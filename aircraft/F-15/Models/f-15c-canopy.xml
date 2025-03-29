@@ -9,12 +9,20 @@
     <animation>
         <type>select</type>
         <condition>
-            <not>
-                <equals>
-                    <property>sim/model/f15/variant</property>
-                    <value>D</value>
-                </equals>
-            </not>
+            <or>
+                <not>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>D</value>
+                    </equals>
+                </not>
+                <not>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>E</value>
+                    </equals>
+                </not>
+            </or>
         </condition>
         <object-name>f15c-canopy</object-name>
     </animation>

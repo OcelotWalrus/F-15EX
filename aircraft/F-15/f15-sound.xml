@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- F-15 sounds
-   |  Richard Harrison: 2014-11-23 : rjh@zaretto.com - based on F-14 
+   |  Richard Harrison: 2014-11-23 : rjh@zaretto.com - based on F-14
 -->
 <PropertyList>
     <fx>
@@ -528,7 +528,7 @@
             <reference-dist>220.0</reference-dist>
             <max-dist>300.0</max-dist>
         </fuselage-scrape>
-        
+
         <fuselage-strike>
             <name>fuselage-strike</name>
             <path>Sounds/fuselage-strike.wav</path>
@@ -557,7 +557,7 @@
             <reference-dist>220.0</reference-dist>
             <max-dist>300.0</max-dist>
         </fuselage-strike>
-        
+
         <rumble>
             <name>rumble</name>
             <mode>looped</mode>
@@ -580,7 +580,7 @@
             <reference-dist>60.0</reference-dist>
             <max-dist>300.0</max-dist>
         </rumble>
-        
+
         <rattle-front>
             <!--wheel-speed-fps-->
             <name>nose wheel rumble</name>
@@ -1065,7 +1065,7 @@
             </volume>
             <max-dist>5</max-dist>
         </pre-stall>
- 
+
         <gear-aoa>
             <name>gear-aoa</name>
             <mode>looped</mode>
@@ -1222,7 +1222,7 @@
             </volume>
             <max-dist>5</max-dist>
         </ows-overload>
-        
+
         <caution-warning>
             <name>caution-warning</name>
             <mode>once</mode>
@@ -1521,13 +1521,35 @@
             </volume>
             <max-dist>5</max-dist>
         </ftit-overtemp-right>
-        
+
         <gun>
             <name>gun</name>
             <mode>looped</mode>
             <path>Sounds/M61A1.wav</path>
             <condition>
                 <property>sim/model/f15/systems/gun/running</property>
+            </condition>
+            <volume>
+                <value>1</value>
+            </volume>
+        </gun>
+        <gun>
+            <name>gun-outta-ammo</name>
+            <mode>once</mode>
+            <path>Sounds/M61A1-out-of-ammo.wav</path>
+            <condition>
+                <and>
+                    <property>controls/armament/trigger</property>
+                    <equals>
+                        <property>sim/model/f15/controls/armament/weapon-selector</property>
+                        <value>0</value>
+                    </equals>
+                    <less-than>
+                        <property>ai/submodels/submodel[3]/count</property>
+                        <value>5</value>
+                    </less-than>
+                    <property>sim/model/f15/controls/armament/master-arm-switch</property>
+                </and>
             </condition>
             <volume>
                 <value>1</value>
@@ -1946,7 +1968,7 @@
                 <property>payload/armament/aim-9/sound-volume</property>
             </volume>
         </rb74-signal>
-        
+
         <rb71-signal>
             <name>rb71-signal</name>
             <mode>looped</mode>
@@ -2097,12 +2119,11 @@
 
         <flare>
             <name>flare</name>
-            <mode>once</mode>
+            <mode>looped</mode>
             <type>avionics</type>
             <path>Aircraft/F-15/Sounds/flare.wav</path>
             <condition>
                 <property>ai/submodels/submodel[5]/flare-release-snd</property>
-                <property>sim/current-view/internal</property>
             </condition>
             <volume>
                 <factor>1</factor>
@@ -2117,7 +2138,6 @@
             <path>Aircraft/F-15/Sounds/flareOut.wav</path>
             <condition>
                 <property>ai/submodels/submodel[5]/flare-release-out-snd</property>
-                <property>sim/current-view/internal</property>
             </condition>
             <volume>
                 <factor>1</factor>

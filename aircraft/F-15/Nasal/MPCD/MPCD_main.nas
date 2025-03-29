@@ -2,7 +2,7 @@
 # ---------------------------
 # MPCD has many pages; the classes here support multiple pages, menu
 # operation and the update loop.
-# 2016-05-17: Refactor to use Nasal/canvas/MFD_Generic.nas 
+# 2016-05-17: Refactor to use Nasal/canvas/MFD_Generic.nas
 # ---------------------------
 # Richard Harrison: 2015-01-23 : rjh@zaretto.com
 # ---------------------------
@@ -12,31 +12,31 @@
 # SIT scaling for legibility is based on the work Fox-Three who
 # provided a prototype with values of 3.5 for the lines and 1.5 for the fonts.
 # I've adjusted the code so that we setup the scaling at the start
-# and also specify the font to match the other displays 
+# and also specify the font to match the other displays
 
-                           # original value 
+                           # original value
 var HSDblepFontSize  = 24; # 15;
 var HSDlargeFontSize = 36; # 25;
 var HSDfontSize      = 24; # 16;
 var HSDlineWidth     =  6; # 1.5;
-var HSDfontFace      = "notosansmono-black.ttf";        
+var HSDfontFace      = "notosansmono-black.ttf";
 
 #
 # Menu Id's:
-# The event that comes back from the animations will be 0 for off and 1..20 for the 
+# The event that comes back from the animations will be 0 for off and 1..20 for the
 # button ID. The PFD menu item code will adjust the event.
 #
-#    10  11  12  13 14 
+#    10  11  12  13 14
 #
-#  0                     5            
+#  0                     5
 #
-#  1                     6            
+#  1                     6
 #
-#  2                     7            
+#  2                     7
 #
-#  3                     8            
+#  3                     8
 #
-#  4                     9            
+#  4                     9
 #
 #    15  16  17  18 19
 #
@@ -46,21 +46,21 @@ var HSDfontFace      = "notosansmono-black.ttf";
 # starting from LEFT (top->bottom), BOTTOM (left->right), RIGHT(bottom->top), TOP (right->left)
 # PB  1..5   LEFT
 # PB  6..10  BOTTOM
-# PB 11..15  RIGHT (bot->top) 
+# PB 11..15  RIGHT (bot->top)
 # PB 16..20 is TOP (right->left)
-# 
-#    20  19  18  17  16 
+#
+#    20  19  18  17  16
 #  1                     15
-# 
+#
 #  2                     14
-# 
+#
 #  3                     13
-# 
+#
 #  4                     12
-# 
+#
 #  5                     11
 #     6   7   8   9  10
-#     
+#
 var PB1 = 0;
 var PB2 = 1;
 var PB3 = 2;
@@ -146,7 +146,31 @@ var MPCD_Station =
                 }
                 else mode = "SRM";
             }
-            elsif (na[0].type == "AIM-120") 
+            elsif (na[0].type == "AIM-9X")
+            {
+                na = "9X";
+                if (weapon_mode == 1)
+                {
+                    #sel = getprop(sel_node);
+                    sel = me.ident+1 == pylons.fcs.getSelectedPylonNumber();
+                    if (sel and master_arm)
+                        mode = "RDY";
+                }
+                else mode = "SRM";
+            }
+            elsif (na[0].type == "2 x AIM-9X")
+            {
+                na = "2x9X";
+                if (weapon_mode == 1)
+                {
+                    #sel = getprop(sel_node);
+                    sel = me.ident+1 == pylons.fcs.getSelectedPylonNumber();
+                    if (sel and master_arm)
+                        mode = "RDY";
+                }
+                else mode = "SRM";
+            }
+            elsif (na[0].type == "AIM-120")
             {
                 na = "120B";
                 if (weapon_mode == 2)
@@ -162,7 +186,7 @@ var MPCD_Station =
                 na = "";
                 mode = "";
             }
-            elsif (na[0].type == "AIM-7") 
+            elsif (na[0].type == "AIM-7")
             {
                 na = "7F";
                 if (weapon_mode == 2)
@@ -321,10 +345,10 @@ var MPCD_Device =
         obj.model_element = model_element;
         var dev_canvas= canvas.new({
                 "name": designation,
-                           "size": [1024,1024], 
-                           "view": [1024,1024],                       
+                           "size": [1024,1024],
+                           "view": [1024,1024],
                     "mipmapping": 1
-                    });                          
+                    });
 
         dev_canvas.addPlacement({"node": model_element});
         dev_canvas.setColorBackground(0.003921,0.1764,0, 0);
@@ -344,7 +368,7 @@ var MPCD_Device =
 
 #
 # Mode switch is day/night/off. we just do on/off
-        setlistener("sim/model/f15/controls/MPCD/mode", 
+        setlistener("sim/model/f15/controls/MPCD/mode",
                     func(v)
                     {
                         if (v != nil)
@@ -357,7 +381,7 @@ var MPCD_Device =
                           }
                     });
 
-        setlistener("instrumentation/radar/radar2-range", 
+        setlistener("instrumentation/radar/radar2-range",
                     func(v)
                     {
                         setprop("instrumentation/mpcd-sit/inputs/range-nm", v.getValue());
@@ -367,22 +391,22 @@ var MPCD_Device =
         obj.addPages();
         return obj;
     },
-    
+
     setupHSD: func (svg) {
         var uv_x = 0;#0.408274;#UV map starts at these coords and goes to 1,1
         var uv_y = 0;#1-0.712342;
         var canvas_x = 1024;#740;
         var canvas_y = 1024;#680;
-        
+
         svg.origin_y = canvas_y*uv_y;
         svg.origin_x = canvas_x*uv_x;
-        
+
         svg.centrum_y= canvas_y*(uv_y+(1-uv_y)*0.5);
         svg.centrum_x= (uv_x+(1-uv_x)*0.5)*canvas_x;
-        
+
         svg.width  = canvas_x*(1-uv_x);
         svg.height = canvas_y*(1-uv_y);
-        
+
         svg.holeTop_y          = svg.origin_y+svg.height*0.15;
         svg.holeBottom_y       = svg.origin_y+svg.height*0.85;
         svg.holeHeight         = svg.holeBottom_y-svg.holeTop_y;
@@ -390,7 +414,7 @@ var MPCD_Device =
         svg.myPos_y            = svg.holeTop_y+svg.holeHeight*0.75;
         svg.myPos_x            = svg.centrum_x;
         #svg.holeTopFromMyPos_y = svg.myPos_y-svg.holeTop_y;
-        
+
         svg.p_HSD = me.PFD._canvas.createGroup();
         #logprint(3, "h "~svg.holeHeight);#339
         svg.hole = svg.p_HSD.createChild("path")
@@ -411,10 +435,10 @@ var MPCD_Device =
                 .set("src", "Aircraft/F-15/Nasal/MPCD/sit-mask.png");
         #printf("leftc %d,%d  size %d,%d",svg.width*0.5-svg.holeRadius,svg.height/svg.width*(svg.height*0.5-svg.holeRadius),svg.holeRadius*2,svg.height/svg.width*(svg.holeRadius*2));
         #printf("%d, %d",svg.width,svg.height);
-        
+
         svg.p_HSDcompass = svg.p_HSD.createChild("group")
             .setTranslation(svg.myPos_x,svg.myPos_y).set("z-index",10002);
-        
+
         svg.compassRadius = svg.holeRadius*0.5;
         svg.compassL = 10;
         svg.c0 = svg.p_HSDcompass.createChild("text")
@@ -540,10 +564,10 @@ var MPCD_Device =
                 .lineTo(svg.compassRadius*math.cos(350*D2R), svg.compassRadius*math.sin(350*D2R))
                 .setColor(0,1,0)
                 .setStrokeLineWidth(HSDlineWidth);
-        
-            
-        
-        
+
+
+
+
 #        svg.buttonView = svg.p_HSD.createChild("group")
 #            .setTranslation(276*0.795,482);
         svg.p_HSDmyPos = svg.p_HSD.createChild("group")
@@ -552,7 +576,7 @@ var MPCD_Device =
             .set("z-index",5);#radar cone
         svg.legs = svg.p_HSDmyPos.createChild("group")
             .set("z-index",3);
-        
+
 
         svg.maxB = 21;#taken from VSD
         svg.blep = setsize([],svg.maxB);
@@ -666,7 +690,7 @@ var MPCD_Device =
                 .set("z-index",10020)
                 .setFont(HSDfontFace).setFontSize(HSDlargeFontSize, 1.0);
         # TODO: these tables needs to be expanded:
-        svg.shipLookup = {  
+        svg.shipLookup = {
                 "missile_frigate":          "",
                 "frigate":                  "",
                 "fleet":                    "",
@@ -680,18 +704,18 @@ var MPCD_Device =
                 "S-75":                     "02",
                 "MIM104D":                  " P",
                 "s300":                     "20",
-        };     
+        };
         svg.typeLookup = {
                 "f-14b":                    "F",     #fighter
-                "F-14D":                    "F",    
-                "F-15C":                    "F",     
-                "F-15D":                    "F",    
+                "F-14D":                    "F",
+                "F-15C":                    "F",
+                "F-15D":                    "F",
                 "F-16":                     "FB",#fighter bomber
-                "YF-16":                    "F",      
-                "JA37-Viggen":              "F",     
-                "AJ37-Viggen":              "FB",     
-                "AJS37-Viggen":             "FB",     
-                "JA37Di-Viggen":            "F",      
+                "YF-16":                    "F",
+                "JA37-Viggen":              "F",
+                "AJ37-Viggen":              "FB",
+                "AJS37-Viggen":             "FB",
+                "JA37Di-Viggen":            "F",
                 "m2000-5":                  "FB",
                 "m2000-5B":                 "FB",
                 "MiG-21bis":                "FB",
@@ -729,7 +753,7 @@ var MPCD_Device =
         var svg = {getElementById: func (id) {return me[id]},};
         #var svg = canvas.parsesvg(obj.PFDsvg, "Nasal/MPCD/empty.svg");
         me.setupHSD(svg);
-        me.PFD.addHSDPage = func(svg, title, layer_id) {   
+        me.PFD.addHSDPage = func(svg, title, layer_id) {
             var np = PFD_Page.new(svg, title, layer_id, me);
             append(me.pages, np);
             me.page_index[layer_id] = np;
@@ -743,7 +767,7 @@ var MPCD_Device =
         me.p_HSD.plc = 0;
         me.p_HSD.ppp = me.PFD;
         me.p_HSD.my = me;
-        
+
         me.p_HSD.root.showDAT = 1;
         me.p_HSD.root.showTGT = 1;
         me.p_HSD.root.showSAM = 1;
@@ -752,19 +776,19 @@ var MPCD_Device =
         me.p_HSD.root.showDIR = 1;
 
         me.p_HSD.update = func (noti) {
-            
+
             me.root.holeRange          = awg_9.range_radar2*1.75;
-            me.root.NM2PIXEL           = svg.holeHeight/me.root.holeRange;       
+            me.root.NM2PIXEL           = svg.holeHeight/me.root.holeRange;
             me.i=0;
             me.root.lock.hide();
             me.rdrRangePixels = awg_9.range_radar2*me.root.NM2PIXEL;
-            
+
             me.root.infoTime.setText(getprop("sim/time/gmt-string")~"Z");
             me.root.infoPq.setText("RPQ 15");
             me.root.infoRange.setText(""~awg_9.range_radar2);
-            
+
             me.myHeading = getprop("orientation/heading-deg");
-            
+
             if (me.root.showDIR) {
                 me.magn = getprop("orientation/heading-magnetic-deg")*D2R;
                 me.root.p_HSDcompass.setRotation(-me.magn);
@@ -784,7 +808,7 @@ var MPCD_Device =
             } else {
                 me.root.p_HSDcompass.hide();
             }
-            
+
             me.w_s = getprop("sim/model/f15/controls/armament/weapon-selector");
             if (me.w_s == 0) {
                 me.root.infoArm.setText(sprintf("G%3dP",getprop("sim/model/f15/systems/gun/rounds")));
@@ -825,7 +849,7 @@ var MPCD_Device =
                     me.legBearing = geo.aircraft_position().course_to(me.wpC)-me.myHeading;#relative
                     me.legDistance = geo.aircraft_position().distance_to(me.wpC)*M2NM;
                     me.legRangePixels = me.legDistance*me.root.NM2PIXEL;
-                    
+
                     me.legX = me.legRangePixels*math.sin(me.legBearing*D2R);
                     me.legY = -me.legRangePixels*math.cos(me.legBearing*D2R);
                     if (me.j > me.root.steerpointsMaxUsed) {
@@ -868,19 +892,19 @@ var MPCD_Device =
             }
 
             me.foundLock = 0;
-            
+
             foreach(contact; awg_9.tgts_list) {
                 if (contact.get_display() == 0) {
                     continue;
                 }
                 me.distPixels = contact.get_range()*me.root.NM2PIXEL;
-                
+
                 me.relBearing = contact.get_deviation(me.myHeading);
-                
+
                 me.rot = contact.get_heading();
-                me.rot -= me.myHeading;                
-                
-                
+                me.rot -= me.myHeading;
+
+
                 if (contact.get_model()!=nil and me.root.samLookup[contact.get_model()] != nil) {
                     me.root.blep[me.i].hide();
                     me.root.ship[me.i].hide();
@@ -957,7 +981,7 @@ var MPCD_Device =
                     break;
                 }
             }
-            
+
             for (;me.i<me.root.maxB;me.i+=1) {
                 me.root.ship[me.i].hide();
                 me.root.blep[me.i].hide();
@@ -1096,7 +1120,7 @@ var MPCD_Device =
 # 1. Repeat these steps for CBT 2, with 2 selected on the display. If
 # the SELECT JETT knob is in COMBAT, CBT 1 and CBT 2 are boxed on the
 # display.
-# 
+#
 # 1. ARMT main menu
 # 2. CBT JETT from ARMT
 # 3. SELJET Knob COMBAT or OFF
@@ -1106,19 +1130,19 @@ var MPCD_Device =
 # on LM. (RH guess top menu changes to display STORE (e.g. FUEL)), RACK,
 # PYLON
 
-# 
+#
 
-# As one, two or all stations can be selected for each program, there may be different 
-# variations seen in column 2, for instance: 
-# CBT 1 LLCRC STORE means that for program 1 left + left conformal tank + right conformal tank stations were selected and stores will be jettisoned. 
-# CBT 2 LLCCRCR RACK means that for program 2 all stations were selected and racks will be jettisoned etc.  
-# Setting up combat jettison program 
-# 1. Enter the CBT JETT page. 
-# 2. Select the desired program (1 by default) pressing PB 5 or 6.  
-# 3. Select the stations you want to program to jettison by pressing PBs 16 thru 20. 
-# Mark stations will become boxed.  
-# 4. When happy, select rack / store or pylon option using PBs 2 thru 4.  
-# 5. Validate the selection by pressing ENTER (PB 10).   
+# As one, two or all stations can be selected for each program, there may be different
+# variations seen in column 2, for instance:
+# CBT 1 LLCRC STORE means that for program 1 left + left conformal tank + right conformal tank stations were selected and stores will be jettisoned.
+# CBT 2 LLCCRCR RACK means that for program 2 all stations were selected and racks will be jettisoned etc.
+# Setting up combat jettison program
+# 1. Enter the CBT JETT page.
+# 2. Select the desired program (1 by default) pressing PB 5 or 6.
+# 3. Select the stations you want to program to jettison by pressing PBs 16 thru 20.
+# Mark stations will become boxed.
+# 4. When happy, select rack / store or pylon option using PBs 2 thru 4.
+# 5. Validate the selection by pressing ENTER (PB 10).
 
 #Each combat program will be displayed in the centre of the display, two lines each
 #with 3 parts as follows:
@@ -1128,10 +1152,10 @@ var MPCD_Device =
 #CBT 1                         L (left)                       RACK
 #CBT 2                         C (center)                    STORE
 #                              R (right)                     PYLON
-#                     
-#                              LC (left conformal tank)     
-#                              RC (right conformal tank)     
-#e.g. CBT 1 LRC PYLON means that for program 1 left + right conformal tank stations were  selected and pylon will be jettisoned.  
+#
+#                              LC (left conformal tank)
+#                              RC (right conformal tank)
+#e.g. CBT 1 LRC PYLON means that for program 1 left + right conformal tank stations were  selected and pylon will be jettisoned.
 # properties:
 # cbtjett[0]/left
 # cbtjett[0]/center
@@ -1147,7 +1171,7 @@ var MPCD_Device =
         var update_flares = func(o) {
             v = getprop("/ai/submodels/submodel[5]/count");
             logprint(3, "submodel [5]",v);
-            
+
             o.p1_3.LBL_CHAFF.setText(sprintf("CHF %3d",v));
             o.p1_3.LBL_FLARE.setText(sprintf(" FLR %2d",v));
             o.p1_3.LBL_NONAVY.setText("GLOBAL");
@@ -1156,7 +1180,7 @@ var MPCD_Device =
             o.p1_4.LBL_NONAVY.setText("GLOBAL");
         };
         update_flares(oo);
-        setlistener("ai/submodels/submodel[5]/flare-release", func {
+        setlistener("/ai/submodels/submodel[5]/count", func {
             update_flares(oo);
         });
 
@@ -1177,7 +1201,7 @@ var MPCD_Device =
             me.p_spin_alt.setText(sprintf("%5d", getprop ("instrumentation/altimeter/indicated-altitude-ft")));
             me.p_spin_cas.setText(sprintf("%3d", getprop ("instrumentation/airspeed-indicator/indicated-speed-kt")));
 
-            if (math.abs(getprop("fdm/jsbsim/velocities/r-rad_sec")) > 0.52631578947368421052631578947368 
+            if (math.abs(getprop("fdm/jsbsim/velocities/r-rad_sec")) > 0.52631578947368421052631578947368
                 or math.abs(getprop("fdm/jsbsim/velocities/p-rad_sec")) > 0.022)
             {
                 me.p_spin_stick_left.setVisible(1);
@@ -1258,7 +1282,7 @@ var MPCD_Device =
                     }
             );
         # gets the description of what is loaded onto the stations
-        # L,C,R. 
+        # L,C,R.
         # does not support CFT
         me.p1_5.get_loadout_desc = func (station,mode=0){
             # use 2 as this will have all the stores
@@ -1286,8 +1310,8 @@ var MPCD_Device =
             me.p1_5.menu12.title = me.p1_5.get_loadout_desc(1,0);
             me.p1_5.menu14.title  = me.p1_5.get_loadout_desc(2,0);
             me.PFD.updateMenus();
-            
-            
+
+
             var j1 = aircraft.describe_selective_jettison(0);
             var j2 = aircraft.describe_selective_jettison(1);
             if (getprop("controls/armament/combat-jettison-count") > 0)
@@ -1318,7 +1342,7 @@ var MPCD_Device =
         me.PFD.selectPage(me.p1_1);
     },
 
-    # Add the menus to each page. 
+    # Add the menus to each page.
     setupMenus : func
     {
 
@@ -1330,7 +1354,7 @@ var MPCD_Device =
         me.p1_1.addMenuItem(3, "WPN", me.p1_2);
         me.p1_1.addMenuItem(4, "DTM", me.p1_2);
         #//me.p1_1.addMenuItem(8, "SIT2", me.p_HSD);#added by niko
-        
+
         me.p_HSD.addMenuItem(9, "M", me.p1_1);#added by niko
         me.p_HSD.addMenuItem(0, "DAT", me.p_HSD);#added by niko
         me.p_HSD.addMenuItem(2, "TGT", me.p_HSD);#added by niko
@@ -1390,7 +1414,7 @@ var MPCD_Device =
                 me.PFD.selectPage(me.p_spin_recovery);
             }
             me.mpcd_spin_reset_time = getprop("instrumentation/clock/indicated-sec") + 5;
-        } 
+        }
         else
         {
             if (me.mpcd_spin_reset_time > 0 and getprop("instrumentation/clock/indicated-sec") > me.mpcd_spin_reset_time)
@@ -1411,7 +1435,7 @@ var MPCD_Device =
 };
 
 #
-# Connect the radar range to the nav display range. 
+# Connect the radar range to the nav display range.
 setprop("instrumentation/mpcd-sit/inputs/range-nm", getprop("instrumentation/radar/radar2-range"));
 input = {
         wowN          : "gear/gear[0]/wow",
@@ -1420,4 +1444,3 @@ input = {
 };
 
 emexec.ExecModule.register("F-15 MPCD", input, MPCD_Device.new("F15-MPCD", "MPCDImage",0),1);
-

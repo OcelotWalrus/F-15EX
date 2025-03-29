@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<!-- F-15 External stores by Richard Harrison rjh@zaretto.com ; 
+<!-- F-15 External stores by Richard Harrison rjh@zaretto.com ;
     | Fuel tanks based on F-15C - modified mounting and removed fins
-    | Missiles except AIM-120 from F-14 by xiii 
+    | Missiles except AIM-120 from F-14 by xiii
     | -->
 <PropertyList>
     <path>f15c-stores.ac</path>
@@ -30,6 +30,10 @@
                 <equals>
                     <property>payload/weight[0]/selected</property>
                     <value>AIM-9</value>
+                </equals>
+                <equals>
+                    <property>payload/weight[0]/selected</property>
+                    <value>AIM-9X</value>
                 </equals>
                 <equals>
                     <property>payload/weight[0]/selected</property>
@@ -115,6 +119,10 @@
                 <equals>
                     <property>payload/weight[2]/selected</property>
                     <value>AIM-9</value>
+                </equals>
+                <equals>
+                    <property>payload/weight[2]/selected</property>
+                    <value>AIM-9X</value>
                 </equals>
                 <equals>
                     <property>payload/weight[2]/selected</property>
@@ -215,6 +223,10 @@
                 </equals>
                 <equals>
                     <property>payload/weight[8]/selected</property>
+                    <value>AIM-9X</value>
+                </equals>
+                <equals>
+                    <property>payload/weight[8]/selected</property>
                     <value>AIM-120</value>
                 </equals>
             </or>
@@ -297,6 +309,10 @@
                 <equals>
                     <property>payload/weight[10]/selected</property>
                     <value>AIM-9</value>
+                </equals>
+                <equals>
+                    <property>payload/weight[10]/selected</property>
+                    <value>AIM-9X</value>
                 </equals>
                 <equals>
                     <property>payload/weight[10]/selected</property>

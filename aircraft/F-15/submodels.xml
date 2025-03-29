@@ -92,7 +92,7 @@
         <repeat>true</repeat>
         <delay>0.05</delay>
         <!-- 1 submodel each 1/10 sec to simulate 10 rounds -->
-        <count>135</count>
+        <count>185</count>
         <!-- that's 68*10 rounds (675 in RL) -->
         <x-offset>24.0</x-offset>
         <y-offset>1.8</y-offset>
@@ -154,7 +154,7 @@
         <trigger>ai/submodels/submodel[5]/flare-release</trigger>        <!-- ai/submodels/submodel[0]/flare-release -->
         <speed>700.0</speed>        <!-- ft/sec -->
         <repeat>true</repeat>
-        <delay>0.50</delay>
+        <delay>0.01</delay>
         <count>100</count>        <!-- was 40 -->
         <x-offset>14.3578</x-offset><!-- in feet -->
         <y-offset>2.56</y-offset>
@@ -176,7 +176,7 @@
         <trigger>ai/submodels/submodel[5]/flare-release</trigger>        <!-- ai/submodels/submodel[0]/flare-release -->
         <speed>700.0</speed>        <!-- ft/sec -->
         <repeat>true</repeat>
-        <delay>0.50</delay>
+        <delay>0.01</delay>
         <count>100</count>        <!-- was 40 -->
         <x-offset>14.3578</x-offset><!-- in feet -->
         <y-offset>-2.56</y-offset>

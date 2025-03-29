@@ -1,0 +1,337 @@
+<?xml version="1.0"?>
+<!-- F-15 C Variant
+   |  Richard Harrison: 2015-05-24 : rjh@zaretto.com - parts taken from F-14 by xii
+-->
+<PropertyList include="f15-common-e.xml">
+
+    <sim>
+        <description>Boeing F-15EX Eagle II</description>
+        <long-description>
+            The F-15EX Eagle II is the most modern version of the F-15 intoduced 52 years after the original F-15A model. The F-15EX is a
+            high-performance, supersonic, allweather air-superiority fighter manufactured by St. Louis' Boing division powered by two
+            F110-GE-129 turbofan engines. Unlike the original F-15C and F-15D, this aircraft has
+            been designed to succeed in both air superiority and ground attack missions.
+            Radar and heat seeking air-to-air missiles AIM-7, AIM-9, AIM-120 (and their variant) and a 20mm gun are the primary armament.
+            The Aircraft can carry and deploy MK-series bombs, CBU-series cluster bombs, GBU guided bombs, A/G missiles, and B61-12 nukes.
+            MTOW ≈85,000 lbs. VNE ≈1,500 kts. Max Gear extension 300 kts. Max Flap speed 250 kts. Max dragchute speed 185 kts.
+        </long-description>
+        <variant-of>f15c</variant-of>
+        <status>production</status>
+        <previews>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/001.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/002.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/003.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/004.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/005.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/006.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/007.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/008.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/009.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/010.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/011.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/012.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/013.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/014.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/015.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/016.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/017.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/018.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/019.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/020.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/021.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/022.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/023.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/024.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/025.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/026.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/027.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/028.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/029.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/030.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/031.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/032.png</path>
+            </preview>
+            <preview>
+                <type>interior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/033.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/034.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/035.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/036.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/037.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/038.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/039.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/040.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/041.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/042.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/043.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/044.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/045.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/046.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/047.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/048.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/049.png</path>
+            </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/050.png</path>
+            </preview>
+        </previews>
+        <startup>
+            <splash-texture>Aircraft/F-15/f15e-splash.jpg</splash-texture>
+            <model-content>
+                <text>Boeing F-15EX Eagle II (F110-GE-129)</text>
+                <font>
+                    <size>0.04</size>
+                    <alignment>left-bottom</alignment>
+                    <face>Fonts/Lato-Bold.ttf</face>
+                </font>
+                <x>0.025</x>
+                <y>0.860</y>
+            </model-content>
+        </startup>
+        <rating>
+            <FDM type="int">5</FDM>
+            <systems type="int">5</systems>
+            <cockpit type="int">5</cockpit>
+            <model type="int">5</model>
+        </rating>
+        <model>
+            <path>Aircraft/F-15/Models/F-15E.xml</path>
+            <f15>
+                <variant>E</variant>
+            </f15>
+        </model>
+        <view n="100">
+            <name>Backseat View</name>
+            <type>lookfrom</type>
+            <internal archive="y">true</internal>
+            <config>
+                <from-model type="bool">true</from-model>
+                <ground-level-nearplane-m type="double">0.5f</ground-level-nearplane-m>
+                <x-offset-m archive="y">0.0</x-offset-m>
+                <y-offset-m archive="y">1.45</y-offset-m>
+                <z-offset-m archive="y">-3.67</z-offset-m>
+                <pitch-offset-deg>-3.042857143</pitch-offset-deg>
+                <default-field-of-view-deg>90</default-field-of-view-deg>
+                <limits>
+                    <enabled type="bool">true</enabled>
+                    <left>
+                        <heading-max-deg type="double">180</heading-max-deg>
+                        <x-offset-max-m type="double">0.16</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">25</x-offset-threshold-deg>
+                    </left>
+                    <right>
+                        <heading-max-deg type="double">180</heading-max-deg>
+                        <x-offset-max-m type="double">0.16</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">25</x-offset-threshold-deg>
+                    </right>
+                </limits>
+            </config>
+        </view>
+    </sim>
+    <fdm>
+        <jsbsim>
+            <metrics>
+                <two-place-canopy type="int">1</two-place-canopy>
+            </metrics>
+        </jsbsim>
+    </fdm>
+    <nasal>
+        <f15_net>
+            <file>Aircraft/F-15/Nasal/mp-network.nas</file>
+        </f15_net>
+    </nasal>
+</PropertyList>

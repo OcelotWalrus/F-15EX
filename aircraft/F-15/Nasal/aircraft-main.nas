@@ -1,7 +1,7 @@
 #
-# F-15 Main Nasal Module 
+# F-15 Main Nasal Module
 # ---------------------------
-# Declares globals; provides update loop 
+# Declares globals; provides update loop
 # ---------------------------
 # Richard Harrison (rjh@zaretto.com) 2014-11-23. Based on F-14b by xii
 #
@@ -25,7 +25,7 @@ var CurrentIASnode = props.globals.getNode("velocities/airspeed-kt");
 var acFrost = props.globals.getNode("environment/aircraft-effects/frost-level",1);
 var sysFrost = props.globals.getNode("fdm/jsbsim/systems/ecs/windscreen-frost-amount",1);
 #
-# 2018.3 has improved stores handling - but this is turned 
+# 2018.3 has improved stores handling - but this is turned
 gui.external_stores_2018_1_compat = 0;
 
 LOG_INFO = 3;
@@ -37,9 +37,9 @@ if (props["UpdateManager"] == nil){
     props.UpdateManager = UpdateManager.UpdateManager;
 }
 
-var payload_dialog_reload = func(from) { 
-#    logprint(3, "payload_dialog_reload: ",from);    
-    setprop("sim/gui/dialogs/payload-reload",!getprop("sim/gui/dialogs/payload-reload",1) or 1); 
+var payload_dialog_reload = func(from) {
+#    logprint(3, "payload_dialog_reload: ",from);
+    setprop("sim/gui/dialogs/payload-reload",!getprop("sim/gui/dialogs/payload-reload",1) or 1);
 }
 
 var deltaT = 1.0;
@@ -62,6 +62,8 @@ var fixAirframe = func {
     	setprop ("fdm/jsbsim/systems/flyt/max-g-reached", 0);
     	repairMe();
     	settimer (func { setprop ("fdm/jsbsim/gear/damage-reset", 0); }, 1.3);
+        setprop("controls/gear/gear-overspeed", 0);
+        setprop("controls/gear/brakes-blownout", 0);
     }
 }
 #
@@ -116,7 +118,7 @@ var radarMPnode = props.globals.getNode("instrumentation/radar/radar-mode",1);
 
 # Utilities #########
 
-# Lighting 
+# Lighting
 #setprop("sim/model/path","data/Aircraft/f15/F15.xml");
 
 var anti_collision_switch = props.globals.getNode("sim/model/f15/controls/lighting/anti-collision-switch");
@@ -192,10 +194,10 @@ var splash_vec_loop = func
 #    var v_z = getprop("velocities/wBody-fps");
 #    var v_x_max = getprop("sim/model/f15/sf-x-max");
     var v_x_max =400;
- 
-    if (v_x > v_x_max) 
+
+    if (v_x > v_x_max)
         v_x = v_x_max;
- 
+
     if (v_x > 1)
         v_x = math.sqrt(v_x/v_x_max);
 #var splash_x = -0.1 - 2.0 * v_x;
@@ -220,7 +222,7 @@ var splash_vec_loop = func
 #vl_z = v_z;
 
 #    interpolate("/environment/aircraft-effects/splash-vector-z", splash_z, 0.01);
- 
+
 if (wow and getprop("gear/gear[0]/rollspeed-ms") < 30)
     settimer( func {splash_vec_loop() },2.5);
 else
@@ -248,7 +250,7 @@ var n2_r = getprop("engines/engine[1]/n2");
         setprop("fdm/jsbsim/systems/sound/cockpit-adjusted-external-volume",1);
 
 
-    setprop_inrange("fdm/jsbsim/systems/sound/cockpit-effects-volume", 
+    setprop_inrange("fdm/jsbsim/systems/sound/cockpit-effects-volume",
              0.3
              - getprop("/controls/seat/pilot-helmet-volume-attenuation"),0,1);
 
@@ -338,11 +340,11 @@ var n2_r = getprop("engines/engine[1]/n2");
              * getprop("engines/engine[1]/afterburner")
              * getprop("fdm/jsbsim/systems/sound/cockpit-adjusted-external-volume"),nil,0.4);
 
-#efflux was: 
+#efflux was:
 # cond  : engines/engine[0]/thrust_lb > 200 and instrumentation/airspeed-indicator/indicated-speed-kt > 100
 # volume: 0.4
 #
-#exhaust was 
+#exhaust was
 # volume: -0.3 + 0.01 * engines/engine[0]/n2
 }
 
@@ -385,7 +387,7 @@ var quickstart = func() {
     if(total_lbs < 400)
         set_fuel(5500);
 
-        settimer(func { 
+        settimer(func {
 
 #    setprop("controls/lighting/panel-norm",1);
 #    setprop("controls/lighting/instruments-norm",1);
@@ -445,7 +447,7 @@ var cold_and_dark = func()
 
     setprop("controls/engines/engine[0]/cutoff",1-getprop("controls/engines/engine[0]/cutoff"));
     setprop("controls/engines/engine[1]/cutoff",1-getprop("controls/engines/engine[1]/cutoff"));
-    
+
     setprop("controls/lighting/aux-inst", 0);
     setprop("controls/lighting/eng-inst", 0);
     setprop("controls/lighting/flt-inst", 0);
@@ -500,7 +502,55 @@ var cold_and_dark = func()
 
 }
 
+# Dragchute
 
+var chute = func() {
+    if (getprop("sim/model/f15/chute/done")) {
+        screen.log.write("Drag chute was released. Repack it once on ground.");
+        return;
+    }
+    chuteLoop.start();
+}
+
+var chuteLoopFunc = func() {
+    if (getprop("sim/model/f15/chute/repack")) {
+        setprop("sim/model/f15/chute/repack", 0);
+        return;
+    }
+    if (!getprop("sim/model/f15/dragchute") or (!getprop("sim/model/f15/chute/enable") and getprop("sim/model/f15/chute/done"))) {
+        chuteLoop.stop();
+        return;
+    } elsif (!getprop("sim/model/f15/chute/enable")) {
+        setprop("sim/model/f15/chute/done", 1);
+        setprop("sim/model/f15/chute/enable", 1);
+        setprop("sim/model/f15/chute/force", 2);
+        setprop("sim/model/f15/chute/fold", 0);
+    } else {
+        if (getprop("/velocities/airspeed-kt") > (185 * 1.05)) { # 10% overspeed safety
+            setprop("sim/model/f15/chute/fold", 1);
+            setprop("fdm/jsbsim/external_reactions/chute/magnitude", 0);
+            settimer(chute_release, 2.0);
+            chuteLoop.stop();
+            screen.log.write("Drag chute lost: airpseed over 185kts.");
+            return;
+        } elsif (getprop("/velocities/groundspeed-kt") <= 25) {
+            setprop("sim/model/f15/chute/fold",1-getprop("/velocities/groundspeed-kt") / 25);
+        }
+        var pressure = getprop("fdm/jsbsim/aero/qbar-psf"); # dynamic pressure
+        var chuteArea = 200; # squarefeet of chute canopy
+        var dragCoeff = 0.50;
+        var force     = pressure * chuteArea * dragCoeff;
+        setprop("fdm/jsbsim/external_reactions/chute/magnitude", force);
+        setprop("sim/model/f15/chute/force", 0, force * 0.000154);
+    }
+}
+
+var chute_release = func() {
+    setprop("sim/model/f15/chute/enable", 0);
+    setprop("fdm/jsbsim/external_reactions/chute/magnitude", 0);
+}
+
+var chuteLoop = maketimer(0.05, chuteLoopFunc);
 
 var resetView = func () {
   setprop("sim/current-view/field-of-view", getprop("sim/current-view/config/default-field-of-view-deg"));
@@ -510,7 +560,7 @@ var resetView = func () {
 }
 
 dynamic_view.register(func {
-              me.default_plane(); 
+              me.default_plane();
    });
 
 var ElevatorTrim  = props.globals.getNode("controls/flight/elevator-trim", 1);
@@ -570,7 +620,7 @@ var F15MainModule =
         # total distance flown calculations.
         currentDistance = distanceNode.getValue();
         if ( last_position != nil) {
-            # total distance 
+            # total distance
             currentPosition = geo.aircraft_position();
             distanceNode.setValue(currentDistance + (last_position.distance_to(currentPosition)*M2NM));
         }
@@ -578,7 +628,38 @@ var F15MainModule =
 
         var frame_count = math.mod(notification.FrameCount,8);
 
-        # legacy logic for subscheduling. 
+        # Gear/flaps overspeed damage
+        if (getprop("controls/gear/gear-down") == 1 and getprop("/velocities/airspeed-kt") > (300 * 1.1) and (getprop("controls/gear/gear-overspeed") == nil or getprop("controls/gear/gear-overspeed") == 0)) { # 10% overspeed safety
+            # Since the front gear is less strong, it's got more chance to break
+            # FRONT 60 %
+            # LEFT 20 %
+            # RIGHT 20 %
+            if (rand() > .4) {
+                screen.log.write("Front gear damage: airpseed over 300kts.");
+                setprop("fdm/jsbsim/gear/unit/damaged", 1)
+            } elsif (rand() > .8) {
+                screen.log.write("Right gear damage: airpseed over 300kts.");
+                setprop("fdm/jsbsim/gear/unit[2]/damaged", 1)
+            } else {
+                screen.log.write("Left gear damage: airpseed over 300kts.");
+                setprop("fdm/jsbsim/gear/unit[1]/damaged", 1)
+            }
+            setprop("controls/gear/gear-overspeed", 1);
+        }
+
+        # Wheel brake overspeed damage
+        if ((((getprop("/controls/gear/brake-left") == 1 or getprop("/controls/gear/brake-right") == 1) and getprop("/velocities/airspeed-kt") > (130 * 1.15) and getprop("controls/gear/gear-down") == 1) or (getprop("/velocities/airspeed-kt") > (50 * 1.2) and getprop("/controls/gear/brake-parking") == 1)) and getprop("controls/gear/brakes-blownout") == 0) {
+            # Brakes are now blown out, disable them
+            screen.log.write("Brakes blownout: used while going too fast.");
+            setprop("controls/gear/brakes-blownout", 1);
+        }
+        if (getprop("controls/gear/brakes-blownout") == 1) {
+            setprop("/controls/gear/brake-left", 0);
+            setprop("/controls/gear/brake-right", 0);
+            setprop("/controls/gear/brake-parking", 0);
+        }
+
+        # legacy logic for subscheduling.
         if (frame_count == 0){
             aircraft.electricsFrame();
             aircraft.rain.update();

@@ -36,6 +36,10 @@
           <property>payload/armament/station/id-0-type</property>
           <value>AIM-9</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>AIM-9X</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-l1</output>
@@ -50,6 +54,10 @@
         <equals>
           <property>payload/armament/station/id-0-type</property>
           <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>AIM-9X</value>
         </equals>
       </or>
     </input>
@@ -165,6 +173,10 @@
           <property>payload/armament/station/id-2-type</property>
           <value>AIM-9</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>AIM-9X</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-l2</output>
@@ -179,6 +191,10 @@
         <equals>
           <property>payload/armament/station/id-2-type</property>
           <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>AIM-9X</value>
         </equals>
       </or>
     </input>
@@ -452,6 +468,10 @@
           <property>payload/armament/station/id-8-type</property>
           <value>AIM-9</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>AIM-9X</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-r1</output>
@@ -466,6 +486,10 @@
         <equals>
           <property>payload/armament/station/id-8-type</property>
           <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>AIM-9X</value>
         </equals>
       </or>
     </input>
@@ -551,6 +575,10 @@
           <property>payload/armament/station/id-10-type</property>
           <value>AIM-9</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>AIM-9X</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-r2</output>
@@ -565,6 +593,10 @@
         <equals>
           <property>payload/armament/station/id-10-type</property>
           <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>AIM-9X</value>
         </equals>
       </or>
     </input>
@@ -608,5 +640,376 @@
       </not-equals>
     </input>
     <output>sim/model/f15/payload/selected/CFT-pylon-l-CFT-pylon-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-0-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-l1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-2-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-l2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-8-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-r1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-10-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-r2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-1-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-aim9x-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-9-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-aim9x-r</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <not-equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value></value>
+        </not-equals>
+        <not-equals>
+          <property>payload/armament/station/id-12-type</property>
+          <value></value>
+        </not-equals>
+        <not-equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value></value>
+        </not-equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/su59-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <not-equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value></value>
+        </not-equals>
+        <not-equals>
+          <property>payload/armament/station/id-15-type</property>
+          <value></value>
+        </not-equals>
+        <not-equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value></value>
+        </not-equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/su59-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/adu552-l1x</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/lau128-l1x</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/adu552-l2x</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/lau128-l2x</output>
+  </logic>
+
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/adu552-r1x</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/lau128-r1x</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/adu552-r2x</output>
+  </logic>
+  <logic>
+    <input>
+      <or>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>AIM-120</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>AIM-9</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>AIM-9X</value>
+        </equals>
+      </or>
+    </input>
+    <output>sim/model/f15/payload/selected/lau128-r2x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-11-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-l1x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-12-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-aim9x-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-13-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-l2x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-14-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-r1x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-15-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-aim9x-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>AIM-9X</value>
+        </equals>
+        <greater-than-equals>
+          <property>payload/armament/station/id-16-count</property>
+          <value>1</value>
+        </greater-than-equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/aim9x-r2x</output>
   </logic>
 </PropertyList>

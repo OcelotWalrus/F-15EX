@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- F-15 All Variants
    | Richard Harrison: released 2015-06-29 : rjh@zaretto.com
-   |   
+   |
    | Authors/Contributions:
    | Richard Harrison; flight and systems models. Cockpit model and operation. Revisions to external 3d model (engines, ramps, animations, speedbrake). Sound. Canvas HUD, MPCD, VSD, TEWS. Revisions to xii files for weapons, radar, etc.
    |                   sole developer of original version (2014->2015)
@@ -39,7 +39,7 @@
                 <ptc-nz-accelerometer-limit>1</ptc-nz-accelerometer-limit>
                 <ptc-p-gain>0.4</ptc-p-gain>
               </cas>
-          
+
               <fcs>
                 <aim-fitted>0</aim-fitted>
                 <flap-cmd-sum />
@@ -80,7 +80,7 @@
                 <gear-asym>0</gear-asym>
                 <gear-warn-silence-dmd>0</gear-warn-silence-dmd>
                 <serviceable>1</serviceable>
-          
+
                 <emergency-handle type="double">0</emergency-handle>
                 <emerg-pos type="double">0</emerg-pos>
                 <emerg-pos-dmd type="double">0</emerg-pos-dmd>
@@ -114,7 +114,7 @@
                 <aircraft-on-ground type="double"/>
                 <aircraft-on-ground-last-value>2</aircraft-on-ground-last-value>
               </position>
-          
+
             <propulsion>
                 <amad-fire type="int">0</amad-fire>
                 <amad-fire-button-armed type="int">0</amad-fire-button-armed>
@@ -173,7 +173,7 @@
             <simulation>
                 <channel-dt type="double">0.00833333333</channel-dt>
             </simulation>
- 
+
             <systems>
                 <afcs>
                     <elevator-cmd-delta />
@@ -188,7 +188,7 @@
 
                 <ecs>
                     <anti-fog>0</anti-fog>
-                    <!-- ECS bleed air source: 
+                    <!-- ECS bleed air source:
                     0 : BOTH
                     1 : Right
                     2 : Off
@@ -236,7 +236,7 @@
                     <holdback-cmd>0</holdback-cmd>
                     <launchbar-engaged />
                 </holdback>
-            
+
                 <hook>
                     <tailhook-length-ft>10.1</tailhook-length-ft>
                     <tailhook-offset-x-in>646</tailhook-offset-x-in>
@@ -246,7 +246,7 @@
                     <tailhook-pos-max-deg>52.369</tailhook-pos-max-deg>
                     <tailhook-pos-min-deg>0</tailhook-pos-min-deg>
                 </hook>
-                    
+
                 <hydraulics>
                     <bidi-activation>2100</bidi-activation>
                     <!-- the min pressure is really for when no hydraulic fluid and the pressure has been at that level
@@ -935,7 +935,7 @@
                         <contrast type="double">0.6</contrast>
                         <on-off type="bool">0</on-off>
 
-                        <!-- 
+                        <!--
                             default Combat Jettision for F-15
                         # CBT 1 C STORE
                         # CBT 2 LR PYLON
@@ -956,7 +956,7 @@
                             <right-conformal type="bool">false</right-conformal>
                             <type type="int">0</type>
                         </cbtjett>
-                       
+
                     </MPCD>
                     <TEWS>
                         <brightness type="double">1</brightness>
@@ -1306,7 +1306,7 @@
                     <left-wing-torn type="bool">false</left-wing-torn>
                     <right-wing-torn type="bool">false</right-wing-torn>
                 </wings>
-                <!-- values that may need to be changed in the future if the carrier handling is fixed 
+                <!-- values that may need to be changed in the future if the carrier handling is fixed
                      and/or the intialization procedure changes
                 -->
                 <overrides>
@@ -1516,13 +1516,13 @@
                             <dialog-name>iff-datalink</dialog-name>
                         </binding>
                     </item>
-		    <item n="12">
-			    <label>Tacview Options</label>
+    		        <item n="12">
+    			    <label>Tacview Options</label>
                         <binding>
                             <command>dialog-show</command>
                             <dialog-name>tacview</dialog-name>
                         </binding>
-		    </item>
+		            </item>
                 </menu>
             </default>
         </menubar>
@@ -1696,7 +1696,7 @@
 
         <tutorials include="Tutorials/F-15-tutorial-index.xml"/>
     </sim>
-	
+
 	<autopilot n="0">
 		<internal n="0">
 			<pitch-active type="bool">0</pitch-active>
@@ -2330,7 +2330,7 @@
                 <binding>
                     <command>nasal</command>
                     <script type="string">
-                        <![CDATA[ 
+                        <![CDATA[
                             if (getprop("fdm/jsbsim/fcs/steer-maneuver"))
                             {
                                 gui.popupTip("Maneuver NWS disabled");
@@ -2461,7 +2461,7 @@
                 <binding>
                     <command>nasal</command>
                     <script type="string">
-                        <![CDATA[ 
+                        <![CDATA[
                         if(getprop("sim/hud/visibility[1]"))
                         {
                             setprop("sim/hud/visibility[0]",0);
@@ -2728,7 +2728,7 @@
     	    </UpdateManager>
         </nasal>
     </fallback>
-    
+
     <surface-positions>
         <l-ramp1-position-deg alias="/fdm/jsbsim/propulsion/inlet/l-ramp1-position-deg"/>
         <r-ramp1-position-deg alias="/fdm/jsbsim/propulsion/inlet/r-ramp1-position-deg"/>

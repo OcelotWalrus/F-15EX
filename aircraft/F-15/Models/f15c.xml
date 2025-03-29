@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0"?>
-<!-- F-15C Model 
-   |  3D Model by Enrique Laso (Flying toaster) 
+<!-- F-15C Model
+   |  3D Model by Enrique Laso (Flying toaster)
    |  Livery support from F-14b by xiii
-   |  
-   |  Richard Harrison: 2014-12-23 : rjh@zaretto.com 
+   |
+   |  Richard Harrison: 2014-12-23 : rjh@zaretto.com
 -->
 
 <PropertyList>
@@ -20,7 +20,7 @@
 
     <nasal>
         <load>
-        <![CDATA[ 
+        <![CDATA[
 
          var self = cmdarg();
          print("Model load F-15 ", self.getPath(), " ID ",_module_id);
@@ -28,10 +28,12 @@
          if (modelPath != nil and find("F-15D.xml", modelPath) != -1) {
             self.getNode("sim/model/f15/variant",1).setValue("D");
              print ("D variant");
+         } elsif (modelPath != nil and find("F-15E.xml", modelPath) != -1) {
+            self.getNode("sim/model/f15/variant",1).setValue("E");
          } else {
             self.getNode("sim/model/f15/variant",1).setValue("C");
          }
-         
+
          var livery_update = aircraft.livery_update.new("Aircraft/F-15/Models/Liveries", 10 );
 
          # nasal module locator
@@ -108,7 +110,7 @@
         </load>
 
         <unload>
-            <![CDATA[ 
+            <![CDATA[
             print("UNLOAD F-15 ", getprop("sim/model/path"), " ID ",_module_id);
             #cmdarg().getNode("sim/model/ac-type", 1).setValue(""); # Dual-control
             livery_update.stop();
@@ -1106,10 +1108,16 @@
         <object-name>Backseater</object-name>
         <condition>
             <and>
-                <equals>
-                    <property>sim/model/f15/variant</property>
-                    <value>D</value>
-                </equals>
+                <or>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>D</value>
+                    </equals>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>E</value>
+                    </equals>
+                </or>
                 <not>
                   <property>/sim/current-view/internal</property>
                 </not>
@@ -1945,7 +1953,7 @@
             <z>0.0</z>
         </axis>
     </animation>
-    <!-- should probably be Stewart & Stevenson Ground Power Unit Model TM4900D 
+    <!-- should probably be Stewart & Stevenson Ground Power Unit Model TM4900D
          or Hobart GPU 60CUa
     -->
     <model>
@@ -1999,7 +2007,7 @@
             </binding>
         </action>
     </animation>
-    
+
     <animation>
         <type>pick</type>
         <visible>false</visible>
@@ -2017,10 +2025,16 @@
         <type>select</type>
         <condition>
             <not>
-                <equals>
-                    <property>sim/model/f15/variant</property>
-                    <value>D</value>
-                </equals>
+                <or>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>D</value>
+                    </equals>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>E</value>
+                    </equals>
+                </or>
             </not>
         </condition>
         <object-name>f15c-canopy</object-name>
@@ -2191,7 +2205,7 @@
             <blue-prop>controls/lighting/instrument-blue</blue-prop>
         </emission>
     </animation>
-    
+
     <animation>
         <type>select</type>
         <object-name>CanopyShootLightLamp</object-name>
@@ -2223,7 +2237,7 @@
     </animation>
 
     <!-- The ready light comes on when the system is ready. We will do this when the door is open.
-         ref: NASA video https://www.youtube.com/watch?v=Wqo8DIKcYtk 
+         ref: NASA video https://www.youtube.com/watch?v=Wqo8DIKcYtk
      -->
     <animation>
         <type>select</type>
@@ -2255,8 +2269,8 @@
         <name>f15interior</name>
         <object-name>StandbyCompassMount</object-name>
         <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
-        <object-name>CanopyMirrors</object-name >
-        <object-name>CanopyWire</object-name >
+        <object-name>CanopyMirrors</object-name>
+        <object-name>CanopyWire</object-name>
         <object-name>CanopyLockShootLight</object-name>
         <object-name>WindscreenCanopyFrame</object-name>
         <object-name>Canopy</object-name>
@@ -2273,10 +2287,16 @@
    <animation>
         <type>select</type>
         <condition>
-            <equals>
-                <property>sim/model/f15/variant</property>
-                <value>D</value>
-            </equals>
+            <or>
+                <equals>
+                    <property>sim/model/f15/variant</property>
+                    <value>D</value>
+                </equals>
+                <equals>
+                    <property>sim/model/f15/variant</property>
+                    <value>E</value>
+                </equals>
+            </or>
         </condition>
         <object-name>f15d-canopy</object-name>
     </animation>
@@ -3019,4 +3039,178 @@
         <object-name>aim120-r3</object-name>
         <object-name>aim7-r3</object-name>
     </animation>
+
+    <!-- smokepods -->
+
+    <model>
+     <name>machCone</name>
+     <path>Aircraft/F-15/Models/Effects/Vapour/mach-cone.xml</path>
+    </model>
+
+    <animation>
+       <type>select</type>
+       <object-name>machCone</object-name>
+       <condition>
+         <greater-than>
+           <property>/environment/relative-humidity</property>
+           <value>25</value>
+         </greater-than>
+         <greater-than>
+           <property>/environment/temperature-degc</property>
+           <value>0</value>
+         </greater-than>
+         <greater-than>
+          <property>sim/multiplay/generic/float[18]</property> <!-- mach speed -->
+          <value>1</value>
+         </greater-than>
+         <lower-than>
+          <property>sim/multiplay/generic/float[18]</property> <!-- mach speed -->
+          <value>1.25</value>
+         </lower-than>
+         <greater-than>
+          <property>/environment/pressure-inhg</property>
+          <value>11</value>
+         </greater-than>
+       </condition>
+     </animation>
+
+    <model>
+     <name>left-strake-vortex</name>
+     <path>Aircraft/F-15/Models/Effects/Vapour/strake-vortex.xml</path>
+     <offsets>
+      <x-m>-2.0</x-m>
+      <y-m>-0.5</y-m>
+      <z-m>0.4</z-m>
+     </offsets>
+    </model>
+
+    <model>
+     <name>right-strake-vortex</name>
+     <path>Aircraft/F-15/Models/Effects/Vapour/strake-vortex.xml</path>
+     <offsets>
+      <x-m>-2.0</x-m>
+      <y-m>0.5</y-m>
+      <z-m>0.4</z-m>
+     </offsets>
+    </model>
+
+    <animation>
+       <type>select</type>
+       <object-name>right-strake-vortex</object-name>
+       <object-name>left-strake-vortex</object-name>
+       <condition>
+          <and>
+             <greater-than>
+               <property>/environment/relative-humidity</property>
+               <value>25</value>
+             </greater-than>
+             <greater-than>
+               <property>/environment/temperature-degc</property>
+               <value>0</value>
+             </greater-than>
+             <greater-than>
+               <property>/environment/pressure-inhg</property>
+               <value>11</value>
+             </greater-than>
+             <or>
+                 <greater-than>
+                    <property>sim/multiplay/generic/float[19]</property> <!-- alpha degree -->
+                    <value>7.8</value>
+                 </greater-than>
+                 <and>
+                     <greater-than>
+                     <property>sim/multiplay/generic/float[20]</property> <!-- airspeed kts -->
+                     <value>565</value>
+                     </greater-than>
+                     <greater-than>
+                        <property>sim/multiplay/generic/float[19]</property> <!-- alpha degree -->
+                        <value>1</value>
+                     </greater-than>
+                 </and>
+             </or>
+             <greater-than>
+              <property>sim/multiplay/generic/float[20]</property> <!-- airspeed kts -->
+              <value>160</value>
+             </greater-than>
+          </and>
+       </condition>
+     </animation>
+
+    <model>
+     <name>g-vortexR</name>
+     <path>Aircraft/F-15/Models/Effects/Vapour/g-vortex.xml</path>
+     <offsets>
+      <x-m>-0.8</x-m>
+      <y-m>0.5</y-m>
+      <z-m>0.65</z-m>
+      <heading-deg>15</heading-deg>
+      <roll-deg>-10</roll-deg>
+     </offsets>
+    </model>
+
+    <model>
+     <name>g-vortexL</name>
+     <path>Aircraft/F-15/Models/Effects/Vapour/g-vortex.xml</path>
+     <offsets>
+      <x-m>-0.8</x-m>
+      <y-m>-0.5</y-m>
+      <z-m>0.65</z-m>
+      <heading-deg>-15</heading-deg>
+      <roll-deg>10</roll-deg>
+     </offsets>
+    </model>
+
+    <animation>
+       <type>select</type>
+       <object-name>g-vortexL</object-name>
+       <object-name>g-vortexR</object-name>
+         <condition>
+              <and>
+                   <greater-than>
+                     <property>/environment/relative-humidity</property>
+                     <value>25</value>
+                   </greater-than>
+                   <greater-than>
+                     <property>/environment/temperature-degc</property>
+                     <value>0</value>
+                   </greater-than>
+                   <greater-than>
+                     <property>/environment/pressure-inhg</property>
+                     <value>11</value>
+                   </greater-than>
+                   <or>
+                       <greater-than>
+                          <property>sim/multiplay/generic/float[19]</property> <!-- alpha degree -->
+                          <value>11</value>
+                       </greater-than>
+                       <and>
+                           <greater-than>
+                              <property>sim/multiplay/generic/float[19]</property> <!-- alpha degree -->
+                              <value>2.25</value>
+                           </greater-than>
+                           <greater-than>
+                               <property>sim/multiplay/generic/float[20]</property> <!-- airspeed kts -->
+                               <value>565</value>
+                           </greater-than>
+                       </and>
+                   </or>
+                   <greater-than>
+                    <property>sim/multiplay/generic/float[20]</property> <!-- airspeed kts -->
+                    <value>300</value>
+                   </greater-than>
+              </and>
+         </condition>
+     </animation>
+
+     <model>
+       <name>dragchute</name>
+       <path>Aircraft/F-15/Models/Effects/dragchute/dragchute.xml</path>
+    </model>
+
+    <animation>
+       <type>select</type>
+       <object-name>dragchute</object-name>
+         <condition><property>sim/model/f15/chute/enable</property></condition>
+    </animation>
+
 </PropertyList>

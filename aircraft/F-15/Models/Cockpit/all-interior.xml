@@ -741,7 +741,7 @@
       </binding>
     </action>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: hc_mount
       instrument: hc_instrument-->
   <!--Merged from Instruments/landing-gear.xml-->
@@ -891,7 +891,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>lg_mount</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: lg_mount-->
   <!--Merged from Instruments/flaps-panel.xml-->
   <animation>
@@ -1070,7 +1070,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>fp_mount</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: fp_mount-->
   <!--Merged from Instruments/jett-panel.xml-->
   <animation>
@@ -1171,7 +1171,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-left</inherits-from>
     <object-name>panel</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: jp_mount-->
   <!--Merged from Instruments/mpcd-panel.xml-->
   <animation>
@@ -1336,7 +1336,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-left-2</object-name>
@@ -1380,7 +1380,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-left-3</object-name>
@@ -1424,7 +1424,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-left-4</object-name>
@@ -1468,7 +1468,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-left-5</object-name>
@@ -1512,7 +1512,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
       <!-- right buttons -->
     <animation>
       <type>knob</type>
@@ -1557,7 +1557,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-right-2</object-name>
@@ -1601,7 +1601,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-right-3</object-name>
@@ -1645,7 +1645,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-right-4</object-name>
@@ -1689,7 +1689,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-right-5</object-name>
@@ -1733,7 +1733,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
       <!-- top buttons -->
     <animation>
       <type>knob</type>
@@ -1778,7 +1778,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-top-lc</object-name>
@@ -1822,7 +1822,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-top-c</object-name>
@@ -1866,7 +1866,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-top-rc</object-name>
@@ -1910,7 +1910,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-top-r</object-name>
@@ -1954,7 +1954,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
       <!-- bottom buttons -->
     <animation>
       <type>knob</type>
@@ -1999,7 +1999,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-bottom-2</object-name>
@@ -2043,7 +2043,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-bottom-3</object-name>
@@ -2087,7 +2087,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-bottom-4</object-name>
@@ -2131,7 +2131,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
     <animation>
       <type>knob</type>
       <object-name>button-bottom-5</object-name>
@@ -2175,7 +2175,7 @@
         <z>0</z>
       </axis>
     </animation>
-  
+
 
   <!-- Lighting -->
   <animation>
@@ -2294,7 +2294,7 @@
       <blue> 1</blue>
     </emission>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       jett-button: mp_jett-button
       mount: Ip_mount-->
   <!--Merged from Instruments/tews.xml-->
@@ -2414,7 +2414,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-knob</inherits-from>
     <object-name>intensity-knob</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: t_mount
       panel: I_panel-->
   <!--Merged from Instruments/vsd-mount.xml-->
@@ -2597,7 +2597,7 @@
       </binding>
     </action>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: Im_mount-->
   <!--Merged from Instruments/left-side-panel.xml-->
   <animation>
@@ -3077,7 +3077,7 @@
     <type>knob</type>
     <object-name>radar-power-knob</object-name>
     <property>instrumentation/radar/radar-mode</property>
-    <!--Radar Status	
+    <!--Radar Status
                 000	high	0
                 001	on	1
                 010	standby	2
@@ -5443,7 +5443,7 @@
       <blue>1</blue>
     </emission>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mpcd-mount: lsp_mpcd-mount-->
   <!--Merged from Instruments/caution-panel.xml-->
   <animation>
@@ -6436,7 +6436,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>cp_mount</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: cp_mount-->
   <!--Merged from Instruments/jfs-panel.xml-->
   <animation>
@@ -6528,7 +6528,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>jp_mount_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: jp_mount_1-->
   <!--Merged from Instruments/cabin-pressure.xml-->
   <animation>
@@ -6600,7 +6600,7 @@
     <object-name>cp_mount_1</object-name>
     <object-name>cp_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: cp_mount_1
       instrument: cp_instrument-->
   <!--Merged from Instruments/canopy-lock-panel.xml-->
@@ -6635,39 +6635,57 @@
     <type>select</type>
     <object-name>light-minimum</object-name>
     <condition>
-      <greater-than>
-        <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
-        <value>0</value>
-      </greater-than>
-      <or>
-        <property>sim/model/f15/lights/master-test-lights</property>
-      </or>
+      <and>
+        <or> <!-- turns if either flares or chaffs are under 35% -->
+          <or>
+            <less-than>
+              <property>/ai/submodels/submodel[5]/count</property>
+              <value>36</value>
+            </less-than>
+            <less-than>
+              <property>/ai/submodels/submodel[6]/count</property>
+              <value>36</value>
+            </less-than>
+          </or>
+          <property>sim/model/f15/lights/master-test-lights</property>
+        </or>
+        <greater-than>
+          <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+          <value>0</value>
+        </greater-than>
+      </and>
     </condition>
   </animation>
   <animation>
     <type>select</type>
     <object-name>light-chaff</object-name>
     <condition>
-      <greater-than>
-        <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
-        <value>0</value>
-      </greater-than>
-      <or>
-        <property>sim/model/f15/lights/master-test-lights</property>
-      </or>
+      <and>
+        <or>
+          <property>/ai/submodels/submodel[5]/flare-release-cmd</property>
+          <property>sim/model/f15/lights/master-test-lights</property>
+        </or>
+        <greater-than>
+          <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+          <value>0</value>
+        </greater-than>
+      </and>
     </condition>
   </animation>
   <animation>
     <type>select</type>
     <object-name>light-flares</object-name>
     <condition>
-      <greater-than>
-        <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
-        <value>0</value>
-      </greater-than>
-      <or>
-        <property>sim/model/f15/lights/master-test-lights</property>
-      </or>
+      <and>
+        <or>
+          <property>/ai/submodels/submodel[5]/flare-release-cmd</property>
+          <property>sim/model/f15/lights/master-test-lights</property>
+        </or>
+        <greater-than>
+          <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+          <value>0</value>
+        </greater-than>
+      </and>
     </condition>
   </animation>
   <!-- Lighting -->
@@ -6702,7 +6720,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>clp_mount</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: clp_mount-->
   <!--Merged from Instruments/fire-panel.xml-->
   <animation>
@@ -6766,7 +6784,7 @@
         <property>fdm/jsbsim/propulsion/engine[0]/fire-test-ok</property>
         <greater-than>
           <expression>
-            <!-- Richard's way of making lights flash entirely in an expression. 
+            <!-- Richard's way of making lights flash entirely in an expression.
                We take the sim time (decimal) and modulus this by the total duration of the blink
                From this we subtract the ON time; which will give us a value of -blink_time..0
                using min we limit this to 0; multiply it by 1000 and limit to 1 thus giving us a flashing
@@ -6890,7 +6908,7 @@
         <property>fdm/jsbsim/propulsion/engine[1]/fire-test-ok</property>
         <greater-than>
           <expression>
-            <!-- Richard's way of making lights flash entirely in an expression. 
+            <!-- Richard's way of making lights flash entirely in an expression.
                We take the sim time (decimal) and modulus this by the total duration of the blink
                From this we subtract the ON time; which will give us a value of -blink_time..0
                using min we limit this to 0; multiply it by 1000 and limit to 1 thus giving us a flashing
@@ -6984,7 +7002,7 @@
     <object-name>discharge-switch</object-name>
     <object-name>fire-test-panel</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: fp_mount_1-->
   <!--Merged from Instruments/asi/asi.xml-->
   <name>ASI</name>
@@ -7415,7 +7433,7 @@
     <object-name>a_mount</object-name>
     <object-name>a_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: a_mount
       instrument: a_instrument-->
   <!--Merged from Instruments/aoa-gauge.xml-->
@@ -7546,7 +7564,7 @@
     <object-name>ag_mount</object-name>
     <object-name>ag_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       off-flag: ag_off-flag
       mount: ag_mount
       instrument: ag_instrument
@@ -7827,7 +7845,7 @@
     <object-name>a_mount_1</object-name>
     <object-name>a_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       needle: a_needle
       mount: a_mount_1
       instrument: a_instrument_1
@@ -8234,7 +8252,7 @@
     <object-name>ext</object-name>
     <object-name>instr</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       off-flag: a_off-flag
       mount: I_mount-->
   <!--Merged from Instruments/arm-modes.xml-->
@@ -8451,7 +8469,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-right</inherits-from>
     <object-name>arm-models-panel</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: am_mount-->
   <!--Merged from Instruments/hsi.xml-->
   <name>HSI</name>
@@ -9076,7 +9094,7 @@
     <object-name>hsi-mount</object-name>
     <object-name>h_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       off-flag: h_off-flag
       instrument: h_instrument-->
   <!--Merged from Instruments/altimeter.xml-->
@@ -9357,7 +9375,7 @@
     <object-name>a_mount_2</object-name>
     <object-name>a_instrument_2</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       needle: a_needle_1
       mount: a_mount_2
       instrument: a_instrument_2
@@ -9489,7 +9507,7 @@
     <object-name>v_mount</object-name>
     <object-name>v_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: v_mount
       instrument: v_instrument-->
   <!--Merged from Instruments/chronograph.xml-->
@@ -9689,7 +9707,7 @@
     <object-name>c_mount</object-name>
     <object-name>c_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: c_mount
       instrument: c_instrument
       face: I_face
@@ -10700,7 +10718,7 @@
     <object-name>eg_mount</object-name>
     <object-name>eg_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       instrument: eg_instrument
       mount: eg_mount-->
   <!--Merged from Instruments/fuel-gauge.xml-->
@@ -11213,7 +11231,7 @@
     <object-name>fg_mount</object-name>
     <object-name>fg_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       off-flag: fg_off-flag
       needle: fg_needle
       instrument: fg_instrument
@@ -11325,7 +11343,7 @@
     <object-name>ba_mount</object-name>
     <object-name>ba_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: ba_mount
       instrument: ba_instrument
       adi-button: Ia_adi-button-->
@@ -11482,7 +11500,7 @@
     <object-name>ba_mount_1</object-name>
     <object-name>ba_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: ba_mount_1
       instrument: ba_instrument_1-->
   <!--Merged from Instruments/backup-asi.xml-->
@@ -11615,7 +11633,7 @@
     <object-name>basi-mount</object-name>
     <object-name>ba_instrument_2</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       face: ba_face
       instrument: ba_instrument_2-->
   <!--Merged from stick.xml-->
@@ -11694,10 +11712,16 @@
   <animation>
     <type>select</type>
     <condition>
-      <equals>
-        <property>sim/model/f15/variant</property>
-        <value>D</value>
-      </equals>
+      <or>
+          <equals>
+            <property>sim/model/f15/variant</property>
+            <value>D</value>
+          </equals>
+          <equals>
+            <property>sim/model/f15/variant</property>
+            <value>E</value>
+          </equals>
+    </or>
     </condition>
     <object-name>mm_f15-interior-back</object-name>
     <object-name>backseat-aoa-gauge</object-name>
@@ -11859,7 +11883,7 @@
     <object-name>ag_mount_1</object-name>
     <object-name>ag_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       max-aoa-needle: ag_max-aoa-needle
       needle: ag_needle
       off-flag: ag_off-flag_1
@@ -11969,7 +11993,7 @@
     <object-name>prp_mount</object-name>
     <object-name>prp_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       needle-pitch-ratio: prp_needle-pitch-ratio
       pitch-ratio-switch: prp_pitch-ratio-switch
       mount: prp_mount
@@ -12429,7 +12453,7 @@
       <blue-prop>controls/lighting/instrument-blue</blue-prop>
     </emission>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       sam-light-on: bcp_sam-light-on
       ai-light-on: bcp_ai-light-on
       hud-mode3a-drum1: bcp_hud-mode3a-drum1
@@ -12614,7 +12638,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>lg_mount_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       landing-gear-handle: lg_landing-gear-handle
       ldg-warn-silence: lg_ldg-warn-silence
       light-locked-nose: lg_light-locked-nose
@@ -12800,7 +12824,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>fp_mount_2</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       hook-switch: fp_hook-switch
       flaps-light-transit: fp_flaps-light-transit
       flaps-light-down: fp_flaps-light-down
@@ -12906,7 +12930,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-left</inherits-from>
     <object-name>jp_panel</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       steer-mode-selector: jp_steer-mode-selector
       jett-button: jp_jett-button
       mount: jp_mount_2
@@ -13109,7 +13133,7 @@
       </binding>
     </action>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       vsd-mount: vm_vsd-mount
       vsd-sym-brt: vm_vsd-sym-brt
       vsd-radar: vm_vsd-radar
@@ -13594,7 +13618,7 @@
     <type>knob</type>
     <object-name>lsp_radar-power-knob</object-name>
     <property>instrumentation/radar/radar-mode</property>
-    <!--Radar Status	
+    <!--Radar Status
                 000	high	0
                 001	on	1
                 010	standby	2
@@ -15969,7 +15993,7 @@
       <blue>1</blue>
     </emission>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       oxy-test-switch: lsp_oxy-test-switch
       oxy-supply-switch: lsp_oxy-supply-switch
       anti-fog-switch: lsp_anti-fog-switch
@@ -16194,7 +16218,7 @@
     <object-name>cp_mount_2</object-name>
     <object-name>cp_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       cabin-pressure-needle: cp_cabin-pressure-needle
       mount: cp_mount_2
       instrument: cp_instrument_1-->
@@ -16297,7 +16321,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>clp_mount_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       canopy-unlocked-light-on: clp_canopy-unlocked-light-on
       light-program: clp_light-program
       light-minimum: clp_light-minimum
@@ -16742,7 +16766,7 @@
     <object-name>a_mount_3</object-name>
     <object-name>a_instrument_3</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       off-flag: a_off-flag_1
       mach-flag: a_mach-flag
       face: a_face
@@ -17027,7 +17051,7 @@
     <object-name>a_mount_4</object-name>
     <object-name>a_instrument_4</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       needle: a_needle_2
       needle-max: a_needle-max
       needle-min: a_needle-min
@@ -17438,7 +17462,7 @@
     <object-name>a_ext</object-name>
     <object-name>a_instr</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       off-flag: a_off-flag_2
       sphere: a_sphere
       turn-indicator: a_turn-indicator
@@ -17668,7 +17692,7 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-right</inherits-from>
     <object-name>am_arm-models-panel</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       beacon-on: am_beacon-on
       ag-light-on: am_ag-light-on
       adi-light-on: am_adi-light-on
@@ -18301,7 +18325,7 @@
     <object-name>h_hsi-mount</object-name>
     <object-name>h_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       group_hsi: h_group_hsi
       group_cdi: h_group_cdi
       bearing-needle-1: h_bearing-needle-1
@@ -18606,7 +18630,7 @@
     <object-name>a_mount_5</object-name>
     <object-name>a_instrument_5</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       needle: a_needle_3
       drum-1: a_drum-1
       drum-4: a_drum-4
@@ -18750,7 +18774,7 @@
     <object-name>v_mount_1</object-name>
     <object-name>v_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       vsi-off-flag: v_vsi-off-flag
       vsi-needle: v_vsi-needle
       mount: v_mount_1
@@ -18952,7 +18976,7 @@
     <object-name>c_mount_1</object-name>
     <object-name>c_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       HourHand: c_HourHand
       MinuteHand: c_MinuteHand
       SecondHand: c_SecondHand
@@ -19970,7 +19994,7 @@
     <object-name>eg_mount_1</object-name>
     <object-name>eg_instrument_1</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       needle-fan-l: eg_needle-fan-l
       needle-fan-r: eg_needle-fan-r
       needle-temp-l: eg_needle-temp-l
@@ -20113,7 +20137,7 @@
     <object-name>bfg_mount</object-name>
     <object-name>bfg_instrument</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       off-flag: bfg_off-flag
       needle: bfg_needle
       instrument: bfg_instrument
@@ -20183,7 +20207,7 @@
       </binding>
     </release>
   </animation>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       stick-handle: s_stick-handle
       stick-mast: s_stick-mast
       pickle-button: s_pickle-button-->
@@ -20243,6 +20267,6 @@
     <object-name>seat-cushion</object-name>
     <object-name>aces2</object-name>
   </effect>
-  <!--Renamed objects: 
+  <!--Renamed objects:
       mount: fib_mount-->
 </PropertyList>

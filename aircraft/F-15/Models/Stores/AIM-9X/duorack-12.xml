@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PropertyList>
+
+    <path>Aircraft/F-15/Models/Stores/Racks/LAU-114/LAU-114.xml</path>
+
+    <model>
+        <name>AIM-9-12-0</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-9X/AIM-9X.xml</path>
+        <offsets>
+            <x-m>-0</x-m>
+            <y-m>-0.332</y-m>
+            <z-m>-0.08</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>AIM-9-12-1</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-9X/AIM-9X.xml</path>
+        <offsets>
+            <x-m>-0</x-m>
+            <y-m>0.332</y-m>
+            <z-m>-0.08</z-m>
+        </offsets>
+    </model>
+
+    <animation>
+        <type>select</type>
+        <object-name>AIM-9-12-0</object-name>
+        <condition>
+            <equals>
+                <property>payload/armament/station/id-12-type</property>
+                <value>AIM-9X</value>
+            </equals>
+            <greater-than>
+                <property>payload/armament/station/id-12-count</property>
+                <value>0</value>
+            </greater-than>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <object-name>AIM-9-12-1</object-name>
+        <condition>
+            <equals>
+                <property>payload/armament/station/id-12-type</property>
+                <value>AIM-9X</value>
+            </equals>
+            <greater-than>
+                <property>payload/armament/station/id-12-count</property>
+                <value>1</value>
+            </greater-than>
+        </condition>
+    </animation>
+
+</PropertyList>

@@ -2,12 +2,12 @@
 # ---------------------------
 #
 # The F-15C HUD is provided by 2 combiners.
-# We model this accurately in the geometry by having the two glass panes 
+# We model this accurately in the geometry by having the two glass panes
 # which are texture mapped onto a single canvas texture.two instances of the HUD
 # 2016-01-06: The HUD appears slightly trapezoidal (better than previous version
 #             however still could be improved possibly with a transformation matrix.
 # ---------------------------
-# Richard Harrison (rjh@zaretto.com) 2015-01-27  - based on F-20 HUD main module Enrique Laso (Flying toaster) 
+# Richard Harrison (rjh@zaretto.com) 2015-01-27  - based on F-20 HUD main module Enrique Laso (Flying toaster)
 # ---------------------------
 
 var ht_xcf = 1024;
@@ -30,9 +30,9 @@ var ht_debug = 0;
 # paste into nasal console for debugging
 #aircraft.MainHUD.canvas._node.setValues({
 #                           "name": "F-15 HUD",
-#                           "size": [1024,1024], 
-#                           "view": [276,106],                       
-#                           "mipmapping": 0     
+#                           "size": [1024,1024],
+#                           "view": [276,106],
+#                           "mipmapping": 0
 #  });
 #aircraft.MainHUD.svg.setTranslation (0, 20.0);
 #aircraft.MainHUD.svg.set("clip", "rect(2,256,276,0)");
@@ -47,9 +47,9 @@ var pitch_factor=11.18;
 # horizontal bar for each tapes.
 var alt_range_factor = (9317-191) / 100000; # alt tape size and max value.
 
-#IAS tape starts at 0 and goes up; so these coordinates result in an overall size 
+#IAS tape starts at 0 and goes up; so these coordinates result in an overall size
 #of -501; if the tape moved downards it would be 501.
-var ias_range_factor = (-310.034 - 191.841) / 1100; 
+var ias_range_factor = (-310.034 - 191.841) / 1100;
 
 #Pinto: if you know starting x (left/right) and z (up/down), then i just do
 #
@@ -86,26 +86,26 @@ var F15HUD = {
 
         obj.canvas= canvas.new({
                 "name": "F-15 HUD",
-                    "size": [1024,1024], 
+                    "size": [1024,1024],
                     "view": [256,296],
                     "mipmapping": 0,
-                    });                          
-        obj.view = [0, 1.4000051983, -5];                          
+                    });
+        obj.view = [0, 1.4000051983, -5];
         obj.canvas.addPlacement({"node": "HUDImage1"});
         obj.canvas.addPlacement({"node": "HUDImage2"});
         obj.canvas.setColorBackground(0.36, 1, 0.3, 0.00);
         obj.FocusAtInfinity = 0;
 # Create a group for the parsed elements
         obj.svg = obj.canvas.createGroup();
- 
+
 # Parse an SVG file and add the parsed elements to the given group
         logprint(3, "HUD Parse SVG ",canvas.parsesvg(obj.svg, svgname),  {'font-mapper': aircraft.hud_font_mapper});
 
         obj.canvas._node.setValues({
                                     "name": "F-15 HUD",
-                                    "size": [1024,1024], 
-                                    "view": [256,296],                       
-                                    "mipmapping": 0     
+                                    "size": [1024,1024],
+                                    "view": [256,296],
+                                    "mipmapping": 0
                     });
         obj.baseTranslation = [30,30];
         obj.svg.setTranslation (obj.baseTranslation[0], obj.baseTranslation[1]);
@@ -121,6 +121,8 @@ var F15HUD = {
         obj.roll_pointer = obj.get_element("roll-pointer");
         obj.alt_range = obj.get_element("alt_range");
         obj.ias_range = obj.get_element("ias_range");
+        obj.window9_rect = obj.get_element("window9_rect");
+        obj.window1_rect = obj.get_element("window1_rect");
 
         obj.target_locked = obj.get_element("target_locked");
         obj.target_locked.setVisible(0);
@@ -133,6 +135,13 @@ var F15HUD = {
         obj.window6 = obj.get_text("window6", aircraft.HUDFont,9,1.4);
         obj.window7 = obj.get_text("window7", aircraft.HUDFont,9,1.4);
         obj.window8 = obj.get_text("window8", aircraft.HUDFont,9,1.4);
+        obj.window9 = obj.get_text("window9", aircraft.HUDFont,9,1.4);
+        obj.window10 = obj.get_text("window10", aircraft.HUDFont,9,1.4);
+        obj.window11 = obj.get_text("window11", aircraft.HUDFont,9,1.4);
+        obj.window13 = obj.get_text("window13", aircraft.HUDFont,9,1.4);
+        obj.window14 = obj.get_text("window14", aircraft.HUDFont,9,1.4);
+        obj.window15 = obj.get_text("window15", aircraft.HUDFont,9,1.4);
+        obj.window16 = obj.get_text("window16", aircraft.HUDFont,9,1.4);
 
         obj.window1.setVisible(0);
 
@@ -140,7 +149,7 @@ var F15HUD = {
         obj.HudNavRangeETA = "";
         obj.currentViewX = props.globals.getNode("/sim/current-view/x-offset-m");
         obj.currentViewY = props.globals.getNode("/sim/current-view/y-offset-m");
-        
+
         obj.symbol_reject = 0;
         obj.heading_deg=0;
         obj.roll_deg=0;
@@ -170,7 +179,7 @@ var F15HUD = {
             else
                 logprint(3, "HUD: could not locate ",name);
         }
-       
+
             obj.dlzX      =170;
             obj.dlzY      =100;
             obj.dlzWidth  = 10;
@@ -199,14 +208,14 @@ var F15HUD = {
                           .arcSmallCW(obj.pipperRadius,obj.pipperRadius, 0, -obj.pipperRadius*2, 0)
                           .moveTo(-1,0)
                           .arcSmallCW(1,1, 0, 1*2, 0)
-                          .arcSmallCW(1,1, 0, -1*2, 0)                   
+                          .arcSmallCW(1,1, 0, -1*2, 0)
                           .setStrokeLineWidth(1)
                           .setColor(0,1,0);
             obj.ccipCross = obj.ccipGrp.createChild("path")
                           .moveTo(-obj.pipperRadius, -obj.pipperRadius)
                            .lineTo(obj.pipperRadius, obj.pipperRadius)
                            .moveTo(-obj.pipperRadius, obj.pipperRadius)
-                           .lineTo( obj.pipperRadius, -obj.pipperRadius)                  
+                           .lineTo( obj.pipperRadius, -obj.pipperRadius)
                           .setStrokeLineWidth(1)
                           .hide()
                           .setColor(0,1,0);
@@ -219,7 +228,7 @@ var F15HUD = {
         obj.update_items = [
             props.UpdateManager.FromHashList(["ElectricsAcLeftMainBus","ControlsHudBrightness"] , 0.01, func(val)
                                       {
-                                          if (val.ElectricsAcLeftMainBus <= 0 
+                                          if (val.ElectricsAcLeftMainBus <= 0
                                               or val.ControlsHudBrightness <= 0) {
                                               obj.svg.setVisible(0);
                                           } else {
@@ -247,7 +256,7 @@ var F15HUD = {
                                             obj.heading_tape_position = -val*54/10;
                                           else
                                             obj.heading_tape_position = (360-val)*54/10;
-                                          
+
                                           obj.heading_tape.setTranslation (obj.heading_tape_position,0);
                                       }),
             props.UpdateManager.FromHashList(["OrientationRollDeg","OrientationPitchDeg"], 0.025, func(val)
@@ -277,12 +286,12 @@ var F15HUD = {
                                                         }),
             props.UpdateManager.FromHashList(["InstrumentedG", "CadcOwsMaximumG"], 0.05, func(val)
                                                         {
-                                                            obj.window8.setText(sprintf("%02d %02d", 
-                                                                                        math.round(val.InstrumentedG*10.0), 
+                                                            obj.window8.setText(sprintf("%02d %02d",
+                                                                                        math.round(val.InstrumentedG*10.0),
                                                                                         math.round(val.CadcOwsMaximumG*10.0)));
                                                         }),
-            props.UpdateManager.FromHashList(["Alpha", 
-                                                        "ControlsGearBrakeParking", 
+            props.UpdateManager.FromHashList(["Alpha",
+                                                        "ControlsGearBrakeParking",
                                                         "AirspeedIndicatorIndicatedMach",
                                                         "ControlsGearGearDown"], 0.01, func(val)
                                                         {
@@ -294,6 +303,21 @@ var F15HUD = {
                                                             obj.window7.setText(sprintf("AOA %d",obj.alpha));
                                                             else
                                                             obj.window7.setText(sprintf(" %1.3f",obj.mach));
+                                                            obj.window10.setText(sprintf("a  %d", obj.alpha));
+                                                        }),
+            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond"], nil, func(val)
+                                                        {
+                                                            obj.window9.setText(sprintf("%03d", math.round(val.VelocitiesAirspeedKt)));
+                                                            obj.window13.setText(sprintf("G %03d", math.round(val.VelocitiesGroundspeedKt)));
+                                                            if (getprop("gear/gear[0]/wow") == 1) {
+                                                                obj.window1.setText("GROUND");
+                                                            } else {
+                                                                obj.window1.setText(sprintf(" %05d", math.round(val.AltimeterIndicatedAltitudeFt)));
+                                                            }
+                                                            obj.window1.setVisible(1);
+
+                                                            obj.window14.setText(sprintf(" %04d fps", math.round(val.FeetPerSecond)));
+                                                            obj.window14.setVisible(1);
                                                         }),
             props.UpdateManager.FromHashList(["AutopilotRouteManagerActive",
                                                         "AutopilotRouteManagerWpDist",
@@ -335,6 +359,13 @@ var F15HUD = {
                                                         "HudNavRangeETA"], nil, func(val)
                                                         {
                                                             if (val.ControlsArmamentMasterArmSwitch) {
+                                                                obj.window11.setVisible(1);
+                                                                obj.window15.setVisible(1);
+                                                                obj.window16.setVisible(1);
+                                                                obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
+                                                                obj.window16.setText(sprintf("FLR %03d",getprop("ai/submodels/submodel[6]/count")));
+                                                                weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
+                                                                obj.window11.setText(weapon_type);
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
                                                                 obj.window2.setVisible(1);
                                                                 if (w_s == 0) {
@@ -353,7 +384,7 @@ var F15HUD = {
                                                                     if (val.RadarActiveTargetType != "")
                                                                     model = val.RadarActiveTargetType;
 
-                                                                    #these labels aren't correct - but we don't have a full simulation of the targetting and missiles so 
+                                                                    #these labels aren't correct - but we don't have a full simulation of the targetting and missiles so
                                                                     #have no real idea on the details of how this works.
                                                                     if (val.RadarActiveTargetDisplay){
                                                                         obj.window4.setText(sprintf("RNG %3.1f", val.RadarActiveTargetRange));
@@ -374,6 +405,9 @@ var F15HUD = {
                                                                 }
                                                             } else {
                                                                 obj.window2.setVisible(0);
+                                                                obj.window11.setVisible(0);
+                                                                obj.window15.setVisible(0);
+                                                                obj.window16.setVisible(0);
                                                                 if (val.HudNavRangeDisplay != "")
                                                                 obj.window3.setText("NAV");
                                                                 else
@@ -414,7 +448,7 @@ return obj;
             clip_el.setVisible(0);
             var tran_rect = clip_el.getTransformedBounds();
 
-            var clip_rect = sprintf("rect(%d,%d, %d,%d)", 
+            var clip_rect = sprintf("rect(%d,%d, %d,%d)",
                                    tran_rect[1], # 0 ys
                                    tran_rect[2],  # 1 xe
                                    tran_rect[3], # 2 ye
@@ -432,7 +466,7 @@ return obj;
 #
 #
     update : func(notification) {
-        
+
         me.dlzArray = aircraft.getDLZ();
 #me.dlzArray =[10,8,6,2,9];#test
         if (me.dlzArray == nil or size(me.dlzArray) == 0) {
@@ -457,19 +491,19 @@ return obj;
                     .setColor(0,1,0);
             me.dlz.show();
         }
-        
-        
-        
+
+
+
         if(me.FocusAtInfinity)
           {
               # parallax correction
               var current_x = me.currentViewX.getValue();
               var current_y = me.currentViewY.getValue();
               #        var current_z = getprop("/sim/current-view/z-offset-m");
-        
+
               var dx = me.view[0] - current_x;
               var dy = me.view[1] - current_y;
-              
+
               me.svg.setTranslation(me.baseTranslation[0]-dx*1024, me.baseTranslation[1]+dy*1024);
           }
 
@@ -522,7 +556,7 @@ return obj;
             me.ccipLine.createChild("path")
                 .moveTo(poscc[0],poscc[1])
                 .lineTo(me.ccipVVPos)
-                .setStrokeDashArray([0,me.pipperRadius,me.ccipLineDist-3.5-me.pipperRadius,3.5*10])#3.5 is radius of VV. 
+                .setStrokeDashArray([0,me.pipperRadius,me.ccipLineDist-3.5-me.pipperRadius,3.5*10])#3.5 is radius of VV.
                 .setStrokeLineWidth(1)
                 .setColor(0,1,0);
             me.ccipGrp.show();
@@ -531,7 +565,7 @@ return obj;
         if (me.svg.getVisible() == 0)
           return;
 
-     
+
 #        if (hdp.range_rate != nil)
 #        {
 #            me.window1.setVisible(1);
@@ -539,12 +573,12 @@ return obj;
 #        }
 #        else
 #            me.window1.setVisible(0);
-  
+
 
      if (notification["Timestamp"] != nil)
          me.process_targets.set_timestamp(notification.Timestamp);
 
-     me.process_targets.process(me, awg_9.tgts_list, 
+     me.process_targets.process(me, awg_9.tgts_list,
                                 func(pp, obj, data){
                                     obj.target_idx=1;
                                     obj.designated = 0;
@@ -557,10 +591,10 @@ return obj;
                                         if (u.Callsign != nil)
                                           callsign = u.Callsign.getValue();
                                         var model = "XX";
-                                        
+
                                         if (u.ModelType != "")
                                           model = u.ModelType;
-                                        
+
                                         if (obj.target_idx < obj.max_symbols)
                                           {
                                               tgt = obj.tgt_symbols[obj.target_idx];
@@ -579,7 +613,7 @@ return obj;
                                                       tgt.setVisible(getprop("sim/model/f15/lighting/hud-diamond-switch/state"));
                                                     else
                                                       tgt.setVisible(u.get_display());
-                                                    
+
                                                     if (awg_9.active_u != nil and awg_9.active_u.Callsign != nil and u.Callsign != nil and u.Callsign.getValue() == awg_9.active_u.Callsign.getValue())
                                                       {
                                                           obj.target_locked.setVisible(u.get_display());
@@ -593,9 +627,9 @@ return obj;
                                                             tgt.setVisible(0);
                                                       }
                                                     tgt.setTranslation (xc, yc);
-                                                    
+
                                                     if (ht_debug)
-                                                      printf("%-10s %f,%f [%f,%f,%f] :: %f,%f",callsign,xc,yc, devs[0], devs[1], devs[2], u_dev_rad*D2R, u_elev_rad*D2R); 
+                                                      printf("%-10s %f,%f [%f,%f,%f] :: %f,%f",callsign,xc,yc, devs[0], devs[1], devs[2], u_dev_rad*D2R, u_elev_rad*D2R);
                                                 }
                                           }
                                         obj.target_idx = obj.target_idx+1;
@@ -654,6 +688,8 @@ input = {
         RadarActiveTargetType                   : "sim/model/f15/instrumentation/radar-awg-9/active-target-type",
         InstrumentedG                           : "instrumentation/g-meter/instrumented-g",
         VelocitiesAirspeedKt                    : "velocities/airspeed-kt",
+        VelocitiesGroundspeedKt                 : "velocities/groundspeed-kt",
+        FeetPerSecond                           : "velocities/down-relground-fps",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD.svg", "HUDImage1"), 2);

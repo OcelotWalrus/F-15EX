@@ -32,7 +32,7 @@ var Station = {
 		p.launcherJettisoned=1;
 		p.forceRail = 0;
 		p.guiListener = nil;
-		p.currentName = nil;	
+		p.currentName = nil;
 		p.currentSet = nil;
 		p.myListener = nil;#will be called when a stations loadout changes from outside.
 		p.AIMListener = nil;#will be called when a weapon is fired. argument=the weapon
@@ -58,7 +58,7 @@ var Station = {
 				if (me.weapon != nil) {
 					return me.currentSet["category"];
 				}
-			}			
+			}
 		}
 		return 1;
 	},
@@ -75,7 +75,7 @@ var Station = {
 		}
 		return 1;
 	},
-	
+
 	isActive: func {
 		# Returns if is active. This is for example used in F-14, where stations be individually enabled or disabled.
 		if (me.activeFunction != nil) {
@@ -309,7 +309,7 @@ var Station = {
 		# Warning: is not called when stores are released, jettisoned or likewise.
 		me.myListener = ml;
 	},
-	
+
 	getMass: func {
 		# Return a vector with launcher/rack/pylon/tube mass and the combined mass of all stores mounted.
 		if (me["weaponsMass"] == nil) me.weaponsMass = 0;
@@ -501,7 +501,7 @@ var Pylon = {
 		var p = Station.new(name, id, position, sets, guiID, pointmassNode, operableFunction, activeFunction);
 		p.parents = [Pylon, Station];
 		p.node_dragaera = dragareaNode;
-		
+
 		# these should not be called in parent.new(), as they are empty there.
 		p.initGUI();
 		p.loadSet(sets[0]);
@@ -542,7 +542,7 @@ var Pylon = {
 			me.guiNode.initNode("opt["~me.i~"]/name",set.name,"STRING");
 
 			# ensure that gals is set in the option for fuel tanks - as this is required
-			# to make the payload dialog auto reload the tank after it is mounted 
+			# to make the payload dialog auto reload the tank after it is mounted
 			# because the payload dialog requires /consumables/fuel/tank[#]/capacity-gal_us to
 			# be present and non zero
 			me.guiNode.initNode("opt["~me.i~"]/lbs",0,"DOUBLE");
@@ -559,12 +559,12 @@ var Pylon = {
 		me.guiListener = setlistener(baseGui~"/weight["~me.guiID~"]/selected", func me.guiChanged());
 		me.changingGui = 0;
 	},
-	
+
 	calculateSetMassForOpt: func {
 		# do mass calc for OPT in dialog, this must be done due to fuel and payload dialog changed recently.
 		# only if gui name dont match OPT, OPT will not be forced upon us.
 		foreach(set ; me.sets) {
-			me.totalMass = 0;		
+			me.totalMass = 0;
 			foreach(me.weapon;set.content) {
 				if (typeof(me.weapon) == "scalar") {
 					me.totalMass += getprop("payload/armament/"~string.lc(me.weapon)~"/weight-launch-lbs");
@@ -614,7 +614,7 @@ var Pylon = {
 
 		me.changingGui = 0;
 	},
-	
+
 	getCurrentPylon: func {
 		me.nameP = nil;
 		if(me.currentSet != nil and me.currentSet["pylon"] != nil) {
@@ -622,7 +622,7 @@ var Pylon = {
 		}
 		return me.nameP;
 	},
-	
+
 	getCurrentRack: func {
 		me.nameR = nil;
 		if(me.currentSet != nil and me.currentSet["rack"] != nil and me.launcherJettisoned == 0) {
@@ -666,7 +666,7 @@ var Pylon = {
 		}
 		return me.nameS;
 	},
-	
+
 	getCurrentSMSName: func {
 		me.nameS = "";
 		if (me.currentSet.showLongTypeInsteadOfCount) {
@@ -713,7 +713,7 @@ var Pylon = {
 		# drops everything.
 		if (me.weaponJettisonable) {
 			me.tempWeapons = [];
-		
+
 			foreach(me.weapon ; me.getWeapons()) {
 				if (me.weapon != nil) {
 					me.weapon.eject();
@@ -738,7 +738,7 @@ var Pylon = {
 			me.launcherJettisoned = 1;
 		}
 	},
-	
+
 	loadingSet: func (set) {
 		# override this method to set custom attributes, before calculateFDM is ran after a set is loaded.
 		if (set != nil) {
@@ -789,7 +789,7 @@ var WPylon = {
 		var p = Station.new(name, id, position, sets, guiID, pointmassNode, operableFunction, activeFunction);
 		p.parents = [WPylon, Station];
 		p.node_dragaera = dragareaNode;
-		
+
 		# these should not be called in parent.new(), as they are empty there.
 		p.initGUI();
 		p.loadSet(sets[0]);
@@ -824,10 +824,10 @@ var WPylon = {
 		me.i = 0;
 		me.guiListener = setlistener(baseGui~"/weight["~me.guiID~"]/selected", func me.guiChanged());
 	},
-	
+
 	setGUI: func {
 	},
-	
+
 	getCurrentPylon: func {
 		me.nameP = nil;
 		if(me.currentSet != nil and me.currentSet["pylon"] != nil) {
@@ -835,7 +835,7 @@ var WPylon = {
 		}
 		return me.nameP;
 	},
-	
+
 	getCurrentRack: func {
 		me.nameR = nil;
 		if(me.currentSet != nil and me.currentSet["rack"] != nil and me.launcherJettisoned == 0) {
@@ -879,7 +879,7 @@ var WPylon = {
 		}
 		return me.nameS;
 	},
-	
+
 	getCurrentSMSName: func {
 		me.nameS = "";
 		if (me.currentSet.showLongTypeInsteadOfCount) {
@@ -920,7 +920,7 @@ var WPylon = {
 		# drops everything.
 		if (me.weaponJettisonable) {
 			me.tempWeapons = [];
-		
+
 			foreach(me.weapon ; me.getWeapons()) {
 				if (me.weapon != nil) {
 					me.weapon.eject();
@@ -945,7 +945,7 @@ var WPylon = {
 			me.launcherJettisoned = 1;
 		}
 	},
-	
+
 	loadingSet: func (set) {
 		# override this method to set custom attributes, before calculateFDM is ran after a set is loaded.
 		if (set != nil) {
@@ -1001,7 +1001,7 @@ var SubModelWeapon = {
 		s.Cd_base = 0;
 		s.ref_area_sqft = 0;
 
-		
+
 		return s;
 	},
 
@@ -1052,7 +1052,7 @@ var SubModelWeapon = {
 		#me.timer.start();
 
 		if (me.neverRan) me.loop();
-		me.neverRan = 0;		
+		me.neverRan = 0;
 	},
 
 	eject: func {
@@ -1114,7 +1114,7 @@ var FuelTank = {
 		if (pylon.guiID != nil) {
 			me.guiNode = props.globals.getNode(baseGui~"/weight["~pylon.guiID~"]",1);
 			me.guiNode.initNode("tank",me.fuelTankNumber,"DOUBLE");
-		}		
+		}
 
 		# set capacity in fuel tank
 		if (fdm == "jsb") {
