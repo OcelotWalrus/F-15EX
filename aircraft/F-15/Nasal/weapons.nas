@@ -131,7 +131,7 @@ var armament_update = func {
     SwCount.setValue(aim9_count);
     Count9.setValue(aim9_count);
     Count7.setValue(pylons.fcs.getAmmoOfType("AIM-7"));
-    Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120"));
+    Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120") + pylons.fcs.getAmmoOfType("AIM-120D"));
     Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10"));
 
     update_gun_ready();
@@ -225,7 +225,7 @@ var missile_code_from_ident= func(mty)
 {
         if (mty == "AIM-9")
             return "aim9";
-        if (mty == "AIM-9X")
+        elsif (mty == "AIM-9X")
             return "aim9x";
         else if (mty == "AIM-7")
             return "aim7";
@@ -239,6 +239,8 @@ var missile_code_from_ident= func(mty)
             return "gbu10";
         else if (mty == "AIM-120")
             return "aim120";
+        else if (mty == "AIM-120D")
+            return "aim120d";
 }
 var get_sel_missile_count = func()
 {
@@ -252,7 +254,7 @@ var get_sel_missile_count = func()
     }
     else if (WeaponSelector.getValue() == 2)
     {
-        return pylons.fcs.getAmmoOfType("AIM-7")+pylons.fcs.getAmmoOfType("AIM-120");
+        return pylons.fcs.getAmmoOfType("AIM-7")+pylons.fcs.getAmmoOfType("AIM-120")+pylons.fcs.getAmmoOfType("AIM-120D");
     }
     return 0;
 }
@@ -283,11 +285,15 @@ var arm_selector = func() {
             setprop("sim/model/f15/systems/armament/selected-arm", "AIM-9X");
         }
     } elsif ( stick_s == 2 ) {
-        var p = pylons.fcs.selectWeapon("AIM-120");
-        setprop("sim/model/f15/systems/armament/selected-arm", "AIM-120");
+        var p = pylons.fcs.selectWeapon("AIM-120D");
+        setprop("sim/model/f15/systems/armament/selected-arm", "AIM-120D");
         if (p == nil) {
-            pylons.fcs.selectWeapon("AIM-7");
-            setprop("sim/model/f15/systems/armament/selected-arm", "AIM-7");
+            pylons.fcs.selectWeapon("AIM-120");
+            setprop("sim/model/f15/systems/armament/selected-arm", "AIM-120");
+            if (p == nil) {
+                pylons.fcs.selectWeapon("AIM-7");
+                setprop("sim/model/f15/systems/armament/selected-arm", "AIM-7");
+            }
         }
     } elsif ( stick_s == 5 ) {
         var p = pylons.fcs.selectWeapon("GBU-10");

@@ -182,6 +182,30 @@ var MPCD_Station =
                 }
                 else mode = "MRM";
             }
+            elsif (na[0].type == "AIM-120D")
+            {
+                na = "120D";
+                if (weapon_mode == 2)
+                {
+                    #sel = getprop(sel_node);
+                    sel = me.ident+1 == pylons.fcs.getSelectedPylonNumber();
+                    if (sel and master_arm)
+                        mode = "RDY";
+                }
+                else mode = "MRM";
+            }
+            elsif (na[0].type == "2 x AIM-120D")
+            {
+                na = "2x120D";
+                if (weapon_mode == 2)
+                {
+                    #sel = getprop(sel_node);
+                    sel = me.ident+1 == pylons.fcs.getSelectedPylonNumber();
+                    if (sel and master_arm)
+                        mode = "RDY";
+                }
+                else mode = "MRM";
+            }
             elsif (na[0].type == "MK-84" or na[0].type == "GBU-10") {
                 na = "";
                 mode = "";

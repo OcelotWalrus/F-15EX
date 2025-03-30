@@ -1154,8 +1154,7 @@
                             <property>payload/weight[11]/selected</property>
                             <live>true</live>
                             <value>Empty</value>
-                            <value>AIM-9M Sidewinder</value>
-                            <value>AIM-9X Sidewinder</value>
+                            <value>AIM-9X Block I Sidewinder</value>
                             <value>AIM-120D AMRAAM</value>
                             <binding>
                                 <command>dialog-apply</command>
@@ -1192,8 +1191,7 @@
                             <property>payload/weight[12]/selected</property>
                             <live>true</live>
                             <value>Empty</value>
-                            <value>2 x AIM-9M Sidewinder</value>
-                            <value>2 x AIM-9X Sidewinder</value>
+                            <value>2 x AIM-9X Block I Sidewinder</value>
                             <value>2 x AIM-120D AMRAAM</value>
                             <binding>
                                 <command>dialog-apply</command>
@@ -1201,7 +1199,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-12-type") == "AIM-9X") {
+									if (getprop("payload/armament/station/id-12-type") == "AIM-9X" or getprop("payload/armament/station/id-12-type") == "AIM-120D") {
 										setprop("payload/armament/station/id-12-count", 2);
 									} else {
 										setprop("payload/armament/station/id-12-count", 1);
@@ -1234,8 +1232,7 @@
                             <property>payload/weight[13]/selected</property>
                             <live>true</live>
                             <value>Empty</value>
-                            <value>AIM-9M Sidewinder</value>
-                            <value>AIM-9X Sidewinder</value>
+                            <value>AIM-9X Block I Sidewinder</value>
                             <value>AIM-120D AMRAAM</value>
                             <binding>
                                 <command>dialog-apply</command>
@@ -1272,9 +1269,8 @@
 							<property>payload/weight[0]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>AIM-9M Sidewinder</value>
-							<value>AIM-9X Sidewinder</value>
-							<value>AIM-120D ARMAAM</value>
+							<value>AIM-9X Block I Sidewinder</value>
+							<value>AIM-120D AMRAAM</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1295,7 +1291,7 @@
                             <property>payload/armament/station/id-0-count</property>
 						    <label>xxxxxxxx</label>
 						    <live>true</live>
-						    <format>%.1f</format>
+						    <format>%.1d</format>
                         </text>
 					</group>
 
@@ -1311,8 +1307,7 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>Droptank</value>
-							<value>2 x AIM-9M Sidewinder</value>
-							<value>2 x AIM-9X Sidewinder</value>
+							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
@@ -1326,7 +1321,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-1-type") == "AIM-9X") {
+									if (getprop("payload/armament/station/id-1-type") == "AIM-9X" or getprop("payload/armament/station/id-1-type") == "AIM-120D") {
 										setprop("payload/armament/station/id-1-count", 2);
 									} else {
 										setprop("payload/armament/station/id-1-count", 1);
@@ -1358,8 +1353,7 @@
 							<property>payload/weight[2]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>AIM-9M Sidewinder</value>
-							<value>AIM-9X Sidewinder</value>
+							<value>AIM-9X Block I Sidewinder</value>
 							<value>AIM-120D AMRAAM</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1395,13 +1389,23 @@
 							<property>payload/weight[3]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-
+							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
 								<command>dialog-apply</command>
+							</binding>
+							<binding>
+								<command>nasal</command>
+								<script>
+									if (getprop("payload/armament/station/id-3-set") == "2 x AIM-120D AMRAAM") {
+										setprop("payload/armament/station/id-3-count", 2);
+									} else {
+										setprop("payload/armament/station/id-3-count", 1);
+									}
+								</script>
 							</binding>
 						</combo>
 						<text>
@@ -1429,12 +1433,23 @@
 							<live>true</live>
 							<value>Empty</value>
 
+							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
 								<command>dialog-apply</command>
+							</binding>
+							<binding>
+								<command>nasal</command>
+								<script>
+									if (getprop("payload/armament/station/id-4-set") == "2 x AIM-120D AMRAAM") {
+										setprop("payload/armament/station/id-4-count", 2);
+									} else {
+										setprop("payload/armament/station/id-4-count", 1);
+									}
+								</script>
 							</binding>
 						</combo>
 						<text>
@@ -1497,12 +1512,23 @@
 							<live>true</live>
 							<value>Empty</value>
 
+							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
 								<command>dialog-apply</command>
+							</binding>
+							<binding>
+								<command>nasal</command>
+								<script>
+									if (getprop("payload/armament/station/id-6-set") == "2 x AIM-120D AMRAAM") {
+										setprop("payload/armament/station/id-6-count", 2);
+									} else {
+										setprop("payload/armament/station/id-6-count", 1);
+									}
+								</script>
 							</binding>
 						</combo>
 						<text>
@@ -1530,12 +1556,23 @@
 							<live>true</live>
 							<value>Empty</value>
 
+							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
 								<command>dialog-apply</command>
+							</binding>
+							<binding>
+								<command>nasal</command>
+								<script>
+									if (getprop("payload/armament/station/id-7-set") == "2 x AIM-120D AMRAAM") {
+										setprop("payload/armament/station/id-7-count", 2);
+									} else {
+										setprop("payload/armament/station/id-7-count", 1);
+									}
+								</script>
 							</binding>
 						</combo>
 						<text>
@@ -1562,8 +1599,7 @@
 							<property>payload/weight[8]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>AIM-9M Sidewinder</value>
-							<value>AIM-9X Sidewinder</value>
+							<value>AIM-9X Block I Sidewinder</value>
 							<value>AIM-120D AMRAAM</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1600,8 +1636,7 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>Droptank</value>
-							<value>2 x AIM-9M Sidewinder</value>
-							<value>2 x AIM-9X Sidewinder</value>
+							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
@@ -1615,7 +1650,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-9-type") == "AIM-9X") {
+									if (getprop("payload/armament/station/id-9-type") == "AIM-9X" or getprop("payload/armament/station/id-9-type") == "AIM-120D") {
 										setprop("payload/armament/station/id-9-count", 2);
 									} else {
 										setprop("payload/armament/station/id-9-count", 1);
@@ -1647,8 +1682,7 @@
 							<property>payload/weight[10]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>AIM-9M Sidewinder</value>
-							<value>AIM-9X Sidewinder</value>
+							<value>AIM-9X Block I Sidewinder</value>
 							<value>AIM-120D AMRAAM</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1684,8 +1718,7 @@
 							<property>payload/weight[14]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>AIM-9M Sidewinder</value>
-							<value>AIM-9X Sidewinder</value>
+							<value>AIM-9X Block I Sidewinder</value>
 							<value>AIM-120D AMRAAM</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1721,8 +1754,7 @@
 							<property>payload/weight[15]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>2 x AIM-9M Sidewinder</value>
-							<value>2 x AIM-9X Sidewinder</value>
+							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1730,7 +1762,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-15-type") == "AIM-9X") {
+									if (getprop("payload/armament/station/id-15-type") == "AIM-9X" or getprop("payload/armament/station/id-15-type") == "AIM-120D") {
 										setprop("payload/armament/station/id-15-count", 2);
 									} else {
 										setprop("payload/armament/station/id-15-count", 1);
@@ -1762,8 +1794,7 @@
 							<property>payload/weight[16]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>AIM-9M Sidewinder</value>
-							<value>AIM-9X Sidewinder</value>
+							<value>AIM-9X Block I Sidewinder</value>
 							<value>AIM-120D AMRAAM</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1799,7 +1830,6 @@
 							<property>payload/weight[17]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>HARM TS Pod</value>
 							<value>LANTIRN Nav Pod</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1840,9 +1870,7 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>Legion Pod</value>
-							<value>HARM TS Pod</value>
 							<value>Sniper ATP</value>
-							<value>LITENING Targeting</value>
 							<value>LANTIRN Target Pod</value>
 							<binding>
 								<command>dialog-apply</command>

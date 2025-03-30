@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PropertyList>
+
+    <path>Aircraft/F-15/Models/Stores/Racks/amber.xml</path>
+
+    <model>
+        <name>AIM-120D-15-0</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
+        <offsets>
+            <x-m>-0</x-m>
+            <y-m>-0.185</y-m>
+            <z-m>-0.14</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>AIM-120D-15-1</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
+        <offsets>
+            <x-m>-0</x-m>
+            <y-m>0.185</y-m>
+            <z-m>-0.14</z-m>
+        </offsets>
+    </model>
+
+    <animation>
+        <type>select</type>
+        <object-name>AIM-120D-15-0</object-name>
+        <condition>
+            <equals>
+                <property>payload/armament/station/id-15-type</property>
+                <value>AIM-120D</value>
+            </equals>
+            <greater-than>
+                <property>payload/armament/station/id-15-count</property>
+                <value>0</value>
+            </greater-than>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <object-name>AIM-120D-15-1</object-name>
+        <condition>
+            <equals>
+                <property>payload/armament/station/id-15-type</property>
+                <value>AIM-120D</value>
+            </equals>
+            <greater-than>
+                <property>payload/armament/station/id-15-count</property>
+                <value>1</value>
+            </greater-than>
+        </condition>
+    </animation>
+
+</PropertyList>

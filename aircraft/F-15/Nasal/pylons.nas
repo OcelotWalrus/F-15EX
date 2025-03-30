@@ -58,16 +58,19 @@ var pylonSets = {
 
     # A/A weapons for fuselage pylons:
 	aim9:    {name: "AIM-9L Sidewinder",   content: ["AIM-9"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 10, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
-	aim9x:   {name: "AIM-9X Sidewinder",   content: ["AIM-9X"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 10, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	aim9x:   {name: "AIM-9X Block I Sidewinder",   content: ["AIM-9X"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 10, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 	aim7:    {name: "AIM-7F Sparrow",   content: ["AIM-7"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 	aim120:  {name: "AIM-120B AMRAAM", content: ["AIM-120"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	aim120d:  {name: "AIM-120D AMRAAM", content: ["AIM-120D"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	doubleaim120d:   {name: "2 x AIM-120D AMRAAM", content: ["AIM-120D", "AIM-120D"], fireOrder: [0, 1], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 1},
 
     # A/A weapons for wing pylons: (launchermass is calculated in jsbsim pointmass weight 13 & 14)
     aim9w:    {name: "AIM-9L Sidewinder",   content: ["AIM-9"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
-    aim9xw:   {name: "AIM-9X Sidewinder",   content: ["AIM-9X"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
-	doubleaim9xw:   {name: "2 x AIM-9X Sidewinder", content: ["AIM-9X", "AIM-9X"], fireOrder: [0, 1], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+    aim9xw:   {name: "AIM-9X Block I Sidewinder",   content: ["AIM-9X"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	doubleaim9xw:   {name: "2 x AIM-9X Block I Sidewinder", content: ["AIM-9X", "AIM-9X"], fireOrder: [0, 1], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 1},
     aim7w:    {name: "AIM-7F Sparrow",   content: ["AIM-7"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
     aim120w:  {name: "AIM-120B AMRAAM", content: ["AIM-120"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+    aim120dw:  {name: "AIM-120D AMRAAM", content: ["AIM-120D"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 };
 
 # sets. The first in the list is the default. Earlier in the list means higher up in dropdown menu.
@@ -75,29 +78,29 @@ var pylonSets = {
 if (getprop("sim/model/f15/variant") == "E") { # EX variant has different pylons and configuration than C and D variants
 	#var pylon1set = [pylonSets.empty];
 
-	var pylonex1aset = [pylonSets.empty, pylonSets.aim9xw];
-	var pylonex1bset = [pylonSets.empty, pylonSets.doubleaim9xw];
-	var pylonex1cset = [pylonSets.empty, pylonSets.aim9xw];
+	var pylonex1aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
+	var pylonex1bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylonex1cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylon2aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120w];
-	var pylon2bset = [pylonSets.empty, pylonSets.m84, pylonSets.g10, pylonSets.doubleaim9xw];
-	var pylon2cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120w];
+	var pylon2aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
+	var pylon2bset = [pylonSets.empty, pylonSets.m84, pylonSets.g10, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon2cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylon3set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120];
-	var pylon4set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120];
+	var pylon3set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
+	var pylon4set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
 
 	var pylon5set = [pylonSets.empty, pylonSets.m84, pylonSets.g10];
 
-	var pylon6set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120];
-	var pylon7set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120];
+	var pylon6set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
+	var pylon7set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
 
-	var pylon8aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120w];
-	var pylon8bset = [pylonSets.empty, pylonSets.m84, pylonSets.g10, pylonSets.doubleaim9xw];
-	var pylon8cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120w];
+	var pylon8aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
+	var pylon8bset = [pylonSets.empty, pylonSets.m84, pylonSets.g10, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon8cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylonex2aset = [pylonSets.empty, pylonSets.aim9xw];
-	var pylonex2bset = [pylonSets.empty, pylonSets.doubleaim9xw];
-	var pylonex2cset = [pylonSets.empty, pylonSets.aim9xw];
+	var pylonex2aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
+	var pylonex2bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylonex2cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	#var pylon9set = [pylonSets.empty];
 } else {
@@ -160,7 +163,7 @@ if (getprop("sim/model/f15/variant") == "E") {
 
 # The order of first vector in this line is the default pylon order weapons is released in.
 # The order of second vector in this line is the order cycle key would cycle through the weapons (since F15 doesn't use the cycle option that order is not important):
-fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","MK-84", "GBU-10"]);
+fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10"]);
 
 var callback = func (aim = nil) {
     # after something has changed in pylon system, this will make MPCD update its A/A and A/G pages:

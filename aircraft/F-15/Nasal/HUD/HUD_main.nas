@@ -142,8 +142,10 @@ var F15HUD = {
         obj.window14 = obj.get_text("window14", aircraft.HUDFont,9,1.4);
         obj.window15 = obj.get_text("window15", aircraft.HUDFont,9,1.4);
         obj.window16 = obj.get_text("window16", aircraft.HUDFont,9,1.4);
+        obj.window17 = obj.get_text("window17", aircraft.HUDFont,9,1.4);
 
         obj.window1.setVisible(0);
+		obj.window17.setVisible(0);
 
         obj.HudNavRangeDisplay = "";
         obj.HudNavRangeETA = "";
@@ -364,6 +366,9 @@ var F15HUD = {
                                                                 obj.window16.setVisible(1);
                                                                 obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
                                                                 obj.window16.setText(sprintf("FLR %03d",getprop("ai/submodels/submodel[6]/count")));
+																fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
+																fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
+																obj.window17.setText(sprintf("%02d m %02d s", fall_time_mins, fall_time_secs));
                                                                 weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
                                                                 obj.window11.setText(weapon_type);
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
@@ -377,6 +382,7 @@ var F15HUD = {
                                                                                                 + val.ArmamentAim7Count));
                                                                 } else if (w_s == 5){
                                                                     obj.window2.setText(sprintf("G%2d", val.ArmamentAgmCount));
+																	obj.window17.setVisible(1);
                                                                 }
                                                                 if (val.RadarActiveTargetAvailable or 0) {
                                                                     obj.window3.setText(val.RadarActiveTargetCallsign);
@@ -403,11 +409,15 @@ var F15HUD = {
                                                                     obj.window6.setText("");
                                                                     obj.window6.setVisible(0); # SRM UNCAGE / TARGET ASPECT
                                                                 }
+																if (getprop("sim/model/f15/armament/ccip-off") == 1) {
+																	obj.window17.setVisible(0);
+																}
                                                             } else {
                                                                 obj.window2.setVisible(0);
                                                                 obj.window11.setVisible(0);
                                                                 obj.window15.setVisible(0);
                                                                 obj.window16.setVisible(0);
+																obj.window17.setVisible(0);
                                                                 if (val.HudNavRangeDisplay != "")
                                                                 obj.window3.setText("NAV");
                                                                 else
@@ -538,6 +548,7 @@ return obj;
         me.ccipInfo = pylons.getCCIP();
         if (me.ccipInfo == nil or notification.ControlsArmamentWeaponSelector != 5) {
             me.ccipGrp.hide();
+			setprop("sim/model/f15/armament/ccip-off", 1);
         } else {
             hudmath.HudMath.reCalc();
             var poscc = hudmath.HudMath.getPosFromCoord(me.ccipInfo[0]);
@@ -560,6 +571,13 @@ return obj;
                 .setStrokeLineWidth(1)
                 .setColor(0,1,0);
             me.ccipGrp.show();
+
+			# Fall time in seconds
+			fall_time = me.ccipInfo[2] / 60; # return its in minutes
+			fall_time_mins = sprintf("%.0f", fall_time);
+			fall_time_secs = me.ccipInfo[2] - fall_time_mins * 60;  # remove whole minutes for seconds
+			setprop("sim/model/f15/armament/fall-time-secs", math.round(fall_time_secs));
+			setprop("sim/model/f15/armament/fall-time-mins", math.round(fall_time_mins));
         }
 
         if (me.svg.getVisible() == 0)

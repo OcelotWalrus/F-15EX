@@ -75,12 +75,12 @@ var warheads = {
     "AGM-154A":          [ 5,  493.00,1,0],
     "AGM-158":           [ 6, 1000.00,1,0],
     "ALARM":             [ 7,  450.00,1,0],
-    "AM 39 Exocet":      [ 8,  364.00,1,0], 
-    "AS 37 Martel":      [ 9,  330.00,1,0],# Also : AJ 168 Martel 
+    "AM 39 Exocet":      [ 8,  364.00,1,0],
+    "AS 37 Martel":      [ 9,  330.00,1,0],# Also : AJ 168 Martel
     "AS30L":             [10,  529.00,1,0],
-    "BL755":             [11,  100.00,1,1],# 800lb bomblet warhead. Mix of armour piecing and HE. 100 due to need to be able to kill buk-m2.    
-    "CBU-87":            [12,  100.00,1,1],# bomblet warhead. Mix of armour piecing and HE. 100 due to need to be able to kill buk-m2.    
-    "CBU-105":           [13,  100.00,1,1],# bomblet warhead. Mix of armour piecing and HE. 100 due to need to be able to kill buk-m2.    
+    "BL755":             [11,  100.00,1,1],# 800lb bomblet warhead. Mix of armour piecing and HE. 100 due to need to be able to kill buk-m2.
+    "CBU-87":            [12,  100.00,1,1],# bomblet warhead. Mix of armour piecing and HE. 100 due to need to be able to kill buk-m2.
+    "CBU-105":           [13,  100.00,1,1],# bomblet warhead. Mix of armour piecing and HE. 100 due to need to be able to kill buk-m2.
     "AS 37 Armat":       [14,  330.00,1,0],
     "FAB-100":           [15,   92.59,1,0],
     "FAB-250":           [16,  202.85,1,0],
@@ -130,7 +130,7 @@ var warheads = {
     "Apache AP":         [60,  110.23,0,1],# Real mass of bomblet. (x 10). Anti runway.
     "KN-06":             [61,  315.00,0,0],
     "9M317":             [62,  145.00,0,0],
-    "GEM":               [63,  185.00,0,0],#MIM-104D 
+    "GEM":               [63,  185.00,0,0],#MIM-104D
     "R.550 Magic":       [64,   26.45,0,0],# also called majic
     "5Ya23":             [65,  414.00,0,0],#Volga-M
     "R.550 Magic 2":     [66,   27.00,0,0],
@@ -139,8 +139,8 @@ var warheads = {
     "AIM-9M":            [69,   20.80,0,0],
     "R-73 RVV-MD":       [70,   16.31,0,0],# automat su34
     "Meteor":            [71,   55.00,0,0],
-    "MICA-EM":           [72,   30.00,0,0], 
-    "MICA-IR":           [73,   30.00,0,0], 
+    "MICA-EM":           [72,   30.00,0,0],
+    "MICA-IR":           [73,   30.00,0,0],
     "R-13M":             [74,   16.31,0,0],
     "R-27R1":            [75,   85.98,0,0],
     "R-27T1":            [76,   85.98,0,0],
@@ -168,6 +168,7 @@ var warheads = {
     "AIM-9X":            [98,   20.80,0,0],
     "R-23R":             [99,   55.00,0,0],# mig23 fox 1
     "5V27":              [100, 150.00,0,0],# Missile used with SA-3/S-125
+    "AIM-120D":          [101,  44.00,0,0],
     # Max id is 180
 };
 
@@ -466,7 +467,7 @@ var DamageRecipient =
                     var callsign = processCallsign(getprop("sim/multiplay/callsign"));
                     if (notification.RemoteCallsign == callsign and getprop("payload/armament/msg") == 1) {
                         #damage enabled and were getting hit
-                        
+
                         if (notification.SecondaryKind < 0 and notification.SecondaryKind >= -40 and hitable_by_cannon) {
                             # cannon hit
                             if (m28_auto) mig28.engagedBy(notification.Callsign, 0);

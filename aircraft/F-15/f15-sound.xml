@@ -1545,7 +1545,7 @@
                         <value>0</value>
                     </equals>
                     <less-than>
-                        <property>ai/submodels/submodel[3]/count</property>
+                        <property>sim/model/f15/systems/gun/rounds</property>
                         <value>5</value>
                     </less-than>
                     <property>sim/model/f15/controls/armament/master-arm-switch</property>
@@ -2026,7 +2026,10 @@
             <path>Aircraft/F-15/Sounds/AIM-discharge.wav</path>
             <mode>once</mode>
             <condition>
-                <property>payload/armament/aim-120/sound-fire-on-off</property>
+                <or>
+                    <property>payload/armament/aim-120/sound-fire-on-off</property>
+                    <property>payload/armament/aim-120d/sound-fire-on-off</property>
+                </or>
             </condition>
             <reference-dist>25</reference-dist>
             <max-dist>10000</max-dist>
@@ -2045,7 +2048,10 @@
             <path>Aircraft/F-15/Sounds/AIM-discharge.wav</path>
             <mode>once</mode>
             <condition>
-                <property>payload/armament/aim-9/sound-fire-on-off</property>
+                <or>
+                    <property>payload/armament/aim-9/sound-fire-on-off</property>
+                    <property>payload/armament/aim-9x/sound-fire-on-off</property>
+                </or>
             </condition>
             <reference-dist>25</reference-dist>
             <max-dist>10000</max-dist>
