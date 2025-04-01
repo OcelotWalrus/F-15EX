@@ -1786,6 +1786,15 @@
             <enabled type="bool">false</enabled>
         </view>
 
+        <view n="101">
+            <!-- also used for ejection view, if change this number, also change it in MissileView.nas -->
+            <name>Missile View</name>
+            <type>lookat</type>
+            <enabled>true</enabled>
+            <heading-offset-deg>180</heading-offset-deg>
+            <pitch-offset-deg>10</pitch-offset-deg>
+        </view>
+
         <instrumentation>
             <path>Aircraft/F-15/Systems/instrumentation.xml</path>
         </instrumentation>
@@ -3333,6 +3342,12 @@
         <hudmath>
             <file>Aircraft/F-15/Nasal/hud_math.nas</file>
         </hudmath>
+        <ai>
+          <file>Aircraft/F-15/Nasal/AI_list.nas</file>
+        </ai>
+        <viewMissile>
+          <file>Aircraft/F-15/Nasal/MissileView.nas</file>
+        </viewMissile>
         <aircraft>
             <file>Aircraft/F-15/Nasal/liveries.nas</file>
             <file>Aircraft/F-15/Nasal/aircraft-main.nas</file>

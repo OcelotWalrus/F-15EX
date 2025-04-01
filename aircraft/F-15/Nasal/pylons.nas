@@ -154,16 +154,51 @@ if (getprop("sim/model/f15/variant") == "E") { # EX variant
 	pylonex2c.forceRail = 1;
 }
 
-var pylons = [pylonI,pylon2a,pylon2b,pylon2c,pylon3,pylon4,pylon5,pylon6,pylon7,pylon8a,pylon8b,pylon8c];
-
 # EX variant
 if (getprop("sim/model/f15/variant") == "E") {
-	var pylons = [pylonI,pylon2a,pylon2b,pylon2c,pylon3,pylon4,pylon5,pylon6,pylon7,pylon8a,pylon8b,pylon8c, pylonex1a, pylonex1b, pylonex1c, pylonex2a, pylonex2b, pylonex2c];
+	var pylons = [pylonI,pylon2a,pylon2b,pylon2c,pylon3,pylon4,pylon5,pylon6,pylon7,pylon8a,pylon8b,pylon8c, pylonex1a, pylonex1b, pylonex1c, pylonex2a, pylonex2b, pylonex2c, pylonnav];
+} else {
+	var pylons = [pylonI,pylon2a,pylon2b,pylon2c,pylon3,pylon4,pylon5,pylon6,pylon7,pylon8a,pylon8b,pylon8c];
 }
 
 # The order of first vector in this line is the default pylon order weapons is released in.
 # The order of second vector in this line is the order cycle key would cycle through the weapons (since F15 doesn't use the cycle option that order is not important):
-fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10"]);
+fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17, 18], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10"]);
+
+if (getprop("sim/model/f15/variant") == "E") { # EX variant only
+	var aimListener = func (obj) {
+		#If auto focus on missile is activated the we call the function
+		if(getprop("/controls/armament/automissileview"))
+		{
+		    viewMissile.view_firing_missile(obj);
+			print("Missile view engaged!");
+		}
+	};
+
+	pylonex1a.setAIMListener(aimListener);
+	pylonex1b.setAIMListener(aimListener);
+	pylonex1c.setAIMListener(aimListener);
+
+	pylon2a.setAIMListener(aimListener);
+	pylon2b.setAIMListener(aimListener);
+	pylon2c.setAIMListener(aimListener);
+
+	pylon3.setAIMListener(aimListener);
+	pylon4.setAIMListener(aimListener);
+
+	pylon5.setAIMListener(aimListener);
+
+	pylon6.setAIMListener(aimListener);
+	pylon7.setAIMListener(aimListener);
+
+	pylon8a.setAIMListener(aimListener);
+	pylon8b.setAIMListener(aimListener);
+	pylon8c.setAIMListener(aimListener);
+
+	pylonex2a.setAIMListener(aimListener);
+	pylonex2b.setAIMListener(aimListener);
+	pylonex2c.setAIMListener(aimListener);
+}
 
 var callback = func (aim = nil) {
     # after something has changed in pylon system, this will make MPCD update its A/A and A/G pages:

@@ -2311,6 +2311,17 @@
 				</text>
 			</group>
 
+			<checkbox>
+		      <label>Activate weapon-follow view</label>
+		      <halign>left</halign>
+		      <property>/controls/armament/automissileview</property>
+		      <live>true</live>
+		        <binding>
+		          <command>property-toggle</command>
+		          <property>/controls/armament/automissileview</property>
+		        </binding>
+		    </checkbox>
+
 
 
 
