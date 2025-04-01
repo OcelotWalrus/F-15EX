@@ -3023,6 +3023,13 @@
                     <property>/ai/submodels/submodel[5]/flare-release-cmd</property>
                     <value type="bool">true</value>
                 </binding>
+                <mod-up>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>/ai/submodels/submodel[5]/flare-release-cmd</property>
+                        <value type="bool">true</value>
+                    </binding>
+                </mod-up>
             </key>
             <key n="73">
                 <name>I</name>
