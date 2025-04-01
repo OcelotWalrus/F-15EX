@@ -1827,51 +1827,10 @@
 						</text>
 						<combo>
 							<pref-width>200</pref-width>
-							<property>payload/weight[17]/selected</property>
-							<live>true</live>
-							<value>Empty</value>
-							<value>LANTIRN Nav Pod</value>
-							<binding>
-								<command>dialog-apply</command>
-							</binding>
-							<binding>
-								<command>nasal</command>
-								<script>
-									if (getprop("sim/multiplay/generic/bool[70]") != 1) {
-										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
-										warn_dialog.open();
-										setprop("payload/weight[17]/selected", "Empty");
-									}
-								</script>
-							</binding>
-						</combo>
-						<text>
-							<property>payload/weight[17]/weight-lb</property>
-							<label>xxxxxxxx</label>
-							<live>true</live>
-							<format>%.1f lbs</format>
-						</text>
-						<text>
-                            <property>payload/armament/station/id-17-count</property>
-						    <label>xxxxxxxx</label>
-						    <live>true</live>
-						    <format>%.1d</format>
-                        </text>
-					</group>
-					<group>
-						<layout>hbox</layout>
-						<default-padding>0</default-padding>
-						<text>
-							<label>TGP :  </label>
-						</text>
-						<combo>
-							<pref-width>200</pref-width>
 							<property>payload/weight[18]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>Legion Pod</value>
-							<value>Sniper ATP</value>
-							<value>LANTIRN Target Pod</value>
+							<value>AN/AAQ-13 LANTIRN Nav Pod</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1894,6 +1853,47 @@
 						</text>
 						<text>
                             <property>payload/armament/station/id-18-count</property>
+						    <label>xxxxxxxx</label>
+						    <live>true</live>
+						    <format>%.1d</format>
+                        </text>
+					</group>
+					<group>
+						<layout>hbox</layout>
+						<default-padding>0</default-padding>
+						<text>
+							<label>TGP :  </label>
+						</text>
+						<combo>
+							<pref-width>200</pref-width>
+							<property>payload/weight[19]/selected</property>
+							<live>true</live>
+							<value>Empty</value>
+							<value>Legion Pod</value>
+							<value>Sniper ATP</value>
+							<value>LANTIRN Target Pod</value>
+							<binding>
+								<command>dialog-apply</command>
+							</binding>
+							<binding>
+								<command>nasal</command>
+								<script>
+									if (getprop("sim/multiplay/generic/bool[70]") != 1) {
+										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
+										warn_dialog.open();
+										setprop("payload/weight[19]/selected", "Empty");
+									}
+								</script>
+							</binding>
+						</combo>
+						<text>
+							<property>payload/weight[19]/weight-lb</property>
+							<label>xxxxxxxx</label>
+							<live>true</live>
+							<format>%.1f lbs</format>
+						</text>
+						<text>
+                            <property>payload/armament/station/id-19-count</property>
 						    <label>xxxxxxxx</label>
 						    <live>true</live>
 						    <format>%.1d</format>

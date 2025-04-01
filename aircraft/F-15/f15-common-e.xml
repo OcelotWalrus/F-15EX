@@ -1489,6 +1489,7 @@
                 <bool n="112" alias="/sim/model/f15/payload/selected/double-aim120d-l4" />
                 <bool n="113" alias="/sim/model/f15/payload/selected/double-aim120d-r1" />
                 <bool n="114" alias="/sim/model/f15/payload/selected/double-aim120d-r2" />
+                <bool n="115" alias="/sim/model/f15/payload/selected/lantirn-nav-pod" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2120,22 +2121,22 @@
                 <max-g type="int">40</max-g>
                 <thrust-lbf-stage-1 type="double">2800</thrust-lbf-stage-1>                <!-- guess bit more than B variant-->
                 <thrust-lbf-stage-2 type="double">290</thrust-lbf-stage-2>                <!-- guess bit more than B variant-->
-                <stage-1-duration-sec type="double">10.0</stage-1-duration-sec>                <!-- guess -->
-                <stage-2-duration-sec type="double">18.0</stage-2-duration-sec>                <!-- guess -->
-                <self-destruct-time-sec type="double">110</self-destruct-time-sec>                <!-- guess -->
+                <stage-1-duration-sec type="double">20.0</stage-1-duration-sec>                <!-- guess doubled it -->
+                <stage-2-duration-sec type="double">36.0</stage-2-duration-sec>                <!-- guess doubled it -->
+                <self-destruct-time-sec type="double">600</self-destruct-time-sec>                <!-- guess 10 mins-->
                 <weight-launch-lbs>291</weight-launch-lbs>
                 <weight-warhead-lbs>44</weight-warhead-lbs>
-                <weight-fuel-lbm type="double">130</weight-fuel-lbm> <!-- guess bit more than B variant-->
+                <weight-fuel-lbm type="double">150</weight-fuel-lbm> <!-- guess bit more than B variant-->
                 <drag-coeff type="double">0.3</drag-coeff>
                 <cross-section-sqft type="double">0.2739</cross-section-sqft>
-                <loft-altitude>55000</loft-altitude>                <!-- in stage 1 it will attempt to climb to this altitude, in real life, it'd probably try to reach about 100,000ft -->
+                <loft-altitude>100000</loft-altitude>                <!-- in stage 1 it will attempt to climb to this altitude -->
                 <min-speed-for-guiding-mach type="double">0.8</min-speed-for-guiding-mach> <!-- bit more than B variant-->
                 <max-report-distance type="double">65</max-report-distance>
                 <arming-time-sec type="double">1.6</arming-time-sec>
                 <rail type="bool">false</rail><!-- wingtips will be set to rail by station-manager -->
                 <rail-length-m type="double">2.6924</rail-length-m><!-- LAU 127 Missile Launcher -->
                 <rail-point-forward type="bool">true</rail-point-forward>
-                <navigation type="string">PN</navigation>
+                <navigation type="string">OPN</navigation>
                 <class type="string">A</class>
                 <fire-msg type="string">Fox 3</fire-msg>
                 <telemetry type="bool">true</telemetry>                <!-- enable for aim 120 to see datalink info -->

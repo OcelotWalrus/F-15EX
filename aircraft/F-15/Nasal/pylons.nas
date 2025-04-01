@@ -24,7 +24,9 @@ var pylonex1c = nil;
 var pylonex2a = nil;
 var pylonex2b = nil;
 var pylonex2c = nil;
+var pylonnav = nil;
 
+var nav = stations.Submodel.new("AN/AAQ-13 LANTIRN Nav Pod", "AAQ-13", "/sim/model/f15/stores/nav-mounted");
 
 var msgA = "If you need to repair now, then use Menu-Location-SelectAirport instead.";
 var msgB = "Please land before changing payload.";
@@ -71,6 +73,9 @@ var pylonSets = {
     aim7w:    {name: "AIM-7F Sparrow",   content: ["AIM-7"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
     aim120w:  {name: "AIM-120B AMRAAM", content: ["AIM-120"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
     aim120dw:  {name: "AIM-120D AMRAAM", content: ["AIM-120D"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+    
+    # Navigation and targeting fuselage-mounted pods
+    lantirnnav:   {name: "AN/AAQ-13 LANTIRN Nav Pod", content: [nav], fireOrder: [0], launcherDragArea: 0.1, launcherMass: 451.1, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 };
 
 # sets. The first in the list is the default. Earlier in the list means higher up in dropdown menu.
@@ -101,6 +106,8 @@ if (getprop("sim/model/f15/variant") == "E") { # EX variant has different pylons
 	var pylonex2aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 	var pylonex2bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylonex2cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
+	
+	var pylonnavset = [pylonSets.empty, pylonSets.lantirnnav];
 
 	#var pylon9set = [pylonSets.empty];
 } else {
@@ -141,6 +148,7 @@ if (getprop("sim/model/f15/variant") == "E") {
 	pylonex2a= stations.Pylon.new("Left Wing Station 14",       14, [2.4044, 3.4575, 0.288],  pylonex2aset,  14, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[21]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[21]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pylonex2b= stations.WPylon.new("Left Wing Station 15",      15, [2.0277, 2.9284, 1.4077], pylonex2bset,  15, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs-sta-2bx-weaps",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft-sta-2bx-weaps",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pylonex2c= stations.Pylon.new("Left Wing Station 16",       16, [2.4044, 3.4575, 0.288],  pylonex2cset,  16, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[22]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[22]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
+	pylonnav = stations.Pylon.new("Right Fuselage Station",      18, [3.5918, 1.611, 0.567],   pylonnavset,  18, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[23]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[23]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 }
 
 pylon2a.forceRail = 1;# set the missiles mounted on these pylon always on a rail.
