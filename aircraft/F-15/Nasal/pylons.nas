@@ -18,12 +18,12 @@ var pylon8a = nil;
 var pylon8b = nil;
 var pylon8c = nil;
 #var pylon9  = nil;
-var pylonex1aset = nil;
-var pylonex1bset = nil;
-var pylonex1cset = nil;
-var pylonex2aset = nil;
-var pylonex2bset = nil;
-var pylonex2cset = nil;
+var pylonex1a = nil;
+var pylonex1b = nil;
+var pylonex1c = nil;
+var pylonex2a = nil;
+var pylonex2b = nil;
+var pylonex2c = nil;
 
 
 var msgA = "If you need to repair now, then use Menu-Location-SelectAirport instead.";
