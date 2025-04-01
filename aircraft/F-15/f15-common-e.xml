@@ -2681,6 +2681,7 @@
             <pilot-helmet-volume-attenuation type="int">0</pilot-helmet-volume-attenuation>
         </seat>
         <armament>
+            <automissileview type="bool">false</automissileview>
             <trigger type="bool">false</trigger>
             <cycle-mode type="bool">false</cycle-mode>
             <master-arm type="bool">false</master-arm>
