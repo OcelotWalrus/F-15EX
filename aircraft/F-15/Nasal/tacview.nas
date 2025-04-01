@@ -47,7 +47,9 @@ var startwrite = func() {
     var ownship = "F-15D";
     if (getprop("sim/aircraft-id")=="f15c") {
         ownship = "F-15C";
-    }
+    } elsif (getprop("sim/aircraft-id")=="f15e") {
+        ownship = "F-15EX";
+    } 
     var color = ",Color=Blue";
     if (left(getprop("sim/multiplay/callsign"),5)=="OPFOR") {
         color=",Color=Red";
