@@ -14,7 +14,13 @@ var ht_xcf = 1024;
 var ht_ycf = -1024;
 var ht_xco = 0;
 var ht_yco = 0;
+var uv_x1 = 0;
+var uv_x2 = 0;
+var uv_used = uv_x2-uv_x1;
 var ht_debug = 0;
+
+var sx = 276*uv_used;
+var sy = -106*3;
 
 #angular definitions
 #up angle 1.73 deg
@@ -223,6 +229,111 @@ var F15HUD = {
                           .setColor(0,1,0);
             obj.ccipLine = obj.ccipGrp.createChild("group");
 
+			# Loads the ASE circle objects
+			var mr = 0.4*1.5;#milliradians
+			obj.ASECircle = obj.canvas.createGroup();
+			obj.ASECircle.setTranslation(obj.centerOrigin);
+			obj.ASEC262 = obj.ASECircle.createChild("path")#rdsearch (Allowable Steering Error Circle (ASEC))
+	            .moveTo(-262*mr,0)
+	            .arcSmallCW(262*mr,262*mr, 0, 262*mr*2, 0)
+	            .arcSmallCW(262*mr,262*mr, 0, -262*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25+262*mr*0.5);
+	        obj.ASC = obj.ASECircle.createChild("path")# (Attack Steering Cue (ASC))
+	            .moveTo(-8*mr,0)
+	            .arcSmallCW(8*mr,8*mr, 0, 8*mr*2, 0)
+	            .arcSmallCW(8*mr,8*mr, 0, -8*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+
+	        obj.ASEC100 = obj.ASECircle.createChild("path")#irsearch
+	            .moveTo(-100*mr,0)
+	            .arcSmallCW(100*mr,100*mr, 0, 100*mr*2, 0)
+	            .arcSmallCW(100*mr,100*mr, 0, -100*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC120 = obj.ASECircle.createChild("path")#rdlock
+	            .moveTo(-120*mr,0)
+	            .arcSmallCW(120*mr,120*mr, 0, 120*mr*2, 0)
+	            .arcSmallCW(120*mr,120*mr, 0, -120*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC65 = obj.ASECircle.createChild("path")#irlock
+	            .moveTo(-65*mr,0)
+	            .arcSmallCW(65*mr,65*mr, 0, 65*mr*2, 0)
+	            .arcSmallCW(65*mr,65*mr, 0, -65*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC65Aspect  = obj.ASECircle.createChild("path")#small triangle on ASEC that denotes aspect of target
+	            .moveTo(0,-65*mr)
+	            .lineTo(-5*mr,-75*mr)
+	            .lineTo(5*mr,-75*mr)
+	            .lineTo(0,-65*mr)
+	            .setStrokeLineWidth(1)
+	            .setColorFill(0,1,0)
+	            .setColor(0,1,0).hide()
+	            #.set("z-index",10500)
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC120Aspect = obj.ASECircle.createChild("path")
+	            .setCenter(0,0)
+	            .moveTo(0,-0*mr)
+	            .lineTo(-5*mr,-10*mr)
+	            .lineTo(5*mr,-10*mr)
+	            .lineTo(0,-0*mr)
+	            .setColorFill(0,1,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            #.set("z-index",10500)
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+
+			var boxRadius = 10;
+	        var boxRadiusHalf = boxRadius*0.5;
+			var hairFactor = 0.8;
+			obj.SeekerSymbols = obj.canvas.createGroup();
+			obj.SeekerSymbols.setTranslation(obj.centerOrigin);
+			obj.radarLock = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadius*hairFactor,0)
+	            .horiz(boxRadiusHalf*hairFactor)
+	            .lineTo(0,boxRadiusHalf*hairFactor)
+	            .moveTo(boxRadius*hairFactor,0)
+	            .horiz(-boxRadiusHalf*hairFactor)
+	            .lineTo(0,-boxRadiusHalf*hairFactor)
+	            .moveTo(0,boxRadius*hairFactor)
+	            .vert(-boxRadiusHalf*hairFactor)
+	            .lineTo(boxRadiusHalf*hairFactor,0)
+	            .moveTo(0,-boxRadius*hairFactor)
+	            .vert(boxRadiusHalf*hairFactor)
+	            .lineTo(-boxRadiusHalf*hairFactor,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+	        obj.irDiamond = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadius,0)
+	            .lineTo(0,-boxRadius)
+	            .lineTo(boxRadius,0)
+	            .lineTo(0,boxRadius)
+	            .lineTo(-boxRadius,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+	        obj.irDiamondSmall = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadiusHalf*0.75,0)
+	            .lineTo(0,-boxRadiusHalf*0.75)
+	            .lineTo(boxRadiusHalf*0.75,0)
+	            .lineTo(0,boxRadiusHalf*0.75)
+	            .lineTo(-boxRadiusHalf*0.75,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+	        obj.irCross = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadiusHalf*4,0)
+	            .horiz(boxRadius*4)
+	            .moveTo(0,-boxRadiusHalf*6)
+	            .vert(boxRadius*6)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+
         #
         #
         # using the new property manager to update items on the HUD.
@@ -235,6 +346,9 @@ var F15HUD = {
                                               obj.svg.setVisible(0);
                                           } else {
                                               obj.svg.setVisible(1);
+											  obj.color = [0.3,1,0.3,1];
+											  obj.ASEC120Aspect.setColorFill(obj.color);
+                                              obj.ASEC65Aspect.setColorFill(obj.color);
                                           }
                                       }),
             props.UpdateManager.FromHashValue("AltimeterIndicatedAltitudeFt", 1, func(val)
@@ -373,6 +487,7 @@ var F15HUD = {
                                                                 obj.window11.setText(weapon_type);
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
                                                                 obj.window2.setVisible(1);
+
                                                                 if (w_s == 0) {
                                                                     obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
                                                                 } else if (w_s == 1) {
@@ -475,6 +590,14 @@ return obj;
 #
 #
 #
+	extrapolate: func (x, x1, x2, y1, y2) {
+		return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
+	},
+	interpolate: func (x, x1, x2, y1, y2) {
+		return math.clamp(me.extrapolate(x, x1, x2, y1, y2),math.min(y1,y2),math.max(y1,y2));
+	},
+	clamp: func(v, min, max) { v < min ? min : v > max ? max : v },
+
     update : func(notification) {
 
         me.dlzArray = aircraft.getDLZ();
@@ -544,8 +667,12 @@ return obj;
             update_item.update(notification);
         }
 
+		# ASE Circle
+
+
         # CCIP is after update_item so it can get VV up-to-date location
         me.ccipInfo = pylons.getCCIP();
+		me.ASECircle.show();
         if (me.ccipInfo == nil or notification.ControlsArmamentWeaponSelector != 5) {
             me.ccipGrp.hide();
 			setprop("sim/model/f15/armament/ccip-off", 1);
