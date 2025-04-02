@@ -19,6 +19,8 @@ var uv_x2 = 0;
 var uv_used = uv_x2-uv_x1;
 var ht_debug = 0;
 
+var flirImageReso = 16;
+
 var sx = 276*uv_used;
 var sy = -106*3;
 
@@ -150,6 +152,8 @@ var F15HUD = {
         obj.window16 = obj.get_text("window16", aircraft.HUDFont,9,1.4);
         obj.window17 = obj.get_text("window17", aircraft.HUDFont,9,1.4);
 
+		obj.color = [0.3,1,0.3,1]; # last one should be brightness parameter TODO: apply it to all elements
+
         obj.window1.setVisible(0);
 		obj.window17.setVisible(0);
 
@@ -228,6 +232,14 @@ var F15HUD = {
                           .hide()
                           .setColor(0,1,0);
             obj.ccipLine = obj.ccipGrp.createChild("group");
+
+			# FLIR image
+			obj.flirPicHD = obj.svg.createChild("image")
+	                .set("src", "Aircraft/F-15/Nasal/HUD/flir"~flirImageReso~".png")
+	                .setScale(256/flirImageReso,256/flirImageReso)#340,260
+	                .set("z-index",10001);
+	        obj.scanY = 0;
+	        obj.scans = flirImageReso/(getprop("sim/model/f15/avionics/hud-flir-optimum")?4:2);
 
 			# Loads the ASE circle objects
 			var mr = 0.4*1.5;#milliradians
@@ -599,6 +611,48 @@ return obj;
 	clamp: func(v, min, max) { v < min ? min : v > max ? max : v },
 
     update : func(notification) {
+
+		# FLIR
+		me.texelPerDegreeX = hudmath.HudMath.getPixelPerDegreeXAvg(5);
+        me.texelPerDegreeY = hudmath.HudMath.getPixelPerDegreeYAvg(5);
+
+		me.xBore = int(276*0.5/(256/flirImageReso));
+		me.yBore = flirImageReso-1-int((hudmath.HudMath.getCenterOrigin()[1]+hudmath.HudMath.getBorePos()[1])/(256/flirImageReso));
+		me.distMin = getprop("velocities/groundspeed-kt")*getprop("sim/model/f15/avionics/hud-flir-distance-min");
+		me.distMax = getprop("velocities/groundspeed-kt")*getprop("sim/model/f15/avionics/hud-flir-distance-max");
+		me.cont = getprop("sim/model/f15/avionics/mfd-flir-cont");
+		me.brt = getprop("sim/model/f15/avionics/mfd-flir-brt");
+		if (me.brt > 0 and getprop("sim/model/f15/payload/selected/lantirn-nav-pod") == 1 and me.color[3] != 0) {
+			for(me.x = 0; me.x < flirImageReso; me.x += 1) {
+				me.xDevi = (me.x-me.xBore)*(256/flirImageReso);
+				me.xDevi /= me.texelPerDegreeX;
+				for(me.y = me.scanY; me.y < me.scanY+me.scans; me.y += 1) {
+					me.yDevi = (me.y-me.yBore)*(256/flirImageReso);
+					me.yDevi /= me.texelPerDegreeY;
+					me.value = 0;
+					me.start = geo.viewer_position();
+					me.vecto = [math.cos(me.xDevi*D2R)*math.cos(me.yDevi*D2R),math.sin(-me.xDevi*D2R)*math.cos(me.yDevi*D2R),math.sin(me.yDevi*D2R)];
+
+					me.direction = vector.Math.vectorToGeoVector(vector.Math.rollPitchYawVector(getprop("orientation/roll-deg"),getprop("orientation/pitch-deg"),-getprop("orientation/heading-deg"), me.vecto),me.start);
+					me.intercept = get_cart_ground_intersection({x:me.start.x(),y:me.start.y(),z:me.start.z()}, me.direction);
+					if (me.intercept == nil) {
+						me.value = 0;
+					} else {
+						me.terrain = geo.Coord.new();
+						me.terrain.set_latlon(me.intercept.lat, me.intercept.lon ,me.intercept.elevation);
+						me.value = math.min(1,((math.max(me.distMin-me.distMax, me.distMin-me.start.direct_distance_to(me.terrain))+(me.distMax-me.distMin))/me.distMax));
+					}
+					me.gain = math.min(1,1+2*me.cont*(1-2*me.value));
+					me.flirPicHD.setPixel(me.x, me.y, [me.color[0],me.color[1],me.color[2],me.brt*math.pow(me.value, me.gain)]);
+				}
+			}
+			me.scanY+=me.scans;if (me.scanY>flirImageReso-me.scans) me.scanY=0;
+			me.flirPicHD.setPixel(me.xBore, me.yBore, [0,0,1,1]); # blue dot at bore
+			me.flirPicHD.dirtyPixels();
+			me.flirPicHD.show();
+		} else {
+			me.flirPicHD.hide();
+		}
 
         me.dlzArray = aircraft.getDLZ();
 #me.dlzArray =[10,8,6,2,9];#test

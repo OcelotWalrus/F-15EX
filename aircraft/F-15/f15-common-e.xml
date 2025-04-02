@@ -860,6 +860,36 @@
                     <fall-time-mins type="double">0</fall-time-mins>
                     <ccip-off type="double">0</ccip-off>
                 </armament>
+                <avionics>
+                    <hud-flir-distance-min type="double">0.1</hud-flir-distance-min><!-- must be larger than zero --> <!-- can be customized in the aircraft -->
+                    <hud-flir-distance-max type="double">60</hud-flir-distance-max><!-- must be larger than min --> <!-- can be customized in the aircraft -->
+                    <hud-flir-optimum type="bool">false</hud-flir-optimum>
+                    <mfd-flir-cont type="double">1.0</mfd-flir-cont> <!-- can be customized in the aircraft -->
+                    <mfd-flir-brt type="double">0.8</mfd-flir-brt> <!-- can be customized in the aircraft -->
+                    <lock-flir type="double">0.05</lock-flir>
+                    <hud-brt type="double">0.8</hud-brt>
+                    <hud-sym type="double">0.0</hud-sym>
+                    <hud-cont type="double">0.0</hud-cont>
+                    <hud-depr-ret type="double">0.0</hud-depr-ret>
+                </avionics>
+                <flir>
+                    <input>
+                        <yaw-deg type="double">0.0</yaw-deg>
+                        <pitch-deg type="double">0.0</pitch-deg>
+                    </input>
+                    <swivel>
+                        <roll-deg type="double">0.0</roll-deg>
+                        <pitch-deg type="double">30.0</pitch-deg>
+                    </swivel>
+                    <target>
+                        <yaw-deg type="double">0.0</yaw-deg>
+                        <pitch-deg type="double">0.0</pitch-deg>
+                        <auto-track type="bool">false</auto-track>
+                    </target>
+                    <locks>
+                        <auto-track type="bool">true</auto-track>
+                    </locks>
+                </flir>
                 <dragchute type="float">1</dragchute>
                 <chute>
                     <force type="double">2.0</force>
@@ -1399,6 +1429,7 @@
                     <!--                    <init-delay type="int">0.1</init-delay> -->
                 </overrides>
             </f15>
+
         </model>
 
         <multiplay>
