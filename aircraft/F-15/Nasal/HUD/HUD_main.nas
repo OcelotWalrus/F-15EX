@@ -647,7 +647,7 @@ return obj;
 				}
 			}
 			me.scanY+=me.scans;if (me.scanY>flirImageReso-me.scans) me.scanY=0;
-			me.flirPicHD.setPixel(me.xBore, me.yBore, [0,0,1,1]); # blue dot at bore
+			#me.flirPicHD.setPixel(me.xBore, me.yBore, [0,0,1,1]); # blue dot at bore
 			me.flirPicHD.dirtyPixels();
 			me.flirPicHD.show();
 		} else {
