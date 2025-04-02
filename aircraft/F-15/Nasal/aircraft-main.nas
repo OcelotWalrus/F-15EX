@@ -628,6 +628,12 @@ var F15MainModule =
 
         var frame_count = math.mod(notification.FrameCount,8);
 
+        # Check for GPU is external electrical power switch is online
+        if (getprop("fdm/jsbsim/systems/electrics/ground-power") and !getprop("fdm/jsbsim/systems/electrics/ground-power-gpu")) {
+            setprop("fdm/jsbsim/systems/electrics/ground-power", 0);
+            screen.log.write("Demand a Ground Power Unit in the F-15EX Eagle II config panel to connect external power!");
+        }
+
         # Gear/flaps overspeed damage
         if (getprop("controls/gear/gear-down") == 1 and getprop("/velocities/airspeed-kt") > (300 * 1.1) and (getprop("controls/gear/gear-overspeed") == nil or getprop("controls/gear/gear-overspeed") == 0)) { # 10% overspeed safety
             # Since the front gear is less strong, it's got more chance to break
