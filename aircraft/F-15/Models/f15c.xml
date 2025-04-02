@@ -3212,5 +3212,10 @@
        <object-name>dragchute</object-name>
          <condition><property>sim/model/f15/chute/enable</property></condition>
     </animation>
+    
+     <model>
+      <name>Chocks</name>
+      <path>Aircraft/f16/Models/chocks.xml</path>
+     </model>
 
 </PropertyList>

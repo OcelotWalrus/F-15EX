@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!-- F-15C Model
    |  3D Model by Enrique Laso (Flying toaster)
    |  Livery support from F-14b by xiii
@@ -4058,4 +4058,8 @@
          <condition><property>sim/model/f15/chute/enable</property></condition>
     </animation>
 
+    <model>
+        <name>Chocks</name>
+        <path>Aircraft/F-15/Models/Chocks/chocks.xml</path>
+    </model>
 </PropertyList>

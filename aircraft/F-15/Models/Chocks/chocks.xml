@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+
+<!--CHOCKS -->
+
+ 
+<!-- NOSE CHOCKS -->
+<model>
+ <name>chocks1</name>
+ <path>Aircraft/F-15/Models/Chocks/chock.ac</path>
+ <offsets> 
+  <x-m>-3.3</x-m>
+  <y-m>-0.00</y-m>
+  <z-m>-1.97</z-m>
+  <heading-deg>-90</heading-deg>
+ </offsets>
+</model>
+
+ <animation>
+  <type>translate</type>
+  <object-name>chocks1</object-name>
+  <property>gear/gear[0]/compression-norm</property>
+  <factor>0.25</factor>
+  <axis>
+   <x>0</x>
+   <y>0</y>
+   <z>1</z>
+  </axis>
+ </animation>
+ 
+<!-- MAIN LEFT CHOCKS -->
+<model>
+ <name>chocks2</name>
+ <path>Aircraft/F-15/Models/Chocks/chocks.ac</path>
+ <offsets> 
+  <x-m>2.022</x-m>
+  <y-m>-1.60</y-m>
+  <z-m>-2.11</z-m>
+  <heading-deg>-90</heading-deg>
+ </offsets>
+</model>
+
+ <animation>
+  <type>translate</type>
+  <object-name>chocks2</object-name>
+  <property>gear/gear[2]/compression-norm</property>
+  <factor>0.25</factor>
+  <axis>
+   <x>0</x>
+   <y>0</y>
+   <z>1</z>
+  </axis>
+ </animation>
+ 
+<!-- MAIN RIGHT CHOCKS -->
+<model>
+ <name>chocks3</name>
+ <path>Aircraft/F-15/Models/Chocks/chocks.ac</path>
+ <offsets> 
+  <x-m>2.022</x-m>
+  <y-m>1.60</y-m>
+  <z-m>-2.11</z-m>
+  <heading-deg>90</heading-deg>
+ </offsets>
+</model>
+
+<animation>
+  <type>translate</type>
+  <object-name>chocks3</object-name>
+  <property>gear/gear[1]/compression-norm</property>
+  <factor>0.25</factor>
+  <axis>
+   <x>0</x>
+   <y>0</y>
+   <z>1</z>
+  </axis>
+ </animation>
+
+ <!-- FIRE EXTINGUISHER -->
+<model>
+ <name>extinguisher</name>
+ <path>Aircraft/F-15/Models/Chocks/extinguisher.ac</path>
+ <offsets> 
+  <x-m>7.1</x-m>
+  <y-m>5.35</y-m>
+  <z-m>-2.3</z-m>
+  <heading-deg>175</heading-deg>
+ </offsets>
+</model>
+
+<animation>
+  <type>translate</type>
+  <object-name>extinguisher</object-name>
+  <property>gear/gear[1]/compression-norm</property>
+  <factor>0.25</factor>
+  <axis>
+   <x>0</x>
+   <y>0</y>
+   <z>1</z>
+  </axis>
+ </animation>
+
+<animation>
+ <type>select</type>
+ <object-name>chocks1</object-name>
+ <object-name>chocks2</object-name>
+ <object-name>chocks3</object-name>
+ <object-name>extinguisher</object-name>
+ <condition>
+   <property>controls/gear/brake-parking</property>
+   <property>gear/gear[0]/wow</property>
+   <property>gear/gear[1]/wow</property>
+   <property>gear/gear[2]/wow</property>
+   <less-than>
+    <property>velocities/groundspeed-kt</property>
+    <value>0.25</value>
+   </less-than>
+   <not><property>fdm/jsbsim/gear/unit/damaged</property></not>
+   <not><property>fdm/jsbsim/gear/unit[1]/damaged</property></not>
+   <not><property>fdm/jsbsim/gear/unit[2]/damaged</property></not>
+ </condition>
+</animation>
+
+</PropertyList>
