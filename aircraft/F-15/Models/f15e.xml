@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <!-- F-15C Model
    |  3D Model by Enrique Laso (Flying toaster)
    |  Livery support from F-14b by xiii
@@ -4062,4 +4062,55 @@
         <name>Chocks</name>
         <path>Aircraft/F-15/Models/Chocks/chocks.xml</path>
     </model>
+
+    <!-- exhaust somke from F-16 model-->
+    <model>
+        <path>Aircraft/F-15/Models/Effects/exhaust_right.xml</path>
+        <offsets>
+            <x-m>50.0</x-m>
+            <y-m>   0.7</y-m>
+            <z-m>   0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <path>Aircraft/F-15/Models/Effects/exhaust_left.xml</path>
+        <offsets>
+            <x-m>50.0</x-m>
+            <y-m>   -0.7</y-m>
+            <z-m>   0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <path>Aircraft/F-15/Models/Effects/exhaust_jelly_right.xml</path>
+        <offsets>
+            <x-m>50.0</x-m>
+            <y-m>   0.7</y-m>
+            <z-m>   0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <path>Aircraft/F-15/Models/Effects/exhaust_jelly_left.xml</path>
+        <offsets>
+            <x-m>50.0</x-m>
+            <y-m>   -0.7</y-m>
+            <z-m>   0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <path>Aircraft/F-15/Models/Effects/exhaust_smoke_right.xml</path>
+        <offsets>
+            <x-m>50.0</x-m>
+            <y-m>   0.7</y-m>
+            <z-m>   0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <path>Aircraft/F-15/Models/Effects/exhaust_smoke_left.xml</path>
+        <offsets>
+            <x-m>50.0</x-m>
+            <y-m>   -0.7</y-m>
+            <z-m>   0.1</z-m>
+        </offsets>
+    </model>
+
 </PropertyList>

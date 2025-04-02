@@ -27,3 +27,6 @@ For now, what's been done is:
 - Added `I` keybind to toggle emergency flare/chaff release (10/sec instead of 2/sec)
 - You now have to hold Ctrl-Q to release flares/chaffs, instead of pressing once to trigger and once again to stop loop
 - Addition of gear, brakes and flaps overspeed damage : when flaps are oversped (about 250 kts), they go to 0 degrees and are locked - when gear is oversped, one of the three gear will be broken - when parking brakes are oversped (about 50 kts) or wheel brakes are oversped (about 150 kts), brakes will not work anymore
+- Added ground models (ramps, extinguisher) when aircraft is offline (models coming from FlightGear's F-16 model)
+- Now check if ground power unit is present when turning external power switch on (won't work if the GPU isn't present)
+- Added a nicer exhaust trail

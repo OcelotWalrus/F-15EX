@@ -1517,6 +1517,8 @@
                 <bool n="113" alias="/sim/model/f15/payload/selected/double-aim120d-r1" />
                 <bool n="114" alias="/sim/model/f15/payload/selected/double-aim120d-r2" />
                 <bool n="115" alias="/sim/model/f15/payload/selected/lantirn-nav-pod" />
+                <bool n="116" alias="/engines/engine[0]/augmentation" />
+                <bool n="117" alias="/engines/engine[1]/augmentation" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -1563,6 +1565,10 @@
                 <string n="7" type="string"></string><!-- datalink -->
                 <string n="13" type="string"></string>
                 <string n="15" type="string"></string>
+                <short n="0" type="int" alias="/engines/engine[0]/n1"/>
+                <short n="1" type="int" alias="/engines/engine[0]/n2"/>
+                <short n="2" type="int" alias="/engines/engine[1]/n1"/>
+                <short n="3" type="int" alias="/engines/engine[1]/n2"/>
                 <!-- Emesary multiplayer bridge -->
                 <!--<string n="19" type="string"></string> -->
             </generic>
