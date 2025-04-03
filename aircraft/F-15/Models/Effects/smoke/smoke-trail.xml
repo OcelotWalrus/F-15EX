@@ -1,6 +1,6 @@
 <!-- F-15 Smoke generator (like in airshows)
-   |  Located at the back in a location that looks good rather than being accurate 
-   |  Richard Harrison: 2015-01 : rjh@zaretto.com 
+   |  Located at the back in a location that looks good rather than being accurate
+   |  Richard Harrison: 2015-01 : rjh@zaretto.com
 -->
 <PropertyList>
     <particlesystem>
@@ -54,7 +54,7 @@
                     <red>
                         <expression>
                             <product>
-                                <value>1.0</value>
+                                <property>systems/smoke-generator/red</property>
                                 <property>rendering/scene/diffuse/red</property>
                             </product>
                         </expression>
@@ -62,7 +62,7 @@
                     <green>
                         <expression>
                             <product>
-                                <value>1.0</value>
+                                <property>systems/smoke-generator/green</property>
                                 <property>rendering/scene/diffuse/red</property>
                             </product>
                         </expression>
@@ -70,7 +70,7 @@
                     <blue>
                         <expression>
                             <product>
-                                <value>1.0</value>
+                                <property>systems/smoke-generator/blue</property>
                                 <property>rendering/scene/diffuse/red</property>
                             </product>
                         </expression>
@@ -89,7 +89,7 @@
                     <red>
                         <expression>
                             <product>
-                                <value>1.0</value>
+                                <property>systems/smoke-generator/red</property>
                                 <property>rendering/scene/diffuse/red</property>
                             </product>
                         </expression>
@@ -97,7 +97,7 @@
                     <green>
                         <expression>
                             <product>
-                                <value>1.0</value>
+                                <property>systems/smoke-generator/green</property>
                                 <property>rendering/scene/diffuse/red</property>
                             </product>
                         </expression>
@@ -105,7 +105,7 @@
                     <blue>
                         <expression>
                             <product>
-                                <value>1.0</value>
+                                <property>systems/smoke-generator/blue</property>
                                 <property>rendering/scene/diffuse/red</property>
                             </product>
                         </expression>
