@@ -124,7 +124,6 @@ var radarMPnode = props.globals.getNode("instrumentation/radar/radar-mode",1);
 var anti_collision_switch = props.globals.getNode("sim/model/f15/controls/lighting/anti-collision-switch");
 var position_sw = props.globals.getNode("sim/model/f15/controls/lighting/position-switch",1);
 var lighting_taxi  = props.globals.getNode("controls/lighting/taxi-light", 1);
-setprop("sim/model/f15/fx/smoke",0);
 
 
 getprop("fdm/jsbsim/fcs/flap-pos-norm",0);
