@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+  
+<PropertyList> 
+
+    <path>Aircraft/F-15/Models/Stores/Racks/trirack.xml</path>
+
+    <model>
+      <name>Station9_MK84_center</name>
+      <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+      <offsets>
+        <x-m>0</x-m>
+        <y-m>0</y-m>
+        <z-m>-0.6</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>180</roll-deg>
+      </offsets>
+    </model>
+
+    <model>
+      <name>Station9_MK84_right</name>
+      <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+      <offsets>
+        <x-m>0</x-m>
+        <y-m>0.52</y-m>
+        <z-m>-0.21</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>-45</roll-deg>
+      </offsets>
+    </model>
+
+     <animation>
+      <type>select</type>
+      <object-name>Station9_MK84_right</object-name>
+      <condition>
+        <and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>MK-84</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-9-count</property>
+          <value>1</value>
+        </greater-than>
+      </and>
+      </condition>
+     </animation>
+
+     <animation>
+      <type>select</type>
+      <object-name>Station9_MK84_center</object-name>
+      <condition><and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>MK-84</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-9-count</property>
+          <value>0</value>
+        </greater-than></and>
+      </condition>
+     </animation>
+
+</PropertyList> 

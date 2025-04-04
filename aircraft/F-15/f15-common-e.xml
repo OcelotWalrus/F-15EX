@@ -1519,6 +1519,9 @@
                 <bool n="115" alias="/sim/model/f15/payload/selected/lantirn-nav-pod" />
                 <bool n="116" alias="/engines/engine[0]/augmentation" />
                 <bool n="117" alias="/engines/engine[1]/augmentation" />
+                <bool n="118" alias="/sim/model/f15/payload/selected/triple-mk84-center" />
+                <bool n="119" alias="/sim/model/f15/payload/selected/double-mk84-left" />
+                <bool n="120" alias="/sim/model/f15/payload/selected/double-mk84-right" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -1888,6 +1891,10 @@
                 <name>2 x AIM-120D AMRAAM</name>
                 <lbs>592.0</lbs>
             </opt>
+            <opt>
+                <name>2 x MK-84</name>
+                <lbs>4000.0</lbs>
+            </opt>
         </weight>
         <weight n="5">
             <name>Center Station 5</name>
@@ -1902,6 +1909,10 @@
                 <name>Droptank</name>
                 <lbs>271.0</lbs>
                 <gals>600</gals>
+            </opt>
+            <opt>
+                <name>3 x MK-84</name>
+                <lbs>6000.0</lbs>
             </opt>
         </weight>
         <weight n="9">
@@ -1925,6 +1936,10 @@
             <opt>
                 <name>2 x AIM-120D AMRAAM</name>
                 <lbs>592.0</lbs>
+            </opt>
+            <opt>
+                <name>2 x MK-84</name>
+                <lbs>4000.0</lbs>
             </opt>
         </weight>
         <weight n="15">

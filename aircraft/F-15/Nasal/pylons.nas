@@ -49,6 +49,8 @@ var pylonSets = {
 
     g10:  {name: "GBU-10", content: ["GBU-10"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 2},
     m84:  {name: "MK-84", content: ["MK-84"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	doublem84:  {name: "2 x MK-84", content: ["MK-84", "MK-84"], fireOrder: [0,1], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 3},
+	triplem84:  {name: "3 x MK-84", content: ["MK-84", "MK-84", "MK-84"], fireOrder: [0,1,2], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 3},
 
     # 340 = outer pylon
 	smokeWL: {name: "Smokewinder White", content: [smokewinderWhite2a], fireOrder: [0], launcherDragArea: -0.05, launcherMass: 53+340, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
@@ -73,7 +75,7 @@ var pylonSets = {
     aim7w:    {name: "AIM-7F Sparrow",   content: ["AIM-7"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
     aim120w:  {name: "AIM-120B AMRAAM", content: ["AIM-120"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
     aim120dw:  {name: "AIM-120D AMRAAM", content: ["AIM-120D"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
-    
+
     # Navigation and targeting fuselage-mounted pods
     lantirnnav:   {name: "AN/AAQ-13 LANTIRN Nav Pod", content: [nav], fireOrder: [0], launcherDragArea: 0.1, launcherMass: 451.1, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 };
@@ -88,25 +90,25 @@ if (getprop("sim/model/f15/variant") == "E") { # EX variant has different pylons
 	var pylonex1cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon2aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon2bset = [pylonSets.empty, pylonSets.m84, pylonSets.g10, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon2bset = [pylonSets.empty, pylonSets.doublem84, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon2cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylon3set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
-	var pylon4set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
+	var pylon3set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
+	var pylon4set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
 
-	var pylon5set = [pylonSets.empty, pylonSets.m84, pylonSets.g10];
+	var pylon5set = [pylonSets.empty, pylonSets.triplem84];
 
-	var pylon6set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
-	var pylon7set = [pylonSets.empty, pylonSets.m84, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
+	var pylon6set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
+	var pylon7set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d];
 
 	var pylon8aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon8bset = [pylonSets.empty, pylonSets.m84, pylonSets.g10, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon8bset = [pylonSets.empty, pylonSets.doublem84, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon8cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonex2aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 	var pylonex2bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylonex2cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
-	
+
 	var pylonnavset = [pylonSets.empty, pylonSets.lantirnnav];
 
 	#var pylon9set = [pylonSets.empty];
