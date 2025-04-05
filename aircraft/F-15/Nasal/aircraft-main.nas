@@ -412,7 +412,7 @@ var quickstart = func() {
     setprop("controls/engines/engine[1]/cutoff",0);
     setprop("engines/engine[0]/out-of-fuel",0);
     setprop("engines/engine[1]/out-of-fuel",0);
-    setprop("engines/engine[1]/run",1);
+    setprop("engines/engine[0]/run",1);
     setprop("engines/engine[1]/run",1);
     setprop("sim/model/f15/controls/CAS/cas-pitch-enable",1);
     setprop("sim/model/f15/controls/CAS/cas-roll-enable",1);
