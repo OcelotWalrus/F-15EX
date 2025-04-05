@@ -3406,6 +3406,9 @@
         <viewMissile>
           <file>Aircraft/F-15/Nasal/MissileView.nas</file>
         </viewMissile>
+        <steerpoints>
+          <file>Aircraft/F-15/Nasal/steerpoints.nas</file>
+        </steerpoints>
         <aircraft>
             <file>Aircraft/F-15/Nasal/liveries.nas</file>
             <file>Aircraft/F-15/Nasal/aircraft-main.nas</file>

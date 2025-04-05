@@ -346,6 +346,27 @@ var F15HUD = {
 	            .setStrokeLineWidth(1)
 	            .setColor(0,1,0).hide();
 
+			# Steering cue & steer point
+			obj.NavigationSymbols = obj.canvas.createGroup();
+			obj.NavigationSymbols.setTranslation(obj.centerOrigin);
+			obj.greatCircleSteeringCue = obj.NavigationSymbols.createChild("path")# nickname: tadpole
+		        .moveTo(-2.5,0)
+		        .arcSmallCW(2.5,2.5, 0, 2.5*2, 0)
+		        .arcSmallCW(2.5,2.5, 0, -2.5*2, 0)
+		        .moveTo(0,-2.5)
+		        .vert(-10)
+		        .setStrokeLineWidth(1)
+		        .setColor(0,1,0);
+
+			obj.steerPT = obj.NavigationSymbols.createChild("path")
+		        .moveTo(-boxRadius*0.3, 0)
+		        .lineTo(0, boxRadiusHalf*0.85)
+		        .lineTo(boxRadius*0.3, 0)
+		        .lineTo(0, -boxRadiusHalf*0.85)
+		        .lineTo(-boxRadius*0.3, 0)
+		        .setStrokeLineWidth(1)
+		        .hide()
+		        .setColor(0,1,0);
         #
         #
         # using the new property manager to update items on the HUD.
@@ -446,6 +467,51 @@ var F15HUD = {
 
                                                             obj.window14.setText(sprintf(" %04d fps", math.round(val.FeetPerSecond)));
                                                             obj.window14.setVisible(1);
+                                                        }),
+            props.UpdateManager.FromHashList(["OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg"], nil, func(val)
+                                                        {
+														# get all the active steerpoints
+														me.plan = flightplan();
+										                me.planSize = me.plan.getPlanSize();
+														for (me.j = 0; me.j < me.planSize;me.j+=1) {
+															me.wp = me.plan.getWP(me.j);
+															me.wpC = geo.Coord.new();
+															me.wpC.set_latlon(me.wp.lat,me.wp.lon);
+														}
+														# the Y position is still not accurate due to HUD being at an angle, but will have to do.
+														 if (steerpoints.getCurrentNumber() != 0 and getprop("autopilot/route-manager/active")) {  # and !hdp.getproper("dgft")
+															 obj.steerDir = steerpoints.getCurrentDirectionForHUD();
+															 obj.wpbear = obj.steerDir[0];
+															 if (obj.wpbear != nil) {
+																 obj.wpbear = geo.normdeg180(obj.wpbear-val.OrientationHeadingDeg);
+																 obj.tadpoleX = hudmath.HudMath.getCenterPosFromDegs(obj.wpbear,0)[0];
+
+																 if (obj.tadpoleX > sx * 0.20) {
+																	 obj.tadpoleX = sx * 0.20;
+																 } elsif (obj.tadpoleX < -sx * 0.20) {
+																	 obj.tadpoleX = -sx * 0.20;
+																 }
+																 obj.greatCircleSteeringCue.setTranslation(obj.tadpoleX, obj.VV_y);
+																 obj.greatCircleSteeringCue.setRotation(obj.wpbear*D2R);
+																 obj.greatCircleSteeringCue.show();
+																 if (obj.steerDir[1] != nil) {
+																	obj.steerCart = vector.Math.eulerToCartesian2(-obj.steerDir[0], obj.steerDir[1]);
+																	obj.steerLocal = vector.Math.yawPitchRollVector(val.OrientationHeadingDeg, -val.OrientationPitchDeg, -val.OrientationRollDeg, obj.steerCart);
+																	obj.steerLocalEuler = vector.Math.cartesianToEuler(obj.steerLocal);
+																	obj.steerHUD = hudmath.HudMath.getCenterPosFromDegs(obj.steerLocalEuler[0]==nil?0:geo.normdeg180(obj.steerLocalEuler[0]),obj.steerLocalEuler[1]);
+																	obj.steerPT.setTranslation(obj.steerHUD);
+																	obj.steerPT.show();
+																 } else {
+																	obj.steerPT.hide();
+																 }
+															 } else {
+																 obj.greatCircleSteeringCue.hide();
+																 obj.steerPT.hide();
+															 }
+														 } else {
+															 obj.greatCircleSteeringCue.hide();
+															 obj.steerPT.hide();
+														 }
                                                         }),
             props.UpdateManager.FromHashList(["AutopilotRouteManagerActive",
                                                         "AutopilotRouteManagerWpDist",
