@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+  <path>Models/Effects/procedural_light.ac</path>
+<animation>
+    <type>noshadow</type>
+    <object-name>procedural_light</object-name>
+  </animation>    
+  <effect>
+    <inherits-from>Aircraft/F-15/Models/Effects/Lights/taxi-light</inherits-from>
+    <object-name>procedural_light</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>procedural_light</object-name>
+    <condition>
+      <equals>
+        <property>sim/multiplay/generic/int[6]</property> 
+        <value>1</value>
+      </equals>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>dist-scale</type>
+    <object-name>procedural_light</object-name>
+    <interpolation>
+      <entry><ind>0</ind><dep>1.25</dep></entry>
+      <entry><ind>2500</ind><dep>6.0</dep></entry>
+      <entry><ind>5000</ind><dep>12.0</dep></entry>
+    </interpolation>
+  </animation>
+</PropertyList>

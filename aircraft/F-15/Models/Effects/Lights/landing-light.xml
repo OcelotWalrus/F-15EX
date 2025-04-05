@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+  <path>Models/Effects/procedural_light.ac</path>
+<animation>
+    <type>noshadow</type>
+    <object-name>procedural_light</object-name>
+  </animation>    
+  <effect>
+    <inherits-from>Aircraft/F-15/Models/Effects/Lights/landing-light</inherits-from>
+    <object-name>procedural_light</object-name>
+  </effect>
+  
+  <animation>
+    <type>select</type>
+    <object-name>procedural_light</object-name>
+    <condition>
+      <equals>
+        <property>sim/multiplay/generic/int[6]</property> 
+        <value>2</value>
+      </equals>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>dist-scale</type>
+    <object-name>procedural_light</object-name>
+    <interpolation>
+      <entry><ind>0</ind><dep>2.0</dep></entry>
+      <entry><ind>3750</ind><dep>12.0</dep></entry>
+      <entry><ind>7500</ind><dep>24.0</dep></entry>
+      <entry><ind>11250</ind><dep>36.0</dep></entry>
+      <entry><ind>15000</ind><dep>48.0</dep></entry>
+    </interpolation>
+  </animation>
+</PropertyList>

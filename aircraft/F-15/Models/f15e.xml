@@ -4118,4 +4118,43 @@
         </offsets>
     </model>
 
+    <!-- taxiing and landing lights effect -->
+    <model>
+     <name>l1</name>
+     <path>Aircraft/F-15/Models/Effects/Lights/landing-light.xml</path>
+     <offsets>
+       <x-m>-3.73735</x-m>
+       <y-m>0</y-m>
+       <z-m>-0.831166</z-m>
+     </offsets>
+    </model>
+    <model>
+     <name>l2</name>
+     <path>Aircraft/F-15/Models/Effects/Lights/landing-light.xml</path>
+     <offsets>
+       <x-m>-3.73735</x-m>
+       <y-m>0</y-m>
+       <z-m>-0.831166</z-m>
+     </offsets>
+   </model>
+
+   <model>
+    <name>t1</name>
+    <path>Aircraft/F-15/Models/Effects/Lights/taxi-light.xml</path>
+    <offsets>
+      <x-m>-3.645</x-m>
+      <y-m>0</y-m>
+      <z-m>-1.001908</z-m>
+    </offsets>
+   </model>
+   <model>
+    <name>t2</name>
+    <path>Aircraft/F-15/Models/Effects/Lights/taxi-light.xml</path>
+    <offsets>
+      <x-m>-3.645</x-m>
+      <y-m>0</y-m>
+      <z-m>-1.001908</z-m>
+    </offsets>
+   </model>
+
 </PropertyList>
