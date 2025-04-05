@@ -797,6 +797,7 @@ return obj;
             me.ccipGrp.hide();
 			setprop("sim/model/f15/armament/ccip-off", 1);
         } else {
+			setprop("sim/model/f15/armament/ccip-off", 0);
             hudmath.HudMath.reCalc();
             var poscc = hudmath.HudMath.getPosFromCoord(me.ccipInfo[0]);
             me.ccipPipper.setTranslation(poscc[0],poscc[1]);
