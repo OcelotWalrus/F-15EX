@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+    <name>flir-config</name>
+    <layout>vbox</layout>
+    <default-padding>0</default-padding>
+    <modal>false</modal>
+    <width>550</width>
+    <valign>top</valign>
+
+    <group>
+        <layout>hbox</layout>
+        <default-padding>0</default-padding>
+
+        <group>
+            <layout>vbox</layout>
+            <default-padding>1</default-padding>
+
+            <empty>
+                <pref-height>2</pref-height>
+            </empty>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>HUD Flir ON</label>
+                </text>
+
+                <checkbox>
+                    <property>sim/model/f15/avionics/hud-flir-on</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>sim/model/f15/avionics/hud-flir-on</property>
+                    </binding>
+                </checkbox>
+            </group>
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Flir Optimum</label>
+                </text>
+
+                <checkbox>
+                    <property>sim/model/f15/avionics/hud-flir-optimum</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>sim/model/f15/avionics/hud-flir-optimum</property>
+                    </binding>
+                </checkbox>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>HUD Flir Brightnss</label>
+                </text>
+
+                <slider>
+                    <name>hud-flir-brt</name>
+                    <property>sim/model/f15/avionics/hud-flir-brt</property>
+                    <live>1</live>
+                    <min>0</min>
+                    <max>1</max>
+                    <binding>
+                        <command>dialog-apply</command>
+                        <object-name>hud-flir-brt</object-name>
+                    </binding>
+                </slider>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>HUD Flir Contrast</label>
+                </text>
+
+                <slider>
+                    <name>hud-flir-cont</name>
+                    <property>sim/model/f15/avionics/hud-flir-cont</property>
+                    <live>1</live>
+                    <min>0</min>
+                    <max>1</max>
+                    <binding>
+                        <command>dialog-apply</command>
+                        <object-name>hud-flir-cont</object-name>
+                    </binding>
+                </slider>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>HUD Flir Max Distance</label>
+                </text>
+
+                <slider>
+                    <name>hud-flir-dist-max</name>
+                    <property>sim/model/f15/avionics/hud-flir-distance-max</property>
+                    <live>1</live>
+                    <min>15</min>
+                    <max>100</max>
+                    <binding>
+                        <command>dialog-apply</command>
+                        <object-name>hud-flir-dist-max</object-name>
+                    </binding>
+                </slider>
+                <text>
+                    <property>sim/model/f15/avionics/hud-flir-distance-max</property>
+                    <label>xxxxxxxx</label>
+                    <live>true</live>
+                    <format>%.1f</format>
+                </text>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>HUD Flir Min Distance</label>
+                </text>
+
+                <slider>
+                    <name>hud-flir-dist-min</name>
+                    <property>sim/model/f15/avionics/hud-flir-distance-min</property>
+                    <live>1</live>
+                    <min>1</min>
+                    <max>14</max>
+                    <binding>
+                        <command>dialog-apply</command>
+                        <object-name>hud-flir-dist-min</object-name>
+                    </binding>
+                </slider>
+                <text>
+                    <property>sim/model/f15/avionics/hud-flir-distance-min</property>
+                    <label>xxxxxxxx</label>
+                    <live>true</live>
+                    <format>%.1f</format>
+                </text>
+            </group>
+        </group>
+    </group>
+    <group>
+        <layout>hbox</layout>
+        <button>
+            <legend>Close</legend>
+            <default>true</default>
+            <key>Esc</key>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+    </group>
+</PropertyList>

@@ -862,10 +862,11 @@
                 </armament>
                 <avionics>
                     <hud-flir-distance-min type="double">0.1</hud-flir-distance-min><!-- must be larger than zero --> <!-- can be customized in the aircraft -->
-                    <hud-flir-distance-max type="double">100</hud-flir-distance-max><!-- must be larger than min --> <!-- can be customized in the aircraft -->
-                    <hud-flir-optimum type="bool">true</hud-flir-optimum>
-                    <mfd-flir-cont type="double">0.5</mfd-flir-cont> <!-- can be customized in the aircraft -->
-                    <mfd-flir-brt type="double">0.5</mfd-flir-brt> <!-- can be customized in the aircraft -->
+                    <hud-flir-distance-max type="double">30</hud-flir-distance-max><!-- must be larger than min --> <!-- can be customized in the aircraft -->
+                    <hud-flir-optimum type="bool">true</hud-flir-optimum> <!-- can be customized in the aircraft -->
+                    <hud-flir-cont type="double">0.5</hud-flir-cont> <!-- can be customized in the aircraft -->
+                    <hud-flir-brt type="double">0.5</hud-flir-brt> <!-- can be customized in the aircraft -->
+                    <hud-flir-on type="bool">false</hud-flir-on> <!-- can be customized in the aircraft -->
                     <lock-flir type="double">0.05</lock-flir>
                 </avionics>
                 <flir>

@@ -652,6 +652,17 @@
                 </binding>
             </button>
 
+			<button>
+                <legend>Flir Config</legend>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+						var flir_config = gui.Dialog.new("dialog[4]","Aircraft/F-15/Dialogs/flir-config.xml");
+						flir_config.open();
+					</script>
+                </binding>
+            </button>
+
 			<group>
                 <layout>hbox</layout>
 
