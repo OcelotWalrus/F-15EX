@@ -4120,7 +4120,7 @@
     <model>
         <path>Aircraft/F-15/Models/Effects/exhaust_jelly_right.xml</path>
         <offsets>
-            <x-m>5.5</x-m>
+            <x-m>4.5</x-m>
             <y-m>1.3</y-m>
             <z-m>-1.05</z-m>
         </offsets>
@@ -4128,7 +4128,7 @@
     <model>
         <path>Aircraft/F-15/Models/Effects/exhaust_jelly_left.xml</path>
         <offsets>
-            <x-m>5.5</x-m>
+            <x-m>4.5</x-m>
             <y-m>-1.3</y-m>
             <z-m>-1.05</z-m>
         </offsets>
