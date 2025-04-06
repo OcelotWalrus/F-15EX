@@ -236,15 +236,15 @@ var selectNextOfSameClass = func (type) {
     }
 }
 
-for (var j = 1;j<12;j+=1) {
-    if (j==2 or j==6 or j==10) {
-        pylons[j].setAIMListener(callbackClassG);
-    } else {
-        pylons[j].setAIMListener(callbackClass);
-    }
-    pylons[j].guiChanged();# update the pylons to whatever startup stores should be loaded.
-}
-fcs.setChangeListener(callback);
+#for (var j = 1;j<12;j+=1) {
+#    if (j==2 or j==6 or j==10) {
+#        pylons[j].setAIMListener(callbackClassG);
+#    } else {
+#        pylons[j].setAIMListener(callbackClass);
+#    }
+#    pylons[j].guiChanged();# update the pylons to whatever startup stores should be loaded.
+#}
+#fcs.setChangeListener(callback);
 
 #print("** Pylon & fire control system started. **");
 var getDLZ = func {
@@ -252,7 +252,7 @@ var getDLZ = func {
         var w = fcs.getSelectedWeapon();
         if (w!=nil and w.parents[0] == armament.AIM) {
             var result = w.getDLZ(1);
-            if (result != nil and size(result) == 5 and result[4]<result[0]*1.5 and armament.contact != nil and armament.contact.get_display()) {
+            if (result != nil and size(result) == 8 and result[4]<result[0]*1.5 and armament.contact != nil and armament.contact.get_display()) {
                 #target is within 150% of max weapon fire range.
         	    return result;
             }

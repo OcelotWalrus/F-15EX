@@ -2,19 +2,27 @@
 # ---------------------------
 #
 # The F-15C HUD is provided by 2 combiners.
-# We model this accurately in the geometry by having the two glass panes 
+# We model this accurately in the geometry by having the two glass panes
 # which are texture mapped onto a single canvas texture.two instances of the HUD
 # 2016-01-06: The HUD appears slightly trapezoidal (better than previous version
 #             however still could be improved possibly with a transformation matrix.
 # ---------------------------
-# Richard Harrison (rjh@zaretto.com) 2015-01-27  - based on F-20 HUD main module Enrique Laso (Flying toaster) 
+# Richard Harrison (rjh@zaretto.com) 2015-01-27  - based on F-20 HUD main module Enrique Laso (Flying toaster)
 # ---------------------------
 
 var ht_xcf = 1024;
 var ht_ycf = -1024;
 var ht_xco = 0;
 var ht_yco = 0;
+var uv_x1 = 0;
+var uv_x2 = 0;
+var uv_used = uv_x2-uv_x1;
 var ht_debug = 0;
+
+var flirImageReso = 16;
+
+var sx = 276*uv_used;
+var sy = -106*3;
 
 #angular definitions
 #up angle 1.73 deg
@@ -30,9 +38,9 @@ var ht_debug = 0;
 # paste into nasal console for debugging
 #aircraft.MainHUD.canvas._node.setValues({
 #                           "name": "F-15 HUD",
-#                           "size": [1024,1024], 
-#                           "view": [276,106],                       
-#                           "mipmapping": 0     
+#                           "size": [1024,1024],
+#                           "view": [276,106],
+#                           "mipmapping": 0
 #  });
 #aircraft.MainHUD.svg.setTranslation (0, 20.0);
 #aircraft.MainHUD.svg.set("clip", "rect(2,256,276,0)");
@@ -47,9 +55,9 @@ var pitch_factor=11.18;
 # horizontal bar for each tapes.
 var alt_range_factor = (9317-191) / 100000; # alt tape size and max value.
 
-#IAS tape starts at 0 and goes up; so these coordinates result in an overall size 
+#IAS tape starts at 0 and goes up; so these coordinates result in an overall size
 #of -501; if the tape moved downards it would be 501.
-var ias_range_factor = (-310.034 - 191.841) / 1100; 
+var ias_range_factor = (-310.034 - 191.841) / 1100;
 
 #Pinto: if you know starting x (left/right) and z (up/down), then i just do
 #
@@ -86,26 +94,26 @@ var F15HUD = {
 
         obj.canvas= canvas.new({
                 "name": "F-15 HUD",
-                    "size": [1024,1024], 
+                    "size": [1024,1024],
                     "view": [256,296],
                     "mipmapping": 0,
-                    });                          
-        obj.view = [0, 1.4000051983, -5];                          
+                    });
+        obj.view = [0, 1.4000051983, -5];
         obj.canvas.addPlacement({"node": "HUDImage1"});
         obj.canvas.addPlacement({"node": "HUDImage2"});
         obj.canvas.setColorBackground(0.36, 1, 0.3, 0.00);
         obj.FocusAtInfinity = 0;
 # Create a group for the parsed elements
         obj.svg = obj.canvas.createGroup();
- 
+
 # Parse an SVG file and add the parsed elements to the given group
         logprint(3, "HUD Parse SVG ",canvas.parsesvg(obj.svg, svgname),  {'font-mapper': aircraft.hud_font_mapper});
 
         obj.canvas._node.setValues({
                                     "name": "F-15 HUD",
-                                    "size": [1024,1024], 
-                                    "view": [256,296],                       
-                                    "mipmapping": 0     
+                                    "size": [1024,1024],
+                                    "view": [256,296],
+                                    "mipmapping": 0
                     });
         obj.baseTranslation = [30,30];
         obj.svg.setTranslation (obj.baseTranslation[0], obj.baseTranslation[1]);
@@ -121,6 +129,8 @@ var F15HUD = {
         obj.roll_pointer = obj.get_element("roll-pointer");
         obj.alt_range = obj.get_element("alt_range");
         obj.ias_range = obj.get_element("ias_range");
+        obj.window9_rect = obj.get_element("window9_rect");
+        obj.window1_rect = obj.get_element("window1_rect");
 
         obj.target_locked = obj.get_element("target_locked");
         obj.target_locked.setVisible(0);
@@ -133,6 +143,16 @@ var F15HUD = {
         obj.window6 = obj.get_text("window6", aircraft.HUDFont,9,1.4);
         obj.window7 = obj.get_text("window7", aircraft.HUDFont,9,1.4);
         obj.window8 = obj.get_text("window8", aircraft.HUDFont,9,1.4);
+        obj.window9 = obj.get_text("window9", aircraft.HUDFont,9,1.4);
+        obj.window10 = obj.get_text("window10", aircraft.HUDFont,9,1.4);
+        obj.window11 = obj.get_text("window11", aircraft.HUDFont,9,1.4);
+        obj.window13 = obj.get_text("window13", aircraft.HUDFont,9,1.4);
+        obj.window14 = obj.get_text("window14", aircraft.HUDFont,9,1.4);
+        obj.window15 = obj.get_text("window15", aircraft.HUDFont,9,1.4);
+        obj.window16 = obj.get_text("window16", aircraft.HUDFont,9,1.4);
+        obj.window17 = obj.get_text("window17", aircraft.HUDFont,9,1.4);
+
+		obj.color = [0.3,1,0.3,1]; # last one should be brightness parameter TODO: apply it to all elements
 
         obj.window1.setVisible(0);
 
@@ -140,7 +160,7 @@ var F15HUD = {
         obj.HudNavRangeETA = "";
         obj.currentViewX = props.globals.getNode("/sim/current-view/x-offset-m");
         obj.currentViewY = props.globals.getNode("/sim/current-view/y-offset-m");
-        
+
         obj.symbol_reject = 0;
         obj.heading_deg=0;
         obj.roll_deg=0;
@@ -170,7 +190,7 @@ var F15HUD = {
             else
                 logprint(3, "HUD: could not locate ",name);
         }
-       
+
             obj.dlzX      =170;
             obj.dlzY      =100;
             obj.dlzWidth  = 10;
@@ -199,19 +219,153 @@ var F15HUD = {
                           .arcSmallCW(obj.pipperRadius,obj.pipperRadius, 0, -obj.pipperRadius*2, 0)
                           .moveTo(-1,0)
                           .arcSmallCW(1,1, 0, 1*2, 0)
-                          .arcSmallCW(1,1, 0, -1*2, 0)                   
+                          .arcSmallCW(1,1, 0, -1*2, 0)
                           .setStrokeLineWidth(1)
                           .setColor(0,1,0);
             obj.ccipCross = obj.ccipGrp.createChild("path")
                           .moveTo(-obj.pipperRadius, -obj.pipperRadius)
                            .lineTo(obj.pipperRadius, obj.pipperRadius)
                            .moveTo(-obj.pipperRadius, obj.pipperRadius)
-                           .lineTo( obj.pipperRadius, -obj.pipperRadius)                  
+                           .lineTo( obj.pipperRadius, -obj.pipperRadius)
                           .setStrokeLineWidth(1)
                           .hide()
                           .setColor(0,1,0);
             obj.ccipLine = obj.ccipGrp.createChild("group");
 
+			# FLIR image
+			obj.flirPicHD = obj.svg.createChild("image")
+	                .set("src", "Aircraft/F-15/Nasal/HUD/flir"~flirImageReso~".png")
+	                .setScale(256/flirImageReso,256/flirImageReso)#340,260
+	                .set("z-index",10001);
+	        obj.scanY = 0;
+	        obj.scans = flirImageReso/(getprop("sim/model/f15/avionics/hud-flir-optimum")?4:2);
+
+			# Loads the ASE circle objects
+			var mr = 0.4*1.5;#milliradians
+			obj.ASECircle = obj.canvas.createGroup();
+			obj.ASECircle.setTranslation(obj.centerOrigin);
+			obj.ASEC262 = obj.ASECircle.createChild("path")#rdsearch (Allowable Steering Error Circle (ASEC))
+	            .moveTo(-262*mr,0)
+	            .arcSmallCW(262*mr,262*mr, 0, 262*mr*2, 0)
+	            .arcSmallCW(262*mr,262*mr, 0, -262*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25+262*mr*0.5);
+	        obj.ASC = obj.ASECircle.createChild("path")# (Attack Steering Cue (ASC))
+	            .moveTo(-8*mr,0)
+	            .arcSmallCW(8*mr,8*mr, 0, 8*mr*2, 0)
+	            .arcSmallCW(8*mr,8*mr, 0, -8*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+
+	        obj.ASEC100 = obj.ASECircle.createChild("path")#irsearch
+	            .moveTo(-100*mr,0)
+	            .arcSmallCW(100*mr,100*mr, 0, 100*mr*2, 0)
+	            .arcSmallCW(100*mr,100*mr, 0, -100*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC120 = obj.ASECircle.createChild("path")#rdlock
+	            .moveTo(-120*mr,0)
+	            .arcSmallCW(120*mr,120*mr, 0, 120*mr*2, 0)
+	            .arcSmallCW(120*mr,120*mr, 0, -120*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC65 = obj.ASECircle.createChild("path")#irlock
+	            .moveTo(-65*mr,0)
+	            .arcSmallCW(65*mr,65*mr, 0, 65*mr*2, 0)
+	            .arcSmallCW(65*mr,65*mr, 0, -65*mr*2, 0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC65Aspect  = obj.ASECircle.createChild("path")#small triangle on ASEC that denotes aspect of target
+	            .moveTo(0,-65*mr)
+	            .lineTo(-5*mr,-75*mr)
+	            .lineTo(5*mr,-75*mr)
+	            .lineTo(0,-65*mr)
+	            .setStrokeLineWidth(1)
+	            .setColorFill(0,1,0)
+	            .setColor(0,1,0).hide()
+	            #.set("z-index",10500)
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+	        obj.ASEC120Aspect = obj.ASECircle.createChild("path")
+	            .setCenter(0,0)
+	            .moveTo(0,-0*mr)
+	            .lineTo(-5*mr,-10*mr)
+	            .lineTo(5*mr,-10*mr)
+	            .lineTo(0,-0*mr)
+	            .setColorFill(0,1,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide()
+	            #.set("z-index",10500)
+	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+
+			var boxRadius = 10;
+	        var boxRadiusHalf = boxRadius*0.5;
+			var hairFactor = 0.8;
+			obj.SeekerSymbols = obj.canvas.createGroup();
+			obj.SeekerSymbols.setTranslation(obj.centerOrigin);
+			obj.radarLock = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadius*hairFactor,0)
+	            .horiz(boxRadiusHalf*hairFactor)
+	            .lineTo(0,boxRadiusHalf*hairFactor)
+	            .moveTo(boxRadius*hairFactor,0)
+	            .horiz(-boxRadiusHalf*hairFactor)
+	            .lineTo(0,-boxRadiusHalf*hairFactor)
+	            .moveTo(0,boxRadius*hairFactor)
+	            .vert(-boxRadiusHalf*hairFactor)
+	            .lineTo(boxRadiusHalf*hairFactor,0)
+	            .moveTo(0,-boxRadius*hairFactor)
+	            .vert(boxRadiusHalf*hairFactor)
+	            .lineTo(-boxRadiusHalf*hairFactor,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+	        obj.irDiamond = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadius,0)
+	            .lineTo(0,-boxRadius)
+	            .lineTo(boxRadius,0)
+	            .lineTo(0,boxRadius)
+	            .lineTo(-boxRadius,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+	        obj.irDiamondSmall = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadiusHalf*0.75,0)
+	            .lineTo(0,-boxRadiusHalf*0.75)
+	            .lineTo(boxRadiusHalf*0.75,0)
+	            .lineTo(0,boxRadiusHalf*0.75)
+	            .lineTo(-boxRadiusHalf*0.75,0)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+	        obj.irCross = obj.SeekerSymbols.createChild("path")
+	            .moveTo(-boxRadiusHalf*4,0)
+	            .horiz(boxRadius*4)
+	            .moveTo(0,-boxRadiusHalf*6)
+	            .vert(boxRadius*6)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0).hide();
+
+			# Steering cue & steer point
+			obj.NavigationSymbols = obj.canvas.createGroup();
+			obj.NavigationSymbols.setTranslation(obj.centerOrigin);
+			obj.greatCircleSteeringCue = obj.NavigationSymbols.createChild("path")# nickname: tadpole
+		        .moveTo(-2.5,0)
+		        .arcSmallCW(2.5,2.5, 0, 2.5*2, 0)
+		        .arcSmallCW(2.5,2.5, 0, -2.5*2, 0)
+		        .moveTo(0,-2.5)
+		        .vert(-10)
+		        .setStrokeLineWidth(1)
+		        .setColor(0,1,0);
+
+			obj.steerPT = obj.NavigationSymbols.createChild("path")
+		        .moveTo(-boxRadius*0.3, 0)
+		        .lineTo(0, boxRadiusHalf*0.85)
+		        .lineTo(boxRadius*0.3, 0)
+		        .lineTo(0, -boxRadiusHalf*0.85)
+		        .lineTo(-boxRadius*0.3, 0)
+		        .setStrokeLineWidth(1)
+		        .hide()
+		        .setColor(0,1,0);
         #
         #
         # using the new property manager to update items on the HUD.
@@ -219,11 +373,14 @@ var F15HUD = {
         obj.update_items = [
             props.UpdateManager.FromHashList(["ElectricsAcLeftMainBus","ControlsHudBrightness"] , 0.01, func(val)
                                       {
-                                          if (val.ElectricsAcLeftMainBus <= 0 
+                                          if (val.ElectricsAcLeftMainBus <= 0
                                               or val.ControlsHudBrightness <= 0) {
                                               obj.svg.setVisible(0);
                                           } else {
                                               obj.svg.setVisible(1);
+											  obj.color = [0.3,1,0.3,1];
+											  obj.ASEC120Aspect.setColorFill(obj.color);
+                                              obj.ASEC65Aspect.setColorFill(obj.color);
                                           }
                                       }),
             props.UpdateManager.FromHashValue("AltimeterIndicatedAltitudeFt", 1, func(val)
@@ -247,7 +404,7 @@ var F15HUD = {
                                             obj.heading_tape_position = -val*54/10;
                                           else
                                             obj.heading_tape_position = (360-val)*54/10;
-                                          
+
                                           obj.heading_tape.setTranslation (obj.heading_tape_position,0);
                                       }),
             props.UpdateManager.FromHashList(["OrientationRollDeg","OrientationPitchDeg"], 0.025, func(val)
@@ -277,12 +434,12 @@ var F15HUD = {
                                                         }),
             props.UpdateManager.FromHashList(["InstrumentedG", "CadcOwsMaximumG"], 0.05, func(val)
                                                         {
-                                                            obj.window8.setText(sprintf("%02d %02d", 
-                                                                                        math.round(val.InstrumentedG*10.0), 
+                                                            obj.window8.setText(sprintf("%02d %02d",
+                                                                                        math.round(val.InstrumentedG*10.0),
                                                                                         math.round(val.CadcOwsMaximumG*10.0)));
                                                         }),
-            props.UpdateManager.FromHashList(["Alpha", 
-                                                        "ControlsGearBrakeParking", 
+            props.UpdateManager.FromHashList(["Alpha",
+                                                        "ControlsGearBrakeParking",
                                                         "AirspeedIndicatorIndicatedMach",
                                                         "ControlsGearGearDown"], 0.01, func(val)
                                                         {
@@ -294,6 +451,131 @@ var F15HUD = {
                                                             obj.window7.setText(sprintf("AOA %d",obj.alpha));
                                                             else
                                                             obj.window7.setText(sprintf(" %1.3f",obj.mach));
+                                                            obj.window10.setText(sprintf("a  %d", obj.alpha));
+                                                        }),
+            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond"], nil, func(val)
+                                                        {
+                                                            obj.window9.setText(sprintf("%03d", math.round(val.VelocitiesAirspeedKt)));
+                                                            obj.window13.setText(sprintf("G %03d", math.round(val.VelocitiesGroundspeedKt)));
+                                                            if (getprop("gear/gear[0]/wow") == 1) {
+                                                                obj.window1.setText("GROUND");
+                                                            } else {
+                                                                obj.window1.setText(sprintf(" %05d", math.round(val.AltimeterIndicatedAltitudeFt)));
+                                                            }
+                                                            obj.window1.setVisible(1);
+
+                                                            obj.window14.setText(sprintf(" %04d fps", math.round(val.FeetPerSecond)));
+                                                            obj.window14.setVisible(1);
+                                                        }),
+            props.UpdateManager.FromHashList(["OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg"], nil, func(val)
+                                                        {
+														# get all the active steerpoints
+														me.plan = flightplan();
+										                me.planSize = me.plan.getPlanSize();
+														for (me.j = 0; me.j < me.planSize;me.j+=1) {
+															me.wp = me.plan.getWP(me.j);
+															me.wpC = geo.Coord.new();
+															me.wpC.set_latlon(me.wp.lat,me.wp.lon);
+														}
+														# the Y position is still not accurate due to HUD being at an angle, but will have to do.
+														 if (steerpoints.getCurrentNumber() != 0 and getprop("autopilot/route-manager/active")) {  # and !hdp.getproper("dgft")
+															 obj.steerDir = steerpoints.getCurrentDirectionForHUD();
+															 obj.wpbear = obj.steerDir[0];
+															 if (obj.wpbear != nil) {
+																 obj.wpbear = geo.normdeg180(obj.wpbear-val.OrientationHeadingDeg);
+																 obj.tadpoleX = hudmath.HudMath.getCenterPosFromDegs(obj.wpbear,0)[0];
+
+																 if (obj.tadpoleX > sx * 0.20) {
+																	 obj.tadpoleX = sx * 0.20;
+																 } elsif (obj.tadpoleX < -sx * 0.20) {
+																	 obj.tadpoleX = -sx * 0.20;
+																 }
+																 obj.greatCircleSteeringCue.setTranslation(obj.tadpoleX, obj.VV_y);
+																 obj.greatCircleSteeringCue.setRotation(obj.wpbear*D2R);
+																 obj.greatCircleSteeringCue.show();
+																 if (obj.steerDir[1] != nil) {
+																	obj.steerCart = vector.Math.eulerToCartesian2(-obj.steerDir[0], obj.steerDir[1]);
+																	obj.steerLocal = vector.Math.yawPitchRollVector(val.OrientationHeadingDeg, -val.OrientationPitchDeg, -val.OrientationRollDeg, obj.steerCart);
+																	obj.steerLocalEuler = vector.Math.cartesianToEuler(obj.steerLocal);
+																	obj.steerHUD = hudmath.HudMath.getCenterPosFromDegs(obj.steerLocalEuler[0]==nil?0:geo.normdeg180(obj.steerLocalEuler[0]),obj.steerLocalEuler[1]);
+																	obj.steerPT.setTranslation(obj.steerHUD);
+																	obj.steerPT.show();
+																 } else {
+																	obj.steerPT.hide();
+																 }
+															 } else {
+																 obj.greatCircleSteeringCue.hide();
+																 obj.steerPT.hide();
+															 }
+														 } else {
+															 obj.greatCircleSteeringCue.hide();
+															 obj.steerPT.hide();
+														 }
+                                                        }),
+            props.UpdateManager.FromHashList(["OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg", "VelocitiesAirspeedKt"], nil, func(val)
+                                                        {
+															# Determine the hypothical estimated time for missile to intercept target (if any) (missile not launched yet)
+															# Constant variables :
+															var mean_120_d_speed = 1850; # in mph - mean speed during whole course is about Ma 2.5 - 3
+															var mean_9_x_speed = 1450; # in mph - mean speed during whole course is about Ma 1.8 - 2.2
+															var mean_speed = 1; # placeholder
+															weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
+															if (weap != nil and weap.parents[0] == armament.AIM) {
+																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and getprop("sim/model/f15/armament/ccip-off") == 0) {
+																	# Time to hit ground already computed, just gotta display it there
+																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
+																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
+																	obj.window17.setText(sprintf("%02d m %02d s", fall_time_mins, fall_time_secs));
+																	obj.window17.setVisible(1);
+																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X") and pylons.fcs.isLock()) { # only works if we have a radar lock; meaning AIM-9X won't have TTI if not slaved to radar
+																	if (weap.type == "AIM-9X") {
+																		mean_speed = mean_9_x_speed;
+																	} elsif (weap.type == "AIM-120D") {
+																		mean_speed = mean_120_d_speed;
+																	}
+																	var dlzArray = pylons.getDLZ();
+																	if (dlzArray == nil or size(dlzArray) == 0) {
+																		return;
+																	}
+
+																	distance_to_target = dlzArray[4] * 1.15;  # in nmi then to mi
+																	target_speed = dlzArray[5] * 1.15;  # in kts then to mph
+
+																	# More complicated formula taking angles in account. This is too overcomplicated and
+																	# a simple 9th grade v = d/t => t = d/v works just fine
+																	#
+																	#o_angle = dlzArray[7];  # angle between aircraft's vector and target's vector
+																	#print(o_angle);
+																	#
+																	#calculus = ((mean_speed ^ 2) + (target_speed ^ 2) - (2 * mean_speed * target_speed * math.cos(o_angle)));
+																	#if (calculus < 0) {  # make sure the calculus is positive
+																	#	obj.window17.setText("XX m XX s");
+																	#	obj.window17.setVisible(1);
+																	#	return;
+																	#}
+																	#V_rel = math.sqrt(calculus);  # relative velocity (in mph)
+																	V_rel = mean_speed - target_speed;
+																	print(V_rel);
+																	tti = distance_to_target / V_rel;  # here in hours
+																	tti_rel = tti * 60;  # convert tti from hrs to mins
+																	print(tti);
+																	print(tti_rel);
+
+																	tti_mins = sprintf("%.0f", tti_rel);
+																	tti_secs = (tti_rel - tti_mins) * 60;  # remove whole minutes for seconds
+																	if (tti_secs < 0) {  # tiny fix
+																		tti_mins = tti_mins - 1;
+																		tti_secs = 60 + tti_secs;
+																	}
+																	obj.window17.setText(sprintf("%02d m %02d s", tti_mins, tti_secs));
+																	obj.window17.setVisible(1);
+																} else {
+																	obj.window17.setText("XX m XX s");
+																	obj.window17.setVisible(1);
+																}
+															} else {
+																obj.window17.setVisible(0);
+															}
                                                         }),
             props.UpdateManager.FromHashList(["AutopilotRouteManagerActive",
                                                         "AutopilotRouteManagerWpDist",
@@ -335,8 +617,16 @@ var F15HUD = {
                                                         "HudNavRangeETA"], nil, func(val)
                                                         {
                                                             if (val.ControlsArmamentMasterArmSwitch) {
+                                                                obj.window11.setVisible(1);
+                                                                obj.window15.setVisible(1);
+                                                                obj.window16.setVisible(1);
+                                                                obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
+                                                                obj.window16.setText(sprintf("FLR %03d",getprop("ai/submodels/submodel[6]/count")));
+                                                                weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
+                                                                obj.window11.setText(weapon_type);
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
                                                                 obj.window2.setVisible(1);
+
                                                                 if (w_s == 0) {
                                                                     obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
                                                                 } else if (w_s == 1) {
@@ -353,7 +643,7 @@ var F15HUD = {
                                                                     if (val.RadarActiveTargetType != "")
                                                                     model = val.RadarActiveTargetType;
 
-                                                                    #these labels aren't correct - but we don't have a full simulation of the targetting and missiles so 
+                                                                    #these labels aren't correct - but we don't have a full simulation of the targetting and missiles so
                                                                     #have no real idea on the details of how this works.
                                                                     if (val.RadarActiveTargetDisplay){
                                                                         obj.window4.setText(sprintf("RNG %3.1f", val.RadarActiveTargetRange));
@@ -374,6 +664,10 @@ var F15HUD = {
                                                                 }
                                                             } else {
                                                                 obj.window2.setVisible(0);
+                                                                obj.window11.setVisible(0);
+                                                                obj.window15.setVisible(0);
+                                                                obj.window16.setVisible(0);
+																obj.window17.setVisible(0);
                                                                 if (val.HudNavRangeDisplay != "")
                                                                 obj.window3.setText("NAV");
                                                                 else
@@ -414,7 +708,7 @@ return obj;
             clip_el.setVisible(0);
             var tran_rect = clip_el.getTransformedBounds();
 
-            var clip_rect = sprintf("rect(%d,%d, %d,%d)", 
+            var clip_rect = sprintf("rect(%d,%d, %d,%d)",
                                    tran_rect[1], # 0 ys
                                    tran_rect[2],  # 1 xe
                                    tran_rect[3], # 2 ye
@@ -431,8 +725,58 @@ return obj;
 #
 #
 #
+	extrapolate: func (x, x1, x2, y1, y2) {
+		return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
+	},
+	interpolate: func (x, x1, x2, y1, y2) {
+		return math.clamp(me.extrapolate(x, x1, x2, y1, y2),math.min(y1,y2),math.max(y1,y2));
+	},
+	clamp: func(v, min, max) { v < min ? min : v > max ? max : v },
+
     update : func(notification) {
-        
+
+		# FLIR
+		me.texelPerDegreeX = hudmath.HudMath.getPixelPerDegreeXAvg(5);
+        me.texelPerDegreeY = hudmath.HudMath.getPixelPerDegreeYAvg(5);
+
+		me.xBore = int(276*0.5/(256/flirImageReso));
+		me.yBore = flirImageReso-1-int((hudmath.HudMath.getCenterOrigin()[1]+hudmath.HudMath.getBorePos()[1])/(256/flirImageReso));
+		me.distMin = getprop("velocities/groundspeed-kt")*getprop("sim/model/f15/avionics/hud-flir-distance-min");
+		me.distMax = getprop("velocities/groundspeed-kt")*getprop("sim/model/f15/avionics/hud-flir-distance-max");
+		me.cont = getprop("sim/model/f15/avionics/hud-flir-cont");
+		me.brt = getprop("sim/model/f15/avionics/hud-flir-brt");
+		if (me.brt > 0 and getprop("sim/model/f15/payload/selected/lantirn-nav-pod") == 1 and me.color[3] != 0 and getprop("sim/model/f15/avionics/hud-flir-on")) {
+			for(me.x = 0; me.x < flirImageReso; me.x += 1) {
+				me.xDevi = (me.x-me.xBore)*(256/flirImageReso);
+				me.xDevi /= me.texelPerDegreeX;
+				for(me.y = me.scanY; me.y < me.scanY+me.scans; me.y += 1) {
+					me.yDevi = (me.y-me.yBore)*(256/flirImageReso);
+					me.yDevi /= me.texelPerDegreeY;
+					me.value = 0;
+					me.start = geo.viewer_position();
+					me.vecto = [math.cos(me.xDevi*D2R)*math.cos(me.yDevi*D2R),math.sin(-me.xDevi*D2R)*math.cos(me.yDevi*D2R),math.sin(me.yDevi*D2R)];
+
+					me.direction = vector.Math.vectorToGeoVector(vector.Math.rollPitchYawVector(getprop("orientation/roll-deg"),getprop("orientation/pitch-deg"),-getprop("orientation/heading-deg"), me.vecto),me.start);
+					me.intercept = get_cart_ground_intersection({x:me.start.x(),y:me.start.y(),z:me.start.z()}, me.direction);
+					if (me.intercept == nil) {
+						me.value = 0;
+					} else {
+						me.terrain = geo.Coord.new();
+						me.terrain.set_latlon(me.intercept.lat, me.intercept.lon ,me.intercept.elevation);
+						me.value = math.min(1,((math.max(me.distMin-me.distMax, me.distMin-me.start.direct_distance_to(me.terrain))+(me.distMax-me.distMin))/me.distMax));
+					}
+					me.gain = math.min(1,1+2*me.cont*(1-2*me.value));
+					me.flirPicHD.setPixel(me.x, me.y, [me.color[0],me.color[1],me.color[2],me.brt*math.pow(me.value, me.gain)]);
+				}
+			}
+			me.scanY+=me.scans;if (me.scanY>flirImageReso-me.scans) me.scanY=0;
+			#me.flirPicHD.setPixel(me.xBore, me.yBore, [0,0,1,1]); # blue dot at bore
+			me.flirPicHD.dirtyPixels();
+			me.flirPicHD.show();
+		} else {
+			me.flirPicHD.hide();
+		}
+
         me.dlzArray = aircraft.getDLZ();
 #me.dlzArray =[10,8,6,2,9];#test
         if (me.dlzArray == nil or size(me.dlzArray) == 0) {
@@ -457,19 +801,19 @@ return obj;
                     .setColor(0,1,0);
             me.dlz.show();
         }
-        
-        
-        
+
+
+
         if(me.FocusAtInfinity)
           {
               # parallax correction
               var current_x = me.currentViewX.getValue();
               var current_y = me.currentViewY.getValue();
               #        var current_z = getprop("/sim/current-view/z-offset-m");
-        
+
               var dx = me.view[0] - current_x;
               var dy = me.view[1] - current_y;
-              
+
               me.svg.setTranslation(me.baseTranslation[0]-dx*1024, me.baseTranslation[1]+dy*1024);
           }
 
@@ -500,11 +844,17 @@ return obj;
             update_item.update(notification);
         }
 
+		# ASE Circle
+
+
         # CCIP is after update_item so it can get VV up-to-date location
         me.ccipInfo = pylons.getCCIP();
+		me.ASECircle.show();
         if (me.ccipInfo == nil or notification.ControlsArmamentWeaponSelector != 5) {
             me.ccipGrp.hide();
+			setprop("sim/model/f15/armament/ccip-off", 1);
         } else {
+			setprop("sim/model/f15/armament/ccip-off", 0);
             hudmath.HudMath.reCalc();
             var poscc = hudmath.HudMath.getPosFromCoord(me.ccipInfo[0]);
             me.ccipPipper.setTranslation(poscc[0],poscc[1]);
@@ -522,16 +872,23 @@ return obj;
             me.ccipLine.createChild("path")
                 .moveTo(poscc[0],poscc[1])
                 .lineTo(me.ccipVVPos)
-                .setStrokeDashArray([0,me.pipperRadius,me.ccipLineDist-3.5-me.pipperRadius,3.5*10])#3.5 is radius of VV. 
+                .setStrokeDashArray([0,me.pipperRadius,me.ccipLineDist-3.5-me.pipperRadius,3.5*10])#3.5 is radius of VV.
                 .setStrokeLineWidth(1)
                 .setColor(0,1,0);
             me.ccipGrp.show();
+
+			# Fall time in seconds
+			fall_time = me.ccipInfo[2] / 60; # return it in minutes
+			fall_time_mins = sprintf("%.0f", fall_time);
+			fall_time_secs = me.ccipInfo[2] - fall_time_mins * 60;  # remove whole minutes for seconds
+			setprop("sim/model/f15/armament/fall-time-secs", math.round(fall_time_secs));
+			setprop("sim/model/f15/armament/fall-time-mins", math.round(fall_time_mins));
         }
 
         if (me.svg.getVisible() == 0)
           return;
 
-     
+
 #        if (hdp.range_rate != nil)
 #        {
 #            me.window1.setVisible(1);
@@ -539,12 +896,12 @@ return obj;
 #        }
 #        else
 #            me.window1.setVisible(0);
-  
+
 
      if (notification["Timestamp"] != nil)
          me.process_targets.set_timestamp(notification.Timestamp);
 
-     me.process_targets.process(me, awg_9.tgts_list, 
+     me.process_targets.process(me, awg_9.tgts_list,
                                 func(pp, obj, data){
                                     obj.target_idx=1;
                                     obj.designated = 0;
@@ -557,10 +914,10 @@ return obj;
                                         if (u.Callsign != nil)
                                           callsign = u.Callsign.getValue();
                                         var model = "XX";
-                                        
+
                                         if (u.ModelType != "")
                                           model = u.ModelType;
-                                        
+
                                         if (obj.target_idx < obj.max_symbols)
                                           {
                                               tgt = obj.tgt_symbols[obj.target_idx];
@@ -579,7 +936,7 @@ return obj;
                                                       tgt.setVisible(getprop("sim/model/f15/lighting/hud-diamond-switch/state"));
                                                     else
                                                       tgt.setVisible(u.get_display());
-                                                    
+
                                                     if (awg_9.active_u != nil and awg_9.active_u.Callsign != nil and u.Callsign != nil and u.Callsign.getValue() == awg_9.active_u.Callsign.getValue())
                                                       {
                                                           obj.target_locked.setVisible(u.get_display());
@@ -593,9 +950,9 @@ return obj;
                                                             tgt.setVisible(0);
                                                       }
                                                     tgt.setTranslation (xc, yc);
-                                                    
+
                                                     if (ht_debug)
-                                                      printf("%-10s %f,%f [%f,%f,%f] :: %f,%f",callsign,xc,yc, devs[0], devs[1], devs[2], u_dev_rad*D2R, u_elev_rad*D2R); 
+                                                      printf("%-10s %f,%f [%f,%f,%f] :: %f,%f",callsign,xc,yc, devs[0], devs[1], devs[2], u_dev_rad*D2R, u_elev_rad*D2R);
                                                 }
                                           }
                                         obj.target_idx = obj.target_idx+1;
@@ -654,6 +1011,8 @@ input = {
         RadarActiveTargetType                   : "sim/model/f15/instrumentation/radar-awg-9/active-target-type",
         InstrumentedG                           : "instrumentation/g-meter/instrumented-g",
         VelocitiesAirspeedKt                    : "velocities/airspeed-kt",
+        VelocitiesGroundspeedKt                 : "velocities/groundspeed-kt",
+        FeetPerSecond                           : "velocities/down-relground-fps",
 };
 
-emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD.svg", "HUDImage1"), 2);
+emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

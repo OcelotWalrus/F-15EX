@@ -40,7 +40,7 @@ var AIObjectGroundSpeedCalculator = {
         }
         me.curtime = me.curtimen.getValue();
         #
-        # calculate groundspeed based on vector product of ECEF 
+        # calculate groundspeed based on vector product of ECEF
         me.nvtime = me.curtime - me.ltime;
         if (me.nvtime > 1) {
             if (me.lvx != 0) {
@@ -74,10 +74,10 @@ var VSD_Device =
         obj.target_module_id = target_module_id;
         obj.dev_canvas= canvas.new({
                 "name": designation,
-                    "size": [1024,1024], 
-                    "view": [276,278],                       
-                    "mipmapping": 1     
-            });                          
+                    "size": [1024,1024],
+                    "view": [276,278],
+                    "mipmapping": 1
+            });
     obj.placement = nil;
     obj.bindDisplay(target_module_id, model_element);
 
@@ -152,7 +152,7 @@ var VSD_Device =
                                             obj.horizon_line.setRotation (-notification.OrientationRollDeg * DTOR);
                                         }),
 
-        props.UpdateManager.FromHashValue("target_display", 0.025, func(target_display) {   
+        props.UpdateManager.FromHashValue("target_display", 0.025, func(target_display) {
                                             if (target_display) {
                                                 obj.nofire_cross.setVisible(1);
                                                 obj.target_circle.setVisible(1);
@@ -212,7 +212,7 @@ var VSD_Device =
         if (notification["Timestamp"] != nil)
             me.process_targets.set_timestamp(notification.Timestamp);
 
-        me.process_targets.process(me, awg_9.tgts_list, 
+        me.process_targets.process(me, awg_9.tgts_list,
                                     func(pp, obj, data){
                                         obj.target_idx=1;
                                         obj.designated = 0;
@@ -260,7 +260,7 @@ var VSD_Device =
                                             obj.target_idx = obj.target_idx+1;
                                             obj.designated = 0;
                                         }
-                                        if (obj.target_idx >= obj.max_symbols and (obj.searchCallsign == nil or obj.active_found)) { 
+                                        if (obj.target_idx >= obj.max_symbols and (obj.searchCallsign == nil or obj.active_found)) {
                                             return 0;
                                         }
                                         return 1;
@@ -269,7 +269,7 @@ var VSD_Device =
                                     {
                                         if (awg_9.active_u != nil and awg_9.active_u.Callsign != nil)
                                         obj.searchCallsign =  awg_9.active_u.Callsign.getValue();
-                            
+
                                         if (obj.active_found == 0) {
                                             obj.tgt_symbols[0].setVisible(0);
                                         }
@@ -289,7 +289,7 @@ var VSD_Device =
         # - update each item
         # - end do nothing
 
-        me.process_display.process(me, me.update_items, 
+        me.process_display.process(me, me.update_items,
                                     func(pp, obj, data){
                                         #
                                         # Backseat: need to calculate ground speed as this isn't transmitted.
@@ -305,30 +305,30 @@ var VSD_Device =
                                         if (awg_9.active_u != nil and awg_9.active_u.get_display()) {
                                             if (awg_9.active_u.Callsign != nil)
                                             obj._callsign = awg_9.active_u.Callsign.getValue();
-                                            
+
                                             obj._model = "XX";
                                             if (awg_9.active_u.ModelType != "")
                                                 obj._model = awg_9.active_u.ModelType;
-                                            
+
                                             obj._w2 = sprintf("%-4d", awg_9.active_u.get_closure_rate());
                                             obj._w3_22 = sprintf("%3d-%1.1f %.5s %.4s",awg_9.active_u.get_bearing(), awg_9.active_u.get_range(), obj._callsign, obj._model);
                                             obj._aspect = math.round(awg_9.active_u.get_aspect()/10.0);
-                                            
+
                                             if (math.abs(obj._aspect) > 17)
                                                 obj.notification.aspect_t = "H  ";
                                             else if (math.abs(obj._aspect) < 1)
                                                 obj.notification.aspect_t = "T  ";
-                                            else 
+                                            else
                                                 obj.notification.aspect_t = sprintf("%2d%s", math.abs(obj._aspect), obj._aspect > 0 ? "R" : "L");
 
                                             obj._w1 = sprintf("%4d %3s %2d %d", awg_9.active_u.get_TAS(), obj.notification.aspect_t, awg_9.active_u.get_heading(), awg_9.active_u.get_altitude());
                                         }
                                         obj.notification.vsd_w1 = obj._w1;
                                         obj.notification.vsd_w2 = obj._w2;
-                                        
+
                                         obj.notification.vsd_w3 = sprintf("G%3.0f %s %s",
                                                                     obj.notification.GroundspeedKts,
-                                                                    obj._w3_7 , 
+                                                                    obj._w3_7 ,
                                                                     obj._w3_22);
                                     },
                                     func(pp, obj, update_item){
@@ -361,10 +361,10 @@ var ModelEventsRecipient =
                     root_node = notification.root_node;
                 }
                 #
-                # 
+                #
                 # Create and append all of the VSDs in the cockpit.
                 # - VSD_Device.new( Identity, Canvas3dSurface, model index)
-                #                 
+                #
                 var designation = "F-15 VSD";
                 var textureImage = "VSDImage";
                 if (VSD == nil) {
