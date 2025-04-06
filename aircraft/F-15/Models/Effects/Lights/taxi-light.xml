@@ -5,7 +5,7 @@
 <animation>
     <type>noshadow</type>
     <object-name>procedural_light</object-name>
-  </animation>    
+  </animation>
   <effect>
     <inherits-from>Aircraft/F-15/Models/Effects/Lights/taxi-light</inherits-from>
     <object-name>procedural_light</object-name>
@@ -16,9 +16,13 @@
     <object-name>procedural_light</object-name>
     <condition>
       <equals>
-        <property>sim/multiplay/generic/int[6]</property> 
+        <property>sim/multiplay/generic/int[6]</property>
         <value>1</value>
       </equals>
+      <greater-than>
+        <property>gear/gear[0]/position-norm</property>
+        <value>0</value>
+      </greater-than>
     </condition>
   </animation>
 
