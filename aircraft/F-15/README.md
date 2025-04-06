@@ -6,7 +6,7 @@ NOTE: **This repository is simply for myself so stay out, unless you're interest
 
 This project aims to enhance the already-existing F-15C and D models originally made by Richard Harrison and other various contributors. But, the main aim is to develop the F-15EX model from that already-existing model, only changing the cockpit's model, being extremely different from the F-15C, but also add as much as weapons as the F-16 FlightGear model, develop A/G operations by adding more bombs types, racks and etc. The development of the MPCD (multi-page control display), the TWS radar display (for example use different symbols for unknown objects or missiles etc.), the HUD (adding modes and more useful info). The creation of a very detailed PDF manual is also under development.
 
-For now, what's been done is:
+For now, what's been done is (all these changes only apply to the F-15EX variant if not specified):
 
 - The creation of the EX variant (cockpit model is still old F-15C)
 - The enhancement of the C variant cockpit (added simulation of chaff/flare release and low ammo lights, engine flame out oral warning)
@@ -30,3 +30,7 @@ For now, what's been done is:
 - Added ground models (ramps, extinguisher) when aircraft is offline (models coming from FlightGear's F-16 model)
 - Now check if ground power unit is present when turning external power switch on (won't work if the GPU isn't present)
 - Added a nicer exhaust trail
+- Added the LANTIRN Navigation Pod, which that the FLIR displayed on the HUD
+- Display steerpoints on the HUD using same method as F-16 model
+- Addd ASE Circles to the HUD (W.I.P.)
+- Upgraded the landing/taxiing light bulb effects
