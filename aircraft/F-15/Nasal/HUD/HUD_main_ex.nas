@@ -538,7 +538,19 @@ var F15HUD = {
 																		return;
 																	}
 
-																	distance_to_target = dlzArray[4] * 1.15;  # in nmi then to mi
+																	if (getprop("sim/model/f15/armament/missile-fired-path") == nil or getprop(getprop("sim/model/f15/armament/missile-fired-path") ~ "/position/latitude-deg") == nil) {  # if no recent missile has been fired, calculate TTI from the aircraft
+																		distance_to_target = dlzArray[4] * 1.15;  # in nmi then to mi
+																		var live = 0;
+																	} else {
+																		data_root = getprop("sim/model/f15/armament/missile-fired-path");
+																		missile_lat = getprop(data_root ~ "/position/latitude-deg");
+																		missile_lon = getprop(data_root ~ "/position/longitude-deg");
+																		missile_alt = getprop(data_root ~ "/position/altitude-ft");
+																		missileCoord = geo.Coord.new().set_latlon(missile_lat, missile_lon, missile_alt);
+																		distance_to_target = dlzArray[6].direct_distance_to(missileCoord)*M2NM*1.15;
+																		mean_speed = getprop(data_root ~ "/velocities/true-airspeed-kt");
+																		var live = 1;
+																	}
 																	target_speed = dlzArray[5] * 1.15;  # in kts then to mph
 
 																	# More complicated formula taking angles in account. This is too overcomplicated and
@@ -555,11 +567,8 @@ var F15HUD = {
 																	#}
 																	#V_rel = math.sqrt(calculus);  # relative velocity (in mph)
 																	V_rel = mean_speed - target_speed;
-																	print(V_rel);
 																	tti = distance_to_target / V_rel;  # here in hours
 																	tti_rel = tti * 60;  # convert tti from hrs to mins
-																	print(tti);
-																	print(tti_rel);
 
 																	tti_mins = sprintf("%.0f", tti_rel);
 																	tti_secs = (tti_rel - tti_mins) * 60;  # remove whole minutes for seconds
@@ -567,7 +576,11 @@ var F15HUD = {
 																		tti_mins = tti_mins - 1;
 																		tti_secs = 60 + tti_secs;
 																	}
-																	obj.window17.setText(sprintf("%02d m %02d s", tti_mins, tti_secs));
+																	if (live == 0) {
+																		obj.window17.setText(sprintf("%02d m %02d s", tti_mins, tti_secs));
+																	} else {
+																		obj.window17.setText(sprintf("L %02d m %02d s", tti_mins, tti_secs));
+																	}
 																	obj.window17.setVisible(1);
 																} else {
 																	obj.window17.setText("XX m XX s");

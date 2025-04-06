@@ -177,12 +177,15 @@ fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17, 1
 
 if (getprop("sim/model/f15/variant") == "E") { # EX variant only
 	var aimListener = func (obj) {
-		#If auto focus on missile is activated the we call the function
+		# If auto focus on missile is activated the we call the function
 		if(getprop("/controls/armament/automissileview"))
 		{
 		    viewMissile.view_firing_missile(obj);
 			print("Missile view engaged!");
 		}
+
+		# Allow TTI to be updated if the fired ordonance has 2-way data link (AIM-120D)
+		viewMissile.missile_coords_feeder(obj);
 	};
 
 	pylonex1a.setAIMListener(aimListener);

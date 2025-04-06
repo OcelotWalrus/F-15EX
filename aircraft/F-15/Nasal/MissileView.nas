@@ -111,3 +111,22 @@ var view_firing_missile = func(myMissile)
     # We feed the handler
     missile_view_handler.setup(data);
 }
+
+var missile_coords_feeder = func(myMissile)
+{
+
+    # We select the missile name
+    var myMissileName = string.replace(myMissile.ai.getPath(), "/ai/models/", "");
+    if (myMissile.ai.getNode("callsign") != nil and myMissile.ai.getNode("callsign").getValue()!=nil) {
+      myMissileName = myMissile.ai.getNode("callsign").getValue();
+    }
+
+    # Check if the ordonance has 2-wat datalink
+    if (substr(myMissileName, 0, 8) == "AIM-120D") {
+        # We recreate the data vector to feed the missile_view_handler
+        var data = { node: myMissile.ai, callsign: myMissileName, root: myMissile.ai.getPath()};
+        setprop("sim/model/f15/armament/missile-fired-path", data.root);
+    } else {
+        return;
+    }
+}
