@@ -1410,6 +1410,7 @@
 							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
+							<value>3 x MK-82 AIR</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
@@ -1420,6 +1421,8 @@
 								<script>
 									if (getprop("payload/armament/station/id-3-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-3-count", 2);
+									} elsif (getprop("payload/armament/station/id-3-set") == "3 x MK-82 AIR") {
+										setprop("payload/armament/station/id-3-count", 3);
 									} else {
 										setprop("payload/armament/station/id-3-count", 1);
 									}
@@ -1454,6 +1457,7 @@
 							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
+							<value>3 x MK-82 AIR</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
@@ -1464,6 +1468,8 @@
 								<script>
 									if (getprop("payload/armament/station/id-4-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-4-count", 2);
+									} elsif (getprop("payload/armament/station/id-4-set") == "3 x MK-82 AIR") {
+										setprop("payload/armament/station/id-4-count", 3);
 									} else {
 										setprop("payload/armament/station/id-4-count", 1);
 									}
@@ -1543,6 +1549,7 @@
 							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
+							<value>3 x MK-82 AIR</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
@@ -1553,6 +1560,8 @@
 								<script>
 									if (getprop("payload/armament/station/id-6-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-6-count", 2);
+									} elsif (getprop("payload/armament/station/id-6-set") == "3 x MK-82 AIR") {
+										setprop("payload/armament/station/id-6-count", 3);
 									} else {
 										setprop("payload/armament/station/id-6-count", 1);
 									}
@@ -1587,6 +1596,7 @@
 							<value>AIM-120D AMRAAM</value>
 							<value>2 x AIM-120D AMRAAM</value>
 							<value>3 x MK-82</value>
+							<value>3 x MK-82 AIR</value>
 							<value>3 x MK-83</value>
 							<value>3 x CBU-87</value>
 							<binding>
@@ -1597,6 +1607,8 @@
 								<script>
 									if (getprop("payload/armament/station/id-7-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-7-count", 2);
+									} elsif (getprop("payload/armament/station/id-7-set") == "3 x MK-82 AIR") {
+										setprop("payload/armament/station/id-7-count", 3);
 									} else {
 										setprop("payload/armament/station/id-7-count", 1);
 									}

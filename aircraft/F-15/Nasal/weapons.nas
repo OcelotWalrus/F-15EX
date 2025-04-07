@@ -60,7 +60,7 @@ var getDLZ = func {
 
 var ccrp = func {
     var weap = pylons.fcs.getSelectedWeapon();
-    if (weap != nil and weap.parents[0] == armament.AIM and (weap.type == "MK-84" or weap.type == "GBU-10")) {
+    if (weap != nil and weap.parents[0] == armament.AIM and (weap.type == "MK-84" or weap.type == "GBU-10" or weap.type == "MK-82AIR")) {
         var ccrp_meters = weap.getCCRP(20,0.25);#meters left to release point
         if (ccrp_meters != nil) {
             # this should make the ccrp bomb steering line and the bomb release cue.
@@ -132,7 +132,7 @@ var armament_update = func {
     Count9.setValue(aim9_count);
     Count7.setValue(pylons.fcs.getAmmoOfType("AIM-7"));
     Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120") + pylons.fcs.getAmmoOfType("AIM-120D"));
-    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10"));
+    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR"));
 
     update_gun_ready();
     setCockpitLights();
@@ -151,7 +151,7 @@ var armament_update2 = func {
     var updatePayload = 0;
     for (var i = 0;i<11;i+=1) {
         var ws = pylons.pylons[i+1].getWeapons();
-        if ((i == 1 or i==5 or i==9) and (getprop("payload/weight["~i~"]/selected") == "MK-84" or getprop("payload/weight["~i~"]/selected") == "GBU-10") and size(ws) > 0 and ws[0] == nil) {
+        if ((i == 1 or i==5 or i==9) and (getprop("payload/weight["~i~"]/selected") == "MK-84" or getprop("payload/weight["~i~"]/selected") == "GBU-10" or getprop("payload/weight["~i~"]/selected") == "MK-82AIR") and size(ws) > 0 and ws[0] == nil) {
             # the MK-84 on this station has been released
             setprop("payload/weight["~i~"]/selected","Empty");
             updatePayload = 1;
@@ -235,6 +235,8 @@ var missile_code_from_ident= func(mty)
             return "mk83";
         else if (mty == "MK-84")
             return "mk84";
+        else if (mty == "MK-82AIR")
+            return "mk82air";
         else if (mty == "GBU-10")
             return "gbu10";
         else if (mty == "AIM-120")
@@ -246,7 +248,7 @@ var get_sel_missile_count = func()
 {
     if (WeaponSelector.getValue() == 5)
     {
-        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10");
+        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR");
     }
     else if (WeaponSelector.getValue() == 1)
     {
@@ -276,7 +278,7 @@ var arm_selector = func() {
 
     var stick_s = WeaponSelector.getValue();
     if ( stick_s == 0 ) {
-        pylons.fcs.selectWeapon("20mm Cannon");
+        var p = pylons.fcs.selectWeapon("20mm Cannon");
     } elsif ( stick_s == 1 ) {
         var p = pylons.fcs.selectWeapon("AIM-9");
         setprop("sim/model/f15/systems/armament/selected-arm", "AIM-9");
@@ -288,10 +290,10 @@ var arm_selector = func() {
         var p = pylons.fcs.selectWeapon("AIM-120D");
         setprop("sim/model/f15/systems/armament/selected-arm", "AIM-120D");
         if (p == nil) {
-            pylons.fcs.selectWeapon("AIM-120");
+            var p = pylons.fcs.selectWeapon("AIM-120");
             setprop("sim/model/f15/systems/armament/selected-arm", "AIM-120");
             if (p == nil) {
-                pylons.fcs.selectWeapon("AIM-7");
+                var p = pylons.fcs.selectWeapon("AIM-7");
                 setprop("sim/model/f15/systems/armament/selected-arm", "AIM-7");
             }
         }
@@ -299,8 +301,12 @@ var arm_selector = func() {
         var p = pylons.fcs.selectWeapon("GBU-10");
         setprop("sim/model/f15/systems/armament/selected-arm", "GBU-10");
         if (p == nil) {
-            pylons.fcs.selectWeapon("MK-84");
+            var p = pylons.fcs.selectWeapon("MK-84");
             setprop("sim/model/f15/systems/armament/selected-arm", "MK-84");
+            if (p == nil) {
+                var p = pylons.fcs.selectWeapon("MK-82AIR");
+                setprop("sim/model/f15/systems/armament/selected-arm", "MK-82AIR");
+            }
         }
     } else {
         pylons.fcs.selectNothing();

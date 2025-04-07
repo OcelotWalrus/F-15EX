@@ -3335,6 +3335,97 @@
             </and>
         </condition>
     </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[121]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[122]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[123]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[124]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[121]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[122]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[123]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-mk82-air-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[124]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+
+    <!-- disable old MK-84s and GBU-10s-->
     <animation>
         <type>select</type>
         <nopreview />
@@ -3919,6 +4010,85 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.15</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>double-mk82-air-l3</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-3.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.6</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-mk82-air-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-3.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.825</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>double-mk82-air-l4</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-4.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.6</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-mk82-air-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-4.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.825</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>double-mk82-air-r1</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-6.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.6</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-mk82-air-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-6.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.825</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>double-mk82-air-r2</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-7.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.6</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-mk82-air-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/ter-9a-7.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.825</z-m>
         </offsets>
     </model>
 

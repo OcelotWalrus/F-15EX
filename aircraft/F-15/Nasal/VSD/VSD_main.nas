@@ -148,7 +148,7 @@ var VSD_Device =
     var pitch_factor = 1.98;
     obj.update_items = [
         props.UpdateManager.FromHashList(["OrientationPitchDeg","roll"], 0.025, func(notification) {
-                                            obj.horizon_line.setTranslation (0.0, notification.OrientationPitchDeg * pitch_factor+pitch_offset);                                           
+                                            obj.horizon_line.setTranslation (0.0, notification.OrientationPitchDeg * pitch_factor+pitch_offset);
                                             obj.horizon_line.setRotation (-notification.OrientationRollDeg * DTOR);
                                         }),
 
