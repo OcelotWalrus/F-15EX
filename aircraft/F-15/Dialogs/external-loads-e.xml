@@ -663,6 +663,17 @@
                 </binding>
             </button>
 
+			<button>
+                <legend>Mission Parameters</legend>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+						var mission_config = gui.Dialog.new("dialog[5]","Aircraft/F-15/Dialogs/mission-config.xml");
+						mission_config.open();
+					</script>
+                </binding>
+            </button>
+
 			<group>
                 <layout>hbox</layout>
 
@@ -1327,7 +1338,6 @@
 							<value>Droptank</value>
 							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
-							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
 							<value>2 x MK-84</value>
 							<value>3 x CBU-87</value>
@@ -1501,7 +1511,6 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>Droptank</value>
-							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
 							<value>3 x MK-84</value>
 							<value>3 x CBU-87</value>
@@ -1678,7 +1687,6 @@
 							<value>Droptank</value>
 							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
-							<value>3 x MK-82</value>
 							<value>3 x MK-83</value>
 							<value>2 x MK-84</value>
 							<value>3 x CBU-87</value>

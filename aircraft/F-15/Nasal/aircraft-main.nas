@@ -5,7 +5,7 @@
 # ---------------------------
 # Richard Harrison (rjh@zaretto.com) 2014-11-23. Based on F-14b by xii
 #
-var stdFont =  "condensed.txf";#"richud.ttf";#"LiberationFonts/LiberationSans-Bold.ttf";#"notosansmono-black.ttf";
+var stdFont =  "NotoF15HUD-SemiBold.ttf";#"richud.ttf";#"LiberationFonts/LiberationSans-Bold.ttf";#"notosansmono-black.ttf";
 HUDFont =  VSDFont = TEWSFont = MPCDFont = stdFont;
 
 var canvas_font_mapper = func(family, weight) {

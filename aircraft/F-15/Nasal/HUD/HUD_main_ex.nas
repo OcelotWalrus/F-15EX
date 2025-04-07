@@ -366,6 +366,16 @@ var F15HUD = {
 		        .setStrokeLineWidth(1)
 		        .hide()
 		        .setColor(0,1,0);
+
+			obj.WarningTexts = obj.canvas.createGroup();
+			obj.WarningTexts.setTranslation(obj.centerOrigin);
+			obj.altitudeDeck = obj.WarningTexts.createChild("text")
+	            .setText("ALTITUDE")
+	            .setTranslation(0,-75)
+	            .setAlignment("center-center")
+	            .setColor(0,1,0,1)
+	            .setFont(aircraft.HUDFont)
+	            .setFontSize(13, 1.4);
         #
         #
         # using the new property manager to update items on the HUD.
@@ -619,6 +629,23 @@ var F15HUD = {
                                                                 obj.HudNavRangeETA = "";
                                                             }
                                                         }),
+			props.UpdateManager.FromHashList(["AltitudeDeckMax",
+														"AltitudeDeckMin",
+														"AltitudeDeckMinEnabled",
+														"AltitudeDeckMaxEnabled",
+														"AltimeterIndicatedAltitudeFt"], 0.1, func(val)
+														{
+															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin)) {
+																obj.altitudeDeck.show();
+																setprop("sim/model/f15/avionics/altitude-deck-hit", 1);
+															} elsif (val.AltitudeDeckMaxEnabled and (val.AltimeterIndicatedAltitudeFt > val.AltitudeDeckMax)) {
+																obj.altitudeDeck.show();
+																setprop("sim/model/f15/avionics/altitude-deck-hit", 1);
+															} else {
+																obj.altitudeDeck.hide();
+																setprop("sim/model/f15/avionics/altitude-deck-hit", 0);
+															}
+											            }),
             props.UpdateManager.FromHashList(["ControlsArmamentMasterArmSwitch",
                                                         "ControlsArmamentWeaponSelector",
                                                         "ArmamentRounds",
@@ -1043,6 +1070,10 @@ input = {
         VelocitiesAirspeedKt                    : "velocities/airspeed-kt",
         VelocitiesGroundspeedKt                 : "velocities/groundspeed-kt",
         FeetPerSecond                           : "velocities/down-relground-fps",
+		AltitudeDeckMax                         : "sim/model/f15/avionics/altitude-deck-max",
+		AltitudeDeckMin                         : "sim/model/f15/avionics/altitude-deck-min",
+		AltitudeDeckMaxEnabled                  : "sim/model/f15/avionics/altitude-deck-max-enabled",
+		AltitudeDeckMinEnabled                  : "sim/model/f15/avionics/altitude-deck-min-enabled",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

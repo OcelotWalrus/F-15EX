@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+    <name>mission-config</name>
+    <layout>vbox</layout>
+    <default-padding>0</default-padding>
+    <modal>false</modal>
+    <width>550</width>
+    <valign>top</valign>
+
+    <group>
+        <layout>hbox</layout>
+        <default-padding>0</default-padding>
+
+        <group>
+            <layout>vbox</layout>
+            <default-padding>1</default-padding>
+
+            <empty>
+                <pref-height>2</pref-height>
+            </empty>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Altitude Deck Min ON</label>
+                </text>
+
+                <checkbox>
+                    <property>sim/model/f15/avionics/altitude-deck-min-enabled</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>sim/model/f15/avionics/altitude-deck-min-enabled</property>
+                    </binding>
+                </checkbox>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Altitude Deck Minimum</label>
+                </text>
+
+                <input>
+        		  	<width>250</width>
+        		  	<height>25</height>
+        		  	<label>FT</label>
+        		  	<property>sim/model/f15/avionics/altitude-deck-min</property>
+        		  	<live>true</live>
+        		  	<halign>left</halign>
+        	        <binding>
+        	            <command>dialog-apply</command>
+        	      	</binding>
+        		</input>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Altitude Deck Max ON</label>
+                </text>
+
+                <checkbox>
+                    <property>sim/model/f15/avionics/altitude-deck-max-enabled</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>sim/model/f15/avionics/altitude-deck-max-enabled</property>
+                    </binding>
+                </checkbox>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Altitude Deck Maximum</label>
+                </text>
+
+                <input>
+        		  	<width>250</width>
+        		  	<height>25</height>
+        		  	<label>FT</label>
+        		  	<property>sim/model/f15/avionics/altitude-deck-max</property>
+        		  	<live>true</live>
+        		  	<halign>left</halign>
+        	        <binding>
+        	            <command>dialog-apply</command>
+        	      	</binding>
+        		</input>
+            </group>
+        </group>
+    </group>
+    <group>
+        <layout>hbox</layout>
+        <button>
+            <legend>Close</legend>
+            <default>true</default>
+            <key>Esc</key>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+    </group>
+</PropertyList>
