@@ -675,9 +675,9 @@ var F15HUD = {
 
 																	# Determine the target's aspect
 																	var aspect = math.round(awg_9.active_u.get_aspect()/10.0);
-																	if (math.abs(obj._aspect) > 17) {
+																	if (math.abs(aspect) > 17) {
 						                                                var rel_aspect = "H  ";
-						                                            } elsif (math.abs(obj._aspect) < 1) {
+						                                            } elsif (math.abs(aspect) < 1) {
 						                                                var rel_aspect = "T  ";
 																	} else {
 																		var rel_aspect = sprintf("%2d%s", math.abs(aspect), aspect > 0 ? "R" : "L");
