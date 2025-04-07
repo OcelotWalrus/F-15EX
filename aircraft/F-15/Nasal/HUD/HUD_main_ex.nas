@@ -434,7 +434,7 @@ var F15HUD = {
                                                         }),
             props.UpdateManager.FromHashList(["InstrumentedG", "CadcOwsMaximumG"], 0.05, func(val)
                                                         {
-                                                            obj.window8.setText(sprintf("%02d %02d",
+                                                            obj.window8.setText(sprintf("%02d %02d G",
                                                                                         math.round(val.InstrumentedG*10.0),
                                                                                         math.round(val.CadcOwsMaximumG*10.0)));
                                                         }),
@@ -445,13 +445,12 @@ var F15HUD = {
                                                         {
                                                             obj.alpha = val.Alpha or 0;
                                                             obj.mach = val.AirspeedIndicatorIndicatedMach or 0;
-                                                            if(val.ControlsGearBrakeParking)
-                                                            obj.window7.setText("BRAKES");
-                                                            else if(val.ControlsGearGearDown or obj.alpha > 20)
-                                                            obj.window7.setText(sprintf("AOA %d",obj.alpha));
-                                                            else
-                                                            obj.window7.setText(sprintf(" %1.3f",obj.mach));
-                                                            obj.window10.setText(sprintf("a  %d", obj.alpha));
+                                                            if(val.ControlsGearBrakeParking) {
+	                                                            obj.window7.setText("BRAKES");
+                                                            } else {
+	                                                            obj.window7.setText(sprintf("%1.3f Ma",obj.mach));
+															}
+	                                                        obj.window10.setText(sprintf("a  %d", obj.alpha));
                                                         }),
             props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond"], nil, func(val)
                                                         {
@@ -576,10 +575,10 @@ var F15HUD = {
 																		tti_mins = tti_mins - 1;
 																		tti_secs = 60 + tti_secs;
 																	}
-																	if (live == 0) {
+																	if (live == 0) {  # if missile ain't active
 																		obj.window17.setText(sprintf("%02d m %02d s", tti_mins, tti_secs));
-																	} else {
-																		obj.window17.setText(sprintf("L %02d m %02d s", tti_mins, tti_secs));
+																	} else {  # if missile is active
+																		obj.window17.setText(sprintf("L %02d m %02d %1.1f n", tti_mins, tti_secs, distance_to_target / 1.15));  #  if missile's live, indicate it is an aditionally display its distance to the target
 																	}
 																	obj.window17.setVisible(1);
 																} else {
@@ -604,10 +603,17 @@ var F15HUD = {
                                                                     obj.HudNavRangeDisplay = "N XXX";
                                                                 }
 
-                                                                if (obj.eta_s != nil)
-                                                                obj.HudNavRangeETA = sprintf("%2d MIN",obj.eta_s/60);
-                                                                else
-                                                                obj.HudNavRangeETA = "XX MIN";
+                                                                if (obj.eta_s != nil) {
+																	nav_mins = sprintf("%.0f", obj.eta_s / 60);
+																	nav_secs = (obj.eta_s / 60 - nav_mins) * 60;  # remove whole minutes for seconds
+																	if (nav_secs < 0) {  # tiny fix
+																		nav_mins = nav_mins - 1;
+																		nav_secs = 60 + nav_secs;
+																	}
+	                                                                obj.HudNavRangeETA = sprintf("%02d m %02d s", nav_mins, nav_secs);
+                                                                } else {
+                                                                	obj.HudNavRangeETA = "XX MIN";
+																}
                                                             } else {
                                                                 obj.HudNavRangeDisplay = "";
                                                                 obj.HudNavRangeETA = "";
@@ -627,7 +633,8 @@ var F15HUD = {
                                                         "RadarActiveTargetRange",
                                                         "RadarActiveTargetClosure",
                                                         "HudNavRangeDisplay",
-                                                        "HudNavRangeETA"], nil, func(val)
+                                                        "HudNavRangeETA",
+														"OrientationHeadingDeg"], nil, func(val)
                                                         {
                                                             if (val.ControlsArmamentMasterArmSwitch) {
                                                                 obj.window11.setVisible(1);
@@ -656,8 +663,8 @@ var F15HUD = {
                                                                     if (val.RadarActiveTargetType != "")
                                                                     model = val.RadarActiveTargetType;
 
-                                                                    #these labels aren't correct - but we don't have a full simulation of the targetting and missiles so
-                                                                    #have no real idea on the details of how this works.
+                                                                    # these labels aren't correct - but we don't have a full simulation of the targetting and missiles so
+                                                                    # have no real idea on the details of how this works.
                                                                     if (val.RadarActiveTargetDisplay){
                                                                         obj.window4.setText(sprintf("RNG %3.1f", val.RadarActiveTargetRange));
                                                                         obj.window5.setText(sprintf("CLO %-3d", val.RadarActiveTargetClosure));
@@ -665,7 +672,17 @@ var F15HUD = {
                                                                         obj.window4.setText("");
                                                                         obj.window5.setText("");
                                                                     }
-                                                                    obj.window6.setText(model);
+
+																	# Determine the target's aspect
+																	var aspect = math.round(awg_9.active_u.get_aspect()/10.0);
+																	if (math.abs(obj._aspect) > 17) {
+						                                                var rel_aspect = "H  ";
+						                                            } elsif (math.abs(obj._aspect) < 1) {
+						                                                var rel_aspect = "T  ";
+																	} else {
+																		var rel_aspect = sprintf("%2d%s", math.abs(aspect), aspect > 0 ? "R" : "L");
+																	}
+                                                                    obj.window6.setText(rel_aspect);
                                                                     obj.window6.setVisible(1); # SRM UNCAGE / TARGET ASPECT
                                                                 } else {
                                                                     # this else added by Leto
