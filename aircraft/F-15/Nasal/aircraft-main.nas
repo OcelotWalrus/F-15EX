@@ -641,6 +641,30 @@ var F15MainModule =
             setprop("controls/armament/dual", 4);
         }
 
+        # Quick patch for pylons weight not computing, no clue why ...
+        all_pylons = [12,1,5,9,15];
+        foreach (cur_pyl; all_pylons) {
+            if (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AIM-9X Block I Sidewinder") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 186*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 15);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AIM-120D AMRAAM") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 291*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x MK-84" or getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x MK-84") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 2000*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
+            } else {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
+            }
+        }
+
+        if (getprop("consumables/fuel/tank[7]/selected")) {
+            setprop("payload/weight[5]/weight-lb", 271);
+        }
+        if (getprop("consumables/fuel/tank[5]/selected")) {
+            setprop("payload/weight[1]/weight-lb", 271);
+        }
+        if (getprop("consumables/fuel/tank[6]/selected")) {
+            setprop("payload/weight[9]/weight-lb", 271);
+        }
+
         # Gear/flaps overspeed damage
         if (getprop("controls/gear/gear-down") == 1 and getprop("/velocities/airspeed-kt") > (300 * 1.1) and (getprop("controls/gear/gear-overspeed") == nil or getprop("controls/gear/gear-overspeed") == 0)) { # 10% overspeed safety
             # Since the front gear is less strong, it's got more chance to break
