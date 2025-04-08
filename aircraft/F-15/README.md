@@ -34,3 +34,4 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Display steerpoints on the HUD using same method as F-16 model
 - Addd ASE Circles to the HUD (W.I.P.)
 - Upgraded the landing/taxiing light bulb effects
+- Added a "FLYUP", "FUEL", and "LIMIT" warning displays on the HUD (with sounds)
