@@ -633,6 +633,14 @@ var F15MainModule =
             screen.log.write("Demand a Ground Power Unit in the F-15EX Eagle II config panel to connect external power!");
         }
 
+        # Make sure ripple number is at least 1 and not higher than 4
+        if (getprop("controls/armament/dual") < 1) {
+            setprop("controls/armament/dual", 1);
+        }
+        if (getprop("controls/armament/dual") > 4) {
+            setprop("controls/armament/dual", 4);
+        }
+
         # Gear/flaps overspeed damage
         if (getprop("controls/gear/gear-down") == 1 and getprop("/velocities/airspeed-kt") > (300 * 1.1) and (getprop("controls/gear/gear-overspeed") == nil or getprop("controls/gear/gear-overspeed") == 0)) { # 10% overspeed safety
             # Since the front gear is less strong, it's got more chance to break

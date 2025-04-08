@@ -1211,10 +1211,13 @@ var MPCD_Device =
             o.p1_3.LBL_NONAVY.setText("GLOBAL");
             o.p1_4.LBL_CHAFF.setText(sprintf("CHF %3d",v));
             o.p1_4.LBL_FLARE.setText(sprintf(" FLR %2d",v));
-            o.p1_4.LBL_NONAVY.setText("GLOBAL");
+            o.p1_4.LBL_NONAVY.setText(sprintf("RIPL %2d", getprop("controls/armament/dual")));
         };
         update_flares(oo);
         setlistener("/ai/submodels/submodel[5]/count", func {
+            update_flares(oo);
+        });
+        setlistener("controls/armament/dual", func {
             update_flares(oo);
         });
 
@@ -1289,9 +1292,15 @@ var MPCD_Device =
         setlistener("sim/model/f15/controls/MPCD/button-pressed", func(v)
                     {
                         if (v != nil) {
-                            if (v.getValue())
+                            if (v.getValue()) {
                                 me.mpcd_button_pushed = v.getValue();
-                            else {
+                                # Don't know how to do it otherwise ?
+                                if (me.mpcd_button_pushed == 6) {
+                                    setprop("controls/armament/dual", getprop("controls/armament/dual") + 1);
+                                } elsif (me.mpcd_button_pushed == 7) {
+                                    setprop("controls/armament/dual", getprop("controls/armament/dual") - 1);
+                                }
+                            } else {
                                 me.PFD.notifyButton(me.mpcd_button_pushed);
                                 me.mpcd_button_pushed = 0;
                             }
