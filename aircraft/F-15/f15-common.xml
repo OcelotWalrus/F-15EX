@@ -2552,8 +2552,8 @@
                     </script>
                 </binding>
             </key>
-            <key n="109">
-                <name>m</name>
+            <key n="77">
+                <name>M</name>
                 <desc>Cycle Weapon Type Selector</desc>
                 <binding>
                     <command>nasal</command>
