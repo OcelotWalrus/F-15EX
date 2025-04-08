@@ -62,7 +62,7 @@ var EmesaryRecipient =
 
                             missile.coord = notification.Position;
                             missile.release();
-                        } 
+                        }
                     }
                 }
                 return emesary.Transmitter.ReceiptStatus_OK;
@@ -114,7 +114,7 @@ var tacan_XYtoggle = func {
 # Save fuel state ###############
 var bingo      = props.globals.getNode("sim/model/f15/controls/fuel/bingo", 1);
 
-aircraft.data.add(	
+aircraft.data.add(
     "sim/model/f15/controls/fuel/bingo",
     "consumables/fuel/tank[0]/level-lbs",
     "consumables/fuel/tank[1]/level-lbs",
@@ -153,9 +153,9 @@ aircraft.data.add(
     "/payload/weight[9]/selected",
     "/payload/weight[10]/selected",
     "sim/model/f15/systems/external-loads/external-load-set",
-    "instrumentation/transponder/inputs/digit[0]", 
-    "instrumentation/transponder/inputs/digit[1]", 
-    "instrumentation/transponder/inputs/digit[2]", 
+    "instrumentation/transponder/inputs/digit[0]",
+    "instrumentation/transponder/inputs/digit[1]",
+    "instrumentation/transponder/inputs/digit[2]",
     "instrumentation/transponder/inputs/digit[3]",
     "sim/multiplay/generic/int[17]", # Radar status
     "sim/model/f15/controls/VSD/brightness",
@@ -270,7 +270,7 @@ controls.stepSpoilers = func(s) {
             setprop("controls/flight/speedbrake", curval+s/5);
         else if (s > 0 and curval < 1)
             setprop("controls/flight/speedbrake", curval+s/5);
-        return; 
+        return;
 }
 
 var common_init = func
@@ -280,7 +280,7 @@ var common_init = func
     setprop("sim/hud/visibility[1]",0);
     aoa_max.setDoubleValue(0);
 
-    setprop("sim/replay/buffer/medium-res-sample-dt", 0.02); 
+    setprop("sim/replay/buffer/medium-res-sample-dt", 0.02);
     setprop("controls/flight/cas-roll",0);
     setprop("sim/model/f15/controls/AFCS/engage",0);
     setprop("autopilot/locks/altitude","");
@@ -362,7 +362,7 @@ setlistener("sim/position-finalized", func (is_done) {
         setprop("consumables/fuel/tank[5]/selected",0);
         setprop("consumables/fuel/tank[6]/selected",0);
         setprop("consumables/fuel/tank[7]/selected",0);
-        
+
         setprop("consumables/fuel/tank[5]/level-lbs",0);
         setprop("consumables/fuel/tank[6]/level-lbs",0);
         setprop("consumables/fuel/tank[7]/level-lbs",0);
@@ -407,12 +407,12 @@ var AircraftModule =
             notification.ownship_pos = ownship_pos;
             burner = math.mod(burner + 1,4);
             BurnerN.setValue(burner);
-            
-            if ( notification.ReplayTime > 0 ) 
+
+            if ( notification.ReplayTime > 0 )
                 me.alphaIndicatedDegNode.setValue((notification.AlphaRaw - 0.797) / 0.8122);
             else
                 me.alphaIndicatedDegNode.setValue(notification.AlphaAero);
-            
+
             if (frame_count == 0) {
                 if ((notification.Alpha or 0) > aoa_max.getValue() or 0) {
                     aoa_max.setDoubleValue(notification.Alpha);
@@ -424,7 +424,7 @@ var AircraftModule =
             }
             else if (frame_count == 4) {
                  awg_9.hud_nearest_tgt();
-                
+
                  if ( notification.ArmSysRunning ) {
                      armament_update();
                  }
@@ -460,7 +460,7 @@ var AircraftModule =
           VtcRadialDeg     : "instrumentation/nav[1]/radials/selected-deg",
           HsdFromFlag      : "sim/model/f15/instrumentation/hsd/from-flag",
           HsdToFlag        : "sim/model/f15/instrumentation/hsd/to-flag",
-          HsdCdiDeflection : "sim/model/f15/instrumentation/hsd/needle-deflection", 
+          HsdCdiDeflection : "sim/model/f15/instrumentation/hsd/needle-deflection",
           TcXYSwitch       : "sim/model/f15/instrumentation/tacan/xy-switch",
           TcModeSwitch     : "sim/model/f15/instrumentation/tacan/mode",
           MagHdg           : "orientation/heading-magnetic-deg",
