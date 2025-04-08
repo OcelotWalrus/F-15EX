@@ -2151,15 +2151,21 @@
             </volume>
         </altitude>
         <pullup>
-            <name>missile5</name>
+            <name>pullup</name>
             <path>Aircraft/F-15/Sounds/betty/pullup.wav</path>
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>sim/model/f15/avionics/pullup</property>
-                    <value>1</value>
-                </equals>
+                <and>
+                    <greather-than>
+                        <property>instrumentation/radar/time-till-crash</property>
+                        <value>0</value>
+                    </greather-than>
+                    <less-than>
+                        <property>instrumentation/radar/time-till-crash</property>
+                        <value>8</value>
+                    </less-than>
+                </and>
             </condition>
             <volume>
                 <factor>2</factor>
