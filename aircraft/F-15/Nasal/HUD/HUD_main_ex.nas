@@ -397,6 +397,13 @@ var F15HUD = {
 	            .setColor(0,1,0,1)
 	            .setFont(aircraft.HUDFont)
 	            .setFontSize(13, 1.4);
+			obj.stby = obj.WarningTexts.createChild("text")
+	            .setText("NO RAD")
+	            .setTranslation(0,-165)
+	            .setAlignment("center-top")
+	            .setColor(0,1,0,1)
+	            .setFont(aircraft.HUDFont)
+	            .setFontSize(11, 1.1);
         #
         #
         # using the new property manager to update items on the HUD.
@@ -692,6 +699,13 @@ var F15HUD = {
 			                                                    obj.flyupRight.hide();
 																setprop("sim/model/f15/avionics/pullup", 0);
 			                                                }
+
+															# NO RAD label if radar's either in standby or offline
+															if (getprop("instrumentation/radar/radar-standby")) {
+																obj.stby.show();
+															} else {
+																obj.stby.hide();
+															}
 											            }),
             props.UpdateManager.FromHashList(["ControlsArmamentMasterArmSwitch",
                                                         "ControlsArmamentWeaponSelector",
