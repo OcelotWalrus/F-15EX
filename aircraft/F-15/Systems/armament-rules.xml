@@ -1384,8 +1384,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-3-type</property>
-          <value>MK-82AIR</value>
+          <property>payload/armament/station/id-3-set</property>
+          <value>3 x MK-82 AIR</value>
         </equals>
       </and>
     </input>
@@ -1395,8 +1395,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-4-type</property>
-          <value>MK-82AIR</value>
+          <property>payload/armament/station/id-4-set</property>
+          <value>3 x MK-82 AIR</value>
         </equals>
       </and>
     </input>
@@ -1406,8 +1406,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-6-type</property>
-          <value>MK-82AIR</value>
+          <property>payload/armament/station/id-6-set</property>
+          <value>3 x MK-82 AIR</value>
         </equals>
       </and>
     </input>
@@ -1417,8 +1417,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-7-type</property>
-          <value>MK-82AIR</value>
+          <property>payload/armament/station/id-7-set</property>
+          <value>3 x MK-82 AIR</value>
         </equals>
       </and>
     </input>
