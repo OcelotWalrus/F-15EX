@@ -376,6 +376,27 @@ var F15HUD = {
 	            .setColor(0,1,0,1)
 	            .setFont(aircraft.HUDFont)
 	            .setFontSize(13, 1.4);
+			obj.flyupLeft    = obj.WarningTexts.createChild("path")
+	            .lineTo(-50,-50)
+	            .moveTo(0,0)
+	            .lineTo(-50,50)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0)
+	            .hide();
+	        obj.flyupRight  = obj.WarningTexts.createChild("path")
+	            .lineTo(50,-50)
+	            .moveTo(0,0)
+	            .lineTo(50,50)
+	            .setStrokeLineWidth(1)
+	            .setColor(0,1,0)
+	            .hide();
+	        obj.flyup = obj.WarningTexts.createChild("text")
+	            .setText("FLYUP")
+	            .setTranslation(0,-75)
+	            .setAlignment("center-center")
+	            .setColor(0,1,0,1)
+	            .setFont(aircraft.HUDFont)
+	            .setFontSize(13, 1.4);
         #
         #
         # using the new property manager to update items on the HUD.
@@ -633,7 +654,10 @@ var F15HUD = {
 														"AltitudeDeckMin",
 														"AltitudeDeckMinEnabled",
 														"AltitudeDeckMaxEnabled",
-														"AltimeterIndicatedAltitudeFt"], 0.1, func(val)
+														"AltimeterIndicatedAltitudeFt",
+														"VNE",
+														"TimeTilCrash",
+														"VelocitiesAirspeedKt"], 0.1, func(val)
 														{
 															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin)) {
 																obj.altitudeDeck.show();
@@ -645,6 +669,29 @@ var F15HUD = {
 																obj.altitudeDeck.hide();
 																setprop("sim/model/f15/avionics/altitude-deck-hit", 0);
 															}
+															if (val.TimeTilCrash != nil and val.TimeTilCrash > 0 and val.TimeTilCrash < 8) {
+		                                                     	obj.flyup.setText("FLYUP");
+		                                                     	obj.flyup.show();
+															} elsif (getprop("sim/time/elapsed-sec") > 2 and getprop("sim/model/f15/lights/ca-bingo-fuel") > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
+		                                                     	obj.flyup.setText("FUEL");
+		                                                     	obj.flyup.show();
+															} elsif (val.VNE < val.VelocitiesAirspeedKt) {
+															} else {
+																obj.flyup.hide();
+															}
+															obj.flyup.update();
+			                                                 if (val.TimeTilCrash != nil and val.TimeTilCrash>0 and val.TimeTilCrash<10.5) {
+			                                                    flyupAmount = math.max(0,obj.extrapolate(val.TimeTilCrash,8,9.5,0,1));
+			                                                    obj.flyupLeft.setTranslation(-flyupAmount*150,0);
+			                                                    obj.flyupRight.setTranslation(flyupAmount*150,0);
+			                                                    obj.flyupLeft.show().update();
+			                                                    obj.flyupRight.show().update();
+																setprop("sim/model/f15/avionics/pullup", 1);
+			                                                } else {
+			                                                    obj.flyupLeft.hide();
+			                                                    obj.flyupRight.hide();
+																setprop("sim/model/f15/avionics/pullup", 0);
+			                                                }
 											            }),
             props.UpdateManager.FromHashList(["ControlsArmamentMasterArmSwitch",
                                                         "ControlsArmamentWeaponSelector",
@@ -1074,6 +1121,8 @@ input = {
 		AltitudeDeckMin                         : "sim/model/f15/avionics/altitude-deck-min",
 		AltitudeDeckMaxEnabled                  : "sim/model/f15/avionics/altitude-deck-max-enabled",
 		AltitudeDeckMinEnabled                  : "sim/model/f15/avionics/altitude-deck-min-enabled",
+		VNE                                     : "limits/vne",
+        TimeTilCrash                            : "instrumentation/radar/time-till-crash",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

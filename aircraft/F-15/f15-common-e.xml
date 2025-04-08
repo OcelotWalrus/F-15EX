@@ -2716,8 +2716,7 @@
 
     <limits>
         <mass-and-balance>
-            <!-- Reference: https://en.wikipedia.org/wiki/Grumman_F-14_Tomcat#Specifications_.28F-14D.29 -->
-            <maximum-takeoff-mass-lbs>74350</maximum-takeoff-mass-lbs>
+            <maximum-takeoff-mass-lbs>85000</maximum-takeoff-mass-lbs>
         </mass-and-balance>
 
         <vne>1100</vne>

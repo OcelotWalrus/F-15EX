@@ -2150,6 +2150,23 @@
                 <property>/sim/current-view/internal</property>
             </volume>
         </altitude>
+        <pullup>
+            <name>missile5</name>
+            <path>Aircraft/F-15/Sounds/betty/pullup.wav</path>
+            <mode>looped</mode>
+            <type>avionics</type>
+            <condition>
+                <equals>
+                    <property>sim/model/f15/avionics/pullup</property>
+                    <value>1</value>
+                </equals>
+            </condition>
+            <volume>
+                <factor>2</factor>
+                <max>2</max>
+                <property>/sim/current-view/internal</property>
+            </volume>
+        </pullup>
 
         <rwr>
             <name>rwr-spike-air</name>
