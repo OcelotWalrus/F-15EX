@@ -35,3 +35,5 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Addd ASE Circles to the HUD (W.I.P.)
 - Upgraded the landing/taxiing light bulb effects
 - Added a "FLYUP", "FUEL", "NO RAD" and "LIMIT" warning displays on the HUD (with sounds)
+- Added the ability to customize the ripple count in the MPCD
+- Added the ability to specifically select a weapon in the HUD (not just type (MRM, SRM or Ground) but actual weapon types (manually choosing from AIM-120, AIM-7))
