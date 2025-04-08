@@ -388,6 +388,10 @@
                 <desc>Cycle Stick Weapon Mode Selector</desc>
             </key>
             <key>
+                <name>M</name>
+                <desc>Cycle Stick Weapon Type Selector</desc>
+            </key>
+            <key>
                 <name>Ctrl-w</name>
                 <desc>Cycle through Master Arm modes</desc>
             </key>
@@ -2545,6 +2549,16 @@
                         if (w == 3) w = 5;
                         if (w == 6) w = 0;
                         setprop("sim/model/f15/controls/armament/weapon-selector", w);
+                    </script>
+                </binding>
+            </key>
+            <key n="109">
+                <name>m</name>
+                <desc>Cycle Weapon Type Selector</desc>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+                        setprop("controls/armament/selected-armament-offset", getprop("controls/armament/selected-armament-offset")+1);
                     </script>
                 </binding>
             </key>

@@ -393,6 +393,10 @@
                 <desc>Cycle Stick Weapon Mode Selector</desc>
             </key>
             <key>
+                <name>M</name>
+                <desc>Cycle Stick Weapon Type Selector</desc>
+            </key>
+            <key>
                 <name>Ctrl-w</name>
                 <desc>Cycle through Master Arm modes</desc>
             </key>
@@ -2791,6 +2795,7 @@
             <mpcd-jettison-button type="float">0</mpcd-jettison-button>
             <combat-jettison-count type="int">0</combat-jettison-count>
             <selected-armament type="string"/>
+            <selected-armament-offset type="int">0</selected-armament-offset>
             <dual type="int">1</dual><!-- set this to control if next bomb release should be released as a pair or more. 1=single -->
         </armament>
         <lighting>
@@ -3191,6 +3196,16 @@
                         if (w == 3) w = 5;
                         if (w == 6) w = 0;
                         setprop("sim/model/f15/controls/armament/weapon-selector", w);
+                    </script>
+                </binding>
+            </key>
+            <key n="109">
+                <name>m</name>
+                <desc>Cycle Weapon Type Selector</desc>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+                        setprop("controls/armament/selected-armament-offset", getprop("controls/armament/selected-armament-offset")+1);
                     </script>
                 </binding>
             </key>

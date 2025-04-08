@@ -151,11 +151,12 @@ var armament_update2 = func {
     var updatePayload = 0;
     for (var i = 0;i<11;i+=1) {
         var ws = pylons.pylons[i+1].getWeapons();
-        if ((i == 1 or i==5 or i==9) and (getprop("payload/weight["~i~"]/selected") == "MK-84" or getprop("payload/weight["~i~"]/selected") == "GBU-10" or getprop("payload/weight["~i~"]/selected") == "MK-82AIR") and size(ws) > 0 and ws[0] == nil) {
-            # the MK-84 on this station has been released
-            setprop("payload/weight["~i~"]/selected","Empty");
-            updatePayload = 1;
-        }
+        # Unecessary ?
+        #if ((i == 1 or i==5 or i==9) and (getprop("payload/weight["~i~"]/selected") == "MK-84" or getprop("payload/weight["~i~"]/selected") == "GBU-10" or getprop("payload/weight["~i~"]/selected") == "MK-82AIR") and size(ws) > 0 and ws[0] == nil) {
+        #    # the MK-84 on this station has been released
+        #    setprop("payload/weight["~i~"]/selected","Empty");
+        #    updatePayload = 1;
+        #}
         setprop("sim/model/f15/systems/external-loads/station["~i~"]/type", getprop("payload/weight["~i~"]/selected"));
         var mass = pylons.pylons[i+1].getMass();
         wWeight += mass[0];
@@ -183,7 +184,7 @@ var armament_update2 = func {
     setprop("controls/armament/master-arm", ArmSwitch.getValue()>0);
 
     # manage smoke
-    if (SmokeCmd.getValue() and (SmokeMountedR.getValue() or SmokeMountedL.getValue())) {
+    if (SmokeCmd.getValue()) {# and (SmokeMountedR.getValue() or SmokeMountedL.getValue())) {
         Smoke.setDoubleValue(1);
     } else {
         Smoke.setDoubleValue(0);
@@ -277,36 +278,59 @@ var arm_selector = func() {
     update_gun_ready();
 
     var stick_s = WeaponSelector.getValue();
+    var selector_offset = getprop("controls/armament/selected-armament-offset");
     if ( stick_s == 0 ) {
         var p = pylons.fcs.selectWeapon("20mm Cannon");
     } elsif ( stick_s == 1 ) {
-        var p = pylons.fcs.selectWeapon("AIM-9");
-        setprop("sim/model/f15/systems/armament/selected-arm", "AIM-9");
+        var wps = ["AIM-9", "AIM-9X"];
+        var count = 1 - selector_offset;  # length of the list (id 1 is 0 here)
+        if (count < 0) {
+            var selector_offset = 0;
+            setprop("controls/armament/selected-armament-offset", 0);
+        }
+        var p = pylons.fcs.selectWeapon("");
+        while (p == nil and count >= 0) {
+            cur_wpn = wps[count];
+            var p = pylons.fcs.selectWeapon(cur_wpn);
+            setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
+                count = count -1;
+        }
         if (p == nil) {
-            var p = pylons.fcs.selectWeapon("AIM-9X");
-            setprop("sim/model/f15/systems/armament/selected-arm", "AIM-9X");
+            setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 2 ) {
-        var p = pylons.fcs.selectWeapon("AIM-120D");
-        setprop("sim/model/f15/systems/armament/selected-arm", "AIM-120D");
+        var wps = ["AIM-7", "AIM-120", "AIM-120D"];
+        var count = 2 - selector_offset;  # length of the list (id 1 is 0 here)
+        if (count < 0) {
+            var selector_offset = 0;
+            setprop("controls/armament/selected-armament-offset", 0);
+        }
+        var p = pylons.fcs.selectWeapon("");
+        while (p == nil and count >= 0) {
+            cur_wpn = wps[count];
+            var p = pylons.fcs.selectWeapon(cur_wpn);
+            setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
+                count = count -1;
+        }
         if (p == nil) {
-            var p = pylons.fcs.selectWeapon("AIM-120");
-            setprop("sim/model/f15/systems/armament/selected-arm", "AIM-120");
-            if (p == nil) {
-                var p = pylons.fcs.selectWeapon("AIM-7");
-                setprop("sim/model/f15/systems/armament/selected-arm", "AIM-7");
-            }
+            setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 5 ) {
-        var p = pylons.fcs.selectWeapon("GBU-10");
-        setprop("sim/model/f15/systems/armament/selected-arm", "GBU-10");
+        var ground_wps = ["MK-82AIR", "MK-84", "GBU-10"];
+        var count = 2 - selector_offset;  # length of the list (id 1 is 0 here)
+        if (count < 0) {
+            var selector_offset = 0;
+            setprop("controls/armament/selected-armament-offset", 0);
+        }
+        var p = pylons.fcs.selectWeapon("");
+        while (p == nil and count >= 0) {
+            cur_wpn = ground_wps[count];
+            var p = pylons.fcs.selectWeapon(cur_wpn);
+            setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
+                count = count -1;
+        }
         if (p == nil) {
-            var p = pylons.fcs.selectWeapon("MK-84");
-            setprop("sim/model/f15/systems/armament/selected-arm", "MK-84");
-            if (p == nil) {
-                var p = pylons.fcs.selectWeapon("MK-82AIR");
-                setprop("sim/model/f15/systems/armament/selected-arm", "MK-82AIR");
-            }
+            setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } else {
         pylons.fcs.selectNothing();
@@ -317,6 +341,8 @@ var arm_selector = func() {
     }
 }
 setlistener(WeaponSelector, arm_selector, nil, 0);
+setlistener("controls/armament/trigger", arm_selector, nil, 0);
+setlistener("controls/armament/selected-armament-offset", arm_selector, nil, 0);
 
 # System start and stop.
 # Timers for weapons system status lights.
