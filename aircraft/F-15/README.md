@@ -30,7 +30,7 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Added ground models (ramps, extinguisher) when aircraft is offline (models coming from FlightGear's F-16 model)
 - Now check if ground power unit is present when turning external power switch on (won't work if the GPU isn't present)
 - Added a nicer exhaust trail
-- Added the LANTIRN Navigation Pod, which that the FLIR displayed on the HUD
+- Added the LANTIRN Navigation Pod, which that the FLIR displayed on the HUD, and a TFR (Terrain Following Radar), which allows the plane to autopilot at a certain altitude above the ground, customized either in the F-15EX Eagle II config panel or the PACS page related to the nav pod (actually doesn't work well with unsmooth ground transitions)
 - Display steerpoints on the HUD using same method as F-16 model
 - Addd ASE Circles to the HUD (W.I.P.)
 - Upgraded the landing/taxiing light bulb effects
