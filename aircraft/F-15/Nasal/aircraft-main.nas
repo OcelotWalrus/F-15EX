@@ -753,9 +753,10 @@ var F15MainModule =
             updateVolume();
         elsif (frame_count == 4)
             radarStandbyNode.setValue((radarMPnode.getValue() or 0)>= 2);
-        elsif (frame_count == 5)
+        elsif (frame_count == 5) {
             aircraft.routeManagerUpdate();
-        elsif (frame_count == 6) {
+            aircraft.TerFolRadUpdate();
+        } elsif (frame_count == 6) {
             if (getprop("fdm/jsbsim/propulsion/ground-refuel") and (!wow or getprop("fdm/jsbsim/gear/unit[2]/wheel-speed-fps") > 1)) {
                 setprop("fdm/jsbsim/propulsion/refuel",0);
                 setprop("fdm/jsbsim/propulsion/ground-refuel",0);

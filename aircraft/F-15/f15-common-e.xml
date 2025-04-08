@@ -859,6 +859,25 @@
                 </default_exit>
             </map>
             <f15>
+                <fcs>
+                    <stby-mode type="bool">false</stby-mode>
+                    <adv-mode type="bool">false</adv-mode>
+                    <adv-mode-sel type="bool">false</adv-mode-sel>
+                    <adv-mode-smooth type="int">1</adv-mode-smooth>
+                    <autopilot-on type="int">0</autopilot-on>
+                    <switch-pitch-block15 type="int">0</switch-pitch-block15>
+                    <switch-pitch-block20 type="int">0</switch-pitch-block20>
+                    <switch-roll-block15 type="int">0</switch-roll-block15>
+                    <switch-roll-block20 type="int">0</switch-roll-block20>
+                    <autopilot-aoa-limit-exceed type="bool">false</autopilot-aoa-limit-exceed>
+                    <autopilot-inhibit type="bool">false</autopilot-inhibit>
+                    <trim-ap-disc-switch type="bool">false</trim-ap-disc-switch>
+                    <le-flaps-switch type="bool">true</le-flaps-switch>
+                    <digital-backup type="bool">false</digital-backup>
+                    <bit type="bool">false</bit>
+                    <bit-run type="bool">false</bit-run>
+                    <bit-fail type="bool">false</bit-fail>
+                </fcs>
                 <armament>
                     <fall-time-sec type="double">0</fall-time-sec>
                     <fall-time-mins type="double">0</fall-time-mins>
@@ -877,6 +896,8 @@
                     <hud-flir-brt type="double">0.5</hud-flir-brt> <!-- can be customized in the aircraft -->
                     <hud-flir-on type="bool">false</hud-flir-on> <!-- can be customized in the aircraft -->
                     <lock-flir type="double">0.05</lock-flir>
+                    <tfr-flir-on type="bool">false</tfr-flir-on>
+                    <tfr-flir-alt type="int">600</tfr-flir-alt>
                 </avionics>
                 <flir>
                     <input>
@@ -3155,7 +3176,7 @@
                 <desc>Toggle smoke generator</desc>
                 <binding>
                     <command>property-toggle</command>
-                    <property>sim/model/f15/fx/smoke</property>
+                    <property>sim/model/f15/fx/smoke-cmd</property>
                 </binding>
             </key>
 
@@ -3476,6 +3497,9 @@
         <steerpoints>
           <file>Aircraft/F-15/Nasal/steerpoints.nas</file>
         </steerpoints>
+        <terr_foll>
+          <file>Aircraft/F-15/Nasal/terrain_follow.nas</file>
+        </terr_foll>
         <aircraft>
             <file>Aircraft/F-15/Nasal/liveries.nas</file>
             <file>Aircraft/F-15/Nasal/aircraft-main.nas</file>

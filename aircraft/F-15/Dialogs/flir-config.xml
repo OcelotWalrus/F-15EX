@@ -55,6 +55,44 @@
 
             <group>
                 <layout>hbox</layout>
+
+                <text>
+                    <label>Terrain-Following Radar (TFR) ON</label>
+                </text>
+
+                <checkbox>
+                    <property>sim/model/f15/avionics/tfr-flir-on</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>sim/model/f15/avionics/tfr-flir-on</property>
+                    </binding>
+                </checkbox>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>TFR Altitude Above Floor</label>
+                </text>
+
+                <input>
+        		  	<width>250</width>
+        		  	<height>25</height>
+        		  	<label>FT</label>
+        		  	<property>sim/model/f15/avionics/tfr-flir-alt</property>
+        		  	<live>true</live>
+        		  	<halign>left</halign>
+        	        <binding>
+        	            <command>dialog-apply</command>
+            		  	<property>sim/model/f15/avionics/tfr-flir-alt</property>
+        	      	</binding>
+        		</input>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
                 <text>
                     <label>HUD Flir Brightnss</label>
                 </text>

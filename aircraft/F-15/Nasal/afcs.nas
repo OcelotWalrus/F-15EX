@@ -4,7 +4,7 @@
 # Connects the autopilot (part JSBSim and part traditional) to the panels and UI
 # ---------------------------
 # Richard Harrison (rjh@zaretto.com) 2017-10-15
-#
+# Terrain follow part comes from Josh Davidson (Octal450), copied and adapted by Jimmy L. Miles (Cromha)
 
 # Switches
 var alt_switch      = props.globals.getNode("sim/model/f15/controls/AFCS/alt-hold",1);
@@ -26,7 +26,7 @@ var press_alt_ft = props.globals.getNode("instrumentation/altimeter/pressure-alt
 # ctrl h - heading : aircraft.afcs_heading_switch(0);
 # switches : Attitude hold (wing-leveler pitch-hold)
 #          : altitude hold (altitude-hold)
-# switches 
+# switches
 #  * sim/model/f15/controls/AFCS/alt-hold
 #  * sim/model/f15/controls/AFCS/att-hold
 
@@ -87,7 +87,7 @@ setlistener("sim/model/f15/controls/AFCS/alt-hold", func(p)
 
 #
 # route manager interface for next waypoint handling.
-# this is called when the waypoint is changed. 
+# this is called when the waypoint is changed.
 var current_leg_is_gs = 0;
 
 setlistener("autopilot/route-manager/current-wp", func {
@@ -209,10 +209,27 @@ var routeManagerUpdate = func {
 			if (getprop("/sim/time/elapsed-sec")-getprop("/autopilot/internal/wp-change-time") > 60) {
 				setprop("/autopilot/internal/wp-change-check-period", time);
 			}
-			
+
 			if (getprop("/autopilot/route-manager/wp/dist") <= turn_dist) {
 				setprop("/autopilot/route-manager/current-wp", getprop("/autopilot/route-manager/current-wp") + 1);
 			}
 		}
 	}
+};
+
+# Loop for terrain-avoidance using the Terrain-Following Radar (if mounted)
+# This is very basic I guess, but works
+# This part was made by Jimmy L. Miles
+var TerFolRadUpdate = func() {
+    var tfr_enabled = (getprop("sim/model/f15/payload/selected/lantirn-nav-pod") and getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/controls/AFCS/att-hold") == 1);
+    if (tfr_enabled) {
+        setprop("instrumentation/tfs/delay-big-sec", 25);
+
+        ter_data = terr_foll.tfs_radar();  # Update both following properties
+        target_altitude = (getprop("instrumentation/tfs/ground-altitude-ft") + getprop("sim/model/f15/avionics/tfr-flir-alt"));
+        setprop("/autopilot/settings/target-altitude-ft", target_altitude);
+        vs = 3000;
+        needed_vertical_speed = vs + math.min(12500, 4000*getprop("velocities/groundspeed-kt")/400+(4000*getprop("velocities/groundspeed-kt")/400) * (getprop("instrumentation/radar/time-till-crash") < 15));
+        setprop("/autopilot/settings/vertical-speed-fpm", needed_vertical_speed)
+    }
 };
