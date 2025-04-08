@@ -154,8 +154,12 @@ var VSD_Device =
 
         props.UpdateManager.FromHashValue("target_display", 0.025, func(target_display) {
                                             if (target_display) {
-                                                obj.nofire_cross.setVisible(1);
                                                 obj.target_circle.setVisible(1);
+                                                if (getprop("sim/model/f15/systems/armament/launch-light") or getprop("sim/model/f15/systems/armament/launch-light") == 1) {
+                                                    obj.nofire_cross.setVisible(0);
+                                                } else {
+                                                    obj.nofire_cross.setVisible(1);
+                                                }
                                             } else {
                                                 obj.nofire_cross.setVisible(0);
                                                 obj.target_circle.setVisible(0);

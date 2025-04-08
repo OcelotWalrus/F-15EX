@@ -847,6 +847,19 @@ var MPCD_Device =
             if (getprop("sim/multiplay/generic/int[2]") != 1) {
                 me.radarX = me.rdrRangePixels*math.cos((90-120*0.5)*D2R);
                 me.radarY = -me.rdrRangePixels*math.sin((90-120*0.5)*D2R);#radar hardcoded to 120 deg scanwidth
+                if (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {
+                    me.radarY = -me.rdrRangePixels*math.sin((90-60*0.5)*D2R);# with TWS it's 60 *
+                }
+
+                # Before it was target's aircraft model, now it's radar mode
+                me.radar_mode = getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode");
+                me.root.infoTgt.show();
+                if (me.radar_mode == 6) {
+                    me.root.infoTgt.setText("TWS AUTO");
+                } else {
+                    me.root.infoTgt.setText("PULSE SRCH");
+                }
+
                 me.cone = me.root.cone.createChild("path")
                     .moveTo(0,0)
                     .lineTo(me.radarX,me.radarY)
@@ -993,10 +1006,8 @@ var MPCD_Device =
                     if (contact.get_model()!=nil) {
                         me.modelType = contact.get_model();
                     }
-                    me.root.infoTgt.setText(me.datType~me.modelType);
                     me.root.infoPos.setText(sprintf("%dK G%d",contact.get_altitude()*0.001,contact.get_Speed()));
                     me.root.infoBer.setText(sprintf("TN 00%03d",geo.normdeg(me.relBearing)));
-                    me.root.infoTgt.show();
                     me.root.infoPos.show();
                     me.root.infoBer.show();
                 }
@@ -1013,7 +1024,6 @@ var MPCD_Device =
             }
             if (!me.foundLock) {
                 me.root.lock.hide();
-                me.root.infoTgt.hide();
                 me.root.infoPos.hide();
                 me.root.infoBer.hide();
             }

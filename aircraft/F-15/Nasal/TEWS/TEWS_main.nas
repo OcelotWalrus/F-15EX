@@ -1,8 +1,8 @@
 # F-15 TEWS; Canvas
 # ---------------------------
-# This bears only a cosmetic relation to the real device mainly because 
-# all of the document for TEWS appears to be classified and/or 
-# generally unavailable. 
+# This bears only a cosmetic relation to the real device mainly because
+# all of the document for TEWS appears to be classified and/or
+# generally unavailable.
 # ---------------------------
 # Richard Harrison: 2015-01-23 : rjh@zaretto.com
 # ---------------------------
@@ -88,17 +88,17 @@ var TEWSDisplay = {
 
         obj.canvas= canvas.new({
                                 "name": "F-15 TEWS",
-                                "size": [1024,1024], 
+                                "size": [1024,1024],
                                 "view": [sx,sy],
                                 "mipmapping": 0
-                               });                          
-                          
+                               });
+
         obj.canvas.addPlacement({"node": canvas_item});
         obj.canvas.setColorBackground(0.0039215686274509803921568627451,0.17647058823529411764705882352941,0, 0.00);
 
         # Create a group for the parsed elements
         obj.TEWSsvg = obj.canvas.createGroup();
- 
+
         # Parse an SVG file and add the parsed elements to the given group
         canvas.parsesvg(obj.TEWSsvg, svgname,  {'font-mapper': aircraft.tews_font_mapper});
         #obj.TEWSsvg.setTranslation (-20.0, 37.0);
@@ -126,13 +126,13 @@ var TEWSDisplay = {
           }
         return obj;
     },
-    update : func (notification){  
+    update : func (notification){
         if(!me.tews_on)
             return;
 
         var scale = 220/2; # horizontal / vertical scale (half resolution)
 
-        me.process_targets.process(me, awg_9.tgts_list, 
+        me.process_targets.process(me, awg_9.tgts_list,
                                 func(pp, obj, data){
                                     obj.target_idx=1;
                                     obj.is_active = 0;
@@ -169,16 +169,14 @@ var TEWSDisplay = {
                                     #                    var bearing = u.get_deviation(notification.OrientationHeadingDeg);
                                                     var bearing = geo.normdeg(u.get_deviation(notification.OrientationHeadingDeg) + me.tews_alignment_offset);
 
-                                                    tgt.setVisible(1);#u.get_display());#Leto: is is only display true when in radar field, so we ignore that.
+                                                    tgt.setVisible(u.get_display());#Leto: is is only display true when in radar field, so we ignore that.
                                                     tgt.setCallsign(callsign);
                                                     var r = (u.get_range()*scale) / notification.radar2_range;
                                                     var xc  = r * math.cos(bearing/57.29577950560105);
                                                     var yc = r * math.sin(bearing/57.29577950560105);
 
-                                                    tgt.setVisible(1);
-
                                     #                    printf("TEWS: %d(%d,%d): %s %s: :R %f B %f %f", obj.target_idx,xc,yc,
-                                    #                           callsign, model, 
+                                    #                           callsign, model,
                                     #                           u.get_altitude(), u.get_range(), u.get_bearing());
 
                                                     tgt.setTranslation (xc, yc);
@@ -186,7 +184,7 @@ var TEWSDisplay = {
                                                 }
                                         }
                                     }
-                                    if (obj.target_idx >= me.max_symbols){ 
+                                    if (obj.target_idx >= me.max_symbols){
                                         return 0;
                                     }
                                     return 1;
@@ -212,4 +210,3 @@ input = {
             };
 
 emexec.ExecModule.register("F15-TEWS",input, TEWSDisplay.new("Nasal/TEWS/TEWS.svg","TEWSImage", 326,256, 0,0), 4);
-
