@@ -24,6 +24,8 @@ var flirImageReso = 16;
 var sx = 276*uv_used;
 var sy = -106*3;
 
+var eegsShow = 0;
+
 #angular definitions
 #up angle 1.73 deg
 #left/right angle 5.5 deg
@@ -367,6 +369,35 @@ var F15HUD = {
 		        .hide()
 		        .setColor(0,1,0);
 
+			# EEGS Gun mode
+			obj.Bore = obj.canvas.createGroup();
+			obj.Bore.setTranslation(obj.centerOrigin);
+			obj.boreSymbol = obj.Bore.createChild("path")
+                .moveTo(-5,0)
+                .horiz(10)
+                .moveTo(0,-5)
+                .vert(10)
+                .setStrokeLineWidth(1)
+                .setColor(0,1,0);
+
+			#EEGS: (other gun sights not made: lcos sslc)
+	        obj.eegsGroup = obj.canvas.createGroup();
+			obj.eegsGroup.setTranslation(obj.centerOrigin);
+	        obj.funnelPartsMax = 51;#strf (hydra is 34)
+	        obj.funnelParts = 17;#eegs (number of segments in funnel sides. If increase, remember to increase all relevant vectors also.)
+	        obj.eegsRightX = obj.makeVector(obj.funnelParts,0);
+	        obj.eegsRightY = obj.makeVector(obj.funnelParts,0);
+	        obj.eegsLeftX  = obj.makeVector(obj.funnelParts,0);
+	        obj.eegsLeftY  = obj.makeVector(obj.funnelParts,0);
+	        obj.gunPos   = nil;#[[nil,nil],[nil,nil,nil],[nil,nil,nil,nil],[nil,nil,nil,nil,nil],[nil,nil,nil,nil,nil,nil],[nil,nil,nil,nil,nil,nil,nil],[nil,nil,nil,nil,nil,nil,nil,nil],[nil,nil,nil,nil,nil,nil,nil,nil,nil],[nil,nil,nil,nil,nil,nil,nil,nil,nil,nil],[nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil]];
+	        obj.eegsMe = {ac: geo.Coord.new(), eegsPos: geo.Coord.new(),shellPosX: obj.makeVector(obj.funnelPartsMax,0),shellPosY: obj.makeVector(obj.funnelPartsMax,0),shellPosDist: obj.makeVector(obj.funnelPartsMax,0)};
+	        obj.lastTime = systime();
+	        obj.averageDt = 0.100;
+	        obj.eegsLoop = maketimer(obj.averageDt, obj, obj.displayEEGS);
+	        obj.eegsLoop.simulatedTime = 1;
+	        obj.resetGunPos();
+
+			# Warning texts
 			obj.WarningTexts = obj.canvas.createGroup();
 			obj.WarningTexts.setTranslation(obj.centerOrigin);
 			obj.altitudeDeck = obj.WarningTexts.createChild("text")
@@ -732,13 +763,16 @@ var F15HUD = {
                                                                 obj.window16.setVisible(1);
                                                                 obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
                                                                 obj.window16.setText(sprintf("FLR %03d",getprop("ai/submodels/submodel[6]/count")));
+																obj.boreSymbol.show();
                                                                 weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
                                                                 obj.window11.setText(weapon_type);
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
                                                                 obj.window2.setVisible(1);
+																eegsShow = 0;
 
                                                                 if (w_s == 0) {
                                                                     obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
+																	eegsShow = 1;
                                                                 } else if (w_s == 1) {
                                                                     obj.window2.setText(sprintf("S%2dL", val.ArmamentAim9Count));
                                                                 } else if (w_s == 2){
@@ -758,9 +792,11 @@ var F15HUD = {
                                                                     if (val.RadarActiveTargetDisplay){
                                                                         obj.window4.setText(sprintf("RNG %3.1f", val.RadarActiveTargetRange));
                                                                         obj.window5.setText(sprintf("CLO %-3d", val.RadarActiveTargetClosure));
+																		obj.window6.setVisible(1);
                                                                     } else{
                                                                         obj.window4.setText("");
                                                                         obj.window5.setText("");
+																		obj.window6.setVisible(0);
                                                                     }
 
 																	# Determine the target's aspect
@@ -772,8 +808,7 @@ var F15HUD = {
 																	} else {
 																		var rel_aspect = sprintf("%2d%s", math.abs(aspect), aspect > 0 ? "R" : "L");
 																	}
-                                                                    obj.window6.setText(rel_aspect);
-                                                                    obj.window6.setVisible(1); # SRM UNCAGE / TARGET ASPECT
+                                                                    obj.window6.setText(rel_aspect);  # SRM UNCAGE / TARGET ASPECT
                                                                 } else {
                                                                     # this else added by Leto
                                                                     obj.window3.setText("");
@@ -783,6 +818,8 @@ var F15HUD = {
                                                                     obj.window6.setVisible(0); # SRM UNCAGE / TARGET ASPECT
                                                                 }
                                                             } else {
+																eegsShow = 0;
+																obj.boreSymbol.hide();
                                                                 obj.window2.setVisible(0);
                                                                 obj.window11.setVisible(0);
                                                                 obj.window15.setVisible(0);
@@ -853,7 +890,39 @@ return obj;
 	},
 	clamp: func(v, min, max) { v < min ? min : v > max ? max : v },
 
+	resetGunPos: func {
+	   me.gunPos   = [];
+	   for(i = 0;i < me.funnelPartsMax;i+=1){
+		 var tmp = [];
+		 for(var myloopy = 0;myloopy <= i+1;myloopy+=1){
+		   append(tmp,nil);
+		 }
+		 append(me.gunPos, tmp);
+	   }
+    },
+
+    makeVector: func (siz,content) {
+	   var vec = setsize([],siz*2);
+	   var k = 0;
+	   while(k<siz*2) {
+		   vec[k] = content;
+		   k += 1;
+	   }
+	   return vec;
+    },
+
     update : func(notification) {
+
+		# Update the bore's cross
+		me.boreSymbol.setTranslation(hudmath.HudMath.getBorePos());
+
+		# EEGS mode's status update
+		me.eegsGroup.setVisible(eegsShow);
+        if (eegsShow and !me.eegsLoop.isRunning) {
+            me.eegsLoop.start();
+        } elsif (!eegsShow and me.eegsLoop.isRunning) {
+            me.eegsLoop.stop();
+        }
 
 		# FLIR
 		me.texelPerDegreeX = hudmath.HudMath.getPixelPerDegreeXAvg(5);
@@ -1093,6 +1162,519 @@ return obj;
 
 
     },
+
+	drag: func (Mach, _cd) {
+	    if (Mach < 0.7) {
+	        return 0.0125 * Mach + _cd;
+	    } elsif (Mach < 1.2) {
+	        return 0.3742 * math.pow(Mach, 2) - 0.252 * Mach + 0.0021 + _cd;
+	    } else {
+	        return 0.2965 * math.pow(Mach, -1.1506) + _cd;
+		}
+	},
+
+	# EEGS Disply loop
+	# Taken from F-16's model, and adapted to the F-15 by Jimmy L. Miles
+	# Only modes adapted and tested for now: SNAP, EEGS
+	# + Only non-radar mode for now
+    # Should match gun submodel parameters
+    gunEda: 0.00338158219,
+    gunWeight: 0.226,
+    gunSpeed: 3450.0,
+    gunCd: 0.09,
+    gunLoc: [0.29069, -1.512999768, 0.558520092],  # converted from ft in the submodels, as it needs to be in meters  previous x:1.512999768
+
+    displayEEGS: func() {
+	   #note: this stuff is expensive like hell to compute, but..lets do it anyway.
+	   var gunSight = getprop("sim/model/f15/armament/gun-sight");
+	   var st = systime();
+	   me.hydra = 0;  # F-15EX doesn't use LAU-68C, so hydra alaways off
+	   if (getprop("sim/model/f15/instrumentation/radar-awg-9/active-target-available")) {
+		   me.designatedDistanceFT = getprop("sim/model/f15/instrumentation/radar-awg-9/active-target-range")*6000;  # conversion from nm to ft
+	   } else {
+	   	   me.designatedDistanceFT = nil;
+	   }
+	   me.eegsMe.dt = st-me.lastTime;
+	   if (me.eegsMe.dt > me.averageDt*3) {
+		   me.lastTime = st;
+		   me.resetGunPos();
+		   me.eegsGroup.removeAllChildren();
+	   } else {
+		   #printf("dt %05.3f",me.eegsMe.dt);
+		   me.lastTime = st;
+
+		   me.eegsMe.hdg   = getprop("orientation/heading-deg");
+		   me.eegsMe.pitch = getprop("orientation/pitch-deg");
+		   me.eegsMe.roll  = getprop("orientation/roll-deg");
+
+		   me.eegsMe.hdg_ac   = me.eegsMe.hdg;
+		   me.eegsMe.pitch_ac = me.eegsMe.pitch;
+		   me.eegsMe.roll_ac  = me.eegsMe.roll;
+
+		   var hdp = {roll:me.eegsMe.roll,current_view_z_offset_m: getprop("sim/current-view/z-offset-m")};
+
+		   me.eegsMe.ac = geo.aircraft_position();
+		   me.eegsMe.eye = geo.viewer_position();
+		   me.eegsMe.allow = 1;
+		   me.drawSTRFPipper = 0;
+		   me.drawGunAim = 0;
+		   me.strfRange = 24000;
+		   if(gunSight == 1 or me.hydra) {  # STFR not adapted yet (to the F-15 model)
+			   me.groundAltDiffLastPointFT = nil;
+			   var currSegmentPt = 0;
+			   for (currSegmentPt = 0;currSegmentPt < me.funnelPartsMax;currSegmentPt+=1) {
+				   # compute terrain impact position of trajectory
+				   var pos = me.gunPos[currSegmentPt][0];
+				   if (pos == nil) {
+					   me.eegsMe.allow = 0;
+				   } else {
+					   var ptc = me.gunPos[currSegmentPt][0][2];
+					   var ac  = me.gunPos[currSegmentPt][0][1];
+					   pos     = me.gunPos[currSegmentPt][0][0];
+					   var el = geo.elevation(pos.lat(),pos.lon());
+					   if (el == nil) {
+						   el = 0;
+					   }
+
+					   if (currSegmentPt != 0 and el > pos.alt()) {
+						   var hitPos = geo.Coord.new(pos);
+						   hitPos.set_alt(el);
+						   me.groundAltDiffLastPointFT = (el-pos.alt())*M2FT;
+						   me.strfRange = hitPos.direct_distance_to(me.eegsMe.ac)*M2FT;
+						   me.elevationToEnd = vector.Math.getPitch(me.eegsMe.ac, pos);
+						   if (me.groundAltDiffLastPointFT > 0 and me.elevationToEnd < 0 and math.sin(-me.elevationToEnd*D2R) != 0) {
+							   # We assume the ground is level and flat at impact position
+							   me.strfRange -= me.groundAltDiffLastPointFT/math.sin(-me.elevationToEnd*D2R);
+						   }
+						   break;# this gunpos is below terrain, break the loop.
+					   }
+				   }
+			   }
+
+			   if (me.eegsMe.allow and me.groundAltDiffLastPointFT != nil) {
+				   # compute display positions of STRF pipper on hud
+				   for (var ll = currSegmentPt-1;ll <= currSegmentPt;ll+=1) {
+					   var pos   = me.gunPos[ll][0][0];
+					   var ac    = me.gunPos[ll][0][1];
+					   var pitch = me.gunPos[ll][0][2];
+
+					   me.eegsMe.posTemp = hudmath.HudMath.getPosFromCoord(pos,me.eegsMe.eye);
+					   #me.eegsMe.shellPosDist[ll] = ac.direct_distance_to(pos)*M2FT;
+					   me.eegsMe.shellPosX[ll] = me.eegsMe.posTemp[0];
+					   me.eegsMe.shellPosY[ll] = me.eegsMe.posTemp[1];
+
+					   if (currSegmentPt == ll and me.strfRange < 24000) {
+						   #var highdist = me.eegsMe.shellPosDist[ll];
+						   #var lowdist = me.eegsMe.shellPosDist[ll-1];
+						   if (pitch >= 0) {
+							   #me.eegsPipperX = me.interpolate(highdist-me.groundAltDiffLastPointFT,lowdist,highdist,me.eegsMe.shellPosX[ll-1],me.eegsMe.shellPosX[ll]);
+							   #me.eegsPipperY = me.interpolate(highdist-me.groundAltDiffLastPointFT,lowdist,highdist,me.eegsMe.shellPosY[ll-1],me.eegsMe.shellPosY[ll]);
+							   me.eegsPipperX = 0.5*me.eegsMe.shellPosX[ll-1]+0.5*me.eegsMe.shellPosX[ll];
+							   me.eegsPipperY = 0.5*me.eegsMe.shellPosY[ll-1]+0.5*me.eegsMe.shellPosY[ll];
+						   } else {
+							   # increasing accuracy me.strfRange and pipper HUD position
+							   me.groundDistDiffLastPointFT = me.groundAltDiffLastPointFT/math.sin(-pitch*D2R);# We assume the ground is level and flat at impact position
+
+							   me.posLow = me.gunPos[ll-1][0][0];
+							   me.posHigh = me.gunPos[ll][0][0];
+							   me.posDist = me.posHigh.direct_distance_to(me.posLow)*M2FT;
+							   me.impactPos = me.interpolateCoords(me.posLow, me.posHigh, 1-me.groundDistDiffLastPointFT/me.posDist);
+							   me.strfRange = me.impactPos.direct_distance_to(me.eegsMe.ac)*M2FT;
+							   me.tmpImpact = hudmath.HudMath.getPosFromCoord(me.impactPos,me.eegsMe.eye);
+							   me.eegsPipperX = me.tmpImpact[0];
+							   me.eegsPipperY = me.tmpImpact[1];
+						   }
+						   me.drawSTRFPipper = 1;
+					   }
+				   }
+			   }
+		   } else {
+			   for (var currSegmentPt = 0;currSegmentPt < me.funnelParts;currSegmentPt+=1) {
+				   # compute display positions of gun path on hud
+				   var pos = me.gunPos[currSegmentPt][currSegmentPt+1];
+				   if (pos == nil) {
+					   me.eegsMe.allow = 0;
+				   } else {
+					   var ac  = me.gunPos[currSegmentPt][currSegmentPt][1];
+					   pos     = me.gunPos[currSegmentPt][currSegmentPt][0];
+					   me.eegsMe.posTemp = hudmath.HudMath.getPosFromCoord(pos,me.eegsMe.eye);
+					   me.eegsMe.shellPosX[currSegmentPt] = me.eegsMe.posTemp[0];
+					   me.eegsMe.shellPosY[currSegmentPt] = me.eegsMe.posTemp[1];
+					   me.eegsMe.shellPosDist[currSegmentPt] = ac.direct_distance_to(pos)*M2FT;
+
+					   if (me.designatedDistanceFT != nil and !me.drawGunAim and gunSight != 2) {
+						 #eegs pipper
+						 if (currSegmentPt != 0 and me.eegsMe.shellPosDist[currSegmentPt] >= me.designatedDistanceFT and me.eegsMe.shellPosDist[currSegmentPt]>me.eegsMe.shellPosDist[currSegmentPt-1]) {
+						   var highdist = me.eegsMe.shellPosDist[currSegmentPt];
+						   var lowdist = me.eegsMe.shellPosDist[currSegmentPt-1];
+						   me.eegsPipperX = hudmath.HudMath.extrapolate(me.designatedDistanceFT,lowdist,highdist,me.eegsMe.shellPosX[currSegmentPt-1],me.eegsMe.shellPosX[currSegmentPt]);
+						   me.eegsPipperY = hudmath.HudMath.extrapolate(me.designatedDistanceFT,lowdist,highdist,me.eegsMe.shellPosY[currSegmentPt-1],me.eegsMe.shellPosY[currSegmentPt]);
+						   me.drawGunAim = 1;
+						 }
+					   }
+				   }
+			   }
+			   if (me.designatedDistanceFT != nil and gunSight == 2) {
+				   #snap pipper
+				   for (var currSegmentPt = 6;currSegmentPt < me.funnelParts;currSegmentPt+=5) {
+					   if (!me.drawGunAim and (me.eegsMe.shellPosDist[currSegmentPt] >= me.designatedDistanceFT or currSegmentPt==16) and me.eegsMe.shellPosDist[currSegmentPt]>me.eegsMe.shellPosDist[currSegmentPt-5]) {
+						   # The check for 16 is to draw the aim extending from last segment if range is larger than last.
+						   var highdist = me.eegsMe.shellPosDist[currSegmentPt];
+						   var lowdist = me.eegsMe.shellPosDist[currSegmentPt-5];
+						   me.eegsPipperX = hudmath.HudMath.extrapolate(me.designatedDistanceFT,lowdist,highdist,me.eegsMe.shellPosX[currSegmentPt-5],me.eegsMe.shellPosX[currSegmentPt]);
+						   me.eegsPipperY = hudmath.HudMath.extrapolate(me.designatedDistanceFT,lowdist,highdist,me.eegsMe.shellPosY[currSegmentPt-5],me.eegsMe.shellPosY[currSegmentPt]);
+						   me.drawGunAim = 1;
+					   }
+				   }
+			   }
+		   }
+		   if (me.eegsMe.allow and gunSight == 0 and !me.hydra) {
+			   # draw the funnel
+			   for (var k = 0;k<me.funnelParts;k+=1) {
+				   var halfspan = math.atan2(getprop("sim/model/f15/armament/gun-eegs-wingspan-ft")*0.5,me.eegsMe.shellPosDist[k])*R2D*me.texelPerDegreeX;#35ft average fighter wingspan
+				   me.eegsRightX[k] = me.eegsMe.shellPosX[k]-halfspan;
+				   me.eegsRightY[k] = me.eegsMe.shellPosY[k];
+				   me.eegsLeftX[k]  = me.eegsMe.shellPosX[k]+halfspan;
+				   me.eegsLeftY[k]  = me.eegsMe.shellPosY[k];
+			   }
+			   me.eegsGroup.removeAllChildren();
+			   for (var i = 1; i < me.funnelParts-1; i+=1) {#changed to i=1 as we dont need funnel to start so close
+				   me.eegsGroup.createChild("path")
+					   .moveTo(me.eegsRightX[i], me.eegsRightY[i])
+					   .lineTo(me.eegsRightX[i+1], me.eegsRightY[i+1])
+					   .moveTo(me.eegsLeftX[i], me.eegsLeftY[i])
+					   .lineTo(me.eegsLeftX[i+1], me.eegsLeftY[i+1])
+					   .setStrokeLineWidth(1)
+					   .setColor(me.color);
+			   }
+			   # Test snake:
+			   #for (var i = 0; i < me.funnelParts-1; i+=1) {
+			   #     me.tmpSegment = me.eegsGroup.createChild("path")
+			   #        .moveTo(me.eegsMe.shellPosX[i], me.eegsMe.shellPosY[i])
+			   #        .lineTo(me.eegsMe.shellPosX[i+1], me.eegsMe.shellPosY[i+1])
+			   #        .setStrokeLineWidth(1)
+			   #        .setColor(me.color);
+			   #}
+			   if (me.drawGunAim) {
+				   var radius = 2;
+				   me.eegsGroup.createChild("path")
+						 .moveTo(me.eegsPipperX, me.eegsPipperY-radius)
+						 .arcSmallCW(radius,radius,0,0,radius*2)
+						 .arcSmallCW(radius,radius,0,0,-radius*2)
+						 .setStrokeLineWidth(1)
+						 .setColor(me.color);
+			   }
+			   me.eegsGroup.update();
+		   } elsif (me.eegsMe.allow and gunSight == 2 and !me.hydra) {
+			   # draw snap
+			   me.eegsGroup.removeAllChildren();
+			   for (var i = 1; i < me.funnelParts-5; i+=5) {#changed to i=1 as we dont need lines to start so close
+				   me.tmpSegment = me.eegsGroup.createChild("path")
+					   .moveTo(me.eegsMe.shellPosX[i], me.eegsMe.shellPosY[i])
+					   .lineTo(me.eegsMe.shellPosX[i+5], me.eegsMe.shellPosY[i+5])
+					   .setStrokeLineWidth(1)
+					   .setColor(me.color);
+				   if (i > 5) {
+					   me.dx = me.eegsMe.shellPosX[i] - me.eegsMe.shellPosX[i+5];
+					   me.dy = me.eegsMe.shellPosY[i] - me.eegsMe.shellPosY[i+5];
+					   me.dl = math.sqrt(me.dx*me.dx+me.dy*me.dy);
+					   if (me.dl != 0) {
+						   me.angle1 = math.acos(math.clamp(me.dx/me.dl,-1,1));
+						   me.angle2 = math.asin(math.clamp(me.dy/me.dl,-1,1));
+						   me.angle  = me.angle2<0?-me.angle1:me.angle1;
+						   me.angle += 90 * D2R;
+						   me.segmentRel = [3*math.cos(me.angle),3*math.sin(me.angle)];
+						   me.tmpSegment
+								   .moveTo(me.eegsMe.shellPosX[i+5]+me.segmentRel[0], me.eegsMe.shellPosY[i+5]+me.segmentRel[1])
+								   .lineTo(me.eegsMe.shellPosX[i+5]-me.segmentRel[0], me.eegsMe.shellPosY[i+5]-me.segmentRel[1]);
+					   }
+				   }
+			   }
+			   if (me.drawGunAim) {
+				   var radius = 2;
+				   me.eegsGroup.createChild("path")
+						 .moveTo(me.eegsPipperX, me.eegsPipperY-radius)
+						 .arcSmallCW(radius,radius,0,0,radius*2)
+						 .arcSmallCW(radius,radius,0,0,-radius*2)
+						 .setStrokeLineWidth(1)
+						 .setColor(me.color);
+			   }
+			   me.eegsGroup.update();
+		   } elsif (me.eegsMe.allow and (gunSight == 1 or me.hydra)) {
+			   # draw STRF
+			   me.eegsGroup.removeAllChildren();
+			   if (me.drawSTRFPipper) {
+					   me.vari = getprop("sim/variant-id");
+					   me.oldStrf = me.vari == 0 or me.vari == 1 or me.vari == 3;
+					   var mr = 0.4 * 1.5;
+					   if (me.oldStrf) {
+							   # draw the old STRF pipper (T.O. GR1F-16CJ-34-1-1 page 1-442 and MLU Tape 1 page 185)
+							   var pipperRadius = 15 * mr;
+							   if (me.strfRange <= (me.hydra?4000:getprop("f16/avionics/gun-strf-max-range-ft"))) {
+									   me.eegsGroup.createChild("path")
+											   .moveTo(me.eegsPipperX-pipperRadius, me.eegsPipperY-pipperRadius-2)
+											   .horiz(pipperRadius*2)
+											   .moveTo(me.eegsPipperX-pipperRadius, me.eegsPipperY)
+											   .arcSmallCW(pipperRadius, pipperRadius, 0, pipperRadius*2, 0)
+											   .arcSmallCW(pipperRadius, pipperRadius, 0, -pipperRadius*2, 0)
+											   .moveTo(me.eegsPipperX-2*mr,me.eegsPipperY)
+											   .arcSmallCW(2*mr,2*mr, 0, 2*mr*2, 0)
+											   .arcSmallCW(2*mr,2*mr, 0, -2*mr*2, 0)
+											   .setStrokeLineWidth(1)
+											   .setColor(me.color);
+							   } else {
+									   me.eegsGroup.createChild("path")
+											   .moveTo(me.eegsPipperX-pipperRadius, me.eegsPipperY)
+											   .arcSmallCW(pipperRadius, pipperRadius, 0, pipperRadius*2, 0)
+											   .arcSmallCW(pipperRadius, pipperRadius, 0, -pipperRadius*2, 0)
+											   .moveTo(me.eegsPipperX-2*mr,me.eegsPipperY)
+											   .arcSmallCW(2*mr,2*mr, 0, 2*mr*2, 0)
+											   .arcSmallCW(2*mr,2*mr, 0, -2*mr*2, 0)
+											   .setStrokeLineWidth(1)
+											   .setColor(me.color);
+							   }
+					   } else {
+							   # draw the new STRF pipper (T.O. GR1F-16CJ-34-1-1(new) page 2-299 and MLU Tape 2 page 79)
+							   me.pipperOuterRadius = 25 * mr;
+							   me.pipperInnerRadius = 20 * mr;
+							   me.pipperRangeTick   =  5 * mr;
+							   me.pipperRangeMode = me.strfRange <= getprop("f16/avionics/gun-strf-max-range-ft") and me.strfRange <= 12000?0:(me.strfRange <= 12000?1:(me.strfRange <= getprop("f16/avionics/gun-strf-max-range-ft") and me.strfRange <= 24000?2:(me.strfRange <= 24000?3:4)));
+
+							   if (me.pipperRangeMode < 4) {
+
+									   if (me.pipperRangeMode < 2) {
+											   me.td_rads = me.interpolate(me.strfRange, 0, 12000, 0, 2*math.pi);
+									   } else {
+											   me.td_rads = me.interpolate(me.strfRange, 12000, 24000, 0, 2*math.pi);
+									   }
+									   me.td_x = me.pipperInnerRadius*math.sin(me.td_rads);
+									   me.td_y = -me.pipperInnerRadius*math.cos(me.td_rads);
+									   me.td_x2 = me.pipperOuterRadius*math.sin(me.td_rads);
+									   me.td_y2 = -me.pipperOuterRadius*math.cos(me.td_rads);
+
+									   if (getprop("f16/avionics/gun-strf-max-range-ft") <= 12000) {
+											   me.td_rads = me.interpolate(getprop("f16/avionics/gun-strf-max-range-ft"), 0, 12000, 0, 2*math.pi);
+									   } else {
+											   me.td_rads = me.interpolate(getprop("f16/avionics/gun-strf-max-range-ft"), 12000, 24000, 0, 2*math.pi);
+									   }
+									   me.td_x3 = (me.pipperOuterRadius+me.pipperRangeTick)*math.sin(me.td_rads);
+									   me.td_y3 = -(me.pipperOuterRadius+me.pipperRangeTick)*math.cos(me.td_rads);
+
+									   # Draw inner arc and range tick
+									   if (me.pipperRangeMode == 3) {
+											   # Out of range (between 12000 and 24000 ft)
+											   me.newPipper = me.eegsGroup.createChild("path")
+													   .moveTo(me.td_x, me.td_y)
+													   .lineTo(me.td_x2, me.td_y2);
+									   } elsif (me.pipperRangeMode == 2) {
+											   # In range (between 12000 and 24000 ft)
+											   me.newPipper = me.eegsGroup.createChild("path")
+													   .moveTo(-me.pipperInnerRadius, 0)
+													   .arcSmallCW(me.pipperInnerRadius, me.pipperInnerRadius, 0, 2*me.pipperInnerRadius, 0)
+													   .arcSmallCW(me.pipperInnerRadius, me.pipperInnerRadius, 0, -2*me.pipperInnerRadius, 0)
+													   .moveTo(me.td_x, me.td_y)
+													   .lineTo(me.td_x2, me.td_y2);
+									   } elsif (me.pipperRangeMode == 1) {
+											   # Out of range (less than 12000 ft)
+											   me.newPipper = me.eegsGroup.createChild("path")
+															   .moveTo(me.td_x, me.td_y)
+															   .lineTo(me.td_x2, me.td_y2);
+									   } elsif (me.pipperRangeMode == 0) {
+											   # in range (less than 12000 ft)
+											   if (me.td_x >= 0) {
+													   me.newPipper = me.eegsGroup.createChild("path")
+															   .moveTo(0, -me.pipperInnerRadius)
+															   .arcSmallCW(me.pipperInnerRadius, me.pipperInnerRadius, 0, me.td_x, me.td_y+me.pipperInnerRadius)
+															   .lineTo(me.td_x2, me.td_y2)
+															   .moveTo(0, -me.pipperInnerRadius)
+															   .vert(-me.pipperRangeTick);
+											   } else {
+													   me.newPipper = me.eegsGroup.createChild("path")
+															   .moveTo(0, -me.pipperInnerRadius)
+															   .arcLargeCW(me.pipperInnerRadius, me.pipperInnerRadius, 0, me.td_x, me.td_y+me.pipperInnerRadius)
+															   .lineTo(me.td_x2, me.td_y2)
+															   .moveTo(0, -me.pipperInnerRadius)
+															   .vert(-me.pipperRangeTick);
+											   }
+									   }
+
+									   # Draw outer arc and outer ticks
+									   me.newPipper
+											   .moveTo(-me.pipperOuterRadius, 0)
+											   .arcSmallCW(me.pipperOuterRadius, me.pipperOuterRadius, 0, 2*me.pipperOuterRadius, 0)
+											   .arcSmallCW(me.pipperOuterRadius, me.pipperOuterRadius, 0, -2*me.pipperOuterRadius, 0)
+											   .moveTo(me.pipperOuterRadius, 0)
+											   .horiz(me.pipperRangeTick)
+											   .moveTo(-me.pipperOuterRadius, 0)
+											   .horiz(-me.pipperRangeTick)
+											   .moveTo(0, me.pipperOuterRadius)
+											   .vert(me.pipperRangeTick)
+											   .moveTo(0, -me.pipperOuterRadius)
+											   .vert(-me.pipperRangeTick);
+
+									   # Draw center dot
+									   me.newPipper.moveTo(-mr,0);
+									   me.newPipper.arcSmallCW(mr,mr, 0, mr*2, 0);
+									   me.newPipper.arcSmallCW(mr,mr, 0, -mr*2, 0);
+
+									   # Draw in-range dot
+									   me.newPipper.moveTo(-mr+me.td_x3,me.td_y3);
+									   me.newPipper.arcSmallCW(mr,mr, 0, mr*2, 0);
+									   me.newPipper.arcSmallCW(mr,mr, 0, -mr*2, 0);
+
+									   # Place the pipper on impact point
+									   me.newPipper.setTranslation(me.eegsPipperX, me.eegsPipperY)
+											   .setStrokeLineWidth(1)
+											   .setColor(me.color)
+											   .update();
+							   }
+					   }
+			   }
+			   me.eegsGroup.update();
+		   }
+
+
+
+
+		   #calc shell positions
+
+		   # speed = aircraft groundspeed vector + aircraft attitude vector with shell speed for magnitude
+		   #
+
+		   me.eegs_ac_north_fps = getprop("velocities/speed-north-fps");
+		   me.eegs_ac_east_fps  = getprop("velocities/speed-east-fps");
+		   me.eegs_ac_down_fps  = getprop("velocities/speed-down-fps");
+
+		   me.eegs_sm_down_fps       = -math.sin(me.eegsMe.pitch_ac * D2R) * (me.hydra?2000:me.gunSpeed);
+		   me.eegs_sm_horizontal_fps = math.cos(me.eegsMe.pitch_ac * D2R) * (me.hydra?2000:me.gunSpeed);
+		   me.eegs_sm_north_fps      = math.cos(me.eegsMe.hdg_ac * D2R) * me.eegs_sm_horizontal_fps;
+		   me.eegs_sm_east_fps       = math.sin(me.eegsMe.hdg_ac * D2R) * me.eegs_sm_horizontal_fps;
+
+		   me.eegs_north_fps = me.eegs_ac_north_fps + me.eegs_sm_north_fps;
+		   me.eegs_east_fps  = me.eegs_ac_east_fps  + me.eegs_sm_east_fps;
+		   me.eegs_down_fps  = me.eegs_ac_down_fps  + me.eegs_sm_down_fps;
+
+		   me.eegs_horiz_fps = math.sqrt(me.eegs_north_fps*me.eegs_north_fps+me.eegs_east_fps*me.eegs_east_fps);
+		   me.eegs_total_fps = math.sqrt(me.eegs_down_fps*me.eegs_down_fps+me.eegs_horiz_fps*me.eegs_horiz_fps);
+
+		   me.eegs_hdging = geo.normdeg(math.atan2(me.eegs_east_fps,me.eegs_north_fps)*R2D);
+		   me.eegs_ptch   = math.atan2(-me.eegs_down_fps, me.eegs_horiz_fps)*R2D;
+
+		   if (me.eegs_total_fps > 1) {
+			   me.eegsMe.hdg = me.eegs_hdging;
+			   me.eegsMe.pitch = me.eegs_ptch;
+		   }
+
+		   me.eegsMe.vel = me.eegs_total_fps;
+
+		   me.eegsMe.geodPos = aircraftToCart({x:-me.gunLoc[0], y:me.gunLoc[1], z: -me.gunLoc[2]});#position of gun in aircraft (x and z inverted)
+		   me.eegsMe.eegsPos.set_xyz(me.eegsMe.geodPos.x, me.eegsMe.geodPos.y, me.eegsMe.geodPos.z);
+		   me.eegsMe.altC = me.eegsMe.eegsPos.alt();
+
+		   me.eegsMe.rs = armament.AIM.rho_sndspeed(me.eegsMe.altC*M2FT);#simplified
+		   me.eegsMe.rho = me.eegsMe.rs[0];
+		   me.eegsMe.mass =  (me.hydra?23.6:me.gunWeight) * armament.LBM2SLUGS;
+
+		   #print("x,y");
+		   #printf("%d,%d",0,0);
+		   #print("-----");
+
+		   var multi = gunSight == 1?3:(me.hydra?2:1);# double the funnel segments for HYDRA (3.4 secs) and triple for STRF (5.1 secs)
+		   for (var j = 0;j < me.funnelParts*multi;j+=1) {
+
+			   # there is a unit bug in FG 2020.3.19 submodels which is applied every frame, which means we gotta compensate:
+			   me.eegsMe.vel_kt = me.eegsMe.vel * FPS2KT;
+
+			   #calc new speed incorrect (using wrong units like FG do)
+			   me.eegsMe.Cd = me.drag(me.eegsMe.vel/ me.eegsMe.rs[1],me.hydra?0:me.gunCd);
+			   me.eegsMe.q = 0.5 * me.eegsMe.rho * me.eegsMe.vel_kt * me.eegsMe.vel_kt;
+			   me.eegsMe.deacc = (me.eegsMe.Cd * me.eegsMe.q * (me.hydra?0.00136354:me.gunEda)) / me.eegsMe.mass;#0.00136354=eda
+			   me.eegsMe.vel -= me.eegsMe.deacc * KT2FPS * me.averageDt;
+
+			   me.eegsMe.speed_down_fps       = -math.sin(me.eegsMe.pitch * D2R) * (me.eegsMe.vel);
+			   me.eegsMe.speed_horizontal_fps = math.cos(me.eegsMe.pitch * D2R) * (me.eegsMe.vel);
+
+			   me.eegsMe.speed_down_fps += getprop("environment/gravitational-acceleration-mps2") * M2FT * me.averageDt;
+
+
+
+			   me.eegsMe.altC -= (me.eegsMe.speed_down_fps*me.averageDt)*FT2M;
+
+
+			   #printf("altC %d   vel_z %d   acc_z=%d",me.eegsMe.altC,me.eegsMe.vel_z,me.eegsMe.acc * averageDt);
+
+
+			   me.eegsMe.dist = (me.eegsMe.speed_horizontal_fps*me.averageDt)*FT2M;
+
+			   #printf("vel_x %d  acc_x %d", me.eegsMe.vel_x,me.eegsMe.acc);
+			   #printf("pitch=%.1f  vel=%d  vdown=%.1f",me.eegsMe.pitch, me.eegsMe.vel, me.eegsMe.speed_down_fps, );
+			   #me.eegsMe.eegsPos.apply_course_distance(me.eegsMe.hdg, me.eegsMe.dist);
+			   me.great = greatCircleMove(me.eegsMe.eegsPos, me.eegsMe.hdg, me.eegsMe.dist*M2NM);
+			   me.eegsMe.eegsPos.set_latlon(me.great.lat, me.great.lon, me.eegsMe.altC);
+
+			   var old = me.gunPos[j];
+			   me.gunPos[j] = [[geo.Coord.new(me.eegsMe.eegsPos),me.eegsMe.ac, me.eegsMe.pitch]];
+			   for (var m = 0;m<j+1;m+=1) {
+				   append(me.gunPos[j], old[m]);
+			   }
+
+			   #print(me.eegsMe.speed_down_fps*me.eegsMe.speed_down_fps+me.eegsMe.speed_horizontal_fps*me.eegsMe.speed_horizontal_fps);
+			   #print(me.eegsMe.speed_down_fps*me.eegsMe.speed_down_fps);
+			   #print(me.eegsMe.speed_horizontal_fps*me.eegsMe.speed_horizontal_fps);
+
+			   #if (j==0) {
+			   #    var p = math.atan2(me.eegsMe.altC-me.eegsMe.ac.alt(),me.eegsMe.eegsPos.distance_to(me.eegsMe.ac))*R2D;
+				   #printf("next %.2f alt %.2f our-pitch %.2f our-alt %.2f",p-getprop("orientation/pitch-deg"),me.eegsMe.altC,getprop("orientation/pitch-deg"),me.eegsMe.ac.alt());
+			   #    printf("shot heading %.2f bearing %.2f", me.eegsMe.hdg, me.eegsMe.ac.course_to(me.eegsMe.eegsPos));
+			   #    printf("dist=%d vel=%d realdist=%d",me.eegsMe.dist,me.eegsMe.vel,me.eegsMe.eegsPos.distance_to(me.eegsMe.ac));
+				   #me.eegsMe.eegsPos.dump();
+			   #}
+			   me.eegsMe.vel = math.sqrt(me.eegsMe.speed_down_fps*me.eegsMe.speed_down_fps+me.eegsMe.speed_horizontal_fps*me.eegsMe.speed_horizontal_fps);
+			   me.eegsMe.pitch = math.atan2(-me.eegsMe.speed_down_fps,me.eegsMe.speed_horizontal_fps)*R2D;
+		   }
+	   }
+	   if (gunSight != 1 and !me.hydra and me.designatedDistanceFT != nil) {
+		   # Draw A-A gun reticle
+		   me.aaTargetDesignationGrp.removeAllChildren();
+		   var mr = 0.4 * 1.5;
+		   var radius = 20 * mr;
+		   me.td_rads = me.interpolate(me.designatedDistanceFT, 0, 12000, 0, 2*math.pi);
+		   me.td_x = radius*math.sin(me.td_rads);
+		   me.td_y = -radius*math.cos(me.td_rads);
+		   me.td_factor = me.designatedDistanceFT >= 12000?1:0.75;
+		   me.td_x2 = me.td_factor*radius*math.sin(me.td_rads);
+		   me.td_y2 = -me.td_factor*radius*math.cos(me.td_rads);
+		   # The open part of the circle is not segmented as per manuals and YT (1FJF5PD1uqM)
+		   # More modern MLU (or some export models) do have it segmented though.
+		   if (me.td_x >= 0) {
+			   me.aaTargetDesignator = me.aaTargetDesignationGrp.createChild("path")
+				   .moveTo(0, -radius)
+				   .arcSmallCW(radius, radius, 0, me.td_x, me.td_y+radius)
+				   .lineTo(me.td_x2, me.td_y2)
+				   .setStrokeLineWidth(1)
+				   .setColor(me.color)
+				   .update();
+		   } else {
+			   me.aaTargetDesignator = me.aaTargetDesignationGrp.createChild("path")
+				   .moveTo(0, -radius)
+				   .arcLargeCW(radius, radius, 0, me.td_x, me.td_y+radius)
+				   .lineTo(me.td_x2, me.td_y2)
+				   .setStrokeLineWidth(1)
+				   .setColor(me.color)
+				   .update();
+		   }
+		   # Draw in-range dot
+		   if (me.designatedDistanceFT > getprop("f16/avionics/gun-aa-max-range-ft")) {
+			   me.td_rads = me.interpolate(getprop("f16/avionics/gun-aa-max-range-ft"), 0, 12000, 0, 2*math.pi);
+			   me.td_x3 = (1.20*radius)*math.sin(me.td_rads);
+			   me.td_y3 = -(1.20*radius)*math.cos(me.td_rads);
+			   me.aaTargetDesignator.moveTo(-mr+me.td_x3,me.td_y3);
+			   me.aaTargetDesignator.arcSmallCW(mr,mr, 0, mr*2, 0);
+			   me.aaTargetDesignator.arcSmallCW(mr,mr, 0, -mr*2, 0);
+		   }
+	   }
+   },
+
     list: [],
 };
 
