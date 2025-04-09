@@ -664,7 +664,9 @@ var F15HUD = {
 														"AltimeterIndicatedAltitudeFt",
 														"VNE",
 														"TimeTilCrash",
-														"VelocitiesAirspeedKt"], 0.1, func(val)
+														"BingoFuel",
+														"VelocitiesAirspeedKt",
+														"RadarStandby"], 0.1, func(val)
 														{
 															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin)) {
 																obj.altitudeDeck.show();
@@ -679,7 +681,7 @@ var F15HUD = {
 															if (val.TimeTilCrash != nil and val.TimeTilCrash > 0 and val.TimeTilCrash < 8) {
 		                                                     	obj.flyup.setText("FLYUP");
 		                                                     	obj.flyup.show();
-															} elsif (getprop("sim/time/elapsed-sec") > 2 and getprop("sim/model/f15/lights/ca-bingo-fuel") > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
+															} elsif (getprop("sim/time/elapsed-sec") > 2 and val.BingoFuel > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
 		                                                     	obj.flyup.setText("FUEL");
 		                                                     	obj.flyup.show();
 															} elsif (val.VNE < val.VelocitiesAirspeedKt) {
@@ -701,7 +703,7 @@ var F15HUD = {
 			                                                }
 
 															# NO RAD label if radar's either in standby or offline
-															if (getprop("instrumentation/radar/radar-standby")) {
+															if (val.RadarStandby) {
 																obj.stby.show();
 															} else {
 																obj.stby.hide();
@@ -1137,6 +1139,8 @@ input = {
 		AltitudeDeckMinEnabled                  : "sim/model/f15/avionics/altitude-deck-min-enabled",
 		VNE                                     : "limits/vne",
         TimeTilCrash                            : "instrumentation/radar/time-till-crash",
+		BingoFuel                               : "sim/model/f15/lights/ca-bingo-fuel",
+		RadarStandby                            : "instrumentation/radar/radar-standby",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
