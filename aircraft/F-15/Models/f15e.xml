@@ -2914,6 +2914,14 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>su59-fuselage-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[115]</property>  # If there's the LANTIRN nav pod
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>adu552-l1x</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[81]</property>
@@ -3980,8 +3988,8 @@
         <path>Aircraft/F-15/Models/Stores/LANTIRN/AN-AAQ-13.xml</path>
         <offsets>
              <x-m>-1.20</x-m>
-             <y-m>1.15</y-m>
-             <z-m>-0.85</z-m>
+             <y-m>1.05</y-m>
+             <z-m>-1.13</z-m>
         </offsets>
     </model>
 
