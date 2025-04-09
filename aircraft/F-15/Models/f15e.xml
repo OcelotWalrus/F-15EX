@@ -3522,6 +3522,119 @@
         </condition>
     </animation>
 
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[132]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[133]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[134]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[135]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[132]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[133]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[134]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk83-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[135]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>triple-mk83-left</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[129]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>triple-mk83-center</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[130]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>triple-mk83-right</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[131]</property>
+        </condition>
+    </animation>
+
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
         <type>select</type>
@@ -4265,6 +4378,116 @@
              <x-m>-0.1</x-m>
              <y-m>1.825</y-m>
              <z-m>-0.825</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>triple-mk83-center</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/trirack-5.xml</path>
+        <offsets>
+             <x-m>1.2</x-m>
+             <y-m>0</y-m>
+             <z-m>-0.8</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>triple-mk83-left</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/trirack-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>triple-mk83-right</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/trirack-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-l3</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-l4</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-r1</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-r2</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk83-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
         </offsets>
     </model>
 

@@ -53,6 +53,8 @@ var pylonSets = {
 	triplem84:  {name: "3 x MK-84", content: ["MK-84", "MK-84", "MK-84"], fireOrder: [0,1,2], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	mk82air:  {name: "3 x MK-82 AIR", content: ["MK-82AIR", "MK-82AIR", "MK-82AIR"], fireOrder: [0,1,2], launcherDragArea: 0.0, launcherMass: 20, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	mk82:  {name: "3 x MK-82", content: ["MK-82", "MK-82", "MK-82"], fireOrder: [0,1,2], launcherDragArea: 0.0, launcherMass: 20, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	mk83:  {name: "1 x MK-83", content: ["MK-83"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	triplemk83:  {name: "3 x MK-83", content: ["MK-83", "MK-83", "MK-83"], fireOrder: [0,1,2], launcherDragArea: 0.0, launcherMass: 25, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 
     # 340 = outer pylon
 	smokeWL: {name: "Smokewinder White", content: [smokewinderWhite2a], fireOrder: [0], launcherDragArea: -0.05, launcherMass: 53+340, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
@@ -92,19 +94,19 @@ if (getprop("sim/model/f15/variant") == "E") { # EX variant has different pylons
 	var pylonex1cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon2aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon2bset = [pylonSets.empty, pylonSets.doublem84, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon2bset = [pylonSets.empty, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon2cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylon3set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air];
-	var pylon4set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air];
+	var pylon3set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
+	var pylon4set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
 
-	var pylon5set = [pylonSets.empty, pylonSets.triplem84];
+	var pylon5set = [pylonSets.empty, pylonSets.triplemk83, pylonSets.triplem84];
 
-	var pylon6set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air];
-	var pylon7set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air];
+	var pylon6set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
+	var pylon7set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
 
 	var pylon8aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon8bset = [pylonSets.empty, pylonSets.doublem84, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon8bset = [pylonSets.empty, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon8cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonex2aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
@@ -175,7 +177,7 @@ if (getprop("sim/model/f15/variant") == "E") {
 
 # The order of first vector in this line is the default pylon order weapons is released in.
 # The order of second vector in this line is the order cycle key would cycle through the weapons (since F15 doesn't use the cycle option that order is not important):
-fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17, 18], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82"]);
+fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17, 18], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83"]);
 
 if (getprop("sim/model/f15/variant") == "E") { # EX variant only
 	var aimListener = func (obj) {
@@ -282,6 +284,9 @@ var getCCIP = func {
             } elsif (w.type=="MK-82") {
                 # 25s fall time limit and calculate fall trajectory at every .20s on the way to ground.
                 return w.getCCIPadv(25, .20);
+            } elsif (w.type=="MK-83") {
+                # 25s fall time limit and calculate fall trajectory at every .20s on the way to ground.
+                return w.getCCIPadv(20, .20);
             }
         }
     }

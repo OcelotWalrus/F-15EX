@@ -1561,6 +1561,13 @@
                 <bool n="126" alias="/sim/model/f15/payload/selected/mk82-l4" />
                 <bool n="127" alias="/sim/model/f15/payload/selected/mk82-r1" />
                 <bool n="128" alias="/sim/model/f15/payload/selected/mk82-r2" />
+                <bool n="129" alias="/sim/model/f15/payload/selected/trirack-mk83-l" />
+                <bool n="130" alias="/sim/model/f15/payload/selected/trirack-mk83-c" />
+                <bool n="131" alias="/sim/model/f15/payload/selected/trirack-mk83-r" />
+                <bool n="132" alias="/sim/model/f15/payload/selected/mk83-l3" />
+                <bool n="133" alias="/sim/model/f15/payload/selected/mk83-l4" />
+                <bool n="134" alias="/sim/model/f15/payload/selected/mk83-r1" />
+                <bool n="135" alias="/sim/model/f15/payload/selected/mk83-r2" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -1931,6 +1938,10 @@
                 <lbs>592.0</lbs>
             </opt>
             <opt>
+                <name>3 x MK-83</name>
+                <lbs>3000.0</lbs>
+            </opt>
+            <opt>
                 <name>2 x MK-84</name>
                 <lbs>4000.0</lbs>
             </opt>
@@ -1948,6 +1959,10 @@
                 <name>Droptank</name>
                 <lbs>271.0</lbs>
                 <gals>600</gals>
+            </opt>
+            <opt>
+                <name>3 x MK-83</name>
+                <lbs>3000.0</lbs>
             </opt>
             <opt>
                 <name>3 x MK-84</name>
@@ -1975,6 +1990,10 @@
             <opt>
                 <name>2 x AIM-120D AMRAAM</name>
                 <lbs>592.0</lbs>
+            </opt>
+            <opt>
+                <name>3 x MK-83</name>
+                <lbs>3000.0</lbs>
             </opt>
             <opt>
                 <name>2 x MK-84</name>
@@ -2370,6 +2389,49 @@
                 <ejector-speed-fps type="double">5</ejector-speed-fps>
                 <ready-time type="double">0.5</ready-time>
             </mk-84>
+            <mk-83>
+                <type-id type="int">33</type-id>
+                <short-name type="string">M83</short-name>
+                <long-name type="string">MK-83 General Purpose Bomb</long-name>
+                <fire-msg type="string">Bombs away</fire-msg>
+                <class type="string">GMP</class>
+                <max-fire-range-nm type="double"> 8 </max-fire-range-nm>
+                <min-fire-range-nm type="double"> 0 </min-fire-range-nm>
+                <guidance type="string">unguided</guidance>
+                <navigation type="string">direct</navigation>
+                <loft-altitude type="int"> 0 </loft-altitude>
+                <terrain-follow type="bool">false</terrain-follow>
+                <FCS-field-deg type="int"> 240 </FCS-field-deg>
+                <seeker-field-deg type="int"> 360 </seeker-field-deg>
+                <max-g type="double"> 1.8 </max-g>
+                <thrust-lbf-stage-1 type="double"> 0 </thrust-lbf-stage-1>
+                <thrust-lbf-stage-2 type="double"> 0 </thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double"> 0 </stage-1-duration-sec>
+                <stage-2-duration-sec type="double"> 0 </stage-2-duration-sec>
+                <weight-launch-lbs type="double"> 1014 </weight-launch-lbs>
+                <weight-warhead-lbs type="double"> 445 </weight-warhead-lbs>
+                <weight-fuel-lbm type="double"> 0 </weight-fuel-lbm>
+                <drag-coeff type="double"> 0.125 </drag-coeff>
+                <cross-section-sqft type="double"> 1.07744817 </cross-section-sqft><!-- the MK83 is 357 mm diam -->
+                <arming-time-sec type="double"> 5 </arming-time-sec>
+                <min-speed-for-guiding-mach type="double"> 0 </min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double"> 10000 </self-destruct-time-sec>
+                <all-aspect type="bool">true</all-aspect>
+                <lock-on-sun-deg type="double"> 0 </lock-on-sun-deg>
+                <seeker-angular-speed-dps type="double"> 0 </seeker-angular-speed-dps>
+                <rail type="bool">false</rail>
+                <max-report-distance type="double"> 175 </max-report-distance>
+                <vol-search type="double"> 0.075 </vol-search>
+                <vol-track type="double"> 0.25 </vol-track>
+                <vol-track-weak type="double"> 0.175 </vol-track-weak>
+                <drop-time type="double">0.75</drop-time>
+                <deploy-time type="double">1</deploy-time>
+                <lateral-dps type="double"> -10 </lateral-dps>
+                <max-pitch-deg type="double">-90</max-pitch-deg>
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <ejector-speed-fps type="double">10</ejector-speed-fps>
+                <ready-time type="double">0.5</ready-time>
+            </mk-83>
             <mk-82air>
                 <type-id type="int">68</type-id>
                 <short-name type="string">M82A</short-name>

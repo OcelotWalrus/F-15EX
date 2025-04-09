@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+  
+<PropertyList> 
+
+    <path>Aircraft/F-15/Models/Stores/Racks/trirack.xml</path>
+
+    <model>
+      <name>Station9_MK83_left</name>
+      <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+      <offsets>
+        <x-m>0.1205</x-m>
+        <y-m>-0.48223</y-m>
+        <z-m>-0.19419</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>90</roll-deg>
+      </offsets>
+    </model>
+
+    <model>
+      <name>Station9_MK83_center</name>
+      <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+      <offsets>
+        <x-m>0.1205</x-m>
+        <y-m>0</y-m>
+        <z-m>-0.54412</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>180</roll-deg>
+      </offsets>
+    </model>
+
+    <model>
+      <name>Station9_MK83_right</name>
+      <path>Aircraft/F-15/Models/Stores/MK-83/MK-83.xml</path>
+      <offsets>
+        <x-m>0.1205</x-m>
+        <y-m>0.48223</y-m>
+        <z-m>-0.19419</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>-90</roll-deg>
+      </offsets>
+    </model>
+
+    <animation>
+      <type>select</type>
+      <object-name>Station9_MK83_left</object-name>
+      <condition><and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>3 x MK-83</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-9-count</property>
+          <value>0</value>
+        </greater-than></and>
+      </condition>
+     </animation>
+
+     <animation>
+      <type>select</type>
+      <object-name>Station9_MK83_right</object-name>
+      <condition>
+        <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>3 x MK-83</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-9-count</property>
+          <value>1</value>
+        </greater-than>
+      </and>
+      </condition>
+     </animation>
+
+     <animation>
+      <type>select</type>
+      <object-name>Station9_MK83_center</object-name>
+      <condition><and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>3 x MK-83</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-9-count</property>
+          <value>2</value>
+        </greater-than></and>
+      </condition>
+     </animation>
+
+</PropertyList> 
