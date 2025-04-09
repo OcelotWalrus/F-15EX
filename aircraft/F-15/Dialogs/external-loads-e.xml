@@ -1431,7 +1431,7 @@
 								<script>
 									if (getprop("payload/armament/station/id-3-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-3-count", 2);
-									} elsif (getprop("payload/armament/station/id-3-set") == "3 x MK-82 AIR") {
+									} elsif (getprop("payload/armament/station/id-3-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-3-set") == "3 x MK-82") {
 										setprop("payload/armament/station/id-3-count", 3);
 									} else {
 										setprop("payload/armament/station/id-3-count", 1);
@@ -1478,7 +1478,7 @@
 								<script>
 									if (getprop("payload/armament/station/id-4-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-4-count", 2);
-									} elsif (getprop("payload/armament/station/id-4-set") == "3 x MK-82 AIR") {
+									} elsif (getprop("payload/armament/station/id-4-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-4-set") == "3 x MK-82") {
 										setprop("payload/armament/station/id-4-count", 3);
 									} else {
 										setprop("payload/armament/station/id-4-count", 1);
@@ -1569,7 +1569,7 @@
 								<script>
 									if (getprop("payload/armament/station/id-6-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-6-count", 2);
-									} elsif (getprop("payload/armament/station/id-6-set") == "3 x MK-82 AIR") {
+									} elsif (getprop("payload/armament/station/id-6-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-6-set") == "3 x MK-82") {
 										setprop("payload/armament/station/id-6-count", 3);
 									} else {
 										setprop("payload/armament/station/id-6-count", 1);
@@ -1616,7 +1616,7 @@
 								<script>
 									if (getprop("payload/armament/station/id-7-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-7-count", 2);
-									} elsif (getprop("payload/armament/station/id-7-set") == "3 x MK-82 AIR") {
+									} elsif (getprop("payload/armament/station/id-7-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-7-set") == "3 x MK-82") {
 										setprop("payload/armament/station/id-7-count", 3);
 									} else {
 										setprop("payload/armament/station/id-7-count", 1);
