@@ -2194,6 +2194,7 @@
             <mpcd-jettison-button type="float">0</mpcd-jettison-button>
             <combat-jettison-count type="int">0</combat-jettison-count>
             <selected-armament type="string"/>
+            <selected-armament-offset type="int">0</selected-armament-offset>
             <dual type="int">1</dual><!-- set this to control if next bomb release should be released as a pair or more. 1=single -->
         </armament>
         <lighting>
