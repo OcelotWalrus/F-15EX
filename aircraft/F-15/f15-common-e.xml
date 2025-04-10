@@ -1579,6 +1579,8 @@
                 <bool n="138" alias="/sim/model/f15/payload/selected/cbu87-l" />
                 <bool n="139" alias="/sim/model/f15/payload/selected/cbu87-c" />
                 <bool n="140" alias="/sim/model/f15/payload/selected/cbu87-r" />
+                <bool n="141" alias="/sim/model/f15/payload/selected/cbu105-l" />
+                <bool n="142" alias="/sim/model/f15/payload/selected/cbu105-r" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -1960,6 +1962,10 @@
                 <name>3 x CBU-87</name>
                 <lbs>2875.0</lbs>
             </opt>
+            <opt>
+                <name>3 x CBU-105</name>
+                <lbs>2827.0</lbs>
+            </opt>
         </weight>
         <weight n="5">
             <name>Center Station 5</name>
@@ -2021,6 +2027,10 @@
             <opt>
                 <name>3 x CBU-87</name>
                 <lbs>2875.0</lbs>
+            </opt>
+            <opt>
+                <name>3 x CBU-105</name>
+                <lbs>2827.0</lbs>
             </opt>
         </weight>
         <weight n="15">

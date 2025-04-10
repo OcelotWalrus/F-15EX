@@ -3689,6 +3689,22 @@
             <property>sim/multiplay/generic/bool[140]</property>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-cbu105-left</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[141]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-cbu105-right</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[142]</property>
+        </condition>
+    </animation>
 
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
@@ -4589,6 +4605,25 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.15</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>double-cbu105-left</name>
+        <path>Aircraft/F-15/Models/Stores/CBU-105/bru-57-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.23</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>double-cbu105-right</name>
+        <path>Aircraft/F-15/Models/Stores/CBU-105/bru-57-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.23</z-m>
         </offsets>
     </model>
 
