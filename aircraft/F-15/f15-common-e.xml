@@ -2222,7 +2222,7 @@
                 <switch-time-sec type="double">5</switch-time-sec>
             </aim-120>
             <aim-120d>
-                <type-id type="int">101</type-id>
+                <type-id type="int">52</type-id>
                 <short-name type="string">A120D</short-name>
                 <long-name type="string">AIM-120D AMRAAM</long-name>
                 <guidance type="string">inertial</guidance>
