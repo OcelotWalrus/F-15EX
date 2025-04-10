@@ -2925,8 +2925,7 @@
         <object-name>su59-fuselage-l</object-name>
         <condition>
             <or>
-                <property>sim/multiplay/generic/bool[136]</property>  # If there's the Sniper ATP or LANTIRN Target pods
-                <property>sim/multiplay/generic/bool[137]</property>
+                <property>sim/multiplay/generic/bool[136]</property>  # If there's LANTIRN Target pod (Sniper APT doesn't need a pylon)
             </or>
         </condition>
     </animation>
@@ -4377,7 +4376,8 @@
         <offsets>
              <x-m>-0.29788</x-m>
              <y-m>-1.0915</y-m>
-             <z-m>-0.98914</z-m>
+             <z-m>-0.69134</z-m>
+             <pitch-deg>1.5</pitch-deg>
         </offsets>
     </model>
 
