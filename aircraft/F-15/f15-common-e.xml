@@ -1570,6 +1570,8 @@
                 <bool n="133" alias="/sim/model/f15/payload/selected/mk83-l4" />
                 <bool n="134" alias="/sim/model/f15/payload/selected/mk83-r1" />
                 <bool n="135" alias="/sim/model/f15/payload/selected/mk83-r2" />
+                <bool n="136" alias="/sim/model/f15/payload/selected/lantirn-target-pod" />
+                <bool n="137" alias="/sim/model/f15/payload/selected/sniper-atp-pod" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->

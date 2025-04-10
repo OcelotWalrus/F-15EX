@@ -2922,6 +2922,17 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>su59-fuselage-l</object-name>
+        <condition>
+            <or>
+                <property>sim/multiplay/generic/bool[136]</property>  # If there's the Sniper ATP or LANTIRN Target pods
+                <property>sim/multiplay/generic/bool[137]</property>
+            </or>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>adu552-l1x</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[81]</property>
@@ -3310,6 +3321,26 @@
         <condition>
             <and>
                 <property>sim/multiplay/generic/bool[115]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>lantirn-target-pod</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[136]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>sniper-atp-pod</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[137]</property>
             </and>
         </condition>
     </animation>
@@ -4189,9 +4220,27 @@
         <name>lantirn-nav-pod</name>
         <path>Aircraft/F-15/Models/Stores/LANTIRN/AN-AAQ-13.xml</path>
         <offsets>
+             <x-m>-0.42019</x-m>
+             <y-m>1.0257</y-m>
+             <z-m>-0.9895</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>lantirn-target-pod</name>
+        <path>Aircraft/F-15/Models/Stores/LANTIRN/AN-AAQ-14.xml</path>
+        <offsets>
              <x-m>-1.20</x-m>
-             <y-m>1.05</y-m>
-             <z-m>-1.13</z-m>
+             <y-m>-1.05</y-m>
+             <z-m>-0.87</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>sniper-atp-pod</name>
+        <path>Aircraft/F-15/Models/Stores/SniperATP/AN-AAQ-33.xml</path>
+        <offsets>
+             <x-m>-0.29788</x-m>
+             <y-m>-1.0915</y-m>
+             <z-m>-0.98914</z-m>
         </offsets>
     </model>
 

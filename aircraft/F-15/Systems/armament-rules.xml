@@ -1351,6 +1351,28 @@
     <input>
       <and>
         <equals>
+          <property>payload/armament/station/id-19-set</property>
+          <value>AN/AAQ-14 LANTIRN Target Pod</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/lantirn-target-pod</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-19-set</property>
+          <value>AN/AAQ-33 Sniper ATP</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/sniper-atp-pod</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
           <property>payload/armament/station/id-5-set</property>
           <value>3 x MK-84</value>
         </equals>

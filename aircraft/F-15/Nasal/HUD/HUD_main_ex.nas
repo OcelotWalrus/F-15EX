@@ -154,7 +154,7 @@ var F15HUD = {
         obj.window16 = obj.get_text("window16", aircraft.HUDFont,9,1.4);
         obj.window17 = obj.get_text("window17", aircraft.HUDFont,9,1.4);
 
-		obj.color = [0.3,1,0.3,1]; # last one should be brightness parameter TODO: apply it to all elements
+		obj.color = [0.3,1,0.3,.5]; # last one should be brightness parameter TODO: apply it to all elements
 
         obj.window1.setVisible(0);
 
@@ -447,7 +447,7 @@ var F15HUD = {
                                               obj.svg.setVisible(0);
                                           } else {
                                               obj.svg.setVisible(1);
-											  obj.color = [0.3,1,0.3,1];
+											  obj.color = [0.3,1,0.3,.5];
 											  obj.ASEC120Aspect.setColorFill(obj.color);
                                               obj.ASEC65Aspect.setColorFill(obj.color);
                                           }
@@ -616,7 +616,7 @@ var F15HUD = {
 																		missile_alt = getprop(data_root ~ "/position/altitude-ft");
 																		missileCoord = geo.Coord.new().set_latlon(missile_lat, missile_lon, missile_alt);
 																		distance_to_target = dlzArray[6].direct_distance_to(missileCoord)*M2NM*1.15;
-																		mean_speed = getprop(data_root ~ "/velocities/true-airspeed-kt");
+																		#mean_speed = getprop(data_root ~ "/velocities/true-airspeed-kt");  # it's actually inaccurate as it's got different speed phases
 																		var live = 1;
 																	}
 																	target_speed = dlzArray[5] * 1.15;  # in kts then to mph

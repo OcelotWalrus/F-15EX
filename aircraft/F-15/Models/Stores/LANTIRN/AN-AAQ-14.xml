@@ -17,7 +17,7 @@
   <object-name>ANAAQ-14_Lens</object-name>
   <object-name>ANAAQ-14_Turnable</object-name>
   <object-name>ANAAQ-14_Tube-inside</object-name>
-  <property>aircraft/flir/swivel/roll-deg</property>
+  <property>sim/model/f15/flir/swivel/roll-deg</property>
   <factor>1.0</factor>
   <offset-deg>90</offset-deg>
   <center>
@@ -39,7 +39,7 @@
   <object-name>ANAAQ-14_Cam</object-name>
   <object-name>ANAAQ-14_FLIR</object-name>
   <object-name>ANAAQ-14_Lens</object-name>
-  <property>aircraft/flir/swivel/pitch-deg</property>
+  <property>sim/model/f15/flir/swivel/pitch-deg</property>
   <factor>-1.0</factor>
   <offset-deg>90</offset-deg>
   <center>
