@@ -153,6 +153,7 @@ var F15HUD = {
         obj.window15 = obj.get_text("window15", aircraft.HUDFont,9,1.4);
         obj.window16 = obj.get_text("window16", aircraft.HUDFont,9,1.4);
         obj.window17 = obj.get_text("window17", aircraft.HUDFont,9,1.4);
+        obj.window18 = obj.get_text("window18", aircraft.HUDFont,9,1.4);
 
 		obj.color = [0.3,1,0.3,.5]; # last one should be brightness parameter TODO: apply it to all elements
 
@@ -447,7 +448,7 @@ var F15HUD = {
                                               obj.svg.setVisible(0);
                                           } else {
                                               obj.svg.setVisible(1);
-											  obj.color = [0.3,1,0.3,.5];
+											  obj.color = [0.3,1,0.3,1];
 											  obj.ASEC120Aspect.setColorFill(obj.color);
                                               obj.ASEC65Aspect.setColorFill(obj.color);
                                           }
@@ -769,12 +770,19 @@ var F15HUD = {
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
                                                                 obj.window2.setVisible(1);
 																eegsShow = 0;
+																obj.window18.setVisible(0);
 
                                                                 if (w_s == 0) {
                                                                     obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
 																	eegsShow = 1;
                                                                 } else if (w_s == 1) {
                                                                     obj.window2.setText(sprintf("%2d SRM", val.ArmamentAim9Count));
+	                                                                obj.window18.setVisible(1);
+																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().isCaged()) {
+																		obj.window18.setText("Caged");
+																	} else {
+																		obj.window18.setText("Uncaged");
+																	}
                                                                 } else if (w_s == 2){
                                                                     obj.window2.setText(sprintf("%2d AAM", val.ArmamentAim120Count
                                                                                                 + val.ArmamentAim7Count));
@@ -806,7 +814,7 @@ var F15HUD = {
 						                                            } elsif (math.abs(aspect) < 1) {
 						                                                var rel_aspect = "T  ";
 																	} else {
-																		var rel_aspect = sprintf("%2d%s", math.abs(aspect), aspect > 0 ? "R" : "L");
+																		var rel_aspect = sprintf("%2d%s", aspect, aspect > 0 ? "R" : "L");
 																	}
                                                                     obj.window6.setText(rel_aspect);  # SRM UNCAGE / TARGET ASPECT
                                                                 } else {
@@ -825,6 +833,7 @@ var F15HUD = {
                                                                 obj.window15.setVisible(0);
                                                                 obj.window16.setVisible(0);
 																obj.window17.setVisible(0);
+																obj.window18.setVisible(0);
                                                                 if (val.HudNavRangeDisplay != "")
                                                                 obj.window3.setText("NAV");
                                                                 else

@@ -32,7 +32,8 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Added a nicer exhaust trail
 - Added the LANTIRN Navigation Pod, which that the FLIR displayed on the HUD, and a TFR (Terrain Following Radar), which allows the plane to autopilot at a certain altitude above the ground, customized either in the F-15EX Eagle II config panel or the PACS page related to the nav pod (actually doesn't work well with unsmooth ground transitions)
 - Display steerpoints on the HUD using same method as F-16 model
-- Addd ASE Circles to the HUD (W.I.P.)
+- Added ASE Circles to the HUD and more A/A missile symbology
+- Added the ability to fire AIM-9s, unslaved to the radar, and the ability to cage or uncage AIM-9s (with that HUD symbology)
 - Upgraded the landing/taxiing light bulb effects
 - Added a "FLYUP", "FUEL", "NO RAD" and "LIMIT" warning displays on the HUD (with sounds)
 - Added the ability to customize the ripple count in the MPCD
