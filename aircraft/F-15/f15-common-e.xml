@@ -3074,7 +3074,7 @@
                 <desc>Toggle cage</desc>
                 <binding>
                     <command>nasal</command>
-                    <script>pylons.fcs.toggleCage();</script>
+                    <script>pylons.fcs.toggleCage();pylons.fcs.setAutocage(0);</script>
                 </binding>
             </key>
 
