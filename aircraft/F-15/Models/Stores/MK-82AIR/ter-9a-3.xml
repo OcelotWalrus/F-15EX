@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-  
-<PropertyList> 
+
+<PropertyList>
 
     <path>Aircraft/F-15/Models/Stores/Racks/TER-9A/TER-9A.xml</path>
 
@@ -19,7 +19,7 @@
         <y-m>-0.25</y-m>
         <z-m>-0.06</z-m>
         <pitch-deg>0</pitch-deg>
-        <roll-deg>00</roll-deg>
+        <roll-deg>180</roll-deg>
       </offsets>
     </model>
 
@@ -31,6 +31,7 @@
         <y-m>0</y-m>
         <z-m>-0.355</z-m>
         <pitch-deg>0</pitch-deg>
+        <roll-deg>180</roll-deg>
       </offsets>
     </model>
 
@@ -42,7 +43,7 @@
         <y-m>0.25</y-m>
         <z-m>-0.06</z-m>
         <pitch-deg>0</pitch-deg>
-        <roll-deg>00</roll-deg>
+        <roll-deg>180</roll-deg>
       </offsets>
     </model>
 
@@ -127,4 +128,4 @@
       </condition>
      </animation>
 
-</PropertyList> 
+</PropertyList>

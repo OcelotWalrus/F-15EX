@@ -3706,6 +3706,103 @@
         </condition>
     </animation>
 
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82-cft-1</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[143]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82-cft-2</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[144]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82-cft-3</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[145]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82-cft-4</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[146]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82-cft-5</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[147]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82-cft-6</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[148]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82air-cft-1</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[149]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82air-cft-2</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[150]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82air-cft-3</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[151]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82air-cft-4</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[152]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82air-cft-5</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[153]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk82air-cft-6</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[154]</property>
+        </condition>
+    </animation>
+
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
         <type>select</type>
@@ -4467,6 +4564,136 @@
              <x-m>-0.1</x-m>
              <y-m>1.825</y-m>
              <z-m>-0.825</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>mk82-cft-1</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82/MK-82.xml</path>
+        <offsets>
+             <x-m>-0.0760</x-m>
+             <y-m>-2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82-cft-2</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82/MK-82.xml</path>
+        <offsets>
+             <x-m>2.4774</x-m>
+             <y-m>-2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82-cft-3</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82/MK-82.xml</path>
+        <offsets>
+             <x-m>5.1044</x-m>
+             <y-m>-2.0352</y-m>
+             <z-m>-0.5638</z-m>
+             <pitch-deg>0.993</pitch-deg>
+             <heading-deg>-0.118</heading-deg>
+             <roll-deg>155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82-cft-4</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82/MK-82.xml</path>
+        <offsets>
+             <x-m>-0.0760</x-m>
+             <y-m>2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>-155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82-cft-5</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82/MK-82.xml</path>
+        <offsets>
+             <x-m>2.4774</x-m>
+             <y-m>2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>-155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82-cft-6</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82/MK-82.xml</path>
+        <offsets>
+             <x-m>5.1044</x-m>
+             <y-m>2.0352</y-m>
+             <z-m>-0.5638</z-m>
+             <pitch-deg>0.993</pitch-deg>
+             <heading-deg>-0.118</heading-deg>
+             <roll-deg>-155</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
+        <name>mk82air-cft-1</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/MK-82AIR.xml</path>
+        <offsets>
+             <x-m>-0.0760</x-m>
+             <y-m>-2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82air-cft-2</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/MK-82AIR.xml</path>
+        <offsets>
+             <x-m>2.4774</x-m>
+             <y-m>-2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82air-cft-3</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/MK-82AIR.xml</path>
+        <offsets>
+             <x-m>5.1044</x-m>
+             <y-m>-2.0352</y-m>
+             <z-m>-0.5638</z-m>
+             <pitch-deg>0.993</pitch-deg>
+             <heading-deg>-0.118</heading-deg>
+             <roll-deg>155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82air-cft-4</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/MK-82AIR.xml</path>
+        <offsets>
+             <x-m>-0.0760</x-m>
+             <y-m>2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>-155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82air-cft-5</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/MK-82AIR.xml</path>
+        <offsets>
+             <x-m>2.4774</x-m>
+             <y-m>2.0865</y-m>
+             <z-m>-0.59576</z-m>
+             <roll-deg>-155</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk82air-cft-6</name>
+        <path>Aircraft/F-15/Models/Stores/MK-82AIR/MK-82AIR.xml</path>
+        <offsets>
+             <x-m>5.1044</x-m>
+             <y-m>2.0352</y-m>
+             <z-m>-0.5638</z-m>
+             <pitch-deg>0.993</pitch-deg>
+             <heading-deg>-0.118</heading-deg>
+             <roll-deg>-155</roll-deg>
         </offsets>
     </model>
 

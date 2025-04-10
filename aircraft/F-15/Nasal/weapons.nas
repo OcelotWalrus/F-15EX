@@ -301,7 +301,7 @@ var arm_selector = func() {
             cur_wpn = wps[count];
             var p = pylons.fcs.selectWeapon(cur_wpn);
             setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
-                count = count -1;
+            count = count -1;
         }
         if (p == nil) {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
@@ -318,7 +318,7 @@ var arm_selector = func() {
             cur_wpn = wps[count];
             var p = pylons.fcs.selectWeapon(cur_wpn);
             setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
-                count = count -1;
+            count = count -1;
         }
         if (p == nil) {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
@@ -335,7 +335,7 @@ var arm_selector = func() {
             cur_wpn = ground_wps[count];
             var p = pylons.fcs.selectWeapon(cur_wpn);
             setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
-                count = count -1;
+            count = count -1;
         }
         if (p == nil) {
             setprop("sim/model/f15/systems/armament/selected-arm", "");

@@ -642,6 +642,18 @@ var F15MainModule =
             setprop("controls/armament/dual", 4);
         }
 
+        # Make sure that if CFTs are not installed, non-CFT-compatible stations are empty
+        if (getprop("fdm/jsbsim/propulsion/cft") != 1 or !getprop("fdm/jsbsim/propulsion/cft")) {
+            setprop("payload/weight[18]/selected", "Empty");
+            setprop("payload/weight[19]/selected", "Empty");
+            setprop("payload/weight[20]/selected", "Empty");
+            setprop("payload/weight[21]/selected", "Empty");
+            setprop("payload/weight[22]/selected", "Empty");
+            setprop("payload/weight[23]/selected", "Empty");
+            setprop("payload/weight[24]/selected", "Empty");
+            setprop("payload/weight[25]/selected", "Empty");
+        }
+
         # Quick patch for pylons weight not computing, no clue why ...
         all_pylons = [12,1,5,9,15];
         foreach (cur_pyl; all_pylons) {

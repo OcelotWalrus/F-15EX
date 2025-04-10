@@ -39,3 +39,4 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Added the ability to customize the ripple count in the MPCD
 - Added the ability to specifically select a weapon in the HUD (not just type (MRM, SRM or Ground) but actual weapon types (manually choosing from AIM-120, AIM-7))
 - Implemented ripple release (from 1 to 4)
+- Added CFT pylons (3 each side)

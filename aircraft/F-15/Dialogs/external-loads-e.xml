@@ -1956,8 +1956,8 @@
 							<property>payload/weight[20]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>MK-82</value>
-							<value>AIM-120D AMRAAM</value>
+							<value>1 x MK-82</value>
+							<value>1 x MK-82AIR</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1996,8 +1996,8 @@
 							<property>payload/weight[21]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>MK-82</value>
-							<value>AIM-120D AMRAAM</value>
+							<value>1 x MK-82</value>
+							<value>1 x MK-82AIR</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2036,8 +2036,8 @@
 							<property>payload/weight[22]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>MK-82</value>
-							<value>AIM-120D AMRAAM</value>
+							<value>1 x MK-82</value>
+							<value>1 x MK-82AIR</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2069,15 +2069,15 @@
 						<layout>hbox</layout>
 						<default-padding>0</default-padding>
 						<text>
-							<label>CFT3 : </label>
+							<label>CFT4 : </label>
 						</text>
 						<combo>
 							<pref-width>200</pref-width>
 							<property>payload/weight[23]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>MK-82</value>
-							<value>AIM-120D AMRAAM</value>
+							<value>1 x MK-82</value>
+							<value>1 x MK-82AIR</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2109,15 +2109,15 @@
 						<layout>hbox</layout>
 						<default-padding>0</default-padding>
 						<text>
-							<label>CFT4 : </label>
+							<label>CFT5 : </label>
 						</text>
 						<combo>
 							<pref-width>200</pref-width>
 							<property>payload/weight[24]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>MK-82</value>
-							<value>AIM-120D AMRAAM</value>
+							<value>1 x MK-82</value>
+							<value>1 x MK-82AIR</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2149,15 +2149,15 @@
 						<layout>hbox</layout>
 						<default-padding>0</default-padding>
 						<text>
-							<label>CFT5 : </label>
+							<label>CFT6 : </label>
 						</text>
 						<combo>
 							<pref-width>200</pref-width>
 							<property>payload/weight[25]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-							<value>MK-82</value>
-							<value>AIM-120D AMRAAM</value>
+							<value>1 x MK-82</value>
+							<value>1 x MK-82AIR</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2180,46 +2180,6 @@
 						</text>
 						<text>
                             <property>payload/armament/station/id-25-count</property>
-						    <label>xxxxxxxx</label>
-						    <live>true</live>
-						    <format>%.1d</format>
-                        </text>
-					</group>
-					<group>
-						<layout>hbox</layout>
-						<default-padding>0</default-padding>
-						<text>
-							<label>CFT6 : </label>
-						</text>
-						<combo>
-							<pref-width>200</pref-width>
-							<property>payload/weight[26]/selected</property>
-							<live>true</live>
-							<value>Empty</value>
-							<value>MK-82</value>
-							<value>AIM-120D AMRAAM</value>
-							<binding>
-								<command>dialog-apply</command>
-							</binding>
-							<binding>
-								<command>nasal</command>
-								<script>
-									if (getprop("sim/multiplay/generic/bool[70]") != 1) {
-										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
-										warn_dialog.open();
-										setprop("payload/weight[26]/selected", "Empty");
-									}
-								</script>
-							</binding>
-						</combo>
-						<text>
-							<property>payload/weight[26]/weight-lb</property>
-							<label>xxxxxxxx</label>
-							<live>true</live>
-							<format>%.1f lbs</format>
-						</text>
-						<text>
-                            <property>payload/armament/station/id-26-count</property>
 						    <label>xxxxxxxx</label>
 						    <live>true</live>
 						    <format>%.1d</format>
