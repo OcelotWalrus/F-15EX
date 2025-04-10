@@ -63,6 +63,7 @@ var fixAirframe = func {
     	repairMe();
     	settimer (func { setprop ("fdm/jsbsim/gear/damage-reset", 0); }, 1.3);
         setprop("controls/gear/gear-overspeed", 0);
+        setprop("controls/flaps-overspeed", 0);
         setprop("controls/gear/brakes-blownout", 0);
     }
 }
@@ -667,29 +668,27 @@ var F15MainModule =
             setprop("payload/weight[9]/weight-lb", 271);
         }
 
-        # Gear/flaps overspeed damage
-        if (getprop("controls/gear/gear-down") == 1 and getprop("/velocities/airspeed-kt") > (300 * 1.1) and (getprop("controls/gear/gear-overspeed") == nil or getprop("controls/gear/gear-overspeed") == 0)) { # 10% overspeed safety
-            # Since the front gear is less strong, it's got more chance to break
-            # FRONT 60 %
-            # LEFT 20 %
-            # RIGHT 20 %
-            if (rand() > .4) {
-                screen.log.write("Front gear damage: airpseed over 300kts.");
-                setprop("fdm/jsbsim/gear/unit/damaged", 1)
-            } elsif (rand() > .8) {
-                screen.log.write("Right gear damage: airpseed over 300kts.");
-                setprop("fdm/jsbsim/gear/unit[2]/damaged", 1)
-            } else {
-                screen.log.write("Left gear damage: airpseed over 300kts.");
-                setprop("fdm/jsbsim/gear/unit[1]/damaged", 1)
-            }
-            setprop("controls/gear/gear-overspeed", 1);
+        # Gear overspeed damage
+        if (getprop("controls/gear/gear-down") == 1 and getprop("/velocities/airspeed-kt") > (300 * 1.1) and (getprop("controls/gear/brakes-blownout") == nil or getprop("controls/gear/brakes-blownout") == 0)) { # 10% overspeed safety
+            screen.log.write("Wheel brakes are now unusable.");
+            setprop("controls/gear/brakes-blownout", 1);
+        }
+
+        # Flaps overspeed damage
+        if (getprop("controls/flight/flaps") == 1 and (getprop("/velocities/airspeed-kt") > 250 * 1.1) and (getprop("controls/flaps-overspeed") == nil or getprop("controls/flaps-overspeed") == 0)) {  # 10% overspeed safety
+            screen.log.write("Flap damage: airpseed over 250kts.");
+            screen.log.write("Flap are now unusable.");
+            setprop("controls/flaps-overspeed", 1);
+        }
+        if (getprop("controls/flaps-overspeed") == 1) {
+            controls.flapsDown(-1);
         }
 
         # Wheel brake overspeed damage
         if ((((getprop("/controls/gear/brake-left") == 1 or getprop("/controls/gear/brake-right") == 1) and getprop("/velocities/airspeed-kt") > (130 * 1.15) and getprop("controls/gear/gear-down") == 1) or (getprop("/velocities/airspeed-kt") > (50 * 1.2) and getprop("/controls/gear/brake-parking") == 1)) and getprop("controls/gear/brakes-blownout") == 0) {
             # Brakes are now blown out, disable them
             screen.log.write("Brakes blownout: used while going too fast.");
+            screen.log.write("Wheel brakes are now unusable.");
             setprop("controls/gear/brakes-blownout", 1);
         }
         if (getprop("controls/gear/brakes-blownout") == 1) {

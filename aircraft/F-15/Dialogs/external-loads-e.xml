@@ -691,6 +691,23 @@
                 </checkbox>
             </group>
 
+			<group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Flaps Damage</label>
+                </text>
+
+                <checkbox>
+                    <property>controls/flaps-overspeed</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+		                <property>controls/flaps-overspeed</property>
+                    </binding>
+                </checkbox>
+            </group>
+
             <group>
                 <layout>hbox</layout>
 
