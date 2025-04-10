@@ -653,6 +653,8 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 2000*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x MK-83") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 1000*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x CBU-87") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 950*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }

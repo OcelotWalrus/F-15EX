@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!-- F-15C Model
    |  3D Model by Enrique Laso (Flying toaster)
    |  Livery support from F-14b by xiii
@@ -3665,6 +3665,30 @@
             <property>sim/multiplay/generic/bool[131]</property>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>triple-cbu87-left</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[138]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>triple-cbu87-center</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[139]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>triple-cbu87-right</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[140]</property>
+        </condition>
+    </animation>
 
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
@@ -4537,6 +4561,34 @@
              <y-m>1.825</y-m>
              <z-m>-0.925</z-m>
              <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
+        <name>triple-cbu87-center</name>
+        <path>Aircraft/F-15/Models/Stores/CBU-87/ter-9a-5.xml</path>
+        <offsets>
+             <x-m>1.2</x-m>
+             <y-m>0</y-m>
+             <z-m>-0.8</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>triple-cbu87-left</name>
+        <path>Aircraft/F-15/Models/Stores/CBU-87/ter-9a-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>triple-cbu87-right</name>
+        <path>Aircraft/F-15/Models/Stores/CBU-87/ter-9a-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.15</z-m>
         </offsets>
     </model>
 
