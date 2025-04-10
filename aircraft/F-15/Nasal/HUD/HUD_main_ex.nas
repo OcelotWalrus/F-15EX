@@ -774,12 +774,12 @@ var F15HUD = {
                                                                     obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
 																	eegsShow = 1;
                                                                 } else if (w_s == 1) {
-                                                                    obj.window2.setText(sprintf("S%2dL", val.ArmamentAim9Count));
+                                                                    obj.window2.setText(sprintf("%2d SRM", val.ArmamentAim9Count));
                                                                 } else if (w_s == 2){
-                                                                    obj.window2.setText(sprintf("M%2dF", val.ArmamentAim120Count
+                                                                    obj.window2.setText(sprintf("%2d AAM", val.ArmamentAim120Count
                                                                                                 + val.ArmamentAim7Count));
                                                                 } else if (w_s == 5){
-                                                                    obj.window2.setText(sprintf("G%2d", val.ArmamentAgmCount));
+                                                                    obj.window2.setText(sprintf("%2d G", val.ArmamentAgmCount));
                                                                 }
                                                                 if (val.RadarActiveTargetAvailable or 0) {
                                                                     obj.window3.setText(val.RadarActiveTargetCallsign);
@@ -1034,11 +1034,183 @@ return obj;
         }
 
 		# ASE Circle
+		# Taken and adapted from the F-16 by Jimmy L. Miles
+		me.asec262 = 0;
+		me.asec120 = 0;
+		me.asec100 = 0;
+		me.asec65  = 0;
+		var currASEC = nil;
+		me.showFov = 0;
 
+		me.weapon_selected = pylons.fcs.selectedType;
+		me.weapn = pylons.fcs.getSelectedWeapon();
+
+		if (getprop("sim/model/f15/controls/armament/master-arm-switch") != 0 and pylons.fcs != nil) {
+
+			if (me.weapon_selected != nil) {
+				var mr = 0.4;
+				if (me.weapon_selected == "AIM-9X") {
+					if (me.weapn != nil) {
+						if (me.weapn.status == armament.MISSILE_LOCK and !getprop("instrumentation/radar/radar-standby")) {
+							me.asec65 = 1;
+							currASEC = nil;#[sx*0.5,sy*0.25];
+						} elsif (!getprop("instrumentation/radar/radar-standby")) {
+							me.asec100 = 1;
+							currASEC = nil;#[sx*0.5,sy*0.25];
+						}
+					}
+				} elsif (me.weapon_selected == "AIM-120D") {
+					if (me.weapn != nil) {
+                        if (me.weapn.status == armament.MISSILE_LOCK and !getprop("instrumentation/radar/radar-standby")) {
+                            me.asec120 = 1;
+                            currASEC = [sx*0.5,sy*0.25];
+                        } elsif (!getprop("instrumentation/radar/radar-standby")) {
+                            me.asec262 = 1;
+                            currASEC = [sx*0.5,sy*0.25+262*mr*0.5];
+                        }
+                    }
+				}
+			}
+		}
+
+		me.ASEC262.setVisible(me.asec262);
+        me.ASEC100.setVisible(me.asec100);
+        me.ASEC120.setVisible(me.asec120);
+        me.ASEC65.setVisible(me.asec65);
+
+		me.irL = 0;
+        me.irS = 0;
+        me.rdL = 0;
+        me.irT = 0;
+        me.rdT = 0;
+        me.irB = 0;
+		if (pylons.fcs != nil and pylons.fcs.isLock()) {
+            if (me.weapon_selected == "AIM-120D" or me.weapon_selected == "AIM-9X") {
+                var aim = pylons.fcs.getSelectedWeapon();
+                if (aim != nil) {
+                    var coords = aim.getSeekerInfo();
+                    if (coords != nil) {
+                        me.seekPos = hudmath.HudMath.getCenterPosFromDegs(coords[0],coords[1]);
+                        me.irDiamond.setTranslation(me.seekPos);
+                        me.radarLock.setTranslation(me.seekPos);
+                    }
+                }
+            }
+            me.asp = awg_9.getPriorityTarget();  # simply return the active target if any
+            if (me.asp != nil) {
+                me.lastH = me.asp.get_heading();  # should be last heading, but we don't have that function in the F-15's radar
+            } else {
+                me.lastH = nil;
+            }
+            if (me.lastH != nil and (me.weapon_selected == "AIM-120D")) {
+                me.ASEC120Aspect.setRotation(D2R*(me.lastH-getprop("orientation/heading-deg")+180));
+                me.rdL = 1;
+                me.rdT = 1;
+            } elsif (me.lastH != nil and (me.weapon_selected == "AIM-9X")) {
+                me.ASEC65Aspect.setRotation(D2R*(me.lastH-getprop("orientation/heading-deg")+180));
+                me.irT = 1;
+            }
+        } else {
+            #me.target_locked.setRotation(0);
+        }
+
+		me.loft_cue = 0;
+		if (currASEC != nil) {
+            # disabled for now as it has issues
+            me.cue = nil;
+            call(func {me.cue = me.weapn.getIdealFireSolution();},[], nil, nil, var err = []);
+            if(size(err)) {
+                print(err[0]);
+                print(err[1]);
+            }
+            if (me.cue != nil) {
+                me.cueXDeg1 = geo.normdeg180(me.cue[0]-hdp.getproper("heading"));
+                me.cueYDeg1 = me.cue[1]-hdp.getproper("pitch");
+
+                #printf("%02d, %02d", me.cueXDeg1, me.cueYDeg1);
+
+                # account for aircraft roll:
+                me.cueXDeg = me.cueXDeg1*math.cos(-getprop("orientation/roll-deg")*D2R)+me.cueYDeg1*math.sin(-getprop("orientation/roll-deg")*D2R);
+                me.cueYDeg = -me.cueXDeg1*math.sin(-getprop("orientation/roll-deg")*D2R)+me.cueYDeg1*math.cos(-getprop("orientation/roll-deg")*D2R);
+
+                me.ascPos = hudmath.HudMath.getPosFromDegs(me.cueXDeg, me.cueYDeg);
+                me.ascpixel = math.sqrt(me.ascPos[0]*me.ascPos[0]+me.ascPos[1]*me.ascPos[1]);
+
+                if (me.ascpixel > 48) {
+                    me.ascReduce = 48/me.ascpixel;# hard clamp
+                } elsif (me.ascpixel > 0) {
+                    me.ascReduce = 1;#math.pow(me.ascpixel/48,0.65) * 48/me.ascpixel;# soft clamp. ASEC120 is 48 pixel radius.
+                } else {
+                    me.ascReduce = 1;
+                }
+
+                me.ASC.setTranslation(currASEC[0]+me.ascReduce*me.ascPos[0], currASEC[1]+me.ascReduce*me.ascPos[1]);#currASEC = center of ASEC
+                #me.ASC2.setTranslation(hudmath.HudMath.getCenterPosFromDegs(me.cueXDeg1, me.cueYDeg1));#currASEC = center of ASEC
+
+                me.loft_cue = me.cue[1];# set loft cue for DLZ
+                showASC = 1;
+            } else {
+                #print("me.cue is nil");
+            }
+        } else {
+            #print("currASEC is nil");
+        }
+
+		if(getprop("sim/model/f15/controls/armament/master-arm-switch") != 0 and pylons.fcs != nil and pylons.fcs.getAmmo() > 0) {
+            var aim = pylons.fcs.getSelectedWeapon();
+            if (me.weapon_selected == "AIM-120D") {
+                if (!pylons.fcs.isLock()) {
+                    me.radarLock.setTranslation(0, -sy*0.25+262*0.3*0.5);
+                    me.rdL = 1;
+                }
+            } elsif (me.weapon_selected == "AIM-9X") {
+                if (aim != nil and aim.isCaged()) {
+                    var coords = aim.getSeekerInfo();
+                    if (coords != nil) {
+                        me.irDiamondSmall.setTranslation(hudmath.HudMath.getCenterPosFromDegs(coords[0],coords[1]));
+                        me.irS = 1;
+                    }
+                } elsif (aim != nil) {
+                    var coords = aim.getSeekerInfo();
+                    if (coords != nil) {
+                        me.irDiamond.setTranslation(hudmath.HudMath.getCenterPosFromDegs(coords[0],coords[1]));
+                        me.irL = 1;
+                    }
+                }
+                if (pylons.bore == 1) {
+                    if (aim != nil) {
+                        me.submode = 1;
+                        me.irCross.setTranslation(hudmath.HudMath.getCenterPosFromDegs(0,-4));
+                        me.irB = 1;
+
+                    }
+                }
+            }
+        }
+
+		if (pylons.fcs.isLock() and me.dlzArray != nil and size(me.dlzArray) != 0) {
+            me.scale120 = me.extrapolate(me.dlzArray[4],me.dlzArray[2],me.dlzArray[3],1,30/120);
+            me.scale120 = me.clamp(me.scale120,30/120,1);
+            me.ASEC120.setScale(me.scale120,me.scale120);#todo error
+            me.ASEC120.setStrokeLineWidth(1/me.scale120);
+            #me.ASEC120Aspect.setScale(me.scale120,me.scale120);
+            #me.ASEC120Aspect.setStrokeLineWidth(1/me.scale120);
+            me.ASEC120Aspect.setTranslation(sx*0.5,sy*0.25-me.scale120*0.4*120);#0.4=mr
+            #me.ASEC120Aspect.setCenter(0,me.scale120*0.4*120);
+            me.ASEC120Aspect.setCenter(0,me.scale120*0.4*120);
+        }
+		me.radarLock.setVisible(me.rdL);
+        me.irDiamondSmall.setVisible(me.irS);
+        me.irDiamond.setVisible(me.irL);
+        me.irCross.setVisible(me.irB);
+        me.ASEC120Aspect.setVisible(me.rdT);
+        me.ASEC65Aspect.setVisible(me.irT);
+        me.radarLock.update();
+        me.irDiamond.update();
+        me.irDiamondSmall.update();
 
         # CCIP is after update_item so it can get VV up-to-date location
         me.ccipInfo = pylons.getCCIP();
-		me.ASECircle.show();
         if (me.ccipInfo == nil or notification.ControlsArmamentWeaponSelector != 5) {
             me.ccipGrp.hide();
 			setprop("sim/model/f15/armament/ccip-off", 1);
