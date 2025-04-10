@@ -10,16 +10,16 @@
           <value>Droptank</value>
         </equals>
         <not-equals>
-          <property>payload/armament/station/id-0-type</property>
-          <value></value>
+          <property>payload/armament/station/id-0-set</property>
+          <value>Empty</value>
         </not-equals>
         <not-equals>
           <property>payload/armament/station/id-1-set</property>
           <value>Empty</value>
         </not-equals>
         <not-equals>
-          <property>payload/armament/station/id-2-type</property>
-          <value></value>
+          <property>payload/armament/station/id-2-set</property>
+          <value>Empty</value>
         </not-equals>
       </or>
     </input>
@@ -37,12 +37,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-0-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-0-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-0-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-0-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -60,12 +60,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-0-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-0-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-0-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-0-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -182,12 +182,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-2-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-2-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-2-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-2-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -205,12 +205,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-2-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-2-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-2-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-2-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -458,16 +458,16 @@
           <value>Droptank</value>
         </equals>
         <not-equals>
-          <property>payload/armament/station/id-8-type</property>
-          <value></value>
+          <property>payload/armament/station/id-8-set</property>
+          <value>Empty</value>
         </not-equals>
         <not-equals>
           <property>payload/armament/station/id-9-set</property>
           <value>Empty</value>
         </not-equals>
         <not-equals>
-          <property>payload/armament/station/id-10-type</property>
-          <value></value>
+          <property>payload/armament/station/id-10-set</property>
+          <value>Empty</value>
         </not-equals>
       </or>
     </input>
@@ -485,12 +485,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-8-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-8-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-8-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-8-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -508,12 +508,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-8-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-8-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-8-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-8-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -600,12 +600,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-10-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-10-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-10-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-10-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -623,12 +623,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-10-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-10-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-10-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-10-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -759,16 +759,16 @@
     <input>
       <or>
         <not-equals>
-          <property>payload/armament/station/id-11-type</property>
-          <value></value>
+          <property>payload/armament/station/id-11-set</property>
+          <value>Empty</value>
         </not-equals>
         <not-equals>
           <property>payload/armament/station/id-12-set</property>
           <value>Empty</value>
         </not-equals>
         <not-equals>
-          <property>payload/armament/station/id-13-type</property>
-          <value></value>
+          <property>payload/armament/station/id-13-set</property>
+          <value>Empty</value>
         </not-equals>
       </or>
     </input>
@@ -778,16 +778,16 @@
     <input>
       <or>
         <not-equals>
-          <property>payload/armament/station/id-14-type</property>
-          <value></value>
+          <property>payload/armament/station/id-14-set</property>
+          <value>Empty</value>
         </not-equals>
         <not-equals>
           <property>payload/armament/station/id-15-set</property>
           <value>Empty</value>
         </not-equals>
         <not-equals>
-          <property>payload/armament/station/id-16-type</property>
-          <value></value>
+          <property>payload/armament/station/id-16-set</property>
+          <value>Empty</value>
         </not-equals>
       </or>
     </input>
@@ -805,12 +805,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-11-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-11-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-11-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-11-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -828,12 +828,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-11-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-11-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-11-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-11-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -851,12 +851,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-13-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-13-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-13-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-13-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -874,12 +874,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-13-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-13-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-13-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-13-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -898,12 +898,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-14-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-14-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-14-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-14-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -921,12 +921,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-14-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-14-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-14-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-14-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -944,12 +944,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-16-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-16-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-16-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-16-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
@@ -967,12 +967,12 @@
           <value>AIM-9</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-16-type</property>
-          <value>AIM-9X</value>
+          <property>payload/armament/station/id-16-set</property>
+          <value>AIM-9X Block I Sidewinder</value>
         </equals>
         <equals>
-          <property>payload/armament/station/id-16-type</property>
-          <value>AIM-120D</value>
+          <property>payload/armament/station/id-16-set</property>
+          <value>AIM-120D AMRAAM</value>
         </equals>
       </or>
     </input>
