@@ -756,7 +756,8 @@ var F15HUD = {
                                                         "RadarActiveTargetClosure",
                                                         "HudNavRangeDisplay",
                                                         "HudNavRangeETA",
-														"OrientationHeadingDeg"], nil, func(val)
+														"OrientationHeadingDeg",
+														"ArmamentRippleCount"], nil, func(val)
                                                         {
                                                             if (val.ControlsArmamentMasterArmSwitch) {
                                                                 obj.window11.setVisible(1);
@@ -764,7 +765,7 @@ var F15HUD = {
                                                                 obj.window16.setVisible(1);
                                                                 obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
                                                                 obj.window16.setText(sprintf("FLR %03d",getprop("ai/submodels/submodel[6]/count")));
-																obj.boreSymbol.show();
+																obj.boreSymbol.hide();
                                                                 weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
                                                                 obj.window11.setText(weapon_type);
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
@@ -775,6 +776,7 @@ var F15HUD = {
                                                                 if (w_s == 0) {
                                                                     obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
 																	eegsShow = 1;
+																	obj.boreSymbol.show();
                                                                 } else if (w_s == 1) {
                                                                     obj.window2.setText(sprintf("%2d SRM", val.ArmamentAim9Count));
 	                                                                obj.window18.setVisible(1);
@@ -787,7 +789,9 @@ var F15HUD = {
                                                                     obj.window2.setText(sprintf("%2d AAM", val.ArmamentAim120Count
                                                                                                 + val.ArmamentAim7Count));
                                                                 } else if (w_s == 5){
-                                                                    obj.window2.setText(sprintf("%2d G", val.ArmamentAgmCount));
+                                                                    obj.window2.setText(sprintf("%2d GND", val.ArmamentAgmCount));
+																	obj.window18.setVisible(1);
+																	obj.window18.setText(sprintf("%2d RIPL", val.ArmamentRippleCount));
                                                                 }
                                                                 if (val.RadarActiveTargetAvailable or 0) {
                                                                     obj.window3.setText(val.RadarActiveTargetCallsign);
@@ -1904,6 +1908,7 @@ input = {
         TimeTilCrash                            : "instrumentation/radar/time-till-crash",
 		BingoFuel                               : "sim/model/f15/lights/ca-bingo-fuel",
 		RadarStandby                            : "instrumentation/radar/radar-standby",
+		ArmamentRippleCount                     : "controls/armament/dual",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
