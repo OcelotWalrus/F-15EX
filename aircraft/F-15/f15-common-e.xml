@@ -405,6 +405,10 @@
                 <desc>Toggle AIM-9 cage mode</desc>
             </key>
             <key>
+                <name>L</name>
+                <desc>Toggle auto AIM-9 cage mode</desc>
+            </key>
+            <key>
                 <name>Ctrl-n</name>
                 <desc>Toggle Radar PULSE SRCH / TWS AUTO Mode</desc>
             </key>
@@ -3188,7 +3192,7 @@
                 <desc>Toggle cage</desc>
                 <binding>
                     <command>nasal</command>
-                    <script>pylons.fcs.toggleCage();pylons.fcs.setAutocage(0);</script>
+                    <script>pylons.fcs.toggleCage();</script>
                 </binding>
             </key>
 
@@ -3251,23 +3255,14 @@
             <!-- map keys for launch-bar -->
             <key n="76">
                 <name>L</name>
-                <desc>Launch-bar engage.</desc>
+                <desc>Toggle auto AIM-9 cage mode</desc>
                 <binding>
                     <command>nasal</command>
                     <script>
-                        if (getprop("fdm/jsbsim/systems/holdback/holdback-cmd"))
-                        {
-                        logprint(3, "Disengage launchbar");
-                        setprop("fdm/jsbsim/systems/catapult/cat-launch-cmd",0);
-                        setprop("fdm/jsbsim/systems/holdback/holdback-cmd",0);
-                        setprop("controls/gear/brake-parking",1);
-                        }
-                        else
-                        {
-                        logprint(3, "Engage launchbar");
-                        setprop("fdm/jsbsim/systems/catapult/cat-launch-cmd",0);
-                        setprop("fdm/jsbsim/systems/holdback/holdback-cmd",1);
-                        setprop("controls/gear/brake-parking",0);
+                        if (pylons.fcs.isAutocage() == 1 or pylons.fcs.isAutocage()) {
+                            pylons.fcs.setAutocage(0);
+                        } else {
+                            pylons.fcs.setAutocage(1);
                         }
                     </script>
                 </binding>
