@@ -2,9 +2,9 @@
 CROMHⒶ'S HERE
 ---
 
-NOTE: **This repository is simply for myself so stay out, unless you're interested in my dookie F-15EX.**
+This project aims to enhance the already-existing F-15C and D models originally made by Richard Harrison and other various contributors. **But**, the main aim is to develop the F-15EX model from that already-existing model, only changing the cockpit's model, being extremely different from the F-15C, but also add as much as weapons as the F-16 FlightGear model, develop A/G operations by adding more bombs types, racks and etc. The development of the MPCD (multi-page control display), the TWS radar display (for example use different symbols for unknown objects or missiles etc.), the HUD (adding modes and more useful info and new symbology). The creation of a very detailed PDF manual is also under development.
 
-This project aims to enhance the already-existing F-15C and D models originally made by Richard Harrison and other various contributors. But, the main aim is to develop the F-15EX model from that already-existing model, only changing the cockpit's model, being extremely different from the F-15C, but also add as much as weapons as the F-16 FlightGear model, develop A/G operations by adding more bombs types, racks and etc. The development of the MPCD (multi-page control display), the TWS radar display (for example use different symbols for unknown objects or missiles etc.), the HUD (adding modes and more useful info). The creation of a very detailed PDF manual is also under development.
+_Note that the C and D variant are probably bugged because I never test them. Will gotta at some point..._
 
 For now, what's been done is (all these changes only apply to the F-15EX variant if not specified):
 
@@ -38,3 +38,4 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Added a "FLYUP", "FUEL", "NO RAD" and "LIMIT" warning displays on the HUD (with sounds)
 - Added the ability to customize the ripple count in the MPCD
 - Added the ability to specifically select a weapon in the HUD (not just type (MRM, SRM or Ground) but actual weapon types (manually choosing from AIM-120, AIM-7))
+- Implemented ripple release (from 1 to 4)
