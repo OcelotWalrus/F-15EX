@@ -1367,7 +1367,7 @@ return obj;
     gunWeight: 0.226,
     gunSpeed: 3450.0,
     gunCd: 0.09,
-    gunLoc: [0.29069, -1.512999768, 0.558520092],  # converted from ft in the submodels, as it needs to be in meters  previous x:1.512999768
+    gunLoc: [0.29069, 1.512999768, 0.558520092],  # converted from ft in the submodels, as it needs to be in meters
 
     displayEEGS: func() {
 	   #note: this stuff is expensive like hell to compute, but..lets do it anyway.
