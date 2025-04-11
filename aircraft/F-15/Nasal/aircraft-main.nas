@@ -167,6 +167,12 @@ var wow = 1;
 setprop("fdm/jsbsim/fcs/roll-trim-actuator",0) ;
 setprop("controls/flight/cas-roll",0);
 
+# Init the targeting pod system
+tgp.callInit();
+flooptimer = maketimer(0, func tgp.fast_loop());
+flooptimer.start();
+
+
 #
 #
 # set the splash vector for the new canopy rain.
@@ -656,7 +662,7 @@ var F15MainModule =
 
         # Make sure the radar is set to standby when the gear's down
         if (getprop("controls/gear/gear-down") == 1) {
-            setprop("instrumentation/radar/radar-standby", 1);
+            setprop("instrumentation/radar/radar-mode", 2);
         }
         
         # Force target pod view

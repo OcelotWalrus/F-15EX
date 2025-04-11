@@ -167,7 +167,7 @@ var FLIRCameraUpdater = {
         me.brng = me.cd[0];
 
         me.global = vector.Math.eulerToCartesian2(-me.brng, me.ptch);# global direction from tgp to target
-        var dv  = vector.Math.yawPitchRollVector(radar_system.self.getHeading(),-radar_system.self.getPitch(),-radar_system.self.getRoll(),me.global);# local in aircraft view vector to target
+        var dv  = vector.Math.yawPitchRollVector(getprop("orientation/heading-deg"),-getprop("orientation/pitch-deg"),-getprop("orientation/roll-deg"),me.global);# local in aircraft view vector to target
 
         var angles = vector.Math.cartesianToEuler(dv);
 
@@ -276,7 +276,7 @@ var list = func (node) {
             var terrain = geo.Coord.new();
             terrain.set_latlon(terrainGeod.lat, terrainGeod.lon, terrainGeod.elevation);
             var ut = nil;
-            foreach (u ; radar_system.getCompleteList()) {
+            foreach (u ; awg_9.getCompleteList()) {
                 if (terrain.direct_distance_to(u.get_Coord())<45) {
                     ut = u;
                     break;
@@ -288,7 +288,7 @@ var list = func (node) {
                 #var tc = contact.getCoord();
                 #print("contactPoint "~tc.lat()~", "~tc.lon()~" at "~(tc.alt()*M2FT)~" ft");
             } else {
-                armament.contactPoint = radar_system.ContactTGP.new("TGP-Spot",terrain,1);
+                armament.contactPoint = awg_9.ContactTGP.new("TGP-Spot",terrain,1);
             }
             #flir_updater.click_coord_cam = terrain;
             #setprop("sim/model/f15/flir/target/auto-track", 1);
@@ -381,7 +381,6 @@ var fast_loop = func {
         masterMode = STBY;
         view.setViewByIndex(0);
         setprop("sim/rendering/als-filters/use-IR-vision", 0);
-        setprop("sim/view[105]/enabled", 0);
         pullup_cue_3.setVisible(0);
     } elsif (viewName == "TGP") {
     #    if (!getprop("f16/avionics/power-mfd") or getprop("f16/avionics/power-ufc-warm")!=1) {  Useless for the F-15
@@ -564,7 +563,7 @@ var fast_loop = func {
                 steer = 0;
                 callsign = nil;
             }
-        } elsif (armament.contact != nil and armament.contact.isVisible() and enable and masterMode) {
+        } elsif (armament.contact != nil and enable and masterMode) {  # missing additional 'armament.contact.isVisible()' but not in the awg_9 code yet TODO: implement that shit
             # TGP follow radar lock
             flir_updater.click_coord_cam = armament.contact.get_Coord();
             #print(armament.contact.getVirtualType());
@@ -597,7 +596,8 @@ var fast_loop = func {
             # - following steerpoint
             # - a GPS coord has been entered manually by "program GPS dialog"
             follow = 1;
-            vis = radar_system.terrain.fastTerrainCheck(armament.contactPoint);
+            #vis = radar_system.terrain.fastTerrainCheck(armament.contactPoint); TODO - implement that
+            vis = 1;
             if (vis > 0) vis = 1;
         }
         if (!vis or !masterMode) {
@@ -618,9 +618,9 @@ var fast_loop = func {
             #flir_updater.offsetH = 0;# commented so we get back to where we were when unlocking
         }
     }
-    setprop("f16/avionics/tgp-lock", lock_tgp);#used in HUD
+    setprop("sim/model/f15/avionics/tgp-lock", lock_tgp);#used in HUD
 
-    if (getprop("f16/stores/tgp-mounted") and enable) {
+    if (getprop("sim/model/f15/stores/tgp-mounted") and enable) {
         if (lock_tgp and !lock_tgp_last) {
             interpolate("sim/model/f15/avionics/lock-flir",1,1.5);
         } elsif (!lock_tgp) {
@@ -691,7 +691,7 @@ var fast_loop = func {
                 var dist_modi = 1.0;
                 if (flir_updater.click_coord_cam != nil) {
                     # 5nm is 5.0, 50 nm is 1.0
-                    dist_modi = 5 + ((flir_updater.click_coord_cam.direct_distance_to(radar_system.self.getCoord())*M2NM - 5) / (50 - 5)) * (1 - 5);
+                    dist_modi = 5 + ((flir_updater.click_coord_cam.direct_distance_to(awg_9.active_u.getCoord())*M2NM - 5) / (50 - 5)) * (1 - 5);
                 }
                 flir_updater.offsetP += dist_modi*modifier*cy*fov/camera_movement_speed_lock;
                 flir_updater.offsetH -= dist_modi*modifier*cx*fov/camera_movement_speed_lock;
