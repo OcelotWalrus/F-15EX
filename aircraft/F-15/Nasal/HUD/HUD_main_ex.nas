@@ -582,26 +582,30 @@ var F15HUD = {
 															 obj.steerPT.hide();
 														 }
                                                         }),
-            props.UpdateManager.FromHashList(["OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg", "VelocitiesAirspeedKt"], nil, func(val)
+            props.UpdateManager.FromHashList(["OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg", "VelocitiesAirspeedKt", "RadarStandby"], nil, func(val)
                                                         {
+															# All by Jimmy L. Miles
 															# Determine the hypothical estimated time for missile to intercept target (if any) (missile not launched yet)
 															# Constant variables :
 															var mean_120_d_speed = 1850; # in mph - mean speed during whole course is about Ma 2.5 - 3
 															var mean_9_x_speed = 1450; # in mph - mean speed during whole course is about Ma 1.8 - 2.2
+															var agm65b_speed = 805; # in mph - mean speed during whole course is about Ma 1.22
 															var mean_speed = 1; # placeholder
 															weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
 															if (weap != nil and weap.parents[0] == armament.AIM) {
-																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and getprop("sim/model/f15/armament/ccip-off") == 0) {
+																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and getprop("sim/model/f15/armament/ccip-off") == 0) {
 																	# Time to hit ground already computed, just gotta display it there
 																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
 																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
 																	obj.window17.setText(sprintf("%02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X") and pylons.fcs.isLock()) { # only works if we have a radar lock; meaning AIM-9X won't have TTI if not slaved to radar
+																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X" or weap.type == "AGM-65B") and armament.MISSILE_LOCK == weap.status and !val.RadarStandby) {  # only works if the radar's on
 																	if (weap.type == "AIM-9X") {
 																		mean_speed = mean_9_x_speed;
 																	} elsif (weap.type == "AIM-120D") {
 																		mean_speed = mean_120_d_speed;
+																	} elsif (weap.type == "AGM-65B") {
+																		mean_speed = agm65b_speed;
 																	}
 																	var dlzArray = pylons.getDLZ();
 																	if (dlzArray == nil or size(dlzArray) == 0) {
@@ -681,7 +685,7 @@ var F15HUD = {
 																		nav_mins = nav_mins - 1;
 																		nav_secs = 60 + nav_secs;
 																	}
-	                                                                obj.HudNavRangeETA = sprintf("%02d m %02d s", nav_mins, nav_secs);
+	                                                                obj.HudNavRangeETA = sprintf("%02d:%02d", nav_mins, nav_secs);
                                                                 } else {
                                                                 	obj.HudNavRangeETA = "XX MIN";
 																}
@@ -805,8 +809,17 @@ var F15HUD = {
 																	}
                                                                 } else if (w_s == 5){
                                                                     obj.window2.setText(sprintf("%2d GND", val.ArmamentAgmCount));
-																	obj.window18.setVisible(1);
-																	obj.window18.setText(sprintf("%2d RIPL", val.ArmamentRippleCount));
+																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "AGM-65B") {
+																		obj.window18.setVisible(1);
+																		obj.window18.setText(sprintf("RIPL %2d", val.ArmamentRippleCount));
+																	} elsif (pylons.fcs.getSelectedWeapon() != nil) {  # For the AGM-65B, instead of ripple count, we display the status of the seeker
+																		obj.window18.setVisible(1);
+																		if (pylons.fcs.getSelectedWeapon().isCaged()) {
+																			obj.window18.setText("Caged");
+																		} else {
+																			obj.window18.setText("Uncaged");
+																		}
+																	}
                                                                 }
                                                                 if (val.RadarActiveTargetAvailable or 0) {
                                                                     obj.window3.setText(val.RadarActiveTargetCallsign);
@@ -1211,6 +1224,20 @@ return obj;
                         me.irCross.setTranslation(hudmath.HudMath.getCenterPosFromDegs(0,-4));
                         me.irB = 1;
 
+                    }
+                }
+            } elsif (me.weapon_selected == "AGM-65B") {  # We wanna display the AGM-65B's seeker pos on the HUD
+                if (aim != nil and aim.isCaged()) {
+                    var coords = aim.getSeekerInfo();
+                    if (coords != nil) {
+                        me.irDiamondSmall.setTranslation(hudmath.HudMath.getCenterPosFromDegs(coords[0],coords[1]));
+                        me.irS = 1;
+                    }
+                } elsif (aim != nil) {
+                    var coords = aim.getSeekerInfo();
+                    if (coords != nil) {
+                        me.irDiamond.setTranslation(hudmath.HudMath.getCenterPosFromDegs(coords[0],coords[1]));
+                        me.irL = 1;
                     }
                 }
             }

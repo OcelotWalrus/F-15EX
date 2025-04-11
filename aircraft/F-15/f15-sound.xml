@@ -2029,6 +2029,7 @@
                 <or>
                     <property>payload/armament/aim-120/sound-fire-on-off</property>
                     <property>payload/armament/aim-120d/sound-fire-on-off</property>
+                    <property>payload/armament/agm-65b/sound-fire-on-off</property>
                 </or>
             </condition>
             <reference-dist>25</reference-dist>

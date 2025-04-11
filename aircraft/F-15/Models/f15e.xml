@@ -3801,6 +3801,22 @@
             <property>sim/multiplay/generic/bool[154]</property>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[155]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[156]</property>
+        </condition>
+    </animation>
 
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
@@ -4851,6 +4867,25 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.23</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>agm-65b-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/duorack-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/duorack-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.15</z-m>
         </offsets>
     </model>
 

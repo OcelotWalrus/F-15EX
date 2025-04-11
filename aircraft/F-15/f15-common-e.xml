@@ -927,6 +927,10 @@
                         <auto-track type="bool">true</auto-track>
                     </locks>
                 </flir>
+                <cursor-slew>
+                    <x type="float">0</x>
+                    <y type="float">-4</y>
+                </cursor-slew>
                 <dragchute type="float">1</dragchute>
                 <chute>
                     <force type="double">2.0</force>
@@ -1597,6 +1601,8 @@
                 <bool n="152" alias="/sim/model/f15/payload/selected/mk82air-cft-4" />
                 <bool n="153" alias="/sim/model/f15/payload/selected/mk82air-cft-5" />
                 <bool n="154" alias="/sim/model/f15/payload/selected/mk82air-cft-6" />
+                <bool n="155" alias="/sim/model/f15/payload/selected/agm-65b-l" />
+                <bool n="156" alias="/sim/model/f15/payload/selected/agm-65b-r" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -1982,6 +1988,10 @@
                 <name>3 x CBU-105</name>
                 <lbs>2827.0</lbs>
             </opt>
+            <opt>
+                <name>2 x AGM-65B</name>
+                <lbs>954.0</lbs>
+            </opt>
         </weight>
         <weight n="5">
             <name>Center Station 5</name>
@@ -2047,6 +2057,10 @@
             <opt>
                 <name>3 x CBU-105</name>
                 <lbs>2827.0</lbs>
+            </opt>
+            <opt>
+                <name>2 x AGM-65B</name>
+                <lbs>954.0</lbs>
             </opt>
         </weight>
         <weight n="15">
@@ -2967,6 +2981,85 @@
                 <requires-power-on type="bool">true</requires-power-on>
                 <power-on-battery-time type="double">0</power-on-battery-time><!-- infinite -->
             </b61-12>
+            <agm-65b>
+                <type-id type="int">0</type-id>
+                <short-name type="string">AG65B</short-name>
+                <long-name type="string">AGM-65B Maverick</long-name>
+                <vol-search type="double">0.00</vol-search>
+                <vol-track type="double">1.00</vol-track>
+                <guidance type="string">vision</guidance>
+                <navigation type="string">APN</navigation>
+                <all-aspect type="bool">true</all-aspect>
+                <max-fire-range-nm type="double">12</max-fire-range-nm>              <!-- source -->
+                <FCS-field-deg type="int">25</FCS-field-deg>
+                <seeker-field-deg type="int">180</seeker-field-deg>
+                <seeker-angular-speed-dps type="double">30</seeker-angular-speed-dps><!-- deg/sec guess-->
+                <max-g type="int">25</max-g>
+                <max-launch-g type="int">7</max-launch-g>
+                <thrust-lbf-stage-1 type="double">1200</thrust-lbf-stage-1>
+                <thrust-lbf-stage-2 type="double">0.0</thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double">40</stage-1-duration-sec>
+                <stage-2-duration-sec type="double">0.0</stage-2-duration-sec>
+                <weight-launch-lbs type="double">462</weight-launch-lbs>              <!-- source -->
+                <weight-warhead-lbs type="double">126</weight-warhead-lbs>            <!-- source -->
+                <weight-fuel-lbm type="double"> 90 </weight-fuel-lbm>      <!-- guess -->
+                <drag-coeff type="double">0.14</drag-coeff>
+                <cross-section-sqft type="double">3.14</cross-section-sqft>                             <!-- source -->
+                <arming-time-sec type="double">1.0</arming-time-sec>
+                <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double">55</self-destruct-time-sec>
+                <loft-altitude type="int">0</loft-altitude>
+                <min-fire-range-nm type="double">0.5</min-fire-range-nm>      <!-- source -->
+                <rail type="bool">true</rail>
+                <rail-length-m type="double">2.373</rail-length-m> <!-- LAU-88 Launcher -->
+                <rail-point-forward type="bool">true</rail-point-forward>
+                <max-report-distance type="double">65</max-report-distance>
+                <class type="string">GM</class>
+                <fire-msg type="string">Rifle</fire-msg>
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <ready-time type="double">0.25</ready-time>
+            </agm-65b>
+            <agm-65d>
+                <type-id type="int">58</type-id>
+                <short-name type="string">AG65D</short-name>
+                <long-name type="string">AGM-65D Maverick</long-name>
+                <vol-search type="double">0.00</vol-search>
+                <vol-track type="double">1.00</vol-track>
+                <guidance type="string">heat</guidance>
+                <navigation type="string">APN</navigation>
+                <all-aspect type="bool">true</all-aspect>
+                <max-fire-range-nm type="double">12</max-fire-range-nm>              <!-- source -->
+                <FCS-field-deg type="int">25</FCS-field-deg>
+                <seeker-field-deg type="int">180</seeker-field-deg>
+                <seeker-angular-speed-dps type="double">45</seeker-angular-speed-dps> <!-- deg/sec guess-->
+                <lock-on-sun-deg type="double">4</lock-on-sun-deg>
+                <max-g type="int">25</max-g>
+                <max-launch-g type="int">7</max-launch-g>
+                <thrust-lbf-stage-1 type="double">1200</thrust-lbf-stage-1>
+                <thrust-lbf-stage-2 type="double">0.0</thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double">40</stage-1-duration-sec>
+                <stage-2-duration-sec type="double">0.0</stage-2-duration-sec>
+                <weight-launch-lbs type="double">484.5</weight-launch-lbs>              <!-- source -->
+                <weight-warhead-lbs type="double">126</weight-warhead-lbs>            <!-- source -->
+                <weight-fuel-lbm type="double"> 90 </weight-fuel-lbm>      <!-- guess -->
+                <drag-coeff type="double">0.14</drag-coeff>
+                <cross-section-sqft type="double">3.14</cross-section-sqft>                             <!-- source -->
+                <arming-time-sec type="double">1.0</arming-time-sec>
+                <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double">105</self-destruct-time-sec>  	<!-- source: max time of flight -->
+                <loft-altitude type="int">0</loft-altitude>
+                <min-fire-range-nm type="double">0.5</min-fire-range-nm>      <!-- source -->
+                <rail type="bool">true</rail>
+                <rail-length-m type="double">2.387</rail-length-m> <!-- LAU-117 Launcher -->
+                <rail-point-forward type="bool">true</rail-point-forward>
+                <max-report-distance type="double">65</max-report-distance>
+                <class type="string">MGP</class>
+                <fire-msg type="string">Rifle</fire-msg>
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <ready-time type="double">180</ready-time>
+                <requires-power-on type="bool">true</requires-power-on>
+                <power-on-battery-time type="double">2700</power-on-battery-time><!-- Official sources: 30 to 60 mins for (think was) D version. And 105 seconds after launch for G version. -->
+            </agm-65d>
         </armament>
 
     </payload>

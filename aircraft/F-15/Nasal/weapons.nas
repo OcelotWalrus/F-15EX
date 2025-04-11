@@ -86,9 +86,108 @@ var weapons_init = func() {
     arm_selector();
 }
 
+
+## All the following lines are taken from the A-10 model and adapted by Jimmy L. Miles
+
+var defaultX = 0;
+var defaultY = -4;
+#Seeker Loop for cursor control
+var seekerLoop = func {
+    selectedWeap = pylons.fcs.getSelectedWeapon();
+    var cursorX = getprop("sim/model/f15/cursor-slew/x");
+    var cursorY = getprop("sim/model/f15/cursor-slew/y");
+    if (selectedWeap == nil) {
+        seekerTimer.stop();
+    } elsif (selectedWeap.type == "AGM-65B") {
+        selectedWeap.commandDir(cursorX,cursorY);
+    }
+};
+seekerTimer = maketimer(0.1,seekerLoop);  # orginially timer was .025 but it seemed a bit to much to me so reduced it to .1
+
+#Maverick Init:
+var mavInit = func {
+    selectedWeap = pylons.fcs.getSelectedWeapon();
+    selectedWeap.setContacts(awg_9.getCompleteList());
+    selectedWeap.commandDir(defaultX,defaultY);
+    selectedWeap.setAutoUncage(0);
+    selectedWeap.setCaged(1);
+    armament.contact = nil;
+    seekerTimer.start();
+};
+
+var mavUpdate = func {
+    selectedWeap = pylons.fcs.getSelectedWeapon();
+    if (selectedWeap == nil or selectedWeap.type != "AGM-65B" or selectedWeap.type == nil) {
+        #print ("Weapon is not of type AGM-65B - Skipping sequence");
+        seekerTimer.stop();
+    }else{
+        if (ArmSwitch.getValue() == 0) {
+            #print("Master Arm safe - Skipping");
+        }else{
+            setprop("sim/model/f15/cursor-slew/x",defaultX);
+            setprop("sim/model/f15/cursor-slew/y",defaultY);
+            mavInit();
+        }
+    }
+
+};
+
+#Maverick seeker control
+var rate = 0.015;
+var step = 0.1;
+
+var xRight = func {
+    var current = math.clamp(getprop("A-10/displays/hud/cursor-slew-x"),-6,6);
+    setprop("sim/model/f15/cursor-slew/x", current + step);
+
+};
+
+var xLeft = func {
+    var current = math.clamp(getprop("A-10/displays/hud/cursor-slew-x"),-6,6);
+    setprop("sim/model/f15/cursor-slew/x", current - step);
+
+};
+
+var yUp = func {
+    var current = math.clamp(getprop("A-10/displays/hud/cursor-slew-y"),-9,1.4);
+    setprop("sim/model/f15/cursor-slew/y", current + step);
+
+};
+
+var yDown = func {
+    var current = math.clamp(getprop("A-10/displays/hud/cursor-slew-y"),-9,1.4);
+    setprop("sim/model/f15/cursor-slew/y", current - step);
+
+};
+
+var lock = func {
+    selectedWeap = pylons.fcs.getSelectedWeapon();
+    if (selectedWeap != nil and ArmSwitch.getValue() > 0 and selectedWeap.type == "AGM-65B") {
+        if (armament.MISSILE_LOCK == selectedWeap.status) {
+            selectedWeap.setCaged(0);
+            #print("Valid tgt - Uncaging");
+        } else {
+            selectedWeap.setCaged(1);
+            #print("Not uncaging - no valid tgt to lock");
+        }
+    } else {
+        #print("Selected Weapon is not an AGM-65 or Master Arm safe. Not locking target");
+    }
+
+};
+
+
+cursorUp = maketimer(rate,yUp);
+cursorDown = maketimer(rate,yDown);
+cursorLeft = maketimer(rate,xLeft);
+cursorRight = maketimer(rate,xRight);
+
 # Main loop
 var armament_update = func {
     # Trigered each 0.1 sec by instruments.nas main_loop() if Master Arm Engaged.
+
+    mavUpdate();
+    lock();
 
     var stick_s = WeaponSelector.getValue();
 
@@ -132,7 +231,7 @@ var armament_update = func {
     Count9.setValue(aim9_count);
     Count7.setValue(pylons.fcs.getAmmoOfType("AIM-7"));
     Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120") + pylons.fcs.getAmmoOfType("AIM-120D"));
-    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105"));
+    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B"));
 
     update_gun_ready();
     setCockpitLights();
@@ -238,6 +337,8 @@ var missile_code_from_ident= func(mty)
             return "mk84";
         else if (mty == "MK-82AIR")
             return "mk82air";
+        else if (mty == "AGM-65B")
+            return "agm65b";
         else if (mty == "CBU-87")
             return "cbu87";
         else if (mty == "CBU-105")
@@ -257,7 +358,7 @@ var get_sel_missile_count = func()
 {
     if (WeaponSelector.getValue() == 5)
     {
-        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105");
+        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B");
     }
     else if (WeaponSelector.getValue() == 1)
     {
@@ -324,8 +425,8 @@ var arm_selector = func() {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 5 ) {
-        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10"];
-        var count = 6 - selector_offset;  # length of the list (id 1 is 0 here)
+        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "AGM-65B"];
+        var count = 7 - selector_offset;  # length of the list (id 1 is 0 here)
         if (count < 0) {
             var selector_offset = 0;
             setprop("controls/armament/selected-armament-offset", 0);
