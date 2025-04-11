@@ -814,10 +814,14 @@ var F15HUD = {
 																		obj.window18.setText(sprintf("RIPL %2d", val.ArmamentRippleCount));
 																	} elsif (pylons.fcs.getSelectedWeapon() != nil) {  # For the AGM-65B, instead of ripple count, we display the status of the seeker
 																		obj.window18.setVisible(1);
-																		if (pylons.fcs.getSelectedWeapon().isCaged()) {
-																			obj.window18.setText("Caged");
-																		} else {
-																			obj.window18.setText("Uncaged");
+																		if (pylons.fcs.getSelectedWeapon() != nil) {
+																			caged = pylons.fcs.getSelectedWeapon().isCaged();  # AGM-65B caging is all automatic and hard-coded in the weapons.nas
+																			if (caged == 1) {
+																				caged = "Caged";
+																			} else {
+																				caged = "Uncaged";
+																			}
+																			obj.window18.setText(sprintf("A %s", caged));
 																		}
 																	}
                                                                 }
