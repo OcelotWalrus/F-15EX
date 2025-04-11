@@ -2021,6 +2021,34 @@
             </volume>
         </rb99-signal>
 
+        <aim-120d-signal>
+            <name>aim-120d-signal</name>
+            <mode>looped</mode>
+            <type>avionics</type>
+            <path>Aircraft/F-15/Sounds/115hz-square.wav</path>
+            <condition>
+                <property>sim/current-view/internal</property>
+                <property>payload/armament/aim-120d/sound-on-off</property>
+                <equals>
+                    <property>sim/model/f15/controls/armament/master-arm-switch</property>
+                    <value>1</value>
+                </equals>
+                <equals>
+                    <property>sim/model/f15/controls/armament/weapon-selector</property>
+                    <value>2</value>
+                </equals>
+            </condition>
+            <pitch>
+                <factor>1.8</factor><!-- changes it to beep -->
+                <max>2</max>
+            </pitch>
+            <volume>
+                <!--property>payload/armament/aim-120d/sound-volume</property--> <!--don't work don't know why-->
+                <factor>0.15</factor>
+                <max>.15</max>
+            </volume>
+        </aim-120d-signal>
+
         <missile1>
             <name>missile1</name>
             <path>Aircraft/F-15/Sounds/AIM-discharge.wav</path>
@@ -2112,6 +2140,35 @@
                 <max>1</max>
             </volume>
         </missile>
+
+        <lock-tone>
+            <name>aim-9x-growl</name>
+            <mode>looped</mode>
+            <type>avionics</type>
+            <path>Aircraft/F-15/Sounds/aim-9-growl.wav</path>
+            <condition>
+                <property>sim/current-view/internal</property>
+                <property>payload/armament/aim-9x/sound-on-off</property>
+                <equals>
+                    <property>sim/model/f15/controls/armament/master-arm-switch</property>
+                    <value>1</value>
+                </equals>
+                <equals>
+                    <property>sim/model/f15/controls/armament/weapon-selector</property>
+                    <value>1</value>
+                </equals>
+            </condition>
+            <pitch>
+                <property>payload/armament/aim-9x/sound-volume</property>
+                <factor>1.00</factor>
+                <offset>1.60</offset>
+                <min>0</min>
+                <max>2</max>
+            </pitch>
+            <volume>
+                <property>payload/armament/aim-9x/sound-volume</property>
+            </volume>
+        </lock-tone>
 
         <flare>
             <name>flare</name>
