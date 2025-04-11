@@ -538,6 +538,7 @@ var F15HUD = {
                                                         }),
             props.UpdateManager.FromHashList(["OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg"], nil, func(val)
                                                         {
+														# Taken from the F-16's model and adapted by Jimmy L. Miles
 														# get all the active steerpoints
 														me.plan = flightplan();
 										                me.planSize = me.plan.getPlanSize();
@@ -594,7 +595,7 @@ var F15HUD = {
 																	# Time to hit ground already computed, just gotta display it there
 																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
 																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
-																	obj.window17.setText(sprintf("%02d m %02d s", fall_time_mins, fall_time_secs));
+																	obj.window17.setText(sprintf("%02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
 																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X") and pylons.fcs.isLock()) { # only works if we have a radar lock; meaning AIM-9X won't have TTI if not slaved to radar
 																	if (weap.type == "AIM-9X") {
@@ -646,13 +647,13 @@ var F15HUD = {
 																		tti_secs = 60 + tti_secs;
 																	}
 																	if (live == 0) {  # if missile ain't active
-																		obj.window17.setText(sprintf("%02d m %02d s", tti_mins, tti_secs));
+																		obj.window17.setText(sprintf("%02d:%02d", tti_mins, tti_secs));
 																	} else {  # if missile is active
-																		obj.window17.setText(sprintf("L %02d m %02d %1.1f n", tti_mins, tti_secs, distance_to_target / 1.15));  #  if missile's live, indicate it is an aditionally display its distance to the target
+																		obj.window17.setText(sprintf("L %02d:%02d %1.1f n", tti_mins, tti_secs, distance_to_target / 1.15));  #  if missile's live, indicate it is an aditionally display its distance to the target
 																	}
 																	obj.window17.setVisible(1);
 																} else {
-																	obj.window17.setText("XX m XX s");
+																	obj.window17.setText("XX:XX");
 																	obj.window17.setVisible(1);
 																}
 															} else {
@@ -779,15 +780,29 @@ var F15HUD = {
 																	obj.boreSymbol.show();
                                                                 } else if (w_s == 1) {
                                                                     obj.window2.setText(sprintf("%2d SRM", val.ArmamentAim9Count));
-	                                                                obj.window18.setVisible(1);
-																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().isCaged()) {
-																		obj.window18.setText("Caged");
-																	} else {
-																		obj.window18.setText("Uncaged");
+																	if (pylons.fcs.getSelectedWeapon() != nil) {
+																		obj.window18.setVisible(1);
+																		caged = pylons.fcs.getSelectedWeapon().isCaged();
+																		auto = pylons.fcs.getSelectedWeapon().isAutoUncage();
+																		if (caged == 1) {
+																			caged = "Caged";
+																		} else {
+																			caged = "Uncaged";
+																		}
+																		if (auto == 1) {
+																			auto = "A";
+																		} else {
+																			auto = "M";
+																		}
+																		obj.window18.setText(sprintf("%s %s", auto, caged));
 																	}
                                                                 } else if (w_s == 2){
                                                                     obj.window2.setText(sprintf("%2d AAM", val.ArmamentAim120Count
                                                                                                 + val.ArmamentAim7Count));
+																	if (!pylons.fcs.isLock()) {  # If there's no lock, inform it's in MADDOG mode
+																		obj.window18.setVisible(1);
+																		obj.window18.setText("MADDOG");
+																	}
                                                                 } else if (w_s == 5){
                                                                     obj.window2.setText(sprintf("%2d GND", val.ArmamentAgmCount));
 																	obj.window18.setVisible(1);
