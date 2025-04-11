@@ -654,6 +654,11 @@ var F15MainModule =
             setprop("payload/weight[25]/selected", "Empty");
         }
 
+        # Make sure the radar is set to standby when the gear's down
+        if (getprop("controls/gear/gear-down") == 1) {
+            setprop("instrumentation/radar/radar-standby", 1);
+        }
+
         # Quick patch for pylons weight not computing, no clue why ...
         all_pylons = [12,1,5,9,15];
         foreach (cur_pyl; all_pylons) {
