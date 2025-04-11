@@ -658,6 +658,11 @@ var F15MainModule =
         if (getprop("controls/gear/gear-down") == 1) {
             setprop("instrumentation/radar/radar-standby", 1);
         }
+        
+        # Force target pod view
+        if (getprop("sim/model/f15/force-tgp") == 1) {
+            view.setViewByIndex(105);
+        }
 
         # Quick patch for pylons weight not computing, no clue why ...
         all_pylons = [12,1,5,9,15];
