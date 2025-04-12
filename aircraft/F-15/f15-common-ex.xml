@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- F-15 All Variants
+<!-- F-15 EX
    | Richard Harrison: released 2015-06-29 : rjh@zaretto.com
    |
    | Authors/Contributions:
@@ -310,7 +310,7 @@
         </rating>
 
         <flight-model>jsb</flight-model>
-        <aero>f15e</aero>
+        <aero>f15ex</aero>
 
         <help>
             <title>Boeing F-15EX Eagle II</title>

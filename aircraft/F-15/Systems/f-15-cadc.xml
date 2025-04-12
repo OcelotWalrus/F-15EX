@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-        Description: F15 CADC (AFCS, Inlet Ramps)  
+        Description: F15 CADC (AFCS, Inlet Ramps)
         Author: Richard Harrison (rjh@zaretto.com)
 -->
 
@@ -21,12 +21,12 @@
                 </ifthen>
             </function>
         </fcs_function>
-        
+
         <pure_gain name="metrics/stores-tank-factor-l-negated">
             <input>metrics/stores-tank-factor-l</input>
             <gain>-1</gain>
         </pure_gain>
-        
+
         <fcs_function name="metrics/stores-tank-factor-c">
             <function>
                 <ifthen>
@@ -202,7 +202,7 @@
             <input>metrics/stores-aiml-factor</input>
             <gain>-1</gain>
         </pure_gain>
-        
+
         <fcs_function name="metrics/stores-aimr-factor">
             <function>
                 <sum>
@@ -272,7 +272,7 @@
         <fcs_function name="inertia/backseat-mass">
             <function>
                 <product>
-                    <p>metrics/two-place-canopy</p> <!-- identifies this is a -D variant -->
+                    <p>metrics/two-place-canopy</p> <!-- identifies this is a -D(or EX) variant -->
                     <v>500</v>
                 </product>
             </function>
@@ -721,7 +721,7 @@
                 systems/cadc/ows-maximum-g ne 0
             </test>
         </switch>
-        
+
         <fcs_function name="systems/cadc/ows-percent-max">
             <description>OWS Percent of max</description>
             <function>
@@ -809,7 +809,7 @@
                 </ifthen>
             </function>
         </fcs_function>
-        
+
         <fcs_function name="systems/flyt/min-g-reached">
             <function>
                 <ifthen>

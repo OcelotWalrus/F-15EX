@@ -8,7 +8,7 @@
 
 <PropertyList>
 
-    <path>f15e.ac</path>
+    <path>f15ex.ac</path>
     <multiplay>
         <refuel>
             <offset-x-m type="double">-0.3457</offset-x-m>
@@ -28,10 +28,12 @@
          if (modelPath != nil and find("F-15D.xml", modelPath) != -1) {
             self.getNode("sim/model/f15/variant",1).setValue("D");
              print ("D variant");
-         } elsif (modelPath != nil and find("F-15E.xml", modelPath) != -1) {
-            self.getNode("sim/model/f15/variant",1).setValue("E");
+         } elsif (modelPath != nil and find("F-15EX.xml", modelPath) != -1) {
+            self.getNode("sim/model/f15/variant",1).setValue("EX");
+             print ("EX variant");
          } else {
             self.getNode("sim/model/f15/variant",1).setValue("C");
+             print ("C variant");
          }
 
          var livery_update = aircraft.livery_update.new("Aircraft/F-15/Models/Liveries", 10 );
@@ -1131,7 +1133,7 @@
                     </equals>
                     <equals>
                         <property>sim/model/f15/variant</property>
-                        <value>E</value>
+                        <value>EX</value>
                     </equals>
                 </or>
                 <not>
@@ -2055,7 +2057,7 @@
                     </equals>
                     <equals>
                         <property>sim/model/f15/variant</property>
-                        <value>E</value>
+                        <value>EX</value>
                     </equals>
                 </or>
             </not>
@@ -2317,7 +2319,7 @@
                 </equals>
                 <equals>
                     <property>sim/model/f15/variant</property>
-                    <value>E</value>
+                    <value>EX</value>
                 </equals>
             </or>
         </condition>

@@ -28,10 +28,12 @@
          if (modelPath != nil and find("F-15D.xml", modelPath) != -1) {
             self.getNode("sim/model/f15/variant",1).setValue("D");
              print ("D variant");
-         } elsif (modelPath != nil and find("F-15E.xml", modelPath) != -1) {
-            self.getNode("sim/model/f15/variant",1).setValue("E");
+         } elsif (modelPath != nil and find("F-15EX.xml", modelPath) != -1) {
+            self.getNode("sim/model/f15/variant",1).setValue("EX");
+             print ("EX variant");
          } else {
             self.getNode("sim/model/f15/variant",1).setValue("C");
+             print ("C variant");
          }
 
          var livery_update = aircraft.livery_update.new("Aircraft/F-15/Models/Liveries", 10 );
@@ -1115,7 +1117,7 @@
                     </equals>
                     <equals>
                         <property>sim/model/f15/variant</property>
-                        <value>E</value>
+                        <value>EX</value>
                     </equals>
                 </or>
                 <not>
@@ -2032,7 +2034,7 @@
                     </equals>
                     <equals>
                         <property>sim/model/f15/variant</property>
-                        <value>E</value>
+                        <value>EX</value>
                     </equals>
                 </or>
             </not>
@@ -2294,7 +2296,7 @@
                 </equals>
                 <equals>
                     <property>sim/model/f15/variant</property>
-                    <value>E</value>
+                    <value>EX</value>
                 </equals>
             </or>
         </condition>
@@ -3212,7 +3214,7 @@
        <object-name>dragchute</object-name>
          <condition><property>sim/model/f15/chute/enable</property></condition>
     </animation>
-    
+
      <model>
       <name>Chocks</name>
       <path>Aircraft/f16/Models/chocks.xml</path>

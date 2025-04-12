@@ -356,7 +356,7 @@ var n2_r = getprop("engines/engine[1]/n2");
 
 var two_seater = getprop("fdm/jsbsim/metrics/two-place-canopy");
 if (two_seater)
-logprint(3, "F-15 two seat variant (B,D,E)");
+logprint(3, "F-15 two seat variant (B,D,E,EX)");
 
 setlistener("sim/model/f15/controls/AFCS/cas-takeoff-trim", func(v) {
     logprint(3, "Takeoff trim");
@@ -664,7 +664,7 @@ var F15MainModule =
         if (getprop("controls/gear/gear-down") == 1) {
             setprop("instrumentation/radar/radar-mode", 2);
         }
-        
+
         # Force target pod view
         if (getprop("sim/model/f15/force-tgp") == 1) {
             view.setViewByIndex(105);

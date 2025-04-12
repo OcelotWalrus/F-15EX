@@ -271,6 +271,7 @@ init = func() {
     # map variants to the base
     if(our_ac_name == "f-14a") our_ac_name = "f-14b";
     if(our_ac_name == "f15d") our_ac_name = "f15c";
+    if(our_ac_name == "f15ex") our_ac_name = "f15ex";
 	if (our_ac_name == "f-14b-bs") { we_are_bs = 1; }
 	if (our_ac_name == "f15-bs") we_are_bs = 1;
     if (find("F-16", our_ac_name) != -1) { we_are_bs = 0; use_tews = 0; }

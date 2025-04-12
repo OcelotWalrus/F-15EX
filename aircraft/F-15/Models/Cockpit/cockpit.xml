@@ -37,7 +37,7 @@
                     </equals>
                     <equals>
                         <property>sim/model/f15/variant</property>
-                        <value>E</value>
+                        <value>EX</value>
                     </equals>
                 </or>
             </not>

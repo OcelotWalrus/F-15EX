@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- F-15C Canopy (single seat applicable to F-15A variant as well)
-   |  Richard Harrison: 2015-04-29 : rjh@zaretto.com 
+   |  Richard Harrison: 2015-04-29 : rjh@zaretto.com
 -->
 
 <PropertyList>
@@ -19,7 +19,7 @@
                 <not>
                     <equals>
                         <property>sim/model/f15/variant</property>
-                        <value>E</value>
+                        <value>EX</value>
                     </equals>
                 </not>
             </or>
@@ -192,7 +192,7 @@
             <blue-prop>controls/lighting/instrument-blue</blue-prop>
         </emission>
     </animation>
-    
+
     <animation>
         <type>select</type>
         <object-name>CanopyShootLightLamp</object-name>
@@ -222,7 +222,7 @@
         </condition>
     </animation>
     <!-- The ready light comes on when the system is ready. We will do this when the door is open.
-         ref: NASA video https://www.youtube.com/watch?v=Wqo8DIKcYtk 
+         ref: NASA video https://www.youtube.com/watch?v=Wqo8DIKcYtk
      -->
     <animation>
         <type>select</type>

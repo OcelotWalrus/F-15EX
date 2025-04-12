@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="https://raw.githubusercontent.com/JSBSim-Team/jsbsim/master/JSBSimScript.xsl"?>
-<fdm_config name="F-15 (all variants)" version="2.0" release="PRODUCTION"
+<fdm_config name="F-15 (EX)" version="2.0" release="PRODUCTION"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/JSBSim-Team/jsbsim/master/JSBSim.xsd">
 

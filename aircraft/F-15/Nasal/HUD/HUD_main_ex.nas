@@ -448,6 +448,7 @@ var F15HUD = {
                                           if (val.ElectricsAcLeftMainBus <= 0
                                               or val.ControlsHudBrightness <= 0) {
                                               obj.svg.setVisible(0);
+											  obj.stby.setVisible(0);
                                           } else {
                                               obj.svg.setVisible(1);
 											  obj.color = [0.3,1,0.3,1];

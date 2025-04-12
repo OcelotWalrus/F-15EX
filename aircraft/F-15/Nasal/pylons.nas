@@ -104,7 +104,7 @@ var pylonSets = {
 
 # sets. The first in the list is the default. Earlier in the list means higher up in dropdown menu.
 # These are not strictly needed in F-15 beside from the Empty, since it uses a custom payload dialog, but there for good measure.
-if (getprop("sim/model/f15/variant") == "E") { # EX variant has different pylons and configuration than C and D variants
+if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylons and configuration than C and D variants
 	#var pylon1set = [pylonSets.empty];
 
 	var pylonex1aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
@@ -167,7 +167,7 @@ pylon8b= stations.WPylon.new("Right Wing Station 8",     9, [1.4077, 2.8034, 1.4
 pylon8c= stations.Pylon.new("Right Wing Station 8",     10, [1.7844, 3.3325, 0.288],   pylon8cset, 10, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[10]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[10]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 
 # EX supplementary pylons
-if (getprop("sim/model/f15/variant") == "E") {
+if (getprop("sim/model/f15/variant") == "EX") {
 	pylonex1a= stations.Pylon.new("Left Wing Station 11",       11, [2.4044, -3.4575, 0.288],  pylonex1aset,  11, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[19]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[19]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pylonex1b= stations.WPylon.new("Left Wing Station 12",      12, [2.0277, -2.9284, 1.4077], pylonex1bset,  12, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs-sta-1bx-weaps",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft-sta-1bx-weaps",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pylonex1c= stations.Pylon.new("Left Wing Station 13",       13, [2.4044, -3.4575, 0.288],  pylonex1cset,  13, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[20]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[20]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
@@ -188,7 +188,7 @@ pylon2a.forceRail = 1;# set the missiles mounted on these pylon always on a rail
 pylon2c.forceRail = 1;
 pylon8a.forceRail = 1;
 pylon8c.forceRail = 1;
-if (getprop("sim/model/f15/variant") == "E") { # EX variant
+if (getprop("sim/model/f15/variant") == "EX") { # EX variant
 	pylonex1a.forceRail = 1;
 	pylonex1c.forceRail = 1;
 	pylonex2a.forceRail = 1;
@@ -196,7 +196,7 @@ if (getprop("sim/model/f15/variant") == "E") { # EX variant
 }
 
 # EX variant
-if (getprop("sim/model/f15/variant") == "E") {
+if (getprop("sim/model/f15/variant") == "EX") {
 	var pylons = [pylonI,pylon2a,pylon2b,pylon2c,pylon3,pylon4,pylon5,pylon6,pylon7,pylon8a,pylon8b,pylon8c, pylonex1a, pylonex1b, pylonex1c, pylonex2a, pylonex2b, pylonex2c, pylonnav, pylontgp, pyloncft1, pyloncft2, pyloncft3, pyloncft4, pyloncft5, pyloncft6];
 } else {
 	var pylons = [pylonI,pylon2a,pylon2b,pylon2c,pylon3,pylon4,pylon5,pylon6,pylon7,pylon8a,pylon8b,pylon8c];
@@ -206,7 +206,7 @@ if (getprop("sim/model/f15/variant") == "E") {
 # The order of second vector in this line is the order cycle key would cycle through the weapons (since F15 doesn't use the cycle option that order is not important):
 fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "AGM-65B"]);
 
-if (getprop("sim/model/f15/variant") == "E") { # EX variant only
+if (getprop("sim/model/f15/variant") == "EX") { # EX variant only
 	var aimListener = func (obj) {
 		# If auto focus on missile is activated the we call the function
 		if(getprop("/controls/armament/automissileview"))
