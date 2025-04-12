@@ -1410,8 +1410,7 @@ return obj;
 
 	# EEGS Disply loop
 	# Taken from F-16's model, and adapted to the F-15 by Jimmy L. Miles
-	# Only modes adapted and tested for now: SNAP, EEGS
-	# + Only non-radar mode for now
+	# Only modes adapted and tested for now: SNAP, FUNNEL
     # Should match gun submodel parameters
     gunEda: 0.00338158219,
     gunWeight: 0.226,
@@ -1802,7 +1801,7 @@ return obj;
 
 		   me.eegsMe.vel = me.eegs_total_fps;
 
-		   me.eegsMe.geodPos = aircraftToCart({x:-me.gunLoc[0], y:me.gunLoc[1], z: -me.gunLoc[2]});#position of gun in aircraft (x and z inverted)
+		   me.eegsMe.geodPos = aircraftToCart({x:-me.gunLoc[0], y:-me.gunLoc[1], z: -me.gunLoc[2]});#position of gun in aircraft (x and z inverted)
 		   me.eegsMe.eegsPos.set_xyz(me.eegsMe.geodPos.x, me.eegsMe.geodPos.y, me.eegsMe.geodPos.z);
 		   me.eegsMe.altC = me.eegsMe.eegsPos.alt();
 
