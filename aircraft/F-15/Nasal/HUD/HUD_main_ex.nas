@@ -371,6 +371,8 @@ var F15HUD = {
 		        .setColor(0,1,0);
 
 			# EEGS Gun mode
+			obj.aaTargetDesignationGrp = obj.canvas.createGroup();
+			obj.aaTargetDesignationGrp.setTranslation(obj.centerOrigin);
 			obj.Bore = obj.canvas.createGroup();
 			obj.Bore.setTranslation(obj.centerOrigin);
 			obj.boreSymbol = obj.Bore.createChild("path")
@@ -967,6 +969,7 @@ return obj;
             me.eegsLoop.start();
         } elsif (!eegsShow and me.eegsLoop.isRunning) {
             me.eegsLoop.stop();
+			me.aaTargetDesignationGrp.setVisible(0);
         }
 
 		# FLIR
@@ -1420,8 +1423,8 @@ return obj;
 	   var gunSight = getprop("sim/model/f15/armament/gun-sight");
 	   var st = systime();
 	   me.hydra = 0;  # F-15EX doesn't use LAU-68C, so hydra alaways off
-	   if (getprop("sim/model/f15/instrumentation/radar-awg-9/active-target-available")) {
-		   me.designatedDistanceFT = getprop("sim/model/f15/instrumentation/radar-awg-9/active-target-range")*6000;  # conversion from nm to ft
+	   if (awg_9.active_u != nil and awg_9.active_u.get_display()) {
+		   me.designatedDistanceFT = awg_9.active_u.get_range() * 6000;  # conversion from nm to ft
 	   } else {
 	   	   me.designatedDistanceFT = nil;
 	   }
@@ -1641,7 +1644,7 @@ return obj;
 					   if (me.oldStrf) {
 							   # draw the old STRF pipper (T.O. GR1F-16CJ-34-1-1 page 1-442 and MLU Tape 1 page 185)
 							   var pipperRadius = 15 * mr;
-							   if (me.strfRange <= (me.hydra?4000:getprop("f16/avionics/gun-strf-max-range-ft"))) {
+							   if (me.strfRange <= (me.hydra?4000:getprop("sim/model/f15/armament/gun-strf-max-range-ft"))) {
 									   me.eegsGroup.createChild("path")
 											   .moveTo(me.eegsPipperX-pipperRadius, me.eegsPipperY-pipperRadius-2)
 											   .horiz(pipperRadius*2)
@@ -1669,7 +1672,7 @@ return obj;
 							   me.pipperOuterRadius = 25 * mr;
 							   me.pipperInnerRadius = 20 * mr;
 							   me.pipperRangeTick   =  5 * mr;
-							   me.pipperRangeMode = me.strfRange <= getprop("f16/avionics/gun-strf-max-range-ft") and me.strfRange <= 12000?0:(me.strfRange <= 12000?1:(me.strfRange <= getprop("f16/avionics/gun-strf-max-range-ft") and me.strfRange <= 24000?2:(me.strfRange <= 24000?3:4)));
+							   me.pipperRangeMode = me.strfRange <= getprop("sim/model/f15/armament/gun-strf-max-range-ft") and me.strfRange <= 12000?0:(me.strfRange <= 12000?1:(me.strfRange <= getprop("sim/model/f15/armament/gun-strf-max-range-ft") and me.strfRange <= 24000?2:(me.strfRange <= 24000?3:4)));
 
 							   if (me.pipperRangeMode < 4) {
 
@@ -1683,10 +1686,10 @@ return obj;
 									   me.td_x2 = me.pipperOuterRadius*math.sin(me.td_rads);
 									   me.td_y2 = -me.pipperOuterRadius*math.cos(me.td_rads);
 
-									   if (getprop("f16/avionics/gun-strf-max-range-ft") <= 12000) {
-											   me.td_rads = me.interpolate(getprop("f16/avionics/gun-strf-max-range-ft"), 0, 12000, 0, 2*math.pi);
+									   if (getprop("sim/model/f15/armament/gun-strf-max-range-ft") <= 12000) {
+											   me.td_rads = me.interpolate(getprop("sim/model/f15/armament/gun-strf-max-range-ft"), 0, 12000, 0, 2*math.pi);
 									   } else {
-											   me.td_rads = me.interpolate(getprop("f16/avionics/gun-strf-max-range-ft"), 12000, 24000, 0, 2*math.pi);
+											   me.td_rads = me.interpolate(getprop("sim/model/f15/armament/gun-strf-max-range-ft"), 12000, 24000, 0, 2*math.pi);
 									   }
 									   me.td_x3 = (me.pipperOuterRadius+me.pipperRangeTick)*math.sin(me.td_rads);
 									   me.td_y3 = -(me.pipperOuterRadius+me.pipperRangeTick)*math.cos(me.td_rads);
@@ -1867,6 +1870,7 @@ return obj;
 	   if (gunSight != 1 and !me.hydra and me.designatedDistanceFT != nil) {
 		   # Draw A-A gun reticle
 		   me.aaTargetDesignationGrp.removeAllChildren();
+		   me.aaTargetDesignationGrp.setVisible(1);
 		   var mr = 0.4 * 1.5;
 		   var radius = 20 * mr;
 		   me.td_rads = me.interpolate(me.designatedDistanceFT, 0, 12000, 0, 2*math.pi);
@@ -1895,14 +1899,16 @@ return obj;
 				   .update();
 		   }
 		   # Draw in-range dot
-		   if (me.designatedDistanceFT > getprop("f16/avionics/gun-aa-max-range-ft")) {
-			   me.td_rads = me.interpolate(getprop("f16/avionics/gun-aa-max-range-ft"), 0, 12000, 0, 2*math.pi);
+		   if (me.designatedDistanceFT > getprop("sim/model/f15/armament/gun-aa-max-range-ft")) {
+			   me.td_rads = me.interpolate(getprop("sim/model/f15/armament/gun-aa-max-range-ft"), 0, 12000, 0, 2*math.pi);
 			   me.td_x3 = (1.20*radius)*math.sin(me.td_rads);
 			   me.td_y3 = -(1.20*radius)*math.cos(me.td_rads);
 			   me.aaTargetDesignator.moveTo(-mr+me.td_x3,me.td_y3);
 			   me.aaTargetDesignator.arcSmallCW(mr,mr, 0, mr*2, 0);
 			   me.aaTargetDesignator.arcSmallCW(mr,mr, 0, -mr*2, 0);
 		   }
+	   } else {
+	   		me.aaTargetDesignationGrp.setVisible(0);
 	   }
    },
 
