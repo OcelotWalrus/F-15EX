@@ -19,7 +19,7 @@
     </empty>
 
     <button>
-      <pref-width>16</pref-width>
+      <pref-width>250</pref-width>
       <pref-height>16</pref-height>
       <legend></legend>
 
@@ -37,7 +37,13 @@
 
   <hrule/>
 
-  <text><halign>center</halign><label>!You need conformal fuel tanks to use that hardpoint!</label></text>
+  <text>
+      <halign>left</halign>
+      <property>sim/model/f15/warn-loads-text</property>
+      <label>xxxxxxxx</label>
+      <live>true</live>
+      <format>%s</format>
+  </text>
 
   <hrule/>
 

@@ -60,7 +60,7 @@ var getDLZ = func {
 
 var ccrp = func {
     var weap = pylons.fcs.getSelectedWeapon();
-    if (weap != nil and weap.parents[0] == armament.AIM and (weap.type == "MK-84" or weap.type == "GBU-10" or weap.type == "MK-82AIR" or weap.type == "MK-82" or weap.type == "MK-83" or weap.type == "CBU-87" or weap.type == "CBU-105")) {
+    if (weap != nil and weap.parents[0] == armament.AIM and (weap.type == "MK-84" or weap.type == "GBU-10" or weap.type == "MK-82AIR" or weap.type == "MK-82" or weap.type == "MK-83" or weap.type == "CBU-87" or weap.type == "CBU-105" or weap.type == "GBU-12")) {
         var ccrp_meters = weap.getCCRP(20,0.25);#meters left to release point
         if (ccrp_meters != nil) {
             # this should make the ccrp bomb steering line and the bomb release cue.
@@ -231,7 +231,7 @@ var armament_update = func {
     Count9.setValue(aim9_count);
     Count7.setValue(pylons.fcs.getAmmoOfType("AIM-7"));
     Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120") + pylons.fcs.getAmmoOfType("AIM-120D"));
-    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B"));
+    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B")+pylons.fcs.getAmmoOfType("GBU-12"));
 
     update_gun_ready();
     setCockpitLights();
@@ -251,7 +251,7 @@ var armament_update2 = func {
     for (var i = 0;i<11;i+=1) {
         var ws = pylons.pylons[i+1].getWeapons();
         # Unecessary ?
-        #if ((i == 1 or i==5 or i==9) and (getprop("payload/weight["~i~"]/selected") == "MK-84" or getprop("payload/weight["~i~"]/selected") == "GBU-10" or getprop("payload/weight["~i~"]/selected") == "MK-82AIR" or getprop("payload/weight["~i~"]/selected") == "MK-82" or getprop("payload/weight["~i~"]/selected") == "MK-83" or getprop("payload/weight["~i~"]/selected") == "CBU-87" or getprop("payload/weight["~i~"]/selected") == "CBU-105") and size(ws) > 0 and ws[0] == nil) {
+        #if ((i == 1 or i==5 or i==9) and (getprop("payload/weight["~i~"]/selected") == "MK-84" or getprop("payload/weight["~i~"]/selected") == "GBU-10" or getprop("payload/weight["~i~"]/selected") == "MK-82AIR" or getprop("payload/weight["~i~"]/selected") == "MK-82" or getprop("payload/weight["~i~"]/selected") == "MK-83" or getprop("payload/weight["~i~"]/selected") == "CBU-87" or getprop("payload/weight["~i~"]/selected") == "CBU-105" or getprop("payload/weight["~i~"]/selected") == "GBU-12") and size(ws) > 0 and ws[0] == nil) {
         #    # the MK-84 on this station has been released
         #    setprop("payload/weight["~i~"]/selected","Empty");
         #    updatePayload = 1;
@@ -337,6 +337,8 @@ var missile_code_from_ident= func(mty)
             return "mk84";
         else if (mty == "MK-82AIR")
             return "mk82air";
+        else if (mty == "GBU-12")
+            return "gbu12";
         else if (mty == "AGM-65B")
             return "agm65b";
         else if (mty == "CBU-87")
@@ -358,7 +360,7 @@ var get_sel_missile_count = func()
 {
     if (WeaponSelector.getValue() == 5)
     {
-        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B");
+        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B")+pylons.fcs.getAmmoOfType("GBU-12");
     }
     else if (WeaponSelector.getValue() == 1)
     {
@@ -425,8 +427,8 @@ var arm_selector = func() {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 5 ) {
-        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "AGM-65B"];
-        var count = 7 - selector_offset;  # length of the list (id 1 is 0 here)
+        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "GBU-12", "AGM-65B"];
+        var count = 8 - selector_offset;  # length of the list (id 1 is 0 here)
         if (count < 0) {
             var selector_offset = 0;
             setprop("controls/armament/selected-armament-offset", 0);

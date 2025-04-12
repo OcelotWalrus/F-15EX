@@ -66,6 +66,8 @@ var pylonSets = {
 	triplemk83:  {name: "3 x MK-83", content: ["MK-83", "MK-83", "MK-83"], fireOrder: [0,1,2], launcherDragArea: 0.0, launcherMass: 25, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	triplecbu87:  {name: "3 x CBU-87", content: ["CBU-87", "CBU-87", "CBU-87"], fireOrder: [0,1,2], launcherDragArea: 0.0, launcherMass: 25, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	doublecbu105:  {name: "2 x CBU-105", content: ["CBU-105", "CBU-105"], fireOrder: [0,1], launcherDragArea: 0.0, launcherMass: 25, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	doublegbu12: {name: "2 x GBU-12", content: ["GBU-12", "GBU-12"], fireOrder: [0, 1], launcherDragArea: 0.0, launcherMass: 30, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	singlegbu12: {name: "1 x GBU-12", content: ["GBU-12"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 
 	cftmk82: {name: "1 x MK-82", content: ["MK-82"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	cftmk82air: {name: "1 x MK-82AIR", content: ["MK-82AIR"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
@@ -112,19 +114,19 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylonex1cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon2aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon2bset = [pylonSets.empty, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doubleagm65b, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon2bset = [pylonSets.empty, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.doubleagm65b, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon2cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylon3set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
-	var pylon4set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
+	var pylon3set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12];
+	var pylon4set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12];
 
 	var pylon5set = [pylonSets.empty, pylonSets.triplemk83, pylonSets.triplem84, pylonSets.triplecbu87];
 
-	var pylon6set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
-	var pylon7set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83];
+	var pylon6set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12];
+	var pylon7set = [pylonSets.empty, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12];
 
 	var pylon8aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon8bset = [pylonSets.empty, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doubleagm65b, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon8bset = [pylonSets.empty, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.doubleagm65b, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon8cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonex2aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
@@ -133,7 +135,8 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 
 	var pylonnavset = [pylonSets.empty, pylonSets.lantirnnav];
 	var pylontgpset = [pylonSets.empty, pylonSets.lantirntgp, pylonSets.atpsniper];
-	var pyloncftset = [pylonSets.empty, pylonSets.cftmk82, pylonSets.cftmk82air];
+	var pyloncftset = [pylonSets.empty, pylonSets.cftmk82, pylonSets.cftmk82air, pylonSets.singlegbu12];
+	var pyloncftsetcenter = [pylonSets.empty, pylonSets.cftmk82, pylonSets.cftmk82air];
 
 	#var pylon9set = [pylonSets.empty];
 } else {
@@ -175,12 +178,12 @@ if (getprop("sim/model/f15/variant") == "EX") {
 	pylonex2b= stations.WPylon.new("Left Wing Station 15",      15, [2.0277, 2.9284, 1.4077], pylonex2bset,  15, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs-sta-2bx-weaps",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft-sta-2bx-weaps",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pylonex2c= stations.Pylon.new("Left Wing Station 16",       16, [2.4044, 3.4575, 0.288],  pylonex2cset,  16, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[22]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[22]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pylonnav = stations.Pylon.new("Right Fuselage Station",      18, [3.5918, 1.611, 0.567],   pylonnavset,  18, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[23]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[23]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
-	pylontgp = stations.Pylon.new("left Fuselage Station",      19, [3.5918, -1.611, 0.567],   pylontgpset,  19, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[24]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[24]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
+	pylontgp = stations.Pylon.new("Left Fuselage Station",      19, [3.5918, -1.611, 0.567],   pylontgpset,  19, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[24]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[24]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pyloncft1 = stations.Pylon.new("CFT1 Station",      20, [-0.0760, -2.0865, -0.59576],   pyloncftset,  20, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[25]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[25]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
-	pyloncft2 = stations.Pylon.new("CFT2 Station",      21, [2.4774, -2.0865, -0.59576],   pyloncftset,  21, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[26]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[26]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
+	pyloncft2 = stations.Pylon.new("CFT2 Station",      21, [2.4774, -2.0865, -0.59576],   pyloncftsetcenter,  21, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[26]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[26]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pyloncft3 = stations.Pylon.new("CFT3 Station",      22, [5.1044, -2.0352, -0.5638],   pyloncftset,  22, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[27]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[27]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pyloncft4 = stations.Pylon.new("CFT4 Station",      23, [-0.0760, 2.0865, -0.59576],   pyloncftset,  23, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[28]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[28]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
-	pyloncft5 = stations.Pylon.new("CFT5 Station",      24, [2.4774, 2.0865, -0.59576],   pyloncftset,  24, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[29]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[29]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
+	pyloncft5 = stations.Pylon.new("CFT5 Station",      24, [2.4774, 2.0865, -0.59576],   pyloncftsetcenter,  24, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[29]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[29]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 	pyloncft6 = stations.Pylon.new("CFT6 Station",      25, [5.1044, 2.0865, -0.56368],   pyloncftset,  25, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[30]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[30]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 }
 
@@ -204,7 +207,7 @@ if (getprop("sim/model/f15/variant") == "EX") {
 
 # The order of first vector in this line is the default pylon order weapons is released in.
 # The order of second vector in this line is the order cycle key would cycle through the weapons (since F15 doesn't use the cycle option that order is not important):
-fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "AGM-65B"]);
+fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "AGM-65B", "GBU-12"]);
 
 if (getprop("sim/model/f15/variant") == "EX") { # EX variant only
 	var aimListener = func (obj) {
@@ -327,6 +330,9 @@ var getCCIP = func {
             } elsif (w.type=="MK-83") {
                 # 25s fall time limit and calculate fall trajectory at every .20s on the way to ground.
                 return w.getCCIPadv(20, .20);
+            } elsif (w.type=="GBU-12") {
+                # 35s fall time limit and calculate fall trajectory at every 0.30s on the way to ground.
+                return w.getCCIPadv(35, 0.30);
             }
         }
     }

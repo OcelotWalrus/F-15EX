@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PropertyList>
+<!--
+Used for non fired GBU-12
+-->
+
+  <path>GBU-12.ac</path>
+
+  <effect>  
+    <inherits-from>Aircraft/F-15/Models/Effects/glass/glassIR</inherits-from>  
+    <object-name>GBU-12_Glass</object-name> 
+  </effect>
+
+</PropertyList>

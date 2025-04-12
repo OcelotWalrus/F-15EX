@@ -2126,6 +2126,7 @@
                     <property>payload/armament/mk-83/sound-fire-on-off</property>
                     <property>payload/armament/mk-82/sound-fire-on-off</property>
                     <property>payload/armament/gbu-10/sound-fire-on-off</property>
+                    <property>payload/armament/gbu-12/sound-fire-on-off</property>
                 </or>
             </condition>
             <reference-dist>25</reference-dist>
