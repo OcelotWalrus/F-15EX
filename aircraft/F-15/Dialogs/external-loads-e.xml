@@ -1427,6 +1427,7 @@
 							<value>3 x MK-82 AIR</value>
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
+							<value>1 x AGM-65B</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1474,6 +1475,7 @@
 							<value>3 x MK-82 AIR</value>
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
+							<value>1 x AGM-65B</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1564,6 +1566,7 @@
 							<value>3 x MK-82 AIR</value>
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
+							<value>1 x AGM-65B</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1611,6 +1614,7 @@
 							<value>3 x MK-82 AIR</value>
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
+							<value>1 x AGM-65B</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>

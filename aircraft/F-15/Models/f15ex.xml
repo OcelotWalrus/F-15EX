@@ -3816,6 +3816,94 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>agm-65b-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[169]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[170]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[171]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[172]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[169]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[170]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[171]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[172]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>gbu-12-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[157]</property>
@@ -5034,6 +5122,88 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-l3</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-l4</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-r1</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-r2</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
         </offsets>
     </model>
 

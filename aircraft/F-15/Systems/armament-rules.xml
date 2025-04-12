@@ -1780,6 +1780,50 @@
     <input>
       <and>
         <equals>
+          <property>payload/armament/station/id-3-type</property>
+          <value>AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-l3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-4-type</property>
+          <value>AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-l4</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-6-type</property>
+          <value>AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-r1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-7-type</property>
+          <value>AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-r2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
           <property>payload/armament/station/id-1-set</property>
           <value>2 x GBU-12</value>
         </equals>
