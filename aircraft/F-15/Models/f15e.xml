@@ -1107,20 +1107,16 @@
         <type>select</type>
         <object-name>LtCdrTricky</object-name>
         <condition>
-            <and>
-                <not>
+            <not>
+                <or>
                     <property>sim/model/hide-pilot</property>
-                </not>
-                <not>
-                    <and>
-                        <property>sim/model/hide-pilots-auto</property>
-                        <equals>
-                            <property>sim/current-view/name</property>
-                            <value>Cockpit View</value>
-                        </equals>
-                    </and>
-                </not>
-            </and>
+                    <property>sim/model/hide-pilots-auto</property>
+                    <equals>
+                        <property>sim/current-view/name</property>
+                        <value>Cockpit View</value>
+                    </equals>
+                </or>
+            </not>
         </condition>
     </animation>
     <animation>
@@ -1139,16 +1135,14 @@
                     </equals>
                 </or>
                 <not>
-                    <property>sim/model/hide-backseater</property>
-                </not>
-                <not>
-                    <and>
+                    <or>
+                        <property>sim/model/hide-backseater</property>
                         <property>sim/model/hide-pilots-auto</property>
                         <equals>
                             <property>sim/current-view/name</property>
                             <value>Backseat View</value>
                         </equals>
-                    </and>
+                    </or>
                 </not>
             </and>
         </condition>
