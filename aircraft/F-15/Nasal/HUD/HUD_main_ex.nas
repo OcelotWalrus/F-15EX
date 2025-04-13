@@ -372,7 +372,7 @@ var F15HUD = {
 
 			# EEGS Gun mode
 			obj.aaTargetDesignationGrp = obj.canvas.createGroup();
-			obj.aaTargetDesignationGrp.setTranslation(obj.centerOrigin);
+			obj.aaTargetDesignationGrp.setTranslation(obj.centerOrigin);  # children are created later in the EEGS loop
 			obj.Bore = obj.canvas.createGroup();
 			obj.Bore.setTranslation(obj.centerOrigin);
 			obj.boreSymbol = obj.Bore.createChild("path")
@@ -399,6 +399,29 @@ var F15HUD = {
 	        obj.eegsLoop = maketimer(obj.averageDt, obj, obj.displayEEGS);
 	        obj.eegsLoop.simulatedTime = 1;
 	        obj.resetGunPos();
+
+			# CCRP Symbology
+			obj.ccrpSymbology = obj.canvas.createGroup();
+			obj.ccrpSymbology.setTranslation(obj.centerOrigin);
+			obj.timeToRelease = nil;
+			obj.CCRP_active = nil;
+			obj.bombFallLine = obj.ccrpSymbology.createChild("path")
+                .moveTo(sx*0.5*uv_used,0)
+                #.horiz(10)
+                .vert(400)
+                .setStrokeLineWidth(1)
+                .setColor(0,1,0).hide();
+        	obj.solutionCue = obj.ccrpSymbology.createChild("path")#the moving line
+                .moveTo(sx*0.5*uv_used-5,0)
+                .horiz(10)
+                .setStrokeLineWidth(2)
+                .set("z-index",10005)
+                .setColor(0,1,0);
+        	obj.ccrpMarker = obj.ccrpSymbology.createChild("path")
+                .moveTo(sx*0.5*uv_used-10,sy*0.5)
+                .horiz(20)
+                .setStrokeLineWidth(1)
+                .setColor(0,1,0);
 
 			# Warning texts
 			obj.WarningTexts = obj.canvas.createGroup();
@@ -596,10 +619,25 @@ var F15HUD = {
 															var mean_speed = 1; # placeholder
 															weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
 															if (weap != nil and weap.parents[0] == armament.AIM) {
-																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and getprop("sim/model/f15/armament/ccip-off") == 0) {
+																print("FIUCK");
+																print(obj.timeToRelease);
+																print(obj.CCRP_active);
+																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and getprop("sim/model/f15/armament/ccip-off") == 0 and pylons.fcs.getDropMode() == 1) {
 																	# Time to hit ground already computed, just gotta display it there
 																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
 																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
+																	obj.window17.setText(sprintf("CCIP %02d:%02d", fall_time_mins, fall_time_secs));
+																	obj.window17.setVisible(1);
+																} elsif (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
+																	obj.timeToReleaseH = int(obj.timeToRelease/3600);
+																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseH*3600;
+																	obj.timeToReleaseM = int(obj.timeToRelease/60);
+																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseM*60;
+																	if (obj.timeToReleaseH < 1) {
+																		obj.window4_txt = sprintf("CCRP %02d:%02d",obj.timeToReleaseM,obj.timeToRelease);# 3 digits so pilot can tell it apart from time to steerpoint.
+																	} else {
+																		obj.window17.setText("CCRP XX:XX");
+																	}
 																	obj.window17.setText(sprintf("%02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
 																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X" or weap.type == "AGM-65B") and armament.MISSILE_LOCK == weap.status and !val.RadarStandby) {  # only works if the radar's on
@@ -810,8 +848,12 @@ var F15HUD = {
 																		obj.window18.setVisible(1);
 																		obj.window18.setText("MADDOG");
 																	}
-                                                                } else if (w_s == 5){
-                                                                    obj.window2.setText(sprintf("%2d GND", val.ArmamentAgmCount));
+                                                                } else if (w_s == 5) {
+																	if (weapon_type != nil and weapon_type != "") {  # additonaly display the current ground weapon's count along the total ground ordonnance count
+																		obj.window2.setText(sprintf("%2d/%2d GND", pylons.fcs.getAmmoOfType(weapon_type), val.ArmamentAgmCount));
+																	} else {
+                                                                    	obj.window2.setText(sprintf("%2d GND", val.ArmamentAgmCount));
+																	}
 																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "AGM-65B") {
 																		obj.window18.setVisible(1);
 																		obj.window18.setText(sprintf("RIPL %2d", val.ArmamentRippleCount));
@@ -963,6 +1005,9 @@ return obj;
 
 		# Update the bore's cross
 		me.boreSymbol.setTranslation(hudmath.HudMath.getBorePos());
+
+		# CCRP shit
+		me.CCRP_active = me.CCRP();
 
 		# EEGS mode's status update
 		me.eegsGroup.setVisible(eegsShow);
@@ -1274,7 +1319,7 @@ return obj;
 
         # CCIP is after update_item so it can get VV up-to-date location
         me.ccipInfo = pylons.getCCIP();
-        if (me.ccipInfo == nil or notification.ControlsArmamentWeaponSelector != 5) {
+        if (me.ccipInfo == nil or notification.ControlsArmamentWeaponSelector != 5 or pylons.fcs.getDropMode() == 0) {
             me.ccipGrp.hide();
 			setprop("sim/model/f15/armament/ccip-off", 1);
         } else {
@@ -1407,6 +1452,77 @@ return obj;
 	        return 0.2965 * math.pow(Mach, -1.1506) + _cd;
 		}
 	},
+
+	# CCRP Loop
+	CCRP: func() {
+        if (getprop("sim/model/f15/controls/armament/master-arm-switch") != 0 and pylons.fcs.getDropMode() == fc.DROP_CCRP) {
+            var selW = pylons.fcs.getSelectedWeapon();
+            if (selW == nil) {
+                me.solutionCue.hide();
+                me.ccrpMarker.hide();
+                me.bombFallLine.hide();
+                return 0;
+            }
+            var trgt = fc.getCCRPTarget();
+
+            if (trgt == nil) {
+				print("target null");
+                # We must return 1 if it's a bomb and we're in CCRP drop mode
+                me.solutionCue.hide();
+                me.ccrpMarker.hide();
+                me.bombFallLine.hide();
+                return fc.containsVector(fc.CCIP_CCRP, selW.type);
+            }
+
+            if (me.CCRP_active and fc.containsVector(fc.CCIP_CCRP, selW.type) and selW.status == armament.MISSILE_LOCK ) {
+                me.distCCRP = getprop("payload/armament/distCCRP");
+                if (me.distCCRP == -1 or (me.distCCRP*M2NM > 13.2 and selW.guidance == "laser")) {#1F-F16CJ-34-1: max laser dist is 13.2nm
+                    me.solutionCue.hide();
+                    me.ccrpMarker.hide();
+                    me.bombFallLine.hide();
+                    return 1;
+                }
+                if (getprop("velocities/groundspeed-kt") > 0) {
+                    me.timeToRelease = me.distCCRP/getprop("velocities/groundspeed-kt");
+                }
+                me.distCCRP/=4000;
+                if (me.distCCRP > 0.75) {
+                    me.distCCRP = 0.75;
+                }
+                me.ldr = trgt.getLastAZDeviation();
+                if (me.ldr == nil) {
+                    me.blepCoord = trgt.get_Coord();
+                    if (trgt == armament.contactPoint and me.blepCoord != nil) {
+                        me.blepHeading = geo.aircraft_position().course_to(me.blepCoord);
+                        me.ldr = geo.normdeg180(me.blepHeading-getprop("orientation/heading"));
+                    } else {
+                        me.solutionCue.hide();
+                        me.ccrpMarker.hide();
+                        me.bombFallLine.hide();
+                        return 1;
+                    }
+                }
+                me.bombFallLine.setTranslation(me.ldr*me.texelPerDegreeX,0);
+                me.ccrpMarker.setTranslation(me.ldr*me.texelPerDegreeX,0);
+                me.solutionCue.setTranslation(me.ldr*me.texelPerDegreeX,me.sy*0.5-me.sy*0.5*me.distCCRP);
+                me.bombFallLine.show();
+                me.ccrpMarker.show();
+                me.solutionCue.show();
+                return math.abs(me.ldr)<20?2:1;
+            } else {
+                me.solutionCue.hide();
+                me.ccrpMarker.hide();
+                me.bombFallLine.hide();
+                return 1;
+            }
+        } else {
+            me.solutionCue.hide();
+            me.ccrpMarker.hide();
+            me.bombFallLine.hide();
+			print("FUCK YA");
+            return 0;
+        }
+    },
 
 	# EEGS Disply loop
 	# Taken from F-16's model, and adapted to the F-15 by Jimmy L. Miles

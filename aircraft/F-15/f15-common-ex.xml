@@ -409,6 +409,10 @@
                 <desc>Toggle auto AIM-9 cage mode</desc>
             </key>
             <key>
+                <name>#</name>
+                <desc>Toggle between CCIP and CCRP bombing mode</desc>
+            </key>
+            <key>
                 <name>Ctrl-n</name>
                 <desc>Toggle Radar PULSE SRCH / TWS AUTO Mode</desc>
             </key>
@@ -899,6 +903,9 @@
                     <gun-aa-max-range-ft type="int">3000</gun-aa-max-range-ft>
                     <gun-strf-max-range-ft type="int">4000</gun-strf-max-range-ft>
                     <gun-eegs-wingspan-ft type="double">25</gun-eegs-wingspan-ft>
+                    <releasedCCRP type="bool">false</releasedCCRP>
+                    <distCCRP type="int">-1</distCCRP>
+                    <gravity-dropping type="bool">false</gravity-dropping>
                 </armament>
                 <avionics>
                     <altitude-deck-min type="double">0</altitude-deck-min>
@@ -3214,6 +3221,15 @@
                 <binding>
                     <command>property-toggle</command>
                     <property>sim/model/f15/controls/AFCS/att-hold</property>
+                </binding>
+            </key>
+
+            <key n="35">
+                <name>#</name>
+                <desc>Toggle between CCIP and CCRP bombing modes</desc>
+                <binding>
+                    <command>nasal</command>
+                    <script>pylons.fcs.toggleDropMode()</script>
                 </binding>
             </key>
 

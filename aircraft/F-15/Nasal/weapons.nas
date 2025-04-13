@@ -73,8 +73,6 @@ var ccrp = func {
             return;
         }
     }
-    setprop("sim/model/f15/systems/armament/aim9/ccrp",0);
-    setprop("sim/model/f15/systems/armament/aim9/ccrp-hud-vert", 0);
 }
 
 # Init
@@ -235,6 +233,7 @@ var armament_update = func {
 
     update_gun_ready();
     setCockpitLights();
+    # Calculate ccrp
     #ccrp();
 }
 

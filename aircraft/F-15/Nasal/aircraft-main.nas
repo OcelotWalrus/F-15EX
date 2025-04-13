@@ -172,6 +172,8 @@ tgp.callInit();
 flooptimer = maketimer(0, func tgp.fast_loop());
 flooptimer.start();
 
+# Init the CCRP computing system
+fc.ccrp_loopTimer.start();
 
 #
 #

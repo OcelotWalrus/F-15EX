@@ -9,6 +9,12 @@ var VectorNotification = {
         return new_class;
     },
 };
+
+var RIPPLE_INTERVAL_METERS = 0;
+var RIPPLE_INTERVAL_SECONDS = 1;
+var DROP_CCRP = 0;
+var DROP_CCIP = 1;
+
 var FireControl = {
 	new: func (pylons, pylonOrder, typeOrder) {
 		var fc = {parents:[FireControl]};
@@ -101,6 +107,14 @@ var FireControl = {
 		#0=ccrp, 1 = ccip
 		me.dropMode;
 	},
+
+    toggleDropMode: func {
+        if (me.dropMode == 1) {
+            me.dropMode = 0;
+        } else {
+            me.dropMode = 1;
+        }
+    },
 
 	setDropMode: func (mode) {
 		#0=ccrp, 1 = ccip
@@ -716,6 +730,7 @@ var FireControl = {
 		printfDebug("trigger called %d %d %d",getprop("controls/armament/master-arm"),getprop("controls/armament/trigger"),me.selected != nil);
 		if (me.getSelectedPylon() == nil or !me.getSelectedPylon().isActive()) return;
 		if (me.isRippling) return;
+        setprop("sim/model/f15/releasedCCRP", 0);
 		if (getprop("controls/armament/master-arm") == 1 and getprop("controls/armament/trigger") > 0 and me.selected != nil) {
 			printDebug("trigger propagating");
 			me.aim = me.getSelectedWeapon();
@@ -726,6 +741,30 @@ var FireControl = {
 				me.guidanceEnabled = 1;
 			}
 			if (me.aim != nil and me.aim.parents[0] == armament.AIM and (me.aim.status == armament.MISSILE_LOCK or me.aim.guidance=="unguided" or me.aim.loal or !me.guidanceEnabled)) {
+                # Weapon ready for dropping
+                if (me.getDropMode() == DROP_CCRP and containsVector(CCIP_CCRP, me.aim.type) and me.aim.status == armament.MISSILE_LOCK) {
+			    	# CCRP: weapon locked and ready
+			        me.distCCRP = getprop("sim/model/f15/distCCRP");
+			        me.distCCRPLast = me.distCCRP;
+			        if (me.distCCRP == -1 or me.distCCRPLast == -1 or me.distCCRP >= 500 or me.distCCRP < me.distCCRPLast) {
+			            printDebug("CCRP: Trigger was pressed, waiting for launch parameters as not fully ready yet");
+                        if (me["distCCRPListen"] == nil) me.distCCRPListen = setlistener("sim/model/f15/distCCRP", func (distCCRP) {
+
+                            me.distCCRPLast = me.distCCRP;
+
+                            me.distCCRP = distCCRP.getValue();
+
+                            if (me.distCCRP != -1 and me.distCCRPLast != -1 and me.distCCRP < 500 and me.distCCRP >= me.distCCRPLast) {
+                                printDebug("CCRP: Launch parameters met, re-run the trigger function");
+                                me.cancelCCRPListener();
+                                me.trigger();
+                                setprop("sim/model/f15/releasedCCRP", 1);
+                            }
+                        });
+                        return;  # The listener will call this function again when we are ready
+                    }
+			    }
+
 				me.aim = me.fireAIM(me.selected[0],me.selected[1], me.guidanceEnabled);
 				if (me.selectedAdd != nil) {
 					foreach(me.seldual ; me.selectedAdd) {
@@ -738,14 +777,14 @@ var FireControl = {
 				me.idx = me.vectorIndex(dualWeapons,me.selectedType);
 				if (me.idx != -1) {
 					# gravity assisted munition dropping.
-					setprop("payload/armament/gravity-dropping", 1);
+					setprop("sim/model/f15/gravity-dropping", 1);
 					if (me.ripple > 1) {
 						me.isRippling = 1;
 						me.rippleThis = 2;
 						me.rippleFireStart();
 					} else {
 						# gravity assisted munition finished dropping.
-						setprop("payload/armament/gravity-dropping", 0);
+						setprop("sim/model/f15/gravity-dropping", 0);
 					}
 				}
 
@@ -773,7 +812,10 @@ var FireControl = {
 					me.nextWeapon(me.selectedType);
 				}
 			}
-		}
+            me.cancelCCRPListener();
+		} else {
+            me.cancelCCRPListener();
+        }
 	},
 
 	fireAIM: func (p,w,g) {
@@ -820,7 +862,7 @@ var FireControl = {
 				if (me.rippleThis > me.ripple or me.getSelectedWeapon() == nil) {
 					me.isRippling = 0;
 					# gravity assisted munition finished dropping.
-					setprop("payload/armament/gravity-dropping", 0);
+					setprop("sim/model/f15/gravity-dropping", 0);
 					screen.log.write("Finished ripple", 0.5, 0.5, 1);
 					return;
 				}
@@ -829,7 +871,7 @@ var FireControl = {
 		if (me.rippleCount > 30) {
 			# after 7.5 seconds if its not finished rippling, cancel it. Might happen if the aircraft is still.
 			me.isRippling = 0;
-			setprop("payload/armament/gravity-dropping", 0);
+			setprop("sim/model/f15/gravity-dropping", 0);
 			screen.log.write("Cancelled ripple", 0.5, 0.5, 1);
 			return;
 		}
@@ -852,6 +894,14 @@ var FireControl = {
 			if (me.changeListener != nil) me.changeListener();
 		}
 		return;
+	},
+
+    cancelCCRPListener: func {
+		if (me["distCCRPListen"] != nil) {
+            printDebug("CCRP: Masterarm/Trigger is off or no weapon, cancel the listener");
+            removelistener(me.distCCRPListen);
+            me.distCCRPListen = nil;
+        }
 	},
 
 	updateCurrent: func {
@@ -883,6 +933,9 @@ var FireControl = {
 
 	updateDual: func (type = nil) {
 		# will stop all current weapons, and select single and pair weapons and start em all.
+        # But only if CCRP trigger is not being held. Else the CCRP line will blink when trigger pulled,
+		# as the weapons(s) will restart init sequence and lose lock.
+		if (me["distCCRPListen"] != nil) return;
 		me.duality = getprop("controls/armament/dual");
 		me.sweaps = me.getSelectedWeapons();
 		if (me.sweaps != nil) {
@@ -1130,12 +1183,76 @@ var FireControl = {
 	},
 };
 
+var ccrpTrgt = nil;
+
+getCCRPTarget = func {
+	# HUD uses this
+	return ccrpTrgt;
+}
+
+var containsVector = func (vec, item) {
+    foreach(test; vec) {
+        if (test == item) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+var ccrp_loop = func () {
+    var selW = pylons.fcs.getSelectedWeapon();
+
+    # Exit if master switch off, no selected weapon, ccip, not A/G bomb, or not locked on a target
+    if (getprop("controls/armament/master-arm") == 0 or
+        	selW == nil or pylons.fcs.getDropMode() != DROP_CCRP or
+            !containsVector(CCIP_CCRP, selW.type)) {  # or selW.status != armament.MISSILE_LOCK
+    	ccrpTrgt = nil;
+        setprop("sim/model/f15/distCCRP", -1);
+        return;
+    }
+    ccrpTrgt = armament.contactPoint;
+    var prio = awg_9.getPriorityTarget();
+    if (ccrpTrgt == nil and prio != nil
+    		and (prio.get_type() == armament.SURFACE or prio.get_type() == armament.MARINE)) {
+        ccrpTrgt = prio;
+    } elsif (ccrpTrgt == nil) {
+        printDebug("CCRP: tgt not found");
+        setprop("sim/model/f15/distCCRP", -1);
+        return;
+    }
+    print("HOWDY");
+    print(ccrpTrgt == nil);
+    print(prio == nil);
+    if (selW.guidance == "unguided") {
+    	# TODO: Scour manual to see if unguided can be dropped with CCRP. Also remove lock requirement if they can.
+        var dt = 0.1;
+        var maxFallTime = 20;
+    } else {
+        var agl = (getprop("position/altitude-ft")-ccrpTrgt.get_altitude())*FT2M;
+        var dt = agl*0.000025;#4000 ft = ~0.1
+        if (dt < 0.1) dt = 0.1;
+        var maxFallTime = 45;
+    }
+    var distCCRP = selW.getCCRP(maxFallTime,dt);
+    if (distCCRP == nil) {
+        distCCRP = -1;
+    }
+    setprop("sim/model/f15/distCCRP", distCCRP);
+}
+#if (debugFC) screen.property_display.add("sim/model/f15/distCCRP");
+#if (debugFC) screen.property_display.add("sim/model/f15/gravity-dropping");
+
+var ccrp_loopTimer = maketimer(0.1, ccrp_loop);
+ccrp_loopTimer.simulatedTime = 1;#started from aircraft-main.nas
+
 var debug = 0;
 var printDebug = func (msg) {if (debug == 1) print(msg);};
 var printfDebug = func {if (debug == 1) call(printf,arg);};
 
 
 # This is non-generic methods, please edit it to fit your radar setup:
+# List of weapons that can be CCIP/CCRP dropped:
+var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12"];
 # List of weapons that can be ripple/dual dropped:
 var dualWeapons = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12"];
 var getCompleteRadarTargetsList = func {
