@@ -11,8 +11,10 @@
             high-performance, supersonic, allweather air-superiority fighter manufactured by St. Louis' Boing division powered by two
             F110-GE-129 turbofan engines. Unlike the original F-15C and F-15D, this aircraft has
             been designed to succeed in both air superiority and ground attack missions.
-            Radar and heat seeking air-to-air missiles AIM-7, AIM-9, AIM-120 (and their variant) and a 20mm gun are the primary armament.
-            The Aircraft can carry and deploy MK-series bombs, CBU-series cluster bombs, GBU guided bombs, A/G missiles, and B61-12 nukes.
+            Radar and heat seeking air-to-air missiles AIM-9X, AIM-120D and a 20mm gun are the primary armament.
+            The Aircraft can carry and deploy MK-series bombs, CBU-series cluster bombs, GBU guided bombs, AGM missiles, and B61-7/12 nukes.
+            Its raw power and acceleration but also targeting precision with the Sniper and LANTIRN targeting pods, along with the
+            advanced LANTIRN Navigation Pod make it an unmatched fighter jet, along with its 104 kills to 0 losses ratio.
             MTOW ≈85,000 lbs. VNE ≈1,500 kts. Max Gear extension 300 kts. Max Flap speed 250 kts. Max dragchute speed 185 kts.
         </long-description>
         <variant-of>f15c</variant-of>

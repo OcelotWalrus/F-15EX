@@ -1636,6 +1636,13 @@
                 <bool n="170" alias="/sim/model/f15/payload/selected/agm-65b-l4" />
                 <bool n="171" alias="/sim/model/f15/payload/selected/agm-65b-r1" />
                 <bool n="172" alias="/sim/model/f15/payload/selected/agm-65b-r2" />
+                <bool n="173" alias="/sim/model/f15/payload/selected/agm-65d-l" />
+                <bool n="174" alias="/sim/model/f15/payload/selected/agm-65d-c" />
+                <bool n="175" alias="/sim/model/f15/payload/selected/agm-65d-r" />
+                <bool n="176" alias="/sim/model/f15/payload/selected/agm-65d-l3" />
+                <bool n="177" alias="/sim/model/f15/payload/selected/agm-65d-l4" />
+                <bool n="178" alias="/sim/model/f15/payload/selected/agm-65d-r1" />
+                <bool n="179" alias="/sim/model/f15/payload/selected/agm-65d-r2" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2047,6 +2054,10 @@
                 <name>2 x AGM-65B</name>
                 <lbs>954.0</lbs>
             </opt>
+            <opt>
+                <name>1 x AGM-65D</name>
+                <lbs>484.6</lbs>
+            </opt>
         </weight>
         <weight n="5">
             <name>Center Station 5</name>
@@ -2073,6 +2084,10 @@
             <opt>
                 <name>3 x CBU-87</name>
                 <lbs>2875.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-65D</name>
+                <lbs>484.6</lbs>
             </opt>
         </weight>
         <weight n="9">
@@ -2120,6 +2135,10 @@
             <opt>
                 <name>2 x AGM-65B</name>
                 <lbs>954.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-65D</name>
+                <lbs>484.6</lbs>
             </opt>
         </weight>
         <weight n="15">
@@ -2992,8 +3011,8 @@
                 <fire-msg type="string">Rifle</fire-msg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <ready-time type="double">180</ready-time>
-                <requires-power-on type="bool">true</requires-power-on>
-                <power-on-battery-time type="double">2700</power-on-battery-time><!-- Official sources: 30 to 60 mins for (think was) D version. And 105 seconds after launch for G version. -->
+                <requires-power-on type="bool">true</requires-power-on> <!-- don't help to work-->
+                <power-on-battery-time type="double">2700</power-on-battery-time>
             </agm-65d>
         </armament>
 

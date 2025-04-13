@@ -1344,6 +1344,7 @@
 							<value>2 x CBU-105</value>
 							<value>2 x GBU-12</value>
 							<value>2 x AGM-65B</value>
+							<value>1 x AGM-65D</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1428,6 +1429,7 @@
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
 							<value>1 x AGM-65B</value>
+							<value>1 x AGM-65D</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1476,6 +1478,7 @@
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
 							<value>1 x AGM-65B</value>
+							<value>1 x AGM-65D</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1520,6 +1523,7 @@
 							<value>3 x MK-83</value>
 							<value>3 x MK-84</value>
 							<value>3 x CBU-87</value>
+							<value>1 x AGM-65D</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1567,6 +1571,7 @@
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
 							<value>1 x AGM-65B</value>
+							<value>1 x AGM-65D</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1615,6 +1620,7 @@
 							<value>1 x MK-83</value>
 							<value>1 x GBU-12</value>
 							<value>1 x AGM-65B</value>
+							<value>1 x AGM-65D</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -1700,6 +1706,7 @@
 							<value>2 x CBU-105</value>
 							<value>2 x GBU-12</value>
 							<value>2 x AGM-65B</value>
+							<value>1 x AGM-65D</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
