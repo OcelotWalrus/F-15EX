@@ -1643,6 +1643,9 @@
                 <bool n="177" alias="/sim/model/f15/payload/selected/agm-65d-l4" />
                 <bool n="178" alias="/sim/model/f15/payload/selected/agm-65d-r1" />
                 <bool n="179" alias="/sim/model/f15/payload/selected/agm-65d-r2" />
+                <bool n="180" alias="/sim/model/f15/payload/selected/agm-84d-l" />
+                <bool n="181" alias="/sim/model/f15/payload/selected/agm-84d-c" />
+                <bool n="182" alias="/sim/model/f15/payload/selected/agm-84d-r" />
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2058,6 +2061,10 @@
                 <name>1 x AGM-65D</name>
                 <lbs>484.6</lbs>
             </opt>
+            <opt>
+                <name>1 x AGM-84D</name>
+                <lbs>1190.0</lbs>
+            </opt>
         </weight>
         <weight n="5">
             <name>Center Station 5</name>
@@ -2088,6 +2095,10 @@
             <opt>
                 <name>1 x AGM-65D</name>
                 <lbs>484.6</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-84D</name>
+                <lbs>1190.0</lbs>
             </opt>
         </weight>
         <weight n="9">
@@ -2139,6 +2150,10 @@
             <opt>
                 <name>1 x AGM-65D</name>
                 <lbs>484.6</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-84D</name>
+                <lbs>1190.0</lbs>
             </opt>
         </weight>
         <weight n="15">
@@ -3014,6 +3029,43 @@
                 <requires-power-on type="bool">true</requires-power-on> <!-- don't help to work-->
                 <power-on-battery-time type="double">2700</power-on-battery-time>
             </agm-65d>
+            <agm-84d>                    <!-- A variant: 0.85 mach cruise, E is calibrated to just under 1.00 -->
+                <type-id type="int">1</type-id>
+                <short-name type="string">AG84D</short-name>
+                <long-name type="string">AGM-84D Harpoon</long-name>
+                <vol-search type="double">0.00</vol-search>
+                <vol-track type="double">1.00</vol-track>
+                <guidance type="string">inertial</guidance> <!--  -->
+                <navigation type="string">direct</navigation>
+                <all-aspect type="bool">true</all-aspect>
+                <max-fire-range-nm type="double">120</max-fire-range-nm> <!-- D variant -->
+                <FCS-field-deg type="int">30</FCS-field-deg>
+                <seeker-field-deg type="int">180</seeker-field-deg>
+                <max-g type="int">5</max-g>
+                <max-launch-g type="int">7</max-launch-g>
+                <thrust-lbf-stage-1 type="double">13000</thrust-lbf-stage-1> <!-- 13000 lbf is approx 36000 lb sec impulse -->
+                <thrust-lbf-stage-2 type="double">660</thrust-lbf-stage-2> <!-- SAC -->
+                <stage-1-duration-sec type="double">2.84</stage-1-duration-sec> <!-- SAC -->
+                <stage-2-duration-sec type="double">960</stage-2-duration-sec> <!-- SAC -->
+                <weight-launch-lbs type="double">1190</weight-launch-lbs> <!--  -->
+                <weight-warhead-lbs type="double">500</weight-warhead-lbs> <!--  -->
+                <weight-fuel-lbm type="double"> 259 </weight-fuel-lbm> <!-- SAC 113sustain+146boost-->
+                <drag-coeff type="double">0.16</drag-coeff>
+                <cross-section-sqft type="double">0.994</cross-section-sqft> <!-- SAC -->
+                <arming-time-sec type="double">5.0</arming-time-sec>
+                <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double">1000</self-destruct-time-sec>
+                <loft-altitude type="int">200</loft-altitude>
+                <min-fire-range-nm type="double">0.5</min-fire-range-nm>
+                <rail type="bool">false</rail>
+                <max-report-distance type="double">125</max-report-distance>
+                <class type="string">M</class>
+                <terrain-follow type="bool">false</terrain-follow> <!-- seaskimming, not terrain following -->
+                <fire-msg type="string">Bruiser</fire-msg>
+                <ready-time type="double">25</ready-time> <!-- INS alignment -->
+                <!--requires-power-on type="bool">true</requires-power-on> disablin that for now
+                <power-on-battery-time type="double">900</power-on-battery-time--><!-- Source: GPT 4 lol -->
+            </agm-84d>
         </armament>
 
     </payload>

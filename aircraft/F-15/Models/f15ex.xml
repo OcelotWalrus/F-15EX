@@ -3901,6 +3901,32 @@
             </and>
         </condition>
     </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84d-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[180]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84d-c</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[181]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84d-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[182]</property>
+        </condition>
+    </animation>
+
     <animation>
         <type>select</type>
         <nopreview />
@@ -5317,6 +5343,34 @@
              <z-m>-0.925</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
+    </model>
+
+    <model>
+        <name>agm-84d-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-84d-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-84d-c</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
+        <offsets>
+            <x-m>1.2</x-m>
+            <y-m>0</y-m>
+            <z-m>-1</z-m>
+       </offsets>
     </model>
 
     <model>

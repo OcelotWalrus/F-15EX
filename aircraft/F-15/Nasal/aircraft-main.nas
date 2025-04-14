@@ -693,6 +693,8 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 610*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-65D") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 484.5*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-84D") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 1190.0*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }
