@@ -1994,7 +1994,7 @@
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
 										setprop("payload/weight[20]/selected", "Empty");
-									} elsif (getprop("payload/armament/station/id-21-set") != "Empty") {
+									} elsif (getprop("payload/armament/station/id-21-set") != "Empty" and getprop("payload/armament/station/id-20-set") == "1 x GBU-12") {
 										setprop("sim/model/f15/warn-loads-text", "!There isn't enough room in the CFT stations to load that here!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2040,7 +2040,7 @@
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
 										setprop("payload/weight[21]/selected", "Empty");
-									} elsif (getprop("payload/armament/station/id-20-set") != "Empty" or getprop("payload/armament/station/id-22-set") != "Empty") {
+									} elsif (getprop("payload/armament/station/id-20-set") == "1 x GBU-12" or getprop("payload/armament/station/id-22-set") == "1 x GBU-12") {
 										setprop("sim/model/f15/warn-loads-text", "!There isn't enough room in the CFT stations to load that here!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2087,7 +2087,7 @@
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
 										setprop("payload/weight[22]/selected", "Empty");
-									} elsif (getprop("payload/armament/station/id-21-set") != "Empty") {
+									} elsif (getprop("payload/armament/station/id-21-set") != "Empty" and getprop("payload/armament/station/id-22-set") == "1 x GBU-12") {
 										setprop("sim/model/f15/warn-loads-text", "!There isn't enough room in the CFT stations to load that here!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2134,7 +2134,7 @@
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
 										setprop("payload/weight[23]/selected", "Empty");
-									} elsif (getprop("payload/armament/station/id-24-set") != "Empty") {
+									} elsif (getprop("payload/armament/station/id-24-set") != "Empty" and getprop("payload/armament/station/id-23-set") == "1 x GBU-12") {
 										setprop("sim/model/f15/warn-loads-text", "!There isn't enough room in the CFT stations to load that here!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2180,7 +2180,7 @@
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
 										setprop("payload/weight[24]/selected", "Empty");
-									} elsif (getprop("payload/armament/station/id-23-set") != "Empty" or getprop("payload/armament/station/id-25-set") != "Empty") {
+									} elsif (getprop("payload/armament/station/id-23-set") == "1 x GBU-12" or getprop("payload/armament/station/id-25-set") == "1 x GBU-12") {
 										setprop("sim/model/f15/warn-loads-text", "!There isn't enough room in the CFT stations to load that here!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2227,7 +2227,7 @@
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
 										setprop("payload/weight[25]/selected", "Empty");
-									} elsif (getprop("payload/armament/station/id-24-set") != "Empty") {
+									} elsif (getprop("payload/armament/station/id-24-set") != "Empty" and getprop("payload/armament/station/id-25-set") == "1 x GBU-12") {
 										setprop("sim/model/f15/warn-loads-text", "!There isn't enough room in the CFT stations to load that here!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
