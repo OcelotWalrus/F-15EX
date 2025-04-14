@@ -3026,8 +3026,8 @@
                 <fire-msg type="string">Rifle</fire-msg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <ready-time type="double">180</ready-time>
-                <requires-power-on type="bool">true</requires-power-on> <!-- don't help to work-->
-                <power-on-battery-time type="double">2700</power-on-battery-time>
+                <!--requires-power-on type="bool">true</requires-power-on>
+                <power-on-battery-time type="double">2700</power-on-battery-time-->
             </agm-65d>
             <agm-84d>                    <!-- A variant: 0.85 mach cruise, E is calibrated to just under 1.00 -->
                 <type-id type="int">1</type-id>

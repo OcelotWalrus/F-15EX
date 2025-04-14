@@ -660,14 +660,33 @@ var F15HUD = {
 																	}
 																	obj.window17.setText(sprintf("%02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
+																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
+																	if (!(weap.ready_time == 0)) { # Only if the weapon has a ready timer
+																		curr_time = getprop("sim/time/elapsed-sec");
+																		standby_time = weap.ready_standby_time;  # time at which the weapon started readyin process
+																		if (curr_time > (standby_time + weap.ready_time)) {  # weapon's ready
+																			obj.window17.setText("RDY");
+																		} else {
+																			timer = math.round((standby_time + weap.ready_time) - curr_time);
+																			timer_sec = timer;
+																			timer_min = math.floor(timer / 60);
+																			if (timer_min > 0) {
+																				timer_sec = timer_sec - timer_min * 60;
+																			}
+																			obj.window17.setText(sprintf("STBY %02d:%02d", timer_min, timer_sec));
+																		}
+																	} else {
+																		obj.window17.setText("RDY");
+																	}
+																	obj.window17.setVisible(1);
 																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X" or weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D") and armament.MISSILE_LOCK == weap.status and !val.RadarStandby) {  # only works if the radar's on
 																	if (weap.type == "AIM-9X") {
 																		mean_speed = mean_9_x_speed;
 																	} elsif (weap.type == "AIM-120D") {
 																		mean_speed = mean_120_d_speed;
-																	} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D") {
+																	} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D") { # not used anymore, we display time till ready instead for AGMs
 																		mean_speed = agm65_speed;  # all AGM variants got the same mean course speed
-																	} elsif (weap.type == "AGM-84D") {
+																	} elsif (weap.type == "AGM-84D") { # not used anymore, we display time till ready instead for AGMs
 																		mean_speed = agm84_speed;  # all AGM variants got the same mean course speed
 																	}
 																	var dlzArray = pylons.getDLZ();
