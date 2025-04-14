@@ -553,7 +553,7 @@ var F15HUD = {
                                                         {
                                                             obj.window9.setText(sprintf("%03d", math.round(val.VelocitiesAirspeedKt)));
                                                             obj.window13.setText(sprintf("G %03d", math.round(val.VelocitiesGroundspeedKt)));
-                                                            
+
                                                             # Separate thousands from the altitude to put em in evidence in the HUD
                                                             altitude = math.round(val.AltimeterIndicatedAltitudeFt);
                                                             if (altitude < 1000) {  # If no thousands, just keep it normal
@@ -565,10 +565,11 @@ var F15HUD = {
                                                                 big_altitude = math.floor(altitude / 1000);
                                                                 small_altitude = altitude - big_altitude * 1000;
                                                             }
-                                                                                                                        
+
                                                             if (getprop("gear/gear[0]/wow") == 1) {
-                                                                obj.window1.setText("GROUND");
-                                                                obj.window1_big.setVisible(0);
+                                                                obj.window1_big.setText("GROUND");
+                                                                obj.window1_big.setVisible(1);
+                                                                obj.window1.setText("");
                                                             } else {
                                                                 obj.window1.setText(sprintf(" %03d", small_altitude));
                                                                 obj.window1_big.setText(sprintf("%02d", big_altitude));
@@ -725,13 +726,47 @@ var F15HUD = {
             props.UpdateManager.FromHashList(["AutopilotRouteManagerActive",
                                                         "AutopilotRouteManagerWpDist",
                                                         "AutopilotRouteManagerWpEtaSeconds",
-                                                        "ControlsGearGearDown"], 0.1, func(val)
+                                                        "ControlsGearGearDown",
+														"NavigationMode",
+														"TacanStationInRange",
+														"TacanBearingRelDeg",
+														"HeadingMag",
+														"TacanStationDistance"], 0.1, func(val)
                                                         {
-                                                            if (val.AutopilotRouteManagerActive) {
+															if (val.NavigationMode == 1) { # TACAN nav mode overrides waypoint nav mode if the switch for it i ON
+																if (val.TacanStationInRange) {
+																	TacanDistance = val.TacanStationDistance;
+																	if (TacanDistance >= 10) {
+																		# tacan can under right conditions be 3 digits
+																		obj.HudNavRangeDisplay = sprintf("%d", TacanDistance);
+																	} else {
+																		obj.HudNavRangeDisplay = sprintf("%.1f", TacanDistance);
+																	}
+																	# In TACAN mode, stead of time for intercept, we display the relative aspect of the station
+																	deg_rel = math.round(val.HeadingMag-val.TacanBearingRelDeg);
+																	sign = "";
+																	if (deg_rel > 0) {
+																		sign = "L";
+																	} elsif (deg_rel < 0) {
+																		deg_rel = -deg_rel;
+																		sign = "R";
+																	} elsif (deg_rel == 0) {
+																		deg_rel = "";
+																		sign = "T";
+																	} elsif (deg_rel == 360) {
+																		deg_rel = "";
+																		sign = "H";
+																	}
+																	obj.HudNavRangeETA = sprintf("%s%03d *", sign, deg_rel);
+																} else {
+																	obj.HudNavRangeDisplay = "N XX";
+																	obj.HudNavRangeETA = "XX";
+																}
+															} elsif (val.AutopilotRouteManagerActive) {
                                                                 obj.rng = val.AutopilotRouteManagerWpDist;
                                                                 obj.eta_s = val.AutopilotRouteManagerWpEtaSeconds;
                                                                 if (obj.rng != nil) {
-                                                                    obj.HudNavRangeDisplay =sprintf("N %4.1f", obj.rng);
+                                                                    obj.HudNavRangeDisplay = sprintf("N %4.1f", obj.rng);
                                                                 } else {
                                                                     obj.HudNavRangeDisplay = "N XXX";
                                                                 }
@@ -819,8 +854,10 @@ var F15HUD = {
                                                         "RadarActiveTargetClosure",
                                                         "HudNavRangeDisplay",
                                                         "HudNavRangeETA",
+														"NavigationMode",
 														"OrientationHeadingDeg",
-														"ArmamentRippleCount"], nil, func(val)
+														"ArmamentRippleCount",
+														"TacanChannel"], nil, func(val)
                                                         {
                                                             if (val.ControlsArmamentMasterArmSwitch) {
                                                                 obj.window11.setVisible(1);
@@ -932,13 +969,16 @@ var F15HUD = {
                                                                 obj.window16.setVisible(0);
 																obj.window17.setVisible(0);
 																obj.window18.setVisible(0);
-                                                                if (val.HudNavRangeDisplay != "")
-                                                                obj.window3.setText("NAV");
-                                                                else
-                                                                obj.window3.setText("");
-                                                                obj.window4.setText(val.HudNavRangeDisplay);
-                                                                obj.window5.setText(val.HudNavRangeETA);
-                                                                obj.window6.setVisible(0); # SRM UNCAGE / TARGET ASPECT
+                                                                if (val.HudNavRangeDisplay != "" and val.NavigationMode == 0) {  # NavigationMode: 0 = waypoint, 1= TACAN, 2=ILS Nav (not implemented), 3=ILS TACAN (not implemented)
+                                                                	obj.window3.setText("NAV");
+																} elsif (val.HudNavRangeDisplay != "" and val.NavigationMode == 1) {
+                                                                	obj.window3.setText(sprintf("TACAN %s", val.TacanChannel));
+                                                                } else {
+	                                                                obj.window3.setText("");
+																}
+	                                                            obj.window4.setText(val.HudNavRangeDisplay);
+	                                                            obj.window5.setText(val.HudNavRangeETA);
+	                                                            obj.window6.setVisible(0); # SRM UNCAGE / TARGET ASPECT
                                                             }
                                                         }
                                                     ),
@@ -2094,6 +2134,12 @@ input = {
 		BingoFuel                               : "sim/model/f15/lights/ca-bingo-fuel",
 		RadarStandby                            : "instrumentation/radar/radar-standby",
 		ArmamentRippleCount                     : "controls/armament/dual",
+		NavigationMode                          : "sim/model/instrumentation/vhf/mode",
+		TacanStationInRange                     : "instrumentation/tacan/in-range",
+		TacanBearingRelDeg                      : "instrumentation/tacan/indicated-bearing-true-deg",
+		HeadingMag                              : "orientation/true-heading-deg",
+		TacanStationDistance                    : "instrumentation/tacan/indicated-distance-nm",
+		TacanChannel                            : "instrumentation/tacan/display/channel",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
