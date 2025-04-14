@@ -137,7 +137,8 @@ var F15HUD = {
         obj.target_locked = obj.get_element("target_locked");
         obj.target_locked.setVisible(0);
 
-        obj.window1 = obj.get_text("window1", aircraft.HUDFont,9,1.4);
+        obj.window1 = obj.get_text("window1", aircraft.HUDFont,10,1.4);
+        obj.window1_big = obj.get_text("W1B", aircraft.HUDFont,12,1.4);
         obj.window2 = obj.get_text("window2", aircraft.HUDFont,9,1.4);
         obj.window3 = obj.get_text("window3", aircraft.HUDFont,9,1.4);
         obj.window4 = obj.get_text("window4", aircraft.HUDFont,9,1.4);
@@ -145,15 +146,15 @@ var F15HUD = {
         obj.window6 = obj.get_text("window6", aircraft.HUDFont,9,1.4);
         obj.window7 = obj.get_text("window7", aircraft.HUDFont,9,1.4);
         obj.window8 = obj.get_text("window8", aircraft.HUDFont,9,1.4);
-        obj.window9 = obj.get_text("window9", aircraft.HUDFont,9,1.4);
+        obj.window9 = obj.get_text("window9", aircraft.HUDFont,11,1.4);
         obj.window10 = obj.get_text("window10", aircraft.HUDFont,9,1.4);
         obj.window11 = obj.get_text("window11", aircraft.HUDFont,9,1.4);
-        obj.window13 = obj.get_text("window13", aircraft.HUDFont,9,1.4);
+        obj.window13 = obj.get_text("window13", aircraft.HUDFont,11,1.4);
         obj.window14 = obj.get_text("window14", aircraft.HUDFont,9,1.4);
-        obj.window15 = obj.get_text("window15", aircraft.HUDFont,9,1.4);
-        obj.window16 = obj.get_text("window16", aircraft.HUDFont,9,1.4);
-        obj.window17 = obj.get_text("window17", aircraft.HUDFont,9,1.4);
-        obj.window18 = obj.get_text("window18", aircraft.HUDFont,9,1.4);
+        obj.window15 = obj.get_text("window15", aircraft.HUDFont,8,1.4);
+        obj.window16 = obj.get_text("window16", aircraft.HUDFont,8,1.4);
+        obj.window17 = obj.get_text("window17", aircraft.HUDFont,8,1.4);
+        obj.window18 = obj.get_text("window18", aircraft.HUDFont,8,1.4);
 
 		obj.color = [0.3,1,0.3,.5]; # last one should be brightness parameter TODO: apply it to all elements
 
@@ -552,10 +553,26 @@ var F15HUD = {
                                                         {
                                                             obj.window9.setText(sprintf("%03d", math.round(val.VelocitiesAirspeedKt)));
                                                             obj.window13.setText(sprintf("G %03d", math.round(val.VelocitiesGroundspeedKt)));
+                                                            
+                                                            # Separate thousands from the altitude to put em in evidence in the HUD
+                                                            altitude = math.round(val.AltimeterIndicatedAltitudeFt);
+                                                            if (altitude < 1000) {  # If no thousands, just keep it normal
+                                                                small_altitude = altitude;
+                                                            } elsif (altitude < 10000) {  # If thousands have only 1 number
+                                                                big_altitude = math.floor(altitude / 1000);
+                                                                small_altitude = altitude - big_altitude * 1000;
+                                                            } elsif (altitude >= 10000) {  # If thousands have more than 1 number
+                                                                big_altitude = math.floor(altitude / 1000);
+                                                                small_altitude = altitude - big_altitude * 1000;
+                                                            }
+                                                                                                                        
                                                             if (getprop("gear/gear[0]/wow") == 1) {
                                                                 obj.window1.setText("GROUND");
+                                                                obj.window1_big.setVisible(0);
                                                             } else {
-                                                                obj.window1.setText(sprintf(" %05d", math.round(val.AltimeterIndicatedAltitudeFt)));
+                                                                obj.window1.setText(sprintf(" %03d", small_altitude));
+                                                                obj.window1_big.setText(sprintf("%02d", big_altitude));
+                                                                obj.window1_big.setVisible(1);
                                                             }
                                                             obj.window1.setVisible(1);
 
