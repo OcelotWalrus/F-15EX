@@ -556,6 +556,7 @@ var F15HUD = {
 
                                                             # Separate thousands from the altitude to put em in evidence in the HUD
                                                             altitude = math.round(val.AltimeterIndicatedAltitudeFt);
+                                                            big_altitude = 00;
                                                             if (altitude < 1000) {  # If no thousands, just keep it normal
                                                                 small_altitude = altitude;
                                                             } elsif (altitude < 10000) {  # If thousands have only 1 number
