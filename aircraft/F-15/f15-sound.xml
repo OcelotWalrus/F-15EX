@@ -2136,6 +2136,27 @@
                 <max>1</max>
             </volume>
         </missile5>
+        <missile6>
+            <name>missile6</name>
+            <path>Aircraft/F-15/Sounds/jassm_release.wav</path>
+            <mode>once</mode>
+            <condition>
+                <or>
+                    <property>payload/armament/agm-158a/sound-fire-on-off</property>
+                </or>
+            </condition>
+            <reference-dist>25</reference-dist>
+            <max-dist>10000</max-dist>
+            <position>
+                <x> 3.15986 </x>
+                <y> -2.70311 </y>
+                <z> -0.67645 </z>
+            </position>
+            <volume>
+                <factor>0.75</factor>
+                <max>1</max>
+            </volume>
+        </missile6>
         <missile4>
             <name>missile4</name>
             <path>Aircraft/F-15/Sounds/bomb_release.wav</path>
@@ -2177,6 +2198,7 @@
                     <property>payload/armament/agm-65d/sound-on-off</property>
                     <property>payload/armament/agm-88b/sound-on-off</property>
                     <property>payload/armament/agm-154a/sound-on-off</property>
+                    <property>payload/armament/agm-158a/sound-on-off</property>
                 </or>
                 <equals>
                     <property>sim/model/f15/controls/armament/master-arm-switch</property>

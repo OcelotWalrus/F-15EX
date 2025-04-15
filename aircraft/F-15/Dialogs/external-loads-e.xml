@@ -1348,6 +1348,7 @@
 							<value>1 x AGM-84D</value>
 							<value>2 x AGM-88B</value>
 							<value>1 x AGM-154A</value>
+							<value>1 x AGM-158A</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1531,6 +1532,7 @@
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
 							<value>1 x AGM-154A</value>
+							<value>1 x AGM-158A</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1719,6 +1721,7 @@
 							<value>1 x AGM-84D</value>
 							<value>2 x AGM-88B</value>
 							<value>1 x AGM-154A</value>
+							<value>1 x AGM-158A</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
