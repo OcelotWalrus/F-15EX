@@ -224,6 +224,10 @@ var gpsInit = func {
     selectedWeap.setContacts(awg_9.getCompleteList());
     armament.contact = nil;
     gpsFeeder.start();
+    setprop("sim/model/f15/fcs/target-lat", 0);
+    setprop("sim/model/f15/fcs/target-lon", 0);
+    setprop("sim/model/f15/fcs/target-alt", 0);
+    setprop("sim/model/f15/fcs/target-lock", 0);
 };
 
 var gpsUpdate = func {

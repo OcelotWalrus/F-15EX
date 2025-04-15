@@ -1094,7 +1094,7 @@ return obj;
 		me.boreSymbol.setTranslation(hudmath.HudMath.getBorePos());
 
 		# CCRP shit
-		me.CCRP_active = me.CCRP();
+		me.CCRP_active = 0;#me.CCRP();
 
 		# EEGS mode's status update
 		me.eegsGroup.setVisible(eegsShow);
