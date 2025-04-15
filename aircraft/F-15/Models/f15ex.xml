@@ -4059,6 +4059,118 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>agm-154a-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[185]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-c</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[186]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[187]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[188]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[189]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[190]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[191]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[188]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[189]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[190]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[191]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>gbu-12-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[157]</property>
@@ -5515,6 +5627,116 @@
              <x-m>-0.1</x-m>
              <y-m>1.825</y-m>
              <z-m>-0.925</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
+        <name>agm-154a-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>-0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>-0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-c</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+            <x-m>1.2</x-m>
+            <y-m>0</y-m>
+            <z-m>-1.1</z-m>
+       </offsets>
+    </model>
+    <model>
+        <name>agm-154a-l3</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.75</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.975</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-l4</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.75</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.975</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-r1</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.75</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.975</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-r2</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.75</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.975</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
