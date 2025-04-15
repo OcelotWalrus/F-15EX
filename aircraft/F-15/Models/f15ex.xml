@@ -3930,6 +3930,23 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>duo-agm-88b-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[183]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>duo-agm-88b-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[184]</property>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>agm-65d-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[173]</property>
@@ -5237,6 +5254,25 @@
     <model>
         <name>double-cbu105-right</name>
         <path>Aircraft/F-15/Models/Stores/CBU-105/bru-57-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.23</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>duo-agm-88b-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88B/bru-57-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.23</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>duo-agm-88b-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88B/bru-57-9.xml</path>
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>

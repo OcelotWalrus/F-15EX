@@ -642,13 +642,13 @@ var F15HUD = {
 																print("FIUCK");
 																print(obj.timeToRelease);
 																print(obj.CCRP_active);
-																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and getprop("sim/model/f15/armament/ccip-off") == 0 and pylons.fcs.getDropMode() == 1) {
+																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-88B" and getprop("sim/model/f15/armament/ccip-off") == 0 and pylons.fcs.getDropMode() == 1) {
 																	# Time to hit ground already computed, just gotta display it there
 																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
 																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
 																	obj.window17.setText(sprintf("CCIP %02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
-																} elsif (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
+																} elsif (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-88B" and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
 																	obj.timeToReleaseH = int(obj.timeToRelease/3600);
 																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseH*3600;
 																	obj.timeToReleaseM = int(obj.timeToRelease/60);
@@ -660,7 +660,7 @@ var F15HUD = {
 																	}
 																	obj.window17.setText(sprintf("%02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
-																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
+																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-88B") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
 																	if (!(weap.ready_time == 0)) { # Only if the weapon has a ready timer
 																		curr_time = getprop("sim/time/elapsed-sec");
 																		standby_time = weap.ready_standby_time;  # time at which the weapon started readyin process
@@ -679,7 +679,7 @@ var F15HUD = {
 																		obj.window17.setText("RDY");
 																	}
 																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X" or weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D") and armament.MISSILE_LOCK == weap.status and !val.RadarStandby) {  # only works if the radar's on
+																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X") and armament.MISSILE_LOCK == weap.status and !val.RadarStandby) {  # only works if the radar's on
 																	if (weap.type == "AIM-9X") {
 																		mean_speed = mean_9_x_speed;
 																	} elsif (weap.type == "AIM-120D") {
@@ -931,7 +931,7 @@ var F15HUD = {
 																	} else {
                                                                     	obj.window2.setText(sprintf("%2d GND", val.ArmamentAgmCount));
 																	}
-																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "AGM-65B" and pylons.fcs.getSelectedWeapon().type != "AGM-65D" and pylons.fcs.getSelectedWeapon().type != "AGM-84D") {
+																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "AGM-65B" and pylons.fcs.getSelectedWeapon().type != "AGM-65D" and pylons.fcs.getSelectedWeapon().type != "AGM-84D"  and pylons.fcs.getSelectedWeapon().type != "AGM-88B") {
 																		obj.window18.setVisible(1);
 																		obj.window18.setText(sprintf("RIPL %2d", val.ArmamentRippleCount));
 																	} elsif (pylons.fcs.getSelectedWeapon() != nil) {  # For the AGMs, instead of ripple count, we display the status of the seeker
@@ -1359,7 +1359,7 @@ return obj;
 
                     }
                 }
-            } elsif (me.weapon_selected == "AGM-65B" or me.weapon_selected == "AGM-65D" or me.weapon_selected == "AGM-84D") {  # We wanna display the AGMs' seeker pos on the HUD
+            } elsif (me.weapon_selected == "AGM-65B" or me.weapon_selected == "AGM-65D" or me.weapon_selected == "AGM-84D" or me.weapon_selected == "AGM-88B") {  # We wanna display the AGMs' seeker pos on the HUD
                 if (aim != nil and aim.isCaged()) {
                     var coords = aim.getSeekerInfo();
                     if (coords != nil) {

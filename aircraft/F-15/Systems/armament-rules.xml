@@ -2062,4 +2062,26 @@
     </input>
     <output>sim/model/f15/payload/selected/agm-84d-r</output>
   </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>2 x AGM-88B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-88b-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>2 x AGM-88B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-88b-r</output>
+  </logic>
 </PropertyList>
