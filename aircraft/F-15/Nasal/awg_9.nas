@@ -1886,6 +1886,13 @@ emexec.ExecModule.register("AWG-9",{}, RADARRecipient, 1);
 
 # Taken from F-16 model's apg-68.nas radar simulation, adapted by Jimmy L. Miles
 
+var Contact = {
+	# Attributes:
+	getCoord: func {
+	   	return geo.Coord.new();
+	},
+};
+
 #  ████████  ██████  ██████      ██████   ██████  ██ ███    ██ ████████
 #     ██    ██       ██   ██     ██   ██ ██    ██ ██ ████   ██    ██
 #     ██    ██   ███ ██████      ██████  ██    ██ ██ ██ ██  ██    ██

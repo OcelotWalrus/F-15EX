@@ -197,7 +197,7 @@ var list = func (node) {
         #lock.hide();
         #setprop("f16/avionics/lock-flir",0.05);
         return;
-    #} elsif (button == 3) {#STBY/A-G/A-A  Don't feel like we need that for the F-15
+    #} elsif (button == 3) {#STBY/A-G/A-A  Don't feel like we need that for the F-15 (code to turn online or offline the tgp)
 #        if (getprop("f16/avionics/power-mfd") and getprop("f16/avionics/power-ufc-warm")==1 and getprop("f16/avionics/power-right-hdpt") == 1 and getprop("fdm/jsbsim/elec/bus/ess-dc") > 20) {
 #            masterMode = !masterMode;
 #        }
