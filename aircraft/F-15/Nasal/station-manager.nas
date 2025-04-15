@@ -108,7 +108,7 @@ var Station = {
 							}
 							return {};
 						};
-					} elsif (me.weaponName == "AGM-158") {
+					} elsif (me.weaponName == "AGM-158" or me.weaponName == "AGM-158A") {  # named 158A in F-15EX
 						mf = func (struct) {
 							if (struct.dist_m != -1 and struct.speed_fps != 0) {
 								if (struct.dist_m*M2NM > 10) {
@@ -130,7 +130,7 @@ var Station = {
 							}
 							return {};
 						};
-					} elsif (me.weaponName == "AGM-88") {
+					} elsif (me.weaponName == "AGM-88" or me.weaponName == "AGM-88B") {  # named 88B in F-15EX
 						mf = func (struct) {
 							if (!struct.hasTarget) {
 								# Is in maddog mode
@@ -174,7 +174,7 @@ var Station = {
 							}
 							return {};
 						};
-					} elsif (me.weaponName == "AGM-84") {
+					} elsif (me.weaponName == "AGM-84" or me.weaponName == "AGM-84D") {  # named 84D in F-15EX
 						mf = func (struct) {
 							if (struct.dist_m != -1 and struct.dist_m*M2NM < 5 and struct.guidance == "inertial") {
 								return {"guidance":"radar","abort_midflight_function":1};
