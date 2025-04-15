@@ -3185,7 +3185,7 @@
                 <terminal-rise-time type="double">23.0</terminal-rise-time>
                 <terminal-dive-time type="double">13.0</terminal-dive-time>
                 <seeker-angular-speed-dps type="double">0</seeker-angular-speed-dps>
-                <ready-time type="double">5</ready-time> <!-- 300-->
+                <ready-time type="double">300</ready-time>
                 <ejector-speed-fps type="double">5</ejector-speed-fps>
                 <telemetry type="bool">true</telemetry>
                 <!--requires-power-on type="bool">true</requires-power-on>
