@@ -744,11 +744,11 @@ var FireControl = {
                 # Weapon ready for dropping
                 if (me.getDropMode() == DROP_CCRP and containsVector(CCIP_CCRP, me.aim.type) and me.aim.status == armament.MISSILE_LOCK) {
 			    	# CCRP: weapon locked and ready
-			        me.distCCRP = getprop("sim/model/f15/distCCRP");
+			        me.distCCRP = getprop("sim/model/f15/armament/distCCRP");
 			        me.distCCRPLast = me.distCCRP;
 			        if (me.distCCRP == -1 or me.distCCRPLast == -1 or me.distCCRP >= 500 or me.distCCRP < me.distCCRPLast) {
 			            printDebug("CCRP: Trigger was pressed, waiting for launch parameters as not fully ready yet");
-                        if (me["distCCRPListen"] == nil) me.distCCRPListen = setlistener("sim/model/f15/distCCRP", func (distCCRP) {
+                        if (me["distCCRPListen"] == nil) me.distCCRPListen = setlistener("sim/model/f15/armament/distCCRP", func (distCCRP) {
 
                             me.distCCRPLast = me.distCCRP;
 
@@ -1207,7 +1207,7 @@ var ccrp_loop = func () {
         	selW == nil or pylons.fcs.getDropMode() != DROP_CCRP or
             !containsVector(CCIP_CCRP, selW.type)) {  # or selW.status != armament.MISSILE_LOCK
     	ccrpTrgt = nil;
-        setprop("sim/model/f15/distCCRP", -1);
+        setprop("sim/model/f15/armament/distCCRP", -1);
         return;
     }
     ccrpTrgt = armament.contactPoint;
@@ -1217,7 +1217,7 @@ var ccrp_loop = func () {
         ccrpTrgt = prio;
     } elsif (ccrpTrgt == nil) {
         printDebug("CCRP: tgt not found");
-        setprop("sim/model/f15/distCCRP", -1);
+        setprop("sim/model/f15/armament/distCCRP", -1);
         return;
     }
     print("HOWDY");
@@ -1237,9 +1237,9 @@ var ccrp_loop = func () {
     if (distCCRP == nil) {
         distCCRP = -1;
     }
-    setprop("sim/model/f15/distCCRP", distCCRP);
+    setprop("sim/model/f15/armament/distCCRP", distCCRP);
 }
-#if (debugFC) screen.property_display.add("sim/model/f15/distCCRP");
+#if (debugFC) screen.property_display.add("sim/model/f15/armament/distCCRP");
 #if (debugFC) screen.property_display.add("sim/model/f15/gravity-dropping");
 
 var ccrp_loopTimer = maketimer(0.1, ccrp_loop);
