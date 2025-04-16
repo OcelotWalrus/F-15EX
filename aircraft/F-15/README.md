@@ -41,3 +41,4 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Implemented ripple release (from 1 to 4)
 - Added CFT pylons (3 each side)
 - Added TACAN nav mode using the STEER mode switch in the center panel
+- Implemented pilot ejection

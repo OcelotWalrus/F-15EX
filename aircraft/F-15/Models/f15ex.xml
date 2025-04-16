@@ -1110,14 +1110,15 @@
         <object-name>LtCdrTricky</object-name>
         <condition>
             <not>
-                <or>
-                    <property>sim/model/hide-pilot</property>
-                    <property>sim/model/hide-pilots-auto</property>
-                    <equals>
-                        <property>sim/current-view/name</property>
-                        <value>Cockpit View</value>
-                    </equals>
-                </or>
+                    <or>
+                        <property>sim/model/f15/ejected</property>
+                        <property>sim/model/hide-pilot</property>
+                        <property>sim/model/hide-pilots-auto</property>
+                        <equals>
+                            <property>sim/current-view/name</property>
+                            <value>Cockpit View</value>
+                        </equals>
+                    </or>
             </not>
         </condition>
     </animation>
@@ -1138,6 +1139,7 @@
                 </or>
                 <not>
                     <or>
+                        <property>sim/model/f15/ejected</property>
                         <property>sim/model/hide-backseater</property>
                         <property>sim/model/hide-pilots-auto</property>
                         <equals>
@@ -2312,16 +2314,19 @@
    <animation>
         <type>select</type>
         <condition>
-            <or>
-                <equals>
-                    <property>sim/model/f15/variant</property>
-                    <value>D</value>
-                </equals>
-                <equals>
-                    <property>sim/model/f15/variant</property>
-                    <value>EX</value>
-                </equals>
-            </or>
+            <and>
+                <or>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>D</value>
+                    </equals>
+                    <equals>
+                        <property>sim/model/f15/variant</property>
+                        <value>EX</value>
+                    </equals>
+                </or>
+                <not><property>sim/model/f15/ejected</property></not>
+            </and>
         </condition>
         <object-name>f15d-canopy</object-name>
     </animation>

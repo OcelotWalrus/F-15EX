@@ -55,7 +55,7 @@ var CrashAndStress = {
 
 			m.input = {
 			#	trembleOn:  "damage/g-tremble-on",
-			#	trembleMax: "damage/g-tremble-max",				
+			#	trembleMax: "damage/g-tremble-max",
 				replay:     "sim/replay/replay-state",
 				lat:        "position/latitude-deg",
 				lon:        "position/longitude-deg",
@@ -87,7 +87,7 @@ var CrashAndStress = {
 				return nil;
 			}
 			m.fdm.convert();
-			
+
 			m.wowStructure = [];
 			m.wowGear = [];
 
@@ -196,6 +196,25 @@ var CrashAndStress = {
 		me.input.simCrashed.setBoolValue(FALSE);
 		me.repairTimer.restart(10.0);
 	},
+	abandon: func {
+		me.failure_modes = FailureMgr._failmgr.failure_modes;
+	    me.mode_list = keys(me.failure_modes);
+
+	    foreach(var failure_mode_id; me.mode_list) {
+      		FailureMgr.set_failure_level(failure_mode_id, 1);
+	    }
+	    me.wingsAttached = FALSE;
+	},
+	eject: func {
+		me.failure_modes = FailureMgr._failmgr.failure_modes;
+	    me.mode_list = keys(me.failure_modes);
+
+	    foreach(var failure_mode_id; me.mode_list) {
+	    	if (failure_mode_id != me.fdm.wingsFailureID and failure_mode_id != "damage/fire") {
+      			FailureMgr.set_failure_level(failure_mode_id, 1);
+      		}
+	    }
+	},
 	_finishRepair: func () {
 		me.repairing = FALSE;
 	},
@@ -222,7 +241,7 @@ var CrashAndStress = {
 				append(me.wowStructure, wow);
 			}
 		}
-	},	
+	},
 	_isStructureInContact: func () {
 		foreach(var structure; me.wowStructure) {
 			if (structure.getBoolValue() == TRUE) {
@@ -279,7 +298,7 @@ var CrashAndStress = {
 			var failure_modes = FailureMgr._failmgr.failure_modes;
 		    var mode_list = keys(failure_modes);
 		    var probability = (speed * speed) / 40000.0;# 200kt will fail everything, 0kt will fail nothing.
-		    
+
 		    var hitStr = "something";
 		    if(info != nil and info[1] != nil) {
 			    hitStr = info[1].names == nil?"something":info[1].names[0];
@@ -348,7 +367,7 @@ var CrashAndStress = {
 	    }
 
 	    me._output(str~" and exploded.", TRUE);
-		
+
 		me.explodeTimer.restart(3);
 	},
 	_explodeEnd: func () {
@@ -357,7 +376,7 @@ var CrashAndStress = {
 	_stressDamage: func (str) {
 		me._output("Aircraft damaged: Wings broke off, due to "~str~" G forces.");
 		me.input.detachOn.setBoolValue(TRUE);
-		
+
   		FailureMgr.set_failure_level(me.fdm.wingsFailureID, 1);
 
 		me.wingsAttached = FALSE;
@@ -535,7 +554,7 @@ var yaSimProp = {
 
 # example uses:
 #
-# var crashCode = CrashAndStress.new([0,1,2]; 
+# var crashCode = CrashAndStress.new([0,1,2];
 #
 # var crashCode = CrashAndStress.new([0,1,2], {"weightLbs":30000, "maxG": 12});
 #
@@ -566,4 +585,12 @@ var lsnr = setlistener("sim/signals/fdm-initialized", crash_start);
 # test:
 var repairMe = func {
 	crashCode.repair();
+};
+
+var exp = func {
+	crashCode.abandon();
+};
+
+var eject = func {
+	crashCode.eject();
 };

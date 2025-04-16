@@ -20267,6 +20267,14 @@
     <object-name>seat-cushion</object-name>
     <object-name>aces2</object-name>
   </effect>
+  <animation>
+    <type>select</type>
+    <object-name>aces2</object-name>
+    <object-name>seat-cushion</object-name>
+    <condition>
+      <not><property>sim/model/f15/ejected</property></not>
+    </condition>
+  </animation>
   <!--Renamed objects:
       mount: fib_mount-->
 </PropertyList>

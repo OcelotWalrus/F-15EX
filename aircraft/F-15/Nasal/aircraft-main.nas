@@ -65,6 +65,7 @@ var fixAirframe = func {
         setprop("controls/gear/gear-overspeed", 0);
         setprop("controls/flaps-overspeed", 0);
         setprop("controls/gear/brakes-blownout", 0);
+        setprop("sim/model/f15/ejected", 0);
     }
 }
 #
@@ -510,6 +511,30 @@ var cold_and_dark = func()
 
 }
 
+# Ejection
+var eject_f15 = func{
+    if (getprop("sim/model/f15/ejected")) {
+        return;
+    }
+    # ACES II activation
+    #view.setViewByIndex(1);
+    setprop("sim/model/f15/ejected", 1);
+    settimer(eject2, 1.5);# this is to give the sim time to load the exterior view, so there is no stutter while seat fires and it gets stuck.
+    damage.damageLog.push("Pilot ejected");
+}
+
+var eject2 = func{
+    setprop("canopy/not-serviceable", 1);
+    var es = armament.AIM.new(10, "es","gamma", nil ,[-1.85,0,0.7]);
+    var es2 = armament.AIM.new(20, "es","gamma", nil ,[0.65,0,0.7]);
+    #setprop("fdm/jsbsim/fcs/canopy/hinges/serviceable",0);
+    es.releaseAtNothing();
+    settimer(func {es2.releaseAtNothing();},1.5);
+    viewMissile.view_firing_missile(es);
+    #setprop("sim/view[0]/enabled",0); #disabled since it might get saved so user gets no pilotview in next aircraft he flies in.
+    settimer(func {aircraft.eject();},3.5);  # apply 100% damage everywhere
+}
+
 # Dragchute
 
 var chute = func() {
@@ -665,6 +690,14 @@ var F15MainModule =
         # Make sure the radar is set to standby when the gear's down
         if (getprop("controls/gear/gear-down") == 1) {
             setprop("instrumentation/radar/radar-mode", 2);
+        }
+
+        # Taken from the F-16
+        if (getprop("payload/armament/es/flags/deploy-id-10") != nil) {
+            # ejection chute force
+            setprop("sim/model/f15/force", 7-5*getprop("payload/armament/es/flags/deploy-id-10"));
+        } else {
+            setprop("sim/model/f15/force", 7);
         }
 
         # Force target pod view
