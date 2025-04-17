@@ -721353,7 +721353,7 @@ refs 3
 kids 0
 OBJECT poly
 name "lau128-r1"
-loc 0.778561 0.264573 -2.40146
+loc 1.1762 0.264573 -2.40146
 texture "Liveries/livery.AF80-0007.jpg"
 crease 45.000000
 numvert 64
@@ -728036,7 +728036,7 @@ refs 3
 kids 0
 OBJECT poly
 name "lau128-r1x"
-loc 1.198561 0.264573 -3.65146
+loc 1.601232 0.264573 -3.65146
 texture "Liveries/livery.AF80-0007.jpg"
 crease 45.000000
 numvert 64
