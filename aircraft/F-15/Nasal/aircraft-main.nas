@@ -528,8 +528,8 @@ var eject2 = func{
     var es = armament.AIM.new(10, "es","gamma", nil ,[-1.85,0,0.7]);
     var es2 = armament.AIM.new(20, "es","gamma", nil ,[0.65,0,0.7]);
     #setprop("fdm/jsbsim/fcs/canopy/hinges/serviceable",0);
-    es.releaseAtNothing();
-    settimer(func {es2.releaseAtNothing();},1.5);
+    es2.releaseAtNothing();
+    settimer(func {es.releaseAtNothing();},1.5);
     viewMissile.view_firing_missile(es);
     #setprop("sim/view[0]/enabled",0); #disabled since it might get saved so user gets no pilotview in next aircraft he flies in.
     settimer(func {aircraft.eject();},3.5);  # apply 100% damage everywhere
