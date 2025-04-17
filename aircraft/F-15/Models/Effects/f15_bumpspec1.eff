@@ -2,11 +2,11 @@
 <!-- Bump and specular effect-->
 
 <PropertyList>
-  <name>Aircraft/F-15C/Models/Effects/f15_bumpspec1</name>
+  <name>Aircraft/F-15/Models/Effects/f15_bumpspec1</name>
   <inherits-from>Effects/bumpspec</inherits-from>
   <parameters>
     <texture n="2">
-      <image>Aircraft/F-15C/Models/Liveries/bumpfiles/2bumpA.png</image>
+      <image>Aircraft/F-15/Models/Liveries/bumpfiles/2bumpA.png</image>
       <filter>linear-mipmap-linear</filter>
       <wrap-s>repeat</wrap-s>
       <wrap-t>repeat</wrap-t>

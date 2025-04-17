@@ -43,7 +43,7 @@ All measurements below are in English measurements (feet/pounds), per the FG wik
 
  <submodel>
     <name>M-61 20 mm cannon</name>
-    <model>Aircraft/F-15C/Models/Effects/guns/apibullet-tracer.xml</model>
+    <model>Aircraft/F-15/Models/Effects/guns/apibullet-tracer.xml</model>
     <trigger>controls/armament/trigger</trigger>
     <speed>3380.0</speed>
     <repeat>true</repeat>
@@ -63,14 +63,14 @@ All measurements below are in English measurements (feet/pounds), per the FG wik
     <collision-report>sim/ai/aircraft/collision/gun</collision-report>
     <impact>true</impact>
     <impact-report>sim/ai/aircraft/impact/bullet</impact-report>
-    <!-- submodel-path>Aircraft/F-15C/Models/Effects/guns/bullet-submodel.xml</submodel-path -->
+    <!-- submodel-path>Aircraft/F-15/Models/Effects/guns/bullet-submodel.xml</submodel-path -->
   </submodel>
 
   
   
 	<submodel>
 	  <name>AIM9</name>
-		<model>Aircraft/F-15C/Models/weapons/AIM9.xml</model>
+		<model>Aircraft/F-15/Models/weapons/AIM9.xml</model>
 		<trigger>controls/armament/trigger1</trigger>		
 		<speed>1350</speed>
 		<repeat>true</repeat>
@@ -105,7 +105,7 @@ All measurements below are in English measurements (feet/pounds), per the FG wik
 
   <submodel>
     <name>flares</name>
-    <model>Aircraft/F-15C/Models/Stores/Countermeasures/flare.xml</model>
+    <model>Aircraft/F-15/Models/Stores/Countermeasures/flare.xml</model>
     <trigger>ai/submodels/submodel/flare-release</trigger>
     <speed>10</speed>
     <repeat>true</repeat>
@@ -123,7 +123,7 @@ All measurements below are in English measurements (feet/pounds), per the FG wik
   
  <submodel>
     <name>flares</name>
-    <model>Aircraft/F-15C/Models/Stores/Countermeasures/flare.xml</model>
+    <model>Aircraft/F-15/Models/Stores/Countermeasures/flare.xml</model>
     <trigger>ai/submodels/submodel/flare-release</trigger>
     <speed>10</speed>
     <repeat>true</repeat>
