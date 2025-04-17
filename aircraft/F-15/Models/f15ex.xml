@@ -4349,6 +4349,54 @@
             <property>sim/multiplay/generic/bool[168]</property>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-lx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[196]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65b-rx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[197]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65d-lx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[198]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-65d-rx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[199]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-88b-lx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[200]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-88b-rx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[201]</property>
+        </condition>
+    </animation>
 
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
@@ -5961,6 +6009,61 @@
              <pitch-deg>0.993</pitch-deg>
              <heading-deg>-0.118</heading-deg>
              <roll-deg>-155</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
+        <name>agm-65b-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>-4.025</y-m>
+             <z-m>0.05</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65b-rx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>3.975</y-m>
+             <z-m>0.05</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65d-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65D/AGM-65D.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>-4.025</y-m>
+             <z-m>0.05</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-65d-rx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65D/AGM-65D.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>3.975</y-m>
+             <z-m>0.05</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-88b-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88B/AGM-88B.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>-4.025</y-m>
+             <z-m>0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-88b-rx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88B/AGM-88B.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>3.975</y-m>
+             <z-m>0.1</z-m>
         </offsets>
     </model>
 

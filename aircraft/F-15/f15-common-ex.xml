@@ -1668,6 +1668,12 @@
                 <bool n="193" alias="/sim/model/f15/payload/selected/agm-158a-c" />
                 <bool n="194" alias="/sim/model/f15/payload/selected/agm-158a-r" />
                 <bool n="195" alias="/sim/failure-manager/damage/fire/failure-level"/>
+                <bool n="196" alias="/sim/model/f15/payload/selected/agm-65b-lx"/>
+                <bool n="197" alias="/sim/model/f15/payload/selected/agm-65b-rx"/>
+                <bool n="198" alias="/sim/model/f15/payload/selected/agm-65d-lx"/>
+                <bool n="199" alias="/sim/model/f15/payload/selected/agm-65d-rx"/>
+                <bool n="200" alias="/sim/model/f15/payload/selected/agm-88b-lx"/>
+                <bool n="201" alias="/sim/model/f15/payload/selected/agm-88b-rx"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2032,6 +2038,18 @@
                 <name>2 x AIM-120D AMRAAM</name>
                 <lbs>592.0</lbs>
             </opt>
+            <opt>
+                <name>1 x AGM-65B</name>
+                <lbs>462.5</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-65D</name>
+                <lbs>484.5</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-88B</name>
+                <lbs>800.0</lbs>
+            </opt>
         </weight>
         <weight n="1">
             <name>Left Wing Station 2</name>
@@ -2225,6 +2243,18 @@
             <opt>
                 <name>2 x AIM-120D AMRAAM</name>
                 <lbs>592.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-65B</name>
+                <lbs>462.5</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-65D</name>
+                <lbs>484.5</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-88B</name>
+                <lbs>800.0</lbs>
             </opt>
         </weight>
         <d-config>

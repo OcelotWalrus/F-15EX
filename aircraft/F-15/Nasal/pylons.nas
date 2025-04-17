@@ -77,6 +77,7 @@ var pylonSets = {
 	singleagm65d: {name: "1 x AGM-65D", content: ["AGM-65D"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm84d: {name: "1 x AGM-84D", content: ["AGM-84D"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	doubleagm88b: {name: "2 x AGM-88B", content: ["AGM-88B", "AGM-88B"], fireOrder: [0,1], launcherDragArea: 0.0, launcherMass: 25, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	singleagm88b: {name: "1 x AGM-88B", content: ["AGM-88B"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm154a: {name: "1 x AGM-154A", content: ["AGM-154A"], fireOrder: [0,0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm158a: {name: "1 x AGM-158A", content: ["AGM-158A"], fireOrder: [0,0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 
@@ -116,7 +117,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	#var pylon1set = [pylonSets.empty];
 
 	var pylonex1aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylonex1bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylonex1bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm88b];
 	var pylonex1cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon2aset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
@@ -136,7 +137,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylon8cset = [pylonSets.empty, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonex2aset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylonex2bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylonex2bset = [pylonSets.empty, pylonSets.doubleaim9xw, pylonSets.doubleaim120d, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm88b];
 	var pylonex2cset = [pylonSets.empty, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonnavset = [pylonSets.empty, pylonSets.lantirnnav];

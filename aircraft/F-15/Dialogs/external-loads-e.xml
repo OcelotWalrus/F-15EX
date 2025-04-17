@@ -1222,6 +1222,9 @@
                             <value>Empty</value>
                             <value>2 x AIM-9X Block I Sidewinder</value>
                             <value>2 x AIM-120D AMRAAM</value>
+                            <value>1 x AGM-65B</value>
+                            <value>1 x AGM-65D</value>
+                            <value>1 x AGM-88B</value>
                             <binding>
                                 <command>dialog-apply</command>
                             </binding>
@@ -1837,6 +1840,9 @@
 							<value>Empty</value>
 							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
+                            <value>1 x AGM-65B</value>
+                            <value>1 x AGM-65D</value>
+                            <value>1 x AGM-88B</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
