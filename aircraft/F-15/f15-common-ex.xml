@@ -1674,6 +1674,38 @@
                 <bool n="199" alias="/sim/model/f15/payload/selected/agm-65d-rx"/>
                 <bool n="200" alias="/sim/model/f15/payload/selected/agm-88b-lx"/>
                 <bool n="201" alias="/sim/model/f15/payload/selected/agm-88b-rx"/>
+                <bool n="202" alias="/sim/model/f15/payload/selected/catm-9x-l1"/>
+                <bool n="203" alias="/sim/model/f15/payload/selected/catm-9x-l2"/>
+                <bool n="204" alias="/sim/model/f15/payload/selected/catm-9x-r1"/>
+                <bool n="205" alias="/sim/model/f15/payload/selected/catm-9x-r2"/>
+                <bool n="206" alias="/sim/model/f15/payload/selected/catm-9x-l1x"/>
+                <bool n="207" alias="/sim/model/f15/payload/selected/catm-9x-l2x"/>
+                <bool n="208" alias="/sim/model/f15/payload/selected/catm-9x-r1x"/>
+                <bool n="209" alias="/sim/model/f15/payload/selected/catm-9x-r2x"/>
+                <bool n="210" alias="/sim/model/f15/payload/selected/catm-9x-lx"/>
+                <bool n="211" alias="/sim/model/f15/payload/selected/catm-9x-l"/>
+                <bool n="212" alias="/sim/model/f15/payload/selected/catm-9x-r"/>
+                <bool n="213" alias="/sim/model/f15/payload/selected/catm-9x-rx"/>
+                <bool n="214" alias="/sim/model/f15/payload/selected/catm-120d-l1"/>
+                <bool n="215" alias="/sim/model/f15/payload/selected/catm-120d-l2"/>
+                <bool n="216" alias="/sim/model/f15/payload/selected/catm-120d-r1"/>
+                <bool n="217" alias="/sim/model/f15/payload/selected/catm-120d-r2"/>
+                <bool n="218" alias="/sim/model/f15/payload/selected/catm-120d-l1x"/>
+                <bool n="219" alias="/sim/model/f15/payload/selected/catm-120d-l2x"/>
+                <bool n="220" alias="/sim/model/f15/payload/selected/catm-120d-r1x"/>
+                <bool n="221" alias="/sim/model/f15/payload/selected/catm-120d-r2x"/>
+                <bool n="222" alias="/sim/model/f15/payload/selected/catm-120d-lx"/>
+                <bool n="223" alias="/sim/model/f15/payload/selected/catm-120d-l"/>
+                <bool n="224" alias="/sim/model/f15/payload/selected/catm-120d-r"/>
+                <bool n="225" alias="/sim/model/f15/payload/selected/catm-120d-rx"/>
+                <bool n="226" alias="/sim/model/f15/payload/selected/catm-120d-l3"/>
+                <bool n="227" alias="/sim/model/f15/payload/selected/catm-120d-l4"/>
+                <bool n="228" alias="/sim/model/f15/payload/selected/catm-120d-r3"/>
+                <bool n="229" alias="/sim/model/f15/payload/selected/catm-120d-r4"/>
+                <bool n="230" alias="/sim/model/f15/payload/selected/double-catm-120d-l3"/>
+                <bool n="231" alias="/sim/model/f15/payload/selected/double-catm-120d-l4"/>
+                <bool n="232" alias="/sim/model/f15/payload/selected/double-catm-120d-r3"/>
+                <bool n="233" alias="/sim/model/f15/payload/selected/double-catm-120d-r4"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2031,6 +2063,10 @@
                 <lbs>0</lbs>
             </opt>
             <opt>
+                <name>2 x CATM-9X Sidewinder Dummy</name>
+                <lbs>575.0</lbs>
+            </opt>
+            <opt>
                 <name>2 x AIM-9X Block I Sidewinder</name>
                 <lbs>402.0</lbs>
             </opt>
@@ -2059,6 +2095,10 @@
             <opt>
                 <name>Empty</name>
                 <lbs>0</lbs>
+            </opt>
+            <opt>
+                <name>2 x CATM-9X Sidewinder Dummy</name>
+                <lbs>575.0</lbs>
             </opt>
             <opt>
                 <name>Droptank</name>
@@ -2171,6 +2211,10 @@
                 <lbs>0</lbs>
             </opt>
             <opt>
+                <name>2 x CATM-9X Sidewinder Dummy</name>
+                <lbs>575.0</lbs>
+            </opt>
+            <opt>
                 <name>Droptank</name>
                 <lbs>271.0</lbs>
                 <gals>600</gals>
@@ -2235,6 +2279,10 @@
             <opt>
                 <name>Empty</name>
                 <lbs>0</lbs>
+            </opt>
+            <opt>
+                <name>2 x CATM-9X Sidewinder Dummy</name>
+                <lbs>575.0</lbs>
             </opt>
             <opt>
                 <name>2 x AIM-9X Block I Sidewinder</name>
@@ -2407,6 +2455,68 @@
                 <wing-efficiency-relative-to-an-elliptical-planform type="double">0.85</wing-efficiency-relative-to-an-elliptical-planform>
                 <vector-thrust type="bool">true</vector-thrust>
             </aim-9x>
+            <catm-9x>
+                <type-id type="int">98</type-id>
+                <short-name type="string">C-9X</short-name>
+                <long-name type="string">CATM-9X Sidewinder Dummy</long-name>
+                <vol-search type="double">0.25</vol-search>
+                <vol-track type="double">0.60</vol-track>
+                <vol-track-weak type="double">0.4</vol-track-weak> <!-- guess -->
+                <guidance type="string">heat</guidance>  <!-- Switched to inertial mid-flight while >70 OB -->
+                <navigation type="string">OPN</navigation>
+                <all-aspect type="bool">true</all-aspect>
+                <max-fire-range-nm type="double">15</max-fire-range-nm> <!-- TODO: Source -->
+                <FCS-field-deg type="int">180</FCS-field-deg>
+                <seeker-field-deg type="int">180</seeker-field-deg> <!-- Switched to 180 mid-flight --><!-- source:  -->
+                <max-g type="int">50</max-g>                                  <!-- Online ~60G, other sims 35-45 -->
+                <thrust-lbf-stage-1 type="double">2880</thrust-lbf-stage-1><!-- same as aim-9m -->
+                <thrust-lbf-stage-2 type="double">0.0</thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double">5.00</stage-1-duration-sec><!-- same as aim-9m -->
+                <stage-2-duration-sec type="double">0.0</stage-2-duration-sec>
+                <weight-launch-lbs type="double">186.0</weight-launch-lbs>      <!-- source: navair.navy.mil -->
+                <weight-warhead-lbs type="double">20.8</weight-warhead-lbs> <!-- source: 2009 Weapons File -->
+                <weight-fuel-lbm type="double">60.0</weight-fuel-lbm>         <!-- same as aim-9m --> <!-- TODO: Check this -->
+                <drag-coeff type="double">0.8</drag-coeff>                   <!-- Estimated --> <!-- TODO: Check this -->
+                <cross-section-sqft type="double">0.143</cross-section-sqft>  <!-- 5 inch diam -->
+                <arming-time-sec type="double">1.4</arming-time-sec>          <!-- same as aim-9l -->
+                <min-speed-for-guiding-mach type="double">0.4</min-speed-for-guiding-mach><!-- just a guess -->
+                <self-destruct-time-sec type="double">60</self-destruct-time-sec>         <!-- same as aim-9m -->
+                <seeker-angular-speed-dps type="double">60</seeker-angular-speed-dps>
+                <rosette-radius-deg type="double">0</rosette-radius-deg>
+                <sw-expanded-acquisition-mode type="bool">true</sw-expanded-acquisition-mode>
+                <nutate-double-d-instead-of-circle type="bool">false</nutate-double-d-instead-of-circle>
+                <seeker-filter type="double">1.10</seeker-filter>
+                <lock-on-sun-deg type="double">4.5</lock-on-sun-deg> <!-- just a guess -->
+                <loft-altitude type="int">0</loft-altitude>
+                <min-fire-range-nm type="double">0.16</min-fire-range-nm>   <!-- same as aim-9m --> <!-- TODO: Check this -->
+                <expand-min-fire-range type="bool">true</expand-min-fire-range>
+                <rail type="bool">true</rail>
+                <rail-length-m type="double">2.667</rail-length-m><!-- 16S210 AIM-9 Missile Launcher -->
+                <rail-point-forward type="bool">true</rail-point-forward>
+                <max-report-distance type="double">65</max-report-distance> <!-- TODO: Check this -->
+                <class type="string">A</class>
+                <fire-msg type="string">Fox 2</fire-msg>
+                <DLZ type="bool">true</DLZ>
+                <DLZ-optimal-alt-feet type="double">25000</DLZ-optimal-alt-feet>
+                <DLZ-optimal-closing-mach type="double">2.0</DLZ-optimal-closing-mach> <!-- TODO: Check this -->
+                <seeker-beam-width-deg type="double">3.5</seeker-beam-width-deg><!-- source: CNATRA P-825 --> <!-- TODO: Check this -->
+                <reaquire type="bool">false</reaquire>
+                <lock-on-after-launch type="bool">false</lock-on-after-launch> <!-- TODO: Do we want loal? -->
+                <auto-switch-target-allowed type="bool">false</auto-switch-target-allowed>
+                <prowl-flight type="string">gyro-pitch</prowl-flight>
+                <switch-time-sec type="double">5</switch-time-sec>
+                <coolable type="bool">true</coolable>
+                <cool-time type="double">30</cool-time>                        <!-- TODO: wikipedia says 9x is cooled internally? -->
+                <cool-duration type="int">5400</cool-duration>                 <!-- TODO: wikipedia says 9x is cooled internally? -->
+                <warm-detect-range-nm type="double">5.0</warm-detect-range-nm> <!-- TODO: Check this -->
+                <detect-range-nm type="double">15</detect-range-nm><!-- estimated --> <!-- TODO: Source -->
+                <ready-time type="double">0.5</ready-time>
+                <proportionality-constant type="double">3</proportionality-constant> <!-- source for 4: AD-A272 984 -->
+                <simplified-induced-drag type="bool">false</simplified-induced-drag>
+                <wing-aspect-ratio type="double">8</wing-aspect-ratio>
+                <wing-efficiency-relative-to-an-elliptical-planform type="double">0.85</wing-efficiency-relative-to-an-elliptical-planform>
+                <vector-thrust type="bool">true</vector-thrust>
+            </catm-9x>
             <aim-120>
                 <type-id type="int">52</type-id>
                 <short-name type="string">A120B</short-name>
@@ -2499,6 +2609,52 @@
                 <prowl-flight type="string">gyro-pitch</prowl-flight>
                 <switch-time-sec type="double">5</switch-time-sec>
             </aim-120d>
+            <catm-120d>
+                <type-id type="int">52</type-id>
+                <short-name type="string">C120D</short-name>
+                <long-name type="string">CATM-120D AMRAAM Dummy</long-name>
+                <guidance type="string">inertial</guidance>
+                <vol-search type="double">0.00</vol-search>
+                <vol-track type="double">1.00</vol-track>
+                <max-fire-range-nm type="int">110.0</max-fire-range-nm>
+                <min-fire-range-nm type="double">0.5</min-fire-range-nm>
+                <FCS-field-deg type="int">120</FCS-field-deg> <!-- guess should be a bit more than B variant-->
+                <seeker-field-deg type="int">145</seeker-field-deg> <!-- guess should be a bit more than B variant-->
+                <max-g type="int">40</max-g>
+                <thrust-lbf-stage-1 type="double">2700</thrust-lbf-stage-1>                <!-- guess -->
+                <thrust-lbf-stage-2 type="double">280</thrust-lbf-stage-2>                <!-- guess -->
+                <stage-1-duration-sec type="double">20.0</stage-1-duration-sec>                <!-- guess doubled it -->
+                <stage-2-duration-sec type="double">36.0</stage-2-duration-sec>                <!-- guess doubled it -->
+                <self-destruct-time-sec type="double">600</self-destruct-time-sec>                <!-- guess 10 mins-->
+                <weight-launch-lbs>291</weight-launch-lbs>
+                <weight-warhead-lbs>44</weight-warhead-lbs>
+                <weight-fuel-lbm type="double">150</weight-fuel-lbm> <!-- guess bit more than B variant-->
+                <drag-coeff type="double">0.3</drag-coeff>
+                <cross-section-sqft type="double">0.2739</cross-section-sqft>
+                <loft-altitude>100000</loft-altitude>                <!-- in stage 1 it will attempt to climb to this altitude -->
+                <min-speed-for-guiding-mach type="double">0.8</min-speed-for-guiding-mach> <!-- bit more than B variant-->
+                <max-report-distance type="double">65</max-report-distance>
+                <arming-time-sec type="double">1.6</arming-time-sec>
+                <rail type="bool">false</rail><!-- wingtips will be set to rail by station-manager -->
+                <rail-length-m type="double">2.6924</rail-length-m><!-- LAU 127 Missile Launcher -->
+                <rail-point-forward type="bool">true</rail-point-forward>
+                <navigation type="string">OPN</navigation>
+                <class type="string">A</class>
+                <fire-msg type="string">Fox 3</fire-msg>
+                <telemetry type="bool">true</telemetry>                <!-- enable for aim 120 to see datalink info -->
+                <DLZ type="bool">true</DLZ>
+                <DLZ-optimal-alt-feet type="double">30000</DLZ-optimal-alt-feet>
+                <DLZ-optimal-closing-mach type="double">2.0</DLZ-optimal-closing-mach>
+                <ready-time type="double">1.5</ready-time>
+                <reaquire type="bool">true</reaquire>
+                <guide-before-ignition type="bool">true</guide-before-ignition>
+                <ejector-speed-fps type="double">20</ejector-speed-fps>
+                <drop-time type="double">0.5</drop-time>
+                <lock-on-after-launch type="bool">true</lock-on-after-launch>
+                <auto-switch-target-allowed type="bool">false</auto-switch-target-allowed>
+                <prowl-flight type="string">gyro-pitch</prowl-flight>
+                <switch-time-sec type="double">5</switch-time-sec>
+            </catm-120d>
             <aim-7>
                 <!-- AIM-7 F/M http://www.hill.af.mil/library/factsheets/factsheet.asp?id=5787
                      http://warfare.be/db/lang/rus/catid/348/linkid/2517/

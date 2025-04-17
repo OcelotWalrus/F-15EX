@@ -13,7 +13,7 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Added more payload options, through custom rack count or new stores (2 x AIMs, and bombs)
 - Added F-15EX new secondary wing pylons
 - Added F-15EX new two fuselage pylons for nav and target pods
-- The addition of A/A missiles: AIM-9X, and the AIM-120D (all weapons are only for EX variant)
+- The addition of A/A missiles: AIM-9X, and the AIM-120D (all weapons are only for EX variant) and also CATM-9X and CATM-120D
 - The addition of A/G bombs: MK-82, MK-82AIR, MK-83, MK-84, CBU-87, CBU-105, GBU-12 (GBU-12 not functional yet)
 - The addition of A/G missiles: AGM-65B, AGM-65D, AGM-84D, AGM-88B, AGM-154A and AGM-158A (no more planned to be added)
 - The addition of more aerodynamic effects such as mach cone or strake and G vortex

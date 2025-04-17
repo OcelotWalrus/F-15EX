@@ -738,6 +738,10 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-88B") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 800*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x CATM-9X Sidewinder Dummy") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 387);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x CATM-120D AMRAAM Dummy") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 291*2 + 25);
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }

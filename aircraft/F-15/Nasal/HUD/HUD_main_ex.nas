@@ -642,13 +642,13 @@ var F15HUD = {
 																print("FIUCK");
 																print(obj.timeToRelease);
 																print(obj.CCRP_active);
-																if (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-88B" and weap.type != "AGM-154A" and weap.type != "AGM-158A" and getprop("sim/model/f15/armament/ccip-off") == 0 and pylons.fcs.getDropMode() == 1) {
+																if (weap.type != "AIM-9X" and weap.type != "CATM-9X" and weap.type != "AIM-120D" and weap.type != "CATM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-88B" and weap.type != "AGM-154A" and weap.type != "AGM-158A" and getprop("sim/model/f15/armament/ccip-off") == 0 and pylons.fcs.getDropMode() == 1) {
 																	# Time to hit ground already computed, just gotta display it there
 																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
 																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
 																	obj.window17.setText(sprintf("CCIP %02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
-																} elsif (weap.type != "AIM-9X" and weap.type != "AIM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-154A" and weap.type != "AGM-158A" and weap.type != "AGM-88B" and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
+																} elsif (weap.type != "AIM-9X" and weap.type != "CATM-9X" and weap.type != "AIM-120D" and weap.type != "CATM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-154A" and weap.type != "AGM-158A" and weap.type != "AGM-88B" and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
 																	obj.timeToReleaseH = int(obj.timeToRelease/3600);
 																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseH*3600;
 																	obj.timeToReleaseM = int(obj.timeToRelease/60);
@@ -679,10 +679,10 @@ var F15HUD = {
 																		obj.window17.setText("RDY");
 																	}
 																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "AIM-120D" or weap.type == "AIM-9X") and armament.MISSILE_LOCK == weap.status and !val.RadarStandby) {  # only works if the radar's on
-																	if (weap.type == "AIM-9X") {
+																} elsif ((weap.type == "AIM-120D" or weap.type == "CATM-120D" or weap.type == "AIM-9X" or weap.type == "CATM-9X") and armament.MISSILE_LOCK == weap.status and !val.RadarStandby) {  # only works if the radar's on
+																	if (weap.type == "AIM-9X" or weap.type == "CATM-9X") {
 																		mean_speed = mean_9_x_speed;
-																	} elsif (weap.type == "AIM-120D") {
+																	} elsif (weap.type == "AIM-120D" or weap.type == "CATM-120D") {
 																		mean_speed = mean_120_d_speed;
 																	} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D") { # not used anymore, we display time till ready instead for AGMs
 																		mean_speed = agm65_speed;  # all AGM variants got the same mean course speed
@@ -1230,7 +1230,7 @@ return obj;
 
 			if (me.weapon_selected != nil) {
 				var mr = 0.4;
-				if (me.weapon_selected == "AIM-9X") {
+				if (me.weapon_selected == "AIM-9X" or me.weapon_selected == "CATM-9X") {
 					if (me.weapn != nil) {
 						if (me.weapn.status == armament.MISSILE_LOCK and !getprop("instrumentation/radar/radar-standby")) {
 							me.asec65 = 1;
@@ -1240,7 +1240,7 @@ return obj;
 							currASEC = nil;#[sx*0.5,sy*0.25];
 						}
 					}
-				} elsif (me.weapon_selected == "AIM-120D") {
+				} elsif (me.weapon_selected == "AIM-120D" or me.weapon_selected == "CATM-120D") {
 					if (me.weapn != nil) {
                         if (me.weapn.status == armament.MISSILE_LOCK and !getprop("instrumentation/radar/radar-standby")) {
                             me.asec120 = 1;
@@ -1266,7 +1266,7 @@ return obj;
         me.rdT = 0;
         me.irB = 0;
 		if (pylons.fcs != nil and pylons.fcs.isLock()) {
-            if (me.weapon_selected == "AIM-120D" or me.weapon_selected == "AIM-9X") {
+            if (me.weapon_selected == "AIM-120D" or me.weapon_selected == "AIM-9X" or me.weapon_selected == "CATM-9X" or me.weapon_selected == "CATM-120D") {
                 var aim = pylons.fcs.getSelectedWeapon();
                 if (aim != nil) {
                     var coords = aim.getSeekerInfo();
@@ -1283,11 +1283,11 @@ return obj;
             } else {
                 me.lastH = nil;
             }
-            if (me.lastH != nil and (me.weapon_selected == "AIM-120D")) {
+            if (me.lastH != nil and (me.weapon_selected == "AIM-120D" or me.weapon_selected == "CATM-120D")) {
                 me.ASEC120Aspect.setRotation(D2R*(me.lastH-getprop("orientation/heading-deg")+180));
                 me.rdL = 1;
                 me.rdT = 1;
-            } elsif (me.lastH != nil and (me.weapon_selected == "AIM-9X")) {
+            } elsif (me.lastH != nil and (me.weapon_selected == "AIM-9X" or me.weapon_selected == "CATM-9X")) {
                 me.ASEC65Aspect.setRotation(D2R*(me.lastH-getprop("orientation/heading-deg")+180));
                 me.irT = 1;
             }
@@ -1339,12 +1339,12 @@ return obj;
 
 		if(getprop("sim/model/f15/controls/armament/master-arm-switch") != 0 and pylons.fcs != nil and pylons.fcs.getAmmo() > 0) {
             var aim = pylons.fcs.getSelectedWeapon();
-            if (me.weapon_selected == "AIM-120D") {
+            if (me.weapon_selected == "AIM-120D" or me.weapon_selected == "CATM-120D") {
                 if (!pylons.fcs.isLock()) {
                     me.radarLock.setTranslation(0, -sy*0.25+262*0.3*0.5);
                     me.rdL = 1;
                 }
-            } elsif (me.weapon_selected == "AIM-9X") {
+            } elsif (me.weapon_selected == "AIM-9X" or me.weapon_selected == "CATM-9X") {
                 if (aim != nil and aim.isCaged()) {
                     var coords = aim.getSeekerInfo();
                     if (coords != nil) {

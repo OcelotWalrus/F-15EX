@@ -740,7 +740,7 @@ var FireControl = {
 			} else {
 				me.guidanceEnabled = 1;
 			}
-			if (me.aim != nil and me.aim.parents[0] == armament.AIM and (me.aim.status == armament.MISSILE_LOCK or me.aim.guidance=="unguided" or me.aim.loal or !me.guidanceEnabled)) {
+			if (me.aim != nil and me.aim.parents[0] == armament.AIM and (me.aim.status == armament.MISSILE_LOCK or me.aim.guidance=="unguided" or me.aim.loal or !me.guidanceEnabled) and me.aim.type != "CATM-9X" and me.aim.type != "CATM-120D") {
                 # Weapon ready for dropping
                 if (me.getDropMode() == DROP_CCRP and containsVector(CCIP_CCRP, me.aim.type) and me.aim.status == armament.MISSILE_LOCK) {
 			    	# CCRP: weapon locked and ready

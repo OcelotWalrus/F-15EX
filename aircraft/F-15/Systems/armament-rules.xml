@@ -44,6 +44,14 @@
           <property>payload/armament/station/id-0-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-l1</output>
@@ -66,6 +74,14 @@
         <equals>
           <property>payload/armament/station/id-0-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -189,6 +205,14 @@
           <property>payload/armament/station/id-2-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-l2</output>
@@ -211,6 +235,14 @@
         <equals>
           <property>payload/armament/station/id-2-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -492,6 +524,14 @@
           <property>payload/armament/station/id-8-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-r1</output>
@@ -514,6 +554,14 @@
         <equals>
           <property>payload/armament/station/id-8-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -607,6 +655,14 @@
           <property>payload/armament/station/id-10-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-r2</output>
@@ -629,6 +685,14 @@
         <equals>
           <property>payload/armament/station/id-10-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -812,6 +876,14 @@
           <property>payload/armament/station/id-11-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-l1x</output>
@@ -834,6 +906,14 @@
         <equals>
           <property>payload/armament/station/id-11-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -858,6 +938,14 @@
           <property>payload/armament/station/id-13-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-l2x</output>
@@ -880,6 +968,14 @@
         <equals>
           <property>payload/armament/station/id-13-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -905,6 +1001,14 @@
           <property>payload/armament/station/id-14-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-r1x</output>
@@ -927,6 +1031,14 @@
         <equals>
           <property>payload/armament/station/id-14-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -951,6 +1063,14 @@
           <property>payload/armament/station/id-16-set</property>
           <value>AIM-120D AMRAAM</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>CATM-120D</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-r2x</output>
@@ -973,6 +1093,14 @@
         <equals>
           <property>payload/armament/station/id-16-set</property>
           <value>AIM-120D AMRAAM</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>CATM-9X</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>CATM-120D</value>
         </equals>
       </or>
     </input>
@@ -2259,5 +2387,357 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/agm-88b-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-l1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-l2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-r1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-r2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-l1x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-l2x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-r1x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-r2x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-type</property>
+          <value>CATM-9X</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-9x-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-0-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-l1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-l2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-r1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-10-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-r2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-11-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-l1x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-13-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-l2x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-14-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-r1x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-16-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-r2x</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-type</property>
+          <value>CATM-120D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-3-set</property>
+          <value>CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-l3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-4-set</property>
+          <value>CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-l4</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-6-set</property>
+          <value>CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-r3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-7-set</property>
+          <value>CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/catm-120d-r4</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-3-set</property>
+          <value>2 x CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-catm-120d-l3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-4-set</property>
+          <value>2 x CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-catm-120d-l4</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-6-set</property>
+          <value>2 x CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-catm-120d-r3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-7-set</property>
+          <value>2 x CATM-120D AMRAAM Dummy</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/double-catm-120d-r4</output>
   </logic>
 </PropertyList>

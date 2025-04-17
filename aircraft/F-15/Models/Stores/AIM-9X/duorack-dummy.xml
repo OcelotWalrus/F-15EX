@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PropertyList>
+
+    <path>Aircraft/F-15/Models/Stores/Racks/LAU-114/LAU-114.xml</path>
+
+    <model>
+        <name>CATM-9</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-9X/CATM-9X.xml</path>
+        <offsets>
+            <x-m>-0</x-m>
+            <y-m>-0.332</y-m>
+            <z-m>-0.08</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>CATM-9</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-9X/CATM-9X.xml</path>
+        <offsets>
+            <x-m>-0</x-m>
+            <y-m>0.332</y-m>
+            <z-m>-0.08</z-m>
+        </offsets>
+    </model>
+
+</PropertyList>

@@ -145,7 +145,7 @@ var Station = {
 							}
 							return {};
 						};
-					} elsif (me.weaponName == "AIM-120" or me.weaponName == "AIM-120D") {
+					} elsif (me.weaponName == "AIM-120" or me.weaponName == "AIM-120D" or me.weaponName == "CATM-120D") {
 						mf = func (struct) {
 							if (struct.dist_m != -1 and struct.dist_m*M2NM < 10 and struct.guidance == "inertial") {
 								screen.log.write("AIM-120: Pitbull", 1,1,0);
@@ -181,7 +181,7 @@ var Station = {
 							}
 							return {};
 						};
-					} elsif (me.weaponName == "AIM-9X") {
+					} elsif (me.weaponName == "AIM-9X" or me.weaponName == "CATM-9X") {
 						mf = func (struct) {
 						    var settings = {};
 						    settings.seeker_fov = 90;

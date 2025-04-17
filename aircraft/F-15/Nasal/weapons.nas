@@ -313,7 +313,7 @@ var armament_update = func {
     }
 
     # Turn sidewinder cooling lights On/Off.
-    var aim9_count = pylons.fcs.getAmmoOfType("AIM-9") + pylons.fcs.getAmmoOfType("AIM-9X");
+    var aim9_count = pylons.fcs.getAmmoOfType("AIM-9") + pylons.fcs.getAmmoOfType("AIM-9X") + pylons.fcs.getAmmoOfType("CATM-9X");
     if (stick_s == 1) {
         if (aim9_count > 0) {
             SWCoolOn.setBoolValue(1);
@@ -330,7 +330,7 @@ var armament_update = func {
     SwCount.setValue(aim9_count);
     Count9.setValue(aim9_count);
     Count7.setValue(pylons.fcs.getAmmoOfType("AIM-7"));
-    Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120") + pylons.fcs.getAmmoOfType("AIM-120D"));
+    Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120") + pylons.fcs.getAmmoOfType("AIM-120D") + pylons.fcs.getAmmoOfType("CATM-120D"));
     Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B")+pylons.fcs.getAmmoOfType("GBU-12")+pylons.fcs.getAmmoOfType("AGM-65D")+pylons.fcs.getAmmoOfType("AGM-84D")+pylons.fcs.getAmmoOfType("AGM-88B")+pylons.fcs.getAmmoOfType("AGM-154A")+pylons.fcs.getAmmoOfType("AGM-158A"));
 
     update_gun_ready();
@@ -428,6 +428,8 @@ var missile_code_from_ident= func(mty)  # not used anymore I think but still kep
             return "aim9";
         elsif (mty == "AIM-9X")
             return "aim9x";
+        elsif (mty == "CATM-9X")
+            return "catm9x";
         else if (mty == "AIM-7")
             return "aim7";
         else if (mty == "MK-82")
@@ -466,6 +468,8 @@ var missile_code_from_ident= func(mty)  # not used anymore I think but still kep
             return "aim120";
         else if (mty == "AIM-120D")
             return "aim120d";
+        else if (mty == "CATM-120D")
+            return "catm120d";
 }
 var get_sel_missile_count = func()
 {
@@ -475,11 +479,11 @@ var get_sel_missile_count = func()
     }
     else if (WeaponSelector.getValue() == 1)
     {
-        return pylons.fcs.getAmmoOfType("AIM-9") + pylons.fcs.getAmmoOfType("AIM-9X");
+        return pylons.fcs.getAmmoOfType("AIM-9") + pylons.fcs.getAmmoOfType("AIM-9X") + pylons.fcs.getAmmoOfType("CATM-9X");
     }
     else if (WeaponSelector.getValue() == 2)
     {
-        return pylons.fcs.getAmmoOfType("AIM-7")+pylons.fcs.getAmmoOfType("AIM-120")+pylons.fcs.getAmmoOfType("AIM-120D");
+        return pylons.fcs.getAmmoOfType("AIM-7")+pylons.fcs.getAmmoOfType("AIM-120")+pylons.fcs.getAmmoOfType("AIM-120D")+pylons.fcs.getAmmoOfType("CATM-120D");
     }
     return 0;
 }
@@ -504,8 +508,8 @@ var arm_selector = func() {
     if ( stick_s == 0 ) {
         var p = pylons.fcs.selectWeapon("20mm Cannon");
     } elsif ( stick_s == 1 ) {
-        var wps = ["AIM-9", "AIM-9X"];
-        var count = 1 - selector_offset;  # length of the list (id 1 is 0 here)
+        var wps = ["AIM-9", "AIM-9X", "CATM-9X"];
+        var count = 2 - selector_offset;  # length of the list (id 1 is 0 here)
         if (count < 0) {
             var selector_offset = 0;
             setprop("controls/armament/selected-armament-offset", 0);
@@ -521,8 +525,8 @@ var arm_selector = func() {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 2 ) {
-        var wps = ["AIM-7", "AIM-120", "AIM-120D"];
-        var count = 2 - selector_offset;  # length of the list (id 1 is 0 here)
+        var wps = ["AIM-7", "AIM-120", "AIM-120D", "CATM-120D"];
+        var count = 3 - selector_offset;  # length of the list (id 1 is 0 here)
         if (count < 0) {
             var selector_offset = 0;
             setprop("controls/armament/selected-armament-offset", 0);
