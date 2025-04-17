@@ -6231,4 +6231,7 @@
     </offsets>
    </model>
 
+   <!--damage effects-->
+   <model><path>Aircraft/F-15/Models/Effects/damage-smoke.xml</path></model>
+
 </PropertyList>
