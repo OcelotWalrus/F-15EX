@@ -1076,31 +1076,63 @@
                     <pref-width>200</pref-width>
                     <property>/sim/model/f15/systems/external-loads/external-load-set</property>
                     <value>Clean</value>
-                    <value>Standard Combat</value>
-                    <value>Offensive Counter Air</value>
-                    <value>Combat Air Patrol</value>
-                    <value>Air Superiority</value>
-                    <value>No Fly Zone</value>
-                    <value>Ground Attack</value>
-                    <value>Ferry Flight</value>
+                    <value>Clean (CFT)</value>
+
+					<!-- A/A missions-->
+                    <value>A/A Training</value>
+					<value>Combat Air Patrol</value>
+                    <value>Combat Air Patrol (1 Bag)</value>
+					<value>Air Superiority (1 Bag)</value>
+					<value>Defensive Counter Air (1 Bag)</value>
+					<value>Strong Defensive Counter Air (1 Bag)</value>
+
+					<!-- Travel missions-->
+					<value>Ferry Loadout (2 Bags)</value>
+					<value>Ferry Loadout (3 Bags)</value>
+
+					<!-- A/G unguided missions-->
+					<value>A/G Unguided Light (1 Bag)</value>
+					<value>A/G Unguided Light (1 Bag, CFTs)</value>
+					<value>A/G Unguided Retarded (1 Bag)</value>
+					<value>A/G Unguided Retarded (1 Bag, CFTs)</value>
+					<value>A/G Unguided Medium (1 Bag)</value>
+					<value>A/G Unguided Heavy (1 Bag)</value>
+					<value>A/G Unguided Diverse (1 Bag)</value>
+
+					<!-- A/G cluster missions-->
+					<value>A/G Cluster CEM (1 Bag)</value>
+					<value>A/G Cluster SFW (1 Bag)</value>
+					<value>A/G Cluster Diverse (1 Bag)</value>
+
+					<!-- A/G laser-guided missions-->
+					<value>A/G LGB Light (1 Bag)</value>
+					<value>A/G LGB Heavy (1 Bag)</value>
+					<value>A/G LGB Diverse (1 Bag)</value>
+
+					<!-- A/G GPS-guided missions-->
+					<value>A/G GPS Light (1 Bag)</value>
+					<value>A/G GPS Heavy (1 Bag)</value>
+
+					<!-- A/G special missions-->
+					<value>A/G SEAD (1 Bag)</value>
+					<value>A/G SEAD Diverse (1 Bag)</value>
+					<value>A/G DEAD (1 Bag)</value>
+					<value>A/G Anti-Ship (1 Bag)</value>
+					<value>A/G Stand-Off JSOW (1 Bag)</value>
+					<value>A/G Stand-Off JSOW Heavy (2 Bags)</value>
+					<value>A/G Stand-Off JASSM (1 Bag)</value>
+					<value>A/G Stand-Off Diverse (2 Bags)</value>
                     <binding>
                         <command>dialog-apply</command>
                     </binding>
+					<binding>
+						<command>property-toggle</command>
+						<property>sim/model/f15/systems/external-loads/reload-demand</property>
+					</binding>
 					<mod-up>
                         <binding>
-                             <!-- gun ammos -->
-                            setprop("/ai/submodels/submodel[3]/count",0);
-                            setprop("sim/model/f15/systems/gun/rounds",0);
-                            <!-- flares and chaffs -->
-                            setprop("/ai/submodels/submodel[5]/count",0);
-                            setprop("/ai/submodels/submodel[6]/count",0);
-                            <!-- force to update the displays -->
                             setprop("/ai/submodels/submodel[5]/reloaded",1);
                         </binding>
-						<binding>
-	                        <command>property-toggle</command>
-	                        <property>sim/model/f15/systems/external-loads/reload-demand</property>
-	                    </binding>
                     </mod-up>
                 </combo>
             <group>

@@ -225,30 +225,101 @@ var ext_loads_set = func(s) {
     # Load set defines which weapons are mounted.
     # It also defines which pylons are mounted, a pylon may
     # support several weapons.
+    # F-15EX uses different payload presets
     var success = 0;
-    if ( s == "Clean" ) {
-        success = pylons.clean();
-    } elsif ( s == "Standard Combat" ) {
-        success = pylons.standard();
-    } elsif ( s == "Offensive Counter Air" ) {
-        success = pylons.counter();
-    } elsif ( s == "No Fly Zone" ) {
-        success = pylons.nofly();
-    } elsif ( s == "Ferry Flight" ) {
-        success = pylons.ferry();
-    } elsif ( s == "Air Superiority" ) {
-        success = pylons.super();
-    } elsif ( s == "Ground Attack" ) {
-        success = pylons.ground();
-    } elsif ( s == "Combat Air Patrol" ) {
-        success = pylons.patrol();
-    } elsif ( s == "Training" ) {
-        success = pylons.train();
+    if (getprop("sim/model/f15/variant") == "EX") {
+        if ( s == "Clean" ) {
+            success = pylons.clean_ex();
+        } elsif ( s == "Clean (CFT)" ) {
+            success = pylons.clean_cft_ex();
+        } elsif ( s == "A/A Training" ) {
+            success = pylons.a_a_training_ex();
+        } elsif ( s == "Combat Air Patrol" ) {
+            success = pylons.combat_air_patrol();
+        } elsif ( s == "Combat Air Patrol (1 Bag)" ) {
+            success = pylons.combat_air_patrol_1bag();
+        } elsif ( s == "Air Superiority (1 Bag)" ) {
+            success = pylons.air_sup();
+        } elsif ( s == "Defensive Counter Air (1 Bag)" ) {
+            success = pylons.defensive_counter();
+        } elsif ( s == "Strong Defensive Counter Air (1 Bag)" ) {
+            success = pylons.defensive_counter_str();
+        } elsif ( s == "Ferry Loadout (2 Bags)" ) {
+            success = pylons.ferry_2();
+        } elsif ( s == "Ferry Loadout (3 Bags)" ) {
+            success = pylons.ferry_3();
+        } elsif ( s == "A/G Unguided Light (1 Bag)" ) {
+            success = pylons.unguided_light();
+        } elsif ( s == "A/G Unguided Light (1 Bag, CFTs)" ) {
+            success = pylons.unguided_light_cfts();
+        } elsif ( s == "A/G Unguided Retarded (1 Bag)" ) {
+            success = pylons.retarded();
+        } elsif ( s == "A/G Unguided Retarded (1 Bag, CFTs)" ) {
+            success = pylons.retarded_cfts();
+        } elsif ( s == "A/G Unguided Medium (1 Bag)" ) {
+            success = pylons.unguided_medium();
+        } elsif ( s == "A/G Unguided Heavy (1 Bag)" ) {
+            success = pylons.unguided_heavy();
+        } elsif ( s == "A/G Unguided Diverse (1 Bag)" ) {
+            success = pylons.unguided_diverse();
+        } elsif ( s == "A/G Cluster CEM (1 Bag)" ) {
+            success = pylons.cluster_ecm();
+        } elsif ( s == "A/G Cluster SFW (1 Bag)" ) {
+            success = pylons.cluster_sfw();
+        } elsif ( s == "A/G Cluster Diverse (1 Bag)" ) {
+            success = pylons.cluster_diverse();
+        } elsif ( s == "A/G SEAD (1 Bag)" ) {
+            success = pylons.ag_sead();
+        } elsif ( s == "A/G SEAD Diverse (1 Bag)" ) {
+            success = pylons.ag_sead_diverse();
+        } elsif ( s == "A/G DEAD (1 Bag)" ) {
+            success = pylons.ag_dead();
+        } elsif ( s == "A/G Anti-Ship (1 Bag)" ) {
+            success = pylons.ag_anti_ship();
+        } elsif ( s == "A/G Stand-Off JSOW (1 Bag)" ) {
+            success = pylons.ag_standoff_jsow();
+        } elsif ( s == "A/G Stand-Off JSOW Heavy (2 Bags)" ) {
+            success = pylons.ag_standoff_jsow_heavy();
+        } elsif ( s == "A/G Stand-Off JASSM (1 Bag)" ) {
+            success = pylons.ag_standoff_jassm();
+        } elsif ( s == "A/G Stand-Off Diverse (2 Bags)" ) {
+            success = pylons.ag_standoff_diverse();
+        } elsif ( s == "Clean (CFT)" ) {
+            success = pylons.clean_cft_ex();
+        } elsif ( s == "Clean (CFT)" ) {
+            success = pylons.clean_cft_ex();
+        } elsif ( s == "Clean (CFT)" ) {
+            success = pylons.clean_cft_ex();
+        } elsif ( s == "Clean (CFT)" ) {
+            success = pylons.clean_cft_ex();
+        } elsif ( s == "Clean (CFT)" ) {
+            success = pylons.clean_cft_ex();
+        }
+    } else {
+        if ( s == "Clean" ) {
+            success = pylons.clean();
+        } elsif ( s == "Standard Combat" ) {
+            success = pylons.standard();
+        } elsif ( s == "Offensive Counter Air" ) {
+            success = pylons.counter();
+        } elsif ( s == "No Fly Zone" ) {
+            success = pylons.nofly();
+        } elsif ( s == "Ferry Flight" ) {
+            success = pylons.ferry();
+        } elsif ( s == "Air Superiority" ) {
+            success = pylons.super();
+        } elsif ( s == "Ground Attack" ) {
+            success = pylons.ground();
+        } elsif ( s == "Combat Air Patrol" ) {
+            success = pylons.patrol();
+        } elsif ( s == "Training" ) {
+            success = pylons.train();
+        }
+        if (success) {
+            ext_loads_set2(s);
+        }
     }
     setprop("controls/armament/combat-jettison-count",0);
-    if (success) {
-        ext_loads_set2(s);
-    }
 }
 
 var ext_loads_set2 = func(s)
