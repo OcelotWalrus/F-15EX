@@ -1768,7 +1768,7 @@ return obj;
 		   if (me.eegsMe.allow and gunSight == 0 and !me.hydra) {
 			   # draw the funnel
 			   for (var k = 0;k<me.funnelParts;k+=1) {
-				   var halfspan = math.atan2(getprop("sim/model/f15/armament/gun-eegs-wingspan-ft")*0.5,me.eegsMe.shellPosDist[k])*R2D*me.texelPerDegreeX;#35ft average fighter wingspan
+				   var halfspan = math.atan2(getprop("sim/model/f15/armament/gun-eegs-wingspan-ft")*0.5,me.eegsMe.shellPosDist[k])*R2D*me.texelPerDegreeX;
 				   me.eegsRightX[k] = me.eegsMe.shellPosX[k]-halfspan;
 				   me.eegsRightY[k] = me.eegsMe.shellPosY[k];
 				   me.eegsLeftX[k]  = me.eegsMe.shellPosX[k]+halfspan;
