@@ -1706,6 +1706,7 @@
                 <bool n="231" alias="/sim/model/f15/payload/selected/double-catm-120d-l4"/>
                 <bool n="232" alias="/sim/model/f15/payload/selected/double-catm-120d-r3"/>
                 <bool n="233" alias="/sim/model/f15/payload/selected/double-catm-120d-r4"/>
+                <bool n="234" alias="/sim/model/f15/payload/selected/an-alq-184"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2061,6 +2062,10 @@
             <opt>
                 <name>Empty</name>
                 <lbs>0</lbs>
+            </opt>
+            <opt>
+                <name>AN/ALQ-184(V) ECM Pod</name>
+                <lbs>705</lbs>
             </opt>
             <opt>
                 <name>2 x CATM-9X Sidewinder Dummy</name>

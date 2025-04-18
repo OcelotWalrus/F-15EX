@@ -2740,4 +2740,15 @@
     </input>
     <output>sim/model/f15/payload/selected/double-catm-120d-r4</output>
   </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>AN/ALQ-184(V) ECM Pod</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/an-alq-184</output>
+  </logic>
 </PropertyList>

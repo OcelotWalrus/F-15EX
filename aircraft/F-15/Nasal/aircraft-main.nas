@@ -742,6 +742,8 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 387);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x CATM-120D AMRAAM Dummy") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 291*2 + 25);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "AN/ALQ-184(V) ECM Pod") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 705);
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }

@@ -4766,6 +4766,14 @@
             </and>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>an-alq-184</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[234]</property>
+        </condition>
+    </animation>
 
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
@@ -5747,6 +5755,16 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.15</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>an-alq-184</name>
+        <path>Aircraft/F-15/Models/Stores/AN_ALQ-184/AN_ALQ-184.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.05</z-m>
         </offsets>
     </model>
 
