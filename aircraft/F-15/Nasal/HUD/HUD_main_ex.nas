@@ -581,19 +581,23 @@ var F15HUD = {
                                                             obj.window14.setText(sprintf(" %04d fps", math.round(val.FeetPerSecond)));
                                                             obj.window14.setVisible(1);
                                                         }),
-            props.UpdateManager.FromHashList(["OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg"], nil, func(val)
+            props.UpdateManager.FromHashList([
+				"OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg", "NavigationMode", "TacanStationInRange", "TacanXShift", "TacanYShift"
+			], nil, func(val)
                                                         {
 														# Taken from the F-16's model and adapted by Jimmy L. Miles
 														# get all the active steerpoints
-														me.plan = flightplan();
-										                me.planSize = me.plan.getPlanSize();
-														for (me.j = 0; me.j < me.planSize;me.j+=1) {
-															me.wp = me.plan.getWP(me.j);
-															me.wpC = geo.Coord.new();
-															me.wpC.set_latlon(me.wp.lat,me.wp.lon);
+														if (val.NavigationMode == 0) {  # if we're in normal nav mode
+															me.plan = flightplan();
+											                me.planSize = me.plan.getPlanSize();
+															for (me.j = 0; me.j < me.planSize;me.j+=1) {
+																me.wp = me.plan.getWP(me.j);
+																me.wpC = geo.Coord.new();
+																me.wpC.set_latlon(me.wp.lat,me.wp.lon);
+															}
 														}
 														# the Y position is still not accurate due to HUD being at an angle, but will have to do.
-														 if (steerpoints.getCurrentNumber() != 0 and getprop("autopilot/route-manager/active")) {  # and !hdp.getproper("dgft")
+													    if (steerpoints.getCurrentNumber() != 0 and getprop("autopilot/route-manager/active") and val.NavigationMode != 1) {  # and !hdp.getproper("dgft")
 															 obj.steerDir = steerpoints.getCurrentDirectionForHUD();
 															 obj.wpbear = obj.steerDir[0];
 															 if (obj.wpbear != nil) {
@@ -622,6 +626,39 @@ var F15HUD = {
 																 obj.greatCircleSteeringCue.hide();
 																 obj.steerPT.hide();
 															 }
+														 } elsif (val.NavigationMode == 1 and val.TacanStationInRange) {  # if we're in TACAN navigation mode NOTE: this ain't very accurate
+														 	 obj.aircraft_x = geo.aircraft_position().lat();
+														 	 obj.aircraft_y = geo.aircraft_position().lon();
+														 	 obj.cc = geo.Coord.new();
+															 obj.cc.set_latlon(obj.aircraft_x - val.TacanXShift, obj.aircraft_y - val.TacanYShift);
+															 obj.steerDir = [geo.aircraft_position().course_to(obj.cc), vector.Math.getPitch(geo.aircraft_position(), obj.cc)];
+															 obj.wpbear = obj.steerDir[0];
+															 if (obj.wpbear != nil) {
+																 obj.wpbear = geo.normdeg180(obj.wpbear-val.OrientationHeadingDeg);
+																 obj.tadpoleX = hudmath.HudMath.getCenterPosFromDegs(obj.wpbear,0)[0];
+
+																 if (obj.tadpoleX > sx * 0.20) {
+																	 obj.tadpoleX = sx * 0.20;
+																 } elsif (obj.tadpoleX < -sx * 0.20) {
+																	 obj.tadpoleX = -sx * 0.20;
+																 }
+																 obj.greatCircleSteeringCue.setTranslation(obj.tadpoleX, obj.VV_y);
+																 obj.greatCircleSteeringCue.setRotation(obj.wpbear*D2R);
+																 obj.greatCircleSteeringCue.show();
+																 if (obj.steerDir[1] != nil) {
+																	obj.steerCart = vector.Math.eulerToCartesian2(-obj.steerDir[0], obj.steerDir[1]);
+																	obj.steerLocal = vector.Math.yawPitchRollVector(val.OrientationHeadingDeg, -val.OrientationPitchDeg, -val.OrientationRollDeg, obj.steerCart);
+																	obj.steerLocalEuler = vector.Math.cartesianToEuler(obj.steerLocal);
+																	obj.steerHUD = hudmath.HudMath.getCenterPosFromDegs(obj.steerLocalEuler[0]==nil?0:geo.normdeg180(obj.steerLocalEuler[0]),obj.steerLocalEuler[1]);
+																	obj.steerPT.setTranslation(obj.steerHUD);
+																	obj.steerPT.show();
+																 } else {
+																	obj.steerPT.hide();
+																 }
+															} else {
+																obj.greatCircleSteeringCue.hide();
+																obj.steerPT.hide();
+															}
 														 } else {
 															 obj.greatCircleSteeringCue.hide();
 															 obj.steerPT.hide();
@@ -780,7 +817,7 @@ var F15HUD = {
 																		deg_rel = "";
 																		sign = "H";
 																	}
-																	obj.HudNavRangeETA = sprintf("%s%03d *", sign, deg_rel);
+																	obj.HudNavRangeETA = sprintf("%s%s *", sign, deg_rel);
 																} else {
 																	obj.HudNavRangeDisplay = "N XX";
 																	obj.HudNavRangeETA = "XX";
@@ -2170,6 +2207,8 @@ input = {
 		HeadingMag                              : "orientation/true-heading-deg",
 		TacanStationDistance                    : "instrumentation/tacan/indicated-distance-nm",
 		TacanChannel                            : "instrumentation/tacan/display/channel",
+		TacanXShift                             : "instrumentation/tacan/display/x-shift",
+		TacanYShift                             : "instrumentation/tacan/display/y-shift",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
