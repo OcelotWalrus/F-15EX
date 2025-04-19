@@ -3497,7 +3497,7 @@
                 <lateral-dps type="int">2</lateral-dps>
                 <max-report-distance type="double">65</max-report-distance>
                 <class type="string">A</class>
-                <fire-msg type="string">weeeeee</fire-msg>
+                <fire-msg type="string">Eject!</fire-msg>
                 <long-name type="string">ACES II</long-name>
                 <short-name type="string">gamma</short-name>
                 <pitch-animation-disabled type="bool">true</pitch-animation-disabled>
