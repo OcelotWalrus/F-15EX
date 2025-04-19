@@ -255,7 +255,7 @@ var updateGPSTarget = func {
             #print("target "~tgt_lat~", "~tgt_lon~" at "~(tgt_alt*M2FT)~" ft");
             setprop("sim/model/f15/fcs/target-lat", tgt_lat);
             setprop("sim/model/f15/fcs/target-lon", tgt_lon);
-            setprop("sim/model/f15/fcs/target-alt", tgt_alt);
+            setprop("sim/model/f15/fcs/target-alt", tgt_alt*M2FT);
             setprop("sim/model/f15/fcs/target-lock", 1);
             var spot = awg_9.ContactTGP.new("GPS-Spot",gpsCoordsTgt,0);
 			armament.contactPoint = spot;  # should be already done in awg_9.nas, but still lettin that here as a safety

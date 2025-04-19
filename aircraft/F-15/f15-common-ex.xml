@@ -901,7 +901,7 @@
                     <bit-fail type="bool">false</bit-fail>
                     <target-lon type="double">0</target-lon>
                     <target-lat type="double">0</target-lat>
-                    <target-alt type="double">0</target-alt> <!-- WARNING: in meters by default-->
+                    <target-alt type="double">0</target-alt> <!-- now in feet-->
                     <target-lock type="bool">false</target-lock>
                 </fcs>
                 <armament>

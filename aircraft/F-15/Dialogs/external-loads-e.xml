@@ -674,6 +674,17 @@
                 </binding>
             </button>
 
+			<button>
+                <legend>GPS Target Config</legend>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+						var gps_config = gui.Dialog.new("dialog[6]","Aircraft/F-15/Dialogs/program-gps.xml");
+						gps_config.open();
+					</script>
+                </binding>
+            </button>
+
 			<group>
                 <layout>hbox</layout>
 
