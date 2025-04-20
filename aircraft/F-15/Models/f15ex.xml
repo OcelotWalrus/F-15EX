@@ -4049,6 +4049,31 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>gbu-31-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[235]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-31-c</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[236]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-31-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[237]</property>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>duo-agm-88b-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[183]</property>
@@ -6376,6 +6401,34 @@
             <x-m>1.2</x-m>
             <y-m>0</y-m>
             <z-m>-1</z-m>
+       </offsets>
+    </model>
+
+    <model>
+        <name>gbu-31-l</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>-0.125</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-31-r</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>-0.125</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-31-c</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+            <x-m>1.2</x-m>
+            <y-m>0</y-m>
+            <z-m>-1.125</z-m>
        </offsets>
     </model>
 

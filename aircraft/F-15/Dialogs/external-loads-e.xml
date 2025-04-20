@@ -1160,8 +1160,8 @@
                     <mod-up>
                         <binding>
                              <!-- gun ammos -->
-                            setprop("/ai/submodels/submodel[3]/count",188);
-                            setprop("sim/model/f15/systems/gun/rounds",940);
+                            setprop("/ai/submodels/submodel[3]/count",185);
+                            setprop("sim/model/f15/systems/gun/rounds",925);
                             <!-- flares and chaffs -->
                             setprop("/ai/submodels/submodel[5]/count",120);
                             setprop("/ai/submodels/submodel[6]/count",120);
@@ -1175,8 +1175,8 @@
                         <command>nasal</command>
                         <script>
                             <!-- gun ammos -->
-                            setprop("/ai/submodels/submodel[3]/count",188);
-                            setprop("sim/model/f15/systems/gun/rounds",940);
+                            setprop("/ai/submodels/submodel[3]/count",185);
+                            setprop("sim/model/f15/systems/gun/rounds",925);
                             <!-- flares and chaffs -->
                             setprop("/ai/submodels/submodel[5]/count",120);
                             setprop("/ai/submodels/submodel[6]/count",120);
@@ -1400,6 +1400,7 @@
 							<value>3 x CBU-87</value>
 							<value>2 x CBU-105</value>
 							<value>2 x GBU-12</value>
+							<value>1 x GBU-31</value>
 							<value>2 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
@@ -1591,6 +1592,7 @@
 							<value>3 x MK-83</value>
 							<value>3 x MK-84</value>
 							<value>3 x CBU-87</value>
+							<value>1 x GBU-31</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
 							<value>1 x AGM-154A</value>
@@ -1784,6 +1786,7 @@
 							<value>3 x CBU-87</value>
 							<value>2 x CBU-105</value>
 							<value>2 x GBU-12</value>
+							<value>1 x GBU-31</value>
 							<value>2 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-84D</value>

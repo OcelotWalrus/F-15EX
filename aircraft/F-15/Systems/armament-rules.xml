@@ -2751,4 +2751,37 @@
     </input>
     <output>sim/model/f15/payload/selected/an-alq-184</output>
   </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-type</property>
+          <value>GBU-31</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-31-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-5-type</property>
+          <value>GBU-31</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-31-c</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>GBU-31</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-31-r</output>
+  </logic>
 </PropertyList>

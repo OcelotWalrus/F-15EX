@@ -1205,7 +1205,7 @@ var ccrp_loop = func () {
     # Exit if master switch off, no selected weapon, ccip, not A/G bomb, or not locked on a target
     if (getprop("controls/armament/master-arm") == 0 or
         	selW == nil or pylons.fcs.getDropMode() != DROP_CCRP or
-            !containsVector(CCIP_CCRP, selW.type)) {  # or selW.status != armament.MISSILE_LOCK
+            !containsVector(CCIP_CCRP, selW.type) or selW.status != armament.MISSILE_LOCK) {
     	ccrpTrgt = nil;
         setprop("sim/model/f15/armament/distCCRP", -1);
         return;
@@ -1220,9 +1220,6 @@ var ccrp_loop = func () {
         setprop("sim/model/f15/armament/distCCRP", -1);
         return;
     }
-    print("HOWDY");
-    print(ccrpTrgt == nil);
-    print(prio == nil);
     if (selW.guidance == "unguided") {
     	# TODO: Scour manual to see if unguided can be dropped with CCRP. Also remove lock requirement if they can.
         var dt = 0.1;
@@ -1252,9 +1249,9 @@ var printfDebug = func {if (debug == 1) call(printf,arg);};
 
 # This is non-generic methods, please edit it to fit your radar setup:
 # List of weapons that can be CCIP/CCRP dropped:
-var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12"];
+var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31"];
 # List of weapons that can be ripple/dual dropped:
-var dualWeapons = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12"];
+var dualWeapons = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31"];
 var getCompleteRadarTargetsList = func {
 	# A list of all MP/AI aircraft/ships/surface-targets around the aircraft.
 	return awg_9.tgts_list;

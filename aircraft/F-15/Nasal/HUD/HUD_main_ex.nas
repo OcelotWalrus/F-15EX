@@ -676,28 +676,24 @@ var F15HUD = {
 															var mean_speed = 1; # placeholder
 															weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
 															if (weap != nil and weap.parents[0] == armament.AIM) {
-																print("FIUCK");
-																print(obj.timeToRelease);
-																print(obj.CCRP_active);
 																if (weap.type != "AIM-9X" and weap.type != "CATM-9X" and weap.type != "AIM-120D" and weap.type != "CATM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-88B" and weap.type != "AGM-154A" and weap.type != "AGM-158A" and getprop("sim/model/f15/armament/ccip-off") == 0 and pylons.fcs.getDropMode() == 1) {
 																	# Time to hit ground already computed, just gotta display it there
 																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
 																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
 																	obj.window17.setText(sprintf("CCIP %02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
-																} elsif (weap.type != "AIM-9X" and weap.type != "CATM-9X" and weap.type != "AIM-120D" and weap.type != "CATM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-154A" and weap.type != "AGM-158A" and weap.type != "AGM-88B" and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
+																} elsif ((weap.type == "GBU-12" or weap.type == "GBU-31" or weap.type == "MK-84" or weap.type == "MK-83" or weap.type == "MK-82" or weap.type == "MK-82AIR" or weap.type == "CBU-87" or weap.type == "CBU-15") and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
 																	obj.timeToReleaseH = int(obj.timeToRelease/3600);
 																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseH*3600;
 																	obj.timeToReleaseM = int(obj.timeToRelease/60);
 																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseM*60;
 																	if (obj.timeToReleaseH < 1) {
-																		obj.window4_txt = sprintf("CCRP %02d:%02d",obj.timeToReleaseM,obj.timeToRelease);# 3 digits so pilot can tell it apart from time to steerpoint.
+																		obj.window17.setText(sprintf("CCRP %02d:%02d",obj.timeToReleaseM,obj.timeToRelease));
 																	} else {
 																		obj.window17.setText("CCRP XX:XX");
 																	}
-																	obj.window17.setText(sprintf("%02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
-																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-88B" or weap.type == "AGM-154A" or weap.type == "AGM-158A") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
+																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-88B" or weap.type == "AGM-154A" or weap.type == "AGM-158A" or weap.type == "GBU-31") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
 																	if (!(weap.ready_time == 0)) { # Only if the weapon has a ready timer
 																		curr_time = getprop("sim/time/elapsed-sec");
 																		standby_time = weap.ready_standby_time;  # time at which the weapon started readyin process
@@ -983,13 +979,13 @@ var F15HUD = {
 																			obj.window18.setText(sprintf("%s", caged));
 																		}
 																	}
-																	if (pylons.fcs.getSelectedWeapon() != nil and (pylons.fcs.getSelectedWeapon().type == "AGM-154A" or pylons.fcs.getSelectedWeapon().type == "AGM-158A")) {  # For GPS guided ordonnance, display target's GPS coordinates
-																		tgt_lat = getprop("sim/model/f15/fcs/target-lat");
-																		tgt_lon = getprop("sim/model/f15/fcs/target-lon");
-																		tgt_alt = getprop("sim/model/f15/fcs/target-alt")*M2FT;
-																		obj.window18.setText(sprintf("%03d lat %03d lon - %03d ft", tgt_lat, tgt_lon, tgt_alt));
-																		obj.window18.setVisible(1);
-																	}
+																	#if (pylons.fcs.getSelectedWeapon() != nil and (pylons.fcs.getSelectedWeapon().type == "AGM-154A" or pylons.fcs.getSelectedWeapon().type == "AGM-158A" or #pylons.fcs.getSelectedWeapon().type == "GBU-31")) {  # For GPS guided ordonnance, display target's GPS coordinates
+																	#	tgt_lat = getprop("sim/model/f15/fcs/target-lat");
+																	#	tgt_lon = getprop("sim/model/f15/fcs/target-lon");
+																	#	tgt_alt = getprop("sim/model/f15/fcs/target-alt");
+																	#	obj.window18.setText(sprintf("%03d lat %03d lon - %03d ft", tgt_lat, tgt_lon, tgt_alt));
+																	#	obj.window18.setVisible(1);
+																	#}
                                                                 }
                                                                 if (val.RadarActiveTargetAvailable or 0) {
                                                                     obj.window3.setText(val.RadarActiveTargetCallsign);
@@ -1131,7 +1127,7 @@ return obj;
 		me.boreSymbol.setTranslation(hudmath.HudMath.getBorePos());
 
 		# CCRP shit
-		me.CCRP_active = 0;#me.CCRP();
+		me.CCRP_active = me.CCRP();
 
 		# EEGS mode's status update
 		me.eegsGroup.setVisible(eegsShow);
@@ -1590,7 +1586,6 @@ return obj;
             var trgt = fc.getCCRPTarget();
 
             if (trgt == nil) {
-				print("target null");
                 # We must return 1 if it's a bomb and we're in CCRP drop mode
                 me.solutionCue.hide();
                 me.ccrpMarker.hide();
@@ -1598,8 +1593,12 @@ return obj;
                 return fc.containsVector(fc.CCIP_CCRP, selW.type);
             }
 
-            if (me.CCRP_active and fc.containsVector(fc.CCIP_CCRP, selW.type) and selW.status == armament.MISSILE_LOCK ) {
-                me.distCCRP = getprop("payload/armament/distCCRP");
+			#print("SUP");
+			#print(selW.status);
+			#print(me.CCRP_active);
+			#print(fc.containsVector(fc.CCIP_CCRP, selW.type));
+            if (me.CCRP_active > 0 and fc.containsVector(fc.CCIP_CCRP, selW.type) and selW.status == armament.MISSILE_LOCK) {
+                me.distCCRP = getprop("sim/model/f15/armament/distCCRP");
                 if (me.distCCRP == -1 or (me.distCCRP*M2NM > 13.2 and selW.guidance == "laser")) {#1F-F16CJ-34-1: max laser dist is 13.2nm
                     me.solutionCue.hide();
                     me.ccrpMarker.hide();
@@ -1613,12 +1612,12 @@ return obj;
                 if (me.distCCRP > 0.75) {
                     me.distCCRP = 0.75;
                 }
-                me.ldr = trgt.getLastAZDeviation();
+                me.ldr = nil;#trgt.getLastAZDeviation();
                 if (me.ldr == nil) {
                     me.blepCoord = trgt.get_Coord();
-                    if (trgt == armament.contactPoint and me.blepCoord != nil) {
+                    if (me.blepCoord != nil) {  # trgt == armament.contactPoint and
                         me.blepHeading = geo.aircraft_position().course_to(me.blepCoord);
-                        me.ldr = geo.normdeg180(me.blepHeading-getprop("orientation/heading"));
+                        me.ldr = geo.normdeg180(me.blepHeading-getprop("orientation/heading-deg"));
                     } else {
                         me.solutionCue.hide();
                         me.ccrpMarker.hide();
@@ -1628,7 +1627,7 @@ return obj;
                 }
                 me.bombFallLine.setTranslation(me.ldr*me.texelPerDegreeX,0);
                 me.ccrpMarker.setTranslation(me.ldr*me.texelPerDegreeX,0);
-                me.solutionCue.setTranslation(me.ldr*me.texelPerDegreeX,me.sy*0.5-me.sy*0.5*me.distCCRP);
+                me.solutionCue.setTranslation(me.ldr*me.texelPerDegreeX,sy*0.5-sy*0.5*me.distCCRP);
                 me.bombFallLine.show();
                 me.ccrpMarker.show();
                 me.solutionCue.show();
@@ -1643,7 +1642,6 @@ return obj;
             me.solutionCue.hide();
             me.ccrpMarker.hide();
             me.bombFallLine.hide();
-			print("FUCK YA");
             return 0;
         }
     },

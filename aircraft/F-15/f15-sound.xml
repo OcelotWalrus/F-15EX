@@ -2171,6 +2171,7 @@
                     <property>payload/armament/mk-82/sound-fire-on-off</property>
                     <property>payload/armament/gbu-10/sound-fire-on-off</property>
                     <property>payload/armament/gbu-12/sound-fire-on-off</property>
+                    <property>payload/armament/gbu-31/sound-fire-on-off</property>
                     <property>payload/armament/agm-154a/sound-fire-on-off</property>
                 </or>
             </condition>
@@ -2197,6 +2198,7 @@
                     <property>payload/armament/agm-65b/sound-on-off</property>
                     <property>payload/armament/agm-65d/sound-on-off</property>
                     <property>payload/armament/agm-88b/sound-on-off</property>
+                    <property>payload/armament/gbu-31/sound-on-off</property>
                     <property>payload/armament/agm-154a/sound-on-off</property>
                     <property>payload/armament/agm-158a/sound-on-off</property>
                 </or>

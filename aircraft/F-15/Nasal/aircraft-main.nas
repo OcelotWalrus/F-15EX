@@ -739,11 +739,13 @@ var F15MainModule =
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-88B") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 800*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x CATM-9X Sidewinder Dummy") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 387);
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 387*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x CATM-120D AMRAAM Dummy") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 291*2 + 25);
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 291*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "AN/ALQ-184(V) ECM Pod") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 705);
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 705*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x GBU-31") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 2039*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }
