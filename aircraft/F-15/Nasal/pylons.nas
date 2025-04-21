@@ -51,8 +51,8 @@ cannon.brevity = "Guns guns";
 #var fuelTank600Center = stations.FuelTank.new("C External", "TK600", 7, 600, "sim/model/f15/wingtankC");
 #var fuelTank600Right  = stations.FuelTank.new("R External", "TK600", 6, 600, "sim/model/f15/wingtankR");
 
-var smokewinderWhite2a = stations.Submodel.new("Smokewinder White", "SmokeW", "sim/model/f15/fx/smoke-mnt-left");
-var smokewinderWhite8c = stations.Submodel.new("Smokewinder White", "SmokeW", "sim/model/f15/fx/smoke-mnt-right");
+var smokewinderWhite2a = stations.Submodel.new("AN-T-17 Smokewinder", "SmokeW", "sim/model/f15/fx/smoke-mnt-left");
+var smokewinderWhite8c = stations.Submodel.new("AN-T-17 Smokewinder", "SmokeW", "sim/model/f15/fx/smoke-mnt-right");
 
 var pylonSets = {
 	empty: {name: "Empty", content: [], fireOrder: [], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 1},
@@ -90,8 +90,8 @@ var pylonSets = {
 	singleagm158a: {name: "1 x AGM-158A", content: ["AGM-158A"], fireOrder: [0,0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 
     # 340 = outer pylon
-	smokeWL: {name: "Smokewinder White", content: [smokewinderWhite2a], fireOrder: [0], launcherDragArea: -0.05, launcherMass: 53+340, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
-	smokeWR: {name: "Smokewinder White", content: [smokewinderWhite8c], fireOrder: [0], launcherDragArea: -0.05, launcherMass: 53+340, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	smokeWL: {name: "AN-T-17 Smokewinder", content: [smokewinderWhite2a], fireOrder: [0], launcherDragArea: -0.05, launcherMass: 53+340, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	smokeWR: {name: "AN-T-17 Smokewinder", content: [smokewinderWhite8c], fireOrder: [0], launcherDragArea: -0.05, launcherMass: 53+340, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 
 #	fuel600L: {name: "Droptank", content: [fuelTank600Left], fireOrder: [0], launcherDragArea: 0.35, launcherMass: 271, launcherJettisonable: 1, showLongTypeInsteadOfCount: 1, category: 2},
 #   fuel600C: {name: "Droptank", content: [fuelTank600Center], fireOrder: [0], launcherDragArea: 0.35, launcherMass: 271, launcherJettisonable: 1, showLongTypeInsteadOfCount: 1, category: 2},
@@ -132,7 +132,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 
 	var pylon2aset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 	var pylon2bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
-	var pylon2cset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
+	var pylon2cset = [pylonSets.empty, pylonSets.smokeWL, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
 	var pylon4set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
@@ -142,7 +142,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylon6set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
 	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
 
-	var pylon8aset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
+	var pylon8aset = [pylonSets.empty, pylonSets.smokeWR, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 	var pylon8bset = [pylonSets.empty, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon8cset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 

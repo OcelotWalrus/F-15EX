@@ -1293,24 +1293,36 @@
             <z-m>  0.1</z-m>
         </offsets>
     </model>
-    <model>
-        <path>Effects/smoke/smoke-trail.xml</path>
+
+    <model> <!-- left smokewinder -->
+        <path>Effects/smoke/smoke-trail-l.xml</path>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[240]</property> <!-- smoke running -->
+                <property>sim/multiplay/generic/bool[241]</property> <!-- smokewinders mounted left -->
+            </and>
+        </condition>
         <offsets>
-            <x-m>5.1</x-m>
-            <y-m> -1.3</y-m>
-            <z-m>-1.05</z-m>
+            <x-m>1.78</x-m>
+            <y-m>-2.42</y-m>
+            <z-m>0.34</z-m>
             <heading-deg>0</heading-deg>
             <roll-deg>    0 </roll-deg>
             <pitch-deg>   0 </pitch-deg>
         </offsets>
     </model>
-
-    <model>
-        <path>Effects/smoke/smoke-trail.xml</path>
+    <model> <!-- right smokewinder -->
+        <path>Effects/smoke/smoke-trail-r.xml</path>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[240]</property>
+                <property>sim/multiplay/generic/bool[242]</property> <!-- smokewinders mounted right -->
+            </and>
+        </condition>
         <offsets>
-            <x-m>5.1</x-m>
-            <y-m> 1.3</y-m>
-            <z-m>-1.05</z-m>
+            <x-m>1.78</x-m>
+            <y-m>2.42</y-m>
+            <z-m>0.34</z-m>
             <heading-deg>0</heading-deg>
             <roll-deg>    0 </roll-deg>
             <pitch-deg>   0 </pitch-deg>
@@ -4817,6 +4829,22 @@
             <property>sim/multiplay/generic/bool[234]</property>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>smokewinder-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[238]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>smokewinder-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[239]</property>
+        </condition>
+    </animation>
 
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
@@ -5099,6 +5127,25 @@
              <x-m>2.62</x-m>
              <y-m>3.97</y-m>
              <z-m>0.15</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>smokewinder-l</name>
+        <path>Aircraft/F-15/Models/Stores/Smokewinders/Smokewinder.xml</path>
+        <offsets>
+             <x-m>1.78</x-m>
+             <y-m>-2.42</y-m>
+             <z-m>0.38</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>smokewinder-r</name>
+        <path>Aircraft/F-15/Models/Stores/Smokewinders/Smokewinder.xml</path>
+        <offsets>
+             <x-m>1.78</x-m>
+             <y-m>2.42</y-m>
+             <z-m>0.38</z-m>
         </offsets>
     </model>
 

@@ -895,74 +895,142 @@
                         <label>Blue</label>
                     </text>
                 </group>
-				<group> <!-- Sliders -->
-					<layout>vbox</layout>
+				<group>
+					<layout>hbox</layout>
 					<halign>right</halign>
-					<text>
-						<label>Level</label>
-					</text>
-					<slider>
-						<name>Red</name>
-						<property>systems/smoke-generator/red</property>
-						<live>1</live>
-						<min>0</min>
-						<max>1</max>
-						<binding>
-							<command>dialog-apply</command>
-							<object-name>Red</object-name>
-						</binding>
-					</slider>
-					<slider>
-						<name>Green</name>
-						<property>systems/smoke-generator/green</property>
-						<live>1</live>
-						<min>0</min>
-						<max>1</max>
-						<binding>
-							<command>dialog-apply</command>
-							<object-name>Green</object-name>
-						</binding>
-					</slider>
-					<slider>
-						<name>Blue</name>
-						<property>systems/smoke-generator/blue</property>
-						<live>1</live>
-						<min>0</min>
-						<max>1</max>
-						<binding>
-							<command>dialog-apply</command>
-							<object-name>Blue</object-name>
-						</binding>
-					</slider>
-                </group>
-				<group> <!-- Level -->
-					<layout>vbox</layout>
-					<halign>right</halign>
-					<text>
-						<label>Level</label>
-					</text>
-					<text>
+
+					<group> <!-- Sliders -->
+						<layout>vbox</layout>
 						<halign>right</halign>
-						<label>xxxxxxxx</label>
-						<live>true</live>
-						<format>%.1f</format>
-						<property>systems/smoke-generator/red</property>
-					</text>
-					<text>
+						<text>
+							<label>Left Levels</label>
+						</text>
+						<slider>
+							<name>LRed</name>
+							<property>systems/smoke-generator/left/red</property>
+							<live>1</live>
+							<min>0</min>
+							<max>1</max>
+							<binding>
+								<command>dialog-apply</command>
+								<object-name>LRed</object-name>
+							</binding>
+						</slider>
+						<slider>
+							<name>LGreen</name>
+							<property>systems/smoke-generator/left/green</property>
+							<live>1</live>
+							<min>0</min>
+							<max>1</max>
+							<binding>
+								<command>dialog-apply</command>
+								<object-name>LGreen</object-name>
+							</binding>
+						</slider>
+						<slider>
+							<name>LBlue</name>
+							<property>systems/smoke-generator/left/blue</property>
+							<live>1</live>
+							<min>0</min>
+							<max>1</max>
+							<binding>
+								<command>dialog-apply</command>
+								<object-name>LBlue</object-name>
+							</binding>
+						</slider>
+	                </group>
+					<group> <!-- Level -->
+						<layout>vbox</layout>
 						<halign>right</halign>
-						<label>xxxxxxxx</label>
-						<live>true</live>
-						<format>%.1f</format>
-						<property>systems/smoke-generator/green</property>
-					</text>
-					<text>
+						<text>
+							<halign>right</halign>
+							<label>xxxxxxxx</label>
+							<live>true</live>
+							<format>%.1f</format>
+							<property>systems/smoke-generator/left/red</property>
+						</text>
+						<text>
+							<halign>right</halign>
+							<label>xxxxxxxx</label>
+							<live>true</live>
+							<format>%.1f</format>
+							<property>systems/smoke-generator/left/green</property>
+						</text>
+						<text>
+							<halign>right</halign>
+							<label>xxxxxxxx</label>
+							<live>true</live>
+							<format>%.1f</format>
+							<property>systems/smoke-generator/left/blue</property>
+						</text>
+	                </group>
+
+					<group> <!-- Sliders -->
+						<layout>vbox</layout>
 						<halign>right</halign>
-						<label>xxxxxxxx</label>
-						<live>true</live>
-						<format>%.1f</format>
-						<property>systems/smoke-generator/blue</property>
-					</text>
-                </group>
+						<text>
+							<label>Right Levels</label>
+						</text>
+						<slider>
+							<name>RRed</name>
+							<property>systems/smoke-generator/right/red</property>
+							<live>1</live>
+							<min>0</min>
+							<max>1</max>
+							<binding>
+								<command>dialog-apply</command>
+								<object-name>RRed</object-name>
+							</binding>
+						</slider>
+						<slider>
+							<name>RGreen</name>
+							<property>systems/smoke-generator/right/green</property>
+							<live>1</live>
+							<min>0</min>
+							<max>1</max>
+							<binding>
+								<command>dialog-apply</command>
+								<object-name>RGreen</object-name>
+							</binding>
+						</slider>
+						<slider>
+							<name>RBlue</name>
+							<property>systems/smoke-generator/right/blue</property>
+							<live>1</live>
+							<min>0</min>
+							<max>1</max>
+							<binding>
+								<command>dialog-apply</command>
+								<object-name>RBlue</object-name>
+							</binding>
+						</slider>
+	                </group>
+					<group> <!-- Level -->
+						<layout>vbox</layout>
+						<halign>right</halign>
+						<text>
+							<halign>right</halign>
+							<label>xxxxxxxx</label>
+							<live>true</live>
+							<format>%.1f</format>
+							<property>systems/smoke-generator/right/red</property>
+						</text>
+						<text>
+							<halign>right</halign>
+							<label>xxxxxxxx</label>
+							<live>true</live>
+							<format>%.1f</format>
+							<property>systems/smoke-generator/right/green</property>
+						</text>
+						<text>
+							<halign>right</halign>
+							<label>xxxxxxxx</label>
+							<live>true</live>
+							<format>%.1f</format>
+							<property>systems/smoke-generator/right/blue</property>
+						</text>
+	                </group>
+				</group>
 			</group>
 
             <hrule/>
@@ -1448,6 +1516,7 @@
 							<property>payload/weight[2]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
+							<value>AN-T-17 Smokewinder</value>
                             <value>CATM-9X Sidewinder Dummy</value>
                             <value>CATM-120D AMRAAM Dummy</value>
 							<value>AIM-9X Block I Sidewinder</value>
@@ -1738,6 +1807,7 @@
 							<property>payload/weight[8]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
+							<value>AN-T-17 Smokewinder</value>
                             <value>CATM-9X Sidewinder Dummy</value>
                             <value>CATM-120D AMRAAM Dummy</value>
 							<value>AIM-9X Block I Sidewinder</value>

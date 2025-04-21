@@ -384,7 +384,7 @@ var armament_update2 = func {
     setprop("controls/armament/master-arm", ArmSwitch.getValue()>0);
 
     # manage smoke
-    if (SmokeCmd.getValue()) {# and (SmokeMountedR.getValue() or SmokeMountedL.getValue())) {
+    if (SmokeCmd.getValue() and (SmokeMountedR.getValue() or SmokeMountedL.getValue())) {
         Smoke.setDoubleValue(1);
     } else {
         Smoke.setDoubleValue(0);

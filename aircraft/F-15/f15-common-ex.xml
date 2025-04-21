@@ -1710,6 +1710,11 @@
                 <bool n="235" alias="/sim/model/f15/payload/selected/gbu-31-l"/>
                 <bool n="236" alias="/sim/model/f15/payload/selected/gbu-31-c"/>
                 <bool n="237" alias="/sim/model/f15/payload/selected/gbu-31-r"/>
+                <bool n="238" alias="/sim/model/f15/payload/selected/smokewinder-l"/>
+                <bool n="239" alias="/sim/model/f15/payload/selected/smokewinder-r"/>
+                <bool n="240" alias="/sim/model/f15/fx/smoke-cmd"/>
+                <bool n="241" alias="/sim/model/f15/fx/smoke-mnt-left"/>
+                <bool n="242" alias="/sim/model/f15/fx/smoke-mnt-right"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -1717,6 +1722,7 @@
                 <float n="4" alias="/fdm/jsbsim/fcs/elevator-left-pos-norm"/><!-- left elevon  -->
                 <float n="5" alias="/fdm/jsbsim/fcs/elevator-right-pos-norm"/><!-- right elevon -->
                 <float n="6" alias="/sim/model/f15/refuel/position-norm"/><!-- refuel probe/door -->
+                <float n="7" alias="/velocities/airspeed-kt"/><!-- refuel probe/door -->
 
                 <float n="8" alias="/engines/engine[0]/augmentation-burner" />
                 <float n="9" alias="/engines/engine[1]/augmentation-burner" />
@@ -3545,6 +3551,18 @@
             <offset-y-m>1.05</offset-y-m>
             <offset-z-m>0.04</offset-z-m>
         </refuel>
+        <smoke-generator>
+            <left>
+                <red type="float">1</red>
+                <green type="float">1</green>
+                <blue type="float">1</blue>
+            </left>
+            <right>
+                <red type="float">1</red>
+                <green type="float">1</green>
+                <blue type="float">1</blue>
+            </right>
+        </smoke-generator>
     </systems>
 
     <limits>

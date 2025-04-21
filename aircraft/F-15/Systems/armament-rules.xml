@@ -213,6 +213,10 @@
           <property>payload/armament/station/id-2-type</property>
           <value>CATM-120D</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>AN-T-17 Smokewinder</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-l2</output>
@@ -243,6 +247,10 @@
         <equals>
           <property>payload/armament/station/id-2-type</property>
           <value>CATM-120D</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>AN-T-17 Smokewinder</value>
         </equals>
       </or>
     </input>
@@ -532,6 +540,10 @@
           <property>payload/armament/station/id-8-type</property>
           <value>CATM-120D</value>
         </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>AN-T-17 Smokewinder</value>
+        </equals>
       </or>
     </input>
     <output>sim/model/f15/payload/selected/adu552-r1</output>
@@ -562,6 +574,10 @@
         <equals>
           <property>payload/armament/station/id-8-type</property>
           <value>CATM-120D</value>
+        </equals>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>AN-T-17 Smokewinder</value>
         </equals>
       </or>
     </input>
@@ -2783,5 +2799,27 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/gbu-31-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-2-type</property>
+          <value>AN-T-17 Smokewinder</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/smokewinder-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-8-type</property>
+          <value>AN-T-17 Smokewinder</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/smokewinder-r</output>
   </logic>
 </PropertyList>
