@@ -169,7 +169,7 @@ var TEWSDisplay = {
                                     #                    var bearing = u.get_deviation(notification.OrientationHeadingDeg);
                                                     var bearing = geo.normdeg(u.get_deviation(notification.OrientationHeadingDeg) + me.tews_alignment_offset);
 
-                                                    tgt.setVisible(u.get_display());#Leto: is is only display true when in radar field, so we ignore that.
+                                                    tgt.setVisible(1);#Leto: is is only display true when in radar field or RWR field, so we ignore that.
                                                     tgt.setCallsign(callsign);
                                                     var r = (u.get_range()*scale) / notification.radar2_range;
                                                     var xc  = r * math.cos(bearing/57.29577950560105);
