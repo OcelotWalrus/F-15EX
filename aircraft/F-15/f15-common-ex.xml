@@ -3217,54 +3217,6 @@
                 <fire-msg type="string">Rifle</fire-msg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
             </lau-68>
-            <b61-12>
-                <type-id type="int">TBD</type-id>
-                <short-name type="string">B61-12</short-name>
-                <long-name type="string">B61-12 Test Flight Body</long-name>
-                <fire-msg type="string">Bombs away</fire-msg>
-                <class type="string">GMP</class>
-                <max-fire-range-nm type="double">25</max-fire-range-nm>
-                <min-fire-range-nm type="double">0</min-fire-range-nm>
-                <guidance type="string">gps</guidance>
-                <navigation type="string">APN</navigation>
-                <loft-altitude type="int"> 0 </loft-altitude>
-                <terrain-follow type="bool">false</terrain-follow>
-                <FCS-field-deg type="int">240</FCS-field-deg>
-                <seeker-field-deg type="int">60</seeker-field-deg>
-                <reaquire type="bool">true</reaquire>
-                <max-g type="double"> 2.0 </max-g>
-                <thrust-lbf-stage-1 type="double">0</thrust-lbf-stage-1>
-                <thrust-lbf-stage-2 type="double">0</thrust-lbf-stage-2>
-                <stage-1-duration-sec type="double">0</stage-1-duration-sec>
-                <stage-2-duration-sec type="double">0</stage-2-duration-sec>
-                <weight-launch-lbs type="double">755</weight-launch-lbs> <!-- source -->
-                <weight-warhead-lbs type="double">6600000</weight-warhead-lbs> <!--825 lbs of plutonium = 6,600,000 lbs of TNT (cuz 1 lb of plutonium = 8,000 of TNT)-->
-                <weight-fuel-lbm type="double"> 0 </weight-fuel-lbm>
-                <drag-coeff type="double">0.125</drag-coeff>
-                <cross-section-sqft type="double">1.1722</cross-section-sqft>
-                <arming-time-sec type="double">30</arming-time-sec>
-                <min-speed-for-guiding-mach type="double">0</min-speed-for-guiding-mach>
-                <self-destruct-time-sec type="double">900</self-destruct-time-sec>
-                <all-aspect type="bool">true</all-aspect>
-                <lock-on-sun-deg type="double"> 0 </lock-on-sun-deg>
-                <seeker-angular-speed-dps type="double"> 0 </seeker-angular-speed-dps>
-                <rail type="bool">false</rail>
-                <max-report-distance type="double">1700</max-report-distance>
-                <vol-search type="double"> 0.075 </vol-search>
-                <vol-track type="double"> 0.25 </vol-track>
-                <vol-track-weak type="double"> 0.175 </vol-track-weak>
-                <drop-time type="double">1</drop-time>
-                <deploy-time type="double">1.5</deploy-time>
-                <lateral-dps type="double">450</lateral-dps>
-                <max-pitch-deg type="double">-45</max-pitch-deg>
-                <hit-everything-nearby type="bool">true</hit-everything-nearby>
-                <inert type="bool">true</inert>
-                <ready-time type="double">900</ready-time>
-                <require-lock-to-fire type="bool">true</require-lock-to-fire>
-                <ejector-speed-fps type="double">15</ejector-speed-fps>
-                <requires-power-on type="bool">true</requires-power-on>
-                <power-on-battery-time type="double">0</power-on-battery-time><!-- infinite -->
-            </b61-12>
             <agm-65b>
                 <type-id type="int">0</type-id>
                 <short-name type="string">AG65B</short-name>
