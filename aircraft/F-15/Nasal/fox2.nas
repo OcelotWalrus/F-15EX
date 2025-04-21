@@ -5240,7 +5240,6 @@ var AIM = {
 		} elsif (me.slave_to_radar and me.caged and me.getContact() != me.Tgt and !me.noCommonTarget) {
 			me.printSearch("target switch (%s to %s)", me.Tgt["getVirtualType"] != nil?me.Tgt.getVirtualType():"orig", me.getContact()==nil?"nil":(me.getContact()["getVirtualType"] != nil?me.getContact().getVirtualType():"orig"));
 			me.return_to_search();
-			print("FUCK5");
 			return;
 		}
 		me.consumeBattery(getprop("sim/time/elapsed-sec"));
