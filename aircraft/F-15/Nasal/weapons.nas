@@ -216,7 +216,7 @@ cursorMove = maketimer(rate,seekerMove);
 
 # -- End of AGMs seeker code
 
-## All the following lines have been by Jimmy L. Miles. This code allows the salving of the current radar target's GPS to GPS guided weapons: AGM-154A, AGM-158A and GBU-31
+## All the following lines have been by Jimmy L. Miles. This code allows the salving of the current radar target's GPS to GPS guided weapons: AGM-154A, AGM-158A, GBU-31 and CBU-105
 ## The following code has a loop checking if the radar's got an active and valid target to lock on, and if the AGM-154A or AGM-158A is selected, and armed and ready, the target's
 ## gps coordinates computed by the radar are "slaved" to the AGM-154A or AGM-158A. Doesn't support mid-flight updates yet, so not very effective against moving targets.
 var gpsInit = func {
@@ -232,7 +232,7 @@ var gpsInit = func {
 
 var gpsUpdate = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
-    if (selectedWeap == nil or (selectedWeap.type != "AGM-154A" and selectedWeap.type != "AGM-158A" and selectedWeap.type != "GBU-31")) {
+    if (selectedWeap == nil or (selectedWeap.type != "AGM-154A" and selectedWeap.type != "AGM-158A" and selectedWeap.type != "GBU-31" and selectedWeap.type != "CBU-105")) {
         #print("Weapon is not of type AGM154A or AGM158A or GBU31 - Skipping sequence");
         gpsFeeder.stop();
     } else {
@@ -246,7 +246,7 @@ var gpsUpdate = func {
 
 var updateGPSTarget = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
-    if (selectedWeap != nil and ArmSwitch.getValue() > 0 and (selectedWeap.type == "AGM-154A" or selectedWeap.type == "AGM-158A" or selectedWeap.type == "GBU-31")) {
+    if (selectedWeap != nil and ArmSwitch.getValue() > 0 and (selectedWeap.type == "AGM-154A" or selectedWeap.type == "AGM-158A" or selectedWeap.type == "GBU-31" or selectedWeap.type == "CBU-105")) {
         if (awg_9.active_u != nil and awg_9.active_u.get_display()) {  # We have a valid radar target
             gpsCoordsTgt = awg_9.active_u.get_Coord();
             var tgt_lat = gpsCoordsTgt.lat();

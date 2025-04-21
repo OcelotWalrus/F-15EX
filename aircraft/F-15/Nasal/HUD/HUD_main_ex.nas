@@ -682,7 +682,7 @@ var F15HUD = {
 																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
 																	obj.window17.setText(sprintf("CCIP %02d:%02d", fall_time_mins, fall_time_secs));
 																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "GBU-12" or weap.type == "GBU-31" or weap.type == "MK-84" or weap.type == "MK-83" or weap.type == "MK-82" or weap.type == "MK-82AIR" or weap.type == "CBU-87" or weap.type == "CBU-15") and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
+																} elsif ((weap.type == "GBU-12" or weap.type == "GBU-31" or weap.type == "MK-84" or weap.type == "MK-83" or weap.type == "MK-82" or weap.type == "MK-82AIR" or weap.type == "CBU-87" or weap.type == "CBU-105") and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
 																	obj.timeToReleaseH = int(obj.timeToRelease/3600);
 																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseH*3600;
 																	obj.timeToReleaseM = int(obj.timeToRelease/60);
@@ -693,7 +693,7 @@ var F15HUD = {
 																		obj.window17.setText("CCRP XX:XX");
 																	}
 																	obj.window17.setVisible(1);
-																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-88B" or weap.type == "AGM-154A" or weap.type == "AGM-158A" or weap.type == "GBU-31") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
+																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-88B" or weap.type == "AGM-154A" or weap.type == "AGM-158A" or weap.type == "GBU-31" or weap.type == "CBU-105") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
 																	if (!(weap.ready_time == 0)) { # Only if the weapon has a ready timer
 																		curr_time = getprop("sim/time/elapsed-sec");
 																		standby_time = weap.ready_standby_time;  # time at which the weapon started readyin process

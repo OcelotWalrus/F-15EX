@@ -66,7 +66,7 @@
 	<hrule/>
 
   	<text>
-	    <label>Target coordinates for GPS-guided munitions (JDAM, JSOW, JASSM).</label>
+	    <label>Target coordinates for GPS-guided munitions (CBU-105, B61-12, JDAM, JSOW, JASSM).</label>
 	    <height>25</height>
 	</text>
 	<group>

@@ -3126,6 +3126,7 @@
                 <max-pitch-deg type="double">-45</max-pitch-deg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <require-lock-to-fire type="bool">false</require-lock-to-fire>
+                <no-common-target type="bool">true</no-common-target>
                 <ready-time type="double">3.5</ready-time>
                 <ejector-speed-fps type="double">10</ejector-speed-fps>
                 <telemetry type="bool">true</telemetry>
