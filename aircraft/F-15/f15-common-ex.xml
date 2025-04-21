@@ -3254,6 +3254,7 @@
                 <fire-msg type="string">Rifle</fire-msg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <ready-time type="double">0.25</ready-time>
+                <no-common-target type="bool">true</no-common-target>
             </agm-65b>
             <agm-65d>
                 <type-id type="int">58</type-id>
@@ -3293,6 +3294,7 @@
                 <fire-msg type="string">Rifle</fire-msg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <ready-time type="double">180</ready-time>
+                <no-common-target type="bool">true</no-common-target>
                 <!--requires-power-on type="bool">true</requires-power-on>
                 <power-on-battery-time type="double">2700</power-on-battery-time-->
             </agm-65d>
@@ -3330,6 +3332,7 @@
                 <terrain-follow type="bool">false</terrain-follow> <!-- seaskimming, not terrain following -->
                 <fire-msg type="string">Bruiser</fire-msg>
                 <ready-time type="double">25</ready-time> <!-- INS alignment -->
+                <no-common-target type="bool">true</no-common-target>
                 <!--requires-power-on type="bool">true</requires-power-on> disablin that for now
                 <power-on-battery-time type="double">900</power-on-battery-time--><!-- Source: GPT 4 lol -->
             </agm-84d>
