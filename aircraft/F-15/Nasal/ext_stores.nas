@@ -227,6 +227,7 @@ var ext_loads_set = func(s) {
     # support several weapons.
     # F-15EX uses different payload presets
     var success = 0;
+    var airshow_fuel = 0;
     if (getprop("sim/model/f15/variant") == "EX") {
         if ( s == "Clean" ) {
             success = pylons.clean_ex();
@@ -284,6 +285,9 @@ var ext_loads_set = func(s) {
             success = pylons.ag_standoff_jassm();
         } elsif ( s == "A/G Stand-Off Diverse (2 Bags)" ) {
             success = pylons.ag_standoff_diverse();
+        } elsif ( s == "Airshow" ) {
+            success = pylons.airshow_ex();
+            airshow_fuel = 1;
         } elsif ( s == "Clean (CFT)" ) {
             success = pylons.clean_cft_ex();
         } elsif ( s == "Clean (CFT)" ) {
@@ -292,8 +296,9 @@ var ext_loads_set = func(s) {
             success = pylons.clean_cft_ex();
         } elsif ( s == "Clean (CFT)" ) {
             success = pylons.clean_cft_ex();
-        } elsif ( s == "Clean (CFT)" ) {
-            success = pylons.clean_cft_ex();
+        }
+        if (airshow_fuel == 0) {
+            aircraft.set_fuel(36000);  # Set max fuel
         }
     } else {
         if ( s == "Clean" ) {

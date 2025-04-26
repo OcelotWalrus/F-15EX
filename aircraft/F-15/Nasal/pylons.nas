@@ -2044,6 +2044,67 @@ var ag_standoff_diverse = func {
     }
 }
 
+var airshow_ex = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.empty);
+
+        pylon2a.loadSet(pylonSets.empty);
+        pylon2b.loadSet(pylonSets.empty);
+        pylon2c.loadSet(pylonSets.smokeWL);
+
+        pylon3.loadSet(pylonSets.empty);
+        pylon4.loadSet(pylonSets.empty);
+
+        pylon5.loadSet(pylonSets.empty);
+
+        pylon6.loadSet(pylonSets.empty);
+        pylon7.loadSet(pylonSets.empty);
+
+        pylon8a.loadSet(pylonSets.smokeWR);
+        pylon8b.loadSet(pylonSets.empty);
+        pylon8c.loadSet(pylonSets.empty);
+
+		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.empty);
+
+		pylonnav.loadSet(pylonSets.empty);
+		pylontgp.loadSet(pylonSets.empty);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[1]/selected","Empty");
+        setprop("payload/weight[5]/selected","Empty");
+        setprop("payload/weight[9]/selected","Empty");
+		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",0);
+        setprop("consumables/fuel/tank[6]/selected",0);
+        setprop("consumables/fuel/tank[7]/selected",0);
+		setprop("fdm/jsbsim/propulsion/cft", 0);
+
+        setprop("consumables/fuel/tank[7]/level-lbs",1);
+		setprop("consumables/fuel/tank[6]/level-lbs",1);
+		setprop("consumables/fuel/tank[5]/level-lbs",1);
+		aircraft.set_fuel(4420); # Airshow fuel amount (full Tank 1)
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
 # Clean configuration
 var clean = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {

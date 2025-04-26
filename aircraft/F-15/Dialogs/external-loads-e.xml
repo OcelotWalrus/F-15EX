@@ -161,10 +161,10 @@
       <group>
         <layout>hbox</layout>
         <button>
-          <legend>Airshow fuel</legend>
+          <legend>Airshow Fuel</legend>
           <binding>
             <command>nasal</command>
-            <script>aircraft.set_fuel(3000)</script>
+            <script>aircraft.set_fuel(4420)</script>  <!-- full Tank 1 -->
           </binding>
         </button>
         <button>
@@ -1156,6 +1156,7 @@
                     <property>/sim/model/f15/systems/external-loads/external-load-set</property>
                     <value>Clean</value>
                     <value>Clean (CFT)</value>
+                    <value>Airshow</value>
 
 					<!-- A/A missions-->
                     <value>A/A Training</value>
