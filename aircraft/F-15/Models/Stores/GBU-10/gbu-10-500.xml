@@ -24,9 +24,9 @@
 		</condition>
 	</animation>
 
-	<effect>  
-    	<inherits-from>Aircraft/f16/Models/Effects/glass/glassIR</inherits-from>  
-    	<object-name>GBU-24_Glass</object-name> 
+	<effect>
+    	<inherits-from>Aircraft/F-15/Models/Effects/glass/glassIR</inherits-from>  
+    	<object-name>GBU-24_Glass</object-name>
   	</effect>
 
 	<animation>
@@ -43,7 +43,7 @@
    <z2-m>0.31219</z2-m>
   </axis>
  </animation>
- 
+
  <animation>
   <type>rotate</type>
   <object-name>GBU-24_Wing2</object-name>
@@ -58,7 +58,7 @@
    <z2-m>0.31219</z2-m>
   </axis>
  </animation>
- 
+
  <animation>
   <type>rotate</type>
   <object-name>GBU-24_Wing3</object-name>
@@ -73,7 +73,7 @@
    <z2-m>-0.30512</z2-m>
   </axis>
  </animation>
- 
+
  <animation>
   <type>rotate</type>
   <object-name>GBU-24_Wing4</object-name>
@@ -131,7 +131,7 @@
              <spread>10</spread>
            </particles-per-sec>
          </counter>
-           
+
          <align>billboard</align>
 
          <particle>
@@ -162,7 +162,7 @@
            <life-sec>
              <value>0.8</value>
            </life-sec>
-             
+
            <mass-kg>  6 </mass-kg>
            <radius-m> 0.5 </radius-m>
          </particle>
@@ -217,7 +217,7 @@
              <spread>10</spread>
            </particles-per-sec>
          </counter>
-           
+
          <align>billboard</align>
 
          <particle>
@@ -248,7 +248,7 @@
            <life-sec>
              <value>2.0</value>
            </life-sec>
-             
+
            <mass-kg>  6 </mass-kg>
            <radius-m> 0.5 </radius-m>
          </particle>
@@ -308,7 +308,7 @@
              <spread>5</spread>
            </particles-per-sec>
          </counter>
-           
+
          <align>billboard</align>
 
          <particle>
@@ -339,7 +339,7 @@
            <life-sec>
              <value>25</value>
            </life-sec>
-             
+
            <mass-kg>  12.0 </mass-kg>
            <radius-m> 0.5 </radius-m>
          </particle>
@@ -401,7 +401,7 @@
              <spread>5</spread>
            </particles-per-sec>
          </counter>
-           
+
          <align>billboard</align>
 
          <particle>
@@ -432,7 +432,7 @@
            <life-sec>
              <value>35</value>
            </life-sec>
-             
+
            <mass-kg>  7.0 </mass-kg>
            <radius-m> 0.5 </radius-m>
          </particle>
@@ -493,7 +493,7 @@
              <spread>5</spread>
            </particles-per-sec>
          </counter>
-           
+
          <align>billboard</align>
 
          <particle>
@@ -524,7 +524,7 @@
            <life-sec>
              <value>10</value>
            </life-sec>
-             
+
            <mass-kg>  15.0 </mass-kg>
            <radius-m> 0.5 </radius-m>
          </particle>
@@ -583,7 +583,7 @@
              <spread>5</spread>
            </particles-per-sec>
          </counter>
-           
+
          <align>billboard</align>
 
          <particle>
@@ -614,7 +614,7 @@
            <life-sec>
              <value>25</value>
            </life-sec>
-             
+
            <mass-kg>  20.0 </mass-kg>
            <radius-m> 0.5 </radius-m>
          </particle>
@@ -673,7 +673,7 @@
              <spread>5</spread>
            </particles-per-sec>
          </counter>
-           
+
          <align>billboard</align>
 
          <particle>
@@ -704,7 +704,7 @@
            <life-sec>
              <value>23</value>
            </life-sec>
-             
+
            <mass-kg>  12.0 </mass-kg>
            <radius-m> 0.5 </radius-m>
          </particle>
@@ -723,7 +723,7 @@
       <object-name>explosion-smoke-outer</object-name>
       <offset-deg>0</offset-deg>
         <factor>1</factor>
-        <property>payload/armament/gbu-10/flags/explode-angle</property>      
+        <property>payload/armament/gbu-10/flags/explode-angle</property>
         <center>
          <x-m>0</x-m>
           <y-m>0</y-m>
