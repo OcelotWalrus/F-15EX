@@ -121,7 +121,7 @@ var missile_coords_feeder = func(myMissile)
       myMissileName = myMissile.ai.getNode("callsign").getValue();
     }
 
-    # Check if the ordonance has 2-wat datalink
+    # Check if the ordonance has 2-way datalink
     if (substr(myMissileName, 0, 8) == "AIM-120D") {
         # We recreate the data vector to feed the missile_view_handler
         var data = { node: myMissile.ai, callsign: myMissileName, root: myMissile.ai.getPath()};
