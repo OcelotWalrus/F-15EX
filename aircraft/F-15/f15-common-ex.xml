@@ -3261,7 +3261,6 @@
                 <fire-msg type="string">Rifle</fire-msg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <ready-time type="double">0.25</ready-time>
-                <no-common-target type="bool">true</no-common-target>
             </agm-65b>
             <agm-65d>
                 <type-id type="int">58</type-id>
@@ -3301,7 +3300,6 @@
                 <fire-msg type="string">Rifle</fire-msg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <ready-time type="double">180</ready-time>
-                <no-common-target type="bool">true</no-common-target>
                 <!--requires-power-on type="bool">true</requires-power-on>
                 <power-on-battery-time type="double">2700</power-on-battery-time-->
             </agm-65d>
@@ -3339,7 +3337,6 @@
                 <terrain-follow type="bool">false</terrain-follow> <!-- seaskimming, not terrain following -->
                 <fire-msg type="string">Bruiser</fire-msg>
                 <ready-time type="double">25</ready-time> <!-- INS alignment -->
-                <no-common-target type="bool">true</no-common-target>
                 <!--requires-power-on type="bool">true</requires-power-on> disablin that for now
                 <power-on-battery-time type="double">900</power-on-battery-time--><!-- Source: GPT 4 lol -->
             </agm-84d>
@@ -3375,7 +3372,6 @@
                 <reaquire type="bool">true</reaquire>
                 <lock-on-after-launch type="bool">true</lock-on-after-launch>
                 <auto-switch-target-allowed type="bool">false</auto-switch-target-allowed>
-                <no-common-target type="bool">true</no-common-target>
                 <prowl-flight type="string">gyro-pitch</prowl-flight>
                 <switch-time-sec type="double">30</switch-time-sec>
                 <class type="string">GMA</class>
@@ -4217,19 +4213,19 @@
             </frequencies>
         </nav>
         <iff>
-            <channel_prop type="string">/instrumentation/iff/channel-selection</channel_prop>
-            <power_prop type="string">/instrumentation/iff/power</power_prop>
-            <power type="bool">true</power>
+            <channel_prop type="string" alias="/instrumentation/iff/channel-selection"/>
+            <power_prop type="string" alias="/instrumentation/iff/power"/>
+            <power type="bool">false</power>
             <activate type="bool">true</activate>
             <channel-selection type="int">1</channel-selection>
             <response type="bool">false</response>
         </iff>
         <datalink>
             <data type="int">0</data>
-            <power type="bool">true</power>
+            <power type="bool">false</power>
             <channel type="int">1</channel>
-            <power_prop type="string">/instrumentation/datalink/power</power_prop>
-            <channel_prop type="string">instrumentation/datalink/channel</channel_prop>
+            <power_prop type="string" alias="/instrumentation/datalink/power"/>
+            <channel_prop type="string" alias="/instrumentation/datalink/channel"/>
             <receive_period type="double">1</receive_period>
         </datalink>
     </instrumentation>
