@@ -54,9 +54,25 @@
 
 				<text>
 					<label>Left Wing Tank</label>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
 				</text>
 
 				<checkbox>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
 					<property>consumables/fuel/tank[5]/selected</property>
 					<live>true</live>
                     <binding>
@@ -71,9 +87,25 @@
 
 				<text>
 					<label>Center Tank</label>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
 				</text>
 
 				<checkbox>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
 					<property>consumables/fuel/tank[7]/selected</property>
 					<live>true</live>
                     <binding>
@@ -88,9 +120,25 @@
 
 				<text>
 					<label>Right Wing Tank</label>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
 				</text>
 
 				<checkbox>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
 					<property>consumables/fuel/tank[6]/selected</property>
 					<live>true</live>
                     <binding>
@@ -104,10 +152,26 @@
                 <layout>vbox</layout>
 
                 <text>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
                     <label> Conformal Tanks</label>
                 </text>
 
                 <checkbox>
+					<enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+					</enable>
                     <property>fdm/jsbsim/propulsion/cft</property>
                     <live>true</live>
                     <binding>
@@ -122,34 +186,40 @@
                 <group>
                     <layout>hbox</layout>
                     <default-padding>0</default-padding>
-                <halign>left</halign>
-                <checkbox>
-                    <padding>12</padding>
-                    <property>sim/freeze/fuel</property>
-                    <live>true</live>
-                    <binding>
-                        <command>nasal</command>
-                        <script>aircraft.toggle_fuel_freeze()</script>
-                    </binding>
-                </checkbox>
-                <text>
-                    <label> Fuel Freeze</label>
-                </text>
-            </group>
-            <button>
-                <legend>Quickstart</legend>
-                <binding>
-                    <command>nasal</command>
-                    <script>aircraft.quickstart()</script>
-                </binding>
-            </button>
-            <button>
-                <legend>Cold and Dark</legend>
-                <binding>
-                    <command>nasal</command>
-                    <script>aircraft.cold_and_dark()</script>
-                </binding>
-            </button>
+	                <halign>left</halign>
+	                <checkbox>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
+	                    <padding>12</padding>
+	                    <property>sim/freeze/fuel</property>
+	                    <live>true</live>
+	                    <binding>
+	                        <command>nasal</command>
+	                        <script>aircraft.toggle_fuel_freeze()</script>
+	                    </binding>
+						<label> Fuel Freeze</label>
+	                </checkbox>
+	            </group>
+	            <button>
+	                <legend>Quickstart</legend>
+	                <binding>
+	                    <command>nasal</command>
+	                    <script>aircraft.quickstart()</script>
+	                </binding>
+	            </button>
+	            <button>
+	                <legend>Cold and Dark</legend>
+	                <binding>
+	                    <command>nasal</command>
+	                    <script>aircraft.cold_and_dark()</script>
+	                </binding>
+	            </button>
             </group>
 
             <empty>
@@ -160,6 +230,14 @@
 
       <group>
         <layout>hbox</layout>
+		<visible>
+			<or>
+				<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+				<not>
+					<property>sim/model/f15/systems/armament/mp-messaging</property>
+				</not>
+			</or>
+		</visible>
         <button>
           <legend>Airshow Fuel</legend>
           <binding>
@@ -288,6 +366,14 @@
 						<label>Level</label>
 					</text>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>LFEED</name>
 						<property>/consumables/fuel/tank[0]/level-gal_us</property>
 						<live>1</live>
@@ -299,6 +385,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>RFEED</name>
 						<property>/consumables/fuel/tank[1]/level-gal_us</property>
 						<live>1</live>
@@ -310,6 +404,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>Tank1</name>
 						<property>/consumables/fuel/tank[2]/level-gal_us</property>
 						<live>1</live>
@@ -321,6 +423,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>LWing</name>
 						<property>/consumables/fuel/tank[3]/level-gal_us</property>
 						<live>1</live>
@@ -332,6 +442,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>RWing</name>
 						<property>/consumables/fuel/tank[4]/level-gal_us</property>
 						<live>1</live>
@@ -343,6 +461,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>ExtWingL</name>
 						<property>/consumables/fuel/tank[5]/level-gal_us</property>
                         <enable>
@@ -357,6 +483,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>ExtWingR</name>
 						<property>/consumables/fuel/tank[6]/level-gal_us</property>
                         <enable>
@@ -371,6 +505,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>CentreExternal</name>
 						<property>/consumables/fuel/tank[7]/level-gal_us</property>
                         <enable>
@@ -385,6 +527,14 @@
 						</binding>
 					</slider>
 					<slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
 						<name>LCFTvalue</name>
 						<property>/consumables/fuel/tank[8]/level-gal_us</property>
                         <enable>
@@ -399,6 +549,14 @@
 						</binding>
 					</slider>
                     <slider>
+						<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+						</enable>
                         <name>RCFTvalue</name>
                         <property>/consumables/fuel/tank[9]/level-gal_us</property>
                         <enable>
@@ -617,6 +775,14 @@
 
             <button>
                 <legend>Repair Airframe</legend>
+				<visible>
+					<or>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						<not>
+							<property>sim/model/f15/systems/armament/mp-messaging</property>
+						</not>
+					</or>
+				</visible>
                 <binding>
                     <command>nasal</command>
                     <script>aircraft.fixAirframe();</script>
@@ -624,6 +790,9 @@
             </button>
 			<button>
                 <legend>Repack Dragchute</legend>
+				<visible>
+					<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+				</visible>
                 <binding>
                     <command>nasal</command>
                     <script>
@@ -690,9 +859,25 @@
 
                 <text>
                     <label>Wheel Brakes Blown Out</label>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                     <property>controls/gear/brakes-blownout</property>
                     <live>true</live>
                     <binding>
@@ -707,9 +892,25 @@
 
                 <text>
                     <label>Flaps Damage</label>
+						<enable>
+							  <or>
+								  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+								  <not>
+									  <property>sim/model/f15/systems/armament/mp-messaging</property>
+								  </not>
+							  </or>
+						</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                     <property>controls/flaps-overspeed</property>
                     <live>true</live>
                     <binding>
@@ -724,9 +925,25 @@
 
                 <text>
                     <label>Front Gear Damaged</label>
+						<enable>
+							  <or>
+								  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+								  <not>
+									  <property>sim/model/f15/systems/armament/mp-messaging</property>
+								  </not>
+							  </or>
+						</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                     <property>fdm/jsbsim/gear/unit/damaged</property>
                     <live>true</live>
                     <binding>
@@ -740,9 +957,25 @@
 
                 <text>
                     <label>Right Gear Damage</label>
+						<enable>
+							  <or>
+								  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+								  <not>
+									  <property>sim/model/f15/systems/armament/mp-messaging</property>
+								  </not>
+							  </or>
+						</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                     <property>fdm/jsbsim/gear/unit[2]/damaged</property>
                     <live>true</live>
                     <binding>
@@ -756,9 +989,25 @@
 
                 <text>
                     <label>Left Gear Damage</label>
+						<enable>
+							  <or>
+								  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+								  <not>
+									  <property>sim/model/f15/systems/armament/mp-messaging</property>
+								  </not>
+							  </or>
+						</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                     <property>fdm/jsbsim/gear/unit[1]/damaged</property>
                     <live>true</live>
                     <binding>
@@ -772,9 +1021,25 @@
 
                 <text>
                     <label>Right Wing Torn</label>
+						<enable>
+							  <or>
+								  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+								  <not>
+									  <property>sim/model/f15/systems/armament/mp-messaging</property>
+								  </not>
+							  </or>
+						</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                     <property>sim/model/f15/wings/right-wing-torn</property>
                     <live>true</live>
                     <binding>
@@ -788,9 +1053,25 @@
 
                 <text>
                     <label>Left Wing Torn</label>
+						<enable>
+							  <or>
+								  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+								  <not>
+									  <property>sim/model/f15/systems/armament/mp-messaging</property>
+								  </not>
+							  </or>
+						</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						  <or>
+							  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							  <not>
+								  <property>sim/model/f15/systems/armament/mp-messaging</property>
+							  </not>
+						  </or>
+					</enable>
                     <property>sim/model/f15/wings/left-wing-torn</property>
                     <live>true</live>
                     <binding>
@@ -807,9 +1088,15 @@
 
                 <text>
                     <label>Ground Power Unit</label>
+					<enable>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+					</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+					</enable>
                     <property>fdm/jsbsim/systems/electrics/ground-power-gpu</property>
                     <live>true</live>
                     <binding>
@@ -823,9 +1110,21 @@
 
                 <text>
                     <label>External Electrical Power Connected</label>
+					<enable>
+						<and>
+							<property>fdm/jsbsim/systems/electrics/ground-power-gpu</property>
+							<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						</and>
+					</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						<and>
+							<property>fdm/jsbsim/systems/electrics/ground-power-gpu</property>
+							<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						</and>
+					</enable>
                     <property>fdm/jsbsim/systems/electrics/ground-power</property>
                     <live>true</live>
                     <binding>
@@ -839,9 +1138,15 @@
                 <layout>hbox</layout>
                 <text>
                     <label>External Air Connected</label>
+					<enable>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+					</enable>
                 </text>
 
                 <checkbox>
+					<enable>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+					</enable>
                     <property>fdm/jsbsim/systems/electrics/ground-air</property>
                     <live>true</live>
                     <binding>
@@ -1152,6 +1457,14 @@
                 <valign>center</valign>
                 <default-padding>1</default-padding>
                 <combo>
+					<visible>
+						<or>
+							<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							<not>
+								<property>sim/model/f15/systems/armament/mp-messaging</property>
+							</not>
+						</or>
+					</visible>
                     <pref-width>200</pref-width>
                     <property>/sim/model/f15/systems/external-loads/external-load-set</property>
                     <value>Clean</value>
@@ -1218,6 +1531,14 @@
             <group>
                 <!-- Ammunitions -->
                 <layout>hbox</layout>
+				<visible>
+					<or>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						<not>
+							<property>sim/model/f15/systems/armament/mp-messaging</property>
+						</not>
+					</or>
+				</visible>
                 <default-padding>1</default-padding>
                 <button>
                     <legend>Reload set</legend>
@@ -1291,6 +1612,14 @@
 							<label>S0 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
                             <pref-width>230</pref-width>
                             <property>payload/weight[11]/selected</property>
                             <live>true</live>
@@ -1330,6 +1659,14 @@
 							<label>P2 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
                             <pref-width>230</pref-width>
                             <property>payload/weight[12]/selected</property>
                             <live>true</live>
@@ -1376,6 +1713,14 @@
 							<label>S2 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
                             <pref-width>230</pref-width>
                             <property>payload/weight[13]/selected</property>
                             <live>true</live>
@@ -1415,6 +1760,14 @@
 							<label>S3 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[0]/selected</property>
 							<live>true</live>
@@ -1454,6 +1807,14 @@
 							<label>P4 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[1]/selected</property>
 							<live>true</live>
@@ -1513,6 +1874,14 @@
 							<label>S5 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[2]/selected</property>
 							<live>true</live>
@@ -1552,6 +1921,14 @@
 							<label>S6 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[3]/selected</property>
 							<live>true</live>
@@ -1605,6 +1982,14 @@
 							<label>S7 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[4]/selected</property>
 							<live>true</live>
@@ -1658,6 +2043,14 @@
 							<label>P8 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[5]/selected</property>
 							<live>true</live>
@@ -1706,6 +2099,14 @@
 							<label>S9 :   </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[6]/selected</property>
 							<live>true</live>
@@ -1759,6 +2160,14 @@
 							<label>S10 :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[7]/selected</property>
 							<live>true</live>
@@ -1812,6 +2221,14 @@
 							<label>S11 :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[8]/selected</property>
 							<live>true</live>
@@ -1851,6 +2268,14 @@
 							<label>P12 :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[9]/selected</property>
 							<live>true</live>
@@ -1909,6 +2334,14 @@
 							<label>S13 :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[10]/selected</property>
 							<live>true</live>
@@ -1947,6 +2380,14 @@
 							<label>S14 :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[14]/selected</property>
 							<live>true</live>
@@ -1985,6 +2426,14 @@
 							<label>P15 :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[15]/selected</property>
 							<live>true</live>
@@ -2030,6 +2479,14 @@
 							<label>S16 :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[16]/selected</property>
 							<live>true</live>
@@ -2068,6 +2525,14 @@
 							<label>NAV :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[18]/selected</property>
 							<live>true</live>
@@ -2108,6 +2573,14 @@
 							<label>TGP :  </label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[19]/selected</property>
 							<live>true</live>
@@ -2149,6 +2622,14 @@
 							<label>CFTL1 :</label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[20]/selected</property>
 							<live>true</live>
@@ -2196,6 +2677,14 @@
 							<label>CFTL2 :</label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[21]/selected</property>
 							<live>true</live>
@@ -2242,6 +2731,14 @@
 							<label>CFTL3 :</label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[22]/selected</property>
 							<live>true</live>
@@ -2289,6 +2786,14 @@
 							<label>CFTR1 :</label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[23]/selected</property>
 							<live>true</live>
@@ -2336,6 +2841,14 @@
 							<label>CFTR2 :</label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[24]/selected</property>
 							<live>true</live>
@@ -2382,6 +2895,14 @@
 							<label>CFTR3 :</label>
 						</text>
 						<combo>
+							<enable>
+								  <or>
+									  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+									  <not>
+										  <property>sim/model/f15/systems/armament/mp-messaging</property>
+									  </not>
+								  </or>
+							</enable>
 							<pref-width>230</pref-width>
 							<property>payload/weight[25]/selected</property>
 							<live>true</live>
@@ -2433,20 +2954,52 @@
 					        <text>
                                 <halign>left</halign>
                                 <label>Gun Rounds : </label>
+								<enable>
+									  <or>
+										  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+										  <not>
+											  <property>sim/model/f15/systems/armament/mp-messaging</property>
+										  </not>
+									  </or>
+								</enable>
                             </text>
 					        <text>
                                 <halign>left</halign>
                                 <label>Flares Count : </label>
+								<enable>
+									  <or>
+										  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+										  <not>
+											  <property>sim/model/f15/systems/armament/mp-messaging</property>
+										  </not>
+									  </or>
+								</enable>
                             </text>
 					        <text>
                                 <halign>left</halign>
                                 <label>Chaffs Count : </label>
+								<enable>
+									  <or>
+										  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+										  <not>
+											  <property>sim/model/f15/systems/armament/mp-messaging</property>
+										  </not>
+									  </or>
+								</enable>
                             </text>
                         </group>
                         <group> <!-- Sliders -->
 					        <layout>vbox</layout>
 					        <halign>right</halign>
 					        <slider>
+								<enable>
+									  <or>
+										  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+										  <not>
+											  <property>sim/model/f15/systems/armament/mp-messaging</property>
+										  </not>
+									  </or>
+								</enable>
 					        	<name>Gun Rounds</name>
 					        	<property>sim/model/f15/systems/gun/rounds</property>
 					        	<live>1</live>
@@ -2465,6 +3018,14 @@
 					        	</binding>
 					        </slider>
 					        <slider>
+								<enable>
+									  <or>
+										  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+										  <not>
+											  <property>sim/model/f15/systems/armament/mp-messaging</property>
+										  </not>
+									  </or>
+								</enable>
 					        	<name>Flares Count</name>
 					        	<property>ai/submodels/submodel[5]/count</property>
 					        	<live>1</live>
@@ -2476,6 +3037,14 @@
 					        	</binding>
 					        </slider>
 					        <slider>
+								<enable>
+									  <or>
+										  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+										  <not>
+											  <property>sim/model/f15/systems/armament/mp-messaging</property>
+										  </not>
+									  </or>
+								</enable>
 					        	<name>Chaffs Count</name>
 					        	<property>ai/submodels/submodel[6]/count</property>
 					        	<live>1</live>
@@ -2517,53 +3086,72 @@
 
             </group>
 
-            <group>
+			<group>
 				<layout>hbox</layout>
-                <halign>left</halign>
+				<halign>left</halign>
 				<checkbox>
-                        <padding>12</padding>
-                        <property>sim/model/f15/systems/armament/mp-messaging</property>
+					<property>sim/model/f15/systems/armament/mp-messaging</property>
 					<live>true</live>
+					<enable>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+					</enable>
 					<binding>
-						<command>property-toggle</command>
-						<property>sim/model/f15/systems/armament/mp-messaging</property>
+						<command>nasal</command>
+						<script>
+					    if(getprop("fdm/jsbsim/gear/unit[0]/WOW")) {
+					      setprop("sim/model/f15/systems/armament/mp-messaging", !getprop("sim/model/f15/systems/armament/mp-messaging"));
+					    }
+					    screen.log.write("Weapons MP damage " ~ (getprop("sim/model/f15/systems/armament/mp-messaging") ? "ON" : "OFF")  , 0.5, 0.5, 1);</script>
 					</binding>
 				</checkbox>
-                <text>
-                    <label>Multiplayer dogfight enabled</label>
-                </text>
-
-            </group>
-			<group>
-				<layout>hbox</layout>
-
 				<text>
-					<label>CAUTION: Please, don't use when in</label>
+					<label>Weapons MP damage:</label>
+					<enable>
+						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+					</enable>
 				</text>
-			</group>
-			<group>
-				<layout>hbox</layout>
 				<text>
-					<label>100 NM range of a crowded airport like</label>
-				</text>
-			</group>
-			<group>
-				<layout>hbox</layout>
-				<text>
-					<label>KSFO.</label>
+					<label> (wheels on ground to toggle)</label>
+					<visible>
+						<less-than>
+							<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							<value>1</value>
+						</less-than>
+					</visible>
 				</text>
 			</group>
 
-			<checkbox>
-		      <label>Activate weapon-follow view</label>
-		      <halign>left</halign>
-		      <property>/controls/armament/automissileview</property>
-		      <live>true</live>
-		        <binding>
-		          <command>property-toggle</command>
-		          <property>/controls/armament/automissileview</property>
-		        </binding>
-		    </checkbox>
+			<group>
+				<layout>hbox</layout>
+				<halign>left</halign>
+				<checkbox>
+			      <label>Activate weapon-follow view</label>
+				  <enable>
+					  <or>
+						  <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+						  <not>
+							  <property>sim/model/f15/systems/armament/mp-messaging</property>
+						  </not>
+					  </or>
+				  </enable>
+			      <halign>left</halign>
+			      <property>/controls/armament/automissileview</property>
+			      <live>true</live>
+			        <binding>
+			          <command>property-toggle</command>
+			          <property>/controls/armament/automissileview</property>
+			        </binding>
+			    </checkbox>
+				<text>
+					<label> (wheels on ground to toggle)</label>
+					<visible>
+						<less-than>
+							<property>fdm/jsbsim/gear/unit[0]/WOW</property>
+							<value>1</value>
+						</less-than>
+					</visible>
+				</text>
+			</group>
 
 
 
