@@ -1715,6 +1715,14 @@
                 <bool n="240" alias="/sim/model/f15/fx/smoke-cmd"/>
                 <bool n="241" alias="/sim/model/f15/fx/smoke-mnt-left"/>
                 <bool n="242" alias="/sim/model/f15/fx/smoke-mnt-right"/>
+                <bool n="243" alias="/sim/model/f15/payload/selected/cbu-87-l3"/>
+                <bool n="244" alias="/sim/model/f15/payload/selected/cbu-87-l4"/>
+                <bool n="245" alias="/sim/model/f15/payload/selected/cbu-87-r1"/>
+                <bool n="246" alias="/sim/model/f15/payload/selected/cbu-87-r2"/>
+                <bool n="247" alias="/sim/model/f15/payload/selected/cbu-105-l3"/>
+                <bool n="248" alias="/sim/model/f15/payload/selected/cbu-105-l4"/>
+                <bool n="249" alias="/sim/model/f15/payload/selected/cbu-105-r1"/>
+                <bool n="250" alias="/sim/model/f15/payload/selected/cbu-105-r2"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
