@@ -623,7 +623,7 @@
             <contents unit="LBS">0</contents>
             <priority>4</priority>
         </tank>
-        <tank type="FUEL" name="7 Centre External Tank">
+        <tank type="FUEL" name="7 Center External Tank">
             <!--7: External Tank-->
             <location unit="M">
                 <x>-0.0918118000000003</x>

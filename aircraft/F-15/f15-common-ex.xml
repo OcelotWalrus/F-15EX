@@ -3616,7 +3616,7 @@
                 <selected type="bool">false</selected >
             </tank>
             <tank n="7">
-                <name>Centre External</name>
+                <name>Center External</name>
                 <kill-when-empty type="bool">false</kill-when-empty>
                 <selected type="bool">false</selected >
             </tank>
