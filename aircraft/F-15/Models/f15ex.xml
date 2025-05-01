@@ -5023,6 +5023,70 @@
             <property>sim/multiplay/generic/bool[239]</property>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>aim-120d-cft1</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[251]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>aim-120d-cft3</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[252]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>aim-120d-cft4</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[253]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>aim-120d-cft6</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[254]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>catm-120d-cft1</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[255]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>catm-120d-cft3</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[256]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>catm-120d-cft4</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[257]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>catm-120d-cft6</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[258]</property>
+        </condition>
+    </animation>
 
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
@@ -5966,6 +6030,87 @@
              <x-m>-0.1</x-m>
              <y-m>1.825</y-m>
              <z-m>-0.825</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>aim-120d-cft1</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
+        <offsets>
+             <x-m>-0.43854</x-m>
+             <y-m>-2.0505</y-m>
+             <z-m>-0.56178</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>aim-120d-cft3</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
+        <offsets>
+             <x-m>4.8846</x-m>
+             <y-m>-2.0468</y-m>
+             <z-m>-0.52389</z-m>
+             <yaw-deg>-6.417</yaw-deg>
+             <pitch-deg>-3.0669</pitch-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>aim-120d-cft4</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
+        <offsets>
+             <x-m>-0.43854</x-m>
+             <y-m>2.0505</y-m>
+             <z-m>-0.56178</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>aim-120d-cft6</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
+        <offsets>
+             <x-m>4.8846</x-m>
+             <y-m>2.0468</y-m>
+             <z-m>-0.52389</z-m>
+             <yaw-deg>6.417</yaw-deg>
+             <pitch-deg>-3.0669</pitch-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>catm-120d-cft1</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/CATM-120B.xml</path>
+        <offsets>
+             <x-m>-0.43854</x-m>
+             <y-m>-2.0505</y-m>
+             <z-m>-0.56178</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>catm-120d-cft3</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/CATM-120B.xml</path>
+        <offsets>
+             <x-m>4.8846</x-m>
+             <y-m>-2.0468</y-m>
+             <z-m>-0.52389</z-m>
+             <yaw-deg>-6.417</yaw-deg>
+             <pitch-deg>-3.0669</pitch-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>catm-120d-cft4</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/CATM-120B.xml</path>
+        <offsets>
+             <x-m>-0.43854</x-m>
+             <y-m>2.0505</y-m>
+             <z-m>-0.56178</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>catm-120d-cft6</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/CATM-120B.xml</path>
+        <offsets>
+             <x-m>4.8846</x-m>
+             <y-m>2.0468</y-m>
+             <z-m>-0.52389</z-m>
+             <yaw-deg>6.417</yaw-deg>
+             <pitch-deg>-3.0669</pitch-deg>
         </offsets>
     </model>
 

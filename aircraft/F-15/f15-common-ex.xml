@@ -1723,6 +1723,14 @@
                 <bool n="248" alias="/sim/model/f15/payload/selected/cbu-105-l4"/>
                 <bool n="249" alias="/sim/model/f15/payload/selected/cbu-105-r1"/>
                 <bool n="250" alias="/sim/model/f15/payload/selected/cbu-105-r2"/>
+                <bool n="251" alias="/sim/model/f15/payload/selected/aim-120d-cft1"/>
+                <bool n="252" alias="/sim/model/f15/payload/selected/aim-120d-cft3"/>
+                <bool n="253" alias="/sim/model/f15/payload/selected/aim-120d-cft4"/>
+                <bool n="254" alias="/sim/model/f15/payload/selected/aim-120d-cft6"/>
+                <bool n="255" alias="/sim/model/f15/payload/selected/catm-120d-cft1"/>
+                <bool n="256" alias="/sim/model/f15/payload/selected/catm-120d-cft3"/>
+                <bool n="257" alias="/sim/model/f15/payload/selected/catm-120d-cft4"/>
+                <bool n="258" alias="/sim/model/f15/payload/selected/catm-120d-cft6"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->

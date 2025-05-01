@@ -154,7 +154,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 
 	var pylonnavset = [pylonSets.empty, pylonSets.lantirnnav];
 	var pylontgpset = [pylonSets.empty, pylonSets.lantirntgp, pylonSets.atpsniper];
-	var pyloncftset = [pylonSets.empty, pylonSets.cftmk82, pylonSets.cftmk82air, pylonSets.singlegbu12];
+	var pyloncftset = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.aim120d, pylonSets.cftmk82, pylonSets.cftmk82air, pylonSets.singlegbu12];
 	var pyloncftsetcenter = [pylonSets.empty, pylonSets.cftmk82, pylonSets.cftmk82air];
 
 	#var pylon9set = [pylonSets.empty];
