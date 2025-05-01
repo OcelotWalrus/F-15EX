@@ -113,13 +113,13 @@ var TEWSDisplay = {
                 }
             });
 
-        obj.max_symbols = 10;
+        obj.max_symbols = 10;  # we got +5 extra but we use them for datalink
         obj.tews_alignment_offset = -90;
         obj.symbol_list = [];
         obj.locked_symbol = TEWSSymbol.new(0, obj.TEWSsvg, "hat_locked");
         obj.process_targets = frame_utils.PartitionProcessor.new("TEWS-display", 20, nil);
 
-        for (var i = 0; i < obj.max_symbols; i += 1)
+        for (var i = 0; i < (obj.max_symbols + 5); i += 1)  # we got +5 extra
           {
               var ts = append(obj.symbol_list, TEWSSymbol.new(i, obj.TEWSsvg, "hat"));
               #    printf("TEWS Sym load: %d: %s %s",i,ts.id, ts.valid);
@@ -131,6 +131,46 @@ var TEWSDisplay = {
             return;
 
         var scale = 220/2; # horizontal / vertical scale (half resolution)
+		var datalink_connections = datalink.get_all_callsigns();
+
+		if (datalink_connections != nil and size(datalink_connections)) {
+		   	print("DATALINK CONNECTIONS!");
+			print(size(datalink_connections));
+			var count = 11;
+		   	foreach(var curr; datalink_connections) {
+				if (count <= 15) {
+					var curr_data = datalink.get_data(curr);
+		   			print("CONTACT");
+					print(curr);
+					print(curr_data == nil);
+					var dt_symbol = me.symbol_list[count];
+
+					var bearing = geo.normdeg(curr_data.get_deviation(notification.OrientationHeadingDeg) + me.tews_alignment_offset);
+
+					dt_symbol.setCallsign(curr);
+					var r = (curr_data.get_range()*scale) / notification.radar2_range;
+					var xc  = r * math.cos(bearing/57.29577950560105);
+					var yc = r * math.sin(bearing/57.29577950560105);
+
+					dt_symbol.setTranslation (xc, yc);
+					dt_symbol.setRotation(geo.normdeg(curr_data.get_heading()-notification.OrientationHeadingDeg)/57.29577950560105);
+
+					me.dt_symbol.setVisible(curr_data == nil);
+				} else {
+					print("TOO MANY CONNECTIONS! EXCEEDS MAX: 5.");
+				}
+				count = count + 1;
+		   	}
+
+			while (count <= 15) {  # make sure unused symbols ain't gettin displayed
+				me.symbol_list[count].setVisible(0);
+				count = count + 1;
+			}
+	   } else {
+	   		foreach(var curr; [10,11,12,13,14]) {
+				me.symbol_list[curr].setVisible(0);
+			}
+	   }
 
         me.process_targets.process(me, awg_9.tgts_list,
                                 func(pp, obj, data){
@@ -143,6 +183,12 @@ var TEWSDisplay = {
                                     {
                                         if (u.Callsign != nil)
                                             callsign = u.Callsign.getValue();
+
+										foreach(curr_call; datalink_connections) {
+											if (callsign == curr_call) {  # if that contact is already on datalink, don't display it
+												return;
+											}
+										}
 
                                         var model = "XX";
 

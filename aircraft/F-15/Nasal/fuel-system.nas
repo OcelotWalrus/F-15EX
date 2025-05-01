@@ -1,4 +1,4 @@
-# F-15 Fuel system 
+# F-15 Fuel system
 # ---------------------------
 # The main fuel computations are performed in JSBSim; these are support routines
 # ---------------------------
@@ -186,14 +186,14 @@ var build_new_tanks = func {
 	Tank1     = Tank.new("Tank 1", 2, 1, TankBothSide);
 	WingInternal_L   = Tank.new("Internal Wing L", 3, 1, TankLeftSide);
 	WingInternal_R   = Tank.new("Internal Wing R", 4, 1, TankRightSide);
-	Left_Feed      = Tank.new("L Feed", 0, 1, TankLeftSide); 
+	Left_Feed      = Tank.new("L Feed", 0, 1, TankLeftSide);
 	Right_Feed      = Tank.new("R Feed", 1, 1, TankRightSide);
 	WingExternal_L   = Tank.newExternal("External Wing L", 5, 1, TankLeftSide);
 	WingExternal_R   = Tank.newExternal("External Wing R", 6, 1, TankRightSide);
-	Centre_External  = Tank.newExternal("Centre External", 7, 1, TankBothSide); 
-    Conformal_L  = Tank.newExternal("Conformal Left", 8, 1, TankLeftSide); 
+	Centre_External  = Tank.newExternal("Center External", 7, 1, TankBothSide); 
+    Conformal_L  = Tank.newExternal("Conformal Left", 8, 1, TankLeftSide);
     Conformal_L.external = 0;
-	Conformal_R  = Tank.newExternal("Conformal Right", 9, 1, TankRightSide); 
+	Conformal_R  = Tank.newExternal("Conformal Right", 9, 1, TankRightSide);
     Conformal_R.external = 0;
 }
 
@@ -241,48 +241,48 @@ var calc_levels = func() {
     {
 #FEED The fuel remaining in the respective engine feed tanks will be displayed.
         setprop("sim/model/f15/instrumentation/fuel-gauges/left-display", Left_Feed.get_level_lbs());
-        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",Right_Feed.get_level_lbs()); 
+        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",Right_Feed.get_level_lbs());
         setprop("sim/model/f15/instrumentation/fuel-gauges/total-display",getprop("consumables/fuel/total-fuel-lbs"));
     }
     else if (sel_display == 2)
     {
 #INT WING The fuel remaining in the respective internal wing tanks is displayed.
         setprop("sim/model/f15/instrumentation/fuel-gauges/left-display", WingInternal_L.get_level_lbs());
-        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",WingInternal_R.get_level_lbs()); 
+        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",WingInternal_R.get_level_lbs());
         setprop("sim/model/f15/instrumentation/fuel-gauges/total-display",getprop("consumables/fuel/total-fuel-lbs"));
     }
     else if (sel_display == 3)
     {
 #TANK 1 The fuel remaining in tank 1 is displayed in the LEFT counter (RIGHT indicates zero).
         setprop("sim/model/f15/instrumentation/fuel-gauges/left-display", Tank1.get_level_lbs());
-        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",0); 
+        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",0);
         setprop("sim/model/f15/instrumentation/fuel-gauges/total-display",getprop("consumables/fuel/total-fuel-lbs"));
     }
     else if (sel_display == 4)
     {
 #EXT WING The fuel remaining in the respective external wing tanks is displayed.
         setprop("sim/model/f15/instrumentation/fuel-gauges/left-display", WingExternal_L.get_level_lbs());
-        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",WingExternal_R.get_level_lbs()); 
+        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",WingExternal_R.get_level_lbs());
         setprop("sim/model/f15/instrumentation/fuel-gauges/total-display",getprop("consumables/fuel/total-fuel-lbs"));
     }
     else if (sel_display == 5)
     {
 #EXT CTR The fuel remaining in the external centerline tank is displayed in the LEFT counter (RIGHT indicates zero).
         setprop("sim/model/f15/instrumentation/fuel-gauges/left-display", Centre_External.get_level_lbs());
-        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",0); 
+        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",0);
         setprop("sim/model/f15/instrumentation/fuel-gauges/total-display",getprop("consumables/fuel/total-fuel-lbs"));
     }
     else if (sel_display == 6)
     {
 #CONF TANK The fuel remaining in the respective conformal tank is displayed.
-        setprop("sim/model/f15/instrumentation/fuel-gauges/left-display",Conformal_L.get_level_lbs()); 
-        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",Conformal_R.get_level_lbs()); 
+        setprop("sim/model/f15/instrumentation/fuel-gauges/left-display",Conformal_L.get_level_lbs());
+        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",Conformal_R.get_level_lbs());
         setprop("sim/model/f15/instrumentation/fuel-gauges/total-display",getprop("consumables/fuel/total-fuel-lbs"));
     }
     else
     {
         setprop("sim/model/f15/instrumentation/fuel-gauges/left-display", 6000);
-        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",600); 
+        setprop("sim/model/f15/instrumentation/fuel-gauges/right-display",600);
         setprop("sim/model/f15/instrumentation/fuel-gauges/total-display",6000);
     }
 }
@@ -300,13 +300,13 @@ setlistener("sim/model/f15/controls/fuel/dump-switch", func(v) {
             setprop("fdm/jsbsim/propulsion/fuel_dump",1);
         }
         else
-        { 
+        {
             setprop("sim/multiplay/generic/int[0]", 0);
             setprop("fdm/jsbsim/propulsion/fuel_dump",0);
-        } 
+        }
     }
-    else 
-    { 
+    else
+    {
         setprop("sim/multiplay/generic/int[0]", 0);
         setprop("fdm/jsbsim/propulsion/fuel_dump",0);
     }
@@ -361,7 +361,7 @@ var refuel_probe_switch_cycle = func() {
 	if ( sw == 2 ) {
 		sw = 0;
 		RprobeSw.setValue(sw);
-		r_probe.close();	
+		r_probe.close();
 	}
 }
 
@@ -447,7 +447,7 @@ Tank = {
 		return obj;
 	},
     #
-    # the side of this tank (or the engine that this tank feeds) (0 = left, 1 = right) 
+    # the side of this tank (or the engine that this tank feeds) (0 = left, 1 = right)
     get_side : func {
         return me.side;
     },
@@ -465,13 +465,13 @@ Tank = {
     },
 
 	get_capacity : func {
-		return me.capacity.getValue(); 
+		return me.capacity.getValue();
 	},
 	set_capacity : func(v) {
-		return me.capacity.setValue(v); 
+		return me.capacity.setValue(v);
 	},
 	get_capacity_lbs : func {
-		return me.capacity.getValue() * me.ppg.getValue(); 
+		return me.capacity.getValue() * me.ppg.getValue();
 	},
 	get_level : func {
 		return me.level_gal_us.getValue();
@@ -499,10 +499,10 @@ Tank = {
 		var amount = (flowrate_lbs_hr / (me.ppg.getValue() * 60 * 60)) * fuel_dt;
 		if(amount > me.level_gal_us.getValue()) {
 			amount = me.level_gal_us.getValue();
-		} 
+		}
 		if(amount > ullage) {
 			amount = ullage;
-		} 
+		}
 		var flowrate_lbs = ((amount/fuel_dt) * 60 * 60) * me.ppg.getValue();
 		return amount
 	},
@@ -521,7 +521,7 @@ Tank = {
 				transfer = me.get_amount(fuel_dt, t.get_ullage());
 				me.set_level(me.get_level() - transfer);
 				t.set_level(t.get_level() + transfer);
-			} 
+			}
 		}
 	},
 
@@ -579,7 +579,7 @@ var toggle_fuel_freeze = func() {
 var set_fuel = func(total) {
     var total_delta = (total - getprop("consumables/fuel/total-fuel-lbs"));
 
-    var start = 0; 
+    var start = 0;
     var end = size(Tank.list)-1;
     var inc = 1;
     if (total_delta < 0)

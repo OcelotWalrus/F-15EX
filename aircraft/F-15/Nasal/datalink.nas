@@ -221,9 +221,9 @@ var can_transmit = func(contact, mp_prop, mp_index) {
 ### Properties
 
 var input = {
-    power:      getprop("/instrumentation/datalink/power_prop"),
-    channel:    getprop("/instrumentation/datalink/channel_prop"),
-    ident:      getprop("/instrumentation/datalink/identifier_prop"),
+    power:      "/instrumentation/datalink/power",
+    channel:    "/instrumentation/datalink/channel",
+    ident:      "/instrumentation/datalink/identifier_prop",
     mp:         mp_path,
     models:     "/ai/models",
     callsign:   "/sim/multiplay/callsign",

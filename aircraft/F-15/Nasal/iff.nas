@@ -37,10 +37,10 @@ var iff_hash_length = getprop("/instrumentation/iff/iff_hash_length") or 3;
 var iff_mp_string = getprop("/instrumentation/iff/iff_mp_string") or 4;
 
 var node = {
-	power:			props.globals.getNode(getprop("/instrumentation/iff/power_prop")),
-	channel:		props.globals.getNode(getprop("/instrumentation/iff/channel_prop")),
-	#hash:				props.globals.getNode("/sim/multiplay/generic/string["~iff_mp_string~"]"),
-	hash:				props.globals.initNode("/sim/multiplay/generic/string["~iff_mp_string~"]","AAA","STRING"),
+	power:			props.globals.getNode("/instrumentation/iff/power"),
+	channel:		props.globals.getNode("/instrumentation/iff/channel-selection"),
+	hash:				props.globals.getNode("/sim/multiplay/generic/string["~iff_mp_string~"]"),
+	#hash:				props.globals.initNode("/sim/multiplay/generic/string["~iff_mp_string~"]","AAA","STRING"),
 	callsign:		props.globals.getNode("/sim/multiplay/callsign"),
 };
 
@@ -63,7 +63,7 @@ var iff_hash = {
 			me.int_systime = int(systime());
 			me.update_time = int(math.mod(me.int_systime,iff_refresh_rate));
 			me.time = me.int_systime - me.update_time;
-			node.hash.setValue(_calculate_hash(me.time, node.callsign.getValue(), node.channel.getValue()));
+			node.hash.setValue(_calculate_hash(me.time, node.callsign.getValue(), node.channel));
 		} else {
 			me.timer.stop();
 			node.hash.setValue("");
@@ -101,7 +101,7 @@ var _calculate_hash = func(time, callsign, channel) {
 	#print("channel|" ~ channel ~ "|");
 	#print("hash|"~left(md5(time ~ callsign ~ channel ~ iff_unique_id),iff_hash_length)~"|");
 	callsign = size(callsign) < 8?callsign:left(callsign, 7);
-	return left(md5(time ~ callsign ~ channel ~ iff_unique_id),iff_hash_length);
+	return left(md5("time ~ callsign ~ channel ~ iff_unique_id"),iff_hash_length);
 }
 
 var new_hashing = iff_hash.new();

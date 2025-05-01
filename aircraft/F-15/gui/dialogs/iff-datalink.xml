@@ -83,6 +83,23 @@
         </button>
     </group>
 
+    <group>
+        <layout>hbox</layout>
+
+        <text>
+            <label>Datalink Power ON</label>
+        </text>
+
+        <checkbox>
+            <property>instrumentation/datalink/power</property>
+            <live>true</live>
+            <binding>
+                <command>property-toggle</command>
+                <property>instrumentation/datalink/power</property>
+            </binding>
+        </checkbox>
+    </group>
+
   <empty><stretch>1</stretch></empty>
 
 </PropertyList>
