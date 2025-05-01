@@ -1831,6 +1831,7 @@
 							<value>2 x CBU-105</value>
 							<value>2 x GBU-12</value>
 							<value>1 x GBU-31</value>
+							<value>2 x GBU-54</value>
 							<value>2 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
@@ -1844,7 +1845,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-1-type") == "AIM-9X" or getprop("payload/armament/station/id-1-type") == "AIM-120D" or getprop("payload/armament/station/id-1-type") == "MK-84" or getprop("payload/armament/station/id-1-type") == "CBU-105" or getprop("payload/armament/station/id-1-type") == "AGM-65B" or getprop("payload/armament/station/id-1-type") == "GBU-12" or getprop("payload/armament/station/id-1-type") == "AGM-88B") {
+									if (getprop("payload/armament/station/id-1-type") == "AIM-9X" or getprop("payload/armament/station/id-1-type") == "AIM-120D" or getprop("payload/armament/station/id-1-type") == "MK-84" or getprop("payload/armament/station/id-1-type") == "CBU-105" or getprop("payload/armament/station/id-1-type") == "AGM-65B" or getprop("payload/armament/station/id-1-type") == "GBU-12" or getprop("payload/armament/station/id-1-type") == "AGM-88B" or getprop("payload/armament/station/id-1-type") == "GBU-54") {
 										setprop("payload/armament/station/id-1-count", 2);
 									} elsif (getprop("payload/armament/station/id-1-type") == "MK-83" or getprop("payload/armament/station/id-1-type") == "CBU-87") {
 										setprop("payload/armament/station/id-1-count", 3);
@@ -1943,6 +1944,7 @@
 							<value>1 x CBU-87</value>
 							<value>1 x CBU-105</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
@@ -2004,6 +2006,7 @@
 							<value>1 x CBU-87</value>
 							<value>1 x CBU-105</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
@@ -2121,6 +2124,7 @@
 							<value>1 x CBU-87</value>
 							<value>1 x CBU-105</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
@@ -2182,6 +2186,7 @@
 							<value>1 x CBU-87</value>
 							<value>1 x CBU-105</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
@@ -2291,6 +2296,7 @@
 							<value>2 x CBU-105</value>
 							<value>2 x GBU-12</value>
 							<value>1 x GBU-31</value>
+							<value>2 x GBU-54</value>
 							<value>2 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
@@ -2304,7 +2310,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-9-type") == "AIM-9X" or getprop("payload/armament/station/id-9-type") == "AIM-120D" or getprop("payload/armament/station/id-9-type") == "MK-84" or getprop("payload/armament/station/id-9-type") == "CBU-105" or getprop("payload/armament/station/id-9-type") == "AGM-65B" or getprop("payload/armament/station/id-9-type") == "GBU-12" or getprop("payload/armament/station/id-9-type") == "AGM-88B") {
+									if (getprop("payload/armament/station/id-9-type") == "AIM-9X" or getprop("payload/armament/station/id-9-type") == "AIM-120D" or getprop("payload/armament/station/id-9-type") == "MK-84" or getprop("payload/armament/station/id-9-type") == "CBU-105" or getprop("payload/armament/station/id-9-type") == "AGM-65B" or getprop("payload/armament/station/id-9-type") == "GBU-12" or getprop("payload/armament/station/id-9-type") == "AGM-88B" or getprop("payload/armament/station/id-9-type") == "GBU-54") {
 										setprop("payload/armament/station/id-9-count", 2);
 									} elsif (getprop("payload/armament/station/id-9-type") == "MK-83" or getprop("payload/armament/station/id-9-type") == "CBU-87") {
 										setprop("payload/armament/station/id-9-count", 3);
@@ -2639,6 +2645,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2693,6 +2700,7 @@
 							<value>Empty</value>
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
+							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2750,6 +2758,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2807,6 +2816,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2861,6 +2871,7 @@
 							<value>Empty</value>
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
+							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2918,6 +2929,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>

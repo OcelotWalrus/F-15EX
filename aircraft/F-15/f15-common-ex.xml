@@ -1731,6 +1731,18 @@
                 <bool n="256" alias="/sim/model/f15/payload/selected/catm-120d-cft3"/>
                 <bool n="257" alias="/sim/model/f15/payload/selected/catm-120d-cft4"/>
                 <bool n="258" alias="/sim/model/f15/payload/selected/catm-120d-cft6"/>
+                <bool n="259" alias="/sim/model/f15/payload/selected/gbu54-l"/>
+                <bool n="260" alias="/sim/model/f15/payload/selected/gbu54-r"/>
+                <bool n="261" alias="/sim/model/f15/payload/selected/gbu54-l3"/>
+                <bool n="262" alias="/sim/model/f15/payload/selected/gbu54-l4"/>
+                <bool n="263" alias="/sim/model/f15/payload/selected/gbu54-r1"/>
+                <bool n="264" alias="/sim/model/f15/payload/selected/gbu54-r2"/>
+                <bool n="265" alias="/sim/model/f15/payload/selected/gbu54-cft1"/>
+                <bool n="266" alias="/sim/model/f15/payload/selected/gbu54-cft2"/>
+                <bool n="267" alias="/sim/model/f15/payload/selected/gbu54-cft3"/>
+                <bool n="268" alias="/sim/model/f15/payload/selected/gbu54-cft4"/>
+                <bool n="269" alias="/sim/model/f15/payload/selected/gbu54-cft5"/>
+                <bool n="270" alias="/sim/model/f15/payload/selected/gbu54-cft6"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2168,6 +2180,10 @@
                 <lbs>2039.0</lbs>
             </opt>
             <opt>
+                <name>2 x GBU-54</name>
+                <lbs>1136.0</lbs>
+            </opt>
+            <opt>
                 <name>2 x AGM-65B</name>
                 <lbs>954.0</lbs>
             </opt>
@@ -2288,6 +2304,10 @@
             <opt>
                 <name>1 x GBU-31</name>
                 <lbs>2039.0</lbs>
+            </opt>
+            <opt>
+                <name>2 x GBU-54</name>
+                <lbs>1136.0</lbs>
             </opt>
             <opt>
                 <name>2 x AGM-65B</name>
@@ -2882,6 +2902,61 @@
                 <power-on-battery-time type="double">0</power-on-battery-time--><!-- infinite -->
                 <telemetry type="bool">true</telemetry>
             </gbu-31>
+            <gbu-54>
+                <type-id type="int">21</type-id>
+                <short-name type="string">GB54</short-name>
+                <long-name type="string">GBU-54 Laser JDAM</long-name>
+                <fire-msg type="string">Bombs away</fire-msg>
+                <class type="string">GMP</class>
+                <max-fire-range-nm type="double">15</max-fire-range-nm>
+                <min-fire-range-nm type="double">0</min-fire-range-nm>
+                <guidance type="string">gps</guidance>
+                <navigation type="string">APN</navigation>
+                <loft-altitude type="int"> 0 </loft-altitude>
+                <terrain-follow type="bool">false</terrain-follow>
+                <FCS-field-deg type="int"> 200 </FCS-field-deg>
+                <seeker-field-deg type="int"> 45 </seeker-field-deg>
+                <reaquire type="bool">true</reaquire>
+                <max-g type="double"> 1.6 </max-g>
+                <thrust-lbf-stage-1 type="double"> 0 </thrust-lbf-stage-1>
+                <thrust-lbf-stage-2 type="double"> 0 </thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double"> 0 </stage-1-duration-sec>
+                <stage-2-duration-sec type="double"> 0 </stage-2-duration-sec>
+                <weight-launch-lbs type="double">558</weight-launch-lbs>
+                <weight-warhead-lbs type="double">190</weight-warhead-lbs>
+                <weight-fuel-lbm type="double"> 0 </weight-fuel-lbm>
+                <drag-coeff type="double"> 0.125 </drag-coeff>
+                <cross-section-sqft type="double"> 0.63 </cross-section-sqft>
+                <arming-time-sec type="double"> 4 </arming-time-sec>
+                <min-speed-for-guiding-mach type="double"> 0 </min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double"> 10000 </self-destruct-time-sec>
+                <all-aspect type="bool">true</all-aspect>
+                <lock-on-sun-deg type="double"> 0 </lock-on-sun-deg>
+                <seeker-angular-speed-dps type="double"> 0 </seeker-angular-speed-dps>
+                <rail type="bool">false</rail>
+                <max-report-distance type="double"> 150 </max-report-distance>
+                <vol-search type="double"> 0.075 </vol-search>
+                <vol-track type="double"> 0.25 </vol-track>
+                <vol-track-weak type="double"> 0.175 </vol-track-weak>
+                <drop-time type="double">0.75</drop-time>
+                <deploy-time type="double">1</deploy-time>
+                <lateral-dps type="double"> 10 </lateral-dps>
+                <max-pitch-deg type="double">-45</max-pitch-deg>
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <!-- the following 6 properties not used yet: -->
+                <release-limit-mach type="double"> 1.2 </release-limit-mach>
+                <release-limit-altitude type="double"> 16000 </release-limit-altitude>
+                <release-limit-g type="double"> 0 </release-limit-g><!-- no info on this -->
+                <release-limit-roll type="double"> 90 </release-limit-roll>
+                <mounted-limit-g type="double"> 7.5 </mounted-limit-g>
+                <require-lock-to-fire type="bool">false</require-lock-to-fire>
+                <ejector-speed-fps type="double">20</ejector-speed-fps>
+                <no-common-target type="bool">true</no-common-target> <!-- prevents it from researching a track because the lock we give in weapons.nas (radar-slaved) ain't exactly the same as the actual radar lock and fox2.nas don't like none of that-->
+                <!--ready-time type="double">300</ready-time-->
+                <!--requires-power-on type="bool">true</requires-power-on>
+                <power-on-battery-time type="double">0</power-on-battery-time--><!-- infinite -->
+                <telemetry type="bool">true</telemetry>
+            </gbu-54>
             <mk-84>
                 <type-id type="int">35</type-id>
                 <short-name type="string">M84</short-name>

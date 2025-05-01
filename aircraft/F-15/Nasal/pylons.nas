@@ -73,6 +73,8 @@ var pylonSets = {
 	singlegbu31: {name: "1 x GBU-31", content: ["GBU-31"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singlecbu87:  {name: "1 x CBU-87", content: ["CBU-87"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singlecbu105:  {name: "1 x CBU-105", content: ["CBU-105"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	singlegbu54: {name: "1 x GBU-54", content: ["GBU-54"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	doublegbu54: {name: "2 x GBU-54", content: ["GBU-54", "GBU-54"], fireOrder: [0, 1], launcherDragArea: 0.0, launcherMass: 20, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 
 	dummyaim9x:   {name: "CATM-9X Sidewinder Dummy", content: ["CATM-9X"], fireOrder: [0], launcherDragArea: 0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 	doubledummyaim9x:   {name: "2 x CATM-9X Sidewinder Dummy", content: ["CATM-9X", "CATM-9X"], fireOrder: [0,1], launcherDragArea: 0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 1},
@@ -133,19 +135,19 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylonex1cset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon2aset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon2bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon2bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon2cset = [pylonSets.empty, pylonSets.smokeWL, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
-	var pylon4set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon4set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
 
 	var pylon5set = [pylonSets.empty, pylonSets.triplemk83, pylonSets.triplem84, pylonSets.triplecbu87, pylonSets.singlegbu31, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.singleagm154a, pylonSets.singleagm158a];
 
-	var pylon6set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
-	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon6set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
 
 	var pylon8aset = [pylonSets.empty, pylonSets.smokeWR, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon8bset = [pylonSets.empty, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon8bset = [pylonSets.empty, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.doublem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon8cset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonex2aset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9xw, pylonSets.aim120dw];
@@ -154,8 +156,8 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 
 	var pylonnavset = [pylonSets.empty, pylonSets.lantirnnav];
 	var pylontgpset = [pylonSets.empty, pylonSets.lantirntgp, pylonSets.atpsniper];
-	var pyloncftset = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.aim120d, pylonSets.cftmk82, pylonSets.cftmk82air, pylonSets.singlegbu12];
-	var pyloncftsetcenter = [pylonSets.empty, pylonSets.cftmk82, pylonSets.cftmk82air];
+	var pyloncftset = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.aim120d, pylonSets.cftmk82, pylonSets.cftmk82air, pylonSets.singlegbu12, pylonSets.singlegbu54];
+	var pyloncftsetcenter = [pylonSets.empty, pylonSets.cftmk82, pylonSets.cftmk82air, pylonSets.singlegbu54];
 
 	#var pylon9set = [pylonSets.empty];
 } else {
@@ -226,7 +228,7 @@ if (getprop("sim/model/f15/variant") == "EX") {
 
 # The order of first vector in this line is the default pylon order weapons is released in.
 # The order of second vector in this line is the order cycle key would cycle through the weapons (since F15 doesn't use the cycle option that order is not important):
-fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "AGM-65B", "GBU-12", "AGM-65D", "AGM-84D", "AGM-88B", "AGM-154A", "AGM-158A", "CATM-9X", "CATM-120D", "GBU-31"]);
+fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "AGM-65B", "GBU-12", "AGM-65D", "AGM-84D", "AGM-88B", "AGM-154A", "AGM-158A", "CATM-9X", "CATM-120D", "GBU-31", "GBU-54"]);
 
 if (getprop("sim/model/f15/variant") == "EX") { # EX variant only
 	var aimListener = func (obj) {
@@ -353,6 +355,9 @@ var getCCIP = func {
                 # 35s fall time limit and calculate fall trajectory at every 0.30s on the way to ground.
                 return w.getCCIPadv(35, 0.30);
             } elsif (w.type=="GBU-31") {
+                # 35s fall time limit and calculate fall trajectory at every 0.30s on the way to ground.
+                return w.getCCIPadv(35, 0.30);
+            } elsif (w.type=="GBU-54") {
                 # 35s fall time limit and calculate fall trajectory at every 0.30s on the way to ground.
                 return w.getCCIPadv(35, 0.30);
             }

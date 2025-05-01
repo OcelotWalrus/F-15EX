@@ -1249,9 +1249,9 @@ var printfDebug = func {if (debug == 1) call(printf,arg);};
 
 # This is non-generic methods, please edit it to fit your radar setup:
 # List of weapons that can be CCIP/CCRP dropped:
-var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31"];
+var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-54"];
 # List of weapons that can be ripple/dual dropped:
-var dualWeapons = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31"];
+var dualWeapons = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-54"];
 var getCompleteRadarTargetsList = func {
 	# A list of all MP/AI aircraft/ships/surface-targets around the aircraft.
 	return awg_9.tgts_list;
