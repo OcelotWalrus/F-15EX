@@ -1879,13 +1879,23 @@
                             <dialog-name>iff-datalink</dialog-name>
                         </binding>
                     </item>
-		    <item n="12">
-			    <label>Tacview Options</label>
+                    <item n="6">
+                        <label>Training Scenario</label>
+                        <binding>
+                            <command>nasal</command>
+                            <script>
+						        var scenario28 = gui.Dialog.new("dialog[7]","Aircraft/F-15/gui/dialogs/scenario28.xml");
+						        scenario28.open();
+					        </script>
+                        </binding>
+                    </item>
+		            <item n="12">
+			            <label>Tacview Options</label>
                         <binding>
                             <command>dialog-show</command>
                             <dialog-name>tacview</dialog-name>
                         </binding>
-		    </item>
+		            </item>
                 </menu>
             </default>
         </menubar>
@@ -2204,7 +2214,7 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>2 x AGM-88B</name>
+                <name>1 x AGM-88B</name>
                 <lbs>1625.0</lbs>
             </opt>
             <opt>
@@ -2330,7 +2340,7 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>2 x AGM-88B</name>
+                <name>1 x AGM-88B</name>
                 <lbs>1625.0</lbs>
             </opt>
             <opt>
@@ -4460,6 +4470,9 @@
         <tgp>
           <file>Aircraft/F-15/Nasal/tgp.nas</file>
         </tgp>
+        <mig28>
+          <file>Aircraft/F-15/Nasal/mig28.nas</file>
+        </mig28>
         <aircraft>
             <file>Aircraft/F-15/Nasal/liveries.nas</file>
             <file>Aircraft/F-15/Nasal/aircraft-main.nas</file>
