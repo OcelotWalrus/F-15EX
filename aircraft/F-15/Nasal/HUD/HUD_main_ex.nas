@@ -913,7 +913,8 @@ var F15HUD = {
 														"NavigationMode",
 														"OrientationHeadingDeg",
 														"ArmamentRippleCount",
-														"TacanChannel"], nil, func(val)
+														"TacanChannel",
+														"GunsMode"], nil, func(val)
                                                         {
                                                             if (val.ControlsArmamentMasterArmSwitch) {
                                                                 obj.window11.setVisible(1);
@@ -933,6 +934,17 @@ var F15HUD = {
                                                                     obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
 																	eegsShow = 1;
 																	obj.boreSymbol.show();
+																	# Show GUNS mode
+																	if (val.GunsMode == 0) {
+																		obj.window17.setText("FUNNEL");
+																	} elsif (val.GunsMode == 1) {
+																		obj.window17.setText("STFR");
+																	} elsif (val.GunsMode == 2) {
+																		obj.window17.setText("SNAP");
+																	} else {
+																		obj.window17.setText("SIGHT");
+																	}
+																	obj.window17.setVisible(1);
                                                                 } else if (w_s == 1) {
                                                                     obj.window2.setText(sprintf("%2d SRM", val.ArmamentAim9Count));
 																	if (pylons.fcs.getSelectedWeapon() != nil) {
@@ -1572,6 +1584,15 @@ return obj;
 	        return 0.2965 * math.pow(Mach, -1.1506) + _cd;
 		}
 	},
+	interpolateCoords: func (start, end, fraction) {
+        me.xx = math.clamp((start.x()*(1-fraction)+end.x()*fraction),math.min(start.x(),end.x()),math.max(start.x(),end.x()));
+        me.yy = math.clamp((start.y()*(1-fraction)+end.y()*fraction),math.min(start.y(),end.y()),math.max(start.y(),end.y()));
+        me.zz = math.clamp((start.z()*(1-fraction)+end.z()*fraction),math.min(start.z(),end.z()),math.max(start.z(),end.z()));
+
+        me.cc = geo.Coord.new();
+        me.cc.set_xyz(me.xx,me.yy,me.zz);
+        return me.cc;
+    },
 
 	# CCRP Loop
 	CCRP: func() {
@@ -1876,7 +1897,7 @@ return obj;
 			   # draw STRF
 			   me.eegsGroup.removeAllChildren();
 			   if (me.drawSTRFPipper) {
-					   me.vari = getprop("sim/variant-id");
+					   me.vari = getprop("sim/variant-id");  # always returns none
 					   me.oldStrf = me.vari == 0 or me.vari == 1 or me.vari == 3;
 					   var mr = 0.4 * 1.5;
 					   if (me.oldStrf) {
@@ -2207,6 +2228,7 @@ input = {
 		TacanChannel                            : "instrumentation/tacan/display/channel",
 		TacanXShift                             : "instrumentation/tacan/display/x-shift",
 		TacanYShift                             : "instrumentation/tacan/display/y-shift",
+		GunsMode                                : "sim/model/f15/armament/gun-sight",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
