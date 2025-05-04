@@ -6748,7 +6748,7 @@
         <offsets>
              <x-m>-0.1</x-m>
              <y-m>-1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
@@ -6768,7 +6768,7 @@
         <offsets>
              <x-m>3.65</x-m>
              <y-m>-1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
@@ -6788,7 +6788,7 @@
         <offsets>
              <x-m>3.65</x-m>
              <y-m>1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
@@ -6809,7 +6809,7 @@
         <offsets>
              <x-m>-0.1</x-m>
              <y-m>1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
@@ -6831,7 +6831,7 @@
         <offsets>
              <x-m>-0.1</x-m>
              <y-m>-1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
@@ -6851,7 +6851,7 @@
         <offsets>
              <x-m>3.65</x-m>
              <y-m>-1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
@@ -6871,7 +6871,7 @@
         <offsets>
              <x-m>3.65</x-m>
              <y-m>1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
@@ -6892,7 +6892,7 @@
         <offsets>
              <x-m>-0.1</x-m>
              <y-m>1.825</y-m>
-             <z-m>-0.925</z-m>
+             <z-m>-1.0</z-m>
              <roll-deg>180</roll-deg>
         </offsets>
     </model>
