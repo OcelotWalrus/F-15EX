@@ -1503,8 +1503,10 @@
 					<value>A/G LGB Diverse (1 Bag)</value>
 
 					<!-- A/G GPS-guided missions-->
-					<value>A/G GPS Light (1 Bag)</value>
-					<value>A/G GPS Heavy (1 Bag)</value>
+					<value>A/G GPS JDAM Light (1 Bag)</value>
+					<value>A/G GPS JDAM Light (1 Bag, CFTs)</value>
+					<value>A/G GPS JDAM Heavy (1 Bag)</value>
+					<value>A/G GPS JDAM Diverse (2 Bags)</value>
 
 					<!-- A/G special missions-->
 					<value>A/G SEAD (1 Bag)</value>
@@ -1550,8 +1552,8 @@
                     <mod-up>
                         <binding>
                              <!-- gun ammos -->
-                            setprop("/ai/submodels/submodel[3]/count",185);
                             setprop("sim/model/f15/systems/gun/rounds",925);
+						    setprop("/ai/submodels/submodel[4]/count",185);
                             <!-- flares and chaffs -->
                             setprop("/ai/submodels/submodel[5]/count",120);
                             setprop("/ai/submodels/submodel[6]/count",120);
@@ -1565,8 +1567,8 @@
                         <command>nasal</command>
                         <script>
                             <!-- gun ammos -->
-                            setprop("/ai/submodels/submodel[3]/count",185);
                             setprop("sim/model/f15/systems/gun/rounds",925);
+                            setprop("/ai/submodels/submodel[4]/count",185);
                             <!-- flares and chaffs -->
                             setprop("/ai/submodels/submodel[5]/count",120);
                             setprop("/ai/submodels/submodel[6]/count",120);

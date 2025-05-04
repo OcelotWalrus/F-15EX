@@ -288,14 +288,14 @@ var ext_loads_set = func(s) {
         } elsif ( s == "Airshow" ) {
             success = pylons.airshow_ex();
             airshow_fuel = 1;
-        } elsif ( s == "Clean (CFT)" ) {
-            success = pylons.clean_cft_ex();
-        } elsif ( s == "Clean (CFT)" ) {
-            success = pylons.clean_cft_ex();
-        } elsif ( s == "Clean (CFT)" ) {
-            success = pylons.clean_cft_ex();
-        } elsif ( s == "Clean (CFT)" ) {
-            success = pylons.clean_cft_ex();
+        } elsif ( s == "A/G GPS JDAM Light (1 Bag)" ) {
+            success = pylons.gps_light();
+        } elsif ( s == "A/G GPS JDAM Heavy (1 Bag)" ) {
+            success = pylons.gps_heavy();
+        } elsif ( s == "A/G GPS JDAM Diverse (2 Bags)" ) {
+            success = pylons.gps_diverse();
+        } elsif ( s == "A/G GPS JDAM Light (1 Bag, CFTs)" ) {
+            success = pylons.gps_light_cfts();
         }
         if (airshow_fuel == 0) {
             aircraft.set_fuel(36000);  # Set max fuel
