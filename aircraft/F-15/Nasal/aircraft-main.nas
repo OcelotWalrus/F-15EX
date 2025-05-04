@@ -712,8 +712,8 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 186*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 15);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AIM-120D AMRAAM") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 291*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
-            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x MK-84" or getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x MK-84") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 2000*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x MK-84") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 2000);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x MK-83") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 1000*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x CBU-87") {

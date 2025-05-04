@@ -1517,8 +1517,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-5-set</property>
-          <value>3 x MK-84</value>
+          <property>payload/armament/station/id-5-type</property>
+          <value>MK-84</value>
         </equals>
       </and>
     </input>
@@ -1528,8 +1528,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-1-set</property>
-          <value>2 x MK-84</value>
+          <property>payload/armament/station/id-1-type</property>
+          <value>MK-84</value>
         </equals>
       </and>
     </input>
@@ -1539,8 +1539,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-9-set</property>
-          <value>2 x MK-84</value>
+          <property>payload/armament/station/id-9-type</property>
+          <value>MK-84</value>
         </equals>
       </and>
     </input>
