@@ -3860,6 +3860,184 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>mk84-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[271]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk84-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[272]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk84-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[273]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk84-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[274]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk84-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[271]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk84-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[272]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk84-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[273]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>mk84-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[274]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[275]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[276]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[277]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[278]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[275]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[276]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[277]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu31-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[278]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>mk83-l3</object-name>
         <condition>
             <and>
@@ -5244,7 +5422,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>mk84-l3</object-name>
+        <object-name>mk84-l3-old</object-name>
         <condition>
             <greater-than>
                 <value>0</value>
@@ -5255,7 +5433,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>mk84-l4</object-name>
+        <object-name>mk84-l4-old</object-name>
         <condition>
             <greater-than>
                 <value>0</value>
@@ -5266,7 +5444,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>mk84-r3</object-name>
+        <object-name>mk84-r3-old</object-name>
         <condition>
             <greater-than>
                 <value>0</value>
@@ -5277,7 +5455,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>mk84-r4</object-name>
+        <object-name>mk84-r4-old</object-name>
         <condition>
             <greater-than>
                 <value>0</value>
@@ -5288,7 +5466,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>mk84-c</object-name>
+        <object-name>mk84-c-old</object-name>
         <condition>
             <greater-than>
                 <value>0</value>
@@ -5299,7 +5477,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>mk84-l</object-name>
+        <object-name>mk84-l-old</object-name>
         <condition>
             <greater-than>
                 <value>0</value>
@@ -5310,7 +5488,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>mk84-r</object-name>
+        <object-name>mk84-r-old</object-name>
         <condition>
             <greater-than>
                 <value>0</value>
@@ -5359,10 +5537,8 @@
         <axis>
             <object-name>CFT-axis-l</object-name>
         </axis>
-        <object-name>mk84-l3</object-name>
         <object-name>aim120-l3</object-name>
         <object-name>aim7-l3</object-name>
-        <object-name>mk84-l4</object-name>
         <object-name>aim120-l4</object-name>
         <object-name>aim7-l4</object-name>
     </animation>
@@ -5375,10 +5551,8 @@
             <y>-2.19</y>
             <z>-1.00</z>
         </axis>
-        <object-name>mk84-l3</object-name>
         <object-name>aim120-l3</object-name>
         <object-name>aim7-l3</object-name>
-        <object-name>mk84-l4</object-name>
         <object-name>aim120-l4</object-name>
         <object-name>aim7-l4</object-name>
     </animation>
@@ -5389,10 +5563,8 @@
         <axis>
             <object-name>CFT-axis-r</object-name>
         </axis>
-        <object-name>mk84-r4</object-name>
         <object-name>aim120-r4</object-name>
         <object-name>aim7-r4</object-name>
-        <object-name>mk84-r3</object-name>
         <object-name>aim120-r3</object-name>
         <object-name>aim7-r3</object-name>
     </animation>
@@ -5405,10 +5577,8 @@
             <y>1.79</y>
             <z>-1.00</z>
         </axis>
-        <object-name>mk84-r4</object-name>
         <object-name>aim120-r4</object-name>
         <object-name>aim7-r4</object-name>
-        <object-name>mk84-r3</object-name>
         <object-name>aim120-r3</object-name>
         <object-name>aim7-r3</object-name>
     </animation>
@@ -6732,6 +6902,172 @@
     </model>
 
     <model>
+        <name>mk84-l3</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk84-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-1.0</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk84-l4</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk84-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-1.0</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk84-r1</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk84-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-1.0</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk84-r2</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>mk84-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/MK-84/MK-84.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-1.0</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
+        <name>gbu31-l3</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu31-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-1.05</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu31-l4</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu31-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-1.05</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu31-r1</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu31-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-1.05</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu31-r2</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.7</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu31-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-31/GBU-31.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-1.05</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
         <name>cbu87-l3</name>
         <path>Aircraft/F-15/Models/Stores/CBU-87/CBU-87.xml</path>
         <offsets>
@@ -7475,7 +7811,7 @@
         <name>agm-154a-l4</name>
         <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
         <offsets>
-             <x-m>3.65</x-m>
+             <x-m>4.05</x-m>
              <y-m>-1.57</y-m>
              <z-m>-0.75</z-m>
              <roll-deg>45</roll-deg>
@@ -7485,7 +7821,7 @@
         <name>agm-154a-l4-cft</name>
         <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
         <offsets>
-             <x-m>3.65</x-m>
+             <x-m>4.05</x-m>
              <y-m>-1.825</y-m>
              <z-m>-0.975</z-m>
              <roll-deg>180</roll-deg>
@@ -7495,7 +7831,7 @@
         <name>agm-154a-r1</name>
         <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
         <offsets>
-             <x-m>3.65</x-m>
+             <x-m>4.05</x-m>
              <y-m>1.57</y-m>
              <z-m>-0.75</z-m>
              <roll-deg>-45</roll-deg>
@@ -7505,7 +7841,7 @@
         <name>agm-154a-r1-cft</name>
         <path>Aircraft/F-15/Models/Stores/AGM-154A/AGM-154A.xml</path>
         <offsets>
-             <x-m>3.65</x-m>
+             <x-m>4.05</x-m>
              <y-m>1.825</y-m>
              <z-m>-0.975</z-m>
              <roll-deg>180</roll-deg>

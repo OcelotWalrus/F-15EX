@@ -139,13 +139,13 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylon2bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon2cset = [pylonSets.empty, pylonSets.smokeWL, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
-	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
-	var pylon4set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon4set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
 
 	var pylon5set = [pylonSets.empty, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.singlegbu31, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.singleagm154a, pylonSets.singleagm158a];
 
-	var pylon6set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
-	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon6set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
+	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu54, pylonSets.singleagm65b, pylonSets.singleagm65d, pylonSets.singleagm154a];
 
 	var pylon8aset = [pylonSets.empty, pylonSets.smokeWR, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 	var pylon8bset = [pylonSets.empty, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.singleagm65d, pylonSets.singleagm84d, pylonSets.doubleagm88b, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
@@ -1586,7 +1586,7 @@ var ag_sead = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.empty);
-		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.singleagm88b);
 		pylonex1c.loadSet(pylonSets.empty);
 
         pylon2a.loadSet(pylonSets.aim120dw);
@@ -1606,7 +1606,7 @@ var ag_sead = func {
         pylon8c.loadSet(pylonSets.aim120dw);
 
 		pylonex2a.loadSet(pylonSets.empty);
-		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.singleagm88b);
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
@@ -1621,11 +1621,11 @@ var ag_sead = func {
 
         reloadCannon();
 
-		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[12]/selected","1 x AGM-88B");
 		setprop("payload/weight[1]/selected","AN/ALQ-184(V) ECM Pod");
         setprop("payload/weight[5]/selected","Droptank");
         setprop("payload/weight[9]/selected","2 x AGM-88B");
-		setprop("payload/weight[15]/selected","Empty");
+		setprop("payload/weight[15]/selected","1 x AGM-88B");
 
         setprop("consumables/fuel/tank[5]/selected",0);
         setprop("consumables/fuel/tank[6]/selected",0);
@@ -1720,7 +1720,7 @@ var ag_dead = func {
         pylon7.loadSet(pylonSets.aim120d);
 
         pylon8a.loadSet(pylonSets.aim9xw);
-        pylon8b.loadSet(pylonSets.doubleagm65b);
+        pylon8b.loadSet(pylonSets.doubleagm88b);
         pylon8c.loadSet(pylonSets.aim120dw);
 
 		pylonex2a.loadSet(pylonSets.empty);
@@ -1730,19 +1730,19 @@ var ag_dead = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.atpsniper);
 
-		pyloncft1.loadSet(pylonSets.singlegbu12);
+		pyloncft1.loadSet(pylonSets.singlegbu54);
 		pyloncft2.loadSet(pylonSets.empty);
-		pyloncft3.loadSet(pylonSets.singlegbu12);
-		pyloncft4.loadSet(pylonSets.singlegbu12);
+		pyloncft3.loadSet(pylonSets.singlegbu54);
+		pyloncft4.loadSet(pylonSets.singlegbu54);
 		pyloncft5.loadSet(pylonSets.empty);
-		pyloncft6.loadSet(pylonSets.singlegbu12);
+		pyloncft6.loadSet(pylonSets.singlegbu54);
 
         reloadCannon();
 
 		setprop("payload/weight[12]/selected","1 x AGM-65D");
 		setprop("payload/weight[1]/selected","AN/ALQ-184(V) ECM Pod");
         setprop("payload/weight[5]/selected","Droptank");
-        setprop("payload/weight[9]/selected","2 x AGM-65B");
+        setprop("payload/weight[9]/selected","2 x AGM-88B");
 		setprop("payload/weight[15]/selected","1 x AGM-65D");
 
         setprop("consumables/fuel/tank[5]/selected",0);

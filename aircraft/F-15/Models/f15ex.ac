@@ -609423,7 +609423,7 @@ refs 2
 0 1 0
 kids 0
 OBJECT poly
-name "mk84-r4"
+name "mk84-r4-old"
 loc 2.9296 -0.639462 -1.53036
 data 9
 mk82.mesh
@@ -611424,7 +611424,7 @@ refs 3
 185 0.995857 0.366791
 kids 0
 OBJECT poly
-name "mk84-r3"
+name "mk84-r3-old"
 loc -1.01247 -0.675306 -1.61104
 data 9
 mk82.mesh
@@ -613425,7 +613425,7 @@ refs 3
 131 0.946849 0.377376
 kids 0
 OBJECT poly
-name "mk84-l4"
+name "mk84-l4-old"
 loc 2.92981 -0.64134 1.50656
 data 9
 mk82.mesh
@@ -615426,7 +615426,7 @@ refs 3
 185 0.995857 0.366791
 kids 0
 OBJECT poly
-name "mk84-l3"
+name "mk84-l3-old"
 loc -1.01124 -0.671708 1.57421
 data 9
 mk82.mesh
@@ -680499,7 +680499,7 @@ loc 0.980276 -0.116459 1.41246
 folded
 kids 3
 OBJECT poly
-name "mk84-l"
+name "mk84-l-old"
 loc 0.0466535 0.0312724 1.89001
 data 9
 mk82.mesh
@@ -682500,7 +682500,7 @@ refs 3
 185 0.995857 0.366791
 kids 0
 OBJECT poly
-name "mk84-c"
+name "mk84-c-old"
 loc -0.593847 -0.957851 -1.41234
 data 9
 mk82.mesh
@@ -684501,7 +684501,7 @@ refs 3
 185 0.995482 0.366728
 kids 0
 OBJECT poly
-name "mk84-r"
+name "mk84-r-old"
 loc 0.0466535 0.0312724 1.89001
 data 9
 mk82.mesh
