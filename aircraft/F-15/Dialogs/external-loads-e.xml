@@ -1952,6 +1952,7 @@
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
+							<value>1 x AGM-158A</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2016,6 +2017,7 @@
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
+							<value>1 x AGM-158A</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2136,6 +2138,7 @@
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
+							<value>1 x AGM-158A</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2200,6 +2203,7 @@
 							<value>1 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
+							<value>1 x AGM-158A</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>

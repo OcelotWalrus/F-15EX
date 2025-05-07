@@ -4707,6 +4707,94 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>agm-158a-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[279]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-158a-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[280]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-158a-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[281]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-158a-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[282]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-158a-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[279]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-158a-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[280]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-158a-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[281]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-158a-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[282]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>gbu-12-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[157]</property>
@@ -7866,6 +7954,85 @@
              <y-m>1.825</y-m>
              <z-m>-0.975</z-m>
              <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
+        <name>agm-158a-l3</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.75</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-158a-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.975</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-158a-l4</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.75</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-158a-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.975</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-158a-r1</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.75</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-158a-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.975</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-158a-r2</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.75</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-158a-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-158A/AGM-158A.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.975</z-m>
         </offsets>
     </model>
 

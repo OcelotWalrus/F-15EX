@@ -3218,4 +3218,48 @@
     </input>
     <output>sim/model/f15/payload/selected/gbu31-r2</output>
   </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-3-type</property>
+          <value>AGM-158A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-158a-l3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-4-type</property>
+          <value>AGM-158A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-158a-l4</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-6-type</property>
+          <value>AGM-158A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-158a-r1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-7-type</property>
+          <value>AGM-158A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-158a-r2</output>
+  </logic>
 </PropertyList>
