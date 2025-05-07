@@ -296,6 +296,8 @@ var ext_loads_set = func(s) {
             success = pylons.gps_diverse();
         } elsif ( s == "A/G GPS JDAM Light (1 Bag, CFTs)" ) {
             success = pylons.gps_light_cfts();
+        } elsif ( s == "A/G Stand-Off JASSM Heavy (2 Bags)" ) {
+            success = pylons.jassm_heavy();
         }
         if (airshow_fuel == 0) {
             aircraft.set_fuel(36000);  # Set max fuel

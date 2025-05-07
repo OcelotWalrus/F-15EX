@@ -1995,6 +1995,64 @@ var ag_standoff_jassm = func {
     }
 }
 
+var jassm_heavy = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.empty);
+
+        pylon2a.loadSet(pylonSets.aim120dw);
+        pylon2b.loadSet(pylonSets.empty);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.singleagm158a);
+        pylon4.loadSet(pylonSets.singleagm158a);
+
+        pylon5.loadSet(pylonSets.singleagm158a);
+
+        pylon6.loadSet(pylonSets.singleagm158a);
+        pylon7.loadSet(pylonSets.singleagm158a);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.empty);
+        pylon8c.loadSet(pylonSets.aim120dw);
+
+		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.empty);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[1]/selected","Droptank");
+        setprop("payload/weight[5]/selected","1 x AGM-158A");
+        setprop("payload/weight[9]/selected","Droptank");
+		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",1);
+        setprop("consumables/fuel/tank[6]/selected",1);
+        setprop("consumables/fuel/tank[7]/selected",0);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[7]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
 var ag_standoff_diverse = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 

@@ -1516,6 +1516,7 @@
 					<value>A/G Stand-Off JSOW (1 Bag)</value>
 					<value>A/G Stand-Off JSOW Heavy (2 Bags)</value>
 					<value>A/G Stand-Off JASSM (1 Bag)</value>
+					<value>A/G Stand-Off JASSM Heavy (2 Bags)</value>
 					<value>A/G Stand-Off Diverse (2 Bags)</value>
                     <binding>
                         <command>dialog-apply</command>
