@@ -229,7 +229,7 @@ if (getprop("sim/model/f15/variant") == "EX") {
 
 # The order of first vector in this line is the default pylon order weapons is released in.
 # The order of second vector in this line is the order cycle key would cycle through the weapons (since F15 doesn't use the cycle option that order is not important):
-fcs = fc.FireControl.new(pylons, [0,6,1,11,3,9,2,10,4,7,5,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "AGM-65B", "GBU-12", "AGM-65D", "AGM-84D", "AGM-88B", "AGM-154A", "AGM-158A", "CATM-9X", "CATM-120D", "GBU-31", "GBU-54"]);
+fcs = fc.FireControl.new(pylons, [11,16,13,14,12,15,0,10,2,8,1,5,9,20,23,21,24,22,25,3,7,4,6], ["20mm Cannon","AIM-9","AIM-9X","AIM-7","AIM-120","AIM-120D","MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "AGM-65B", "GBU-12", "AGM-65D", "AGM-84D", "AGM-88B", "AGM-154A", "AGM-158A", "CATM-9X", "CATM-120D", "GBU-31", "GBU-54"]);
 
 if (getprop("sim/model/f15/variant") == "EX") { # EX variant only
 	var aimListener = func (obj) {
