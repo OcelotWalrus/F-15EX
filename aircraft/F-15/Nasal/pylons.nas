@@ -731,12 +731,12 @@ var air_sup = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.atpsniper);
 
-		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
-		pyloncft3.loadSet(pylonSets.empty);
-		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.aim120d);
+		pyloncft4.loadSet(pylonSets.aim120d);
 		pyloncft5.loadSet(pylonSets.empty);
-		pyloncft6.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.aim120d);
 
         reloadCannon();
 
@@ -1240,13 +1240,13 @@ var unguided_medium = func {
         pylon2b.loadSet(pylonSets.triplemk83);
         pylon2c.loadSet(pylonSets.aim9xw);
 
-        pylon3.loadSet(pylonSets.empty);
-        pylon4.loadSet(pylonSets.empty);
+        pylon3.loadSet(pylonSets.mk83);
+        pylon4.loadSet(pylonSets.mk83);
 
         pylon5.loadSet(pylonSets.empty);
 
-        pylon6.loadSet(pylonSets.empty);
-        pylon7.loadSet(pylonSets.empty);
+        pylon6.loadSet(pylonSets.mk83);
+        pylon7.loadSet(pylonSets.mk83);
 
         pylon8a.loadSet(pylonSets.aim9xw);
         pylon8b.loadSet(pylonSets.triplemk83);
@@ -1259,10 +1259,10 @@ var unguided_medium = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.lantirntgp);
 
-		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
 		pyloncft3.loadSet(pylonSets.empty);
-		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.aim120d);
 		pyloncft5.loadSet(pylonSets.empty);
 		pyloncft6.loadSet(pylonSets.empty);
 
@@ -1299,13 +1299,13 @@ var unguided_heavy = func {
         pylon2b.loadSet(pylonSets.singlem84);
         pylon2c.loadSet(pylonSets.aim9xw);
 
-        pylon3.loadSet(pylonSets.empty);
-        pylon4.loadSet(pylonSets.empty);
+        pylon3.loadSet(pylonSets.singlem84);
+        pylon4.loadSet(pylonSets.singlem84);
 
         pylon5.loadSet(pylonSets.empty);
 
-        pylon6.loadSet(pylonSets.empty);
-        pylon7.loadSet(pylonSets.empty);
+        pylon6.loadSet(pylonSets.singlem84);
+        pylon7.loadSet(pylonSets.singlem84);
 
         pylon8a.loadSet(pylonSets.aim9xw);
         pylon8b.loadSet(pylonSets.singlem84);
@@ -1318,10 +1318,10 @@ var unguided_heavy = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.lantirntgp);
 
-		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
 		pyloncft3.loadSet(pylonSets.empty);
-		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.aim120d);
 		pyloncft5.loadSet(pylonSets.empty);
 		pyloncft6.loadSet(pylonSets.empty);
 
@@ -1417,13 +1417,13 @@ var cluster_ecm = func {
         pylon2b.loadSet(pylonSets.triplecbu87);
         pylon2c.loadSet(pylonSets.aim9xw);
 
-        pylon3.loadSet(pylonSets.empty);
-        pylon4.loadSet(pylonSets.empty);
+        pylon3.loadSet(pylonSets.aim120d);
+        pylon4.loadSet(pylonSets.aim120d);
 
         pylon5.loadSet(pylonSets.empty);
 
-        pylon6.loadSet(pylonSets.empty);
-        pylon7.loadSet(pylonSets.empty);
+        pylon6.loadSet(pylonSets.aim120d);
+        pylon7.loadSet(pylonSets.aim120d);
 
         pylon8a.loadSet(pylonSets.aim9xw);
         pylon8b.loadSet(pylonSets.triplecbu87);
@@ -1476,13 +1476,13 @@ var cluster_sfw = func {
         pylon2b.loadSet(pylonSets.doublecbu105);
         pylon2c.loadSet(pylonSets.aim9xw);
 
-        pylon3.loadSet(pylonSets.empty);
-        pylon4.loadSet(pylonSets.empty);
+        pylon3.loadSet(pylonSets.aim120d);
+        pylon4.loadSet(pylonSets.aim120d);
 
         pylon5.loadSet(pylonSets.empty);
 
-        pylon6.loadSet(pylonSets.empty);
-        pylon7.loadSet(pylonSets.empty);
+        pylon6.loadSet(pylonSets.aim120d);
+        pylon7.loadSet(pylonSets.aim120d);
 
         pylon8a.loadSet(pylonSets.aim9xw);
         pylon8b.loadSet(pylonSets.doublecbu105);
@@ -1554,12 +1554,12 @@ var cluster_diverse = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.atpsniper);
 
-		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
-		pyloncft3.loadSet(pylonSets.empty);
-		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.aim120d);
+		pyloncft4.loadSet(pylonSets.aim120d);
 		pyloncft5.loadSet(pylonSets.empty);
-		pyloncft6.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.aim120d);
 
         reloadCannon();
 
@@ -1613,12 +1613,12 @@ var ag_sead = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.atpsniper);
 
-		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
-		pyloncft3.loadSet(pylonSets.empty);
-		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.aim120d);
+		pyloncft4.loadSet(pylonSets.aim120d);
 		pyloncft5.loadSet(pylonSets.empty);
-		pyloncft6.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.aim120d);
 
         reloadCannon();
 
@@ -1672,12 +1672,12 @@ var ag_sead_diverse = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.atpsniper);
 
-		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
-		pyloncft3.loadSet(pylonSets.empty);
-		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.aim120d);
+		pyloncft4.loadSet(pylonSets.aim120d);
 		pyloncft5.loadSet(pylonSets.empty);
-		pyloncft6.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.aim120d);
 
         reloadCannon();
 
@@ -2320,12 +2320,12 @@ var gps_heavy = func {
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.atpsniper);
 
-		pyloncft1.loadSet(pylonSets.singlegbu54);
-		pyloncft2.loadSet(pylonSets.singlegbu54);
-		pyloncft3.loadSet(pylonSets.singlegbu54);
-		pyloncft4.loadSet(pylonSets.singlegbu54);
-		pyloncft5.loadSet(pylonSets.singlegbu54);
-		pyloncft6.loadSet(pylonSets.singlegbu54);
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
 
         reloadCannon();
 
