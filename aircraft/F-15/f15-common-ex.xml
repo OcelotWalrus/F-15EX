@@ -909,9 +909,9 @@
                     <fall-time-mins type="double">0</fall-time-mins>
                     <ccip-off type="double">0</ccip-off>
                     <gun-sight type="int">0</gun-sight>  <!-- 0 EGGS, 1 STFR, 2 SNAP ... the rest I ain't sure-->
-                    <gun-aa-max-range-ft type="int">3000</gun-aa-max-range-ft>
-                    <gun-strf-max-range-ft type="int">4000</gun-strf-max-range-ft>
-                    <gun-eegs-wingspan-ft type="double">40</gun-eegs-wingspan-ft>  <!-- same value than in DCS F-15E-->
+                    <gun-aa-max-range-ft type="int">4200</gun-aa-max-range-ft>
+                    <gun-strf-max-range-ft type="int">4500</gun-strf-max-range-ft>
+                    <gun-eegs-wingspan-ft type="double">42</gun-eegs-wingspan-ft>  <!-- same value than in DCS F-15E-->
                     <releasedCCRP type="bool">false</releasedCCRP>
                     <distCCRP type="int">-1</distCCRP>
                     <gravity-dropping type="bool">false</gravity-dropping>

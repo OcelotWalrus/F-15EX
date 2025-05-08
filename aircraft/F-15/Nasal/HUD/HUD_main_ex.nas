@@ -938,7 +938,7 @@ var F15HUD = {
 																	if (val.GunsMode == 0) {
 																		obj.window17.setText("FUNNEL");
 																	} elsif (val.GunsMode == 1) {
-																		obj.window17.setText("STFR");
+																		obj.window17.setText("STRF");
 																	} elsif (val.GunsMode == 2) {
 																		obj.window17.setText("SNAP");
 																	} else {
@@ -1914,6 +1914,7 @@ return obj;
 											   .arcSmallCW(2*mr,2*mr, 0, 2*mr*2, 0)
 											   .arcSmallCW(2*mr,2*mr, 0, -2*mr*2, 0)
 											   .setStrokeLineWidth(1)
+											   .lineTo(-5,-5)  # where the bore symbol is
 											   .setColor(me.color);
 							   } else {
 									   me.eegsGroup.createChild("path")
@@ -1924,6 +1925,7 @@ return obj;
 											   .arcSmallCW(2*mr,2*mr, 0, 2*mr*2, 0)
 											   .arcSmallCW(2*mr,2*mr, 0, -2*mr*2, 0)
 											   .setStrokeLineWidth(1)
+											   .lineTo(-5,-5)  # where the bore symbol is
 											   .setColor(me.color);
 							   }
 					   } else {
