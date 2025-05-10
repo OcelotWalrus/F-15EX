@@ -305,6 +305,17 @@ var F15HUD = {
 	            .setColor(0,1,0).hide()
 	            #.set("z-index",10500)
 	            .setTranslation(sx*0.5*uv_used,sy*0.25);
+			obj.GUNSAspect = obj.ASECircle.createChild("path")
+		        .setCenter(0,0)
+		        .moveTo(0,-0*mr)
+		        .lineTo(-5*mr,-10*mr)
+		        .lineTo(5*mr,-10*mr)
+		        .lineTo(0,-0*mr)
+		        .setColorFill(0,1,0)
+		        .setStrokeLineWidth(1)
+		        .setColor(0,1,0).hide()
+		        #.set("z-index",10500)
+		        .setTranslation(sx*0.5*uv_used,sy*0.25);
 
 			var boxRadius = 10;
 	        var boxRadiusHalf = boxRadius*0.5;
@@ -486,6 +497,7 @@ var F15HUD = {
 											  obj.color = [0.3,1,0.3,1];
 											  obj.ASEC120Aspect.setColorFill(obj.color);
                                               obj.ASEC65Aspect.setColorFill(obj.color);
+											  obj.GUNSAspect.setColorFill(obj.color);
                                           }
                                       }),
             props.UpdateManager.FromHashValue("AltimeterIndicatedAltitudeFt", 1, func(val)
@@ -1177,6 +1189,24 @@ return obj;
             me.eegsLoop.stop();
 			me.aaTargetDesignationGrp.setVisible(0);
         }
+
+		# GUNS Mode target aspect
+		asp = awg_9.getPriorityTarget();  # simply return the active target if any
+		if (asp != nil) {
+			lastH = asp.get_heading();  # should be last known heading, but we don't have that function in the F-15's radar
+		} else {
+			lastH = nil;
+		}
+		if (lastH != nil and getprop("sim/model/f15/controls/armament/weapon-selector") == 0 and getprop("sim/model/f15/controls/armament/master-arm-switch")) {
+			var mr = 0.4 * 1.5;
+			var radius = 20 * mr;
+			me.GUNSAspect.setRotation(D2R*(lastH-getprop("orientation/heading-deg")+180));
+			me.GUNSAspect.setTranslation(sx*0.5,sy*0.25);#0.4=mr
+			me.GUNSAspect.setCenter(0,-radius);
+			me.GUNSAspect.setVisible(1);
+		} else {
+			me.GUNSAspect.setVisible(0);
+		}
 
 		# FLIR
 		me.texelPerDegreeX = hudmath.HudMath.getPixelPerDegreeXAvg(5);
