@@ -369,8 +369,8 @@ var getCCIP = func {
 
 var reloadCannon = func {
 	if (getprop("sim/model/f15/variant") == "EX") {  # EX variant's got more capacity
-	    setprop("ai/submodels/submodel[5]/count", 120);
-	    setprop("ai/submodels/submodel[6]/count", 120);#flares
+	    setprop("ai/submodels/submodel[5]/count", 220);
+	    setprop("ai/submodels/submodel[6]/count", 220);#flares
 	    cannon.reloadAmmo();
 	    setprop("/systems/gun/rounds",925);
         setprop("/ai/submodels/submodel[4]/count",185);

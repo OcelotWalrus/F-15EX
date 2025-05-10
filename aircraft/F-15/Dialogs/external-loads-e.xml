@@ -1556,8 +1556,8 @@
                             setprop("sim/model/f15/systems/gun/rounds",925);
 						    setprop("/ai/submodels/submodel[4]/count",185);
                             <!-- flares and chaffs -->
-                            setprop("/ai/submodels/submodel[5]/count",120);
-                            setprop("/ai/submodels/submodel[6]/count",120);
+                            setprop("/ai/submodels/submodel[5]/count",220);
+                            setprop("/ai/submodels/submodel[6]/count",220);
                         </binding>
                     </mod-up>
                 </button>
@@ -1571,8 +1571,8 @@
                             setprop("sim/model/f15/systems/gun/rounds",925);
                             setprop("/ai/submodels/submodel[4]/count",185);
                             <!-- flares and chaffs -->
-                            setprop("/ai/submodels/submodel[5]/count",120);
-                            setprop("/ai/submodels/submodel[6]/count",120);
+                            setprop("/ai/submodels/submodel[5]/count",220);
+                            setprop("/ai/submodels/submodel[6]/count",220);
                         </script>
                     </binding>
                 </button>
@@ -3065,10 +3065,14 @@
 					        	<property>ai/submodels/submodel[5]/count</property>
 					        	<live>1</live>
 					        	<min>0</min>
-					        	<max>120</max>
+					        	<max>220</max>
 					        	<binding>
 					        		<command>dialog-apply</command>
 					        		<object-name>Flares Count</object-name>
+					        	</binding>
+					        	<binding>
+					        		<command>dialog-apply</command>
+					        		<object-name>Chaffs Count</object-name>
 					        	</binding>
 					        </slider>
 					        <slider>
@@ -3084,7 +3088,11 @@
 					        	<property>ai/submodels/submodel[6]/count</property>
 					        	<live>1</live>
 					        	<min>0</min>
-					        	<max>120</max>
+					        	<max>220</max>
+					        	<binding>
+					        		<command>dialog-apply</command>
+					        		<object-name>Flares Count</object-name>
+					        	</binding>
 					        	<binding>
 					        		<command>dialog-apply</command>
 					        		<object-name>Chaffs Count</object-name>
