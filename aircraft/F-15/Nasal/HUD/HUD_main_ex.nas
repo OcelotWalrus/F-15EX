@@ -455,6 +455,13 @@ var F15HUD = {
 	            .setColor(0,1,0,1)
 	            .setFont(aircraft.HUDFont)
 	            .setFontSize(13, 1.4);
+			obj.flyupTime = obj.WarningTexts.createChild("text")
+		        .setText("00.000")
+		        .setTranslation(0,-65)
+		        .setAlignment("center-center")
+		        .setColor(0,1,0,1)
+		        .setFont(aircraft.HUDFont)
+		        .setFontSize(9, 1.2);
 			obj.stby = obj.WarningTexts.createChild("text")
 	            .setText("NO RAD")
 	            .setTranslation(0,-165)
@@ -875,16 +882,29 @@ var F15HUD = {
 																obj.flyup.hide();
 															}
 															obj.flyup.update();
-			                                                 if (val.TimeTilCrash != nil and val.TimeTilCrash>0 and val.TimeTilCrash<10.5) {
+			                                                if (val.TimeTilCrash != nil and val.TimeTilCrash>0 and val.TimeTilCrash<10.5) {
 			                                                    flyupAmount = math.max(0,obj.extrapolate(val.TimeTilCrash,8,9.5,0,1));
 			                                                    obj.flyupLeft.setTranslation(-flyupAmount*150,0);
 			                                                    obj.flyupRight.setTranslation(flyupAmount*150,0);
 			                                                    obj.flyupLeft.show().update();
 			                                                    obj.flyupRight.show().update();
+																time_till_crash_sec = sprintf("%.0f", val.TimeTilCrash);
+																time_till_crash_mil_sec = (val.TimeTilCrash - time_till_crash_sec) * 1000;
+																if (time_till_crash_mil_sec < 0) {
+																	time_till_crash_mil_sec = 1000 + time_till_crash_mil_sec;
+																	time_till_crash_sec = time_till_crash_sec - 1;
+																}
+																if (time_till_crash_mil_sec == nil) {
+																	time_till_crash_mil_sec = 000;
+																}
+																time_till_crash_mil_sec = sprintf("%3d", time_till_crash_mil_sec);
+			                                                    obj.flyupTime.setText(sprintf("%s:%3d", time_till_crash_sec, time_till_crash_mil_sec));
+			                                                    obj.flyupTime.show();
 																setprop("sim/model/f15/avionics/pullup", 1);
 			                                                } else {
 			                                                    obj.flyupLeft.hide();
 			                                                    obj.flyupRight.hide();
+			                                                    obj.flyupTime.hide();
 																setprop("sim/model/f15/avionics/pullup", 0);
 			                                                }
 
