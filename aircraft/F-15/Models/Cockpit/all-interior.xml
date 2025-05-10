@@ -127,7 +127,8 @@
       </greater-than>
       <or>
         <property>sim/model/f15/lights/master-test-lights</property>
-        <property>sim/model/f15/instrumentation/warnings/ac-sam</property>
+        <property>payload/armament/MAW-active</property>
+        <property>payload/armament/MAW-semiactive</property>
       </or>
     </condition>
   </animation>
@@ -152,6 +153,16 @@
         <and>
           <property>instrumentation/ecm/on-off</property>
           <property>instrumentation/ecm/alert-type1</property>
+          <greater-than>
+            <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
+            <value>0</value>
+          </greater-than>
+        </and>
+        <and>
+          <equals>
+            <property>payload/armament/spike-air</property>
+            <value>1</value>
+          </equals>
           <greater-than>
             <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
             <value>0</value>

@@ -2331,6 +2331,25 @@
             </volume-->
         </rwr>
         <rwr>
+            <name>rwr-missile-warning</name>
+            <path>Aircraft/F-15/Sounds/rwr/rwr-lock-02.wav</path>
+            <mode>looped</mode>
+            <type>avionics</type>
+            <condition>
+                <or>
+                    <property>payload/armament/MAW-active</property>
+                    <property>payload/armament/MAW-semiactive</property>
+                </or>
+            </condition>
+            <volume>
+                <property>/sim/current-view/internal</property>
+                <factor>0.70</factor>
+            </volume>
+            <!--volume>
+                <property>f15/avionics/rwr-volume</property>
+            </volume-->
+        </rwr>
+        <rwr>
             <name>rwr-spike-02</name>
             <path>Aircraft/F-15/Sounds/rwr/rwr-rf-otorsi.wav</path>
             <mode>looped</mode>
