@@ -10,7 +10,8 @@
 #
 # Output:
 # instrumentation/tfs/malfunction:          set to 1 if the ground was not found
-# instrumentation/tfs/ground-altitude-ft:   measured ground altitude
+# instrumentation/tfs/ground-altitude-ft:   measured ground altitude at delayed location
+# instrumentation/tfs/ground-altitude-ft-now:   measured ground altitude at current location
 #
 # Note: in case of malfunction, the radar will keep reporting the last
 # known altitude or 0 if that was negative (there is an issue when
@@ -24,6 +25,7 @@ var versionString = getprop("sim/version/flightgear");
 var version = split(".", versionString);
 
 setprop("/instrumentation/tfs/ground-altitude-ft",0);
+setprop("/instrumentation/tfs/ground-altitude-ft-now",0);
 
 
 var xyz = nil;
@@ -43,8 +45,10 @@ setprop ("instrumentation/tfs/delay-big-sec", minim_delay);
 var tfs_radar = func(){
     var delay_sec = getprop("instrumentation/tfs/delay-big-sec");
     var myAltitude = tfs_radar_calculation(delay_sec);
+    var myAltitudeNow = tfs_radar_calculation(0);
 
     setprop("/instrumentation/tfs/ground-altitude-ft",myAltitude);
+    setprop("/instrumentation/tfs/ground-altitude-ft-now",myAltitudeNow);
 }
 
 var long_view_avoiding = func(){
@@ -323,6 +327,7 @@ var TF_malfunction = func(){
   setprop("instrumentation/tfs/malfunction", 1);
   settimer(reset_TF_malfunction, 5.0);
   return math.max (0, getprop ("instrumentation/tfs/ground-altitude-ft"));
+  return math.max (0, getprop ("instrumentation/tfs/ground-altitude-ft-now"));
 }
 
 

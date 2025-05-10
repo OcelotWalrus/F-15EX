@@ -155,6 +155,7 @@ var F15HUD = {
         obj.window16 = obj.get_text("window16", aircraft.HUDFont,8,1.4);
         obj.window17 = obj.get_text("window17", aircraft.HUDFont,8,1.4);
         obj.window18 = obj.get_text("window18", aircraft.HUDFont,8,1.4);
+        obj.window19 = obj.get_text("window19", aircraft.HUDFont,6,1.4);
 
 		obj.color = [0.3,1,0.3,.5]; # last one should be brightness parameter TODO: apply it to all elements
 
@@ -461,7 +462,7 @@ var F15HUD = {
 		        .setAlignment("center-center")
 		        .setColor(0,1,0,1)
 		        .setFont(aircraft.HUDFont)
-		        .setFontSize(9, 1.2);
+		        .setFontSize(9, 1.4);
 			obj.stby = obj.WarningTexts.createChild("text")
 	            .setText("NO RAD")
 	            .setTranslation(0,-165)
@@ -556,7 +557,7 @@ var F15HUD = {
 															}
 	                                                        obj.window10.setText(sprintf("a  %d", obj.alpha));
                                                         }),
-            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond"], nil, func(val)
+            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond", "GroundAlt"], nil, func(val)
                                                         {
                                                             obj.window9.setText(sprintf("%03d", math.round(val.VelocitiesAirspeedKt)));
                                                             obj.window13.setText(sprintf("G %03d", math.round(val.VelocitiesGroundspeedKt)));
@@ -587,6 +588,13 @@ var F15HUD = {
 
                                                             obj.window14.setText(sprintf(" %04d fps", math.round(val.FeetPerSecond)));
                                                             obj.window14.setVisible(1);
+
+															if (val.GroundAlt > 0) {
+																obj.window19.setText(sprintf("%04d ft", math.round(val.AltimeterIndicatedAltitudeFt - val.GroundAlt)));
+																obj.window19.setVisible(1);
+															} else {
+																obj.window19.setVisible(0);
+															}
                                                         }),
             props.UpdateManager.FromHashList([
 				"OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg", "NavigationMode", "TacanStationInRange", "TacanXShift", "TacanYShift"
@@ -2251,6 +2259,7 @@ input = {
 		TacanXShift                             : "instrumentation/tacan/display/x-shift",
 		TacanYShift                             : "instrumentation/tacan/display/y-shift",
 		GunsMode                                : "sim/model/f15/armament/gun-sight",
+		GroundAlt                               : "instrumentation/tfs/ground-altitude-ft-now",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
