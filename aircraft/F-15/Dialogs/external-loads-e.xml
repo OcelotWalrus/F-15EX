@@ -1513,6 +1513,8 @@
 					<value>A/G SEAD Diverse (1 Bag)</value>
 					<value>A/G DEAD (1 Bag)</value>
 					<value>A/G Anti-Ship (1 Bag)</value>
+					<value>A/G Anti-Ship LRSAM (1 Bag)</value>
+					<value>A/G Anti-Ship LRSAM Heavy (2 Bags)</value>
 					<value>A/G Stand-Off JSOW (1 Bag)</value>
 					<value>A/G Stand-Off JSOW Heavy (2 Bags)</value>
 					<value>A/G Stand-Off JASSM (1 Bag)</value>
@@ -1841,6 +1843,7 @@
 							<value>2 x AGM-88B</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
+							<value>1 x AGM-158C</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -1954,6 +1957,7 @@
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
+							<value>1 x AGM-158C</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2019,6 +2023,7 @@
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
+							<value>1 x AGM-158C</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2076,6 +2081,7 @@
 							<value>1 x AGM-84D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
+							<value>1 x AGM-158C</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -2140,6 +2146,7 @@
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
+							<value>1 x AGM-158C</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2205,6 +2212,7 @@
 							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
+							<value>1 x AGM-158C</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
@@ -2318,6 +2326,7 @@
 							<value>2 x AGM-88B</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
+							<value>1 x AGM-158C</value>
 							<value>B61-12</value>
 							<binding>
 								<command>dialog-apply</command>

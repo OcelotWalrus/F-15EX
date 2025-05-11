@@ -298,6 +298,10 @@ var ext_loads_set = func(s) {
             success = pylons.gps_light_cfts();
         } elsif ( s == "A/G Stand-Off JASSM Heavy (2 Bags)" ) {
             success = pylons.jassm_heavy();
+        }  elsif ( s == "A/G Anti-Ship LRSAM (1 Bag)" ) {
+            success = pylons.lrsam();
+        } elsif ( s == "A/G Anti-Ship LRSAM Heavy (2 Bags)" ) {
+            success = pylons.lrsam_heavy();
         }
         if (airshow_fuel == 0) {
             aircraft.set_fuel(36000);  # Set max fuel

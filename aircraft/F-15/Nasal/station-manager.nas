@@ -130,6 +130,67 @@ var Station = {
 							}
 							return {};
 						};
+					} elsif (me.weaponName == "AGM-158C") {
+   						mf = func (struct) {
+	   						if (struct.dist_m != -1 and struct.speed_fps != 0) {
+								# Mid-flight updates of the target's (a ship) position
+								# Needs to be at the top so it don't get canceled by return statements below
+								#print("-------------------");
+								#print("DIST");
+								#print(struct.dist_m*M2NM);
+								if (getprop("controls/armament/lrsam-updated") == 0) {  # makes so that it only does that 1/2 times
+									targets = awg_9.tgts_list;
+									#print("CONTACT");
+									#print(struct.callsign);
+									foreach (var u; awg_9.tgts_list) {  # Go through each radar targets
+										if (u.Callsign != nil and u.Callsign.getValue() == struct.callsign) {  # If we can find the same target in the radar targets, we take its new coordinates and slave it to the AGM-158C to update to that new position
+											gpsCoordsTgt = u.get_Coord();
+											var spot = awg_9.ContactTGP.new(u.get_Callsign(),gpsCoordsTgt,0);
+											#print(gpsCoordsTgt.lat());
+											#print(gpsCoordsTgt.lon());
+											#print(gpsCoordsTgt.alt());
+											#print("COORDS UPDATE");
+											setprop("controls/armament/lrsam-updated", 1);
+											return {"target": spot};
+										}
+									}
+								} else {
+									setprop("controls/armament/lrsam-updated", 0);
+								}
+
+								#print("IT CONTINUES");
+
+								# Beyond 70nmi, keeps a FL220 altitude, then till 25nmi, FL110 and then lower than 25nmi starts sea-skimming at FL002
+								new_altitude = 0;
+	   							if (struct.dist_m*M2NM > 70) {
+	   								# 22,000 ft above sealevel, guess
+	   								new_altitude = 22000;
+	   							} elsif (struct.dist_m*M2NM > 25) {
+	   								# 11,000 ft above sealevel, guess
+	   								new_altitude = 11000;
+	   							} else {
+	   								# 200 ft above sealevel, starts sea-skimmin
+	   								new_altitude = 200;
+	   							}
+								#print("TGT ALT");
+								#print(new_altitude);
+	   							#if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {
+								#	# Not sure bout what that does ...
+	   							#	# Lower altitude to 5000 ft above target
+	   							#	return {"altitude_at": 5000, "altitude": new_altitude};
+	   							#}
+	   							if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 1.75 and struct.guidanceLaw == "direct-alt") {
+	   								# start terminal diving
+	   								return {"altitude":0,"guidanceLaw":"direct"};
+	   							}
+	   							if (M2FT*struct.dist_m/struct.speed_fps < 8 and struct.guidance == "gps") {
+	   								# 8s before impact switch to IR, authentic value (for A version)
+	   								return {"guidance":"heat","guidanceLaw":"PN","altitude":0,"class":"GM","target":"closest","abort_midflight_function":1};
+	   							}
+								return {"altitude": new_altitude};  # makin sure it returns somethin
+	   						}
+	   						return {};
+   						};
 					} elsif (me.weaponName == "AGM-88" or me.weaponName == "AGM-88B") {  # named 88B in F-15EX
 						mf = func (struct) {
 							if (!struct.hasTarget) {

@@ -2143,6 +2143,7 @@
             <condition>
                 <or>
                     <property>payload/armament/agm-158a/sound-fire-on-off</property>
+                    <property>payload/armament/agm-158c/sound-fire-on-off</property>
                 </or>
             </condition>
             <reference-dist>25</reference-dist>
