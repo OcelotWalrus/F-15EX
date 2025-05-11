@@ -1761,6 +1761,13 @@ else
         }
         return 0;
     },
+    isSpikingMe: func {
+    	me.str6    = me.propNode.getNode("sim/multiplay/generic/string[6]");
+		if (me.str6 != nil and me.str6.getValue() != nil and me.str6.getValue() != "" and size(""~me.str6.getValue())==4 and left(md5(self.getCallsign()),4) == me.str6.getValue()) {
+			return 1;
+		}
+		return 0;
+	},
     isVirtual: func {
         # used by missile-code
         return FALSE;
