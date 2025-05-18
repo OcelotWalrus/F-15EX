@@ -151,12 +151,13 @@ var mavUpdate = func {
 };
 
 setlistener(WeaponSelector, mavUpdate, nil, 0);
+setlistener("controls/armament/selected-armament-offset", mavUpdate, nil, 0);
 setlistener("controls/armament/trigger", mavUpdate, nil, 0);
 setlistener("controls/armament/selected-armament-offset", mavUpdate, nil, 0);
 
 #Maverick seeker control
 var rate = .0025;
-var maxDegMove = 11;
+var maxDegMove = 7.5;
 
 var xRight = func {
     var current = math.clamp(getprop("sim/model/f15/cursor-slew/x"),-maxDegMove,maxDegMove);
@@ -183,15 +184,34 @@ var yDown = func {
 
 var seekerMove = func {
 
-    if (rand() > .5) {
-        xRight();
-    } else {
-        xLeft();
-    }
-    if (rand() > .5) {
+    # older method, less effective
+    #if (rand() > .5) {
+    #    xRight();
+    #} else {
+    #    xLeft();
+    #}
+    #if (rand() > .5) {
+    #    yUp();
+    #} else {
+    #    yDown();
+    #}
+    
+    # new method, more effective
+    odds = rand();
+    # Each move got a 25% chance of happenin
+    # 0-25 % up
+    # 25-50 % down
+    # 50-75 % left
+    # 75-100 % right
+    
+    if (odds < .25) {
         yUp();
-    } else {
+    } elsif (odds < .5 and odds > .25) {
         yDown();
+    } elsif (odds < .75 and odds > .5) {
+        xLeft();
+    } elsif (odds < 1 and odds > .75) {
+        xRight();
     }
 }
 
