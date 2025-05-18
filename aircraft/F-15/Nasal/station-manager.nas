@@ -108,15 +108,50 @@ var Station = {
 							}
 							return {};
 						};
+					} if (me.weaponName == "GBU-39") {  # agm-154 and GBU-39 got the same midflight behavior
+						mf = func (struct) {
+							if (struct.dist_m != -1 and struct.dist_m*M2NM < 1.75) {  # When closer than 1.75 nm, start diving onto the target
+								return {"guidanceLaw":"direct","altitude":0,"altitude_at":0,"abort_midflight_function":1};
+							} elsif (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {
+								return {"altitude_at":5000};  # Loft altitude, 5,000ft above target
+							}
+							return {};
+						};
 					} elsif (me.weaponName == "AGM-158" or me.weaponName == "AGM-158A") {  # named 158A in F-15EX
 						mf = func (struct) {
 							if (struct.dist_m != -1 and struct.speed_fps != 0) {
+							    # Mid-flight updates of the target's (a ship) position
+								# Needs to be at the top so it don't get canceled by return statements below
+								#print("-------------------");
+								#print("DIST");
+								#print(struct.dist_m*M2NM);
+								if (getprop("controls/armament/jassm-updated") == 0) {  # makes so that it only does that 1/2 times
+									targets = awg_9.tgts_list;
+									#print("CONTACT");
+									#print(struct.callsign);
+									foreach (var u; awg_9.tgts_list) {  # Go through each radar targets
+										if (u.Callsign != nil and u.Callsign.getValue() == struct.callsign) {  # If we can find the same target in the radar targets, we take its new coordinates and slave it to the AGM-158C to update to that new position
+											gpsCoordsTgt = u.get_Coord();
+											var spot = awg_9.ContactTGP.new(u.get_Callsign(),gpsCoordsTgt,0);
+											#print(gpsCoordsTgt.lat());
+											#print(gpsCoordsTgt.lon());
+											#print(gpsCoordsTgt.alt());
+											#print("COORDS UPDATE");
+											setprop("controls/armament/jassm-updated", 1);
+											return {"target": spot};
+										}
+									}
+								} else {
+									setprop("controls/armament/jassm-updated", 0);
+								}
+
+								#print("IT CONTINUES");
 								if (struct.dist_m*M2NM > 10) {
 									# 22000 ft above sealevel, authentic value
 									return {"altitude": 22000};
 								}
 								if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {
-									# Lower altitude to 5000 ft above target
+									# Loft altitude to 5000 ft above target
 									return {"altitude_at": 5000};
 								}
 								if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 1.75 and struct.guidanceLaw == "direct-alt") {
@@ -176,7 +211,7 @@ var Station = {
 								#print(new_altitude);
 	   							#if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {
 								#	# Not sure bout what that does ...
-	   							#	# Lower altitude to 5000 ft above target
+	   							#	# Loft altitude to 5000 ft above target
 	   							#	return {"altitude_at": 5000, "altitude": new_altitude};
 	   							#}
 	   							if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 1.75 and struct.guidanceLaw == "direct-alt") {

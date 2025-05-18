@@ -3842,6 +3842,7 @@
             <dual type="int">1</dual><!-- set this to control if next bomb release should be released as a pair or more. 1=single -->
             <laser-arm-dmd type="bool">false</laser-arm-dmd>
             <lrsam-updated type="int">0</lrsam-updated>
+            <jassm-updated type="int">0</jassm-updated>
         </armament>
         <lighting>
             <anti-collision-switch type="bool">true</anti-collision-switch>
