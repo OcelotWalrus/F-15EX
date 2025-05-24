@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PropertyList>
   <!--Reduce update rate because these items do not change that often.-->
   <update-interval-secs type="double">0.5</update-interval-secs>
@@ -3338,5 +3338,27 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/agm-158c-r2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-type</property>
+          <value>AGM-84D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-84d-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-type</property>
+          <value>AGM-84D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-84d-rx</output>
   </logic>
 </PropertyList>

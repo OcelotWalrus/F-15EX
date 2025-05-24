@@ -1765,7 +1765,7 @@ var ag_anti_ship = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.empty);
-		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.singleagm84d);
 		pylonex1c.loadSet(pylonSets.empty);
 
         pylon2a.loadSet(pylonSets.aim120dw);
@@ -1785,7 +1785,7 @@ var ag_anti_ship = func {
         pylon8c.loadSet(pylonSets.aim120dw);
 
 		pylonex2a.loadSet(pylonSets.empty);
-		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.singleagm84d);
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
@@ -1800,11 +1800,11 @@ var ag_anti_ship = func {
 
         reloadCannon();
 
-		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[12]/selected","1 x AGM-84D");
 		setprop("payload/weight[1]/selected","1 x AGM-84D");
         setprop("payload/weight[5]/selected","Droptank");
         setprop("payload/weight[9]/selected","1 x AGM-84D");
-		setprop("payload/weight[15]/selected","Empty");
+		setprop("payload/weight[15]/selected","1 x AGM-84D");
 
         setprop("consumables/fuel/tank[5]/selected",0);
         setprop("consumables/fuel/tank[6]/selected",0);

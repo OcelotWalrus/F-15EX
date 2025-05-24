@@ -1682,6 +1682,7 @@
                             <value>2 x AIM-120D AMRAAM</value>
                             <value>1 x AGM-65B</value>
                             <value>1 x AGM-65D</value>
+                            <value>1 x AGM-84D</value>
                             <value>1 x AGM-88B</value>
                             <binding>
                                 <command>dialog-apply</command>
@@ -2474,6 +2475,7 @@
 							<value>2 x AIM-120D AMRAAM</value>
                             <value>1 x AGM-65B</value>
                             <value>1 x AGM-65D</value>
+                            <value>1 x AGM-84D</value>
                             <value>1 x AGM-88B</value>
 							<binding>
 								<command>dialog-apply</command>
