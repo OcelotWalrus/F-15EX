@@ -252,13 +252,14 @@ var gpsInit = func {
 
 var gpsUpdate = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
-    if (selectedWeap == nil or (selectedWeap.type != "AGM-154A" and selectedWeap.type != "AGM-158A" and selectedWeap.type != "AGM-158C" and selectedWeap.type != "GBU-31" and selectedWeap.type != "GBU-54" and selectedWeap.type != "CBU-105")) {
-        #print("Weapon is not of type AGM154A or AGM158A or GBU31 - Skipping sequence");
+    if (selectedWeap == nil or (selectedWeap.type != "AGM-154A" and selectedWeap.type != "AGM-158A" and selectedWeap.type != "AGM-158C" and selectedWeap.type != "GBU-31" and selectedWeap.type != "GBU-54" and selectedWeap.type != "GBU-39" and selectedWeap.type != "CBU-105")) {
+        print("Weapon is not of type AGM154A or AGM158A or GBU31 - Skipping sequence");
         gpsFeeder.stop();
     } else {
         if (ArmSwitch.getValue() == 0) {
-            #print("Master Arm safe - Skipping");
+            print("Master Arm safe - Skipping");
         }else{
+            print("All good. Initing GPS feeder");
             gpsInit();
         }
     }
@@ -306,6 +307,7 @@ var updateGPSTarget = func {
 gpsFeeder = maketimer(.1,updateGPSTarget);
 
 setlistener(WeaponSelector, gpsUpdate, nil, 0);
+setlistener("controls/armament/selected-armament-offset", gpsUpdate, nil, 0);
 setlistener("controls/armament/trigger", gpsUpdate, nil, 0);
 setlistener("controls/armament/selected-armament-offset", gpsUpdate, nil, 0);
 # -- end of GPS guided weapons code
