@@ -1655,8 +1655,8 @@
                 <bool n="180" alias="/sim/model/f15/payload/selected/agm-84d-l" />
                 <bool n="181" alias="/sim/model/f15/payload/selected/agm-84d-c" />
                 <bool n="182" alias="/sim/model/f15/payload/selected/agm-84d-r" />
-                <bool n="183" alias="/sim/model/f15/payload/selected/agm-88b-l" />
-                <bool n="184" alias="/sim/model/f15/payload/selected/agm-88b-r" />
+                <bool n="183" alias="/sim/model/f15/payload/selected/agm-88e-l" />
+                <bool n="184" alias="/sim/model/f15/payload/selected/agm-88e-r" />
                 <bool n="185" alias="/sim/model/f15/payload/selected/agm-154a-l" />
                 <bool n="186" alias="/sim/model/f15/payload/selected/agm-154a-c" />
                 <bool n="187" alias="/sim/model/f15/payload/selected/agm-154a-r" />
@@ -1672,8 +1672,8 @@
                 <bool n="197" alias="/sim/model/f15/payload/selected/agm-65b-rx"/>
                 <bool n="198" alias="/sim/model/f15/payload/selected/agm-65d-lx"/>
                 <bool n="199" alias="/sim/model/f15/payload/selected/agm-65d-rx"/>
-                <bool n="200" alias="/sim/model/f15/payload/selected/agm-88b-lx"/>
-                <bool n="201" alias="/sim/model/f15/payload/selected/agm-88b-rx"/>
+                <bool n="200" alias="/sim/model/f15/payload/selected/agm-88e-lx"/>
+                <bool n="201" alias="/sim/model/f15/payload/selected/agm-88e-rx"/>
                 <bool n="202" alias="/sim/model/f15/payload/selected/catm-9x-l1"/>
                 <bool n="203" alias="/sim/model/f15/payload/selected/catm-9x-l2"/>
                 <bool n="204" alias="/sim/model/f15/payload/selected/catm-9x-r1"/>
@@ -2160,7 +2160,7 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>1 x AGM-88B</name>
+                <name>1 x AGM-88E</name>
                 <lbs>800.0</lbs>
             </opt>
         </weight>
@@ -2231,7 +2231,7 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>1 x AGM-88B</name>
+                <name>2 x AGM-88E</name>
                 <lbs>1625.0</lbs>
             </opt>
             <opt>
@@ -2365,7 +2365,7 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>1 x AGM-88B</name>
+                <name>2 x AGM-88E</name>
                 <lbs>1625.0</lbs>
             </opt>
             <opt>
@@ -2414,7 +2414,7 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>1 x AGM-88B</name>
+                <name>1 x AGM-88E</name>
                 <lbs>800.0</lbs>
             </opt>
         </weight>
@@ -3482,46 +3482,47 @@
                 <!--requires-power-on type="bool">true</requires-power-on> disablin that for now
                 <power-on-battery-time type="double">900</power-on-battery-time--><!-- Source: GPT 4 lol -->
             </agm-84d>
-            <agm-88b>
+            <agm-88e>
                 <type-id type="int">2</type-id>
                 <short-name type="string">AG88</short-name>
-                <long-name type="string">AGM-88B HARM</long-name>
+                <long-name type="string">AGM-88E HARM</long-name>
                 <vol-search type="double">0.00</vol-search>
                 <vol-track type="double">1.00</vol-track>
-                <guidance type="string">radiation</guidance>
-                <navigation type="string">APN</navigation>
+                <guidance type="string">radiation</guidance>  <!-- E variant: passive radar, then active radar turns ON when 5 nm from target and starts diving onto it -->
+                <navigation type="string">direct-alt</navigation>
                 <all-aspect type="bool">true</all-aspect>
-                <max-fire-range-nm type="double">30</max-fire-range-nm>              <!--  -->
+                <max-fire-range-nm type="double">75</max-fire-range-nm>              <!-- E variant: up to 75 nmi because it's got loft altitude -->
                 <FCS-field-deg type="int">80</FCS-field-deg>
                 <seeker-field-deg type="int">80</seeker-field-deg>
                 <max-g type="int">15</max-g>
                 <thrust-lbf-stage-1 type="double">3000</thrust-lbf-stage-1><!-- Boost Sustain 64,000 lbs./sec    630 mps/mach 2+ -->
                 <thrust-lbf-stage-2 type="double">575</thrust-lbf-stage-2>
-                <stage-1-duration-sec type="double">10</stage-1-duration-sec>
-                <stage-2-duration-sec type="double">50</stage-2-duration-sec>
+                <stage-1-duration-sec type="double">20</stage-1-duration-sec>  <!-- E variant: longer boost phases -->
+                <stage-2-duration-sec type="double">75</stage-2-duration-sec>  <!-- E variant: longer boost phases -->
                 <weight-launch-lbs type="double">800</weight-launch-lbs>  <!--  -->
                 <weight-warhead-lbs type="double">143.51</weight-warhead-lbs>   <!--  -->
-                <weight-fuel-lbm type="double">250</weight-fuel-lbm>
+                <weight-fuel-lbm type="double">350</weight-fuel-lbm>
                 <drag-coeff type="double">0.25</drag-coeff>
                 <cross-section-sqft type="double">0.53</cross-section-sqft> <!-- 9.84 inch diam -->
                 <arming-time-sec type="double">4.0</arming-time-sec>
                 <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
                 <self-destruct-time-sec type="double">150</self-destruct-time-sec>
-                <loft-altitude type="int">0</loft-altitude>
+                <loft-altitude type="int">25000</loft-altitude>  <!-- E variant: can perform loft maneuveurs to avoid terrain -->
                 <min-fire-range-nm type="double">0.25</min-fire-range-nm>
                 <rail type="bool">false</rail>
                 <max-report-distance type="double">65</max-report-distance>
                 <reaquire type="bool">true</reaquire>
                 <lock-on-after-launch type="bool">true</lock-on-after-launch>
-                <auto-switch-target-allowed type="bool">false</auto-switch-target-allowed>
+                <auto-switch-target-allowed type="bool">true</auto-switch-target-allowed>
                 <prowl-flight type="string">gyro-pitch</prowl-flight>
-                <switch-time-sec type="double">30</switch-time-sec>
+                <switch-time-sec type="double">2</switch-time-sec>
                 <class type="string">GMA</class>
                 <fire-msg type="string">Magnum</fire-msg>
                 <!--requires-power-on type="bool">true</requires-power-on-->
                 <ready-time type="double">3</ready-time>
                 <!--power-on-battery-time type="double">1800</power-on-battery-time-->
-            </agm-88b>
+                <telemetry type="bool">true</telemetry>  <!-- E variant: got 2-way datalink -->
+            </agm-88e>
             <agm-154a>
                 <type-id type="int">5</type-id>
                 <short-name type="string">AG154</short-name>

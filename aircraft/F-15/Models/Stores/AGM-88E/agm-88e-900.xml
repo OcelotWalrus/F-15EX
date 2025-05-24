@@ -12,13 +12,13 @@
       <object-name>Tail-Fins</object-name>
       <object-name>Exhaust</object-name>
     <condition>
-      <property>payload/armament/agm-88b/flags/msl-id-900</property>
+      <property>payload/armament/agm-88e/flags/msl-id-900</property>
     </condition>
   </animation>
 
 	<model>
     <name>flaminghot</name>
-    <path>agm-88b-exhaust.xml</path>
+    <path>agm-88e-exhaust.xml</path>
     <offsets>
       <x-m>1.985</x-m>
       <y-m>0</y-m>
@@ -30,7 +30,7 @@
       <type>select</type>
       <object-name>flaminghot</object-name>
       <condition>
-           <property>payload/armament/agm-88b/flags/smoke-id-900</property>
+           <property>payload/armament/agm-88e/flags/smoke-id-900</property>
      </condition>
   </animation>
 
@@ -42,7 +42,7 @@
        <lighting type="bool">false</lighting>
 
        <condition>
-             <property>payload/armament/agm-88b/flags/smoke-id-900</property>
+             <property>payload/armament/agm-88e/flags/smoke-id-900</property>
        </condition>
 
        <attach>world</attach>
@@ -134,7 +134,7 @@
          <lighting type="bool">false</lighting>
 
          <condition>
-             <property>payload/armament/agm-88b/flags/explode-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-id-900</property>
          </condition>
 
          <attach>world</attach>
@@ -220,7 +220,7 @@
          <lighting type="bool">false</lighting>
 
          <condition>
-             <property>payload/armament/agm-88b/flags/explode-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-id-900</property>
          </condition>
 
          <attach>world</attach>
@@ -307,9 +307,9 @@
 
          <condition>
           <and>
-             <property>payload/armament/agm-88b/flags/explode-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-id-900</property>
           <not>
-             <property>payload/armament/agm-88b/flags/explode-water-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-water-id-900</property>
            </not>
           </and>
          </condition>
@@ -401,9 +401,9 @@
 
          <condition>
          <and>
-             <property>payload/armament/agm-88b/flags/explode-smoke-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-smoke-id-900</property>
           <not>
-             <property>payload/armament/agm-88b/flags/explode-water-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-water-id-900</property>
            </not>
           </and>
          </condition>
@@ -493,9 +493,9 @@
 
          <condition>
           <and>
-             <property>payload/armament/agm-88b/flags/explode-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-id-900</property>
           <not>
-             <property>payload/armament/agm-88b/flags/explode-water-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-water-id-900</property>
            </not>
           </and>
          </condition>
@@ -585,8 +585,8 @@
 
          <condition>
           <and>
-             <property>payload/armament/agm-88b/flags/explode-id-900</property>
-             <property>payload/armament/agm-88b/flags/explode-water-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-water-id-900</property>
           </and>
          </condition>
 
@@ -675,8 +675,8 @@
 
          <condition>
           <and>
-             <property>payload/armament/agm-88b/flags/explode-smoke-id-900</property>
-             <property>payload/armament/agm-88b/flags/explode-water-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-smoke-id-900</property>
+             <property>payload/armament/agm-88e/flags/explode-water-id-900</property>
           </and>
          </condition>
 
@@ -761,7 +761,7 @@
       <object-name>explosion-smoke-outer</object-name>
       <offset-deg>0</offset-deg>
         <factor>1</factor>
-        <property>payload/armament/agm-88b/flags/explode-angle</property>      
+        <property>payload/armament/agm-88e/flags/explode-angle</property>      
         <center>
          <x-m>0</x-m>
           <y-m>0</y-m>

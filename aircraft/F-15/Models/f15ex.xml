@@ -4442,7 +4442,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>duo-agm-88b-l</object-name>
+        <object-name>duo-agm-88e-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[183]</property>
         </condition>
@@ -4450,7 +4450,7 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>duo-agm-88b-r</object-name>
+        <object-name>duo-agm-88e-r</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[184]</property>
         </condition>
@@ -5088,10 +5088,11 @@
             <property>sim/multiplay/generic/bool[199]</property>
         </condition>
     </animation>
+
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>agm-88b-lx</object-name>
+        <object-name>agm-88e-lx</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[200]</property>
         </condition>
@@ -5099,9 +5100,26 @@
     <animation>
         <type>select</type>
         <nopreview />
-        <object-name>agm-88b-rx</object-name>
+        <object-name>agm-88e-rx</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[201]</property>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84d-lx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[294]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84d-rx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[295]</property>
         </condition>
     </animation>
 
@@ -7657,8 +7675,8 @@
     </model>
 
     <model>
-        <name>duo-agm-88b-l</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-88B/bru-57-1.xml</path>
+        <name>duo-agm-88e-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88E/bru-57-1.xml</path>
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
@@ -7666,8 +7684,8 @@
         </offsets>
     </model>
     <model>
-        <name>duo-agm-88b-r</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-88B/bru-57-9.xml</path>
+        <name>duo-agm-88e-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88E/bru-57-9.xml</path>
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
@@ -8468,9 +8486,10 @@
              <z-m>0.05</z-m>
         </offsets>
     </model>
+
     <model>
-        <name>agm-88b-lx</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-88B/AGM-88B.xml</path>
+        <name>agm-88e-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88E/AGM-88E.xml</path>
         <offsets>
              <x-m>2.8</x-m>
              <y-m>-4.025</y-m>
@@ -8478,8 +8497,27 @@
         </offsets>
     </model>
     <model>
-        <name>agm-88b-rx</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-88B/AGM-88B.xml</path>
+        <name>agm-88e-rx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-88E/AGM-88E.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>3.975</y-m>
+             <z-m>0.1</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>agm-84d-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>-4.025</y-m>
+             <z-m>0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-84d-rx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
         <offsets>
              <x-m>2.8</x-m>
              <y-m>3.975</y-m>

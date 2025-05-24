@@ -6,7 +6,7 @@
 
     <model>
       <name>Station1_AGM88_left</name>
-      <path>Aircraft/F-15/Models/Stores/AGM-88B/AGM-88B.xml</path>
+      <path>Aircraft/F-15/Models/Stores/AGM-88E/AGM-88E.xml</path>
       <offsets>
         <x-m>0.145</x-m>
         <y-m>-0.3</y-m>
@@ -18,7 +18,7 @@
 
     <model>
       <name>Station1_AGM88_right</name>
-      <path>Aircraft/F-15/Models/Stores/AGM-88B/AGM-88B.xml</path>
+      <path>Aircraft/F-15/Models/Stores/AGM-88E/AGM-88E.xml</path>
       <offsets>
         <x-m>0.145</x-m>
         <y-m>0.3</y-m>
@@ -34,7 +34,7 @@
       <condition><and>
         <equals>
           <property>payload/armament/station/id-1-type</property>
-          <value>AGM-88B</value>
+          <value>AGM-88E</value>
         </equals>
         <greater-than>
           <property>payload/armament/station/id-1-count</property>
@@ -50,7 +50,7 @@
         <and>
         <equals>
           <property>payload/armament/station/id-1-type</property>
-          <value>AGM-88B</value>
+          <value>AGM-88E</value>
         </equals>
         <greater-than>
           <property>payload/armament/station/id-1-count</property>
