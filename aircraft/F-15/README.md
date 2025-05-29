@@ -14,8 +14,8 @@ For now, what's been done is (all these changes only apply to the F-15EX variant
 - Added F-15EX new secondary wing pylons
 - Added F-15EX new two fuselage pylons for nav and target pods
 - The addition of A/A missiles: AIM-9X, and the AIM-120D (all weapons are only for EX variant) and also CATM-9X and CATM-120D
-- The addition of A/G bombs: MK-82, MK-82AIR, MK-83, MK-84, CBU-87, CBU-105, GBU-12 (GBU-12 not functional yet), GBU-31, GBU-54
-- The addition of A/G missiles: AGM-65B, AGM-65D, AGM-84D, AGM-88E, AGM-154A, AGM-158A and AGM-158C
+- The addition of A/G bombs: MK-82, MK-82AIR, MK-83, MK-84, CBU-87, CBU-105, GBU-12 (GBU-12 not functional yet), GBU-31, GBU-32, GBU-54 and GBU-39
+- The addition of A/G missiles: AGM-65B, AGM-65D, AGM-84D,A AGM-84E, AGM-88E, AGM-154A, AGM-158A, AGM-158C and AGM-119A
 - The addition of pods: LANTIRN Nav Pod, LANTIRN Target Pod, Sniper APT Target pod and AN/ALQ-184(V) ECM Pod (target pods not functional yet)
 - The addition of more aerodynamic effects such as mach cone or strake and G vortex
 - The polishing of already-existing effects

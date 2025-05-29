@@ -60,7 +60,7 @@ var getDLZ = func {
 
 var ccrp = func {
     var weap = pylons.fcs.getSelectedWeapon();
-    if (weap != nil and weap.parents[0] == armament.AIM and (weap.type == "MK-84" or weap.type == "GBU-10" or weap.type == "MK-82AIR" or weap.type == "MK-82" or weap.type == "MK-83" or weap.type == "CBU-87" or weap.type == "CBU-105" or weap.type == "GBU-12" or weap.type == "GBU-31" or weap.type == "GBU-54")) {
+    if (weap != nil and weap.parents[0] == armament.AIM and (weap.type == "MK-84" or weap.type == "GBU-10" or weap.type == "MK-82AIR" or weap.type == "MK-82" or weap.type == "MK-83" or weap.type == "CBU-87" or weap.type == "CBU-105" or weap.type == "GBU-12" or weap.type == "GBU-31" or weap.type == "GBU-32" or weap.type == "GBU-54" or weap.type == "GBU-39")) {
         var ccrp_meters = weap.getCCRP(20,0.25);#meters left to release point
         if (ccrp_meters != nil) {
             # this should make the ccrp bomb steering line and the bomb release cue.
@@ -86,7 +86,7 @@ var weapons_init = func() {
 
 
 ## All the following lines are taken from the A-10 model and adapted by Jimmy L. Miles
-## These methods are used for compatible AGM missiles: AGM-65B, AGM-65D and AGM-84D and AGM-88E (not AGM-154A and AGM-158s since GPS guided)
+## These methods are used for compatible AGM missiles: AGM-65B, AGM-65D, AGM-84D, AGM-88E and AGM-119A (not AGM-154A and AGM-158s since GPS guided)
 ## It ranomly moves the caged seeker cursor until it finds a target. When a target's found,
 ## the seeker goes uncaged and tracks the target. If the target is lock, searchin mode turns back online
 
@@ -99,9 +99,9 @@ var seekerLoop = func {
     var cursorY = getprop("sim/model/f15/cursor-slew/y");
     if (selectedWeap == nil) {
         seekerTimer.stop();
-    } elsif ((selectedWeap.type == "AGM-65B" or selectedWeap.type == "AGM-65D" or selectedWeap.type == "AGM-84D" or selectedWeap.type == "AGM-88E") and (awg_9.active_u == nil or !awg_9.active_u.get_display())) {
+    } elsif ((selectedWeap.type == "AGM-65B" or selectedWeap.type == "AGM-65D" or selectedWeap.type == "AGM-84D" or selectedWeap.type == "AGM-119A" or selectedWeap.type == "AGM-88E") and (awg_9.active_u == nil or !awg_9.active_u.get_display())) {
         selectedWeap.commandDir(cursorX,cursorY);
-    } elsif (awg_9.active_u != nil and awg_9.active_u.get_display() and (selectedWeap.type == "AGM-65B" or selectedWeap.type == "AGM-65D" or selectedWeap.type == "AGM-84D" or selectedWeap.type == "AGM-88E")) {  # If we have a valid radar target, slave the AGM's seeker to that
+    } elsif (awg_9.active_u != nil and awg_9.active_u.get_display() and (selectedWeap.type == "AGM-65B" or selectedWeap.type == "AGM-65D" or selectedWeap.type == "AGM-84D" or selectedWeap.type == "AGM-119A" or selectedWeap.type == "AGM-88E")) {  # If we have a valid radar target, slave the AGM's seeker to that
         # Code taken from the HUD, used to transform the target's position into the target rectangle designator's position into the HUD
         var u_dev_rad = (90-awg_9.active_u.get_deviation(getprop("orientation/heading-deg")))  * D2R;
         var u_elev_rad = (90-awg_9.active_u.get_total_elevation(getprop("orientation/heading-deg")))  * D2R;
@@ -134,7 +134,7 @@ var mavInit = func {
 
 var mavUpdate = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
-    if (selectedWeap == nil or (selectedWeap.type != "AGM-65B" and selectedWeap.type != "AGM-65D" and selectedWeap.type != "AGM-84D" and selectedWeap.type != "AGM-88E")) {
+    if (selectedWeap == nil or (selectedWeap.type != "AGM-65B" and selectedWeap.type != "AGM-65D" and selectedWeap.type != "AGM-84D" and selectedWeap.type != "AGM-119A" and selectedWeap.type != "AGM-88E")) {
         #print ("Weapon is not of type AGM - Skipping sequence");
         cursorMove.stop();
         seekerTimer.stop();
@@ -195,7 +195,7 @@ var seekerMove = func {
     #} else {
     #    yDown();
     #}
-    
+
     # new method, more effective
     odds = rand();
     # Each move got a 25% chance of happenin
@@ -203,21 +203,25 @@ var seekerMove = func {
     # 25-50 % down
     # 50-75 % left
     # 75-100 % right
-    
-    if (odds < .25) {
-        yUp();
-    } elsif (odds < .5 and odds > .25) {
-        yDown();
-    } elsif (odds < .75 and odds > .5) {
-        xLeft();
-    } elsif (odds < 1 and odds > .75) {
-        xRight();
-    }
+
+    #if (odds < .25) {
+    #    yUp();
+    #} elsif (odds < .5 and odds > .25) {
+    #    yDown();
+    #} elsif (odds < .75 and odds > .5) {
+    #    xLeft();
+    #} elsif (odds < 1 and odds > .75) {
+    #    xRight();
+    #}
+
+    # actually, this is disabled for now.
+    setprop("sim/model/f15/cursor-slew/x", 0);
+    setprop("sim/model/f15/cursor-slew/y", 0);
 }
 
 var lock = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
-    if (selectedWeap != nil and ArmSwitch.getValue() > 0 and (selectedWeap.type == "AGM-65B" or selectedWeap.type == "AGM-65D" or selectedWeap.type == "AGM-84D" or selectedWeap.type == "AGM-88E")) {
+    if (selectedWeap != nil and ArmSwitch.getValue() > 0 and (selectedWeap.type == "AGM-65B" or selectedWeap.type == "AGM-65D" or selectedWeap.type == "AGM-84D" or selectedWeap.type == "AGM-119A" or selectedWeap.type == "AGM-88E")) {
         if (armament.MISSILE_LOCK == selectedWeap.status) {
             selectedWeap.setCaged(0);
             #print("Valid tgt - Uncaging");
@@ -236,9 +240,9 @@ cursorMove = maketimer(rate,seekerMove);
 
 # -- End of AGMs seeker code
 
-## All the following lines have been written by Jimmy L. Miles. This code allows the salving of the current radar target's GPS to GPS guided weapons: AGM-154A, AGM-158A, GBU-31, GBU-54, CBU-105, B61-12 and AGM-158C
+## All the following lines have been written by Jimmy L. Miles. This code allows the salving of the current radar target's GPS to GPS guided weapons: AGM-154A, AGM-158A, GBU-31, GBU-32, GBU-39, GBU-54, CBU-105, B61-12, AGM-158C and AGM-84E
 ## The following code has a loop checking if the radar's got an active and valid target to lock on, and if the correct GPS weapon's selected, and armed and ready, the target's
-## gps coordinates computed by the radar are "slaved" to the current weapon. Doesn't support mid-flight updates yet, so not very effective against moving targets.
+## gps coordinates computed by the radar are "slaved" to the current weapon. Depending on the weapon (if it's got datalink or not), they individually receive mid-flight updates of the GPS coordinates of the target (only AGM-158C)
 var gpsInit = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
     selectedWeap.setContacts(awg_9.getCompleteList());
@@ -252,14 +256,16 @@ var gpsInit = func {
 
 var gpsUpdate = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
-    if (selectedWeap == nil or (selectedWeap.type != "AGM-154A" and selectedWeap.type != "AGM-158A" and selectedWeap.type != "AGM-158C" and selectedWeap.type != "GBU-31" and selectedWeap.type != "GBU-54" and selectedWeap.type != "GBU-39" and selectedWeap.type != "CBU-105")) {
-        print("Weapon is not of type AGM154A or AGM158A or GBU31 - Skipping sequence");
+    if (selectedWeap == nil or (selectedWeap.type != "AGM-154A" and selectedWeap.type != "AGM-158A" and selectedWeap.type != "AGM-158C" and selectedWeap.type != "AGM-84E" and selectedWeap.type != "GBU-31" and selectedWeap.type != "GBU-32" and selectedWeap.type != "GBU-54" and selectedWeap.type != "GBU-39" and selectedWeap.type != "CBU-105")) {
+        #print("Weapon is not compatible with GPS feeder - Skipping sequence");
         gpsFeeder.stop();
+    } elsif (getprop("instrumentation/radar/radar-mode") == 2) {
+        #print("Radar is on standby.");
     } else {
         if (ArmSwitch.getValue() == 0) {
-            print("Master Arm safe - Skipping");
-        }else{
-            print("All good. Initing GPS feeder");
+            #print("Master Arm safe - Skipping");
+        } else{
+            #print("All good. Initiating GPS feeder");
             gpsInit();
         }
     }
@@ -267,7 +273,7 @@ var gpsUpdate = func {
 
 var updateGPSTarget = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
-    if (selectedWeap != nil and ArmSwitch.getValue() > 0 and (selectedWeap.type == "AGM-154A" or selectedWeap.type == "AGM-158A" or selectedWeap.type == "AGM-158C" or selectedWeap.type == "GBU-31" or selectedWeap.type == "GBU-54" or selectedWeap.type == "CBU-105")) {
+    if (selectedWeap != nil and ArmSwitch.getValue() > 0 and (selectedWeap.type == "AGM-84E" or selectedWeap.type == "AGM-154A" or selectedWeap.type == "AGM-158A" or selectedWeap.type == "AGM-158C" or selectedWeap.type == "GBU-31" or selectedWeap.type == "GBU-32" or selectedWeap.type == "GBU-54" or selectedWeap.type == "GBU-39" or selectedWeap.type == "CBU-105")) {
         if (awg_9.active_u != nil and awg_9.active_u.get_display()) {  # We have a valid radar target
             gpsCoordsTgt = awg_9.active_u.get_Coord();
             var tgt_lat = gpsCoordsTgt.lat();
@@ -300,6 +306,7 @@ var updateGPSTarget = func {
         }
     } else {  # invalid inputs
         #print("Invalid inputs");
+        #print(selectedWeap == nil);
         setprop("sim/model/f15/fcs/target-lock", 0);
     }
 };
@@ -357,7 +364,7 @@ var armament_update = func {
     Count9.setValue(aim9_count);
     Count7.setValue(pylons.fcs.getAmmoOfType("AIM-7"));
     Count120.setValue(pylons.fcs.getAmmoOfType("AIM-120") + pylons.fcs.getAmmoOfType("AIM-120D") + pylons.fcs.getAmmoOfType("CATM-120D"));
-    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B")+pylons.fcs.getAmmoOfType("GBU-12")+pylons.fcs.getAmmoOfType("AGM-65D")+pylons.fcs.getAmmoOfType("AGM-84D")+pylons.fcs.getAmmoOfType("AGM-88E")+pylons.fcs.getAmmoOfType("AGM-154A")+pylons.fcs.getAmmoOfType("AGM-158A")+pylons.fcs.getAmmoOfType("GBU-31")+pylons.fcs.getAmmoOfType("GBU-54")+pylons.fcs.getAmmoOfType("AGM-158C")+pylons.fcs.getAmmoOfType("GBU-39"));
+    Count84.setValue(pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B")+pylons.fcs.getAmmoOfType("GBU-12")+pylons.fcs.getAmmoOfType("AGM-65D")+pylons.fcs.getAmmoOfType("AGM-84D")+pylons.fcs.getAmmoOfType("AGM-84E")+pylons.fcs.getAmmoOfType("AGM-119A")+pylons.fcs.getAmmoOfType("AGM-88E")+pylons.fcs.getAmmoOfType("AGM-154A")+pylons.fcs.getAmmoOfType("AGM-158A")+pylons.fcs.getAmmoOfType("GBU-31")+pylons.fcs.getAmmoOfType("GBU-32")+pylons.fcs.getAmmoOfType("GBU-54")+pylons.fcs.getAmmoOfType("AGM-158C")+pylons.fcs.getAmmoOfType("GBU-39"));
 
     update_gun_ready();
     setCockpitLights();
@@ -474,10 +481,16 @@ var missile_code_from_ident= func(mty)  # not used anymore I think but still kep
             return "agm65d";
         else if (mty == "AGM-84D")
             return "agm84d";
+        else if (mty == "AGM-84E")
+            return "agm84e";
+        else if (mty == "AGM-119A")
+            return "agm119a";
         else if (mty == "AGM-154A")
             return "agm154a";
         else if (mty == "GBU-31")
             return "gbu31";
+        else if (mty == "GBU-32")
+            return "gbu32";
         else if (mty == "GBU-54")
             return "gbu54";
         else if (mty == "GBU-39")
@@ -509,7 +522,7 @@ var get_sel_missile_count = func()
 {
     if (WeaponSelector.getValue() == 5)
     {
-        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B")+pylons.fcs.getAmmoOfType("GBU-12")+pylons.fcs.getAmmoOfType("AGM-65D")+pylons.fcs.getAmmoOfType("AGM-84D")+pylons.fcs.getAmmoOfType("AGM-88E")+pylons.fcs.getAmmoOfType("AGM-154A")+pylons.fcs.getAmmoOfType("AGM-158A")+pylons.fcs.getAmmoOfType("GBU-31")+pylons.fcs.getAmmoOfType("GBU-54")+pylons.fcs.getAmmoOfType("AGM-158C")+pylons.fcs.getAmmoOfType("GBU-39");
+        return pylons.fcs.getAmmoOfType("MK-84")+pylons.fcs.getAmmoOfType("GBU-10")+pylons.fcs.getAmmoOfType("MK-82AIR")+pylons.fcs.getAmmoOfType("MK-82")+pylons.fcs.getAmmoOfType("MK-83")+pylons.fcs.getAmmoOfType("CBU-87")+pylons.fcs.getAmmoOfType("CBU-105")+pylons.fcs.getAmmoOfType("AGM-65B")+pylons.fcs.getAmmoOfType("GBU-12")+pylons.fcs.getAmmoOfType("AGM-65D")+pylons.fcs.getAmmoOfType("AGM-84D")+pylons.fcs.getAmmoOfType("AGM-84E")+pylons.fcs.getAmmoOfType("AGM-119A")+pylons.fcs.getAmmoOfType("AGM-88E")+pylons.fcs.getAmmoOfType("AGM-154A")+pylons.fcs.getAmmoOfType("AGM-158A")+pylons.fcs.getAmmoOfType("GBU-31")+pylons.fcs.getAmmoOfType("GBU-32")+pylons.fcs.getAmmoOfType("GBU-54")+pylons.fcs.getAmmoOfType("AGM-158C")+pylons.fcs.getAmmoOfType("GBU-39");
     }
     else if (WeaponSelector.getValue() == 1)
     {
@@ -576,8 +589,8 @@ var arm_selector = func() {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 5 ) {
-        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "GBU-12", "GBU-31", "GBU-39", "GBU-54", "AGM-158C", "AGM-158A", "AGM-154A", "AGM-88E", "AGM-84D", "AGM-65B", "AGM-65D"];
-        var count = 17 - selector_offset;  # length of the list (id 1 is 0 here)
+        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "GBU-12", "GBU-31", "GBU-32", "GBU-39", "GBU-54", "AGM-158C", "AGM-158A", "AGM-154A", "AGM-88E", "AGM-84D", "AGM-84E", "AGM-119A", "AGM-65B", "AGM-65D"];
+        var count = 20 - selector_offset;  # length of the list (id 1 is 0 here)
         if (count < 0) {
             var selector_offset = 0;
             setprop("controls/armament/selected-armament-offset", 0);

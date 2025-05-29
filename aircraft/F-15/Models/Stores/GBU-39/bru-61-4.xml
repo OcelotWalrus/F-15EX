@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+  
+<PropertyList> 
+
+    <path>Aircraft/F-15/Models/Stores/Racks/BRU-61/BRU-61.xml</path>
+
+    <model>
+      <name>Station4_GBU39_left_front</name>
+      <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+      <offsets>
+        <x-m>1.2251</x-m>
+        <y-m>-0.11869</y-m>
+        <z-m>-0.16177</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>0</roll-deg>
+      </offsets>
+    </model>
+    
+    <model>
+      <name>Station4_GBU39_right_front</name>
+      <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+      <offsets>
+        <x-m>1.2251</x-m>
+        <y-m>0.11869</y-m>
+        <z-m>-0.16177</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>0</roll-deg>
+      </offsets>
+    </model>
+    
+    <model>
+      <name>Station4_GBU39_left_back</name>
+      <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+      <offsets>
+        <x-m>-0.83169</x-m>
+        <y-m>-0.11869</y-m>
+        <z-m>-0.16177</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>0</roll-deg>
+      </offsets>
+    </model>
+    
+    <model>
+      <name>Station4_GBU39_right_back</name>
+      <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+      <offsets>
+        <x-m>-0.83169</x-m>
+        <y-m>0.11869</y-m>
+        <z-m>-0.16177</z-m>
+        <pitch-deg>0</pitch-deg>
+        <roll-deg>0</roll-deg>
+      </offsets>
+    </model>
+
+    <!-- fire order: left back, right front, right back and left front -->
+
+    <animation>
+      <type>select</type>
+      <object-name>Station4_GBU39_left_front</object-name>
+      <condition><and>
+        <equals>
+          <property>payload/armament/station/id-4-type</property>
+          <value>GBU-39</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-4-count</property>
+          <value>0</value>
+        </greater-than></and>
+      </condition>
+     </animation>
+     
+     <animation>
+      <type>select</type>
+      <object-name>Station4_GBU39_right_front</object-name>
+      <condition><and>
+        <equals>
+          <property>payload/armament/station/id-4-type</property>
+          <value>GBU-39</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-4-count</property>
+          <value>2</value>
+        </greater-than></and>
+      </condition>
+     </animation>
+     
+     <animation>
+      <type>select</type>
+      <object-name>Station4_GBU39_left_back</object-name>
+      <condition><and>
+        <equals>
+          <property>payload/armament/station/id-4-type</property>
+          <value>GBU-39</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-4-count</property>
+          <value>3</value>
+        </greater-than></and>
+      </condition>
+     </animation>
+     
+     <animation>
+      <type>select</type>
+      <object-name>Station4_GBU39_right_back</object-name>
+      <condition><and>
+        <equals>
+          <property>payload/armament/station/id-4-type</property>
+          <value>GBU-39</value>
+        </equals>
+        <greater-than>
+          <property>payload/armament/station/id-4-count</property>
+          <value>1</value>
+        </greater-than></and>
+      </condition>
+     </animation>
+
+</PropertyList> 

@@ -101,7 +101,7 @@ var Station = {
 				if (typeof(me.weaponName) == "scalar") {
 					#print("attempting to create weapon id="~(me.id*100+me.i));
 					var mf = nil;
-					if (me.weaponName == "AGM-154A") {
+					if (me.weaponName == "AGM-154A" or me.weaponName == "GBU-39") {
 						mf = func (struct) {
 							if (struct.dist_m != -1 and struct.dist_m*M2NM < 4) {
 								return {"guidanceLaw":"direct","abort_midflight_function":1};
@@ -236,8 +236,6 @@ var Station = {
 						};
 					} elsif (me.weaponName == "AGM-88E") {  # named 88E in F-15EX  (E variant has more complex midflight mechanics)
 						mf = func (struct) {
-							print("DIST");
-							print(struct.dist_horz_m*M2NM);
 							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 8 and struct.hasTarget) {
 								screen.log.write("AGM-88E: Pitbull", 1,1,0);
 								return {"altitude":0,"guidance":"radar","guidanceLaw":"PN","abort_midflight_function":1};
@@ -287,6 +285,20 @@ var Station = {
 							}
 							return {};
 						};
+					} elsif (me.weaponName == "AGM-84E") {
+   						mf = func (struct) {
+   							print("DIST");
+   							print(struct.dist_horz_m*M2NM);
+   							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 8 and struct.hasTarget) {
+   								screen.log.write("AGM-84E: Diving", 1,1,0);
+   								return {"altitude":0,"guidanceLaw":"PN","abort_midflight_function":1};
+   							}
+							if (!struct.hasTarget and struct.guidance == "gps") {
+								# If it's release in MADDOG mode, turn the heat seeker ON and make it go the the closest target
+								return {"guidance":"heat","guidanceLaw":"PN","altitude":0,"class":"GM","target":"closest","abort_midflight_function":1};
+							}
+   							return {};
+   						};
 					} elsif (me.weaponName == "AIM-9X" or me.weaponName == "CATM-9X") {
 						mf = func (struct) {
 						    var settings = {};

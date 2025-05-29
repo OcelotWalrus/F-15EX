@@ -137,7 +137,7 @@
 					if (wp != nil and wp.parents[0] == armament.AIM and wp.target_pnt == 1 and (wp.guidance=="gps" or wp.guidance=="gps-altitude")) {
 						var coord = geo.Coord.new();
 						coord.set_latlon(lat,lon,alt*FT2M);
-						var spot = radar_system.ContactTGP.new("GPS-Spot",coord,0);
+						var spot = awg_9.ContactTGP.new("GPS-Spot",coord,0);
 						armament.contactPoint = spot;
 						tgp.gps = 1;
 						if (getprop("sim/model/f15/stores/tgp-mounted") and 0) {

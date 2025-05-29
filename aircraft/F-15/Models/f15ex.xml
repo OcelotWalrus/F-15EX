@@ -3593,6 +3593,95 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>double-gbu39-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[290]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-gbu39-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[291]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-gbu39-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[292]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-gbu39-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[293]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-gbu39-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[290]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-gbu39-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[291]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-gbu39-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[292]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>double-gbu39-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[293]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>double-mk82-l3</object-name>
         <condition>
             <and>
@@ -4417,6 +4506,47 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>agm-84e-lx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[307]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84e-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[308]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84e-c</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[309]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84e-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[310]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-84e-rx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[311]</property>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>gbu-31-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[235]</property>
@@ -4453,6 +4583,23 @@
         <object-name>duo-agm-88e-r</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[184]</property>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>duo-agm-119a-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[296]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>duo-agm-119a-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[297]</property>
         </condition>
     </animation>
 
@@ -5109,6 +5256,23 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>agm-119a-lx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[298]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-119a-rx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[299]</property>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>agm-84d-lx</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[294]</property>
@@ -5587,6 +5751,120 @@
             </and>
         </condition>
     </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[300]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-c</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[301]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[302]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-l3</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[303]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-l4</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[304]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-r1</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[305]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-r2</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[306]</property>
+                <not><property>sim/multiplay/generic/bool[70]</property></not>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-l3-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[303]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-l4-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[304]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-r1-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[305]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-32-r2-cft</object-name>
+        <condition>
+            <and>
+                <property>sim/multiplay/generic/bool[306]</property>
+                <property>sim/multiplay/generic/bool[70]</property>
+            </and>
+        </condition>
+    </animation>
+
     <animation>
         <type>select</type>
         <nopreview />
@@ -6812,6 +7090,85 @@
     </model>
 
     <model>
+        <name>double-gbu39-l3</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-3.xml</path>
+        <offsets>
+             <x-m>-0.35</x-m>
+             <y-m>-1.53</y-m>
+             <z-m>-0.55</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-gbu39-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-3.xml</path>
+        <offsets>
+             <x-m>-0.35</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.775</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>double-gbu39-l4</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-4.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>-1.53</y-m>
+             <z-m>-0.55</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-gbu39-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-4.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-0.775</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>double-gbu39-r1</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-6.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>1.53</y-m>
+             <z-m>-0.55</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-gbu39-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-6.xml</path>
+        <offsets>
+             <x-m>4.05</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.775</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>double-gbu39-r2</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-7.xml</path>
+        <offsets>
+             <x-m>-0.35</x-m>
+             <y-m>1.53</y-m>
+             <z-m>-0.55</z-m>
+             <pitch-deg>1.5</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>double-gbu39-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-7.xml</path>
+        <offsets>
+             <x-m>-0.35</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-0.775</z-m>
+        </offsets>
+    </model>
+
+    <model>
         <name>double-mk82-l3</name>
         <path>Aircraft/F-15/Models/Stores/MK-82/ter-9a-3.xml</path>
         <offsets>
@@ -7491,6 +7848,116 @@
     </model>
 
     <model>
+        <name>gbu-32-l</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/bru-57-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.23</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-c</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+            <x-m>1.2</x-m>
+            <y-m>0</y-m>
+            <z-m>-1.085</z-m>
+       </offsets>
+    </model>
+    <model>
+        <name>gbu-32-r</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/bru-57-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.23</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-l3</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.575</z-m>
+             <pitch-deg>1.75</pitch-deg>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-l3-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-1.15</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-l4</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.57</y-m>
+             <z-m>-0.645</z-m>
+             <roll-deg>45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-l4-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>-1.825</y-m>
+             <z-m>-1.15</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-r1</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.645</z-m>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-r1-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>3.65</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-1.15</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-r2</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.57</y-m>
+             <z-m>-0.575</z-m>
+             <pitch-deg>1.75</pitch-deg>
+             <roll-deg>-45</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-32-r2-cft</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-32/GBU-32.xml</path>
+        <offsets>
+             <x-m>-0.1</x-m>
+             <y-m>1.825</y-m>
+             <z-m>-1.15</z-m>
+             <roll-deg>180</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
         <name>gbu54-l</name>
         <path>Aircraft/F-15/Models/Stores/GBU-54/bru-57-1.xml</path>
         <offsets>
@@ -7676,20 +8143,39 @@
 
     <model>
         <name>duo-agm-88e-l</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-88E/bru-57-1.xml</path>
+        <path>Aircraft/F-15/Models/Stores/AGM-88E/AGM-88E.xml</path>
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.025</z-m>
         </offsets>
     </model>
     <model>
         <name>duo-agm-88e-r</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-88E/bru-57-9.xml</path>
+        <path>Aircraft/F-15/Models/Stores/AGM-88E/AGM-88E.xml</path>
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.025</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>duo-agm-119a-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-119A/AGM-119A.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.025</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>duo-agm-119a-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-119A/AGM-119A.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.025</z-m>
         </offsets>
     </model>
 
@@ -7815,6 +8301,34 @@
     <model>
         <name>agm-84d-c</name>
         <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
+        <offsets>
+            <x-m>1.2</x-m>
+            <y-m>0</y-m>
+            <z-m>-1</z-m>
+       </offsets>
+    </model>
+
+    <model>
+        <name>agm-84e-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84E/AGM-84E.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-84e-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84E/AGM-84E.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-84e-c</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84E/AGM-84E.xml</path>
         <offsets>
             <x-m>1.2</x-m>
             <y-m>0</y-m>
@@ -8507,6 +9021,25 @@
     </model>
 
     <model>
+        <name>agm-119a-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-119A/AGM-119A.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>-4.025</y-m>
+             <z-m>0.05</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-119a-rx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-119A/AGM-119A.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>3.975</y-m>
+             <z-m>0.05</z-m>
+        </offsets>
+    </model>
+
+    <model>
         <name>agm-84d-lx</name>
         <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
         <offsets>
@@ -8518,6 +9051,25 @@
     <model>
         <name>agm-84d-rx</name>
         <path>Aircraft/F-15/Models/Stores/AGM-84D/AGM-84D.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>3.975</y-m>
+             <z-m>0.1</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>agm-84e-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84E/AGM-84E.xml</path>
+        <offsets>
+             <x-m>2.8</x-m>
+             <y-m>-4.025</y-m>
+             <z-m>0.1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-84e-rx</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-84E/AGM-84E.xml</path>
         <offsets>
              <x-m>2.8</x-m>
              <y-m>3.975</y-m>

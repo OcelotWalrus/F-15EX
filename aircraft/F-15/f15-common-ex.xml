@@ -1762,8 +1762,28 @@
                 <bool n="287" alias="/sim/model/f15/payload/selected/agm-158c-l4"/>
                 <bool n="288" alias="/sim/model/f15/payload/selected/agm-158c-r1"/>
                 <bool n="289" alias="/sim/model/f15/payload/selected/agm-158c-r2"/>
+                <bool n="290" alias="/sim/model/f15/payload/selected/gbu-39-l3"/>
+                <bool n="291" alias="/sim/model/f15/payload/selected/gbu-39-l4"/>
+                <bool n="292" alias="/sim/model/f15/payload/selected/gbu-39-r1"/>
+                <bool n="293" alias="/sim/model/f15/payload/selected/gbu-39-r2"/>
                 <bool n="294" alias="/sim/model/f15/payload/selected/agm-84d-lx"/>
                 <bool n="295" alias="/sim/model/f15/payload/selected/agm-84d-rx"/>
+                <bool n="296" alias="/sim/model/f15/payload/selected/agm-119a-l"/>
+                <bool n="297" alias="/sim/model/f15/payload/selected/agm-119a-r"/>
+                <bool n="298" alias="/sim/model/f15/payload/selected/agm-119a-lx"/>
+                <bool n="299" alias="/sim/model/f15/payload/selected/agm-119a-rx"/>
+                <bool n="300" alias="/sim/model/f15/payload/selected/gbu-32-l"/>
+                <bool n="301" alias="/sim/model/f15/payload/selected/gbu-32-c"/>
+                <bool n="302" alias="/sim/model/f15/payload/selected/gbu-32-r"/>
+                <bool n="303" alias="/sim/model/f15/payload/selected/gbu-32-l3"/>
+                <bool n="304" alias="/sim/model/f15/payload/selected/gbu-32-l4"/>
+                <bool n="305" alias="/sim/model/f15/payload/selected/gbu-32-r1"/>
+                <bool n="306" alias="/sim/model/f15/payload/selected/gbu-32-r2"/>
+                <bool n="307" alias="/sim/model/f15/payload/selected/agm-84e-lx"/>
+                <bool n="308" alias="/sim/model/f15/payload/selected/agm-84e-l"/>
+                <bool n="309" alias="/sim/model/f15/payload/selected/agm-84e-c"/>
+                <bool n="310" alias="/sim/model/f15/payload/selected/agm-84e-r"/>
+                <bool n="311" alias="/sim/model/f15/payload/selected/agm-84e-rx"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2160,8 +2180,16 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
+                <name>1 x AGM-84E</name>
+                <lbs>1190.0</lbs>
+            </opt>
+            <opt>
                 <name>1 x AGM-88E</name>
                 <lbs>800.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-119A</name>
+                <lbs>820.0</lbs>
             </opt>
         </weight>
         <weight n="1">
@@ -2219,6 +2247,10 @@
                 <lbs>1136.0</lbs>
             </opt>
             <opt>
+                <name>2 x GBU-32</name>
+                <lbs>2230.0</lbs>
+            </opt>
+            <opt>
                 <name>2 x AGM-65B</name>
                 <lbs>954.0</lbs>
             </opt>
@@ -2231,8 +2263,16 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>2 x AGM-88E</name>
-                <lbs>1625.0</lbs>
+                <name>1 x AGM-84E</name>
+                <lbs>1190.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-88</name>
+                <lbs>800.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-119A</name>
+                <lbs>820.0</lbs>
             </opt>
             <opt>
                 <name>1 x AGM-154A</name>
@@ -2278,11 +2318,19 @@
                 <lbs>2039.0</lbs>
             </opt>
             <opt>
+                <name>1 x GBU-32</name>
+                <lbs>1105.0</lbs>
+            </opt>
+            <opt>
                 <name>1 x AGM-65D</name>
                 <lbs>484.6</lbs>
             </opt>
             <opt>
                 <name>1 x AGM-84D</name>
+                <lbs>1190.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-84E</name>
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
@@ -2349,6 +2397,10 @@
                 <lbs>2039.0</lbs>
             </opt>
             <opt>
+                <name>2 x GBU-32</name>
+                <lbs>2230.0</lbs>
+            </opt>
+            <opt>
                 <name>2 x GBU-54</name>
                 <lbs>1136.0</lbs>
             </opt>
@@ -2365,8 +2417,16 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
-                <name>2 x AGM-88E</name>
-                <lbs>1625.0</lbs>
+                <name>1 x AGM-84E</name>
+                <lbs>1190.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-88E</name>
+                <lbs>800.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-119A</name>
+                <lbs>820.0</lbs>
             </opt>
             <opt>
                 <name>1 x AGM-154A</name>
@@ -2414,8 +2474,16 @@
                 <lbs>1190.0</lbs>
             </opt>
             <opt>
+                <name>1 x AGM-84E</name>
+                <lbs>1190.0</lbs>
+            </opt>
+            <opt>
                 <name>1 x AGM-88E</name>
                 <lbs>800.0</lbs>
+            </opt>
+            <opt>
+                <name>1 x AGM-119A</name>
+                <lbs>820.0</lbs>
             </opt>
         </weight>
         <d-config>
@@ -2923,7 +2991,7 @@
                 <weight-fuel-lbm type="double"> 0 </weight-fuel-lbm>
                 <drag-coeff type="double"> 0.125 </drag-coeff>
                 <cross-section-sqft type="double"> 1.78886 </cross-section-sqft><!-- the MK84 which is the bomb part is 640 mm diam -->
-                <arming-time-sec type="double"> 6 </arming-time-sec>
+                <arming-time-sec type="double"> 3 </arming-time-sec>
                 <min-speed-for-guiding-mach type="double"> 0 </min-speed-for-guiding-mach>
                 <self-destruct-time-sec type="double"> 10000 </self-destruct-time-sec>
                 <all-aspect type="bool">true</all-aspect>
@@ -2951,8 +3019,121 @@
                 <no-common-target type="bool">true</no-common-target> <!-- prevents it from researching a track because the lock we give in weapons.nas (radar-slaved) ain't exactly the same as the actual radar lock and fox2.nas don't like none of that-->
                 <!--requires-power-on type="bool">true</requires-power-on>
                 <power-on-battery-time type="double">0</power-on-battery-time--><!-- infinite -->
-                <telemetry type="bool">true</telemetry>
+                <telemetry type="bool">false</telemetry>
             </gbu-31>
+            <gbu-32>
+                <type-id type="int">33</type-id>  <!-- there ain't no GBU-32 in damage.nas, so we use the MK-83 cause it's the same warhead -->
+                <short-name type="string">GB32</short-name>
+                <long-name type="string">GBU-32 JDAM</long-name>
+                <fire-msg type="string">Bombs away</fire-msg>
+                <class type="string">GMP</class>
+                <max-fire-range-nm type="double">15 </max-fire-range-nm>
+                <min-fire-range-nm type="double"> 0 </min-fire-range-nm>
+                <guidance type="string">gps</guidance>
+                <navigation type="string">APN</navigation>
+                <loft-altitude type="int"> 0 </loft-altitude>
+                <terrain-follow type="bool">false</terrain-follow>
+                <FCS-field-deg type="int"> 200 </FCS-field-deg>
+                <seeker-field-deg type="int"> 45 </seeker-field-deg>
+                <reaquire type="bool">true</reaquire>
+                <max-g type="double"> 3.5 </max-g>  <!-- from 3 to 5 from the internet so I chose 3.5 -->
+                <thrust-lbf-stage-1 type="double"> 0 </thrust-lbf-stage-1>
+                <thrust-lbf-stage-2 type="double"> 0 </thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double"> 0 </stage-1-duration-sec>
+                <stage-2-duration-sec type="double"> 0 </stage-2-duration-sec>
+                <weight-launch-lbs type="double"> 1015 </weight-launch-lbs><!-- Wikipedia -->
+                <weight-warhead-lbs type="double"> 445 </weight-warhead-lbs><!-- weapons file 2004 -->
+                <weight-fuel-lbm type="double"> 0 </weight-fuel-lbm>
+                <drag-coeff type="double"> 0.125 </drag-coeff>
+                <cross-section-sqft type="double"> 1.07744817 </cross-section-sqft>  <!-- the MK83 is 357 mm diam -->
+                <arming-time-sec type="double"> 3 </arming-time-sec>
+                <min-speed-for-guiding-mach type="double"> 0 </min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double"> 10000 </self-destruct-time-sec>
+                <all-aspect type="bool">true</all-aspect>
+                <lock-on-sun-deg type="double"> 0 </lock-on-sun-deg>
+                <seeker-angular-speed-dps type="double"> 0 </seeker-angular-speed-dps>
+                <rail type="bool">false</rail>
+                <max-report-distance type="double"> 125 </max-report-distance>
+                <vol-search type="double"> 0.075 </vol-search>
+                <vol-track type="double"> 0.25 </vol-track>
+                <vol-track-weak type="double"> 0.175 </vol-track-weak>
+                <drop-time type="double">0.75</drop-time>  <!-- assuming same as GBU-31 -->
+                <deploy-time type="double">1</deploy-time>  <!-- assuming same as GBU-31 -->
+                <lateral-dps type="double"> 10 </lateral-dps>  <!-- assuming same as GBU-31 -->
+                <max-pitch-deg type="double">-45</max-pitch-deg>  <!-- assuming same as GBU-31 -->
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <!-- the following 6 properties not used yet: -->
+                <release-limit-mach type="double"> 1.2 </release-limit-mach>
+                <release-limit-altitude type="double"> 45000 </release-limit-altitude>
+                <release-limit-g type="double"> 0 </release-limit-g><!-- no info on this -->
+                <release-limit-roll type="double"> 90 </release-limit-roll>
+                <mounted-limit-g type="double"> 7.5 </mounted-limit-g>
+                <require-lock-to-fire type="bool">false</require-lock-to-fire>
+                <ejector-speed-fps type="double">5</ejector-speed-fps>  <!-- assuming same as GBU-31 -->
+                <!--ready-time type="double">300</ready-time-->
+                <no-common-target type="bool">true</no-common-target> <!-- prevents it from researching a track because the lock we give in weapons.nas (radar-slaved) ain't exactly the same as the actual radar lock and fox2.nas don't like none of that-->
+                <!--requires-power-on type="bool">true</requires-power-on>
+                <power-on-battery-time type="double">0</power-on-battery-time--><!-- infinite -->
+                <telemetry type="bool">false</telemetry>
+            </gbu-32>
+            <gbu-39>
+                <type-id type="int">16</type-id>  <!-- considered as a FAB-250 cuz the warhead is almost the same weight TODO: add GBU-39 to warheads in damage.nas in OPRF repo -->
+                <short-name type="string">GB39</short-name>
+                <long-name type="string">GBU-39 Small Diameter Bomb</long-name>
+                <fire-msg type="string">SDB away</fire-msg>
+                <class type="string">GMP</class>
+                <max-fire-range-nm type="double">50</max-fire-range-nm>  <!-- glides so the operational range is quite high -->
+                <min-fire-range-nm type="double">0</min-fire-range-nm>
+                <guidance type="string">gps</guidance>
+                <navigation type="string">GPN</navigation>
+                <loft-altitude type="int"> 0 </loft-altitude> <!-- updated when launched to be 5,000ft above target. Will then start diving directly onto the target when closer than 1.75 nmi (if there's any target (not CCIP released)) -->
+                <terrain-follow type="bool">false</terrain-follow>
+                <FCS-field-deg type="int"> 200 </FCS-field-deg>
+                <seeker-field-deg type="int"> 45 </seeker-field-deg>
+                <reaquire type="bool">true</reaquire>
+                <max-g type="double"> 1.6 </max-g>
+                <prowl-flight type="string">5</prowl-flight>
+                <thrust-lbf-stage-1 type="double"> 0 </thrust-lbf-stage-1>
+                <thrust-lbf-stage-2 type="double"> 0 </thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double"> 0 </stage-1-duration-sec>
+                <stage-2-duration-sec type="double"> 0 </stage-2-duration-sec>
+                <weight-launch-lbs type="double">285</weight-launch-lbs>  <!-- source: wikipedia https://en.wikipedia.org/wiki/GBU-39_Small_Diameter_Bomb -->
+                <weight-warhead-lbs type="double">206</weight-warhead-lbs>  <!-- source: wikipedia https://en.wikipedia.org/wiki/GBU-39_Small_Diameter_Bomb -->
+                <weight-fuel-lbm type="double"> 0 </weight-fuel-lbm>
+                <drag-coeff type="double"> 0.125 </drag-coeff>  <!-- source: GPT 4 -->
+                <cross-section-sqft type="double"> 0.045 </cross-section-sqft>  <!-- source: Jimmy L. Miles's calculations -->
+                <arming-time-sec type="double"> 2 </arming-time-sec>
+                <min-speed-for-guiding-mach type="double"> 0 </min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double"> 10000 </self-destruct-time-sec>
+                <all-aspect type="bool">true</all-aspect>
+                <lock-on-sun-deg type="double"> 0 </lock-on-sun-deg>
+                <seeker-angular-speed-dps type="double"> 0 </seeker-angular-speed-dps>
+                <rail type="bool">false</rail>
+                <max-report-distance type="double"> 30 </max-report-distance>  <!-- it's a precise bomb, so we keep it low -->
+                <drop-time type="double">0.75</drop-time>
+                <lateral-dps type="double"> 10 </lateral-dps>
+                <vol-search type="double">0.075</vol-search>
+                <vol-track type="double">0.25</vol-track>
+                <deploy-time type="double">2.0</deploy-time>
+                <terminal-alt-factor type="double">2</terminal-alt-factor>
+                <terminal-rise-time type="double">23.0</terminal-rise-time>
+                <terminal-dive-time type="double">13.0</terminal-dive-time>
+                <seeker-angular-speed-dps type="double">0</seeker-angular-speed-dps>
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <!-- the following 6 properties not used yet: -->
+                <release-limit-mach type="double"> 1.2 </release-limit-mach>
+                <release-limit-altitude type="double"> 16000 </release-limit-altitude>
+                <release-limit-g type="double"> 0 </release-limit-g><!-- no info on this -->
+                <release-limit-roll type="double"> 90 </release-limit-roll>
+                <mounted-limit-g type="double"> 7.5 </mounted-limit-g>
+                <require-lock-to-fire type="bool">false</require-lock-to-fire>
+                <ejector-speed-fps type="double">17</ejector-speed-fps>
+                <no-common-target type="bool">true</no-common-target> <!-- prevents it from researching a track because the lock we give in weapons.nas (radar-slaved) ain't exactly the same as the actual radar lock and fox2.nas don't like none of that-->
+                <!--ready-time type="double">300</ready-time-->
+                <!--requires-power-on type="bool">true</requires-power-on>
+                <power-on-battery-time type="double">0</power-on-battery-time--><!-- infinite -->
+                <telemetry type="bool">false</telemetry>  <!-- don't got datalink -->
+            </gbu-39>
             <gbu-54>
                 <type-id type="int">21</type-id>
                 <short-name type="string">GB54</short-name>
@@ -3006,7 +3187,7 @@
                 <!--ready-time type="double">300</ready-time-->
                 <!--requires-power-on type="bool">true</requires-power-on>
                 <power-on-battery-time type="double">0</power-on-battery-time--><!-- infinite -->
-                <telemetry type="bool">true</telemetry>
+                <telemetry type="bool">false</telemetry>
             </gbu-54>
             <mk-84>
                 <type-id type="int">35</type-id>
@@ -3478,10 +3659,61 @@
                 <class type="string">M</class>
                 <terrain-follow type="bool">false</terrain-follow> <!-- seaskimming, not terrain following -->
                 <fire-msg type="string">Bruiser</fire-msg>
-                <ready-time type="double">25</ready-time> <!-- INS alignment -->
+                <ready-time type="double">3</ready-time>
                 <!--requires-power-on type="bool">true</requires-power-on> disablin that for now
                 <power-on-battery-time type="double">900</power-on-battery-time--><!-- Source: GPT 4 lol -->
             </agm-84d>
+            <agm-84e>
+                <type-id type="int">1</type-id>
+                <short-name type="string">AG84</short-name>
+                <long-name type="string">AGM-84E SLAM</long-name>
+                <vol-search type="double">0.075</vol-search>
+                <vol-track type="double">0.25</vol-track>
+                <guidance type="string">gps</guidance>  <!-- E variant: passive radar, then active radar turns ON when 5 nm from target and starts diving onto it -->
+                <navigation type="string">direct-alt</navigation>
+                <terrain-follow type="bool">false</terrain-follow>
+                <all-aspect type="bool">true</all-aspect>
+                <max-fire-range-nm type="double">70</max-fire-range-nm>              <!-- E variant: up to 75 nmi because it's got loft altitude -->
+                <FCS-field-deg type="int">80</FCS-field-deg>
+                <seeker-field-deg type="int">80</seeker-field-deg>
+                <no-common-target type="bool">true</no-common-target>
+                <lock-on-sun-deg type="double">5</lock-on-sun-deg>
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <terminal-alt-factor type="double">2</terminal-alt-factor>
+                <terminal-rise-time type="double">23.0</terminal-rise-time>
+                <terminal-dive-time type="double">13.0</terminal-dive-time>
+                <seeker-angular-speed-dps type="double">150</seeker-angular-speed-dps>
+                <max-g type="int">15</max-g>
+                <stage-1-jet type="bool">true</stage-1-jet>
+                <jet-effectiveness-10000ft type="double">0.825</jet-effectiveness-10000ft>
+                <thrust-lbf-stage-1 type="double">13000</thrust-lbf-stage-1> <!-- 13000 lbf is approx 36000 lb sec impulse -->
+                <thrust-lbf-stage-2 type="double">660</thrust-lbf-stage-2> <!-- SAC -->
+                <stage-1-duration-sec type="double">10</stage-1-duration-sec> <!-- SAC -->  <!-- E variant: longer cause it needs to reach its loft alt -->
+                <stage-2-duration-sec type="double">960</stage-2-duration-sec> <!-- SAC -->
+                <weight-launch-lbs type="double">1190</weight-launch-lbs>  <!--  -->
+                <weight-warhead-lbs type="double">500</weight-warhead-lbs>   <!--  -->
+                <weight-fuel-lbm type="double">259</weight-fuel-lbm> <!-- SAC 113sustain+146boost-->
+                <drag-coeff type="double">0.16</drag-coeff>
+                <cross-section-sqft type="double">0.994</cross-section-sqft> <!-- SAC -->
+                <arming-time-sec type="double">5.0</arming-time-sec>
+                <min-speed-for-guiding-mach type="double">0.35</min-speed-for-guiding-mach>  <!-- E variant: a little bit less -->
+                <self-destruct-time-sec type="double">1000</self-destruct-time-sec>
+                <loft-altitude type="int">35000</loft-altitude>
+                <min-fire-range-nm type="double">0.25</min-fire-range-nm>
+                <rail type="bool">false</rail>
+                <max-report-distance type="double">125</max-report-distance>
+                <reaquire type="bool">true</reaquire>
+                <lock-on-after-launch type="bool">true</lock-on-after-launch>
+                <auto-switch-target-allowed type="bool">true</auto-switch-target-allowed>
+                <prowl-flight type="string">gyro-pitch</prowl-flight>
+                <switch-time-sec type="double">1</switch-time-sec>
+                <class type="string">P</class>
+                <fire-msg type="string">SLAM Bruiser</fire-msg>
+                <!--requires-power-on type="bool">true</requires-power-on-->
+                <ready-time type="double">3</ready-time>
+                <!--power-on-battery-time type="double">1800</power-on-battery-time-->
+                <telemetry type="bool">true</telemetry>  <!-- E variant: got 2-way datalink -->
+            </agm-84e>
             <agm-88e>
                 <type-id type="int">2</type-id>
                 <short-name type="string">AG88</short-name>
@@ -3506,7 +3738,7 @@
                 <cross-section-sqft type="double">0.53</cross-section-sqft> <!-- 9.84 inch diam -->
                 <arming-time-sec type="double">4.0</arming-time-sec>
                 <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
-                <self-destruct-time-sec type="double">150</self-destruct-time-sec>
+                <self-destruct-time-sec type="double">1000</self-destruct-time-sec>
                 <loft-altitude type="int">25000</loft-altitude>  <!-- E variant: can perform loft maneuveurs to avoid terrain -->
                 <min-fire-range-nm type="double">0.25</min-fire-range-nm>
                 <rail type="bool">false</rail>
@@ -3523,6 +3755,48 @@
                 <!--power-on-battery-time type="double">1800</power-on-battery-time-->
                 <telemetry type="bool">true</telemetry>  <!-- E variant: got 2-way datalink -->
             </agm-88e>
+            <agm-119a>
+                <type-id type="int">4</type-id>
+                <short-name type="string">AG119</short-name>
+                <long-name type="string">AGM-119A Penguin MK3</long-name>
+                <vol-search type="double">0.00</vol-search>
+                <vol-track type="double">1.00</vol-track>
+                <guidance type="string">heat</guidance><!--  -->
+                <navigation type="string">direct</navigation>
+                <all-aspect type="bool">true</all-aspect>
+                <class type="string">M</class>
+                <max-fire-range-nm type="double">30</max-fire-range-nm>              <!--  -->
+                <FCS-field-deg type="int">45</FCS-field-deg>
+                <seeker-field-deg type="int">180</seeker-field-deg>  <!-- wtf in F-16 is was 360* ??? -->
+                <reaquire type="bool">true</reaquire>
+                <auto-switch-target-allowed type="bool">true</auto-switch-target-allowed>
+                <max-g type="int">5</max-g>
+                <max-launch-g type="int">7</max-launch-g>
+                <thrust-lbf-stage-1 type="double">530</thrust-lbf-stage-1>
+                <thrust-lbf-stage-2 type="double">470</thrust-lbf-stage-2>
+                <stage-1-duration-sec type="double">60</stage-1-duration-sec>
+                <stage-2-duration-sec type="double">290</stage-2-duration-sec>
+                <weight-launch-lbs type="double">820</weight-launch-lbs>              <!--  -->
+                <weight-warhead-lbs type="double">264.5</weight-warhead-lbs>            <!--  -->
+                <weight-fuel-lbm type="double">104</weight-fuel-lbm>
+                <drag-coeff type="double">0.10</drag-coeff>
+                <cross-section-sqft type="double">0.844</cross-section-sqft>                             <!--  -->
+                <arming-time-sec type="double">3</arming-time-sec>
+                <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
+                <self-destruct-time-sec type="double">400</self-destruct-time-sec>
+                <loft-altitude type="int">180</loft-altitude>
+                <min-fire-range-nm type="double">0.5</min-fire-range-nm>
+                <rail type="bool">false</rail>
+                <lock-on-sun-deg type="double">4</lock-on-sun-deg>
+                <max-report-distance type="double">85</max-report-distance>
+                <hit-everything-nearby type="bool">true</hit-everything-nearby>
+                <terrain-follow type="bool">true</terrain-follow>
+                <seeker-angular-speed-dps type="double">45</seeker-angular-speed-dps>
+                <fire-msg type="string">Bruiser</fire-msg>
+                <ready-time type="double">3</ready-time>
+                <!--requires-power-on type="bool">true</requires-power-on>
+                <power-on-battery-time type="double">2700</power-on-battery-time-->
+            </agm-119a>
             <agm-154a>
                 <type-id type="int">5</type-id>
                 <short-name type="string">AG154</short-name>

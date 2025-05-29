@@ -122,7 +122,7 @@ var missile_coords_feeder = func(myMissile)
     }
 
     # Check if the ordonance has 2-way datalink
-    if (substr(myMissileName, 0, 8) == "AIM-120D") {
+    if (substr(myMissileName, 0, 8) == "AIM-120D" or substr(myMissileName, 0, 8) == "AIM-88E") {  # both missiles got 2-way datalink
         # We recreate the data vector to feed the missile_view_handler
         var data = { node: myMissile.ai, callsign: myMissileName, root: myMissile.ai.getPath()};
         setprop("sim/model/f15/armament/missile-fired-path", data.root);

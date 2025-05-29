@@ -2,6 +2,11 @@
 
 <PropertyList>
 
-  <path>bru-61.3ds</path>
+  <path>BRU-61.ac</path>
+  <offsets>
+    <x-m>0.45</x-m>
+    <y-m>0</y-m>
+    <z-m>0</z-m>
+  </offsets>
 
 </PropertyList>

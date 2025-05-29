@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <PropertyList>
   <!--Reduce update rate because these items do not change that often.-->
   <update-interval-secs type="double">0.5</update-interval-secs>
@@ -2210,8 +2210,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-1-set</property>
-          <value>2 x AGM-88E</value>
+          <property>payload/armament/station/id-1-type</property>
+          <value>AGM-88E</value>
         </equals>
       </and>
     </input>
@@ -2221,8 +2221,8 @@
     <input>
       <and>
         <equals>
-          <property>payload/armament/station/id-9-set</property>
-          <value>2 x AGM-88E</value>
+          <property>payload/armament/station/id-9-type</property>
+          <value>AGM-88E</value>
         </equals>
       </and>
     </input>
@@ -3343,6 +3343,50 @@
     <input>
       <and>
         <equals>
+          <property>payload/armament/station/id-3-set</property>
+          <value>4 x GBU-39</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-39-l3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-4-set</property>
+          <value>4 x GBU-39</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-39-l4</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-6-set</property>
+          <value>4 x GBU-39</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-39-r1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-7-set</property>
+          <value>4 x GBU-39</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-39-r2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
           <property>payload/armament/station/id-12-type</property>
           <value>AGM-84D</value>
         </equals>
@@ -3360,5 +3404,181 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/agm-84d-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-type</property>
+          <value>AGM-119A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-119a-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-type</property>
+          <value>AGM-119A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-119a-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-type</property>
+          <value>AGM-119A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-119a-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>AGM-119A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-119a-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>2 x GBU-32</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-32-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-5-type</property>
+          <value>GBU-32</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-32-c</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>2 x GBU-32</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-32-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-3-type</property>
+          <value>GBU-32</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-32-l3</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-4-type</property>
+          <value>GBU-32</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-32-l4</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-6-type</property>
+          <value>GBU-32</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-32-r1</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-7-type</property>
+          <value>GBU-32</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-32-r2</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-type</property>
+          <value>AGM-84E</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-84e-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-type</property>
+          <value>AGM-84E</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-84e-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-5-type</property>
+          <value>AGM-84E</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-84e-c</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-type</property>
+          <value>AGM-84E</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-84e-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-type</property>
+          <value>AGM-84E</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-84e-rx</output>
   </logic>
 </PropertyList>

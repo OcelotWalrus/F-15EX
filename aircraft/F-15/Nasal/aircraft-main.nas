@@ -519,7 +519,8 @@ var eject_f15 = func{
     # ACES II activation
     #view.setViewByIndex(1);
     setprop("sim/model/f15/ejected", 1);
-    settimer(eject2, 1.5);# this is to give the sim time to load the exterior view, so there is no stutter while seat fires and it gets stuck.
+    #settimer(eject2, 1.5);# this is to give the sim time to load the exterior view, so there is no stutter while seat fires and it gets stuck.
+    eject2();
     damage.damageLog.push("Pilot ejected");
 }
 
@@ -530,7 +531,7 @@ var eject2 = func{
     #setprop("fdm/jsbsim/fcs/canopy/hinges/serviceable",0);
     es.releaseAtNothing();
     viewMissile.view_firing_missile(es);
-    settimer(func {es2.releaseAtNothing();},1.5);
+    settimer(func {es2.releaseAtNothing();},0.5);
     #setprop("sim/view[0]/enabled",0); #disabled since it might get saved so user gets no pilotview in next aircraft he flies in.
     settimer(func {aircraft.eject();},3.5);  # apply 100% damage everywhere
 }
@@ -726,10 +727,10 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 610*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-65D") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 484.5*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
-            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-84D") {
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-84D" or getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-84E") {  # D and C variant both got the same weight
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 1190.0*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
-            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AGM-88E") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 800*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-88E") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 800*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-154A") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 1065*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-158A" or getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-158C") {  # A and C variants both got the same weight
@@ -748,6 +749,14 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 2039*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x GBU-54") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 558*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 20);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-119A") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 820*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-119A") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 820*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x GBU-32") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 1105*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x GBU-32") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 1105*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 20);
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }

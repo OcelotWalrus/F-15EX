@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+
+<!-- this is the static non fired model on the aircraft -->
+
+	<path>AGM-119A.ac</path>
+
+    <effect>  
+    	<inherits-from>Aircraft/F-15/Models/Effects/glass/glassIR</inherits-from>  
+    	<object-name>AGM-119_Glass</object-name> 
+  	</effect>
+	
+</PropertyList>
