@@ -1784,6 +1784,14 @@
                 <bool n="309" alias="/sim/model/f15/payload/selected/agm-84e-c"/>
                 <bool n="310" alias="/sim/model/f15/payload/selected/agm-84e-r"/>
                 <bool n="311" alias="/sim/model/f15/payload/selected/agm-84e-rx"/>
+                <bool n="312" alias="/sim/model/f15/payload/selected/gbu-39-l"/>
+                <bool n="313" alias="/sim/model/f15/payload/selected/gbu-39-r"/>
+                <bool n="314" alias="/sim/model/f15/payload/selected/gbu-39-cft1"/>
+                <bool n="315" alias="/sim/model/f15/payload/selected/gbu-39-cft2"/>
+                <bool n="316" alias="/sim/model/f15/payload/selected/gbu-39-cft3"/>
+                <bool n="317" alias="/sim/model/f15/payload/selected/gbu-39-cft4"/>
+                <bool n="318" alias="/sim/model/f15/payload/selected/gbu-39-cft5"/>
+                <bool n="319" alias="/sim/model/f15/payload/selected/gbu-39-cft6"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2243,6 +2251,10 @@
                 <lbs>2039.0</lbs>
             </opt>
             <opt>
+                <name>4 x GBU-39</name>
+                <lbs>1190.0</lbs>
+            </opt>
+            <opt>
                 <name>2 x GBU-54</name>
                 <lbs>1136.0</lbs>
             </opt>
@@ -2399,6 +2411,10 @@
             <opt>
                 <name>2 x GBU-32</name>
                 <lbs>2230.0</lbs>
+            </opt>
+            <opt>
+                <name>4 x GBU-39</name>
+                <lbs>1190.0</lbs>
             </opt>
             <opt>
                 <name>2 x GBU-54</name>

@@ -18,7 +18,7 @@
       	<object-name>LJDAM_body</object-name>
       	<object-name>LJDAM_top</object-name-->
 		<condition>
-			<property>payload/armament/gbu-39/flags/msl-id-300</property>
+			<property>payload/armament/gbu-39/flags/msl-id-103</property>
 		</condition>
 	</animation>
 
@@ -30,7 +30,7 @@
          <lighting type="bool">false</lighting>
 
          <condition>
-               <property>payload/armament/gbu-39/flags/explode-id-300</property>
+               <property>payload/armament/gbu-39/flags/explode-id-103</property>
          </condition>
 
          <attach>world</attach>
@@ -116,7 +116,7 @@
          <lighting type="bool">false</lighting>
 
          <condition>
-               <property>payload/armament/gbu-39/flags/explode-id-300</property>
+               <property>payload/armament/gbu-39/flags/explode-id-103</property>
          </condition>
 
          <attach>world</attach>
@@ -203,9 +203,9 @@
 
          <condition>
              <and>
-               <property>payload/armament/gbu-39/flags/explode-smoke-id-300</property>
+               <property>payload/armament/gbu-39/flags/explode-smoke-id-103</property>
              <not>
-                <property>payload/armament/gbu-39/flags/explode-water-id-300</property>
+                <property>payload/armament/gbu-39/flags/explode-water-id-103</property>
              </not>
              </and>
          </condition>
@@ -297,9 +297,9 @@
 
          <condition>
              <and>
-               <property>payload/armament/gbu-39/flags/explode-smoke-id-300</property>
+               <property>payload/armament/gbu-39/flags/explode-smoke-id-103</property>
              <not>
-                <property>payload/armament/gbu-39/flags/explode-water-id-300</property>
+                <property>payload/armament/gbu-39/flags/explode-water-id-103</property>
              </not>
              </and>
          </condition>
@@ -388,9 +388,9 @@
 
          <condition>
           <and>
-             <property>payload/armament/gbu-39/flags/explode-id-300</property>
+             <property>payload/armament/gbu-39/flags/explode-id-103</property>
           <not>
-             <property>payload/armament/gbu-39/flags/explode-water-id-300</property>
+             <property>payload/armament/gbu-39/flags/explode-water-id-103</property>
            </not>
           </and>
          </condition>
@@ -480,8 +480,8 @@
 
          <condition>
           <and>
-             <property>payload/armament/gbu-39/flags/explode-id-300</property>
-             <property>payload/armament/gbu-39/flags/explode-water-id-300</property>
+             <property>payload/armament/gbu-39/flags/explode-id-103</property>
+             <property>payload/armament/gbu-39/flags/explode-water-id-103</property>
           </and>
          </condition>
 
@@ -570,8 +570,8 @@
 
          <condition>
           <and>
-             <property>payload/armament/gbu-39/flags/explode-smoke-id-300</property>
-             <property>payload/armament/gbu-39/flags/explode-water-id-300</property>
+             <property>payload/armament/gbu-39/flags/explode-smoke-id-103</property>
+             <property>payload/armament/gbu-39/flags/explode-water-id-103</property>
           </and>
          </condition>
 

@@ -4328,6 +4328,54 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>gbu39-cft-1</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[314]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu39-cft-2</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[315]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu39-cft-3</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[316]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu39-cft-4</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[317]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu39-cft-5</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[318]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu39-cft-6</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[319]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>mk82air-cft-1</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[149]</property>
@@ -5749,6 +5797,23 @@
                 <property>sim/multiplay/generic/bool[264]</property>
                 <property>sim/multiplay/generic/bool[70]</property>
             </and>
+        </condition>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-39-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[312]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-39-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[313]</property>
         </condition>
     </animation>
 
@@ -7313,6 +7378,73 @@
     </model>
 
     <model>
+        <name>gbu39-cft-1</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+        <offsets>
+            <x-m>-0.0760</x-m>
+            <y-m>-2.00</y-m>
+            <z-m>-0.50</z-m>
+            <roll-deg>-27</roll-deg>
+            <pitch-deg>2.5</pitch-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu39-cft-2</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+        <offsets>
+            <x-m>2.4774</x-m>
+            <y-m>-1.99</y-m>
+            <z-m>-0.50</z-m>
+            <roll-deg>-27</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu39-cft-3</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+        <offsets>
+            <x-m>5.1044</x-m>
+            <y-m>-1.985</y-m>
+            <z-m>-0.45</z-m>
+            <pitch-deg>-4.25</pitch-deg>
+            <heading-deg>3</heading-deg>
+            <roll-deg>-25</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu39-cft-4</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+        <offsets>
+             <x-m>-0.0760</x-m>
+             <y-m>2.0465</y-m>
+             <z-m>-0.50</z-m>
+             <roll-deg>25</roll-deg>
+             <pitch-deg>2.5</pitch-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu39-cft-5</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+        <offsets>
+             <x-m>2.4774</x-m>
+             <y-m>2.0465</y-m>
+             <z-m>-0.50</z-m>
+             <roll-deg>25</roll-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu39-cft-6</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/GBU-39.xml</path>
+        <offsets>
+             <x-m>5.1044</x-m>
+             <y-m>1.985</y-m>
+             <z-m>-0.45</z-m>
+             <pitch-deg>-4.25</pitch-deg>
+             <heading-deg>-3</heading-deg>
+             <roll-deg>25</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
         <name>mk82air-cft-1</name>
         <path>Aircraft/F-15/Models/Stores/MK-82AIR/MK-82AIR.xml</path>
         <offsets>
@@ -7844,6 +7976,25 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.15</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>gbu-39-l</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.185</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>gbu-39-r</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.185</z-m>
         </offsets>
     </model>
 

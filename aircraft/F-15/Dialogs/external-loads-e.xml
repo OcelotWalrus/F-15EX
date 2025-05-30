@@ -1840,6 +1840,7 @@
 							<value>2 x GBU-12</value>
 							<value>1 x GBU-31</value>
 							<value>2 x GBU-32</value>
+							<value>4 x GBU-39</value>
 							<value>2 x GBU-54</value>
 							<value>2 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
@@ -1861,6 +1862,8 @@
 										setprop("payload/armament/station/id-1-count", 2);
 									} elsif (getprop("payload/armament/station/id-1-type") == "MK-83" or getprop("payload/armament/station/id-1-type") == "CBU-87") {
 										setprop("payload/armament/station/id-1-count", 3);
+									} elsif (getprop("payload/armament/station/id-1-type") == "GBU-39") {
+										setprop("payload/armament/station/id-1-count", 4);
 									} else {
 										setprop("payload/armament/station/id-1-count", 1);
 									}
@@ -2344,6 +2347,7 @@
 							<value>2 x GBU-12</value>
 							<value>1 x GBU-31</value>
 							<value>2 x GBU-32</value>
+							<value>4 x GBU-39</value>
 							<value>2 x GBU-54</value>
 							<value>2 x AGM-65B</value>
 							<value>1 x AGM-65D</value>
@@ -2365,6 +2369,8 @@
 										setprop("payload/armament/station/id-9-count", 2);
 									} elsif (getprop("payload/armament/station/id-9-type") == "MK-83" or getprop("payload/armament/station/id-9-type") == "CBU-87") {
 										setprop("payload/armament/station/id-9-count", 3);
+									} elsif (getprop("payload/armament/station/id-9-type") == "GBU-39") {
+										setprop("payload/armament/station/id-9-count", 4);
 									} else {
 										setprop("payload/armament/station/id-9-count", 1);
 									}
@@ -2699,6 +2705,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-39</value>
 							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -2754,6 +2761,7 @@
 							<value>Empty</value>
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
+							<value>1 x GBU-39</value>
 							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -2812,6 +2820,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-39</value>
 							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -2870,6 +2879,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-39</value>
 							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -2925,6 +2935,7 @@
 							<value>Empty</value>
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
+							<value>1 x GBU-39</value>
 							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
@@ -2983,6 +2994,7 @@
 							<value>1 x MK-82</value>
 							<value>1 x MK-82AIR</value>
 							<value>1 x GBU-12</value>
+							<value>1 x GBU-39</value>
 							<value>1 x GBU-54</value>
 							<binding>
 								<command>dialog-apply</command>
