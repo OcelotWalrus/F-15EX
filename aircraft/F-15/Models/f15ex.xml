@@ -8013,7 +8013,7 @@
         <offsets>
             <x-m>1.2</x-m>
             <y-m>0</y-m>
-            <z-m>-1.085</z-m>
+            <z-m>-0.825</z-m>
        </offsets>
     </model>
     <model>
@@ -8312,7 +8312,7 @@
     </model>
 
     <model>
-        <name>duo-agm-119a-l</name>
+        <name>duo-agm-119a-l</name>  <!-- use to be a duorack but not anymore -->
         <path>Aircraft/F-15/Models/Stores/AGM-119A/AGM-119A.xml</path>
         <offsets>
             <x-m>2</x-m>
@@ -8321,7 +8321,7 @@
         </offsets>
     </model>
     <model>
-        <name>duo-agm-119a-r</name>
+        <name>duo-agm-119a-r</name>  <!-- use to be a duorack but not anymore -->
         <path>Aircraft/F-15/Models/Stores/AGM-119A/AGM-119A.xml</path>
         <offsets>
             <x-m>2</x-m>
