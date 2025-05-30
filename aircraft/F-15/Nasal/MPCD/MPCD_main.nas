@@ -853,11 +853,21 @@ var MPCD_Device =
 
                 # Before it was target's aircraft model, now it's radar mode
                 me.radar_mode = getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode");
+                me.radar_filter_mode = getprop("instrumentation/radar/radar-filter-mode");
+                
+                if (me.radar_filter_mode == 0) {
+                    me.radar_filter_mode = "AIR";
+                } elsif (me.radar_filter_mode == 1) {
+                    me.radar_filter_mode = "GND";
+                } else {
+                    me.radar_filter_mode = "SEA";
+                }
+                
                 me.root.infoTgt.show();
                 if (me.radar_mode == 6) {
-                    me.root.infoTgt.setText("TWS AUTO");
+                    me.root.infoTgt.setText(sprintf("TWS AUTO %s", me.radar_filter_mode));
                 } else {
-                    me.root.infoTgt.setText("PULSE SRCH");
+                    me.root.infoTgt.setText(sprintf("PLS SRCH %s", me.radar_filter_mode));
                 }
 
                 me.cone = me.root.cone.createChild("path")

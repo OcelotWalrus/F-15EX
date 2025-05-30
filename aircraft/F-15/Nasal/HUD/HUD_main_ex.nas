@@ -156,6 +156,7 @@ var F15HUD = {
         obj.window17 = obj.get_text("window17", aircraft.HUDFont,8,1.4);
         obj.window18 = obj.get_text("window18", aircraft.HUDFont,8,1.4);
         obj.window19 = obj.get_text("window19", aircraft.HUDFont,6,1.4);
+        obj.window20 = obj.get_text("window20", aircraft.HUDFont,6,1.4);
 
 		obj.color = [0.3,1,0.3,.5]; # last one should be brightness parameter TODO: apply it to all elements
 
@@ -882,7 +883,8 @@ var F15HUD = {
 														"TimeTilCrash",
 														"BingoFuel",
 														"VelocitiesAirspeedKt",
-														"RadarStandby"], 0.1, func(val)
+														"RadarStandby",
+														"RadarFilterMode"], 0.1, func(val)
 														{
 															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin)) {
 																obj.altitudeDeck.show();
@@ -937,6 +939,16 @@ var F15HUD = {
 															} else {
 																obj.stby.hide();
 															}
+															
+															obj.radar_filter_mode = "A/A";  # default mode
+															if (val.RadarFilterMode == 1) {
+															    obj.radar_filter_mode = "A/G";
+															} elsif (val.RadarFilterMode == 2) {
+															    obj.radar_filter_mode = "A/SEA";
+															}
+															
+															obj.window20.setVisible(!val.RadarStandby);
+															obj.window20.setText(obj.radar_filter_mode);
 											            }),
             props.UpdateManager.FromHashList(["ControlsArmamentMasterArmSwitch",
                                                         "ControlsArmamentWeaponSelector",
@@ -2293,6 +2305,7 @@ input = {
 		TacanYShift                             : "instrumentation/tacan/display/y-shift",
 		GunsMode                                : "sim/model/f15/armament/gun-sight",
 		GroundAlt                               : "instrumentation/tfs/ground-altitude-ft-now",
+		RadarFilterMode                         : "instrumentation/radar/radar-filter-mode",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
