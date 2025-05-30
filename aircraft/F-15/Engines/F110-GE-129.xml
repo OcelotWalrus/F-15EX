@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <turbine_engine name="F110-GE-129">
-  <milthrust> 17000.0 </milthrust>
-  <maxthrust> 29300.0 </maxthrust>
+  <milthrust> 17155.0 </milthrust>
+  <maxthrust> 29500.0 </maxthrust>
   <bypassratio>     0.760 </bypassratio>
   <tsfc>            0.69 </tsfc>
   <atsfc>           1.9 </atsfc>
@@ -22,7 +22,7 @@
   <injected>          0 </injected>
 
   <!--
-      The engine used for block 50.
+      The engine used for EXs.
 
       Sources:
               Turbofan and Turbojet Engines: Database Handbook by Elodie Roux
