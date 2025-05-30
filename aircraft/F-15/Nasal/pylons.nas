@@ -35,7 +35,7 @@ var pyloncft6 = nil;
 
 var nav = stations.Submodel.new("AN/AAQ-13 LANTIRN Nav Pod", "AAQ-13", "/sim/model/f15/stores/nav-mounted");
 var tgp = stations.Submodel.new("AN/AAQ-14 LANTIRN Target Pod", "AAQ-14", "sim/model/f15/stores/tgp-mounted");
-var atp = stations.Submodel.new("AN/AAQ-33 Sniper ATP", "AAQ-33", "sim/model/f15/stores/tgp-mounted");
+var atp = stations.Submodel.new("AN/AAQ-33 Sniper XR", "AAQ-33", "sim/model/f15/stores/tgp-mounted");
 
 var ecm184 = stations.Submodel.new("AN/ALQ-184(V) ECM Pod", "AL184", "sim/model/f15/stores/ecm-mounted");
 
@@ -127,7 +127,7 @@ var pylonSets = {
     # Navigation and targeting fuselage-mounted pods
     lantirnnav:   {name: "AN/AAQ-13 LANTIRN Nav Pod", content: [nav], fireOrder: [0], launcherDragArea: 0.1, launcherMass: 451.1, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 	lantirntgp:   {name: "AN/AAQ-14 LANTIRN Target Pod", content: [tgp], fireOrder: [0], launcherDragArea: 0.07, launcherMass: 530, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
-	atpsniper:   {name: "AN/AAQ-33 Sniper ATP", content: [atp], fireOrder: [0], launcherDragArea: 0.06, launcherMass: 446, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	atpsniper:   {name: "AN/AAQ-33 Sniper XR", content: [atp], fireOrder: [0], launcherDragArea: 0.06, launcherMass: 446, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 
 	podEcm184: {name: "AN/ALQ-184(V) ECM Pod", content: [ecm184], fireOrder: [0], launcherDragArea: 0.1, launcherMass: 705, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 2},
 };
@@ -622,7 +622,7 @@ var combat_air_patrol = func {
 		pylonex2c.loadSet(pylonSets.aim120dw);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.empty);
 		pyloncft2.loadSet(pylonSets.empty);
@@ -682,7 +682,7 @@ var combat_air_patrol_1bag = func {
 		pylonex2c.loadSet(pylonSets.aim120dw);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.empty);
 		pyloncft2.loadSet(pylonSets.empty);
@@ -1033,7 +1033,7 @@ var unguided_light = func {
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.empty);
 		pyloncft2.loadSet(pylonSets.empty);
@@ -1092,7 +1092,7 @@ var unguided_light_cfts = func {
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.cftmk82);
 		pyloncft2.loadSet(pylonSets.cftmk82);
@@ -1151,7 +1151,7 @@ var retarded = func {
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.empty);
 		pyloncft2.loadSet(pylonSets.empty);
@@ -1210,7 +1210,7 @@ var retarded_cfts = func {
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.cftmk82air);
 		pyloncft2.loadSet(pylonSets.cftmk82air);
@@ -1269,7 +1269,7 @@ var unguided_medium = func {
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
@@ -1328,7 +1328,7 @@ var unguided_heavy = func {
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.aim120d);
 		pyloncft2.loadSet(pylonSets.empty);
@@ -1800,7 +1800,7 @@ var ag_anti_ship = func {
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
-		pylontgp.loadSet(pylonSets.lantirntgp);
+		pylontgp.loadSet(pylonSets.atpsniper);
 
 		pyloncft1.loadSet(pylonSets.empty);
 		pyloncft2.loadSet(pylonSets.empty);

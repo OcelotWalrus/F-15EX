@@ -2652,7 +2652,7 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>AN/AAQ-14 LANTIRN Target Pod</value>
-							<value>AN/AAQ-33 Sniper ATP</value>
+							<value>AN/AAQ-33 Sniper XR</value>
 							<binding>
 								<command>dialog-apply</command>
 							</binding>

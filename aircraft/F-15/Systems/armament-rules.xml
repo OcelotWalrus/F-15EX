@@ -1507,7 +1507,7 @@
       <and>
         <equals>
           <property>payload/armament/station/id-19-set</property>
-          <value>AN/AAQ-33 Sniper ATP</value>
+          <value>AN/AAQ-33 Sniper XR</value>
         </equals>
       </and>
     </input>
