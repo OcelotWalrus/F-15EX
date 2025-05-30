@@ -266,6 +266,12 @@ setlistener("/ai/models/model-removed", func(v){
     }
 });
 
+setlistener("instrumentation/radar/radar-filter-mode", func(v){
+    if (!scan_update_tgt_list) {
+        scan_update_tgt_list = 1;
+    }
+});
+
 init = func() {
 	var our_ac_name = getprop("sim/aircraft");
     # map variants to the base
@@ -444,7 +450,10 @@ var az_scan = func(notification) {
                         }
                         # notice the default class is set to AIR
                     }
-                    append(tgts_list, u);
+
+                    if ((getprop("instrumentation/radar/radar-filter-mode") == 0 and u.get_type() == AIR) or (getprop("instrumentation/radar/radar-filter-mode") == 1 and u.get_type() == SURFACE) or (getprop("instrumentation/radar/radar-filter-mode") == 2 and u.get_type() == MARINE)) {
+                        append(tgts_list, u);  # Check if the target is filtered or not by the RADAR MODE (0: AIR, 1: SURFACE, 2: SEA)
+                    }
                 }
             }
             scan_tgt_idx = 0;
@@ -1172,6 +1181,18 @@ radar_mode_cycle = func() {
     if (v == 2) v = 0;
         else v = 2;
     setprop("instrumentation/radar/radar-mode",v);
+}
+
+radar_filter_mode_cycle = func() {
+    var v = getprop("instrumentation/radar/radar-filter-mode");
+    if (v == 2) {
+         v = 0;
+    } elsif (v == 1) {
+         v = 2;
+    } else {
+        v = 1;
+    }
+    setprop("instrumentation/radar/radar-filter-mode",v);
 }
 
 wcs_mode_toggle = func() {
