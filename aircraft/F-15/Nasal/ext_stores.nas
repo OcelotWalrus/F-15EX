@@ -275,7 +275,7 @@ var ext_loads_set = func(s) {
             success = pylons.ag_sead_diverse();
         } elsif ( s == "A/G DEAD (1 Bag)" ) {
             success = pylons.ag_dead();
-        } elsif ( s == "A/G Anti-Ship (1 Bag)" ) {
+        } elsif ( s == "A/G Anti-Ship Harpoon (1 Bag)" ) {
             success = pylons.ag_anti_ship();
         } elsif ( s == "A/G Stand-Off JSOW (1 Bag)" ) {
             success = pylons.ag_standoff_jsow();
@@ -302,6 +302,22 @@ var ext_loads_set = func(s) {
             success = pylons.lrsam();
         } elsif ( s == "A/G Anti-Ship LRSAM Heavy (2 Bags)" ) {
             success = pylons.lrsam_heavy();
+        } elsif ( s == "A/G GPS JDAM Medium (1 Bag)" ) {
+            success = pylons.gps_medium();
+        } elsif ( s == "A/G Stand-Off SLAM (1 Bag)" ) {
+            success = pylons.stdoff_slam();
+        } elsif ( s == "A/G Stand-Off SLAM Heavy (2 Bags)" ) {
+            success = pylons.stdoff_slam_heavy();
+        } elsif ( s == "A/G Anti-Ship Penguin (1 Bag)" ) {
+            success = pylons.anti_ship_penguin();
+        } elsif ( s == "A/G Anti-Ship Diverse (2 Bags)" ) {
+            success = pylons.anti_ship_diverse();
+        } elsif ( s == "A/G GPS SDB Light (1 Bag)" ) {
+            success = pylons.sdb_light();
+        } elsif ( s == "A/G GPS SDB Medium (1 Bag)" ) {
+            success = pylons.sdb_medium();
+        } elsif ( s == "A/G GPS SDB Heavy (2 Bags, CFTs)" ) {
+            success = pylons.sdb_heavy();
         }
         if (airshow_fuel == 0) {
             aircraft.set_fuel(36000);  # Set max fuel

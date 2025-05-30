@@ -1505,16 +1505,27 @@
 					<!-- A/G GPS-guided missions-->
 					<value>A/G GPS JDAM Light (1 Bag)</value>
 					<value>A/G GPS JDAM Light (1 Bag, CFTs)</value>
+					<value>A/G GPS JDAM Medium (1 Bag)</value>
 					<value>A/G GPS JDAM Heavy (1 Bag)</value>
 					<value>A/G GPS JDAM Diverse (2 Bags)</value>
+
+					<value>A/G GPS SDB Light (1 Bag)</value>
+					<value>A/G GPS SDB Medium (1 Bag)</value>
+					<value>A/G GPS SDB Heavy (2 Bags, CFTs)</value>
 
 					<!-- A/G special missions-->
 					<value>A/G SEAD (1 Bag)</value>
 					<value>A/G SEAD Diverse (1 Bag)</value>
 					<value>A/G DEAD (1 Bag)</value>
-					<value>A/G Anti-Ship (1 Bag)</value>
+
+					<value>A/G Anti-Ship Penguin (1 Bag)</value>
+					<value>A/G Anti-Ship Harpoon (1 Bag)</value>
 					<value>A/G Anti-Ship LRSAM (1 Bag)</value>
 					<value>A/G Anti-Ship LRSAM Heavy (2 Bags)</value>
+					<value>A/G Anti-Ship Diverse (2 Bags)</value>
+
+					<value>A/G Stand-Off SLAM (1 Bag)</value>
+					<value>A/G Stand-Off SLAM Heavy (2 Bags)</value>
 					<value>A/G Stand-Off JSOW (1 Bag)</value>
 					<value>A/G Stand-Off JSOW Heavy (2 Bags)</value>
 					<value>A/G Stand-Off JASSM (1 Bag)</value>

@@ -1831,6 +1831,65 @@ var ag_anti_ship = func {
     }
 }
 
+var anti_ship_penguin = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.singleagm119a);
+		pylonex1c.loadSet(pylonSets.empty);
+
+        pylon2a.loadSet(pylonSets.aim120dw);
+        pylon2b.loadSet(pylonSets.singleagm119a);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.aim120d);
+        pylon4.loadSet(pylonSets.aim120d);
+
+        pylon5.loadSet(pylonSets.empty);
+
+        pylon6.loadSet(pylonSets.aim120d);
+        pylon7.loadSet(pylonSets.aim120d);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.singleagm119a);
+        pylon8c.loadSet(pylonSets.aim120dw);
+
+		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.singleagm119a);
+		pylonex2c.loadSet(pylonSets.empty);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","1 x AGM-119A");
+		setprop("payload/weight[1]/selected","1 x AGM-119A");
+        setprop("payload/weight[5]/selected","Droptank");
+        setprop("payload/weight[9]/selected","1 x AGM-119A");
+		setprop("payload/weight[15]/selected","1 x AGM-119A");
+
+        setprop("consumables/fuel/tank[5]/selected",0);
+        setprop("consumables/fuel/tank[6]/selected",0);
+        setprop("consumables/fuel/tank[7]/selected",1);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[5]/level-lbs",0);
+        setprop("consumables/fuel/tank[6]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
 var ag_standoff_jsow = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
@@ -1890,6 +1949,182 @@ var ag_standoff_jsow = func {
     }
 }
 
+var sdb_light = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.empty);
+
+        pylon2a.loadSet(pylonSets.aim9xw);
+        pylon2b.loadSet(pylonSets.quadgbu39);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.aim120d);
+        pylon4.loadSet(pylonSets.aim120d);
+
+        pylon5.loadSet(pylonSets.empty);
+
+        pylon6.loadSet(pylonSets.aim120d);
+        pylon7.loadSet(pylonSets.aim120d);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.quadgbu39);
+        pylon8c.loadSet(pylonSets.aim9xw);
+
+		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.empty);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[1]/selected","4 x GBU-39");
+        setprop("payload/weight[5]/selected","Droptank");
+        setprop("payload/weight[9]/selected","4 x GBU-39");
+		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",0);
+        setprop("consumables/fuel/tank[6]/selected",0);
+        setprop("consumables/fuel/tank[7]/selected",1);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[5]/level-lbs",0);
+        setprop("consumables/fuel/tank[6]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
+var sdb_medium = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.aim120dw);
+		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.aim120dw);
+
+        pylon2a.loadSet(pylonSets.aim9xw);
+        pylon2b.loadSet(pylonSets.empty);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.quadgbu39);
+        pylon4.loadSet(pylonSets.quadgbu39);
+
+        pylon5.loadSet(pylonSets.empty);
+
+        pylon6.loadSet(pylonSets.quadgbu39);
+        pylon7.loadSet(pylonSets.quadgbu39);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.empty);
+        pylon8c.loadSet(pylonSets.aim9xw);
+
+		pylonex2a.loadSet(pylonSets.aim120dw);
+		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.aim120dw);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[1]/selected","Empty");
+        setprop("payload/weight[5]/selected","Droptank");
+        setprop("payload/weight[9]/selected","Empty");
+		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",0);
+        setprop("consumables/fuel/tank[6]/selected",0);
+        setprop("consumables/fuel/tank[7]/selected",1);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[5]/level-lbs",0);
+        setprop("consumables/fuel/tank[6]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
+var sdb_heavy = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.aim120dw);
+		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.aim120dw);
+
+        pylon2a.loadSet(pylonSets.aim9xw);
+        pylon2b.loadSet(pylonSets.empty);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.quadgbu39);
+        pylon4.loadSet(pylonSets.quadgbu39);
+
+        pylon5.loadSet(pylonSets.empty);
+
+        pylon6.loadSet(pylonSets.quadgbu39);
+        pylon7.loadSet(pylonSets.quadgbu39);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.empty);
+        pylon8c.loadSet(pylonSets.aim9xw);
+
+		pylonex2a.loadSet(pylonSets.aim120dw);
+		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.aim120dw);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.singlegbu39);
+		pyloncft2.loadSet(pylonSets.singlegbu39);
+		pyloncft3.loadSet(pylonSets.singlegbu39);
+		pyloncft4.loadSet(pylonSets.singlegbu39);
+		pyloncft5.loadSet(pylonSets.singlegbu39);
+		pyloncft6.loadSet(pylonSets.singlegbu39);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[1]/selected","Droptank");
+        setprop("payload/weight[5]/selected","Empty");
+        setprop("payload/weight[9]/selected","Droptank");
+		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",1);
+        setprop("consumables/fuel/tank[6]/selected",1);
+        setprop("consumables/fuel/tank[7]/selected",0);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[7]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
 var ag_standoff_jsow_heavy = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
@@ -1934,6 +2169,181 @@ var ag_standoff_jsow_heavy = func {
         setprop("payload/weight[5]/selected","1 x AGM-154A");
         setprop("payload/weight[9]/selected","Droptank");
 		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",1);
+        setprop("consumables/fuel/tank[6]/selected",1);
+        setprop("consumables/fuel/tank[7]/selected",0);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[7]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
+var anti_ship_diverse = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.singleagm119a);
+		pylonex1c.loadSet(pylonSets.empty);
+
+        pylon2a.loadSet(pylonSets.aim120dw);
+        pylon2b.loadSet(pylonSets.empty);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.singleagm158c);
+        pylon4.loadSet(pylonSets.singleagm158c);
+
+        pylon5.loadSet(pylonSets.singleagm84d);
+
+        pylon6.loadSet(pylonSets.singleagm158c);
+        pylon7.loadSet(pylonSets.singleagm158c);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.empty);
+        pylon8c.loadSet(pylonSets.aim120dw);
+
+		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.singleagm119a);
+		pylonex2c.loadSet(pylonSets.empty);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","1 x AGM-119A");
+		setprop("payload/weight[1]/selected","Droptank");
+        setprop("payload/weight[5]/selected","1 x AGM-84D");
+        setprop("payload/weight[9]/selected","Droptank");
+		setprop("payload/weight[15]/selected","1 x AGM-119A");
+
+        setprop("consumables/fuel/tank[5]/selected",1);
+        setprop("consumables/fuel/tank[6]/selected",1);
+        setprop("consumables/fuel/tank[7]/selected",0);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[7]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
+var stdoff_slam = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.empty);
+
+        pylon2a.loadSet(pylonSets.aim9xw);
+        pylon2b.loadSet(pylonSets.singleagm84e);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.aim120d);
+        pylon4.loadSet(pylonSets.aim120d);
+
+        pylon5.loadSet(pylonSets.empty);
+
+        pylon6.loadSet(pylonSets.aim120d);
+        pylon7.loadSet(pylonSets.aim120d);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.singleagm84e);
+        pylon8c.loadSet(pylonSets.aim9xw);
+
+		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.empty);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[1]/selected","1 x AGM-84E");
+        setprop("payload/weight[5]/selected","Droptank");
+        setprop("payload/weight[9]/selected","1 x AGM-84E");
+		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",0);
+        setprop("consumables/fuel/tank[6]/selected",0);
+        setprop("consumables/fuel/tank[7]/selected",1);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+        setprop("consumables/fuel/tank[5]/level-lbs",0);
+        setprop("consumables/fuel/tank[6]/level-lbs",0);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
+var stdoff_slam_heavy = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.singleagm84e);
+		pylonex1c.loadSet(pylonSets.empty);
+
+        pylon2a.loadSet(pylonSets.aim120dw);
+        pylon2b.loadSet(pylonSets.empty);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.aim120d);
+        pylon4.loadSet(pylonSets.aim120d);
+
+        pylon5.loadSet(pylonSets.singleagm84e);
+
+        pylon6.loadSet(pylonSets.aim120d);
+        pylon7.loadSet(pylonSets.aim120d);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.empty);
+        pylon8c.loadSet(pylonSets.aim120dw);
+
+		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.singleagm84e);
+		pylonex2c.loadSet(pylonSets.empty);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","1 x AGM-84E");
+		setprop("payload/weight[1]/selected","Droptank");
+        setprop("payload/weight[5]/selected","1 x AGM-84E");
+        setprop("payload/weight[9]/selected","Droptank");
+		setprop("payload/weight[15]/selected","1 x AGM-84E");
 
         setprop("consumables/fuel/tank[5]/selected",1);
         setprop("consumables/fuel/tank[6]/selected",1);
@@ -2127,9 +2537,9 @@ var lrsam = func {
 var lrsam_heavy = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
-		pylonex1a.loadSet(pylonSets.empty);
+		pylonex1a.loadSet(pylonSets.aim120dw);
 		pylonex1b.loadSet(pylonSets.empty);
-		pylonex1c.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.aim120dw);
 
         pylon2a.loadSet(pylonSets.aim120dw);
         pylon2b.loadSet(pylonSets.empty);
@@ -2147,9 +2557,9 @@ var lrsam_heavy = func {
         pylon8b.loadSet(pylonSets.empty);
         pylon8c.loadSet(pylonSets.aim120dw);
 
-		pylonex2a.loadSet(pylonSets.empty);
+		pylonex2a.loadSet(pylonSets.aim120dw);
 		pylonex2b.loadSet(pylonSets.empty);
-		pylonex2c.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.aim120dw);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
 		pylontgp.loadSet(pylonSets.atpsniper);
@@ -2186,7 +2596,7 @@ var ag_standoff_diverse = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.empty);
-		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1b.loadSet(pylonSets.singleagm84e);
 		pylonex1c.loadSet(pylonSets.aim120dw);
 
         pylon2a.loadSet(pylonSets.aim120dw);
@@ -2206,7 +2616,7 @@ var ag_standoff_diverse = func {
         pylon8c.loadSet(pylonSets.aim120dw);
 
 		pylonex2a.loadSet(pylonSets.aim120dw);
-		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2b.loadSet(pylonSets.singleagm84e);
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
@@ -2221,11 +2631,11 @@ var ag_standoff_diverse = func {
 
         reloadCannon();
 
-		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[12]/selected","1 x AGM-84E");
 		setprop("payload/weight[1]/selected","Droptank");
         setprop("payload/weight[5]/selected","1 x AGM-158A");
         setprop("payload/weight[9]/selected","Droptank");
-		setprop("payload/weight[15]/selected","Empty");
+		setprop("payload/weight[15]/selected","1 x AGM-84E");
 
         setprop("consumables/fuel/tank[5]/selected",1);
         setprop("consumables/fuel/tank[6]/selected",1);
@@ -2419,6 +2829,65 @@ var gps_light_cfts = func {
     }
 }
 
+var gps_medium = func {
+    if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
+
+		pylonex1a.loadSet(pylonSets.aim120dw);
+		pylonex1b.loadSet(pylonSets.empty);
+		pylonex1c.loadSet(pylonSets.aim120dw);
+
+        pylon2a.loadSet(pylonSets.aim120dw);
+        pylon2b.loadSet(pylonSets.doublegbu32);
+        pylon2c.loadSet(pylonSets.aim9xw);
+
+        pylon3.loadSet(pylonSets.singlegbu32);
+        pylon4.loadSet(pylonSets.empty);
+
+        pylon5.loadSet(pylonSets.empty);
+
+        pylon6.loadSet(pylonSets.empty);
+        pylon7.loadSet(pylonSets.singlegbu32);
+
+        pylon8a.loadSet(pylonSets.aim9xw);
+        pylon8b.loadSet(pylonSets.doublegbu32);
+        pylon8c.loadSet(pylonSets.aim120dw);
+
+		pylonex2a.loadSet(pylonSets.aim120dw);
+		pylonex2b.loadSet(pylonSets.empty);
+		pylonex2c.loadSet(pylonSets.aim120dw);
+
+		pylonnav.loadSet(pylonSets.lantirnnav);
+		pylontgp.loadSet(pylonSets.atpsniper);
+
+		pyloncft1.loadSet(pylonSets.empty);
+		pyloncft2.loadSet(pylonSets.empty);
+		pyloncft3.loadSet(pylonSets.empty);
+		pyloncft4.loadSet(pylonSets.empty);
+		pyloncft5.loadSet(pylonSets.empty);
+		pyloncft6.loadSet(pylonSets.empty);
+
+        reloadCannon();
+
+		setprop("payload/weight[12]/selected","Empty");
+		setprop("payload/weight[1]/selected","1 x GBU-32");
+        setprop("payload/weight[5]/selected","Droptank");
+        setprop("payload/weight[9]/selected","1 x GBU-32");
+		setprop("payload/weight[15]/selected","Empty");
+
+        setprop("consumables/fuel/tank[5]/selected",0);
+        setprop("consumables/fuel/tank[6]/selected",0);
+        setprop("consumables/fuel/tank[7]/selected",1);
+		setprop("fdm/jsbsim/propulsion/cft", 1);
+
+		setprop("consumables/fuel/tank[6]/level-lbs",1);
+		setprop("consumables/fuel/tank[5]/level-lbs",1);
+        return 1;
+    } else {
+      screen.log.write(msgB);
+      return 0;
+    }
+}
+
 var gps_heavy = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
@@ -2492,7 +2961,7 @@ var gps_diverse = func {
         pylon3.loadSet(pylonSets.singlegbu31);
         pylon4.loadSet(pylonSets.singlegbu54);
 
-        pylon5.loadSet(pylonSets.singlegbu31);
+        pylon5.loadSet(pylonSets.singlegbu32);
 
         pylon6.loadSet(pylonSets.singlegbu54);
         pylon7.loadSet(pylonSets.singlegbu31);
@@ -2519,7 +2988,7 @@ var gps_diverse = func {
 
 		setprop("payload/weight[12]/selected","Empty");
 		setprop("payload/weight[1]/selected","Droptank");
-        setprop("payload/weight[5]/selected","1 x GBU-31");
+        setprop("payload/weight[5]/selected","1 x GBU-32");
         setprop("payload/weight[9]/selected","Droptank");
 		setprop("payload/weight[15]/selected","Empty");
 
