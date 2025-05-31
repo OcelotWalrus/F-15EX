@@ -85,6 +85,15 @@ var PB18 = 12;
 var PB17 = 13;
 var PB16 = 14;
 
+
+# Utilities
+
+var deviation_normdeg = func(our_heading, target_bearing) {
+	var dev_norm = target_bearing - our_heading;
+    dev_norm = geo.normdeg180(dev_norm);
+	return dev_norm;
+}
+
 var MPCD_Station =
 {
     new : func (svg, ident)
@@ -602,7 +611,7 @@ var MPCD_Device =
             .set("z-index",3);
 
 
-        svg.maxB = 21;#taken from VSD
+        svg.maxB = 50; #taken from VSD - Jimmy L. Miles Note: was originally 21 but I changed it to 50 because I added datalink contacts
         svg.blep = setsize([],svg.maxB);
         svg.ship = setsize([],svg.maxB);
         svg.blepText = setsize([],svg.maxB);
@@ -715,19 +724,28 @@ var MPCD_Device =
                 .setFont(HSDfontFace).setFontSize(HSDlargeFontSize, 1.0);
         # TODO: these tables needs to be expanded:
         svg.shipLookup = {
-                "missile_frigate":          "",
-                "frigate":                  "",
-                "fleet":                    "",
-                "USS-LakeChamplain":        "",
-                "USS-NORMANDY":             "",
-                "USS-OliverPerry":          "",
-                "USS-SanAntonio":           "",
+                "missile_frigate":          "SHIP",
+                "frigate":                  "SHIP",
+                "fleet":                    "SHIP",
+                "USS-LakeChamplain":        "SHIP",
+                "USS-NORMANDY":             "SHIP",
+                "USS-OliverPerry":          "SHIP",
+                "USS-SanAntonio":           "SHIP",
+                "hunter":                   "BOAT",
         };
         svg.samLookup = {
-                "buk-m2":                   "11",
-                "S-75":                     "02",
-                "MIM104D":                  " P",
-                "s300":                     "20",
+                "buk-m2":                   "SAM",
+                "S-75":                     "SAM",
+                "S-200":                    "SAM",
+                "S-300":                    "SAM",
+                "MIM104D":                  "SAM",
+                "s300":                     "SAM",
+                "SA-6":                     "SAM",
+                "SA-3":                     "SAM",
+                "SA-3":                     "SAM",
+                "MIM-104D":                 "SAM",
+                "zsu-23":                "SHILKA",
+                "ZSU-IR":             "SHILKA-IR",
         };
         svg.typeLookup = {
                 "f-14b":                    "F",     #fighter
@@ -735,6 +753,7 @@ var MPCD_Device =
                 "F-15C":                    "F",
                 "F-15D":                    "F",
                 "F-16":                     "FB",#fighter bomber
+                "F-15EX":                   "FB",#fighter bomber
                 "YF-16":                    "F",
                 "JA37-Viggen":              "F",
                 "AJ37-Viggen":              "FB",
@@ -750,14 +769,19 @@ var MPCD_Device =
                 "Voyager-KC":               "TNKR",
                 "KC-10A":                   "TNKR",
                 "KC-10A-GE":                "TNKR",
-                "EC-137R":                  "AEW&C",#awacs airborne and groundborne
-                "RC-137R":                  "AEW&C",
-                "E-8R":                     "AEW&C",
-                "EC-137D":                  "AEW&C",
-                "gci":                      "AEW&C",
+                "EC-137R":                  "AWACS",#awacs airborne and groundborne
+                "RC-137R":                  "AWACS",
+                "E-3R":                     "AWACS",
+                "E-173R":                   "AWACS",
+                "E-8R":                     "AWACS",
+                "EC-137D":                  "AWACS",
+                "gci":                      "AWACS",
                 "MiG-29":                   "F",
                 "SU-27":                    "F",
                 "ch53e":                    "HELO",#heli
+                "Mil-Mi-8":                 "HELO",#heli
+                "ka50":                     "HELO",#heli
+                "mi24":                     "HELO",#heli
                 "MQ-9":                     "MC",#missile carrier
                 "QF-4E":                    "F",
                 "B1-B":                     "B",#bomber
@@ -854,7 +878,7 @@ var MPCD_Device =
                 # Before it was target's aircraft model, now it's radar mode
                 me.radar_mode = getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode");
                 me.radar_filter_mode = getprop("instrumentation/radar/radar-filter-mode");
-                
+
                 if (me.radar_filter_mode == 0) {
                     me.radar_filter_mode = "AIR";
                 } elsif (me.radar_filter_mode == 1) {
@@ -862,7 +886,7 @@ var MPCD_Device =
                 } else {
                     me.radar_filter_mode = "SEA";
                 }
-                
+
                 me.root.infoTgt.show();
                 if (me.radar_mode == 6) {
                     me.root.infoTgt.setText(sprintf("TWS AUTO %s", me.radar_filter_mode));
@@ -940,6 +964,117 @@ var MPCD_Device =
 
             me.foundLock = 0;
 
+            me.datalink_connections = datalink.get_all_callsigns();
+            me.datalink_online = me.datalink_connections != nil and size(me.datalink_connections);
+            foreach(contact; datalink.get_all_callsigns()) {
+                if (!me.datalink_online) {
+                    return;
+                }
+                me.contact_data = datalink.get_data(contact);
+                if (me.contact_data == nil or !me.contact_data.is_known()) {
+                    return;
+                }
+
+                foreach (rdr_contact; awg_9.tgts_list) {  # If it's a valid contact on our own radar, we don't display it as a datalink contact
+                    if (rdr_contact.get_display() == 1 and rdr_contact.get_Callsign() == contact) {
+                        return;
+                    }
+                }
+
+                me.friendly = me.contact_data.is_friendly();
+                me.hostile = me.contact_data.is_hostile();
+                me.neutral = !me.friendly and !me.hostile;
+                me.index = me.contact_data.index();
+
+                if (me.index == nil) {
+                    return;
+                }
+
+                #print(contact);
+                me.model = getprop("/ai/models/multiplayer["~me.index~"]/model-short");
+                me.lat = getprop("/ai/models/multiplayer["~me.index~"]/position/latitude-deg");
+                me.lon = getprop("/ai/models/multiplayer["~me.index~"]/position/longitude-deg");
+                me.alt = getprop("/ai/models/multiplayer["~me.index~"]/position/altitude-ft");
+                me.heading_true = getprop("/ai/models/multiplayer["~me.index~"]/orientation/true-heading-deg");
+
+                me.coord = geo.Coord.new().set_latlon(me.lat,me.lon,me.alt*FT2M);
+                me.range = me.coord.direct_distance_to(geo.aircraft_position()) * M2NM;
+
+                me.distPixels = me.range*me.root.NM2PIXEL;
+
+                me.relBearing = deviation_normdeg(me.myHeading, me.heading_true);
+
+                me.rot = me.heading_true;
+                me.rot -= me.myHeading;
+
+                if (me.friendly) {
+                    me.root.blep[me.i].setColor(0,1,0);  # green
+                    me.root.blepText[me.i].setColor(0,1,0);  # green
+                    me.root.ship[me.i].setColor(0,1,0);  # green
+                } elsif (me.hostile) {
+                    me.root.blep[me.i].setColor(1,0,0);  # red
+                    me.root.blepText[me.i].setColor(1,0,0);  # red
+                    me.root.ship[me.i].setColor(1,0,0);  # red
+                } else {
+                    me.root.blep[me.i].setColor(0,0,1);  # blue
+                    me.root.blepText[me.i].setColor(0,0,1);  # blue
+                    me.root.ship[me.i].setColor(0,0,1);  # blue
+                }
+
+                if (me.model!=nil and me.root.samLookup[me.model] != nil) {
+                    me.root.blep[me.i].hide();
+                    me.root.ship[me.i].hide();
+                    if (me.root.showSAM) {
+                        me.root.blepText[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
+                        me.root.blepText[me.i].setText(sprintf("%s", me.root.samLookup[me.model]));
+                        me.root.blepText[me.i].show();
+                    } else {
+                        me.root.blepText[me.i].hide();
+                    }
+                } else {
+                    if (me.model!=nil and me.root.shipLookup[me.model] != nil) {
+                        me.root.blep[me.i].hide();
+                        me.root.blepText[me.i].hide();
+                        me.root.blep[me.i].hide();
+                        if (me.root.showSHP) {
+                            me.root.ship[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
+                            me.root.ship[me.i].show();
+                        } else {
+                            me.root.ship[me.i].hide();
+                        }
+                    } else {
+                        if (me.root.showTGT) {
+                            me.root.ship[me.i].hide();
+                            me.root.blep[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
+                            me.root.blep[me.i].setRotation(me.rot*D2R);
+                            me.root.blep[me.i].show();
+                            me.root.blep[me.i].update();
+                            if (me.root.showDAT) {
+                                me.datType = "";
+                                if (me.model!=nil and me.root.typeLookup[me.model] != nil) {
+                                    me.datType = me.root.typeLookup[me.model]~"/";
+                                }
+                                me.root.blepText[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R)+12);
+                                me.root.blepText[me.i].setText(sprintf("%s%02d", me.datType,me.alt*0.001));
+                                me.root.blepText[me.i].show();
+                            } else {
+                                me.root.blepText[me.i].hide();
+                            }
+                        } else {
+                            me.root.ship[me.i].hide();
+                            me.root.blepText[me.i].hide();
+                            me.root.blep[me.i].hide();
+                        }
+                    }
+                }
+                me.i += 1;
+                if (me.i > ((me.root.maxB/2)-1)) {
+                    break;
+                }
+            }
+
+            print(me.i);
+
             foreach(contact; awg_9.tgts_list) {
                 if (contact.get_display() == 0) {
                     continue;
@@ -950,6 +1085,30 @@ var MPCD_Device =
 
                 me.rot = contact.get_heading();
                 me.rot -= me.myHeading;
+
+                me.contact_data = datalink.get_data(contact.get_Callsign());
+                if (me.contact_data == nil or !me.contact_data.is_known()) {
+                    me.unknown = 1;
+                }
+
+                if (!me.unknown) {
+                    me.friendly = me.contact_data.is_friendly();
+                    me.hostile = me.contact_data.is_hostile();
+                }
+
+                if (me.friendly) {
+                    me.root.blep[me.i].setColor(0,1,0);  # green
+                    me.root.blepText[me.i].setColor(0,1,0);  # green
+                    me.root.ship[me.i].setColor(0,1,0);  # green
+                } elsif (me.hostile) {
+                    me.root.blep[me.i].setColor(1,0,0);  # red
+                    me.root.blepText[me.i].setColor(1,0,0);  # red
+                    me.root.ship[me.i].setColor(1,0,0);  # red
+                } else {
+                    me.root.blep[me.i].setColor(1,1,0);  # yellow
+                    me.root.blepText[me.i].setColor(1,1,0);  # yellow
+                    me.root.ship[me.i].setColor(1,1,0);  # yellow
+                }
 
 
                 if (contact.get_model()!=nil and me.root.samLookup[contact.get_model()] != nil) {

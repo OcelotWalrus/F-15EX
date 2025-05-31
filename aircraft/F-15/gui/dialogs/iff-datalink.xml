@@ -87,23 +87,6 @@
         <layout>hbox</layout>
 
         <text>
-            <label>Datalink Power ON</label>
-        </text>
-
-        <checkbox>
-            <property>instrumentation/datalink/power</property>
-            <live>true</live>
-            <binding>
-                <command>property-toggle</command>
-                <property>instrumentation/datalink/power</property>
-            </binding>
-        </checkbox>
-    </group>
-    
-    <group>
-        <layout>hbox</layout>
-
-        <text>
             <label>IFF Power ON</label>
         </text>
 
@@ -113,6 +96,23 @@
             <binding>
                 <command>property-toggle</command>
                 <property>instrumentation/iff/power</property>
+            </binding>
+        </checkbox>
+    </group>
+
+    <group>
+        <layout>hbox</layout>
+
+        <text>
+            <label>Datalink Power ON</label>
+        </text>
+
+        <checkbox>
+            <property>instrumentation/datalink/power</property>
+            <live>true</live>
+            <binding>
+                <command>property-toggle</command>
+                <property>instrumentation/datalink/power</property>
             </binding>
         </checkbox>
     </group>
