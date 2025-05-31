@@ -589,7 +589,7 @@ var arm_selector = func() {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 5 ) {
-        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "GBU-12", "GBU-31", "GBU-32", "GBU-39", "GBU-54", "AGM-158C", "AGM-158A", "AGM-154A", "AGM-88E", "AGM-84D", "AGM-84E", "AGM-119A", "AGM-65B", "AGM-65D"];
+        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "GBU-12", "GBU-31", "GBU-32", "GBU-39", "GBU-54", "AGM-88E", "AGM-65B", "AGM-65D", "AGM-119A", "AGM-84D", "AGM-158C", "AGM-84E", "AGM-158A", "AGM-154A"];
         var count = 20 - selector_offset;  # length of the list (id 1 is 0 here)
         if (count < 0) {
             var selector_offset = 0;

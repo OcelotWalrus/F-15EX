@@ -1796,6 +1796,18 @@
                 <bool n="317" alias="/sim/model/f15/payload/selected/gbu-39-cft4"/>
                 <bool n="318" alias="/sim/model/f15/payload/selected/gbu-39-cft5"/>
                 <bool n="319" alias="/sim/model/f15/payload/selected/gbu-39-cft6"/>
+                <bool n="320" alias="/sim/model/f15/payload/selected/agm-65b-lx"/>
+                <bool n="321" alias="/sim/model/f15/payload/selected/agm-65b-rx"/>
+                <bool n="322" alias="/sim/model/f15/payload/selected/agm-65b-duo-l"/>
+                <bool n="323" alias="/sim/model/f15/payload/selected/agm-65b-duo-r"/>
+                <bool n="324" alias="/sim/model/f15/payload/selected/agm-65b-tri-l"/>
+                <bool n="325" alias="/sim/model/f15/payload/selected/agm-65b-tri-r"/>
+                <bool n="326" alias="/sim/model/f15/payload/selected/agm-65d-lx"/>
+                <bool n="327" alias="/sim/model/f15/payload/selected/agm-65d-rx"/>
+                <bool n="328" alias="/sim/model/f15/payload/selected/agm-65d-duo-l"/>
+                <bool n="329" alias="/sim/model/f15/payload/selected/agm-65d-duo-r"/>
+                <bool n="330" alias="/sim/model/f15/payload/selected/agm-65d-tri-l"/>
+                <bool n="331" alias="/sim/model/f15/payload/selected/agm-65d-tri-r"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -4260,7 +4272,7 @@
                     <script>awg_9.wcs_mode_toggle()</script>
                 </binding>
             </key>
-            
+
             <key n="33">
                 <name>!</name>
                 <desc>Toggle Radar AIR / SURFACE / MARINE Modes</desc>

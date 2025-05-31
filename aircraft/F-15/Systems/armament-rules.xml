@@ -1903,72 +1903,6 @@
       <and>
         <equals>
           <property>payload/armament/station/id-1-set</property>
-          <value>2 x AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-l</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-9-set</property>
-          <value>2 x AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-r</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-3-type</property>
-          <value>AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-l3</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-4-type</property>
-          <value>AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-l4</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-6-type</property>
-          <value>AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-r1</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-7-type</property>
-          <value>AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-r2</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-1-set</property>
           <value>2 x GBU-12</value>
         </equals>
       </and>
@@ -2095,83 +2029,6 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/gbu-12-cft-6</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-1-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-l</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-3-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-l3</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-4-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-l4</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-5-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-c</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-6-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-r1</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-7-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-r2</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-9-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-r</output>
   </logic>
   <logic>
     <input>
@@ -2337,50 +2194,6 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/agm-158a-r</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-12-type</property>
-          <value>AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-lx</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-15-type</property>
-          <value>AGM-65B</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65b-rx</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-12-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-lx</output>
-  </logic>
-  <logic>
-    <input>
-      <and>
-        <equals>
-          <property>payload/armament/station/id-15-type</property>
-          <value>AGM-65D</value>
-        </equals>
-      </and>
-    </input>
-    <output>sim/model/f15/payload/selected/agm-65d-rx</output>
   </logic>
   <logic>
     <input>
@@ -3668,5 +3481,137 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/gbu-39-cft6</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-set</property>
+          <value>2 x AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-set</property>
+          <value>2 x AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>2 x AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-duo-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>3 x AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-tri-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>2 x AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-duo-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>3 x AGM-65B</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65b-tri-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-12-set</property>
+          <value>2 x AGM-65D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65d-lx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-15-set</property>
+          <value>2 x AGM-65D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65d-rx</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>2 x AGM-65D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65d-duo-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>3 x AGM-65D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65d-tri-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>2 x AGM-65D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65d-duo-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>3 x AGM-65D</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-65d-tri-r</output>
   </logic>
 </PropertyList>

@@ -4,7 +4,7 @@
     <path>Aircraft/F-15/Models/Stores/Racks/LAU-114/LAU-114.xml</path>
 
     <model>
-        <name>AGM65B-9-0</name>
+        <name>AGM65B-12-0</name>
         <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
         <offsets>
             <x-m>-0</x-m>
@@ -14,7 +14,7 @@
     </model>
 
     <model>
-        <name>AGM65B-9-1</name>
+        <name>AGM65B-12-1</name>
         <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
         <offsets>
             <x-m>-0</x-m>
@@ -25,29 +25,29 @@
 
     <animation>
         <type>select</type>
-        <object-name>AGM65B-9-0</object-name>
+        <object-name>AGM65B-12-0</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-9-type</property>
+                <property>payload/armament/station/id-12-type</property>
                 <value>AGM-65B</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-9-count</property>
-                <value>0</value>
+                <property>payload/armament/station/id-12-count</property>
+                <value>1</value>
             </greater-than>
         </condition>
     </animation>
     <animation>
         <type>select</type>
-        <object-name>AGM65B-9-1</object-name>
+        <object-name>AGM65B-12-1</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-9-type</property>
+                <property>payload/armament/station/id-12-type</property>
                 <value>AGM-65B</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-9-count</property>
-                <value>1</value>
+                <property>payload/armament/station/id-12-count</property>
+                <value>0</value>
             </greater-than>
         </condition>
     </animation>

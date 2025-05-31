@@ -4,8 +4,8 @@
     <path>Aircraft/F-15/Models/Stores/Racks/LAU-114/LAU-114.xml</path>
 
     <model>
-        <name>AGM65B-9-0</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <name>AGM65D-15-0</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65D/AGM-65D.xml</path>
         <offsets>
             <x-m>-0</x-m>
             <y-m>-0.332</y-m>
@@ -14,8 +14,8 @@
     </model>
 
     <model>
-        <name>AGM65B-9-1</name>
-        <path>Aircraft/F-15/Models/Stores/AGM-65B/AGM-65B.xml</path>
+        <name>AGM65D-15-1</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-65D/AGM-65D.xml</path>
         <offsets>
             <x-m>-0</x-m>
             <y-m>0.332</y-m>
@@ -25,28 +25,28 @@
 
     <animation>
         <type>select</type>
-        <object-name>AGM65B-9-0</object-name>
+        <object-name>AGM65D-15-0</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-9-type</property>
-                <value>AGM-65B</value>
+                <property>payload/armament/station/id-15-type</property>
+                <value>AGM-65D</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-9-count</property>
+                <property>payload/armament/station/id-15-count</property>
                 <value>0</value>
             </greater-than>
         </condition>
     </animation>
     <animation>
         <type>select</type>
-        <object-name>AGM65B-9-1</object-name>
+        <object-name>AGM65D-15-1</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-9-type</property>
-                <value>AGM-65B</value>
+                <property>payload/armament/station/id-15-type</property>
+                <value>AGM-65D</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-9-count</property>
+                <property>payload/armament/station/id-15-count</property>
                 <value>1</value>
             </greater-than>
         </condition>

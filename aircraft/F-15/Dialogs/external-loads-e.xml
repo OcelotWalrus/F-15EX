@@ -1691,8 +1691,8 @@
                             <value>2 x CATM-120D AMRAAM Dummy</value>
                             <value>2 x AIM-9X Block I Sidewinder</value>
                             <value>2 x AIM-120D AMRAAM</value>
-                            <value>1 x AGM-65B</value>
-                            <value>1 x AGM-65D</value>
+                            <value>2 x AGM-65B</value>
+                            <value>2 x AGM-65D</value>
                             <value>1 x AGM-84D</value>
                             <value>1 x AGM-84E</value>
                             <value>1 x AGM-88E</value>
@@ -1703,7 +1703,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-12-type") == "AIM-9X" or getprop("payload/armament/station/id-12-type") == "AIM-120D") {
+									if (getprop("payload/armament/station/id-12-type") == "AIM-9X" or getprop("payload/armament/station/id-12-type") == "AIM-120D" or getprop("payload/armament/station/id-12-type") == "AGM-65B" or getprop("payload/armament/station/id-12-type") == "AGM-65D") {
 										setprop("payload/armament/station/id-12-count", 2);
 									} else {
 										setprop("payload/armament/station/id-12-count", 1);
@@ -1854,7 +1854,9 @@
 							<value>4 x GBU-39</value>
 							<value>2 x GBU-54</value>
 							<value>2 x AGM-65B</value>
-							<value>1 x AGM-65D</value>
+							<value>3 x AGM-65B</value>
+							<value>2 x AGM-65D</value>
+							<value>3 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
 							<value>1 x AGM-84E</value>
 							<value>1 x AGM-88E</value>
@@ -1869,9 +1871,9 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-1-type") == "AIM-9X" or getprop("payload/armament/station/id-1-type") == "AIM-120D" or getprop("payload/armament/station/id-1-type") == "CBU-105" or getprop("payload/armament/station/id-1-type") == "AGM-65B" or getprop("payload/armament/station/id-1-type") == "GBU-12" or getprop("payload/armament/station/id-1-type") == "GBU-54" or getprop("payload/armament/station/id-1-type") == "GBU-32") {
+									if (getprop("payload/armament/station/id-1-type") == "AIM-9X" or getprop("payload/armament/station/id-1-type") == "AIM-120D" or getprop("payload/armament/station/id-1-type") == "CBU-105" or getprop("payload/armament/station/id-1-set") == "2 x AGM-65B" or getprop("payload/armament/station/id-1-set") == "2 x AGM-65D" or getprop("payload/armament/station/id-1-type") == "GBU-12" or getprop("payload/armament/station/id-1-type") == "GBU-54" or getprop("payload/armament/station/id-1-type") == "GBU-32") {
 										setprop("payload/armament/station/id-1-count", 2);
-									} elsif (getprop("payload/armament/station/id-1-type") == "MK-83" or getprop("payload/armament/station/id-1-type") == "CBU-87") {
+									} elsif (getprop("payload/armament/station/id-1-type") == "MK-83" or getprop("payload/armament/station/id-1-type") == "CBU-87" or getprop("payload/armament/station/id-1-set") == "3 x AGM-65B" or getprop("payload/armament/station/id-1-set") == "3 x AGM-65D") {
 										setprop("payload/armament/station/id-1-count", 3);
 									} elsif (getprop("payload/armament/station/id-1-type") == "GBU-39") {
 										setprop("payload/armament/station/id-1-count", 4);
@@ -1975,8 +1977,6 @@
 							<value>1 x GBU-32</value>
 							<value>4 x GBU-39</value>
 							<value>1 x GBU-54</value>
-							<value>1 x AGM-65B</value>
-							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
 							<value>1 x AGM-158C</value>
@@ -2045,8 +2045,6 @@
 							<value>1 x GBU-32</value>
 							<value>4 x GBU-39</value>
 							<value>1 x GBU-54</value>
-							<value>1 x AGM-65B</value>
-							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
 							<value>1 x AGM-158C</value>
@@ -2106,7 +2104,6 @@
 							<value>3 x CBU-87</value>
 							<value>1 x GBU-31</value>
 							<value>1 x GBU-32</value>
-							<value>1 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
 							<value>1 x AGM-84E</value>
 							<value>1 x AGM-154A</value>
@@ -2174,8 +2171,6 @@
 							<value>1 x GBU-32</value>
 							<value>4 x GBU-39</value>
 							<value>1 x GBU-54</value>
-							<value>1 x AGM-65B</value>
-							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
 							<value>1 x AGM-158C</value>
@@ -2244,8 +2239,6 @@
 							<value>1 x GBU-32</value>
 							<value>4 x GBU-39</value>
 							<value>1 x GBU-54</value>
-							<value>1 x AGM-65B</value>
-							<value>1 x AGM-65D</value>
 							<value>1 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
 							<value>1 x AGM-158C</value>
@@ -2361,7 +2354,9 @@
 							<value>4 x GBU-39</value>
 							<value>2 x GBU-54</value>
 							<value>2 x AGM-65B</value>
-							<value>1 x AGM-65D</value>
+							<value>3 x AGM-65B</value>
+							<value>2 x AGM-65D</value>
+							<value>3 x AGM-65D</value>
 							<value>1 x AGM-84D</value>
 							<value>1 x AGM-84E</value>
 							<value>1 x AGM-88E</value>
@@ -2376,9 +2371,9 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-9-type") == "AIM-9X" or getprop("payload/armament/station/id-9-type") == "AIM-120D" or getprop("payload/armament/station/id-9-type") == "CBU-105" or getprop("payload/armament/station/id-9-type") == "AGM-65B" or getprop("payload/armament/station/id-9-type") == "GBU-12" or getprop("payload/armament/station/id-9-type") == "GBU-54" or getprop("payload/armament/station/id-9-type") == "GBU-32") {
+									if (getprop("payload/armament/station/id-9-type") == "AIM-9X" or getprop("payload/armament/station/id-9-type") == "AIM-120D" or getprop("payload/armament/station/id-9-type") == "CBU-105" or getprop("payload/armament/station/id-9-set") == "2 x AGM-65B" or getprop("payload/armament/station/id-9-set") == "2 x AGM-65D" or getprop("payload/armament/station/id-9-type") == "GBU-12" or getprop("payload/armament/station/id-9-type") == "GBU-54" or getprop("payload/armament/station/id-9-type") == "GBU-32") {
 										setprop("payload/armament/station/id-9-count", 2);
-									} elsif (getprop("payload/armament/station/id-9-type") == "MK-83" or getprop("payload/armament/station/id-9-type") == "CBU-87") {
+									} elsif (getprop("payload/armament/station/id-9-type") == "MK-83" or getprop("payload/armament/station/id-9-type") == "CBU-87" or getprop("payload/armament/station/id-9-set") == "3 x AGM-65B" or getprop("payload/armament/station/id-9-set") == "3 x AGM-65D") {
 										setprop("payload/armament/station/id-9-count", 3);
 									} elsif (getprop("payload/armament/station/id-9-type") == "GBU-39") {
 										setprop("payload/armament/station/id-9-count", 4);
@@ -2516,8 +2511,8 @@
                             <value>2 x CATM-120D AMRAAM Dummy</value>
 							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
-                            <value>1 x AGM-65B</value>
-                            <value>1 x AGM-65D</value>
+                            <value>2 x AGM-65B</value>
+                            <value>2 x AGM-65D</value>
                             <value>1 x AGM-84D</value>
                             <value>1 x AGM-84E</value>
                             <value>1 x AGM-88E</value>
@@ -2528,7 +2523,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-15-type") == "AIM-9X" or getprop("payload/armament/station/id-15-type") == "AIM-120D") {
+									if (getprop("payload/armament/station/id-15-type") == "AIM-9X" or getprop("payload/armament/station/id-15-type") == "AIM-120D" or getprop("payload/armament/station/id-15-type") == "AGM-65B" or getprop("payload/armament/station/id-15-type") == "AGM-65D") {
 										setprop("payload/armament/station/id-15-count", 2);
 									} else {
 										setprop("payload/armament/station/id-15-count", 1);
