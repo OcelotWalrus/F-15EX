@@ -482,6 +482,22 @@ var F15HUD = {
 	            .setColor(0,1,0,1)
 	            .setFont(aircraft.HUDFont)
 	            .setFontSize(11, 1.1);
+	            
+	        # Texts when refueling bay's open, or when fuel's gettin dumped
+	        obj.fuel_amount = obj.WarningTexts.createChild("text")
+	            .setText("Total x")
+	            .setTranslation(0,20)
+	            .setAlignment("center-top")
+	            .setColor(0,1,0,1)
+	            .setFont(aircraft.HUDFont)
+	            .setFontSize(8, 1.1);
+	        obj.fuel_now = obj.WarningTexts.createChild("text")
+	            .setText("Curr y")
+	            .setTranslation(0,30)
+	            .setAlignment("center-top")
+	            .setColor(0,1,0,1)
+	            .setFont(aircraft.HUDFont)
+	            .setFontSize(8, 1.1);
         #
         #
         # using the new property manager to update items on the HUD.
@@ -525,8 +541,23 @@ var F15HUD = {
 
                                           obj.heading_tape.setTranslation (obj.heading_tape_position,0);
                                       }),
-            props.UpdateManager.FromHashList(["OrientationRollDeg","OrientationPitchDeg"], 0.025, func(val)
+            props.UpdateManager.FromHashList(["OrientationRollDeg","OrientationPitchDeg", "IsRefueling", "IsDumpingFuel", "FuelPercentage", "CurrentFuelLb"], 0.025, func(val)
                                     {
+                                        if (val.IsRefueling == 1) {
+                                            obj.fuel_amount.setText(sprintf("REFUELING - %s/100", math.floor(val.FuelPercentage * 100)));
+                                            obj.fuel_now.setText(sprintf("%s LBS", math.floor(val.CurrentFuelLb)));
+                                            obj.fuel_amount.setVisible(1);
+                                            obj.fuel_now.setVisible(1);
+                                        } elsif (val.IsDumpingFuel == 1) {
+                                            obj.fuel_amount.setText(sprintf("DUMPING - %s/100", math.floor(val.FuelPercentage * 100)));
+                                            obj.fuel_now.setText(sprintf("%s LBS", math.floor(val.CurrentFuelLb)));
+                                            obj.fuel_amount.setVisible(1);
+                                            obj.fuel_now.setVisible(1);
+                                        } else {
+                                            obj.fuel_amount.setVisible(0);
+                                            obj.fuel_now.setVisible(0);
+                                        }
+                                    
                                         obj.roll_deg = val.OrientationRollDeg;
                                         obj.roll_rad = -obj.roll_deg*3.14159/180.0;
                                         obj.roll_pointer.setRotation (obj.roll_rad);
@@ -537,10 +568,11 @@ var F15HUD = {
                                         obj.ladder.setRotation(obj.roll_rad);
                                         obj.ladder.setTranslation(ptx,pty);
 
-                                        if (obj.pitch_deg>0)
-                                          obj.ladder.setCenter (110,900-obj.pitch_deg*(1815/90));
-                                        else
-                                          obj.ladder.setCenter (110,900+obj.pitch_deg*-(1772/90));
+                                        if (obj.pitch_deg > 0) {
+                                            obj.ladder.setCenter (110,900-obj.pitch_deg*(1815/90));
+                                        } else {
+                                            obj.ladder.setCenter (110,900+obj.pitch_deg*-(1772/90));
+                                        }
                                     }),
             props.UpdateManager.FromHashList(["Alpha", "OrientationSideSlipDeg"], 0.001, func(val)
                                                         {
@@ -2310,6 +2342,10 @@ input = {
 		GunsMode                                : "sim/model/f15/armament/gun-sight",
 		GroundAlt                               : "instrumentation/tfs/ground-altitude-ft-now",
 		RadarFilterMode                         : "instrumentation/radar/radar-filter-mode",
+		IsRefueling                             : "fdm/jsbsim/propulsion/refuel",
+		IsDumpingFuel                           : "fdm/jsbsim/propulsion/fuel_dump",
+		CurrentFuelLb                           : "sim/model/f15/instrumentation/fuel-gauges/total-display",
+		FuelPercentage                          : "consumables/fuel/total-fuel-norm",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
