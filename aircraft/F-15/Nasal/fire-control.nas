@@ -1252,6 +1252,8 @@ var printfDebug = func {if (debug == 1) call(printf,arg);};
 var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-32", "GBU-54", "GBU-39"];
 # List of weapons that can be ripple/dual dropped:
 var dualWeapons = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-32", "GBU-54", "GBU-39"];
+var defaultRocket = "LAU-68C";
+var defaultCannon = "20mm Cannon";
 var getCompleteRadarTargetsList = func {
 	# A list of all MP/AI aircraft/ships/surface-targets around the aircraft.
 	return awg_9.tgts_list;

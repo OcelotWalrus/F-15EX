@@ -342,7 +342,11 @@ var armament_update = func {
 
     # Update selected weapon on the HUD
     if (WeaponSelector.getValue() == 0) {
-        setprop("sim/model/f15/systems/armament/selected-arm", "M61A1");
+        if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "LAU-68C") {
+            setprop("sim/model/f15/systems/armament/selected-arm", "M61A1");
+        } elsif (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type == "LAU-68C") {
+            setprop("sim/model/f15/systems/armament/selected-arm", "M151");
+        }
     }
 
     # Turn sidewinder cooling lights On/Off.
@@ -553,7 +557,22 @@ var arm_selector = func() {
     var stick_s = WeaponSelector.getValue();
     var selector_offset = getprop("controls/armament/selected-armament-offset");
     if ( stick_s == 0 ) {
-        var p = pylons.fcs.selectWeapon("20mm Cannon");
+        var wps = ["LAU-68C", "20mm Cannon"];
+        var count = 1 - selector_offset;  # length of the list (id 1 is 0 here)
+        if (count < 0) {
+            var selector_offset = 0;
+            setprop("controls/armament/selected-armament-offset", 0);
+        }
+        var p = pylons.fcs.selectWeapon("");
+        while (p == nil and count >= 0) {
+            cur_wpn = wps[count];
+            var p = pylons.fcs.selectWeapon(cur_wpn);
+            setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
+            count = count -1;
+        }
+        if (p == nil) {
+            setprop("sim/model/f15/systems/armament/selected-arm", "");
+        }
     } elsif ( stick_s == 1 ) {
         var wps = ["AIM-9", "AIM-9X", "CATM-9X"];
         var count = 2 - selector_offset;  # length of the list (id 1 is 0 here)

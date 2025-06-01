@@ -2049,6 +2049,33 @@
             </volume>
         </aim-120d-signal>
 
+        <lau68-launch>
+            <name>lau68-launch</name>
+            <path>Aircraft/F-15/Sounds/hydra-launch.wav</path>
+            <mode>once</mode>
+            <condition>
+                <or>
+                    <property>fdm/jsbsim/fcs/hydra1ltrigger</property>
+                    <property>fdm/jsbsim/fcs/hydra1ctrigger</property>
+                    <property>fdm/jsbsim/fcs/hydra1rtrigger</property>
+                    <property>fdm/jsbsim/fcs/hydra9ltrigger</property>
+                    <property>fdm/jsbsim/fcs/hydra9ctrigger</property>
+                    <property>fdm/jsbsim/fcs/hydra9rtrigger</property>
+                </or>
+            </condition>
+            <reference-dist>25</reference-dist>
+            <max-dist>10000</max-dist>
+            <position>
+                <x> 3.15986 </x>
+                <y> -2.70311 </y>
+                <z> -0.67645 </z>
+            </position>
+            <volume>
+                <factor>0.75</factor>
+                <max>1</max>
+            </volume>
+        </lau68-launch>
+
         <missile1>
             <name>missile1</name>
             <path>Aircraft/F-15/Sounds/AIM-discharge.wav</path>

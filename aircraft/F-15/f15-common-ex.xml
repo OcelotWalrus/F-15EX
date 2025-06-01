@@ -882,8 +882,9 @@
                 <ejected type="bool">false</ejected>
                 <force-tgp type="bool">false</force-tgp>
                 <stores>
-                    <nav-mounted type="int">0</nav-mounted>
-                    <tgp-mounted type="int">0</tgp-mounted>
+                    <nav-mounted type="bool">false</nav-mounted>
+                    <tgp-mounted type="bool">false</tgp-mounted>
+                    <ecm-mounted type="bool">false</ecm-mounted>
                 </stores>
                 <fcs>
                     <stby-mode type="bool">false</stby-mode>
@@ -1808,6 +1809,8 @@
                 <bool n="329" alias="/sim/model/f15/payload/selected/agm-65d-duo-r"/>
                 <bool n="330" alias="/sim/model/f15/payload/selected/agm-65d-tri-l"/>
                 <bool n="331" alias="/sim/model/f15/payload/selected/agm-65d-tri-r"/>
+                <bool n="332" alias="/sim/model/f15/payload/selected/lau68-l"/>
+                <bool n="333" alias="/sim/model/f15/payload/selected/lau68-r"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2235,6 +2238,10 @@
                 <gals>600</gals>
             </opt>
             <opt>
+                <name>3 x M151</name>
+                <lbs>625.0</lbs>
+            </opt>
+            <opt>
                 <name>2 x AIM-9X Block I Sidewinder</name>
                 <lbs>402.0</lbs>
             </opt>
@@ -2391,6 +2398,10 @@
                 <name>Droptank</name>
                 <lbs>271.0</lbs>
                 <gals>600</gals>
+            </opt>
+            <opt>
+                <name>3 x M151</name>
+                <lbs>625.0</lbs>
             </opt>
             <opt>
                 <name>2 x AIM-9X Block I Sidewinder</name>

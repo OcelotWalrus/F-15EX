@@ -482,7 +482,7 @@ var F15HUD = {
 	            .setColor(0,1,0,1)
 	            .setFont(aircraft.HUDFont)
 	            .setFontSize(11, 1.1);
-	            
+
 	        # Texts when refueling bay's open, or when fuel's gettin dumped
 	        obj.fuel_amount = obj.WarningTexts.createChild("text")
 	            .setText("Total x")
@@ -557,7 +557,7 @@ var F15HUD = {
                                             obj.fuel_amount.setVisible(0);
                                             obj.fuel_now.setVisible(0);
                                         }
-                                    
+
                                         obj.roll_deg = val.OrientationRollDeg;
                                         obj.roll_rad = -obj.roll_deg*3.14159/180.0;
                                         obj.roll_pointer.setRotation (obj.roll_rad);
@@ -1022,18 +1022,24 @@ var F15HUD = {
 																obj.window18.setVisible(0);
 
                                                                 if (w_s == 0) {
-                                                                    obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
 																	eegsShow = 1;
 																	obj.boreSymbol.show();
-																	# Show GUNS mode
-																	if (val.GunsMode == 0) {
-																		obj.window17.setText("FUNNEL");
-																	} elsif (val.GunsMode == 1) {
-																		obj.window17.setText("STRF");
-																	} elsif (val.GunsMode == 2) {
-																		obj.window17.setText("SNAP");
+																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "LAU-68C") {
+	                                                                    obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
+																		# Show GUNS mode
+																		if (val.GunsMode == 0) {
+																			obj.window17.setText("FUNNEL");
+																		} elsif (val.GunsMode == 1) {
+																			obj.window17.setText("STRF");
+																		} elsif (val.GunsMode == 2) {
+																			obj.window17.setText("SNAP");
+																		} else {
+																			obj.window17.setText("SIGHT");
+																		}
 																	} else {
-																		obj.window17.setText("SIGHT");
+																		obj.window2.setText(sprintf("%3d",pylons.fcs.getAmmo()));
+																		# Show GUNS mode
+																		obj.window17.setText("STRF");
 																	}
 																	obj.window17.setVisible(1);
                                                                 } else if (w_s == 1) {
@@ -1790,7 +1796,10 @@ return obj;
 	   #note: this stuff is expensive like hell to compute, but..lets do it anyway.
 	   var gunSight = getprop("sim/model/f15/armament/gun-sight");
 	   var st = systime();
-	   me.hydra = 0;  # F-15EX doesn't use LAU-68C, so hydra alaways off
+	   me.hydra = 0;
+	   if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type == "LAU-68C") {
+	   		me.hydra = 1;
+	   }
 	   if (awg_9.active_u != nil and awg_9.active_u.get_display()) {
 		   me.designatedDistanceFT = awg_9.active_u.get_range() * 6000;  # conversion from nm to ft
 	   } else {
@@ -1821,7 +1830,7 @@ return obj;
 		   me.drawSTRFPipper = 0;
 		   me.drawGunAim = 0;
 		   me.strfRange = 24000;
-		   if(gunSight == 1 or me.hydra) {  # STFR not adapted yet (to the F-15 model)
+		   if (gunSight == 1 or me.hydra) {
 			   me.groundAltDiffLastPointFT = nil;
 			   var currSegmentPt = 0;
 			   for (currSegmentPt = 0;currSegmentPt < me.funnelPartsMax;currSegmentPt+=1) {

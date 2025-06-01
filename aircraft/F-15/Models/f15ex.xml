@@ -5830,6 +5830,23 @@
         </condition>
     </animation>
 
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>lau68-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[332]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>lau68-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[333]</property>
+        </condition>
+    </animation>
+
     <!-- disable old MK-84s and GBU-10s-->
     <animation>
         <type>select</type>
@@ -7357,6 +7374,25 @@
              <pitch-deg>0.993</pitch-deg>
              <heading-deg>-0.118</heading-deg>
              <roll-deg>-155</roll-deg>
+        </offsets>
+    </model>
+
+    <model>
+        <name>lau68-l</name>
+        <path>Aircraft/F-15/Models/Stores/LAU-68C/ter-9a-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>lau68-r</name>
+        <path>Aircraft/F-15/Models/Stores/LAU-68C/ter-9a-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.15</z-m>
         </offsets>
     </model>
 

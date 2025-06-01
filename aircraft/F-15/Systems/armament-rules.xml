@@ -3614,4 +3614,26 @@
     </input>
     <output>sim/model/f15/payload/selected/agm-65d-tri-r</output>
   </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>3 x M151</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/lau68-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>3 x M151</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/lau68-r</output>
+  </logic>
 </PropertyList>
