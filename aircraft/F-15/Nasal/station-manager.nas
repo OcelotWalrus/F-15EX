@@ -13,6 +13,8 @@
 var fdm = getprop("/sim/flight-model");
 var baseGui = fdm=="jsb"?"payload":"sim";
 
+var telemetry_weapons = [];
+
 var Station = {
 # pylon or fixed mounted weapon on the aircraft
 	new: func (name, id, position, sets, guiID, pointmassNode, operableFunction = nil, activeFunction = nil) {
@@ -190,6 +192,37 @@ var Station = {
 									}
 								} else {
 									setprop("controls/armament/lrsam-updated", 0);
+								}
+
+								# Transmit weapon's data over datalink
+								wpn_coords = struct.weapon_position;
+								wpn_heading = struct.weapon_heading;
+								wpn_dist = struct.dist_m*M2NM;
+								callsign = sprintf("AGM158C-%s", struct.callsign);  # Create the callsign of the weapon using pattern `AGM-158C-<tgt callsign>`
+
+								# If there's already this callsign (because multiple weapons of the same type got the same target, we add a character at the end to differentiate 'em)
+								#foreach(wpn; telemetry_weapons) {
+								#	if (wpn == callsign) {
+								#		callsign = sprintf("AGM158C-%s-BIS", struct.callsign);
+								#	}
+								#}
+								# TODO: Find a way to track weapons with the same target at once!
+
+								setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/position/lat", wpn_coords.lat());
+								setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/position/lon", wpn_coords.lon());
+								setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/position/alt", wpn_coords.alt()*M2FT);
+								setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/heading-true", wpn_heading);
+								setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/direct-dist-to-tgt", wpn_dist);
+								setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/last-time-updated", getprop("sim/time/elapsed-sec"));  # used to delete it if it's not been updated for too long
+
+								already_registered = 0;
+								foreach(wpn; telemetry_weapons) {
+									if (wpn == callsign) {
+										already_registered = 1;
+									}
+								}
+								if (already_registered == 0) {
+									append(telemetry_weapons, callsign);
 								}
 
 								# Beyond 70nmi, keeps a FL320 altitude, then till 35nmi, FL180 and then lower than 25nmi starts sea-skimming at FL002

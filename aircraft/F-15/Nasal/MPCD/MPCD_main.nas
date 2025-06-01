@@ -611,11 +611,11 @@ var MPCD_Device =
             .set("z-index",3);
 
 
-        svg.maxB = 50; #taken from VSD - Jimmy L. Miles Note: was originally 21 but I changed it to 50 because I added datalink contacts
-        svg.blep = setsize([],svg.maxB);
-        svg.ship = setsize([],svg.maxB);
-        svg.blepText = setsize([],svg.maxB);
-        for (var i = 0;i<svg.maxB;i+=1) {
+        svg.maxB = 50; #taken from VSD - Jimmy L. Miles Note: was originally 21 but I changed it to 50 because I added datalink contacts  # there are actually 7 additionally for telemetry-compatible ordinance
+        svg.blep = setsize([],svg.maxB+7);
+        svg.ship = setsize([],svg.maxB+7);
+        svg.blepText = setsize([],svg.maxB+7);
+        for (var i = 0;i<(svg.maxB+7);i+=1) {
             svg.blep[i] = svg.p_HSDmyPos.createChild("path")
                     .moveTo(8,12)
                     .lineTo(0,0)
@@ -964,20 +964,24 @@ var MPCD_Device =
 
             me.foundLock = 0;
 
+
+            # The following code - made by Jimmy L. Miles - is used to display datalink contacts on the SIT, using different color codes whether they're friendly, hostile, neutral, or unknown
             me.datalink_connections = datalink.get_all_callsigns();
             me.datalink_online = me.datalink_connections != nil and size(me.datalink_connections);
+            datalink_contacts_over = 0;
             foreach(contact; datalink.get_all_callsigns()) {
-                if (!me.datalink_online) {
-                    return;
+                pass = 0;
+                if (!me.datalink_online or datalink_contacts_over == 1) {
+                    pass = 1;
                 }
                 me.contact_data = datalink.get_data(contact);
                 if (me.contact_data == nil or !me.contact_data.is_known()) {
-                    return;
+                    pass = 1;
                 }
 
                 foreach (rdr_contact; awg_9.tgts_list) {  # If it's a valid contact on our own radar, we don't display it as a datalink contact
                     if (rdr_contact.get_display() == 1 and rdr_contact.get_Callsign() == contact) {
-                        return;
+                        pass = 1;
                     }
                 }
 
@@ -987,93 +991,93 @@ var MPCD_Device =
                 me.index = me.contact_data.index();
 
                 if (me.index == nil) {
-                    return;
+                    pass = 1;
                 }
 
-                #print(contact);
-                me.model = getprop("/ai/models/multiplayer["~me.index~"]/model-short");
-                me.lat = getprop("/ai/models/multiplayer["~me.index~"]/position/latitude-deg");
-                me.lon = getprop("/ai/models/multiplayer["~me.index~"]/position/longitude-deg");
-                me.alt = getprop("/ai/models/multiplayer["~me.index~"]/position/altitude-ft");
-                me.heading_true = getprop("/ai/models/multiplayer["~me.index~"]/orientation/true-heading-deg");
+                if (pass != 1) {
+                    #print(contact);
+                    me.model = getprop("/ai/models/multiplayer["~me.index~"]/model-short");
+                    me.lat = getprop("/ai/models/multiplayer["~me.index~"]/position/latitude-deg");
+                    me.lon = getprop("/ai/models/multiplayer["~me.index~"]/position/longitude-deg");
+                    me.alt = getprop("/ai/models/multiplayer["~me.index~"]/position/altitude-ft");
+                    me.heading_true = getprop("/ai/models/multiplayer["~me.index~"]/orientation/true-heading-deg");
 
-                me.coord = geo.Coord.new().set_latlon(me.lat,me.lon,me.alt*FT2M);
-                me.range = me.coord.direct_distance_to(geo.aircraft_position()) * M2NM;
+                    me.coord = geo.Coord.new().set_latlon(me.lat,me.lon,me.alt*FT2M);
+                    me.range = me.coord.direct_distance_to(geo.aircraft_position()) * M2NM;
 
-                me.distPixels = me.range*me.root.NM2PIXEL;
+                    me.distPixels = me.range*me.root.NM2PIXEL;
 
-                me.relBearing = deviation_normdeg(me.myHeading, me.heading_true);
+                    me.relBearing = deviation_normdeg(me.myHeading, me.heading_true);
 
-                me.rot = me.heading_true;
-                me.rot -= me.myHeading;
+                    me.rot = me.heading_true;
+                    me.rot -= me.myHeading;
 
-                if (me.friendly) {
-                    me.root.blep[me.i].setColor(0,1,0);  # green
-                    me.root.blepText[me.i].setColor(0,1,0);  # green
-                    me.root.ship[me.i].setColor(0,1,0);  # green
-                } elsif (me.hostile) {
-                    me.root.blep[me.i].setColor(1,0,0);  # red
-                    me.root.blepText[me.i].setColor(1,0,0);  # red
-                    me.root.ship[me.i].setColor(1,0,0);  # red
-                } else {
-                    me.root.blep[me.i].setColor(0,0,1);  # blue
-                    me.root.blepText[me.i].setColor(0,0,1);  # blue
-                    me.root.ship[me.i].setColor(0,0,1);  # blue
-                }
-
-                if (me.model!=nil and me.root.samLookup[me.model] != nil) {
-                    me.root.blep[me.i].hide();
-                    me.root.ship[me.i].hide();
-                    if (me.root.showSAM) {
-                        me.root.blepText[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
-                        me.root.blepText[me.i].setText(sprintf("%s", me.root.samLookup[me.model]));
-                        me.root.blepText[me.i].show();
+                    if (me.friendly) {
+                        me.root.blep[me.i].setColor(0,1,0);  # green
+                        me.root.blepText[me.i].setColor(0,1,0);  # green
+                        me.root.ship[me.i].setColor(0,1,0);  # green
+                    } elsif (me.hostile) {
+                        me.root.blep[me.i].setColor(1,0,0);  # red
+                        me.root.blepText[me.i].setColor(1,0,0);  # red
+                        me.root.ship[me.i].setColor(1,0,0);  # red
                     } else {
-                        me.root.blepText[me.i].hide();
+                        me.root.blep[me.i].setColor(0,0,1);  # blue
+                        me.root.blepText[me.i].setColor(0,0,1);  # blue
+                        me.root.ship[me.i].setColor(0,0,1);  # blue
                     }
-                } else {
-                    if (me.model!=nil and me.root.shipLookup[me.model] != nil) {
+
+                    if (me.model!=nil and me.root.samLookup[me.model] != nil) {
                         me.root.blep[me.i].hide();
-                        me.root.blepText[me.i].hide();
-                        me.root.blep[me.i].hide();
-                        if (me.root.showSHP) {
-                            me.root.ship[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
-                            me.root.ship[me.i].show();
+                        me.root.ship[me.i].hide();
+                        if (me.root.showSAM) {
+                            me.root.blepText[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
+                            me.root.blepText[me.i].setText(sprintf("%s", me.root.samLookup[me.model]));
+                            me.root.blepText[me.i].show();
                         } else {
-                            me.root.ship[me.i].hide();
+                            me.root.blepText[me.i].hide();
                         }
                     } else {
-                        if (me.root.showTGT) {
-                            me.root.ship[me.i].hide();
-                            me.root.blep[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
-                            me.root.blep[me.i].setRotation(me.rot*D2R);
-                            me.root.blep[me.i].show();
-                            me.root.blep[me.i].update();
-                            if (me.root.showDAT) {
-                                me.datType = "";
-                                if (me.model!=nil and me.root.typeLookup[me.model] != nil) {
-                                    me.datType = me.root.typeLookup[me.model]~"/";
-                                }
-                                me.root.blepText[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R)+12);
-                                me.root.blepText[me.i].setText(sprintf("%s%02d", me.datType,me.alt*0.001));
-                                me.root.blepText[me.i].show();
-                            } else {
-                                me.root.blepText[me.i].hide();
-                            }
-                        } else {
-                            me.root.ship[me.i].hide();
+                        if (me.model!=nil and me.root.shipLookup[me.model] != nil) {
+                            me.root.blep[me.i].hide();
                             me.root.blepText[me.i].hide();
                             me.root.blep[me.i].hide();
+                            if (me.root.showSHP) {
+                                me.root.ship[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
+                                me.root.ship[me.i].show();
+                            } else {
+                                me.root.ship[me.i].hide();
+                            }
+                        } else {
+                            if (me.root.showTGT) {
+                                me.root.ship[me.i].hide();
+                                me.root.blep[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
+                                #me.root.blep[me.i].setRotation(me.rot*D2R);  # Disabled for now cuz of some weird shit
+                                me.root.blep[me.i].show();
+                                me.root.blep[me.i].update();
+                                if (me.root.showDAT) {
+                                    me.datType = "";
+                                    if (me.model!=nil and me.root.typeLookup[me.model] != nil) {
+                                        me.datType = me.root.typeLookup[me.model]~"/";
+                                    }
+                                    me.root.blepText[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R)+12);
+                                    me.root.blepText[me.i].setText(sprintf("%s%02d", me.datType,me.alt*0.001));
+                                    me.root.blepText[me.i].show();
+                                } else {
+                                    me.root.blepText[me.i].hide();
+                                }
+                            } else {
+                                me.root.ship[me.i].hide();
+                                me.root.blepText[me.i].hide();
+                                me.root.blep[me.i].hide();
+                            }
                         }
                     }
-                }
-                me.i += 1;
-                if (me.i > ((me.root.maxB/2)-1)) {
-                    break;
+                    me.i += 1;
+                    if (me.i > ((me.root.maxB/2)-1)) {
+                        datalink_contacts_over = 1;
+                    }
                 }
             }
-
-            print(me.i);
 
             foreach(contact; awg_9.tgts_list) {
                 if (contact.get_display() == 0) {
@@ -1189,7 +1193,7 @@ var MPCD_Device =
                 }
             }
 
-            for (;me.i<me.root.maxB;me.i+=1) {
+            for (;me.i<me.root.maxB;me.i+=1) {  # Remove unused objects
                 me.root.ship[me.i].hide();
                 me.root.blep[me.i].hide();
                 me.root.blepText[me.i].hide();
@@ -1198,6 +1202,59 @@ var MPCD_Device =
                 me.root.lock.hide();
                 me.root.infoPos.hide();
                 me.root.infoBer.hide();
+            }
+
+            me.i = me.root.maxB;  # force the count to go at the place where there are ordinance objects
+
+            # Telemetry Ordinance code here :
+            foreach(ordinance; stations.telemetry_weapons) {
+                pass = 0;
+
+                if ((getprop("sim/model/f15/armament/telemetry-data-armaments/"~ordinance~"/last-time-updated") + 2) < getprop("sim/time/elapsed-sec")) {
+                    pass = 1;  # If it's been more than 2 seconds that the telemetry ain't been updated, we don't count it anymore
+                }
+
+                if (pass == 0) {
+                    me.model = "AGM158C";  # TODO: Make it guess the weapon's name (for when more weapons will have that)
+                    me.lat = getprop("sim/model/f15/armament/telemetry-data-armaments/"~ordinance~"/position/lat");
+                    me.lon = getprop("sim/model/f15/armament/telemetry-data-armaments/"~ordinance~"/position/lon");
+                    me.alt = getprop("sim/model/f15/armament/telemetry-data-armaments/"~ordinance~"/position/alt");
+                    me.heading_true = getprop("sim/model/f15/armament/telemetry-data-armaments/"~ordinance~"/heading-true");
+
+                    me.coord = geo.Coord.new().set_latlon(me.lat,me.lon,me.alt*FT2M);
+                    me.range = me.coord.direct_distance_to(geo.aircraft_position()) * M2NM;
+
+                    me.distPixels = me.range*me.root.NM2PIXEL;
+
+                    me.relBearing = deviation_normdeg(me.myHeading, me.heading_true);
+
+                    me.rot = me.heading_true;
+                    me.rot -= me.myHeading;
+
+                    # Ordinance bleps are purple
+                    me.root.blep[me.i].setColor(.6,0,1);  # purple
+                    me.root.blepText[me.i].setColor(.6,0,1);  # purple
+                    me.root.ship[me.i].setColor(.6,0,1);  # purple
+
+                    me.root.ship[me.i].hide();
+                    me.root.blep[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
+                    #me.root.blep[me.i].setRotation(me.rot*D2R);  # Disabled for now cuz of some weird shit
+                    me.root.blep[me.i].show();
+                    me.root.blep[me.i].update();
+                    me.root.blepText[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R)+12);
+                    me.root.blepText[me.i].setText(sprintf("%s%02d", me.model,me.alt*0.001));
+                    me.root.blepText[me.i].show();
+                    me.i += 1;
+                    if (me.i > ((me.root.maxB+7)-1)) {
+                        break;
+                    }
+                }
+            }
+
+            for (;me.i<me.root.maxB+7;me.i+=1) {  # Remove unused objects
+                me.root.ship[me.i].hide();
+                me.root.blep[me.i].hide();
+                me.root.blepText[me.i].hide();
             }
         };
         me.p_HSD.notifyButton = func (eventi) {
