@@ -702,6 +702,7 @@ var F15HUD = {
 															var agm65_speed = 805; # in mph - mean speed during whole course is about Ma 1.22
 															var agm84_speed = 645; # in mph - mean speed during whole course is about Ma .85
 															var agm88_speed = 2000; # in mph
+															var agm158c_speed = 550; # in mph - about Ma .8
 															var mean_speed = 1; # placeholder
 															weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
 															if (weap != nil and weap.parents[0] == armament.AIM) {
@@ -722,7 +723,7 @@ var F15HUD = {
 																		obj.window17.setText("CCRP XX:XX");
 																	}
 																	obj.window17.setVisible(1);
-																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-84E" or weap.type == "AGM-119A" or weap.type == "AGM-154A" or weap.type == "AGM-158A" or weap.type == "AGM-158C" or weap.type == "GBU-31" or weap.type == "GBU-32" or weap.type == "CBU-105" or weap.type == "GBU-54" or weap.type == "GBU-39") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
+																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-84E" or weap.type == "AGM-119A" or weap.type == "AGM-154A" or weap.type == "AGM-158A" or weap.type == "GBU-31" or weap.type == "GBU-32" or weap.type == "CBU-105" or weap.type == "GBU-54" or weap.type == "GBU-39") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
 																	if (!(weap.ready_time == 0)) { # Only if the weapon has a ready timer
 																		curr_time = getprop("sim/time/elapsed-sec");
 																		standby_time = weap.ready_standby_time;  # time at which the weapon started readyin process
@@ -741,7 +742,7 @@ var F15HUD = {
 																		obj.window17.setText("RDY");
 																	}
 																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "AIM-120D" or weap.type == "CATM-120D" or weap.type == "AIM-9X" or weap.type == "CATM-9X" or weap.type == "AGM-88E") and getprop("instrumentation/datalink/power")) {  # needs datalink to be ON to work
+																} elsif ((weap.type == "AIM-120D" or weap.type == "CATM-120D" or weap.type == "AIM-9X" or weap.type == "CATM-9X" or weap.type == "AGM-88E" or weap.type == "AGM-158C") and getprop("instrumentation/datalink/power")) {  # needs datalink to be ON to work
 																	if (weap.type == "AIM-9X" or weap.type == "CATM-9X") {
 																		mean_speed = mean_9_x_speed;
 																	} elsif (weap.type == "AIM-120D" or weap.type == "CATM-120D") {
@@ -752,6 +753,8 @@ var F15HUD = {
 																		mean_speed = agm84_speed;  # all AGM variants got the same mean course speed
 																	} elsif (weap.type == "AGM-88E") {
 																		mean_speed = agm88_speed;
+																	} elsif (weap.type == "AGM-158C") {
+																		mean_speed = agm158c_speed;
 																	}
 																	var dlzArray = pylons.getDLZ();
 																	if (dlzArray == nil or size(dlzArray) == 0) {
@@ -766,6 +769,7 @@ var F15HUD = {
 																		missile_lat = getprop(data_root ~ "/position/latitude-deg");
 																		missile_lon = getprop(data_root ~ "/position/longitude-deg");
 																		missile_alt = getprop(data_root ~ "/position/altitude-ft");
+																		hit_chance = getprop(data_root ~ "/hit");
 																		missileCoord = geo.Coord.new().set_latlon(missile_lat, missile_lon, missile_alt);
 																		distance_to_target = dlzArray[6].direct_distance_to(missileCoord)*M2NM*1.15;
 																		#mean_speed = getprop(data_root ~ "/velocities/true-airspeed-kt");  # it's actually inaccurate as it's got different speed phases
