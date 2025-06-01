@@ -1094,6 +1094,9 @@ var MPCD_Device =
                 if (!me.unknown) {
                     me.friendly = me.contact_data.is_friendly();
                     me.hostile = me.contact_data.is_hostile();
+                } else {
+                    me.friendly = 0;
+                    me.hostile = 0;
                 }
 
                 if (me.friendly) {
