@@ -518,8 +518,8 @@ var fast_loop = func {
 
     steerlock = 0;
     var follow = 0;
-    if (armament.contactPoint !=nil and armament.contactPoint.get_range()>50 and armament.contactPoint.get_Callsign() != "GPS-Spot") {
-        print("TGP attempted lock at 50+ nm: ",armament.contactPoint.get_range());
+    if (armament.contactPoint !=nil and armament.contactPoint.get_range()>60 and armament.contactPoint.get_Callsign() != "GPS-Spot") {
+        print("TGP attempted lock at 60+ nm: ",armament.contactPoint.get_range());
         armament.contactPoint = nil;
     }
     var gpps = 0;
