@@ -939,14 +939,14 @@ var F15HUD = {
 															} else {
 																obj.stby.hide();
 															}
-															
+
 															obj.radar_filter_mode = "A/A";  # default mode
 															if (val.RadarFilterMode == 1) {
 															    obj.radar_filter_mode = "A/G";
 															} elsif (val.RadarFilterMode == 2) {
 															    obj.radar_filter_mode = "A/SEA";
 															}
-															
+
 															obj.window20.setVisible(!val.RadarStandby);
 															obj.window20.setText(obj.radar_filter_mode);
 											            }),
@@ -1484,7 +1484,7 @@ return obj;
 
                     }
                 }
-            } elsif (me.weapon_selected == "AGM-65B" or me.weapon_selected == "AGM-65D" or me.weapon_selected == "AGM-84D" or me.weapon_selected == "AGM-119A" or me.weapon_selected == "AGM-88E") {  # We wanna display the AGMs' seeker pos on the HUD
+            } elsif (me.weapon_selected == "AGM-65B" or me.weapon_selected == "AGM-65D" or me.weapon_selected == "AGM-119A" or me.weapon_selected == "AGM-88E") {  # We wanna display the AGMs' seeker pos on the HUD
                 if (aim != nil and aim.isCaged()) {
                     var coords = aim.getSeekerInfo();
                     if (coords != nil) {
