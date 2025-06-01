@@ -130,7 +130,7 @@ var Station = {
 									#print("CONTACT");
 									#print(struct.callsign);
 									foreach (var u; awg_9.tgts_list) {  # Go through each radar targets
-										if (u.Callsign != nil and u.Callsign.getValue() == struct.callsign) {  # If we can find the same target in the radar targets, we take its new coordinates and slave it to the AGM-158C to update to that new position
+										if (u.Callsign != nil and u.Callsign.getValue() == struct.callsign) {  # If we can find the same target in the radar targets, we take its new coordinates and slave it to the AGM-158 to update to that new position
 											gpsCoordsTgt = u.get_Coord();
 											var spot = awg_9.ContactTGP.new(u.get_Callsign(),gpsCoordsTgt,0);
 											#print(gpsCoordsTgt.lat());
@@ -145,7 +145,6 @@ var Station = {
 									setprop("controls/armament/jassm-updated", 0);
 								}
 
-								#print("IT CONTINUES");
 								if (struct.dist_m*M2NM > 10) {
 									# 22000 ft above sealevel, authentic value
 									return {"altitude": 22000};
@@ -193,18 +192,16 @@ var Station = {
 									setprop("controls/armament/lrsam-updated", 0);
 								}
 
-								#print("IT CONTINUES");
-
-								# Beyond 70nmi, keeps a FL220 altitude, then till 25nmi, FL110 and then lower than 25nmi starts sea-skimming at FL002
+								# Beyond 70nmi, keeps a FL320 altitude, then till 35nmi, FL180 and then lower than 25nmi starts sea-skimming at FL002
 								new_altitude = 0;
 	   							if (struct.dist_m*M2NM > 70) {
 	   								# 22,000 ft above sealevel, guess
-	   								new_altitude = 22000;
-	   							} elsif (struct.dist_m*M2NM > 25) {
+	   								new_altitude = 32000;
+	   							} elsif (struct.dist_m*M2NM > 35) {
 	   								# 11,000 ft above sealevel, guess
-	   								new_altitude = 11000;
+	   								new_altitude = 18000;
 	   							} else {
-	   								# 200 ft above sealevel, starts sea-skimmin
+	   								# 200 ft above sealevel, starts sea-skimming
 	   								new_altitude = 200;
 	   							}
 								#print("TGT ALT");
