@@ -3779,7 +3779,7 @@
                 <arming-time-sec type="double">4.0</arming-time-sec>
                 <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
                 <self-destruct-time-sec type="double">1000</self-destruct-time-sec>
-                <loft-altitude type="int">25000</loft-altitude>  <!-- E variant: can perform loft maneuveurs to avoid terrain -->
+                <loft-altitude type="int">35000</loft-altitude>  <!-- E variant: can perform loft maneuveurs to avoid terrain -->
                 <min-fire-range-nm type="double">0.25</min-fire-range-nm>
                 <rail type="bool">false</rail>
                 <max-report-distance type="double">65</max-report-distance>
