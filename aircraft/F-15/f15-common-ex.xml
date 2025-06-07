@@ -3719,7 +3719,7 @@
                 <vol-track type="double">0.25</vol-track>
                 <guidance type="string">gps</guidance>  <!-- E variant: passive radar, then active radar turns ON when 5 nm from target and starts diving onto it -->
                 <navigation type="string">direct-alt</navigation>
-                <terrain-follow type="bool">false</terrain-follow>
+                <terrain-follow type="bool">true</terrain-follow>  <!-- standoff missile, using terrain-follow to keep a low profile and escape terrain-->
                 <all-aspect type="bool">true</all-aspect>
                 <max-fire-range-nm type="double">70</max-fire-range-nm>              <!-- E variant: up to 75 nmi because it's got loft altitude -->
                 <FCS-field-deg type="int">80</FCS-field-deg>
