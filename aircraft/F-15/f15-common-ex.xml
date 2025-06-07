@@ -3969,14 +3969,14 @@
                 <min-fire-range-nm type="double">2.0</min-fire-range-nm>
                 <guidance type="string">gps</guidance> <!-- GPS, but switches to IR 8s fore impact -->
                 <navigation type="string">direct-alt</navigation> <!-- like original AGM-158A, though switches to PN at 8 secs till impact, when IR seeker initiates  -->
-                <loft-altitude type="int">32000</loft-altitude>  <!-- starts high to optimize speed and fuel, then at 80nm goes down to FL180 and then at 35nm at FL002 (sea-skimmin) -->
-                <terrain-follow type="bool">false</terrain-follow>  <!-- sea skimming, not terrain following -->
+                <loft-altitude type="int">32000</loft-altitude>  <!-- starts high to optimize speed and fuel, then at 80nm goes down to FL180 and then at 35nm at 85ft (sea-skimmin) -->
+                <terrain-follow type="bool">true</terrain-follow>  <!-- sea skimming, but needs to avoid islands and such -->
                 <FCS-field-deg type="int">120</FCS-field-deg> <!-- guess, same as A ver -->
                 <seeker-field-deg type="int">240</seeker-field-deg> <!-- guess, same as A ver -->
                 <reaquire type="bool">true</reaquire>
                 <switch-time-sec type="double">1</switch-time-sec>
                 <auto-switch-target-allowed type="bool">true</auto-switch-target-allowed>
-                <prowl-flight type="string">5</prowl-flight>
+                <prowl-flight type="string">terrain-follow</prowl-flight>
                 <max-g type="double">6</max-g>
                 <max-launch-g type="int">7</max-launch-g>
                 <jet-effectiveness-10000ft type="double">0.885</jet-effectiveness-10000ft>  <!-- AGM-158A is .825, I gave the AGM-158C .885 -->
@@ -4013,7 +4013,7 @@
                 <ejector-speed-fps type="double">5</ejector-speed-fps>
                 <telemetry type="bool">true</telemetry>
                 <DLZ type="bool">true</DLZ>
-                <DLZ-optimal-alt-feet type="double">30000</DLZ-optimal-alt-feet>  <!-- guess -->
+                <DLZ-optimal-alt-feet type="double">32000</DLZ-optimal-alt-feet>  <!-- guess -->
                 <DLZ-optimal-closing-mach type="double">.9</DLZ-optimal-closing-mach>  <!-- the LRSAM's got a sbsonic cruise speed of .9 Ma -->
             </agm-158c>
             <es>                   <!-- Ejection seat ACES II. Source: A-DA-133 628 --> <!-- orginially F-16's -->

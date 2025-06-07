@@ -225,7 +225,7 @@ var Station = {
 									append(telemetry_weapons, callsign);
 								}
 
-								# Beyond 70nmi, keeps a FL320 altitude, then till 35nmi, FL180 and then lower than 25nmi starts sea-skimming at FL002
+								# Beyond 70nmi, keeps a FL320 altitude, then till 35nmi, FL180 and then lower than 25nmi starts sea-skimming at 85 ft
 								new_altitude = 0;
 	   							if (struct.dist_m*M2NM > 70) {
 	   								# 22,000 ft above sealevel, guess
@@ -235,7 +235,7 @@ var Station = {
 	   								new_altitude = 18000;
 	   							} else {
 	   								# 200 ft above sealevel, starts sea-skimming
-	   								new_altitude = 200;
+	   								new_altitude = 85;
 	   							}
 								#print("TGT ALT");
 								#print(new_altitude);
