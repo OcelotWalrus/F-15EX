@@ -321,11 +321,11 @@ var Station = {
    							print(struct.dist_horz_m*M2NM);
    							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 8 and struct.hasTarget) {
    								screen.log.write("AGM-84E: Diving", 1,1,0);
-   								return {"altitude":0,"guidanceLaw":"PN","abort_midflight_function":1};
+   								return {"class":"GM","target":"closest","guidance":"heat","altitude":0,"guidanceLaw":"PN","abort_midflight_function":1};
    							}
 							if (!struct.hasTarget and struct.guidance == "gps") {
 								# If it's release in MADDOG mode, turn the heat seeker ON and make it go the the closest target
-								return {"guidance":"heat","guidanceLaw":"PN","altitude":0,"class":"GM","target":"closest","abort_midflight_function":1};
+								return {"guidance":"heat","guidanceLaw":"PN","altitude":35000,"class":"GM","target":"closest","abort_midflight_function":1};
 							}
    							return {};
    						};
