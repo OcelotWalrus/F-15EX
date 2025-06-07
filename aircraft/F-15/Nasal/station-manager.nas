@@ -227,16 +227,19 @@ var Station = {
 
 								# Beyond 70nmi, keeps a FL320 altitude, then till 35nmi, FL180 and then lower than 25nmi starts sea-skimming at 85 ft
 								new_altitude = 0;
-	   							if (struct.dist_m*M2NM > 70) {
+	   							if (struct.dist_horz_m*M2NM > 70) {
 	   								# 22,000 ft above sealevel, guess
 	   								new_altitude = 32000;
-	   							} elsif (struct.dist_m*M2NM > 35) {
+	   							} elsif (struct.dist_horz_m*M2NM > 35) {
 	   								# 11,000 ft above sealevel, guess
 	   								new_altitude = 18000;
 	   							} else {
 	   								# 200 ft above sealevel, starts sea-skimming
 	   								new_altitude = 85;
 	   							}
+	   							
+	   							setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/loft-altitude", new_altitude);
+	   							
 								#print("TGT ALT");
 								#print(new_altitude);
 	   							#if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {

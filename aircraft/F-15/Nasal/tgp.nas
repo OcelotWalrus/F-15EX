@@ -519,7 +519,7 @@ var fast_loop = func {
     steerlock = 0;
     var follow = 0;
     if (armament.contactPoint !=nil and armament.contactPoint.get_range()>60 and armament.contactPoint.get_Callsign() != "GPS-Spot") {
-        print("TGP attempted lock at 60+ nm: ",armament.contactPoint.get_range());
+        #print("TGP attempted lock at 60+ nm: ",armament.contactPoint.get_range());
         armament.contactPoint = nil;
     }
     var gpps = 0;
@@ -607,7 +607,7 @@ var fast_loop = func {
             flir_updater.offsetP = 0;
             flir_updater.offsetH = 0;
             lock_tgp = 0;
-            armament.contactPoint = nil;print("No vis on TGP lock");
+            armament.contactPoint = nil; #print("No vis on TGP lock");
             hiddenMode = AG;
         } else {
             lock_tgp = 1;
