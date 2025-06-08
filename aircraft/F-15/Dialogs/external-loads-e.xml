@@ -3402,6 +3402,21 @@
 				</text>
 			</group>
 
+			<group>
+				<layout>hbox</layout>
+				<default-padding>0</default-padding>
+				<halign>left</halign>
+				<text>
+					<label>Thrust / Weight ratio : </label>
+				</text>
+				<text>
+					<label>xxxxxxxxxxxxxxxxxx</label>
+					<live>true</live>
+					<format>%1.2f</format>
+					<property>sim/model/f15/avionics/thrust-weight-ratio</property>
+				</text>
+			</group>
+
             <empty>
 				<pref-height>12</pref-height>
 			</empty>

@@ -676,6 +676,12 @@ var F15MainModule =
             setprop("controls/armament/dual", 4);
         }
 
+        # Compute the trust/weight ratio and set it to an avionics property
+        gross_weight = getprop("fdm/jsbsim/inertia/weight-lbs");
+        thrust = 29500.0 * 2;  # for twin F100-GE-129s
+        thrust_weight_ratio = thrust / gross_weight;
+        setprop("sim/model/f15/avionics/thrust-weight-ratio", thrust_weight_ratio);
+
         # Make sure that if CFTs are not installed, non-CFT-compatible stations are empty
         if (getprop("fdm/jsbsim/propulsion/cft") != 1 or !getprop("fdm/jsbsim/propulsion/cft")) {
             setprop("payload/weight[18]/selected", "Empty");

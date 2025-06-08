@@ -157,6 +157,7 @@ var F15HUD = {
         obj.window18 = obj.get_text("window18", aircraft.HUDFont,8,1.4);
         obj.window19 = obj.get_text("window19", aircraft.HUDFont,6,1.4);
         obj.window20 = obj.get_text("window20", aircraft.HUDFont,6,1.4);
+        obj.window21 = obj.get_text("window21", aircraft.HUDFont,6,1.4);
 
 		obj.color = [0.3,1,0.3,.5]; # last one should be brightness parameter TODO: apply it to all elements
 
@@ -582,11 +583,13 @@ var F15HUD = {
                                                             obj.VV_y = (val.Alpha or 0)*10; # adjust for view
                                                             obj.VV.setTranslation (obj.VV_x, obj.VV_y);
                                                         }),
-            props.UpdateManager.FromHashList(["InstrumentedG", "CadcOwsMaximumG"], 0.05, func(val)
+            props.UpdateManager.FromHashList(["InstrumentedG", "CadcOwsMaximumG", "ThrustToWeightRatio"], 0.05, func(val)
                                                         {
                                                             obj.window8.setText(sprintf("%02d %02d G",
                                                                                         math.round(val.InstrumentedG*10.0),
                                                                                         math.round(val.CadcOwsMaximumG*10.0)));
+
+															obj.window21.setText(sprintf("%1.2f T/W", val.ThrustToWeightRatio));
                                                         }),
             props.UpdateManager.FromHashList(["Alpha",
                                                         "ControlsGearBrakeParking",
@@ -2355,6 +2358,7 @@ input = {
 		IsDumpingFuel                           : "fdm/jsbsim/propulsion/fuel_dump",
 		CurrentFuelLb                           : "sim/model/f15/instrumentation/fuel-gauges/total-display",
 		FuelPercentage                          : "consumables/fuel/total-fuel-norm",
+		ThrustToWeightRatio                     : "sim/model/f15/avionics/thrust-weight-ratio",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

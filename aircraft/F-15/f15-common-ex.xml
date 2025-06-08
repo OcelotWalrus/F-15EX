@@ -939,6 +939,7 @@
                     <laser-code type="int">000</laser-code>
                     <cara-on type="bool">false</cara-on><!-- if CARA radar altimeter is detecting ground (whether enabled or not) -->
                     <tgp-lock type="bool">false</tgp-lock>
+                    <thrust-weight-ratio type="double">1</thrust-weight-ratio>
                 </avionics>
                 <flir>
                     <input>
