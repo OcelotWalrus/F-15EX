@@ -738,12 +738,8 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 950*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x CBU-105") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 934*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
-            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AGM-65B") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x GBU-12") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 610*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
-            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-65D") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 484.5*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-84D" or getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-84E") {  # D and C variant both got the same weight
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 1190.0*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-88E") {
@@ -752,8 +748,6 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 1065*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-158A" or getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-158C") {  # A and C variants both got the same weight
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 2150*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
-            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-65B") {
-                setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-88E") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 800*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x CATM-9X Sidewinder Dummy") {
@@ -778,6 +772,14 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 285*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 50);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x M151") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 935);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AGM-65B") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AGM-65D") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x AGM-65B") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x AGM-65D") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }
