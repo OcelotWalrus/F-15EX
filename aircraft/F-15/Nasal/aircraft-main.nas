@@ -372,18 +372,29 @@ setlistener("sim/model/f15/controls/AFCS/cas-takeoff-trim", func(v) {
 
 var CurrentView_Num = props.globals.getNode("sim/current-view/view-number");
 var backseat_view_num = view.indexof("Backseat View");
+var awareness_view_num = view.indexof("Awareness Camera");
+var awareness_view_num_second = view.indexof("Awareness Camera (Belly)");
+var tgp_view_num = view.indexof("TGP");
 
 var toggle_cockpit_views = func() {
 	cur_v = CurrentView_Num.getValue();
-	if (cur_v != 0 )
-    {
+	if (cur_v != 0 ) {
 		CurrentView_Num.setValue(0);
-	}
-    else if(two_seater){
+	} else if(two_seater) {
         CurrentView_Num.setValue(backseat_view_num);
     }
 }
 
+var toggle_awareness_views = func() {
+	cur_v = CurrentView_Num.getValue();
+	if ((cur_v != 0 and cur_v != awareness_view_num) or (cur_v == awareness_view_num_second)) {
+		CurrentView_Num.setValue(0);
+	} else if(cur_v == 0) {
+        CurrentView_Num.setValue(awareness_view_num);
+    } else if(cur_v == awareness_view_num) {
+        CurrentView_Num.setValue(awareness_view_num_second);
+    }
+}
 
 
 var quickstart = func() {
@@ -709,7 +720,7 @@ var F15MainModule =
 
         # Force target pod view
         if (getprop("sim/model/f15/force-tgp") == 1) {
-            view.setViewByIndex(105);
+            CurrentView_Num.setValue(tgp_view_num);
         }
 
         # Quick patch for pylons weight not computing, no clue why ...

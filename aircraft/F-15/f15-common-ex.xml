@@ -429,6 +429,10 @@
                 <desc>Back to Pilot's View or toggle Pilot's and Backseat View.</desc>
             </key>
             <key>
+                <name>Ctrl-z</name>
+                <desc>Go through different situational awareness camera views.</desc>
+            </key>
+            <key>
                 <name>y/Y</name>
                 <desc>Select next/prev target (by distance).</desc>
             </key>
@@ -2084,6 +2088,62 @@
                 </limits>
             </config>
         </view>-->
+        <view n="106">
+            <name>Awareness Camera</name>
+            <internal archive="y">true</internal>
+            <enabled>false</enabled>
+            <config>
+                <x-offset-m archive="y">-0.2</x-offset-m>
+                <y-offset-m archive="y">2.00195</y-offset-m>
+                <z-offset-m archive="y">-5.71</z-offset-m>
+                <pitch-offset-deg>-21</pitch-offset-deg>
+                <heading-offset-deg type="double">180</heading-offset-deg>
+                <default-field-of-view-deg>120</default-field-of-view-deg>
+                <from-model type="bool">true</from-model>
+                <from-model-idx type="int">0</from-model-idx>
+                <limits>
+                    <enabled type="bool">true</enabled>
+                    <left>
+                        <heading-max-deg type="double">180</heading-max-deg>
+                        <x-offset-max-m type="double">0.17</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">120</x-offset-threshold-deg>
+                    </left>
+                    <right>
+                        <heading-max-deg type="double">180</heading-max-deg>
+                        <x-offset-max-m type="double">0.17</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">120</x-offset-threshold-deg>
+                    </right>
+                </limits>
+            </config>
+        </view>
+        <view n="107">
+            <name>Awareness Camera (Belly)</name>
+            <internal archive="y">true</internal>
+            <enabled>false</enabled>
+            <config>
+                <x-offset-m archive="y">0.36960</x-offset-m>
+                <y-offset-m archive="y">-0.4980</y-offset-m>
+                <z-offset-m archive="y">-5.71</z-offset-m>
+                <pitch-offset-deg>-5</pitch-offset-deg>
+                <heading-offset-deg type="double">180</heading-offset-deg>
+                <default-field-of-view-deg>120</default-field-of-view-deg>
+                <from-model type="bool">true</from-model>
+                <from-model-idx type="int">0</from-model-idx>
+                <limits>
+                    <enabled type="bool">true</enabled>
+                    <left>
+                        <heading-max-deg type="double">180</heading-max-deg>
+                        <x-offset-max-m type="double">0.17</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">120</x-offset-threshold-deg>
+                    </left>
+                    <right>
+                        <heading-max-deg type="double">180</heading-max-deg>
+                        <x-offset-max-m type="double">0.17</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">120</x-offset-threshold-deg>
+                    </right>
+                </limits>
+            </config>
+        </view>
         <view n="109">
             <name>Wingman View</name>
             <type>lookat</type>
@@ -4593,6 +4653,15 @@
               <binding>
                   <command>nasal</command>
                   <script>aircraft.chute_release();</script>
+              </binding>
+          </key>
+          
+          <key n="26">
+              <name>Ctrl-z</name>
+              <desc>Go through different situational awareness camera views.</desc>
+              <binding>
+                  <command>nasal</command>
+                  <script>aircraft.toggle_awareness_views();</script>
               </binding>
           </key>
 
