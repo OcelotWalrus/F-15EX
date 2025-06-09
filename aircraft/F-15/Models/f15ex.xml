@@ -9247,5 +9247,7 @@
 
    <!--damage effects-->
    <model><path>Aircraft/F-15/Models/Effects/damage-smoke.xml</path></model>
+   <model><path>Aircraft/F-15/Models/Effects/damage-smoke2.xml</path></model>
+   <model><path>Aircraft/F-15/Models/Effects/damage-smoke3.xml</path></model>
 
 </PropertyList>
