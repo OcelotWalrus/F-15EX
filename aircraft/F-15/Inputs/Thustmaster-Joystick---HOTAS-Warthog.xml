@@ -1,0 +1,498 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+  <name type="string">Thustmaster Joystick - HOTAS Warthog</name>
+  <nasal>
+    <script type="string">
+			var this = cmdarg().getParent();
+			var init = !contains(caller(0)[0], "init");
+			if (!contains(globals, "warthog"))
+				io.load_nasal(getprop("/sim/fg-root") ~ "/Input/Joysticks/ThrustMaster/Warthog/warthog.nas");
+
+			var jslistener = func init and call(setlistener, arg);
+			var popup = func gui.popupTip(call(sprintf, arg));
+			var is_helicopter = (func {(var n = props.globals.getNode("rotors", 0)) != nil and n.getAttribute("children")})();
+			var aircraft_type = getprop("/sim/type");
+
+			var load_overlay = func(name) {
+				foreach (var dir; [getprop("/sim/fg-home"), getprop("/sim/fg-root")]) {
+					var file = dir ~ "/Input/Joysticks/ThrustMaster/Warthog/Stick/" ~ name ~ ".xml";
+					if (io.stat(file) != nil) {
+						printlog("info", "WARTHOG: loading overlay " ~ file);
+						cmdarg().setValues({command: "nasal", script: ""});
+						io.read_properties(file, this);
+						props.runBinding(cmdarg());
+						break;
+					}
+				}
+			}
+
+			foreach (var b; this.getChildren("button")) {
+				if (b.getAttribute("children") == 1) {
+					var name = b.getNode("name", 1).getValue() or "??";
+					b.setValues({binding: {command: "nasal", script: 'popup("' ~ name ~ '")'}});
+				}
+			}
+
+			var mod = 0;
+			var m = props.globals.initNode("/devices/status/joysticks/warthog/modifier", mod, "INT");
+			jslistener(m, func(n) mod = n.getValue());
+
+			var trimstep = 0.75;
+			var viewstep = 1.5;
+			var button = {18: {id: 0}};
+
+			var reset_zoom = func setprop("/sim/current-view/field-of-view", 55);
+			var viewdir = props.globals.getNode("/sim").getChildren("view");
+			forindex (var i; viewdir) {
+				var t = viewdir[i].getNode("type");
+				viewdir[i] = t != nil and t.getValue() == "lookat" ? 1 : -1;
+			}
+
+			load_overlay("generic");
+			if (is_helicopter)
+				load_overlay("helicopter");
+			if (aircraft_type)
+				load_overlay(aircraft_type);
+			foreach (var o; split(":", getprop("/input/joysticks/overlays") or ""))
+				load_overlay(o);
+			load_overlay(getprop("/sim/aircraft"));
+		</script>
+    <module type="string">__js0</module>
+  </nasal>
+  <axis>
+    <desc type="string">Aileron</desc>
+    <binding>
+      <command type="string">property-scale</command>
+      <property type="string">/controls/flight/aileron</property>
+      <factor type="double">1</factor>
+      <offset type="double">0</offset>
+      <power type="double">2.5</power>
+    </binding>
+  </axis>
+  <axis n="1">
+    <desc type="string">Elevator</desc>
+    <binding>
+      <command type="string">property-scale</command>
+      <property type="string">/controls/flight/elevator</property>
+      <factor type="double">-1</factor>
+      <offset type="double">0</offset>
+      <power type="double">2.5</power>
+    </binding>
+  </axis>
+  <axis n="2">
+    <desc type="string">Aileron Trim inc.</desc>
+    <low>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.aileronTrim(-1);</script>
+      </binding>
+      <repeatable type="bool">true</repeatable>
+    </low>
+    <high>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.aileronTrim(1);</script>
+      </binding>
+      <repeatable type="bool">true</repeatable>
+    </high>
+  </axis>
+  <axis n="3">
+    <desc type="string">Elevator Trim inc.</desc>
+    <low>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.elevatorTrim(1);</script>
+      </binding>
+      <repeatable type="bool">true</repeatable>
+    </low>
+    <high>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.elevatorTrim(-1);</script>
+      </binding>
+      <repeatable type="bool">true</repeatable>
+    </high>
+  </axis>
+  <axis n="4">
+    <name type="string">Trim Hat Switch Down/Up</name>
+    <desc type="string">adjust elevator trim,  +mod: reset elevator trim</desc>
+    <number>
+      <unix type="string">3</unix>
+    </number>
+    <low>
+      <repeatable type="string">true</repeatable>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">
+					if (mod)
+						setprop("/controls/flight/elevator-trim", 0);
+					else
+						controls.elevatorTrim(trimstep);
+				</script>
+        <module type="string">__js0</module>
+        <offset type="double">1</offset>
+      </binding>
+    </low>
+    <high>
+      <repeatable type="string">true</repeatable>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">
+					if (mod)
+						setprop("/controls/flight/elevator-trim", 0);
+					else
+						controls.elevatorTrim(-trimstep);
+				</script>
+        <module type="string">__js0</module>
+        <offset type="double">1</offset>
+      </binding>
+    </high>
+    <binding n="0" type="string">
+    </binding>
+    <binding n="0">
+      <setting type="double">0</setting>
+    </binding>
+  </axis>
+  <axis n="5">
+    <name type="string">Trim Hat Switch Down/Up</name>
+    <desc type="string">adjust elevator trim,  +mod: reset elevator trim</desc>
+    <number>
+      <windows type="string">7</windows>
+    </number>
+    <low>
+      <repeatable type="string">true</repeatable>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">
+					if (mod)
+						setprop("/controls/flight/elevator-trim", 0);
+					else
+						controls.elevatorTrim(-trimstep);
+				</script>
+      </binding>
+    </low>
+    <high>
+      <repeatable type="string">true</repeatable>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">
+					if (mod)
+						setprop("/controls/flight/elevator-trim", 0);
+					else
+						controls.elevatorTrim(trimstep);
+				</script>
+      </binding>
+    </high>
+    <binding type="string">
+    </binding>
+  </axis>
+  <button>
+    <name type="string">Trigger Button/Half Pushed</name>
+    <desc type="string">Custom</desc>
+    <binding n="0" type="string">
+    </binding>
+    <binding n="0">
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="1">
+    <desc type="string">Pickle</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.trigger(1);</script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.trigger(0);</script>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="2">
+    <desc type="string">Target next</desc>
+    <binding>
+      <command type="string">property-adjust</command>
+      <property type="string">/controls/armament/target-selected</property>
+      <step type="string">1</step>
+    </binding>
+  </button>
+  <button n="3">
+    <desc type="string">Target next</desc>
+    <repeatable>false</repeatable>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">sim/model/f15/controls/CAS/cas-pitch-enable</property>
+    </binding>
+    <mod-up>
+        <binding>
+          <command type="string">property-toggle</command>
+          <property type="string">sim/model/f15/controls/CAS/cas-pitch-enable</property>
+        </binding>
+    </mod-up>
+  </button>
+  <button n="4">
+    <desc type="string">Custom</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">
+           
+              if (getprop("fdm/jsbsim/fcs/steer-maneuver"))
+              {
+                  gui.popupTip("Maneuver NWS disabled");
+                  setprop("fdm/jsbsim/fcs/steer-maneuver",0)
+              }
+              else
+              {
+                  gui.popupTip("Maneuver NWS enabled");
+                  setprop("fdm/jsbsim/fcs/steer-maneuver",1)
+              }
+          
+      </script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding type="string">
+      </binding>
+    </mod-up>
+  </button>
+  <button n="5">
+    <desc type="string">Trigger</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.trigger(1);</script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.trigger(0);</script>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="6">
+    <desc type="string">Custom</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">/ai/submodels/submodel[5]/burst</property>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-toggle</command>
+        <property type="string">/ai/submodels/submodel[5]/burst</property>
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="7">
+    <desc type="string">Custom</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">aircraft.chute_release();</script>
+      <module type="string">__js0</module>
+    </binding>
+    <mod-up>
+      <binding type="string">
+      </binding>
+    </mod-up>
+  </button>
+  <button n="8">
+    <desc type="string">Custom</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">aircraft.chute();</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding type="string">
+      </binding>
+    </mod-up>
+  </button>
+  <button n="9">
+    <desc type="string">Toggle bomb dropping modes or guns mode</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">
+        if (getprop("sim/model/f15/controls/armament/weapon-selector") == 5) {
+            pylons.fcs.toggleDropMode();
+        } elsif (getprop("sim/model/f15/controls/armament/weapon-selector") == 0) {
+            guns_mode = getprop("sim/model/f15/armament/gun-sight");
+            if (guns_mode == 0) {
+                setprop("sim/model/f15/armament/gun-sight", 1);
+            } elsif (guns_mode == 1) {
+                setprop("sim/model/f15/armament/gun-sight", 2);
+            } elsif (guns_mode == 2) {
+                setprop("sim/model/f15/armament/gun-sight", 0);
+            }
+        }
+      </script>
+    </binding>
+    <repeatable type="double">0</repeatable>
+  </button>
+  <button n="10">
+    <name type="string">right black cursor (DMS) up</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">true</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">
+				if (mod)
+					reset_zoom();
+				else
+					view.decrease(1);
+			</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="11">
+    <name type="string">right black cursor (DMS) right</name>
+    <desc type="string">Custom</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">view.stepView(1, mod)</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="12">
+    <name type="string">right black cursor (DMS) down</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">true</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">
+				if (mod)
+					reset_zoom();
+				else
+					view.increase(1);
+			</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="13">
+    <name type="string">right black cursor (DMS) left</name>
+    <desc type="string">Custom</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">view.stepView(-1, mod)</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="14">
+    <name type="string">grey cursor (CMS) up</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">true</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">view.panViewPitch(viewstep)</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="15">
+    <name type="string">grey cursor (CMS) right</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">true</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">view.panViewDir(viewdir[view.index] * viewstep)</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="16">
+    <name type="string">grey cursor (CMS) down</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">true</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">view.panViewPitch(-viewstep)</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="17">
+    <name type="string">grey cursor (CMS) left</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">true</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">view.panViewDir(-viewdir[view.index] * viewstep)</script>
+      <module type="string">__js0</module>
+      <offset type="double">1</offset>
+    </binding>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+</PropertyList>

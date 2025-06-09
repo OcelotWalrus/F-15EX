@@ -1,0 +1,541 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+  <name type="string">Thrustmaster Throttle - HOTAS Warthog</name>
+  <nasal>
+    <script type="string"></script>
+    <module type="string">__js1</module>
+    <command type="string">nasal</command>
+  </nasal>
+  <axis>
+    <desc type="string">Rudder</desc>
+    <binding>
+      <command type="string">property-scale</command>
+      <property type="string">/controls/flight/rudder</property>
+      <factor type="double">1</factor>
+      <offset type="double">0</offset>
+      <power type="double">1</power>
+    </binding>
+  </axis>
+  <axis n="1">
+    <name type="string">Mouse Vertical</name>
+    <binding n="0" type="string">
+    </binding>
+    <binding n="0">
+      <setting type="double">0</setting>
+    </binding>
+    <low>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </low>
+  </axis>
+  <axis n="2">
+    <desc type="string">Throttle Engine 1</desc>
+    <binding>
+      <command type="string">property-scale</command>
+      <property type="string">/controls/engines/engine[1]/throttle</property>
+      <factor type="double">-1</factor>
+      <offset type="double">-.47</offset>
+      <power type="double">1</power>
+    </binding>
+  </axis>
+  <axis n="3">
+    <desc type="string">Throttle Engine 0</desc>
+    <binding>
+      <command type="string">property-scale</command>
+      <property type="string">/controls/engines/engine[0]/throttle</property>
+      <factor type="double">-1</factor>
+      <offset type="double">-.47</offset>
+      <power type="double">1</power>
+    </binding>
+  </axis>
+  <axis n="4">
+    <desc type="string">Elevator Trim</desc>
+    <binding>
+      <command type="string">property-scale</command>
+      <property type="string">/controls/flight/elevator-trim</property>
+      <factor type="double">1</factor>
+      <offset type="double">0</offset>
+      <power type="double">1</power>
+    </binding>
+  </axis>
+  <axis n="5">
+    <name type="string">Hat Switch Horizontal</name>
+    <desc type="string">adjust engine balance</desc>
+    <number>
+      <unix type="string">5</unix>
+      <mac type="string">5</mac>
+      <windows type="string">3</windows>
+    </number>
+    <low>
+      <repeatable type="string">true</repeatable>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.adjMixture(-1)</script>
+        <module type="string">__js1</module>
+      </binding>
+    </low>
+    <high>
+      <repeatable type="string">true</repeatable>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.adjMixture(1)</script>
+        <module type="string">__js1</module>
+      </binding>
+    </high>
+    <binding n="0" type="string">
+    </binding>
+    <binding n="0">
+      <setting type="double">0</setting>
+    </binding>
+  </axis>
+  <axis n="6">
+    <desc type="string">Flaps</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">awg_9.wcs_mode_toggle();</script>
+    </binding>
+    <repeatable type="string">false</repeatable>
+  </axis>
+  <button>
+    <name type="string">Mouse Button</name>
+    <binding>
+      <script type="string">popup("Mouse Button")</script>
+      <command type="string">nasal</command>
+      <module type="string">__js1</module>
+      <offset type="double">1</offset>
+    </binding>
+    <desc type="string">Custom</desc>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="1">
+    <desc type="string">FGCom PTT</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.ptt(1);</script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.ptt(0);</script>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="2">
+    <name type="string">MIC Switch Up</name>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">/ai/submodels/submodel[5]/flare-release-cmd</property>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-toggle</command>
+        <property type="string">/ai/submodels/submodel[5]/flare-release-cmd</property>
+      </binding>
+    </mod-up>
+    <desc type="string">Custom</desc>
+  </button>
+  <button n="3">
+    <name type="string">Toggle AIM-9 Caging</name>
+    <desc type="string">Toggle AIM-9 Caging</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">pylons.fcs.toggleCage();</script>
+    </binding>
+    <desc type="string">Custom</desc>
+  </button>
+  <button n="4">
+    <name type="string">Toggle Auto AIM-9 Caging</name>
+    <desc type="string">Toggle Auto AIM-9 Caging</desc>
+    <binding>
+      <script type="string">
+                        if (pylons.fcs.isAutocage() == 1 or pylons.fcs.isAutocage()) {
+                            pylons.fcs.setAutocage(0);
+                        } else {
+                            pylons.fcs.setAutocage(1);
+                        }
+      </script>
+      <command type="string">nasal</command>
+    </binding>
+  </button>
+  <button n="5">
+    <name type="string">MIC Switch Aft</name>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">aircraft.refuel_probe_switch_cycle();</script>
+      <module type="string">__js1</module>
+    </binding>
+    <desc type="string">Custom</desc>
+  </button>
+  <button n="6">
+    <name type="string">Selected Armament Offset</name>
+    <desc type="string">Custom</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">setprop("controls/armament/selected-armament-offset", getprop("controls/armament/selected-armament-offset")+1);</script>
+    </binding>
+    <mod-up>
+      <binding type="string">
+      </binding>
+    </mod-up>
+  </button>
+  <button n="7">
+    <desc type="string">Custom</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">var w = getprop("sim/model/f15/controls/armament/weapon-selector");
+                        w += 1;
+                        if (w == 3) w = 5;
+                        if (w == 6) w = 0;
+                        setprop("sim/model/f15/controls/armament/weapon-selector", w);</script>
+      <module type="string">__js1</module>
+    </binding>
+  </button>
+  <button n="8">
+    <desc type="string">Gear Up</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.gearDown(-1);</script>
+    </binding>
+    <repeatable type="double">0</repeatable>
+  </button>
+  <button n="9">
+    <desc type="string">Gear Down</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.gearDown(1);</script>
+    </binding>
+    <repeatable type="double">0</repeatable>
+  </button>
+  <button n="10">
+    <desc type="string">Spoilers Retract</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.stepSpoilers(-1);</script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.stepSpoilers(0);</script>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="11">
+    <desc type="string">Spoilers Deploy</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.stepSpoilers(1);</script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.stepSpoilers(0);</script>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="12">
+    <name type="string">Pinky Switch Forward</name>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">awg_9.range_control(1);</script>
+      <module type="string">__js1</module>
+      <offset type="double">1</offset>
+    </binding>
+    <desc type="string">Custom</desc>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="13">
+    <name type="string">Pinky Switch Aft</name>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">awg_9.range_control(-1);</script>
+      <module type="string">__js1</module>
+      <offset type="double">1</offset>
+    </binding>
+    <desc type="string">Custom</desc>
+    <mod-up>
+      <binding n="0" type="string">
+      </binding>
+      <binding n="0">
+        <offset type="double">1</offset>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="14">
+    <desc type="string">Brakes (air/wheel)</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.applyApplicableBrakes(1);</script>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">controls.applyApplicableBrakes(0);</script>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="15">
+    <name type="string">Engine Fuel Flow Left</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">
+                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
+                    {
+                    if ( (!getprop("engines/engine[0]/running") or getprop("engines/engine[0]/running")=="false") and  getprop("controls/engines/engine[0]/cutoff"))
+                    {
+                    setprop("controls/engines/engine[0]/starter",1);
+                    settimer(func { setprop("controls/engines/engine[0]/cutoff",0) }, 0.2);
+                    }
+                    else
+                    {
+                    setprop("controls/engines/engine[0]/cutoff",1-getprop("controls/engines/engine[0]/cutoff"));
+                    }
+                    }
+      </script>
+      <module type="string">__js1</module>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">
+                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
+                    {
+                    if ( (!getprop("engines/engine[0]/running") or getprop("engines/engine[0]/running")=="false") and  getprop("controls/engines/engine[0]/cutoff"))
+                    {
+                    setprop("controls/engines/engine[0]/starter",1);
+                    settimer(func { setprop("controls/engines/engine[0]/cutoff",0) }, 0.2);
+                    }
+                    else
+                    {
+                    setprop("controls/engines/engine[0]/cutoff",1-getprop("controls/engines/engine[0]/cutoff"));
+                    }
+                    }
+        </script>
+        <module type="string">__js1</module>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="16">
+    <name type="string">Engine Fuel Flow Right</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">
+                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
+                    {
+                    if ( (!getprop("engines/engine[1]/running") or getprop("engines/engine[1]/running")=="false") and  getprop("controls/engines/engine[1]/cutoff"))
+                    {
+                    setprop("controls/engines/engine[1]/starter",1);
+                    settimer(func { setprop("controls/engines/engine[1]/cutoff",0) }, 0.2);
+                    }
+                    else
+                    {
+                    setprop("controls/engines/engine[1]/cutoff",1-getprop("controls/engines/engine[1]/cutoff"));
+                    }
+                    }
+      </script>
+      <module type="string">__js1</module>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">nasal</command>
+        <script type="string">
+                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
+                    {
+                    if ( (!getprop("engines/engine[1]/running") or getprop("engines/engine[1]/running")=="false") and  getprop("controls/engines/engine[1]/cutoff"))
+                    {
+                    setprop("controls/engines/engine[1]/starter",1);
+                    settimer(func { setprop("controls/engines/engine[1]/cutoff",0) }, 0.2);
+                    }
+                    else
+                    {
+                    setprop("controls/engines/engine[1]/cutoff",1-getprop("controls/engines/engine[1]/cutoff"));
+                    }
+                    }
+      </script>
+        <module type="string">__js1</module>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="17">
+    <name type="string">Engine Left GEN</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">sim/model/f15/controls/electrics/l-gen-switch</property>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-toggle</command>
+        <property type="string">sim/model/f15/controls/electrics/l-gen-switch</property>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="18">
+    <name type="string">Engine Right GEN</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">sim/model/f15/controls/electrics/r-gen-switch</property>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-toggle</command>
+        <property type="string">sim/model/f15/controls/electrics/r-gen-switch</property>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="19">
+    <name type="string">JFS Starter</name>
+    <desc type="string">Custom</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">sim/model/f15/controls/electrics/jfs-starter</property>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-toggle</command>
+        <property type="string">sim/model/f15/controls/electrics/jfs-starter</property>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="20">
+    <desc type="string">Custom</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-assign</command>
+      <property type="string">controls/armament/emergency-jettison</property>
+      <value type="string">1</value>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-assign</command>
+        <property type="string">controls/armament/emergency-jettison</property>
+        <value type="string">0</value>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="21">
+    <desc type="string">Flaps Up</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.flapsDown(-1);</script>
+    </binding>
+    <repeatable type="double">0</repeatable>
+  </button>
+  <button n="22">
+    <desc type="string">Flaps Down</desc>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">controls.flapsDown(1);</script>
+    </binding>
+    <repeatable type="double">0</repeatable>
+  </button>
+  <button n="23">
+    <desc type="string">Master Arm Switch</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-assign</command>
+      <property type="string">/sim/model/f15/controls/armament/master-arm-switch</property>
+      <value type="string">1</value>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-assign</command>
+        <property type="string">/sim/model/f15/controls/armament/master-arm-switch</property>
+        <value type="string">0</value>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="24">
+    <desc type="string">TFR Switch</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-assign</command>
+      <property type="string">sim/model/f15/avionics/tfr-flir-on</property>
+      <value type="string">1</value>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-assign</command>
+        <property type="string">sim/model/f15/avionics/tfr-flir-on</property>
+        <value type="string">0</value>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="25">
+    <desc type="string">AFCS Attitude Switch</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command>property-toggle</command>
+      <property>sim/model/f15/controls/AFCS/att-hold</property>
+    </binding>
+  </button>
+  <button n="27">
+    <desc type="string">AFCS Altitude Switch</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-assign</command>
+      <property type="string">sim/model/f15/controls/AFCS/alt-hold</property>
+      <value type="string">1</value>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-assign</command>
+        <property type="string">sim/model/f15/controls/AFCS/alt-hold</property>
+        <value type="string">0</value>
+      </binding>
+    </mod-up>
+  </button>
+  <button n="26">
+    <desc type="string">AFCS Heading Switch</desc>
+    <repeatable type="double">0</repeatable>
+    <binding>
+      <command type="string">property-assign</command>
+      <property type="string">autopilot/locks/heading</property>
+      <value type="string">true-heading-hold</value>
+    </binding>
+    <mod-up>
+      <binding>
+        <command type="string">property-assign</command>
+        <property type="string">autopilot/locks/heading</property>
+        <value type="string">wing-leveler</value>
+      </binding>
+      <binding>
+        <command type="string">property-assign</command>
+        <property type="string">sim/model/f15/controls/AFCS/alt-hold</property>
+        <value type="string">0</value>
+      </binding>
+    </mod-up>
+    <binding>
+      <command type="string">property-assign</command>
+      <property type="string">sim/model/f15/controls/AFCS/alt-hold</property>
+      <value type="string">1</value>
+    </binding>
+  </button>
+</PropertyList>
