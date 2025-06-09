@@ -16,6 +16,8 @@
       <object-name>AGM-84_Tailend</object-name>
       <object-name>AGM-84_Tailfins</object-name>
       <object-name>AGM-84_Glass</object-name>
+      <object-name>Lens</object-name>
+      <object-name>CamSphere</object-name>
     <condition>
       <property>payload/armament/agm-84e/flags/msl-id-500</property>
     </condition>
@@ -767,6 +769,8 @@
       <object-name>AGM-84_Tailend</object-name>
       <object-name>AGM-84_Tailfins</object-name>
       <object-name>AGM-84_Glass</object-name>
+      <object-name>Lens</object-name>
+      <object-name>CamSphere</object-name>
   		<enable-hot type="bool">false</enable-hot>
  	</animation>
 	
