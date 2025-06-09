@@ -1805,7 +1805,7 @@ else
     },
     get_vBody: func {
       var body = nil;
-      if (me.ubody != nil) {
+      if (me.ubody != nil and me.vbody != nil) {  # I get non-object has no members at the following line, so that should fix it Jimmy L. Miles
         body = me.vbody.getValue();
       }
       if(body == nil) {

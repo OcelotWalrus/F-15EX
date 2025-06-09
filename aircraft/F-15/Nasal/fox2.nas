@@ -5073,7 +5073,7 @@ var AIM = {
 			if (pattern == PATTERN_ROSETTE) {
 				# rosette nutation
 				me.freq1 = me.angular_speed*0.23/radius;
-				me.freq2 = me.f1*0.4;
+				me.freq2 = me.free*0.4;  # was me.f, but didn't exist and produced crashes, no my guess is that it's me.free ??? Jimmy L. Miles
 				me.seeker_head = 0.5*radius*(math.cos(me.freq1*math.pi*2*me.pattern_elapsed)+math.cos(me.freq2*math.pi*2*me.pattern_elapsed))/me.meridian_factor+heading;
 				me.seeker_elev = 0.5*radius*(math.sin(me.freq1*math.pi*2*me.pattern_elapsed)-math.sin(me.freq2*math.pi*2*me.pattern_elapsed))+pitch;
 			} elsif (pattern == PATTERN_CIRCLE) {
