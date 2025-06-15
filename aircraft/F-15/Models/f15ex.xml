@@ -201,7 +201,6 @@
         <object-name>CFT-left</object-name>
         <object-name>CFT-left-pylons</object-name>
         <object-name>CFT-right-pylons</object-name>
-        <object-name>tanks</object-name>
         <object-name>mk-84</object-name>
         <object-name>aim-9</object-name>
         <object-name>aim-7</object-name>
@@ -6011,6 +6010,34 @@
         <object-name>aim120-r3</object-name>
         <object-name>aim7-r3</object-name>
     </animation>
+
+    <model>
+        <name>tank-l</name>
+        <path>Aircraft/F-15/Models/Stores/Ext-Tanks/exttank-submodel.xml</path>
+        <offsets>
+             <x-m>1.8772</x-m>
+             <y-m>-2.7964</y-m>
+             <z-m>-0.23704</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>tank-r</name>
+        <path>Aircraft/F-15/Models/Stores/Ext-Tanks/exttank-submodel.xml</path>
+        <offsets>
+             <x-m>1.8772</x-m>
+             <y-m>2.7868</y-m>
+             <z-m>-0.25474</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>tank-c</name>
+        <path>Aircraft/F-15/Models/Stores/Ext-Tanks/exttank-submodel.xml</path>
+        <offsets>
+             <x-m>1.5381</x-m>
+             <y-m>0</y-m>
+             <z-m>-1.256</z-m>
+        </offsets>
+    </model>
 
     <!-- new extenal-models weapons-->
     <model>

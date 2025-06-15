@@ -2,7 +2,7 @@
 <PropertyList>
 
 	<path>exttank.ac</path>
-	<!--<texture-path>swordmen/</texture-path>-->
+	<!--texture-path>Aircraft/F-15/Models/</texture-path>
 	<animation>
 		<enable-hot type="bool">false</enable-hot>
 	</animation>
@@ -12,5 +12,5 @@
         <property-base>sim/model/livery</property-base>
         <texture-prop>texture</texture-prop>
         <texture>Aircraft/F-15/Models/Liveries/livery.AF80-0007.jpg</texture>
-    </animation>
+    </animation-->
 </PropertyList>
