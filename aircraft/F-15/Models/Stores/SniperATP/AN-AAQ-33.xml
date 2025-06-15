@@ -7,6 +7,22 @@
     <inherits-from>Aircraft/F-15/Models/Effects/glass/glassIR</inherits-from>  
     <object-name>Sniper_Glass</object-name>
   </effect>
+  
+  <effect>
+      <inherits-from>Aircraft/F-15/Models/Effects/fuselage/model-combined-fuselage</inherits-from>
+      <parameters>
+          <metallic type="float">0.80</metallic>
+          <ambient-factor type="float">0.35</ambient-factor>
+          <rain-enabled type="int">0</rain-enabled>
+          <ambient-correction type="float">0.00</ambient-correction>
+          <reflection-enabled type="int">0</reflection-enabled>
+      </parameters>
+      <object-name>Sniper_Front</object-name>
+      <object-name>Sniper_Sphere</object-name>
+      <object-name>Sniper_SphereUnit</object-name>
+      <object-name>Sniper_TopMount</object-name>
+      <object-name>ANAAQ-33</object-name>
+  </effect>
 
 
  <animation>

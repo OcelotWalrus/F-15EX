@@ -883,6 +883,23 @@
                 </default_exit>
             </map>
             <f15>
+                <effects>
+                    <rust type="bool">true</rust>
+                    <rust-mag type="double">1</rust-mag>
+                    <dirt type="bool">true</dirt>
+                    <dirt-fac type="double">.15</dirt-fac>
+                    <apple type="int">0</apple>
+                </effects>
+                <scene>
+                    <ambient type="double">1.0</ambient>
+                    <diffuse type="double">1.0</diffuse>
+                    <specular type="double">0.8</specular>
+                    <shininess type="int">60</shininess>
+                    <reflection-fuselage type="double">-0.40</reflection-fuselage>
+                    <reflection-stuff type="double">-0.30</reflection-stuff>
+                    <ambient-occlusion type="double">0.35</ambient-occlusion>
+                    <version type="bool">1</version>
+                </scene>
                 <ejected type="bool">false</ejected>
                 <force-tgp type="bool">false</force-tgp>
                 <stores>
@@ -4655,7 +4672,7 @@
                   <script>aircraft.chute_release();</script>
               </binding>
           </key>
-          
+
           <key n="26">
               <name>Ctrl-z</name>
               <desc>Go through different situational awareness camera views.</desc>

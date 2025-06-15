@@ -2,15 +2,21 @@
 <PropertyList>
 
 	<path>exttank.ac</path>
-	<!--texture-path>Aircraft/F-15/Models/</texture-path>
-	<animation>
-		<enable-hot type="bool">false</enable-hot>
-	</animation>
-    <animation>
-        <type>material</type>
-        <object-name>tank</object-name>
-        <property-base>sim/model/livery</property-base>
-        <texture-prop>texture</texture-prop>
-        <texture>Aircraft/F-15/Models/Liveries/livery.AF80-0007.jpg</texture>
-    </animation-->
+    <effect>
+      <inherits-from>Aircraft/F-15/Models/Effects/fuselage/model-combined-fuselage</inherits-from>
+      <parameters>
+         <metallic type="float">0.80</metallic>
+         <ambient-factor type="float">0.35</ambient-factor>
+         <rain-enabled type="int">2</rain-enabled>
+         <snow-enabled type="int">0</snow-enabled>
+         <reflection-enabled type="int">1</reflection-enabled>
+         <reflection-correction type="float">-0.45</reflection-correction>
+         <grain-texture-enabled type="int"><use>sim/model/f15/effects/rust</use></grain-texture-enabled>
+         <grain-magnification type="float"><use>sim/model/f15/effects/rust-mag</use></grain-magnification>
+         <dirt-enabled type="int"><use>sim/model/f15/effects/dirt</use></dirt-enabled>
+         <dirt-factor type="float"><use>sim/model/f15/effects/dirt-fac</use></dirt-factor>
+     </parameters>
+      <object-name>fuel_tank600</object-name>
+      <object-name>fillercap-600</object-name>
+  </effect>
 </PropertyList>

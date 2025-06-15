@@ -1344,6 +1344,95 @@
                 <layout>hbox</layout>
 
                 <text>
+                    <label>Weathered effects (Experimental)</label>
+                </text>
+            </group>
+
+            <group>
+				<layout>hbox</layout>
+
+				<group><!-- Labels -->
+					<layout>vbox</layout>
+					<halign>left</halign>
+					<text>
+                        <halign>left</halign>
+                        <live>true</live>
+                        <label>Rust</label>
+                    </text>
+					<text>
+                        <halign>left</halign>
+                        <live>true</live>
+                        <label>Dirt</label>
+                    </text>
+                </group>
+				<group>
+					<layout>hbox</layout>
+					<halign>center</halign>
+
+					<group> <!-- Sliders -->
+						<layout>vbox</layout>
+						<halign>center</halign>
+						<checkbox>
+					      <halign>left</halign>
+					      <property>sim/model/f15/effects/rust</property>
+					      <live>true</live>
+					        <binding>
+					          <command>property-toggle</command>
+					          <property>sim/model/f15/effects/rust</property>
+					        </binding>
+					    </checkbox>
+						<checkbox>
+					      <halign>left</halign>
+					      <property>sim/model/f15/effects/dirt</property>
+					      <live>true</live>
+					        <binding>
+					          <command>property-toggle</command>
+					          <property>sim/model/f15/effects/dirt</property>
+					        </binding>
+					    </checkbox>
+	                </group>
+
+					<group> <!-- Sliders -->
+						<layout>vbox</layout>
+						<halign>right</halign>
+						<slider>
+						     <halign>left</halign>
+						     <property>sim/model/f15/effects/rust-mag</property>
+						     <min>0.1</min>
+						     <max>1</max>
+						     <step>0.05</step>
+						     <live>true</live>
+						     <vertical>false</vertical>
+						     <pref-height>40</pref-height>
+						     <pref-width>150</pref-width>
+						     <binding>
+						        <command>dialog-apply</command>
+						     </binding>
+						</slider>
+						<slider>
+						     <halign>left</halign>
+						     <property>sim/model/f15/effects/dirt-fac</property>
+						     <min>0</min>
+						     <max>0.4</max>
+						     <step>0.05</step>
+						     <live>true</live>
+						     <vertical>false</vertical>
+						     <pref-height>40</pref-height>
+						     <pref-width>150</pref-width>
+						     <binding>
+						        <command>dialog-apply</command>
+						     </binding>
+						</slider>
+	                </group>
+				</group>
+			</group>
+
+			<hrule/>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
                     <label>Pilot Helment Sound Proofing</label>
                 </text>
 
