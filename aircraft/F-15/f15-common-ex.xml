@@ -885,7 +885,7 @@
             <f15>
                 <effects>
                     <rust type="bool">true</rust>
-                    <rust-mag type="double">1</rust-mag>
+                    <rust-mag type="double">.15</rust-mag>
                     <dirt type="bool">true</dirt>
                     <dirt-fac type="double">.15</dirt-fac>
                     <apple type="int">0</apple>
