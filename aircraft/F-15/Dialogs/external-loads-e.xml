@@ -1928,8 +1928,8 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>Droptank</value>
-							<value>3 x M151</value>
 							<value>AN/ALQ-184(V) ECM Pod</value>
+							<value>3 x M151</value>
                             <value>2 x CATM-9X Sidewinder Dummy</value>
                             <value>2 x CATM-120D AMRAAM Dummy</value>
 							<value>2 x AIM-9X Block I Sidewinder</value>
@@ -2189,6 +2189,7 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>Droptank</value>
+							<value>AN/ALQ-184(V) ECM Pod</value>
 							<value>3 x MK-83</value>
 							<value>1 x MK-84</value>
 							<value>3 x CBU-87</value>
@@ -2430,6 +2431,7 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>Droptank</value>
+							<value>AN/ALQ-184(V) ECM Pod</value>
 							<value>3 x M151</value>
                             <value>2 x CATM-9X Sidewinder Dummy</value>
                             <value>2 x CATM-120D AMRAAM Dummy</value>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PropertyList>
   <!--Reduce update rate because these items do not change that often.-->
   <update-interval-secs type="double">0.5</update-interval-secs>
@@ -2579,6 +2579,28 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/an-alq-184</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>AN/ALQ-184(V) ECM Pod</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/an-alq-184-r</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-5-set</property>
+          <value>AN/ALQ-184(V) ECM Pod</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/an-alq-184-c</output>
   </logic>
   <logic>
     <input>

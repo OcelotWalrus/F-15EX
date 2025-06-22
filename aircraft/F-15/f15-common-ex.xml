@@ -1833,6 +1833,8 @@
                 <bool n="331" alias="/sim/model/f15/payload/selected/agm-65d-tri-r"/>
                 <bool n="332" alias="/sim/model/f15/payload/selected/lau68-l"/>
                 <bool n="333" alias="/sim/model/f15/payload/selected/lau68-r"/>
+                <bool n="334" alias="/sim/model/f15/payload/selected/an-alq-184-r"/>
+                <bool n="335" alias="/sim/model/f15/payload/selected/an-alq-184-c"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2257,10 +2259,6 @@
                 <lbs>0</lbs>
             </opt>
             <opt>
-                <name>AN/ALQ-184(V) ECM Pod</name>
-                <lbs>705</lbs>
-            </opt>
-            <opt>
                 <name>2 x CATM-9X Sidewinder Dummy</name>
                 <lbs>575.0</lbs>
             </opt>
@@ -2305,6 +2303,10 @@
             <opt>
                 <name>Empty</name>
                 <lbs>0</lbs>
+            </opt>
+            <opt>
+                <name>AN/ALQ-184(V) ECM Pod</name>
+                <lbs>705</lbs>
             </opt>
             <opt>
                 <name>2 x CATM-9X Sidewinder Dummy</name>
@@ -2415,6 +2417,10 @@
                 <gals>600</gals>
             </opt>
             <opt>
+                <name>AN/ALQ-184(V) ECM Pod</name>
+                <lbs>705</lbs>
+            </opt>
+            <opt>
                 <name>3 x MK-83</name>
                 <lbs>3000.0</lbs>
             </opt>
@@ -2467,6 +2473,10 @@
             <opt>
                 <name>Empty</name>
                 <lbs>0</lbs>
+            </opt>
+            <opt>
+                <name>AN/ALQ-184(V) ECM Pod</name>
+                <lbs>705</lbs>
             </opt>
             <opt>
                 <name>2 x CATM-9X Sidewinder Dummy</name>

@@ -5369,6 +5369,22 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>an-alq-184-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[334]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>an-alq-184-c</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[335]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>smokewinder-l</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[238]</property>
@@ -6966,6 +6982,24 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
+            <z-m>0.05</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>an-alq-184-c</name>
+        <path>Aircraft/F-15/Models/Stores/AN_ALQ-184/AN_ALQ-184.xml</path>
+        <offsets>
+             <x-m>1.5381</x-m>
+             <y-m>0</y-m>
+             <z-m>-1</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>an-alq-184-r</name>
+        <path>Aircraft/F-15/Models/Stores/AN_ALQ-184/AN_ALQ-184.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
             <z-m>0.05</z-m>
         </offsets>
     </model>

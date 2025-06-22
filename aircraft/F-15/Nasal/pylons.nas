@@ -171,13 +171,13 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 	var pylon4set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 
-	var pylon5set = [pylonSets.empty, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
+	var pylon5set = [pylonSets.empty, pylonSets.podEcm184, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 
 	var pylon6set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 
 	var pylon8aset = [pylonSets.empty, pylonSets.smokeWR, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon8bset = [pylonSets.empty, pylonSets.hyd70h9, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu32, pylonSets.quadgbu39, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.tripleagm65b, pylonSets.doubleagm65d, pylonSets.tripleagm65d, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm88e, pylonSets.singleagm119a, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon8bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.hyd70h9, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu32, pylonSets.quadgbu39, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.tripleagm65b, pylonSets.doubleagm65d, pylonSets.tripleagm65d, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm88e, pylonSets.singleagm119a, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon8cset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonex2aset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9xw, pylonSets.aim120dw];
@@ -3235,12 +3235,32 @@ var bore_loop = func {
         var standby = getprop("instrumentation/radar/radar-standby");
         var aim = fcs.getSelectedWeapon();
         if (aim != nil and (aim.type == "AIM-9" or aim.type == "AIM-9X" or aim.type == "CATM-9X")) {
-            if (standby == 1) {
+			var hmd_active = getprop("payload/armament/hmd-active");
+
+        	if (hmd_active and aim.status < 1 and awg_9.getPriorityTarget() == nil) {
+        		aim.setContacts(awg_9.completeList());
+        		var h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
+                var p = getprop("sim/current-view/pitch-offset-deg");
+        		if (1 or math.sqrt(h*h+p*p) < aim.fcs_fov) {
+                	aim.commandDir(h,p);
+                	bore = 2;
+            	} else {
+            		if (standby != 1) {
+		                aim.commandRadar(0,-4);
+		                aim.setContacts([]);
+		            } else {
+		            	aim.setContacts(awg_9.completeList());
+		                aim.commandDir(0,-4);# the real is bored to -6 deg below real bore
+		                bore = 1;
+		            }
+            	}
+            } elsif (standby == 1) {
                 #aim.setBore(1);
                 aim.setContacts(awg_9.completeList);
                 aim.commandDir(0,-3.5);# the real is bored to -6 deg below real bore
                 bore = 1;
             } else {
+				# stop tracking target with IR and start try to lock up radar target
                 aim.commandRadar();
                 aim.setContacts([]);
             }
