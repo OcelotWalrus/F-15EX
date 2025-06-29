@@ -1719,7 +1719,7 @@ var ag_sead_diverse = func {
 		setprop("payload/weight[12]/selected","1 x AGM-88E");
 		setprop("payload/weight[1]/selected","AN/ALQ-184(V) ECM Pod");
         setprop("payload/weight[5]/selected","Droptank");
-        setprop("payload/weight[9]/selected","1 x AGM-65D");
+        setprop("payload/weight[9]/selected","3 x AGM-65D");
 		setprop("payload/weight[15]/selected","1 x AGM-88E");
 
         setprop("consumables/fuel/tank[5]/selected",0);
@@ -1775,11 +1775,11 @@ var ag_dead = func {
 
         reloadCannon();
 
-		setprop("payload/weight[12]/selected","1 x AGM-65D");
+		setprop("payload/weight[12]/selected","2 x AGM-65D");
 		setprop("payload/weight[1]/selected","AN/ALQ-184(V) ECM Pod");
         setprop("payload/weight[5]/selected","Droptank");
         setprop("payload/weight[9]/selected","1 x AGM-88E");
-		setprop("payload/weight[15]/selected","1 x AGM-65D");
+		setprop("payload/weight[15]/selected","2 x AGM-65D");
 
         setprop("consumables/fuel/tank[5]/selected",0);
         setprop("consumables/fuel/tank[6]/selected",0);
