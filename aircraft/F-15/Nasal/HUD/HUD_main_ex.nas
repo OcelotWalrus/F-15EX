@@ -605,7 +605,7 @@ var F15HUD = {
 															}
 	                                                        obj.window10.setText(sprintf("a  %d", obj.alpha));
                                                         }),
-            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond", "GroundAlt"], nil, func(val)
+            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond", "AltitudeAGL"], nil, func(val)
                                                         {
                                                             obj.window9.setText(sprintf("%03d", math.round(val.VelocitiesAirspeedKt)));
                                                             obj.window13.setText(sprintf("G %03d", math.round(val.VelocitiesGroundspeedKt)));
@@ -637,8 +637,8 @@ var F15HUD = {
                                                             obj.window14.setText(sprintf(" %04d fps", math.round(val.FeetPerSecond)));
                                                             obj.window14.setVisible(1);
 
-															if (val.GroundAlt > 0) {
-																obj.window19.setText(sprintf("%04d ft", math.round(val.AltimeterIndicatedAltitudeFt - val.GroundAlt)));
+															if (val.AltitudeAGL > 0) {
+																obj.window19.setText(sprintf("%04d ftAGL", math.round(val.AltitudeAGL)));
 																obj.window19.setVisible(1);
 															} else {
 																obj.window19.setVisible(0);
@@ -2359,6 +2359,7 @@ input = {
 		CurrentFuelLb                           : "sim/model/f15/instrumentation/fuel-gauges/total-display",
 		FuelPercentage                          : "consumables/fuel/total-fuel-norm",
 		ThrustToWeightRatio                     : "sim/model/f15/avionics/thrust-weight-ratio",
+		AltitudeAGL                             : "position/altitude-agl-ft",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
