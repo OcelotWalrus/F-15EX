@@ -1093,6 +1093,8 @@ var MPCD_Device =
                 me.contact_data = datalink.get_data(contact.get_Callsign());
                 if (me.contact_data == nil or !me.contact_data.is_known()) {
                     me.unknown = 1;
+                } else {
+                    me.unknown = 0;
                 }
 
                 if (me.unknown == 0) {
