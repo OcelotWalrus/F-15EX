@@ -1436,17 +1436,14 @@
                     <label>Pilot Helment Sound Proofing</label>
                 </text>
 
-                <slider>
-                    <name>PilotHelmentSoundProofing</name>
-                    <property>/controls/seat/pilot-helmet-volume-attenuation</property>
-                    <live>1</live>
-                    <min>0</min>
-                    <max>0.3</max>
-                    <binding>
-                        <command>dialog-apply</command>
-                        <object-name>PilotHelmentSoundProofing</object-name>
-                    </binding>
-                </slider>
+				<checkbox>
+				  <property>/controls/seat/pilot-helmet-volume-attenuation</property>
+				  <live>true</live>
+				  <binding>
+					  <command>property-toggle</command>
+					  <property>/controls/seat/pilot-helmet-volume-attenuation</property>
+				  </binding>
+				</checkbox>
             </group>
             <group>
                 <layout>hbox</layout>
@@ -1492,9 +1489,55 @@
 
             <hrule/>
 
-			<empty>
-				<pref-height>96</pref-height>
-			</empty>
+			<text><label>Kneeboards</label></text>
+
+		    <group>
+				<layout>hbox</layout>
+			    <group>
+					<layout>hbox</layout>
+			    	<button>
+						<legend>Load Left MDC</legend>
+						<binding>
+							<command>nasal</command>
+							<script><![CDATA[
+								knee.get_knee_file_gui_l();
+							]]></script>
+						</binding>
+					</button>
+					<checkbox>
+						<label>Visible</label>
+						<halign>center</halign>
+						<live>true</live>
+						<property>sim/model/f15/avionics/kneeboard-left</property>
+						<binding>
+							<command>dialog-apply</command>
+						</binding>
+					</checkbox>
+				</group>
+				<group>
+					<layout>hbox</layout>
+					<button>
+						<legend>Load Right MDC</legend>
+						<binding>
+							<command>nasal</command>
+							<script><![CDATA[
+								knee.get_knee_file_gui_r();
+							]]></script>
+						</binding>
+					</button>
+					<checkbox>
+						<label>Visible</label>
+						<halign>center</halign>
+						<live>true</live>
+						<property>sim/model/f15/avionics/kneeboard-right</property>
+						<binding>
+							<command>dialog-apply</command>
+						</binding>
+					</checkbox>
+				</group>
+			</group>
+
+			<hrule/>
 
 		</group>
 
@@ -3531,9 +3574,5 @@
 		</group>
 
 	</group>
-
-	<empty>
-		<pref-height>8</pref-height>
-	</empty>
 
 </PropertyList>

@@ -20286,6 +20286,38 @@
       <not><property>sim/model/f15/ejected</property></not>
     </condition>
   </animation>
+  <model>
+     <name>kneeboard-l</name>
+     <path>Aircraft/F-15/Models/Cockpit/kneeboards/kneeboard-left.xml</path>
+     <offsets>
+       <x-m>0</x-m>
+       <y-m>0</y-m>
+       <z-m>0</z-m>
+     </offsets>
+  </model>
+  <model>
+     <name>kneeboard-r</name>
+     <path>Aircraft/F-15/Models/Cockpit/kneeboards/kneeboard-right.xml</path>
+     <offsets>
+       <x-m>0</x-m>
+       <y-m>0</y-m>
+       <z-m>0</z-m>
+     </offsets>
+  </model>
+  <animation>
+    <type>select</type>
+    <object-name>kneeboard-l</object-name>
+    <condition>
+      <property>sim/model/f15/avionics/kneeboard-left</property>
+    </condition>
+  </animation>
+  <animation>
+    <type>select</type>
+    <object-name>kneeboard-r</object-name>
+    <condition>
+      <property>sim/model/f15/avionics/kneeboard-right</property>
+    </condition>
+  </animation>
   <!--Renamed objects:
       mount: fib_mount-->
 </PropertyList>

@@ -961,6 +961,8 @@
                     <cara-on type="bool">false</cara-on><!-- if CARA radar altimeter is detecting ground (whether enabled or not) -->
                     <tgp-lock type="bool">false</tgp-lock>
                     <thrust-weight-ratio type="double">1</thrust-weight-ratio>
+                    <kneeboard-left type="bool">true</kneeboard-left>
+                    <kneeboard-right type="bool">true</kneeboard-right>
                 </avionics>
                 <flir>
                     <input>
@@ -5002,6 +5004,9 @@
         <mig28>
           <file>Aircraft/F-15/Nasal/mig28.nas</file>
         </mig28>
+        <knee>
+            <file>Aircraft/F-15/Nasal/kneeboards.nas</file>
+        </knee>
         <aircraft>
             <file>Aircraft/F-15/Nasal/liveries.nas</file>
             <file>Aircraft/F-15/Nasal/aircraft-main.nas</file>
@@ -5024,6 +5029,7 @@
         <displays>
             <file>Nasal/canvas/MFD_Generic.nas</file>
             <file>Nasal/HUD/HUD_main_ex.nas</file>
+            <!--file>Nasal/HUD/hmd.nas</file-->
             <file>Nasal/VSD/VSD_main.nas</file>
             <file>Nasal/TEWS/TEWS_main.nas</file>
             <file>Nasal/MPCD/MPCD_main.nas</file>
