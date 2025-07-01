@@ -3895,6 +3895,9 @@
                 <ready-time type="double">3</ready-time>
                 <!--power-on-battery-time type="double">1800</power-on-battery-time-->
                 <telemetry type="bool">true</telemetry>  <!-- E variant: got 2-way datalink -->
+                <DLZ type="bool">true</DLZ>
+                <DLZ-optimal-alt-feet type="double">25000</DLZ-optimal-alt-feet>  <!-- guess -->
+                <DLZ-optimal-closing-mach type="double">.9</DLZ-optimal-closing-mach>  <!-- guess -->
             </agm-88e>
             <agm-119a>
                 <type-id type="int">4</type-id>
@@ -4046,7 +4049,7 @@
                 <ejector-speed-fps type="double">5</ejector-speed-fps>
                 <telemetry type="bool">true</telemetry>
                 <DLZ type="bool">true</DLZ>
-                <DLZ-optimal-alt-feet type="double">25000</DLZ-optimal-alt-feet>  <!-- data given by FG F-16 github wiki -->
+                <DLZ-optimal-alt-feet type="double">32000</DLZ-optimal-alt-feet>  <!-- data given by FG F-16 github wiki -->
                 <DLZ-optimal-closing-mach type="double">.9</DLZ-optimal-closing-mach>  <!-- the JASSM's got a sbsonic cruise speed of .9 Ma -->
             </agm-158a>
             <agm-158c>
