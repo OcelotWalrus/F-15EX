@@ -87,6 +87,11 @@ string.truncateAt = func(src, match){
 #
 #
 
+var hmd = modules.Module.new("f15_HMD"); # Module name
+hmd.setDebug(0); # 0=(mostly) silent; 1=print setlistener and maketimer calls to console; 2=print also each listener hit, be very careful with this!
+hmd.setFilePath(getprop("/sim/aircraft-dir")~"/Nasal/HUD");
+hmd.setMainFile("hmd.nas");
+hmd.load();
 
 #----------------------------------------------------------------------------
 # Nozzle opening

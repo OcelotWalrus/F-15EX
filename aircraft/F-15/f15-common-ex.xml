@@ -960,6 +960,9 @@
                     <laser-code type="int">000</laser-code>
                     <cara-on type="bool">false</cara-on><!-- if CARA radar altimeter is detecting ground (whether enabled or not) -->
                     <tgp-lock type="bool">false</tgp-lock>
+                    <hmd-sym type="double">.75</hmd-sym>
+                    <hmd-power type="double">1</hmd-power>
+                    <n-reset type="double">0</n-reset>
                     <thrust-weight-ratio type="double">1</thrust-weight-ratio>
                     <kneeboard-left type="bool">true</kneeboard-left>
                     <kneeboard-right type="bool">true</kneeboard-right>
@@ -2653,6 +2656,7 @@
             <MAW-bearing type="double">0</MAW-bearing>
             <MAW-active type="bool">false</MAW-active>
             <spike type="bool">false</spike>
+            <hmd-active type="bool">false</hmd-active>
             <fire-control>
                 <serviceable type="bool">true</serviceable><!-- why is this not auto created by failure system in 2018.3?? -->
             </fire-control>
@@ -4576,7 +4580,7 @@
                     <script>aircraft.lowerFlaps();</script>
                 </binding>
             </key>
-            <key n="104">
+            <!--key n="104">
                 <name>h</name>
                 <desc>HUD Cycle</desc>
                 <binding>
@@ -4596,7 +4600,7 @@
                         ]]>
                     </script>
                 </binding>
-            </key>
+            </key--> <!-- disabled, now it's for the HMD -->
             <key n="74">
                 <name>J</name>
                 <desc>MPCD jettison</desc>
@@ -5032,7 +5036,7 @@
         <displays>
             <file>Nasal/canvas/MFD_Generic.nas</file>
             <file>Nasal/HUD/HUD_main_ex.nas</file>
-            <!--file>Nasal/HUD/hmd.nas</file-->
+            <file>Nasal/HUD/hmd.nas</file>
             <file>Nasal/VSD/VSD_main.nas</file>
             <file>Nasal/TEWS/TEWS_main.nas</file>
             <file>Nasal/MPCD/MPCD_main.nas</file>

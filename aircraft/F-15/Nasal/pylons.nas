@@ -3238,10 +3238,10 @@ var bore_loop = func {
 			var hmd_active = getprop("payload/armament/hmd-active");
 
         	if (hmd_active and aim.status < 1 and awg_9.getPriorityTarget() == nil) {
-        		aim.setContacts(awg_9.completeList());
+        		aim.setContacts(awg_9.completeList);
         		var h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
                 var p = getprop("sim/current-view/pitch-offset-deg");
-        		if (1 or math.sqrt(h*h+p*p) < aim.fcs_fov) {
+        		if (math.sqrt(h*h+p*p) < aim.fcs_fov) {
                 	aim.commandDir(h,p);
                 	bore = 2;
             	} else {
@@ -3249,7 +3249,7 @@ var bore_loop = func {
 		                aim.commandRadar(0,-4);
 		                aim.setContacts([]);
 		            } else {
-		            	aim.setContacts(awg_9.completeList());
+		            	aim.setContacts(awg_9.completeList);
 		                aim.commandDir(0,-4);# the real is bored to -6 deg below real bore
 		                bore = 1;
 		            }

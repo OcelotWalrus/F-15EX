@@ -5,9 +5,9 @@
 # Version 1.09
 #
 # License: GPL 2.0
-	
+
 var HudMath = {
-	
+
 	init: func (acHudUpperLeft, acHudLowerRight, canvasSize, uvUpperLeft_norm, uvLowerRight_norm, parallax) {
 		# acHudUpperLeft, acHudLowerRight: vectors of size 3 that indicates HUD position in 3D world.
 		# canvasSize: vector of size 2 that indicates size of canvas.
@@ -17,7 +17,7 @@ var HudMath = {
 		# Assumptions is that HUD canvas is vertical aligned and centered in the Y axis. (will though to some degree work with slanted HUDs)
 		# Also assumed that UV ratio is not stretched. So that every texel is perfect square formed. (see above)
 		# Another assumption is that aircraft bore line is parallel with 3D X axis.
-		
+
 		# statics
 		me.hud3dWidth    = acHudLowerRight[1]-acHudUpperLeft[1];
 		me.hud3dHeight   = acHudUpperLeft[2]-acHudLowerRight[2];
@@ -25,29 +25,29 @@ var HudMath = {
 		me.hud3dX        = (acHudUpperLeft[0]+acHudLowerRight[0])*0.5;#average due to slanted HUDs
 		me.hud3dXTop     = acHudUpperLeft[0];
 		me.hud3dXBottom  = acHudLowerRight[0];
-		me.canvasWidth   = (uvLowerRight_norm[0]-uvUpperLeft_norm[0])*canvasSize[0]; 
+		me.canvasWidth   = (uvLowerRight_norm[0]-uvUpperLeft_norm[0])*canvasSize[0];
 		me.canvasHeight  = (uvUpperLeft_norm[1]-uvLowerRight_norm[1])*canvasSize[1];
 		me.pixelPerMeterY= me.canvasHeight / me.hud3dHeight;# for x and y seperate because some HUDs are slanted
 		me.pixelPerMeterX= me.canvasWidth / me.hud3dWidth;
 		me.parallax      = parallax;
 		me.originCanvas  = [uvUpperLeft_norm[0]*canvasSize[0],(1-uvUpperLeft_norm[1])*canvasSize[1]];
 		me.slanted       = me.hud3dXTop-me.hud3dXBottom > 0.01;
-		
+
 		#printf("HUD 3D. width=%.2f height=%.2f x_pos=%.2f",me.hud3dWidth,me.hud3dHeight,me.hud3dX);
 		#printf("HUD canvas. width=%d height=%d pixelX/meter=%.1f",me.canvasWidth,me.canvasHeight,me.pixelPerMeterX);
-		
+
 		me.makeProperties_();
 		delete(me,"makeProperties_");
 		me.reCalc(1);
 	},
-	
+
 	reCalc: func (initialization = 0) {
 		# if view position has moved and you dont use parallax, call this.
-		# 
+		#
 		if (me.slanted) {
 			# TODO: do init here also
 			me.length = math.sqrt(me.hud3dHeight*me.hud3dHeight+(me.hud3dXTop-me.hud3dXBottom)*(me.hud3dXTop-me.hud3dXBottom));
-			me.slantAngle = math.acos((me.length*me.length+me.hud3dHeight*me.hud3dHeight-(me.hud3dXTop-me.hud3dXBottom)*(me.hud3dXTop-me.hud3dXBottom))/(2*me.length*me.hud3dHeight));			
+			me.slantAngle = math.acos((me.length*me.length+me.hud3dHeight*me.hud3dHeight-(me.hud3dXTop-me.hud3dXBottom)*(me.hud3dXTop-me.hud3dXBottom))/(2*me.length*me.hud3dHeight));
 			me.HorizTopToEye = me.input.viewX.getValue()-me.hud3dXTop;
 			me.slantAngleOther = (180-90-me.slantAngle*R2D)*D2R;
 			me.extendedHUDToOverEye = me.HorizTopToEye*math.sin(me.slantAngleOther)/math.sin(me.slantAngle)+(me.hud3dTop - me.input.viewZ.getValue());
@@ -64,35 +64,35 @@ var HudMath = {
 			# calc Y offset from HUD canvas center origin.
 			me.centerOffset = -1 * (me.canvasHeight/2 - ((me.hud3dTop - me.input.viewZ.getValue())*me.pixelPerMeterY));
 		}
-		
+
 	},
-	
+
 	hudX3d: func (y) {
 		# hud 3D X pos for slanted HUDs. y is pixelPos from bore.
 		# only does this for x as Y is less affected by slanting.
 		return me.extrapolate(y/me.pixelPerMeterYSlant,-me.boreSlantedDownFromTopMeter,me.length-me.boreSlantedDownFromTopMeter,me.hud3dXTop,me.hud3dXBottom);
 	},
-	
+
 	getVertDistSlanted: func (pitch) {
 		# pixels down from bore on slanted HUD
 		me.slantDistMeter = me.distanceToBore*math.sin(-pitch*D2R)/math.sin((180+pitch-me.slantAngle*R2D-90)*D2R);
-		
+
 		return me.pixelPerMeterYSlant*me.slantDistMeter;
 	},
-	
+
 	getVertDistSlantedFromCenter: func (pitch) {
 		# pixels down from center origin on slanted HUD
 		me.slantDistMeter = me.centerOffsetSlantedMeter+(me.distanceToBore*math.sin(-pitch*D2R)/math.sin((180+pitch-me.slantAngle*R2D-90)*D2R));
 		return me.pixelPerMeterYSlant*me.slantDistMeter;
 	},
-	
+
 	getCenterOrigin: func {
 		# returns center origin in canvas from origin (0,0)
 		#
 		# most methods in the library assumes that your root group has been moved to this position.
 		return [me.originCanvas[0]+me.canvasWidth*0.5,me.originCanvas[1]+me.canvasHeight*0.5];
 	},
-	
+
 	getBorePos: func {
 		# returns bore pos in canvas from center origin
 		if (me.slanted) {
@@ -100,7 +100,7 @@ var HudMath = {
 		}
 		return [0,me.centerOffset];
 	},
-		
+
 	getPosFromCoord: func (gpsCoord, aircraft = nil) {
 		# return pos in canvas from center origin
 		if (aircraft== nil) {
@@ -116,7 +116,7 @@ var HudMath = {
 	    me.vel_gz = -math.sin(me.ptch*D2R)*me.dst;
 	    me.vel_gx = math.cos(me.brng*D2R) *me.hrz;
 	    me.vel_gy = math.sin(me.brng*D2R) *me.hrz;
-	    
+
 
 	    me.yaw   = me.input.hdgTrue.getValue() * D2R;
 	    me.roll  = me.input.roll.getValue()    * D2R;
@@ -125,7 +125,7 @@ var HudMath = {
 	    me.sy = math.sin(me.yaw);   me.cy = math.cos(me.yaw);
 	    me.sr = math.sin(me.roll);  me.cr = math.cos(me.roll);
 	    me.sp = math.sin(me.pitch); me.cp = math.cos(me.pitch);
-	 
+
 	    me.vel_bx = me.vel_gx * me.cy * me.cp
 	               + me.vel_gy * me.sy * me.cp
 	               + me.vel_gz * -me.sp;
@@ -135,12 +135,12 @@ var HudMath = {
 	    me.vel_bz = me.vel_gx * (me.cy * me.sp * me.cr + me.sy * me.sr)
 	               + me.vel_gy * (me.sy * me.sp * me.cr - me.cy * me.sr)
 	               + me.vel_gz * me.cp * me.cr;
-	 
+
 	    me.dir_y  = math.atan2(me.round0_(me.vel_bz), math.max(me.vel_bx, 0.001)) * R2D;
 	    me.dir_x  = math.atan2(me.round0_(me.vel_by), math.max(me.vel_bx, 0.001)) * R2D;
 
 	    me.pos = me.getCenterPosFromDegs(me.dir_x,-me.dir_y);
-	    
+
 	    return [me.pos[0], me.pos[1], me.dir_x,-me.dir_y];
 	},
 
@@ -160,26 +160,26 @@ var HudMath = {
         var ym = vector.Math.yawMatrix(-viewh);
         var pm = vector.Math.pitchMatrix(-viewp);
         var vm = vector.Math.multiplyMatrices(pm, ym);# local view rot matrix
-        me.rollM  = vector.Math.rollMatrix(-hdp.getproper("roll"));
-        me.pitchM = vector.Math.pitchMatrix(-hdp.getproper("pitch"));
-        me.yawM   = vector.Math.yawMatrix(hdp.getproper("heading"));
+        me.rollM  = vector.Math.rollMatrix(-hdp.OrientationRollDeg);
+        me.pitchM = vector.Math.pitchMatrix(-hdp.OrientationPitchDeg);
+        me.yawM   = vector.Math.yawMatrix(hdp.OrientationHeadingDeg);
         me.rotation = vector.Math.multiplyMatrices(me.rollM, vector.Math.multiplyMatrices(me.pitchM, me.yawM));
         me.rotation = vector.Math.multiplyMatrices(vm, me.rotation);# global view rot matrix
 
         me.coord_x = math.cos(me.brng*D2R)*math.cos(me.ptch*D2R);
         me.coord_y = -math.sin(me.brng*D2R)*math.cos(me.ptch*D2R);
         me.coord_z = math.sin(me.ptch*D2R);
-        
+
         var tv = [me.coord_x,me.coord_y,me.coord_z];# global direction from hmcs to target
         var dv = vector.Math.multiplyMatrixWithVector(me.rotation, tv);# local in HMCS view vector to target
         var angles = vector.Math.cartesianToEuler(dv);
-        
+
         return [angles[0]==nil?0:angles[0],angles[1]];
     },
 
     getDevFromHMD: func (heading, pitch, viewh, viewp) {
         # return pos in canvas from center origin
-        
+
         var ym = vector.Math.yawMatrix(viewh);
         var pm = vector.Math.pitchMatrix(-viewp);
         var vm = vector.Math.multiplyMatrices(pm, ym);
@@ -187,22 +187,22 @@ var HudMath = {
         me.target_x = math.cos(heading*D2R)*math.cos(pitch*D2R);
         me.target_y = -math.sin(heading*D2R)*math.cos(pitch*D2R);
         me.target_z = math.sin(pitch*D2R);
-        
+
         var tv = [me.target_x,me.target_y,me.target_z];
         var dv = vector.Math.multiplyMatrixWithVector(vm, tv);
         var angles = vector.Math.cartesianToEuler(dv);
 
         return [angles[0]==nil?0:angles[0],angles[1]];
     },
-	
+
 	getPosFromDegs:  func (yaw_deg, pitch_deg) {
 		# return pos from bore
-		
+
 		if (yaw_deg > 89) yaw_deg = 89;
 		if (yaw_deg < -89) yaw_deg = -89;
 		if (pitch_deg < -89) pitch_deg = -89;
 		if (pitch_deg > 89) pitch_deg = 89;
-		
+
 		var y = 0;
 		var x = 0;
 		if (me.slanted) {
@@ -214,15 +214,15 @@ var HudMath = {
 		}
 		return [x,y];
 	},
-	
+
 	getCenterPosFromDegs:  func (yaw_deg, pitch_deg) {
 		# return pos from center origin
-		
+
 		if (yaw_deg > 89) yaw_deg = 89;
 		if (yaw_deg < -89) yaw_deg = -89;
 		if (pitch_deg < -89) pitch_deg = -89;
 		if (pitch_deg > 89) pitch_deg = 89;
-		
+
 		if (me.slanted) {
 			var y = me.getVertDistSlanted(pitch_deg);
 			var x =  me.pixelPerMeterX*((me.input.viewX.getValue() - me.hudX3d(y)) * math.tan(yaw_deg*D2R));
@@ -233,28 +233,28 @@ var HudMath = {
 			return [x,y+me.centerOffset];
 		}
 	},
-	
+
 	isCanvasPosClamped: func (x,y) {
 		if (x>me.originCanvas[0]+me.canvasWidth or x<me.originCanvas[0] or y >me.originCanvas[1]+me.canvasHeight or y<me.originCanvas[1]) {
 			return 1;
 		}
 		return 0;
 	},
-	
+
 	isCenterPosClamped: func (x,y) {
 		x += me.getCenterOrigin()[0];
 		y += me.getCenterOrigin()[1];
-		
+
 		return me.isCanvasPosClamped(x,y);
 	},
-	
+
 	getPosFromPolar:  func (meter, angle_deg) {
 		# return pos from center origin (not tested)
 		me.xxx =  me.pixelPerMeterX * meter * math.sin(angle_deg*D2R);
         me.yyy = -me.pixelPerMeterY * meter * math.cos(angle_deg*D2R);
         return [me.xxx, me.yyy+me.centerOffset];
 	},
-	
+
 	getPolarFromBorePos: func (x,y) {
 		me.ll = math.sqrt(x*x+y*y);
         if (me.ll != 0) {
@@ -263,13 +263,13 @@ var HudMath = {
         }
         return [0,0];
 	},
-	
+
 	getPolarFromCenterPos: func (x,y) {
 		# only works well when not too far from bore.
 		y -= me.centerOffset;
 		return me.getPolarFromBorePos(x,y);
 	},
-		
+
 	getFlightPathIndicatorPos: func (clampXmin=-1000,clampYmin=-1000,clampXmax=1000,clampYmax=1000) {
 		# return pos from canvas center origin
 		# notice that this gives real flightpath location, not influenced by wind. (use the wind for yasim, as there is an issue with that somehow)
@@ -287,11 +287,11 @@ var HudMath = {
 	      me.vel_gy = math.sin(me.yaw)*1;
 	      me.vel_gz = 0;
 	    }
-	 
+
 	    me.sy = math.sin(me.yaw);   me.cy = math.cos(me.yaw);
 	    me.sr = math.sin(me.roll);  me.cr = math.cos(me.roll);
 	    me.sp = math.sin(me.pitch); me.cp = math.cos(me.pitch);
-	 
+
 	    me.vel_bx = me.vel_gx * me.cy * me.cp
 	               + me.vel_gy * me.sy * me.cp
 	               + me.vel_gz * -me.sp;
@@ -301,45 +301,45 @@ var HudMath = {
 	    me.vel_bz = me.vel_gx * (me.cy * me.sp * me.cr + me.sy * me.sr)
 	               + me.vel_gy * (me.sy * me.sp * me.cr - me.cy * me.sr)
 	               + me.vel_gz * me.cp * me.cr;
-	 
+
 	    me.dir_y  = math.atan2(me.round0_(me.vel_bz), math.max(me.vel_bx, 0.001)) * R2D;
 	    me.dir_x  = math.atan2(me.round0_(me.vel_by), math.max(me.vel_bx, 0.001)) * R2D;
 
 	    me.pos = me.getCenterPosFromDegs(me.dir_x,-me.dir_y);
-	    
+
 	    me.pos_x = me.clamp(me.pos[0],   clampXmin, clampXmax);
 	    me.pos_y = me.clamp(me.pos[1],   clampYmin, clampYmax);
 
 	    return [me.pos_x, me.pos_y];
 	},
-	
+
 	getFlightPathIndicatorPosWind: func (clampXmin=-1000,clampYmin=-1000,clampXmax=1000,clampYmax=1000) {
 		# return pos from canvas center origin
 		# notice that this does not give real flightpath location, since wind factors in.
 		me.dir_y  = me.input.alpha.getValue();
 	    me.dir_x  = me.input.beta.getValue();
-	    
+
 	    if (me.dir_x==nil or me.dir_y==nil) {
 			me.pos_x = 0;
-	    	me.pos_y = 0;		    
+	    	me.pos_y = 0;
 		} else{
 			me.pos = me.getCenterPosFromDegs(me.dir_x,-me.dir_y);
-		    
+
 		    me.pos_x = me.clamp(me.pos[0],   clampXmin, clampXmax);
 		    me.pos_y = me.clamp(me.pos[1],   clampYmin, clampYmax);
 		}
 	    return [me.pos_x, me.pos_y];
 	},
-	
+
 	getStaticHorizon: func (averagePoint_deg = 7.5) {
 		# get translation and rotation for horizon line, static means not centered around FPI.
 		# return a vector of 3: translation of main horizon group, rotation of main horizon groups transform, translation of sub horizon group (wherein the line (and pitch ladder) is drawn).
-		
+
 		me.rot = -me.input.roll.getValue() * D2R;
-    
+
 	    return [[0,me.getCenterOffset()],me.rot,[0, me.getPixelPerDegreeAvg(averagePoint_deg)*me.input.pitch.getValue()]];
 	},
-	
+
 	getCenterOffset: func {
 		if (me.slanted) {
 			return me.centerOffsetSlantedMeter*me.pixelPerMeterYSlant;
@@ -347,13 +347,13 @@ var HudMath = {
 			return me.centerOffset;
 		}
 	},
-	
+
 	getDynamicHorizon: func (averagePoint_deg = 7.5, xMin=1,xMax=1,yMin=1,yMax=1,drift=1, drift_fix=0.0) {
 		# get translation and rotation for horizon line, dynamic means centered around FPI.
 		# the min max values are faction from center to edge of hud to restrict ladder movement.
 		# should be called after getFlightPathIndicatorPos/getFlightPathIndicatorPosWind.
 		# return a vector of 3: translation of main horizon group, rotation of main horizon groups transform in radians, translation of sub horizon group (wherein the line (and pitch ladder) is drawn).
-		
+
 		me.rot = -me.input.roll.getValue() * D2R;
 
 		me.pos_x_clamp = drift?me.clamp(me.pos_x, -xMin*me.canvasWidth*0.5,xMax*me.canvasWidth*0.5):0;
@@ -368,55 +368,55 @@ var HudMath = {
 	      me.fpi_angle *= -1;
 	    }
 	    me.fpi_pos_rel_x    = math.sin(me.fpi_angle-me.rot)*me.fpi_polar;
-	    
+
 	    return [[0,me.getCenterOffset()],me.rot,[me.fpi_pos_rel_x, me.getPixelPerDegreeAvg(averagePoint_deg)*me.input.pitch.getValue()]];
 	},
-	
+
 	getPixelPerDegreeAvg: func (averagePoint_deg = 7.5) {
 		# return average value, not exact unless parameter match what you multiply it with.
 		# the parameter is distance from bore. Typically if the result are to be multiplied on multiple values, use halfway between center and edge of HUD.
 		# not slant compatiple yet
-		
+
 		if (averagePoint_deg == 0) {
 			averagePoint_deg = 0.001;
 		}
 		return 0.5*(me.pixelPerMeterX+me.pixelPerMeterY)*(((me.input.viewX.getValue() - me.hud3dX) * math.tan(averagePoint_deg*D2R))/averagePoint_deg);
 	},
-	
+
 	getPixelPerDegreeXAvg: func (averagePoint_deg = 7.5) {
 		# return average value, not exact unless parameter match what you multiply it with.
 		# the parameter is distance from bore. Typically if the result are to be multiplied on multiple values, use halfway between center and edge of HUD.
 		# not slant compatiple yet
-		
+
 		if (averagePoint_deg == 0) {
 			averagePoint_deg = 0.001;
 		}
 		return me.pixelPerMeterX*(((me.input.viewX.getValue() - me.hud3dX) * math.tan(averagePoint_deg*D2R))/averagePoint_deg);
 	},
-	
+
 	getPixelPerDegreeYAvg: func (averagePoint_deg = 7.5) {
 		# return average value, not exact unless parameter match what you multiply it with.
 		# the parameter is distance from bore. Typically if the result are to be multiplied on multiple values, use halfway between center and edge of HUD.
 		# not slant compatiple yet
-		
+
 		if (averagePoint_deg == 0) {
 			averagePoint_deg = 0.001;
 		}
 		return me.pixelPerMeterY*(((me.input.viewX.getValue() - me.hud3dX) * math.tan(averagePoint_deg*D2R))/averagePoint_deg);
 	},
-	
+
 	round0_: func(x) {
 		return math.abs(x) > 0.01 ? x : 0;
 	},
-	
+
 	clamp: func(v, min, max) {
 		return v < min ? min : v > max ? max : v;
 	},
-	
+
 	extrapolate: func (x, x1, x2, y1, y2) {
     	return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
 	},
-	
+
 	makeProperties_: func {
 		me.input = {
 	        alpha:            "orientation/alpha-deg",
