@@ -538,4 +538,18 @@
       <value type="string">1</value>
     </binding>
   </button>
+  <button n="31">
+    <desc type="string">EEC Right Nozzle</desc>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">sim/model/f15/controls/engines/r-eec-switch</property>
+    </binding>
+  </button>
+  <button n="30">
+    <desc type="string">EEC Left Nozzle</desc>
+    <binding>
+      <command type="string">property-toggle</command>
+      <property type="string">sim/model/f15/controls/engines/l-eec-switch</property>
+    </binding>
+  </button>
 </PropertyList>
