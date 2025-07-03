@@ -90,7 +90,7 @@ var PB16 = 14;
 
 var deviation_normdeg = func(our_heading, target_bearing) {
 	var dev_norm = target_bearing - our_heading;
-    dev_norm = geo.normdeg180(dev_norm);
+    var dev_norm = geo.normdeg180(dev_norm);
 	return dev_norm;
 }
 
@@ -1006,8 +1006,10 @@ var MPCD_Device =
                     me.range = me.coord.direct_distance_to(geo.aircraft_position()) * M2NM;
 
                     me.distPixels = me.range*me.root.NM2PIXEL;
+                    
+                    me.bearing = geo.aircraft_position().course_to(me.coord);
 
-                    me.relBearing = deviation_normdeg(me.myHeading, me.heading_true);
+                    me.relBearing = deviation_normdeg(me.myHeading, me.bearing);
 
                     me.rot = me.heading_true;
                     me.rot -= me.myHeading;
@@ -1051,7 +1053,7 @@ var MPCD_Device =
                             if (me.root.showTGT) {
                                 me.root.ship[me.i].hide();
                                 me.root.blep[me.i].setTranslation(me.distPixels*math.sin(me.relBearing*D2R),-me.distPixels*math.cos(me.relBearing*D2R));
-                                #me.root.blep[me.i].setRotation(me.rot*D2R);  # Disabled for now cuz of some weird shit
+                                me.root.blep[me.i].setRotation(me.rot*D2R);
                                 me.root.blep[me.i].show();
                                 me.root.blep[me.i].update();
                                 if (me.root.showDAT) {
