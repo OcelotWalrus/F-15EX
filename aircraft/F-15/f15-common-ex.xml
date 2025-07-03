@@ -966,6 +966,8 @@
                     <thrust-weight-ratio type="double">1</thrust-weight-ratio>
                     <kneeboard-left type="bool">true</kneeboard-left>
                     <kneeboard-right type="bool">true</kneeboard-right>
+                    <kneeboard-left-wso type="bool">true</kneeboard-left-wso>
+                    <kneeboard-right-wso type="bool">true</kneeboard-right-wso>
                 </avionics>
                 <flir>
                     <input>

@@ -54,8 +54,62 @@ var load_knee_r = func(path) {
     setprop("f16/preplanning-status", "Kneeboard loaded");
 }
 
+var load_knee_l_wso = func(path) {
+    path = path.getValue();
+    if (io.stat(path) == nil){
+        setprop("f16/preplanning-status", "Loading kneeboard failed");
+        print("Loading kneeboard failed");
+        gui.showDialog("loadfail");
+        return;
+    }
+    var vi = nil;
+    var data = nil;
+    call(func{vi = io.open(path,'r'); data = split("\n",string.replace(io.readfile(path),"\r",""));},nil, var err = []);
+    if (size(err) > 0) {
+        setprop("f16/preplanning-status", err[0]);
+        print(err[0]);
+        gui.showDialog("loadfail");
+        return;
+    }
+    
+    leftKWSO.update_text(path,data);
+    
+    if (file_selector_l_wso != nil) {
+        #file_selector_l_wso.close();
+    }
+    setprop("f16/preplanning-status", "Kneeboard loaded");
+}
+
+var load_knee_r_wso = func(path) {
+    path = path.getValue();
+    if (io.stat(path) == nil){
+        setprop("f16/preplanning-status", "Loading kneeboard failed");
+        print("Loading kneeboard failed");
+        gui.showDialog("loadfail");
+        return;
+    }
+    var vi = nil;
+    var data = nil;
+    call(func{vi = io.open(path,'r'); data = split("\n",string.replace(io.readfile(path),"\r",""));},nil, var err = []);
+    if (size(err) > 0) {
+        setprop("f16/preplanning-status", err[0]);
+        print(err[0]);
+        gui.showDialog("loadfail");
+        return;
+    }
+    
+    rightKWSO.update_text(path,data);
+    
+    if (file_selector_r_wso != nil) {
+        #file_selector_r_wso.close();
+    }
+    setprop("f16/preplanning-status", "Kneeboard loaded");
+}
+
 var file_selector_r = nil;
 var file_selector_l = nil;
+var file_selector_r_wso = nil;
+var file_selector_l_wso = nil;
 
 var get_knee_file_gui_l = func() {
     if (file_selector_l == nil) {
@@ -69,6 +123,20 @@ var get_knee_file_gui_r = func() {
         file_selector_r = gui.FileSelector.new(dir: getprop("/sim/fg-home") ~ "/Export", callback: load_knee_r, title: "Select Right Kneeboard Config File", button: "Load", pattern: ["*.knee"]);
     }
     file_selector_r.open();
+}
+
+var get_knee_file_gui_l_wso = func() {
+    if (file_selector_l_wso == nil) {
+        file_selector_l_wso = gui.FileSelector.new(dir: getprop("/sim/fg-home") ~ "/Export", callback: load_knee_l_wso, title: "Select Left WSO Kneeboard Config File", button: "Load", pattern: ["*.knee"]);
+    }
+    file_selector_l_wso.open();
+}
+
+var get_knee_file_gui_r_wso = func() {
+    if (file_selector_r_wso == nil) {
+        file_selector_r_wso = gui.FileSelector.new(dir: getprop("/sim/fg-home") ~ "/Export", callback: load_knee_r_wso, title: "Select Right WSO Kneeboard Config File", button: "Load", pattern: ["*.knee"]);
+    }
+    file_selector_r_wso.open();
 }
 
 var knee_paper = {
@@ -197,9 +265,13 @@ var knee_paper = {
 
 var leftK = nil;
 var rightK = nil;
+var leftKWSO = nil;
+var rightKWSO = nil;
 
 var init = setlistener("/sim/signals/fdm-initialized", func() {
   removelistener(init); # only call once
   leftK = knee_paper.new({"node": "paper", "texture": "kneeboard.png"});
   rightK = knee_paper.new({"node": "paper-r", "texture": "kneeboard.png"});
+  leftKWSO = knee_paper.new({"node": "paper-wso", "texture": "kneeboard.png"});
+  rightKWSO = knee_paper.new({"node": "paper-r-wso", "texture": "kneeboard.png"});
 });
