@@ -725,7 +725,7 @@ var F15_HMD = {
                                           elsif (hd < 30) currLimit = -30;
                                           else currLimit = -50;
 
-                                          if (val.HmdP < currLimit) obj.off = 1;
+                                          if (val.HmdP < currLimit and getprop("sim/current-view/view-number") != 9) obj.off = 1;  # view 9 in backseater, and backseater should always be able to see it no matter what
                                           else
                                             obj.off = 0;
 
@@ -822,7 +822,7 @@ var F15_HMD = {
                 "hmcs_sym": hdp.HmdSym,
                 "hud_power": getprop("sim/model/f15/avionics/hmd-power"),
                 "hud_daytime": 1,  # not used in the F-15EX
-                "red": hdp.Red,   # not used in the F-15EX
+                "red": hdp.Red,
             };
             me.firstOne = 1;
             foreach(var update_item; me.update_items)
