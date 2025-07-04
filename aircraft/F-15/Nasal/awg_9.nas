@@ -338,7 +338,7 @@ var rdr_loop = func(notification) {
     connections = datalink.get_connected_callsigns();
     if (connections != nil) {
         foreach(connection ; connections) {
-            data = datalink.get_data(contact);
+            data = datalink.get_data(connection);
             if (data != nil  and data.on_link()) {
                 gps_spot = data.point();
                 if (gps_spot != nil) {
