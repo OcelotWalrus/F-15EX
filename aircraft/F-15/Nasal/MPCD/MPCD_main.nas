@@ -967,7 +967,7 @@ var MPCD_Device =
 
             # The following code - made by Jimmy L. Miles - is used to display datalink contacts on the SIT, using different color codes whether they're friendly, hostile, neutral, or unknown
             me.datalink_connections = datalink.get_all_callsigns();
-            me.datalink_online = me.datalink_connections != nil and size(me.datalink_connections);
+            me.datalink_online = me.datalink_connections != nil and size(me.datalink_connections) < 1;
             datalink_contacts_over = 0;
             foreach(contact; datalink.get_all_callsigns()) {
                 pass = 0;
@@ -1006,7 +1006,7 @@ var MPCD_Device =
                     me.range = me.coord.direct_distance_to(geo.aircraft_position()) * M2NM;
 
                     me.distPixels = me.range*me.root.NM2PIXEL;
-                    
+
                     me.bearing = geo.aircraft_position().course_to(me.coord);
 
                     me.relBearing = deviation_normdeg(me.myHeading, me.bearing);
