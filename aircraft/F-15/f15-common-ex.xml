@@ -3849,7 +3849,7 @@
                 <reaquire type="bool">true</reaquire>
                 <lock-on-after-launch type="bool">true</lock-on-after-launch>
                 <auto-switch-target-allowed type="bool">true</auto-switch-target-allowed>
-                <prowl-flight type="string">terrain-follow</prowl-flight>
+                <prowl-flight type="string">gyro-pitch</prowl-flight>
                 <switch-time-sec type="double">1</switch-time-sec>
                 <class type="string">P</class>
                 <fire-msg type="string">SLAM Bruiser</fire-msg>
