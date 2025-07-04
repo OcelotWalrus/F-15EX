@@ -175,9 +175,8 @@ var Station = {
 								#print("DIST");
 								#print(struct.dist_m*M2NM);
 								if (getprop("controls/armament/lrsam-updated") == 0) {  # makes so that it only does that 1/2 times
-									targets = awg_9.tgts_list;
-									#print("CONTACT");
-									#print(struct.callsign);
+									# First, we check through our own radar targets, but if none are found,
+									# we then search through all datalink contacts
 									foreach (var u; awg_9.tgts_list) {  # Go through each radar targets
 										if (u.Callsign != nil and u.Callsign.getValue() == struct.callsign) {  # If we can find the same target in the radar targets, we take its new coordinates and slave it to the AGM-158C to update to that new position
 											gpsCoordsTgt = u.get_Coord();
@@ -188,6 +187,24 @@ var Station = {
 											#print("COORDS UPDATE");
 											setprop("controls/armament/lrsam-updated", 1);
 											return {"target": spot};
+										}
+									}
+
+									datalink_connections = datalink.get_all_callsigns();
+									if (datalink_connections != nil or size(datalink_connections) > 0) {  # check if datalink's online and if there are any contacts
+										foreach (contact; datalink_connections) {  # Go through each radar targets
+											print(contact);
+											if (contact == struct.callsign) {  # If we can find the same target in the datalink contacts, we take its new coordinates and slave it to the AGM-158C to update to that new position
+												contact_index = datalink.get_data(contact).index();
+							                    lat = getprop("/ai/models/multiplayer["~contact_index~"]/position/latitude-deg");
+							                    lon = getprop("/ai/models/multiplayer["~contact_index~"]/position/longitude-deg");
+							                    alt = getprop("/ai/models/multiplayer["~contact_index~"]/position/altitude-ft");
+												gpsCoordsTgt = geo.Coord.new().set_latlon(lat,lon,alt*FT2M);
+												var spot = awg_9.ContactTGP.new(contact,gpsCoordsTgt,0);
+												#print("COORDS UPDATE");
+												setprop("controls/armament/lrsam-updated", 1);
+												return {"target": spot};
+											}
 										}
 									}
 								} else {
@@ -237,9 +254,9 @@ var Station = {
 	   								# 200 ft above sealevel, starts sea-skimming
 	   								new_altitude = 85;
 	   							}
-	   							
+
 	   							setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/loft-altitude", new_altitude);
-	   							
+
 								#print("TGT ALT");
 								#print(new_altitude);
 	   							#if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {
