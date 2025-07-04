@@ -2894,9 +2894,9 @@ var gps_medium = func {
         reloadCannon();
 
 		setprop("payload/weight[12]/selected","Empty");
-		setprop("payload/weight[1]/selected","1 x GBU-32");
+		setprop("payload/weight[1]/selected","2 x GBU-32");
         setprop("payload/weight[5]/selected","Droptank");
-        setprop("payload/weight[9]/selected","1 x GBU-32");
+        setprop("payload/weight[9]/selected","2 x GBU-32");
 		setprop("payload/weight[15]/selected","Empty");
 
         setprop("consumables/fuel/tank[5]/selected",0);
@@ -2984,11 +2984,11 @@ var gps_diverse = func {
         pylon2c.loadSet(pylonSets.aim9xw);
 
         pylon3.loadSet(pylonSets.singlegbu31);
-        pylon4.loadSet(pylonSets.singlegbu54);
+        pylon4.loadSet(pylonSets.singlegbu32);
 
         pylon5.loadSet(pylonSets.singlegbu32);
 
-        pylon6.loadSet(pylonSets.singlegbu54);
+        pylon6.loadSet(pylonSets.singlegbu32);
         pylon7.loadSet(pylonSets.singlegbu31);
 
         pylon8a.loadSet(pylonSets.aim9xw);
