@@ -26,6 +26,8 @@ var center_to_edge_distance_m = 0.025;#meters
 var screen_w=getprop("sim/startup/xsize");
 var screen_h=getprop("sim/startup/ysize");
 
+var Mp = props.globals.getNode("ai/models");
+
 var VISUAL = 47;
 var SLAVE  = 76;
 
@@ -188,6 +190,7 @@ var F15_HMD = {
 # Load the target symbosl.
         obj.max_symbols = 10;
         obj.tgt_symbols =  setsize([],obj.max_symbols);
+        obj.spike_symbols = setsize([],obj.max_symbols);
 
 
         obj.custom = obj.svg.createChild("group");
@@ -444,6 +447,7 @@ var F15_HMD = {
         var boxRadiusHalf = boxRadius*0.5;
         var hairFactor = 0.8;
         obj.tgt_symbols = [];
+        obj.spike_symbols = [];
         for(var k = 0; k<obj.max_symbols;k+=1) {
             obj.tgt = obj.centerOrigin.createChild("path")
                 .moveTo(-boxRadiusHalf,-boxRadiusHalf)
@@ -456,6 +460,17 @@ var F15_HMD = {
                 .setColor(0,1,0);
             append(obj.tgt_symbols, obj.tgt);
             append(obj.total, obj.tgt);
+            obj.spike = obj.centerOrigin.createChild("path")
+                .moveTo(-boxRadiusHalf*.7,-boxRadiusHalf*.7)  # spike boxes are a bit smaller than radar targets
+                .vert(boxRadius*.7)
+                .horiz(boxRadius*.7)
+                .vert(-boxRadius*.7)
+                .horiz(-boxRadius*.7)
+                .setStrokeLineWidth(7)  # 4 is for targets, 7 is for spikes
+                .hide()
+                .setColor(0,1,0);
+            append(obj.spike_symbols, obj.spike);
+            append(obj.total, obj.spike);
         }
         obj.mark_symbols = [];
         for(var u = 0; u<steerpoints.number_of_markpoints_own + steerpoints.number_of_markpoints_dlnk;u+=1) {
@@ -942,6 +957,7 @@ var F15_HMD = {
         me.locatorLineShow = 0;
 #        if (hdp.FrameCount == 1 or hdp.FrameCount == 3 or me.initUpdate == 1) {
             me.target_idx = 0;
+            me.spike_index = 0;
             me.designated = 0;
 
         me.target_lock_show = 0;
@@ -1150,6 +1166,80 @@ var F15_HMD = {
                 }
             }
         }
+
+        me.designatedDistanceFT = nil;
+        me.groundDistanceFT = nil;
+
+        me.missile_launcher = getprop("payload/armament/MLW-launcher");
+        if (me.missile_launcher != "" and me.missile_launcher != nil) {
+            me.u = me.missile_launcher;
+            if (me.u != nil) {
+                me.callsign = me.u;
+
+                foreach(c ; Mp.getChildren()) {
+                    type = c.getName();
+
+                    if (c.getNode("valid") == nil or !c.getNode("valid").getValue()) {
+                        continue;
+                    }
+                    if (type == "multiplayer" or type == "tanker" or type == "aircraft" or type == "carrier" or type == "ship" or type == "groundvehicle") {
+                        print(c.getNode("callsign").getValue());
+                        if (c.getNode("callsign").getValue() == me.callsign) {
+                            me.lat = c.getNode("position/latitude-deg").getValue();
+                            me.lon = c.getNode("position/longitude-deg").getValue();
+                            me.alt = c.getNode("position/altitude-ft").getValue();
+                            me.lastCoord = geo.Coord.new().set_latlon(me.lat,me.lon,me.alt*FT2M);
+                        }
+                    }
+                }
+                if ((me.spike_index < me.max_symbols or me.designatedDistanceFT == nil) and me.lastCoord != nil and me.lastCoord.is_defined()) {
+                    me.echoPos = hudmath.HudMath.getDevFromCoord(me.lastCoord, hdp.HmdH, hdp.HmdP, hdp, geo.viewer_position());
+                    #print(me.echoPos[0],",",me.echoPos[1],"    ", hdp.HmdH, "," ,hdp.HmdP);
+                    me.echoPos[0] = geo.normdeg180(me.echoPos[0]);
+                    #print("    ",me.echoPos[0]);
+                    me.echoPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                    me.echoPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+
+                    if (me.spike_index < me.max_symbols) {
+                        me.spike = me.spike_symbols[me.spike_index];
+                    } else {
+                        me.spike = nil;
+                    }
+                    if (me.spike != nil or me.designatedDistanceFT == nil) {
+                        if (me.spike != nil) {
+                            me.spike.setVisible(1);
+                        }
+                        me.clamped = math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]) > 500;
+
+                        if (me.clamped) {
+                            me.clampAmount = 500/math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]);
+                            me.echoPos[0] *= me.clampAmount;
+                            me.echoPos[1] *= me.clampAmount;
+                            me.spike.setStrokeDashArray([7,7]);
+                        } else {
+                            me.spike.setStrokeDashArray([100]);
+                        }
+                        if (me.spike != nil) {
+                            me.spike.setTranslation (me.echoPos);
+                            me.spike.update();
+                        }
+                        if (ht_debug)
+                          #printf("%-10s %f,%f [%f,%f,%f] :: %f,%f",me.callsign,me.xc,me.yc, me.devs[0], me.devs[1], me.devs[2], me.u_dev_rad*D2R, me.u_elev_rad*D2R);
+                    } else {
+                        print("[ERROR]: HUD too many spikes ",me.spike_index);
+                    }
+                    me.spike_index += 1;
+                }
+
+                for (me.nv = me.spike_index; me.nv < me.max_symbols;me.nv += 1) {
+                    me.spike = me.spike_symbols[me.nv];
+                    if (me.spike != nil) {
+                        me.spike.setVisible(0);
+                    }
+                }
+            }
+        }
+
         me.ASC.setVisible(showASC);
 
         #print(me.irS~" "~me.irL);
