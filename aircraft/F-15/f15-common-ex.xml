@@ -3813,7 +3813,7 @@
                 <long-name type="string">AGM-84E SLAM</long-name>
                 <vol-search type="double">0.075</vol-search>
                 <vol-track type="double">0.25</vol-track>
-                <guidance type="string">gps</guidance>  <!-- E variant: passive radar, then active radar turns ON when 5 nm from target and starts diving onto it -->
+                <guidance type="string">gps</guidance>  <!-- E variant: GPS, then heat seeker turns ON when 10 nm from target and starts diving onto it for precision -->
                 <navigation type="string">direct-alt</navigation>
                 <terrain-follow type="bool">true</terrain-follow>  <!-- standoff missile, using terrain-follow to keep a low profile and escape terrain-->
                 <all-aspect type="bool">true</all-aspect>
