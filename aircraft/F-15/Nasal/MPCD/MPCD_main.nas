@@ -989,6 +989,7 @@ var MPCD_Device =
                 me.hostile = me.contact_data.is_hostile();
                 me.neutral = !me.friendly and !me.hostile;
                 me.index = me.contact_data.index();
+                me.on_link = me.contact_data.on_link();
 
                 if (me.index == nil) {
                     pass = 1;
@@ -1014,7 +1015,11 @@ var MPCD_Device =
                     me.rot = me.heading_true;
                     me.rot -= me.myHeading;
 
-                    if (me.friendly) {
+                    if (me.on_link) {
+                        me.root.blep[me.i].setColor(0,1,1);  # cyan
+                        me.root.blepText[me.i].setColor(0,1,1);  # cyan
+                        me.root.ship[me.i].setColor(0,1,1);  # cyan
+                    } elsif (me.friendly) {
                         me.root.blep[me.i].setColor(0,1,0);  # green
                         me.root.blepText[me.i].setColor(0,1,0);  # green
                         me.root.ship[me.i].setColor(0,1,0);  # green
@@ -1023,9 +1028,9 @@ var MPCD_Device =
                         me.root.blepText[me.i].setColor(1,0,0);  # red
                         me.root.ship[me.i].setColor(1,0,0);  # red
                     } else {
-                        me.root.blep[me.i].setColor(0,0,1);  # blue
-                        me.root.blepText[me.i].setColor(0,0,1);  # blue
-                        me.root.ship[me.i].setColor(0,0,1);  # blue
+                        me.root.blep[me.i].setColor(1,1,0);  # yellow
+                        me.root.blepText[me.i].setColor(1,1,0);  # yellow
+                        me.root.ship[me.i].setColor(1,1,0);  # yellow
                     }
 
                     if (me.model!=nil and me.root.samLookup[me.model] != nil) {
@@ -1102,12 +1107,18 @@ var MPCD_Device =
                 if (me.unknown == 0) {
                     me.friendly = me.contact_data.is_friendly();
                     me.hostile = me.contact_data.is_hostile();
+                    me.on_link = me.contact_data.on_link();
                 } else {
                     me.friendly = 0;
                     me.hostile = 0;
+                    me.on_link = 0;
                 }
 
-                if (me.friendly) {
+                if (me.on_link) {
+                    me.root.blep[me.i].setColor(0,1,1);  # cyan
+                    me.root.blepText[me.i].setColor(0,1,1);  # cyan
+                    me.root.ship[me.i].setColor(0,1,1);  # cyan
+                } elsif (me.friendly) {
                     me.root.blep[me.i].setColor(0,1,0);  # green
                     me.root.blepText[me.i].setColor(0,1,0);  # green
                     me.root.ship[me.i].setColor(0,1,0);  # green
