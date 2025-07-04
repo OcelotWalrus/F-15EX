@@ -36,6 +36,7 @@ var pyloncft6 = nil;
 var nav = stations.Submodel.new("AN/AAQ-13 LANTIRN Nav Pod", "AAQ-13", "/sim/model/f15/stores/nav-mounted");
 var tgp = stations.Submodel.new("AN/AAQ-14 LANTIRN Target Pod", "AAQ-14", "sim/model/f15/stores/tgp-mounted");
 var atp = stations.Submodel.new("AN/AAQ-33 Sniper XR", "AAQ-33", "sim/model/f15/stores/tgp-mounted");
+var irst = stations.Submodel.new("Legion Pod (IRST)", "IRST", "sim/model/f15/stores/irst-mounted");
 
 var ecm184 = stations.Submodel.new("AN/ALQ-184(V) ECM Pod", "AL184", "sim/model/f15/stores/ecm-mounted");
 
@@ -151,6 +152,7 @@ var pylonSets = {
     lantirnnav:   {name: "AN/AAQ-13 LANTIRN Nav Pod", content: [nav], fireOrder: [0], launcherDragArea: 0.1, launcherMass: 451.1, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 	lantirntgp:   {name: "AN/AAQ-14 LANTIRN Target Pod", content: [tgp], fireOrder: [0], launcherDragArea: 0.07, launcherMass: 530, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
 	atpsniper:   {name: "AN/AAQ-33 Sniper XR", content: [atp], fireOrder: [0], launcherDragArea: 0.06, launcherMass: 446, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1},
+	podIrst:   {name: "Legion Pod (IRST)", content: [irst], fireOrder: [0], launcherDragArea: 0.08, launcherMass: 500, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 1}, #mass guess based on available data
 
 	podEcm184: {name: "AN/ALQ-184(V) ECM Pod", content: [ecm184], fireOrder: [0], launcherDragArea: 0.1, launcherMass: 705, launcherJettisonable: 0, weaponJettisonable: 0, showLongTypeInsteadOfCount: 1, category: 2},
 };
@@ -171,7 +173,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 	var pylon4set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 
-	var pylon5set = [pylonSets.empty, pylonSets.podEcm184, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
+	var pylon5set = [pylonSets.empty, pylonSets.podIrst, pylonSets.podEcm184, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 
 	var pylon6set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];

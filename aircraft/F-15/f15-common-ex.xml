@@ -906,6 +906,7 @@
                     <nav-mounted type="bool">false</nav-mounted>
                     <tgp-mounted type="bool">false</tgp-mounted>
                     <ecm-mounted type="bool">false</ecm-mounted>
+                    <irst-mounted type="bool">false</irst-mounted>
                 </stores>
                 <fcs>
                     <stby-mode type="bool">false</stby-mode>
@@ -1842,6 +1843,7 @@
                 <bool n="333" alias="/sim/model/f15/payload/selected/lau68-r"/>
                 <bool n="334" alias="/sim/model/f15/payload/selected/an-alq-184-r"/>
                 <bool n="335" alias="/sim/model/f15/payload/selected/an-alq-184-c"/>
+                <bool n="336" alias="/sim/model/f15/payload/selected/legion-pod-irst"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2422,6 +2424,10 @@
                 <name>Droptank</name>
                 <lbs>271.0</lbs>
                 <gals>600</gals>
+            </opt>
+            <opt>
+                <name>Legion Pod (IRST)</name>
+                <lbs>500</lbs>
             </opt>
             <opt>
                 <name>AN/ALQ-184(V) ECM Pod</name>

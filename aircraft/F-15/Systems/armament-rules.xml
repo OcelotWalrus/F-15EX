@@ -3658,4 +3658,15 @@
     </input>
     <output>sim/model/f15/payload/selected/lau68-r</output>
   </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-5-set</property>
+          <value>Legion Pod (IRST)</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/legion-pod-irst</output>
+  </logic>
 </PropertyList>
