@@ -4870,12 +4870,17 @@
             <response type="bool">false</response>
         </iff>
         <datalink>
-            <data type="int">0</data>
+            <sending type="bool">false</sending>
             <power type="bool">false</power>
             <channel type="int">1</channel>
             <power_prop type="string" alias="/instrumentation/datalink/power"/>
             <channel_prop type="string" alias="/instrumentation/datalink/channel"/>
             <receive_period type="double">1</receive_period>
+            <checked-callsign type="string">Coyote01</checked-callsign>  # All 5 following are used for GUIs to see data that only Nasal could see, Jimmy L. Miles here
+            <checked-found type="string">NOT FOUND</checked-found>
+            <checked-lat type="float">0</checked-lat>
+            <checked-lon type="float">0</checked-lon>
+            <checked-alt type="float">0</checked-alt>
         </datalink>
     </instrumentation>
 

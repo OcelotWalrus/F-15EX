@@ -201,6 +201,7 @@ var mp_i              = 0;
 var mp_count          = 0;
 var mp_list           = [];
 var tgts_list         = [];
+var dtl_share_stpts   = [];
 var cnt               = 0;
 
 var use_tews          = 1;#skips the TEWS code to save performance if 0
@@ -321,6 +322,39 @@ var rdr_loop = func(notification) {
 	} else {
         setprop("sim/multiplay/generic/string[6]", "");
 	}
+
+    # Following Datalink code has been made by Jimmy L. Miles
+
+    # Share all of our radar contacts over datalink
+    # On the F-15EX with its AN/APG-82(V)1 AESA radar, targets don't need to be locked on to be tracked,
+    # so the whole panel of available radar contacts are sent over to the datalink network
+    foreach(contact; tgts_list) {
+        if (getprop("instrumentation/datalink/sending") == 0) {  # so we're not overwriting a GPS spot that's being sent
+	       datalink.send_data({"contacts":[{"callsign":contact.get_Callsign(),"iff":0}]});
+        }
+    }
+
+    # Check if we received any GPS-Spot over datalink
+    connections = datalink.get_connected_callsigns();
+    if (connections != nil) {
+        foreach(connection ; connections) {
+            data = datalink.get_data(contact);
+            if (data != nil  and data.on_link()) {
+                gps_spot = data.point();
+                if (gps_spot != nil) {
+                    # We generate a callsign for each GPS Spot using this pattern : `<sender-callsign><how many has he already sent?+1>`
+                    count = 0;
+                    foreach(shared_spot ; dtl_share_stpts) {
+                        if (shared_spot.sender == connection and shared_spot.gps_spot != gps_spot) {  # if the same guy's resending a gps spot, that he ain't sent before, be add 1 to the counter
+                            count += 1
+                        }
+                    }
+                    callsign = sprintf("%s%02d", connection, count);
+                    append(dtl_share_stpts, {"sender": connection , "callsign" : callsign , "gps_spot" : gps_spot});
+                }
+            }
+        }
+    }
 }
 
 var sweep_frame_inc = 0.2;

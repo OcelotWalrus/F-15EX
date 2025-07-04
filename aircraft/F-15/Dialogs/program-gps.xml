@@ -66,7 +66,7 @@
 	<hrule/>
 
   	<text>
-	    <label>Target coordinates for GPS-guided munitions (CBU-105, B61-12, JDAM, JSOW, JASSM).</label>
+	    <label>Target coordinates for GPS-guided munitions.</label>
 	    <height>25</height>
 	</text>
 	<group>
@@ -168,9 +168,156 @@
 						armament.contactPoint = nil;
 					}
 					tgp.gps = 0;
-					#if (!getprop("f16/stores/tgp-mounted")) {
-					#	tgp.flir_updater.click_coord_cam = nil;
-					#}
+					if (!getprop("sim/model/f15/stores/tgp-mounted")) {
+						tgp.flir_updater.click_coord_cam = nil;
+					}
+				}
+			]]></script>
+		</binding>
+	</button>
+	<button>
+		<legend>Send over Datalink</legend>
+		<binding>
+			<command>nasal</command>
+			<script><![CDATA[
+				lat = getprop("sim/model/f15/fcs/target-lat");
+				lon = getprop("sim/model/f15/fcs/target-lon");
+				alt = getprop("sim/model/f15/fcs/target-alt");
+
+				gps_spot = geo.Coord.new().set_latlon(lat,lon,alt*FT2M);
+				datalink.send_data({"point": gps_spot}, timeout = 15);  # stops being continuously sent after 15 seconds
+			]]></script>
+		</binding>
+	</button>
+ </group>
+
+ <hrule/>
+
+  <text>
+	    <label>Target coordinates shared over Datalink.</label>
+	    <height>25</height>
+	</text>
+
+ <group>
+	<layout>hbox</layout>
+	<input>
+	  	<width>250</width>
+	  	<height>25</height>
+	  	<label>Check for shared GPS-Spot</label>
+	  	<property>instrumentation/datalink/checked-callsign</property>
+	  	<live>true</live>
+	  	<halign>left</halign>
+        <binding>
+            <command>dialog-apply</command>
+      	</binding>
+		<binding>
+			<command>nasal</command>
+			<script><![CDATA[
+				var run = func() {
+					foreach(gps_spot_cur ; awg_9.dtl_share_stpts) {
+						if (gps_spot_cur.callsign == getprop("instrumentation/datalink/checked-callsign")) {
+							setprop("instrumentation/datalink/checked-lat", gps_spot_cur.gps_spot.lat());
+							setprop("instrumentation/datalink/checked-lon", gps_spot_cur.gps_spot.lon());
+							setprop("instrumentation/datalink/checked-alt", gps_spot_cur.gps_spot.at());
+							setprop("instrumentation/datalink/checked-found", "FOUND");
+						} else {
+							setprop("instrumentation/datalink/checked-found", "NOT FOUND");  # notify the user that no GPS-Spot of this name shared over datalink has been found
+						}
+					}
+					if (size(awg_9.dtl_share_stpts) < 1) {
+					    setprop("instrumentation/datalink/checked-found", "NOT FOUND");
+					}
+				}
+				settimer(run, 1.5);  # wait for the property, just a safety
+			]]></script>
+		</binding>
+      	<!--<color>
+      		<red>0.5</red>
+      		<green>1</green>
+      		<blue>0.5</blue>
+      	</color>-->
+	</input>
+	<text>
+		<halign>center</halign>
+		<label>xxxxxxxxxxxxxx</label>
+		<live>true</live>
+		<format>STATUS: %s</format>
+		<property>instrumentation/datalink/checked-found</property>
+	</text>
+ </group>
+ <group>
+	<layout>hbox</layout>
+	<text>
+		<halign>left</halign>
+		<label>xxxxxxxxxxxxxx</label>
+		<live>true</live>
+		<format>Latitude: %.5f</format>
+		<property>instrumentation/datalink/checked-lat</property>
+	</text>
+	<text>
+		<halign>center</halign>
+		<label>xxxxxxxxxxxxxx</label>
+		<live>true</live>
+		<format>Longitude: %.5f</format>
+		<property>instrumentation/datalink/checked-lon</property>
+	</text>
+	<text>
+		<label>xxxxxxxxxxxxxx</label>
+		<live>true</live>
+		<format>Altitude (ft): %.2f</format>
+		<property>instrumentation/datalink/checked-alt</property>
+	</text>
+ </group>
+
+ <group>
+	<layout>hbox</layout>
+	<button>
+		<legend>Apply DTL-GPS-Spot to current weapon</legend>
+		<binding>
+			<command>nasal</command>
+			<script><![CDATA[
+				lat = getprop("instrumentation/datalink/checked-lat");
+				lon = getprop("instrumentation/datalink/checked-lon");
+				alt = getprop("instrumentation/datalink/checked-alt");
+				if (lat < 90 and lat > -90 and lon < 180 and lon > -180 and pylons.fcs != nil) {
+					var wp = pylons.fcs.getSelectedWeapon();
+					if (wp != nil and wp.parents[0] == armament.AIM and wp.target_pnt == 1 and (wp.guidance=="gps" or wp.guidance=="gps-altitude")) {
+						var coord = geo.Coord.new();
+						coord.set_latlon(lat,lon,alt*FT2M);
+						var spot = awg_9.ContactTGP.new("GPS-Spot",coord,0);
+						armament.contactPoint = spot;
+						tgp.gps = 1;
+						if (getprop("sim/model/f15/stores/tgp-mounted") and 0) {
+							tgp.flir_updater.click_coord_cam = armament.contactPoint.get_Coord();
+							callsign = armament.contactPoint.getUnique();
+			                setprop("/sim/model/f15/flir/target/auto-track", 1);
+			                flir_updater.offsetP = 0;
+			                flir_updater.offsetH = 0;
+							setprop("sim/model/f15/avionics/tgp-lock", 1);
+						}
+						wp.setContacts([spot]);
+					}
+				}
+			]]></script>
+		</binding>
+	</button>
+	<button>
+		<legend>Clear DTL-GPS-Spot from weapon</legend>
+		<binding>
+			<command>nasal</command>
+			<script><![CDATA[
+				if (pylons.fcs != nil) {
+					var wp = pylons.fcs.getSelectedWeapon();
+					if (wp != nil and wp.parents[0] == armament.AIM) {
+						wp.setContacts([]);
+					}
+					if (armament.contactPoint != nil and armament.contactPoint.get_Callsign()=="GPS-Spot") {
+						armament.contactPoint = nil;
+					}
+					tgp.gps = 0;
+					if (!getprop("sim/model/f15/stores/tgp-mounted")) {
+						tgp.flir_updater.click_coord_cam = nil;
+					}
 				}
 			]]></script>
 		</binding>
