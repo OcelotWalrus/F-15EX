@@ -269,7 +269,7 @@ var Station = {
 						};
 					} elsif (me.weaponName == "AGM-88E") {  # named 88E in F-15EX  (E variant has more complex midflight mechanics)
 						mf = func (struct) {
-							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 8 and struct.hasTarget) {
+							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 10 and struct.hasTarget) {
 								screen.log.write("AGM-88E: Pitbull", 1,1,0);
 								return {"altitude":0,"guidance":"radar","guidanceLaw":"PN","abort_midflight_function":1};
 							}
@@ -320,9 +320,7 @@ var Station = {
 						};
 					} elsif (me.weaponName == "AGM-84E") {
    						mf = func (struct) {
-   							print("DIST");
-   							print(struct.dist_horz_m*M2NM);
-   							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 8 and struct.hasTarget) {
+   							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 10 and struct.hasTarget) {
    								screen.log.write("AGM-84E: Diving", 1,1,0);
    								return {"class":"GM","target":"closest","guidance":"heat","altitude":0,"guidanceLaw":"PN","abort_midflight_function":1};
    							}
