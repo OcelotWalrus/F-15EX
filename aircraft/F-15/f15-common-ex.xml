@@ -409,6 +409,10 @@
                 <desc>Toggle auto AIM-9 cage mode</desc>
             </key>
             <key>
+                <name>Ctrl-l</name>
+                <desc>Toggle HMD Seeker slaving</desc>
+            </key>
+            <key>
                 <name>#</name>
                 <desc>Toggle between CCIP and CCRP bombing mode</desc>
             </key>
@@ -963,6 +967,7 @@
                     <tgp-lock type="bool">false</tgp-lock>
                     <hmd-sym type="double">.75</hmd-sym>
                     <hmd-power type="double">1</hmd-power>
+                    <hmd-slaving type="bool">false</hmd-slaving>
                     <n-reset type="double">0</n-reset>
                     <thrust-weight-ratio type="double">1</thrust-weight-ratio>
                     <kneeboard-left type="bool">true</kneeboard-left>
@@ -4433,6 +4438,15 @@
                 <binding>
                     <command>nasal</command>
                     <script>aircraft.toggle_cockpit_views();</script>
+                </binding>
+            </key>
+            
+            <key n="12">
+                <name>CTRL-l</name>
+                <desc>Toggle HMD Seeker slaving.</desc>
+                <binding>
+                    <command>property-toggle</command>
+                    <property>sim/model/f15/avionics/hmd-slaving</property>
                 </binding>
             </key>
 

@@ -97,7 +97,7 @@ var seekerLoop = func {
     selectedWeap = pylons.fcs.getSelectedWeapon();
     var cursorX = getprop("sim/model/f15/cursor-slew/x");
     var cursorY = getprop("sim/model/f15/cursor-slew/y");
-    if (selectedWeap == nil) {
+    if (selectedWeap == nil or getprop("sim/model/f15/avionics/hmd-slaving")) {
         seekerTimer.stop();
     } elsif ((selectedWeap.type == "AGM-65B" or selectedWeap.type == "AGM-65D" or selectedWeap.type == "AGM-84D" or selectedWeap.type == "AGM-119A" or selectedWeap.type == "AGM-88E") and (awg_9.active_u == nil or !awg_9.active_u.get_display())) {
         selectedWeap.commandDir(cursorX,cursorY);

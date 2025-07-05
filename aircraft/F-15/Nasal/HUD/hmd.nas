@@ -974,12 +974,12 @@ var F15_HMD = {
             hdp.weapon_selected = pylons.fcs.selectedType;
             var aim = pylons.fcs.getSelectedWeapon();
 
-            if (0 and hdp.weapon_selected == "AIM-120" or hdp.weapon_selected == "AIM-7") {
+            if (0 and hdp.weapon_selected == "AIM-120D" or hdp.weapon_selected == "AIM-7") {
                 if (!pylons.fcs.isLock()) {
                     me.radarLock.setTranslation(0, -me.sy*0.25+262*0.3*0.5);
                     me.rdL = 1;
                 }
-            } elsif (hdp.weapon_selected == "AIM-9L" or hdp.weapon_selected == "AIM-9M" or hdp.weapon_selected == "AIM-9X" or hdp.weapon_selected == "IRIS-T") {
+            } elsif (hdp.weapon_selected == "AIM-9L" or hdp.weapon_selected == "AIM-9M" or hdp.weapon_selected == "AIM-9X" or hdp.weapon_selected == "CATM-9X" or hdp.weapon_selected == "IRIS-T" or hdp.weapon_selected == "AGM-65B" or hdp.weapon_selected == "AGM-65D" or hdp.weapon_selected == "AGM-88E" or hdp.weapon_selected == "AGM-119A") {
                 if (aim != nil) {
                     if (!aim.isRadarSlaved()) {
                         me.aimMode = VISUAL;
@@ -1100,7 +1100,7 @@ var F15_HMD = {
                         }
                         if (0 and pylons.fcs != nil and pylons.fcs.isLock()) {
                             #me.target_locked.setRotation(45*D2R);
-                            if (hdp.weapon_selected == "AIM-120" or hdp.weapon_selected == "AIM-7" or hdp.weapon_selected == "AIM-9L" or hdp.weapon_selected == "AIM-9M" or hdp.weapon_selected == "AIM-9X" or hdp.weapon_selected == "IRIS-T") {
+                            if (hdp.weapon_selected == "AIM-120D" or hdp.weapon_selected == "AIM-7" or hdp.weapon_selected == "AIM-9L" or hdp.weapon_selected == "AIM-9M" or hdp.weapon_selected == "AIM-9X" or hdp.weapon_selected == "CATM-9X" or hdp.weapon_selected == "IRIS-T" or hdp.weapon_selected == "AGM-65B" or hdp.weapon_selected == "AGM-65D" or hdp.weapon_selected == "AGM-88E" or hdp.weapon_selected == "AGM-119A") {
                                 var aim = pylons.fcs.getSelectedWeapon();
                                 if (aim != nil) {
                                     var coords = aim.getSeekerInfo();
@@ -1123,12 +1123,12 @@ var F15_HMD = {
                                     }
                                 }
                             }
-                            if (hdp.weapon_selected == "AIM-120" or hdp.weapon_selected == "AIM-7") {
+                            if (hdp.weapon_selected == "AIM-120D" or hdp.weapon_selected == "AIM-7") {
                                 #me.radarLock.setTranslation(me.xcS, me.ycS); too perfect
                                 me.ASEC120Aspect.setRotation(D2R*(awg_9.getPriorityTarget().get_heading()-hdp.OrientationHeadingDeg+180));
                                 me.rdL = 1;
                                 me.rdT = 1;
-                            } elsif (hdp.weapon_selected == "AIM-9L" or hdp.weapon_selected == "AIM-9M" or hdp.weapon_selected == "AIM-9X" or hdp.weapon_selected == "IRIS-T") {
+                            } elsif (hdp.weapon_selected == "AIM-9L" or hdp.weapon_selected == "AIM-9M" or hdp.weapon_selected == "AIM-9X" or hdp.weapon_selected == "CATM-9X" or hdp.weapon_selected == "IRIS-T") {
                                 #me.irLock.setTranslation(me.xcS, me.ycS);
                                 me.ASEC65Aspect.setRotation(D2R*(awg_9.getPriorityTarget().get_heading()-hdp.OrientationHeadingDeg+180));
                                 me.irL = 1;
@@ -1400,6 +1400,7 @@ var F15_HMD = {
         wpn_selector = getprop("sim/model/f15/controls/armament/weapon-selector");
         wpn_mode = "M61A1";
         ammo_count = hdp.ArmamentRounds;
+        ammo_string = 0;
 
         if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type == "LAU-68C") {
             wpn_mode = "M151";
@@ -1416,6 +1417,7 @@ var F15_HMD = {
             wpn_mode = "GND";
             if (getprop("sim/model/f15/systems/armament/selected-arm") != nil and getprop("sim/model/f15/systems/armament/selected-arm") != "") {  # additonaly display the current ground weapon's count along the total ground ordinance count
                 ammo_count = sprintf("%2d/%2d", pylons.fcs.getAmmoOfType(getprop("sim/model/f15/systems/armament/selected-arm")), hdp.ArmamentAgmCount);
+                ammo_string = 1;
             } else {
                 ammo_count = hdp.ArmamentAgmCount;
             }
@@ -1446,7 +1448,11 @@ var F15_HMD = {
 
         hdp.window9_txt = wpn_mode;
         hdp.window2_txt = sprintf("%1.2f T/W", hdp.ThrustToWeightRatio);
-        hdp.window11_txt = sprintf("%02d", ammo_count);
+        if (ammo_string == 0) {
+            hdp.window11_txt = sprintf("%02d", ammo_count);
+        } else {
+            hdp.window11_txt = sprintf("%s", ammo_count);
+        }
         hdp.window12_txt = sprintf("%02d %02d G", math.round(hdp.InstrumentedG*10.0), math.round(hdp.CadcOwsMaximumG*10.0));
 
         me.old_hdp = {
