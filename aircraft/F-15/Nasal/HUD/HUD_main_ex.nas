@@ -693,7 +693,7 @@ var F15HUD = {
 														 	 obj.aircraft_x = geo.aircraft_position().lat();
 														 	 obj.aircraft_y = geo.aircraft_position().lon();
 														 	 obj.cc = geo.Coord.new();
-															 obj.cc.set_latlon(obj.aircraft_x - val.TacanXShift, obj.aircraft_y - val.TacanYShift);
+															 obj.cc.set_latlon(obj.aircraft_x + val.TacanXShift, obj.aircraft_y + val.TacanYShift);
 															 obj.steerDir = [geo.aircraft_position().course_to(obj.cc), vector.Math.getPitch(geo.aircraft_position(), obj.cc)];
 															 obj.wpbear = obj.steerDir[0];
 															 if (obj.wpbear != nil) {
@@ -862,12 +862,7 @@ var F15HUD = {
 															if (val.NavigationMode == 1) { # TACAN nav mode overrides waypoint nav mode if the switch for it i ON
 																if (val.TacanStationInRange) {
 																	TacanDistance = val.TacanStationDistance;
-																	if (TacanDistance >= 10) {
-																		# tacan can under right conditions be 3 digits
-																		obj.HudNavRangeDisplay = sprintf("%d", TacanDistance);
-																	} else {
-																		obj.HudNavRangeDisplay = sprintf("%.1f", TacanDistance);
-																	}
+																	obj.HudNavRangeDisplay = sprintf("N %.1f", TacanDistance);
 																	# In TACAN mode, stead of time for intercept, we display the relative aspect of the station
 																	deg_rel = math.round(val.HeadingMag-val.TacanBearingRelDeg);
 																	sign = "";
