@@ -186,6 +186,13 @@
 
 				gps_spot = geo.Coord.new().set_latlon(lat,lon,alt*FT2M);
 				datalink.send_data({"point": gps_spot}, timeout = 15);  # stops being continuously sent after 15 seconds
+				
+				# Notify the pilot and logs it
+                var out = "Sending GPS-Spot over datalink. Timeout: 15 seconds.";
+                var out_detailed = sprintf("Sending GPS-Spot over datalink. Timeout: 15 seconds. Lat: %.05f deg, Lon: %.05f deg, Alt: %.02f ft.", lat, lon, alt);
+                screen.log.write(out, 1,1,0);
+                print(out_detailed);
+                damageLog.push(out_detailed);
 			]]></script>
 		</binding>
 	</button>

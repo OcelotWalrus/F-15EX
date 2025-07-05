@@ -351,6 +351,13 @@ var rdr_loop = func(notification) {
                     }
                     callsign = sprintf("%s%02d", connection, count);
                     append(dtl_share_stpts, {"sender": connection , "callsign" : callsign , "gps_spot" : gps_spot});
+                    
+                    # Notify the pilot and logs it
+                    var out = sprintf("Datalink GPS-Spot received under callsign %s .", callsign);
+                    var out_detailed = sprintf("Datalink GPS-Spot received under callsign %s . Lat: %.5f deg, Lon: %.5f deg, Alt: %.2f ft.", callsign, gps_spot.lat(), gps_spot.lon(), gps_spot.alt()*M2FT);
+                    screen.log.write(out, 1,1,0);
+                    print(out_detailed);
+                    damageLog.push(out_detailed);
                 }
             }
         }
