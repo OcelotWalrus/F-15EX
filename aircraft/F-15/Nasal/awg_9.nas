@@ -58,6 +58,7 @@ var knownSurface = {
     "tower":     nil,
 };
 
+var damageLog = events.LogBuffer.new(echo: 0);
 var this_model = "f15";
 #var this_model = "f-14b";
 #var this_model = "f16";
@@ -343,21 +344,25 @@ var rdr_loop = func(notification) {
                 gps_spot = data.point();
                 if (gps_spot != nil) {
                     # We generate a callsign for each GPS Spot using this pattern : `<sender-callsign><how many has he already sent?+1>`
-                    count = 0;
+                    var count = 0;
+                    var different = 0;
                     foreach(shared_spot ; dtl_share_stpts) {
-                        if (shared_spot.sender == connection and shared_spot.gps_spot != gps_spot) {  # if the same guy's resending a gps spot, that he ain't sent before, be add 1 to the counter
-                            count += 1
+                        if (shared_spot.sender == connection and shared_spot.gps_spot != gps_spot) {  # if the same guy's resending a gps spot, that he ain't sent before, we add 1 to the counter
+                            count += 1;
+                            different = 1;
                         }
                     }
                     callsign = sprintf("%s%02d", connection, count);
                     append(dtl_share_stpts, {"sender": connection , "callsign" : callsign , "gps_spot" : gps_spot});
                     
                     # Notify the pilot and logs it
-                    var out = sprintf("Datalink GPS-Spot received under callsign %s .", callsign);
-                    var out_detailed = sprintf("Datalink GPS-Spot received under callsign %s . Lat: %.5f deg, Lon: %.5f deg, Alt: %.2f ft.", callsign, gps_spot.lat(), gps_spot.lon(), gps_spot.alt()*M2FT);
-                    screen.log.write(out, 1,1,0);
-                    print(out_detailed);
-                    damageLog.push(out_detailed);
+                    if (different == 1) {
+                        var out = sprintf("Datalink GPS-Spot received under callsign %s .", callsign);
+                        var out_detailed = sprintf("Datalink GPS-Spot received under callsign %s . Lat: %.5f deg, Lon: %.5f deg, Alt: %.2f ft.", callsign, gps_spot.lat(), gps_spot.lon(), gps_spot.alt()*M2FT);
+                        screen.log.write(out, 1,1,0);
+                        print(out_detailed);
+                        damageLog.push(out_detailed);
+                    }
                 }
             }
         }

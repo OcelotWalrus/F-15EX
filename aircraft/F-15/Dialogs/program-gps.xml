@@ -192,6 +192,8 @@
                 var out_detailed = sprintf("Sending GPS-Spot over datalink. Timeout: 15 seconds. Lat: %.05f deg, Lon: %.05f deg, Alt: %.02f ft.", lat, lon, alt);
                 screen.log.write(out, 1,1,0);
                 print(out_detailed);
+                
+                var damageLog = events.LogBuffer.new(echo: 0);
                 damageLog.push(out_detailed);
 			]]></script>
 		</binding>
@@ -225,7 +227,7 @@
 						if (gps_spot_cur.callsign == getprop("instrumentation/datalink/checked-callsign")) {
 							setprop("instrumentation/datalink/checked-lat", gps_spot_cur.gps_spot.lat());
 							setprop("instrumentation/datalink/checked-lon", gps_spot_cur.gps_spot.lon());
-							setprop("instrumentation/datalink/checked-alt", gps_spot_cur.gps_spot.at());
+							setprop("instrumentation/datalink/checked-alt", gps_spot_cur.gps_spot.alt());
 							setprop("instrumentation/datalink/checked-found", "FOUND");
 						} else {
 							setprop("instrumentation/datalink/checked-found", "NOT FOUND");  # notify the user that no GPS-Spot of this name shared over datalink has been found
