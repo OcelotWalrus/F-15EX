@@ -735,7 +735,7 @@ var F15_HMD = {
                                           var currLimit = 0;
                                           var hd = math.abs(geo.normdeg180(val.HmdH));
 
-                                          if (hd < 5) currLimit = 1.5;
+                                          if (hd < 5) currLimit = 20.5;
                                           elsif (hd < 15) currLimit = -17;
                                           elsif (hd < 30) currLimit = -30;
                                           else currLimit = -50;

@@ -1103,45 +1103,12 @@
                         <on-off type="bool">true</on-off>
                         <brightness type="double">1</brightness>
                     </TID>
-                    <VSD>
-                        <brightness type="double">1</brightness>
-                        <contrast type="double">0.6</contrast>
-                        <on-off type="bool">0</on-off>
-                    </VSD>
-                    <MPCD>
+                    <LAD>
                         <mode type="int">2</mode>
                         <brightness type="double">1</brightness>
                         <contrast type="double">0.6</contrast>
                         <on-off type="bool">0</on-off>
-
-                        <!--
-                            default Combat Jettision for F-15
-                        # CBT 1 C STORE
-                        # CBT 2 LR PYLON
-                        -->
-                        <cbtjett n="0">
-                            <left type="bool">false</left>
-                            <center type="bool">true</center>
-                            <right type="bool">false</right>
-                            <left-conformal type="bool">false</left-conformal>
-                            <right-conformal type="bool">false</right-conformal>
-                            <type type="int">1</type>
-                        </cbtjett>
-                        <cbtjett n="1">
-                            <left type="bool">true</left>
-                            <center type="bool">false</center>
-                            <right type="bool">true</right>
-                            <left-conformal type="bool">false</left-conformal>
-                            <right-conformal type="bool">false</right-conformal>
-                            <type type="int">0</type>
-                        </cbtjett>
-
-                    </MPCD>
-                    <TEWS>
-                        <brightness type="double">1</brightness>
-                        <contrast type="double">0.6</contrast>
-                        <on-off type="bool">0</on-off>
-                    </TEWS>
+                    </LAD>
                     <HUD>
                         <brightness type="double">1</brightness>
                         <on-off type="bool">0</on-off>
@@ -2042,10 +2009,10 @@
             <internal archive="y">true</internal>
             <config>
                 <x-offset-m archive="y">0.0</x-offset-m>
-                <y-offset-m archive="y">1.401951318</y-offset-m>
-                <z-offset-m archive="y">-5.11</z-offset-m>
-                <pitch-offset-deg>-17.43</pitch-offset-deg>
-                <default-field-of-view-deg>93.7</default-field-of-view-deg>
+                <y-offset-m archive="y">1.38195</y-offset-m>
+                <z-offset-m archive="y">-5.09</z-offset-m>
+                <pitch-offset-deg>-5.555</pitch-offset-deg>
+                <default-field-of-view-deg>116</default-field-of-view-deg>
                 <limits>
                     <enabled type="bool">false</enabled>
                     <left>
@@ -4440,7 +4407,7 @@
                     <script>aircraft.toggle_cockpit_views();</script>
                 </binding>
             </key>
-            
+
             <key n="12">
                 <name>CTRL-l</name>
                 <desc>Toggle HMD Seeker slaving.</desc>
@@ -4886,13 +4853,13 @@
             <power_prop type="string" alias="/instrumentation/iff/power"/>
             <power type="bool">false</power>
             <activate type="bool">true</activate>
-            <channel-selection type="int">1</channel-selection>
+            <channel-selection type="int">4217</channel-selection>
             <response type="bool">false</response>
         </iff>
         <datalink>
             <sending type="bool">false</sending>
             <power type="bool">false</power>
-            <channel type="int">1</channel>
+            <channel type="int">7538</channel>
             <power_prop type="string" alias="/instrumentation/datalink/power"/>
             <channel_prop type="string" alias="/instrumentation/datalink/channel"/>
             <receive_period type="double">1</receive_period>
@@ -5067,6 +5034,7 @@
             <file>Nasal/VSD/VSD_main.nas</file>
             <file>Nasal/TEWS/TEWS_main.nas</file>
             <file>Nasal/MPCD/MPCD_main.nas</file>
+            <file>Nasal/LAD/lad.nas</file>
         </displays>
     </nasal>
 
