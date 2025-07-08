@@ -25,6 +25,13 @@ var prst_green = {"r": 0, "g": 255 / 255, "b": 58 / 255};
 var prst_yellow = {"r": 234 / 255, "g": 255 / 255, "b": 0 / 255};
 var prst_yellow_dark = {"r": 94 / 255, "g": 105 / 255, "b": 0 / 255};  # 2.5 times darker than regular yellow
 
+# Settings
+var main_screens = {
+    "left": "VSD",
+    "center": "ARMS",
+    "right": "HSD",
+};
+
 var LAD_Device = {
 
     canvas_settings: {
@@ -45,10 +52,11 @@ var LAD_Device = {
 
 
 
-        # The upper panel, it's static and displays basic useful information
+        ## The upper panel, it's static and displays basic useful information
+        ## Are in order from left to right
         m.upper_panel = m.svg.createGroup();
 
-        # Are in order from left to right
+        # Time box
         m.time_text_hrs = m.upper_panel.createChild("text")
             .setFontSize(120, 1.4)
             .setText("23")
@@ -79,6 +87,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
+        # Caution ("Warning") box
         m.caution_text = m.upper_panel.createChild("text")
             .setFontSize(165, 1.4)
             .setText("CAUTION")
@@ -95,6 +104,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
 
+        # Radio 1 (Comm 1) box
         m.radio1_text_up = m.upper_panel.createChild("text")
             .setFontSize(135, 1.4)
             .setText("R1")
@@ -125,6 +135,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
+        # Radio 2 (Comm 2) box
         m.radio2_text_up = m.upper_panel.createChild("text")
             .setFontSize(135, 1.4)
             .setText("R2")
@@ -155,6 +166,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
+        # Transponder box
         m.transponder_text_up = m.upper_panel.createChild("text")
             .setFontSize(135, 1.4)
             .setText("MODE 3/A")
@@ -185,6 +197,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
+        # IFF Box
         m.iff_text_up = m.upper_panel.createChild("text")
             .setFontSize(135, 1.4)
             .setText("IFF - OFF")
@@ -215,6 +228,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
+        # Datalink box
         m.dtl_text_up = m.upper_panel.createChild("text")
             .setFontSize(135, 1.4)
             .setText("DTLNK - OFF")
@@ -245,7 +259,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
-
+        # TACAN box
         m.tacan_text_up = m.upper_panel.createChild("text")
             .setFontSize(135, 1.4)
             .setText("TACAN")
@@ -269,6 +283,7 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
+        # ILS box
         m.ils_text_up = m.upper_panel.createChild("text")
             .setFontSize(135, 1.4)
             .setText("ILS")
@@ -326,6 +341,175 @@ var LAD_Device = {
         m.ils_text_down.setVisible(1);
         m.ils_box.setVisible(1);
 
+        ## Main screens.
+        ## The objects are actually all placed on the left screen,
+        ## and are translated on different locations, depending on
+        ## which screen they need to be displayed on, as you can't
+        ## have two screens both having the VSD for example.
+
+        # These objects are not usually displayed, but are when developing, to see limits
+        m.main_screen_box_1 = m.upper_panel.createChild("path")
+            .vert(2300*2)
+            .horiz(1355*2)
+            .vert(-2300*2)
+            .horiz(-1355*2)
+            .setTranslation(0,500)
+            .setStrokeLineWidth(20)
+            .setColor(prst_white.r,prst_white.g,prst_white.b);
+        m.main_screen_box_2 = m.upper_panel.createChild("path")
+            .vert(2300*2)
+            .horiz(1355*2)
+            .vert(-2300*2)
+            .horiz(-1355*2)
+            .setTranslation(1355+1355+20,500)
+            .setStrokeLineWidth(20)
+            .setColor(prst_white.r,prst_white.g,prst_white.b);
+        m.main_screen_box_3 = m.upper_panel.createChild("path")
+            .vert(2300*2)
+            .horiz(1355*2)
+            .vert(-2300*2)
+            .horiz(-1355*2)
+            .setTranslation(1355+1355+20+1355+1355+20,500)
+            .setStrokeLineWidth(20)
+            .setColor(prst_white.r,prst_white.g,prst_white.b);
+        
+        m.main_screen_box_1.setVisible(0);
+        m.main_screen_box_2.setVisible(0);
+        m.main_screen_box_3.setVisible(0);
+
+        ## VSD Display
+        m.VSDScreen = m.svg.createGroup();
+        # VSD Grid - 4x4 equal
+        m.vsd_box = m.VSDScreen.createChild("path")
+            .vert(2300*2)
+            .horiz(1355*2)
+            .vert(-2300*2)
+            .horiz(-1355*2)
+            .setTranslation(0,500)
+            .setStrokeLineWidth(20)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        me.line_0_1 = m.VSDScreen.createChild("path")
+            .moveTo(0,1150+500)
+            .lineTo(1355+1355,1150+500)
+            .setStrokeLineWidth(10)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        me.line_0_2 = m.VSDScreen.createChild("path")
+            .moveTo(0,1150*2+500)
+            .lineTo(1355+1355,1150*2+500)
+            .setStrokeLineWidth(10)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        me.line_0_3 = m.VSDScreen.createChild("path")
+            .moveTo(0,1150*3+500)
+            .lineTo(1355+1355,1150*3+500)
+            .setStrokeLineWidth(10)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        me.line_1_0 = m.VSDScreen.createChild("path")
+            .moveTo(677,500)
+            .lineTo(677,2300*2+500)
+            .setStrokeLineWidth(10)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        me.line_2_0 = m.VSDScreen.createChild("path")
+            .moveTo(677*2,500)
+            .lineTo(677*2,2300*2+500)
+            .setStrokeLineWidth(10)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        me.line_3_0 = m.VSDScreen.createChild("path")
+            .moveTo(677*3,500)
+            .lineTo(677*3,2300*2+500)
+            .setStrokeLineWidth(10)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        
+        # VSD Texts
+        m.vsd_rdr_range_txt = m.upper_panel.createChild("text")  # far top right
+            .setFontSize(140, 1.4)
+            .setText("050 NM")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(2510,575)
+            .setFont(aircraft.HUDFont);
+        m.vsd_rdr_mode_1 = m.upper_panel.createChild("text")  # far top right
+            .setFontSize(100, 1.4)
+            .setText("T")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(2645,700)
+            .setFont(aircraft.HUDFont);
+        m.vsd_rdr_mode_2 = m.upper_panel.createChild("text")  # far top right
+            .setFontSize(100, 1.4)
+            .setText("W")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(2645,780)
+            .setFont(aircraft.HUDFont);
+        m.vsd_rdr_mode_3 = m.upper_panel.createChild("text")  # far top right
+            .setFontSize(100, 1.4)
+            .setText("S")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(2645,860)
+            .setFont(aircraft.HUDFont);
+        m.vsd_rdr_filter_1 = m.upper_panel.createChild("text")  # far top right
+            .setFontSize(100, 1.4)
+            .setText("A")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(2645,960)
+            .setFont(aircraft.HUDFont);
+        m.vsd_rdr_filter_2 = m.upper_panel.createChild("text")  # far top right
+            .setFontSize(100, 1.4)
+            .setText("/")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(2645,1040)
+            .setFont(aircraft.HUDFont);
+        m.vsd_rdr_filter_3 = m.upper_panel.createChild("text")  # far top right
+            .setFontSize(100, 1.4)
+            .setText("A")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(2645,1120)
+            .setFont(aircraft.HUDFont);
+        m.vsd_azimuth_center = m.upper_panel.createChild("text")  # far down, right of the center column
+            .setFontSize(100, 1.4)
+            .setText("0°")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(677*2+70,2300*2+500-70)
+            .setFont(aircraft.HUDFont);
+        m.vsd_azimuth_left = m.upper_panel.createChild("text")  # far down, bottom right
+            .setFontSize(100, 1.4)
+            .setText("30°")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(80,2300*2+500-80)
+            .setFont(aircraft.HUDFont);
+        m.vsd_azimuth_right = m.upper_panel.createChild("text")  # far down, bottom left
+            .setFontSize(100, 1.4)
+            .setText("30°")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(677*4-80,2300*2+500-75)
+            .setFont(aircraft.HUDFont);
+
+        m.VSDScreen.setVisible(1);
+        m.vsd_box.setVisible(1);
+        m.line_0_1.setVisible(1);
+        m.line_0_2.setVisible(1);
+        m.line_0_3.setVisible(1);
+        m.line_1_0.setVisible(1);
+        m.line_2_0.setVisible(1);
+        m.line_3_0.setVisible(1);
+        m.vsd_rdr_range_txt.setVisible(1);
+        m.vsd_rdr_mode_1.setVisible(1);
+        m.vsd_rdr_mode_2.setVisible(1);
+        m.vsd_rdr_mode_3.setVisible(1);
+        m.vsd_rdr_filter_1.setVisible(1);
+        m.vsd_rdr_filter_2.setVisible(1);
+        m.vsd_rdr_filter_3.setVisible(1);
+        m.vsd_azimuth_center.setVisible(1);
+        m.vsd_azimuth_right.setVisible(1);
+        m.vsd_azimuth_left.setVisible(1);
+
         return m;
     },
 };
@@ -334,6 +518,8 @@ var LADCanvas = nil;
 var update_loop = nil;
 
 update = func() {
+
+    ## Upper panel updates
     # Update the Caution light, depending on if there's a caution or not (also change its size)
     caution = getprop("sim/model/f15/instrumentation/warnings/master-caution");
     if (caution) {
@@ -506,6 +692,35 @@ update = func() {
         LADCanvas.ils_text_up.setColor(prst_white.r,prst_white.g,prst_white.b);
         LADCanvas.ils_text_down.setColor(prst_white.r,prst_white.g,prst_white.b);
         LADCanvas.ils_box.setColor(prst_white.r,prst_white.g,prst_white.b);
+    }
+    
+    ## VSD Updates
+    # Update the texts
+    LADCanvas.vsd_rdr_range_txt.setText(sprintf("%03d NM", getprop("instrumentation/radar/radar2-range")));
+    LADCanvas.vsd_azimuth_right.setText(sprintf("%02d°", getprop("instrumentation/radar/az-field")/2));
+    LADCanvas.vsd_azimuth_left.setText(sprintf("%02d°", getprop("instrumentation/radar/az-field")/2));
+    if (getprop("instrumentation/radar/radar-standby")) {  # if radar's standy
+        LADCanvas.vsd_rdr_mode_1.setText("S");
+        LADCanvas.vsd_rdr_mode_2.setText("T");
+        LADCanvas.vsd_rdr_mode_3.setText("Y");
+    } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # if radar's in TWS mode
+        LADCanvas.vsd_rdr_mode_1.setText("T");
+        LADCanvas.vsd_rdr_mode_2.setText("W");
+        LADCanvas.vsd_rdr_mode_3.setText("S");
+    } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 3) {  # if radar's in Pulse Search mode
+        LADCanvas.vsd_rdr_mode_1.setText("P");
+        LADCanvas.vsd_rdr_mode_2.setText("U");
+        LADCanvas.vsd_rdr_mode_3.setText("L");
+    }
+    if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # if radar's A/A
+        LADCanvas.vsd_rdr_filter_1.setText("A");
+        LADCanvas.vsd_rdr_filter_2.setText("A");
+    } elsif (getprop("instrumentation/radar/radar-filter-mode") == 1) {  # if radar's A/G
+        LADCanvas.vsd_rdr_filter_1.setText("A");
+        LADCanvas.vsd_rdr_filter_2.setText("G");
+    } elsif (getprop("instrumentation/radar/radar-filter-mode") == 2) {  # if radar's A/SEA
+        LADCanvas.vsd_rdr_filter_1.setText("A");
+        LADCanvas.vsd_rdr_filter_2.setText("S");
     }
 }
 
