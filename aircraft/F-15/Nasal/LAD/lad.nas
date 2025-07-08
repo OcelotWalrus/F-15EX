@@ -381,114 +381,124 @@ var LAD_Device = {
         m.VSDScreen = m.svg.createGroup();
         # VSD Grid - 4x4 equal
         m.vsd_box = m.VSDScreen.createChild("path")
-            .vert(2300*2)
-            .horiz(1355*2)
-            .vert(-2300*2)
-            .horiz(-1355*2)
-            .setTranslation(0,500)
+            .vert(2225*2)
+            .horiz(1280*2)
+            .vert(-2225*2)
+            .horiz(-1280*2)
+            .setTranslation(75,575)
             .setStrokeLineWidth(20)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
         me.line_0_1 = m.VSDScreen.createChild("path")
-            .moveTo(0,1150+500)
-            .lineTo(1355+1355,1150+500)
+            .moveTo(75-30,1150+500+75)
+            .lineTo(1355+1355-75+30,1150+500+75)
             .setStrokeLineWidth(10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
         me.line_0_2 = m.VSDScreen.createChild("path")
-            .moveTo(0,1150*2+500)
-            .lineTo(1355+1355,1150*2+500)
+            .moveTo(75-30,1150*2+500+75)
+            .lineTo(1355+1355-75+30,1150*2+500+75)
             .setStrokeLineWidth(10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
         me.line_0_3 = m.VSDScreen.createChild("path")
-            .moveTo(0,1150*3+500)
-            .lineTo(1355+1355,1150*3+500)
+            .moveTo(75-30,1150*3+500+75)
+            .lineTo(1355+1355-75+30,1150*3+500+75)
             .setStrokeLineWidth(10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
         me.line_1_0 = m.VSDScreen.createChild("path")
-            .moveTo(677,500)
-            .lineTo(677,2300*2+500)
+            .moveTo(677,500+75)
+            .lineTo(677,2300*2+500-75)
             .setStrokeLineWidth(10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
         me.line_2_0 = m.VSDScreen.createChild("path")
-            .moveTo(677*2,500)
-            .lineTo(677*2,2300*2+500)
+            .moveTo(677*2,500+75)
+            .lineTo(677*2,2300*2+500-75)
             .setStrokeLineWidth(10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
         me.line_3_0 = m.VSDScreen.createChild("path")
-            .moveTo(677*3,500)
-            .lineTo(677*3,2300*2+500)
+            .moveTo(677*3,500+75)
+            .lineTo(677*3,2300*2+500-75)
             .setStrokeLineWidth(10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
         
-        # VSD Texts
+        # VSD Symbologies
+        # Standard symbology (speed, alt, horizon etc.)
+        m.vsd_horizon_line = m.upper_panel.createChild("path")
+            .moveTo(1355-40,2750)
+            .lineTo(677-75,2750) # Left horizontal line
+            #.moveTo(677-75,2625)
+            #.lineTo(677-75,2625) # Left vertical line
+            .setStrokeLineWidth(10)
+            .set("z-index",10)
+            .setColor(prst_green.r,prst_green.g,prst_green.b);
+        # Radar
         m.vsd_rdr_range_txt = m.upper_panel.createChild("text")  # far top right
-            .setFontSize(140, 1.4)
+            .setFontSize(80, 1.4)
             .setText("050 NM")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2510,575)
+            .setTranslation(2555,535)
             .setFont(aircraft.HUDFont);
         m.vsd_rdr_mode_1 = m.upper_panel.createChild("text")  # far top right
             .setFontSize(100, 1.4)
             .setText("T")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645,700)
+            .setTranslation(2645+35,700)
             .setFont(aircraft.HUDFont);
         m.vsd_rdr_mode_2 = m.upper_panel.createChild("text")  # far top right
             .setFontSize(100, 1.4)
             .setText("W")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645,780)
+            .setTranslation(2645+35,780)
             .setFont(aircraft.HUDFont);
         m.vsd_rdr_mode_3 = m.upper_panel.createChild("text")  # far top right
             .setFontSize(100, 1.4)
             .setText("S")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645,860)
+            .setTranslation(2645+35,860)
             .setFont(aircraft.HUDFont);
         m.vsd_rdr_filter_1 = m.upper_panel.createChild("text")  # far top right
             .setFontSize(100, 1.4)
             .setText("A")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645,960)
+            .setTranslation(2645+35,980)
             .setFont(aircraft.HUDFont);
         m.vsd_rdr_filter_2 = m.upper_panel.createChild("text")  # far top right
             .setFontSize(100, 1.4)
             .setText("/")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645,1040)
+            .setTranslation(2645+35,1060)
             .setFont(aircraft.HUDFont);
         m.vsd_rdr_filter_3 = m.upper_panel.createChild("text")  # far top right
             .setFontSize(100, 1.4)
             .setText("A")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645,1120)
+            .setTranslation(2645+35,1140)
             .setFont(aircraft.HUDFont);
         m.vsd_azimuth_center = m.upper_panel.createChild("text")  # far down, right of the center column
             .setFontSize(100, 1.4)
             .setText("0°")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(677*2+70,2300*2+500-70)
+            .setTranslation(677*2+85,2300*2+500-70-75)
             .setFont(aircraft.HUDFont);
         m.vsd_azimuth_left = m.upper_panel.createChild("text")  # far down, bottom right
             .setFontSize(100, 1.4)
             .setText("30°")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(80,2300*2+500-80)
+            .setTranslation(80+75,2300*2+500-80-75)
             .setFont(aircraft.HUDFont);
         m.vsd_azimuth_right = m.upper_panel.createChild("text")  # far down, bottom left
             .setFontSize(100, 1.4)
             .setText("30°")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(677*4-80,2300*2+500-75)
+            .setTranslation(677*4-80-75,2300*2+500-75-75)
             .setFont(aircraft.HUDFont);
 
         m.VSDScreen.setVisible(1);
@@ -714,13 +724,13 @@ update = func() {
     }
     if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # if radar's A/A
         LADCanvas.vsd_rdr_filter_1.setText("A");
-        LADCanvas.vsd_rdr_filter_2.setText("A");
+        LADCanvas.vsd_rdr_filter_3.setText("A");
     } elsif (getprop("instrumentation/radar/radar-filter-mode") == 1) {  # if radar's A/G
         LADCanvas.vsd_rdr_filter_1.setText("A");
-        LADCanvas.vsd_rdr_filter_2.setText("G");
+        LADCanvas.vsd_rdr_filter_3.setText("G");
     } elsif (getprop("instrumentation/radar/radar-filter-mode") == 2) {  # if radar's A/SEA
         LADCanvas.vsd_rdr_filter_1.setText("A");
-        LADCanvas.vsd_rdr_filter_2.setText("S");
+        LADCanvas.vsd_rdr_filter_3.setText("S");
     }
 }
 
