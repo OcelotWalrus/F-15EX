@@ -65,7 +65,7 @@ var this_model = "f15";
 
 var ownship_pos = geo.Coord.new();
 var cockpitNotifier = nil;
-var radar_ranges = [5,10,20,40,50,100,200];
+var radar_ranges = [5,10,20,40,50,80,100,140,170,200,250,275];
 
 
 
@@ -179,7 +179,7 @@ var r_az_fld          = 0;
 var swp_fac           = nil;    # Scan azimuth deviation, normalized (-1 --> 1).
 var swp_deg           = nil;    # Scan azimuth deviation, in degree.
 var swp_deg_last      = 0;      # Used to get sweep direction.
-var swp_spd           = 0.5;
+var swp_spd           = 1;
 var swp_dir           = nil;    # Sweep direction, 0 to left, 1 to right.
 var swp_dir_last      = 0;
 var ddd_screen_width  = 0.0844; # 0.0844m : length of the max azimuth range on the DDD screen.
