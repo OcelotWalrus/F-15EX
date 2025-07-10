@@ -121,10 +121,13 @@ var prst_red_dark = {"r": .3764, "g": .0076, "b": .0076};  # 2.5 times darker th
 
 # Settings
 var main_screens = {
-    "left": "VSD",
+    "left": "PACS",
     "center": "PACS",
     "right": "HSD",
 };
+var VSD_ON = 0;
+var PACS_ON = 0;
+var HSD_ON = 0;
 
 var LAD_Device = {
 
@@ -1048,99 +1051,171 @@ update = func() {
         LADCanvas.ils_box.setColor(prst_white.r,prst_white.g,prst_white.b);
     }
     
+    # Main center screens updates
+    # We determine which "displays" are online (VSD, HSD, PACS etc...)
+    # Allowing us to update only needed displays.
+    # We also shift (translate) online displays to the correct position,
+    # whether they're on the left, center or right main screens.
+    
+    if (main_screens.left == "VSD") {
+        VSD_ON = 1;
+        LADCanvas.VSDScreen.setTranslation(0,0);  # Default position's position for the left main screen
+    } elsif (main_screens.center == "VSD") {
+        VSD_ON = 1;
+        LADCanvas.VSDScreen.setTranslation(8192/3,0);  # Default position's position for the left main screen
+    } elsif (main_screens.right == "VSD") {
+        VSD_ON = 1;
+        LADCanvas.VSDScreen.setTranslation((8192/3)*2,0);  # Default position's position for the left main screen
+    }
+    
     ## VSD Updates
-    # Update the texts
-    LADCanvas.vsd_rdr_range_txt.setText(sprintf("%03d NM", getprop("instrumentation/radar/radar2-range")));
-    if (getprop("instrumentation/radar/radar-standby")) {  # if radar's standy
-        LADCanvas.vsd_rdr_mode_1.setText("S");
-        LADCanvas.vsd_rdr_mode_2.setText("T");
-        LADCanvas.vsd_rdr_mode_3.setText("Y");
-    } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # if radar's in TWS mode
-        LADCanvas.vsd_rdr_mode_1.setText("T");
-        LADCanvas.vsd_rdr_mode_2.setText("W");
-        LADCanvas.vsd_rdr_mode_3.setText("S");
-    } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 3) {  # if radar's in Pulse Search mode
-        LADCanvas.vsd_rdr_mode_1.setText("P");
-        LADCanvas.vsd_rdr_mode_2.setText("U");
-        LADCanvas.vsd_rdr_mode_3.setText("L");
-    }
-    if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # if radar's A/A
-        LADCanvas.vsd_rdr_filter_1.setText("A");
-        LADCanvas.vsd_rdr_filter_3.setText("A");
-    } elsif (getprop("instrumentation/radar/radar-filter-mode") == 1) {  # if radar's A/G
-        LADCanvas.vsd_rdr_filter_1.setText("A");
-        LADCanvas.vsd_rdr_filter_3.setText("G");
-    } elsif (getprop("instrumentation/radar/radar-filter-mode") == 2) {  # if radar's A/SEA
-        LADCanvas.vsd_rdr_filter_1.setText("A");
-        LADCanvas.vsd_rdr_filter_3.setText("S");
-    }
-    # Update the horizon line's placement
-    var pitch_offset = 15; # makes the thing 15 pixels below the middle, so it ain't hidden by the grid
-    var DTOR = math.pi / 180.0;
-    new_y_pos_hori = (2300 * getprop("orientation/pitch-deg")) / 60;
-    # clamp the values of the y pos of the horizon line, so it don't get outta the grid
-    if (new_y_pos_hori > 2210) {
-        new_y_pos_hori = 2210;
-    } elsif (new_y_pos_hori < -1960) {
-        new_y_pos_hori = -1960;
-    }
-    LADCanvas.vsd_horizon_line.setTranslation (0.0, -new_y_pos_hori-pitch_offset);
-    #LADCanvas.vsd_horizon_line.setRotation (-getprop("orientation/roll-deg") * DTOR);
-    
-    # Update some texts giving info about ourselves
-    LADCanvas.vsd_ground_speed.setText(sprintf("G %03d", getprop("velocities/groundspeed-kt")));
-    LADCanvas.vsd_airspeed.setText(sprintf("T %03d", getprop("velocities/airspeed-kt")));
-    
-    # Move the azimuth carat around
-    var azimuth_sweep = getprop("sim/model/f15/instrumentation/awg-9/sweep-factor");
-    var carat_sweep = 0;
-    if (azimuth_sweep != nil) {  # this property is created in awg_9.nas, so at startup it's null
-        carat_sweep = azimuth_sweep * 1280;
-    }
-    LADCanvas.vsd_azimuth_carat.setTranslation(carat_sweep, 0.0);
-    
-    # Update the azimuth circles'
-    if (getprop("instrumentation/radar/az-field") == 120) {
-        LADCanvas.vsd_azimuth_limit_circle_right_60.setVisible(1);
-        LADCanvas.vsd_azimuth_limit_circle_left_60.setVisible(1);
-        LADCanvas.vsd_azimuth_limit_circle_right_30.setVisible(0);
-        LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(0);
-    } elsif (getprop("instrumentation/radar/az-field") == 60) {
-        LADCanvas.vsd_azimuth_limit_circle_right_60.setVisible(0);
-        LADCanvas.vsd_azimuth_limit_circle_left_60.setVisible(0);
-        LADCanvas.vsd_azimuth_limit_circle_right_30.setVisible(1);
-        LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(1);
-    }
-    
-    # Update the steerpoint symbols
-    var stpt_idx = 0;
-    if (getprop("sim/model/instrumentation/vhf/mode") == 0) {  # if we're in normal nav mode (not TACAN or ILS)
-    
-        # Update the wp dist/ETA texts
-        if (getprop("autopilot/route-manager/active")) {  # if route-manager's active
-            LADCanvas.vsd_stpt_eta.setText("XX:XX");
-            if (getprop("autopilot/route-manager/wp/dist") != nil) {
-                LADCanvas.vsd_stpt_dist.setText(sprintf("N %4.1f", getprop("autopilot/route-manager/wp/dist")));
-            } else {
-                LADCanvas.vsd_stpt_dist.setText("N 9999");
-            }
-            
-            if (getprop("autopilot/route-manager/wp/eta-seconds") != nil) {
-                nav_mins = sprintf("%.0f", getprop("autopilot/route-manager/wp/eta-seconds") / 60);
-                nav_secs = (getprop("autopilot/route-manager/wp/eta-seconds") / 60 - nav_mins) * 60;  # remove whole minutes for seconds
-                if (nav_secs < 0) {  # tiny fix
-                    nav_mins = nav_mins - 1;
-                    nav_secs = 60 + nav_secs;
+    if (VSD_ON) {  # Optimization, we only wanna update the VSD display if it's online
+        LADCanvas.VSDScreen.setVisible(1);
+        # Update the texts
+        LADCanvas.vsd_rdr_range_txt.setText(sprintf("%03d NM", getprop("instrumentation/radar/radar2-range")));
+        if (getprop("instrumentation/radar/radar-standby")) {  # if radar's standy
+            LADCanvas.vsd_rdr_mode_1.setText("S");
+            LADCanvas.vsd_rdr_mode_2.setText("T");
+            LADCanvas.vsd_rdr_mode_3.setText("Y");
+        } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # if radar's in TWS mode
+            LADCanvas.vsd_rdr_mode_1.setText("T");
+            LADCanvas.vsd_rdr_mode_2.setText("W");
+            LADCanvas.vsd_rdr_mode_3.setText("S");
+        } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 3) {  # if radar's in Pulse Search mode
+            LADCanvas.vsd_rdr_mode_1.setText("P");
+            LADCanvas.vsd_rdr_mode_2.setText("U");
+            LADCanvas.vsd_rdr_mode_3.setText("L");
+        }
+        if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # if radar's A/A
+            LADCanvas.vsd_rdr_filter_1.setText("A");
+            LADCanvas.vsd_rdr_filter_3.setText("A");
+        } elsif (getprop("instrumentation/radar/radar-filter-mode") == 1) {  # if radar's A/G
+            LADCanvas.vsd_rdr_filter_1.setText("A");
+            LADCanvas.vsd_rdr_filter_3.setText("G");
+        } elsif (getprop("instrumentation/radar/radar-filter-mode") == 2) {  # if radar's A/SEA
+            LADCanvas.vsd_rdr_filter_1.setText("A");
+            LADCanvas.vsd_rdr_filter_3.setText("S");
+        }
+        # Update the horizon line's placement
+        var pitch_offset = 15; # makes the thing 15 pixels below the middle, so it ain't hidden by the grid
+        var DTOR = math.pi / 180.0;
+        new_y_pos_hori = (2300 * getprop("orientation/pitch-deg")) / 60;
+        # clamp the values of the y pos of the horizon line, so it don't get outta the grid
+        if (new_y_pos_hori > 2210) {
+            new_y_pos_hori = 2210;
+        } elsif (new_y_pos_hori < -1960) {
+            new_y_pos_hori = -1960;
+        }
+        LADCanvas.vsd_horizon_line.setTranslation (0.0, -new_y_pos_hori-pitch_offset);
+        #LADCanvas.vsd_horizon_line.setRotation (-getprop("orientation/roll-deg") * DTOR);
+        
+        # Update some texts giving info about ourselves
+        LADCanvas.vsd_ground_speed.setText(sprintf("G %03d", getprop("velocities/groundspeed-kt")));
+        LADCanvas.vsd_airspeed.setText(sprintf("T %03d", getprop("velocities/airspeed-kt")));
+        
+        # Move the azimuth carat around
+        var azimuth_sweep = getprop("sim/model/f15/instrumentation/awg-9/sweep-factor");
+        var carat_sweep = 0;
+        if (azimuth_sweep != nil) {  # this property is created in awg_9.nas, so at startup it's null
+            carat_sweep = azimuth_sweep * 1280;
+        }
+        LADCanvas.vsd_azimuth_carat.setTranslation(carat_sweep, 0.0);
+        
+        # Update the azimuth circles'
+        if (getprop("instrumentation/radar/az-field") == 120) {
+            LADCanvas.vsd_azimuth_limit_circle_right_60.setVisible(1);
+            LADCanvas.vsd_azimuth_limit_circle_left_60.setVisible(1);
+            LADCanvas.vsd_azimuth_limit_circle_right_30.setVisible(0);
+            LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(0);
+        } elsif (getprop("instrumentation/radar/az-field") == 60) {
+            LADCanvas.vsd_azimuth_limit_circle_right_60.setVisible(0);
+            LADCanvas.vsd_azimuth_limit_circle_left_60.setVisible(0);
+            LADCanvas.vsd_azimuth_limit_circle_right_30.setVisible(1);
+            LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(1);
+        }
+        
+        # Update the steerpoint symbols
+        var stpt_idx = 0;
+        if (getprop("sim/model/instrumentation/vhf/mode") == 0) {  # if we're in normal nav mode (not TACAN or ILS)
+        
+            # Update the wp dist/ETA texts
+            if (getprop("autopilot/route-manager/active")) {  # if route-manager's active
+                LADCanvas.vsd_stpt_eta.setText("XX:XX");
+                if (getprop("autopilot/route-manager/wp/dist") != nil) {
+                    LADCanvas.vsd_stpt_dist.setText(sprintf("N %4.1f", getprop("autopilot/route-manager/wp/dist")));
+                } else {
+                    LADCanvas.vsd_stpt_dist.setText("N 9999");
                 }
-                LADCanvas.vsd_stpt_eta.setText(sprintf("%02d:%02d", nav_mins, nav_secs));
+                
+                if (getprop("autopilot/route-manager/wp/eta-seconds") != nil) {
+                    nav_mins = sprintf("%.0f", getprop("autopilot/route-manager/wp/eta-seconds") / 60);
+                    nav_secs = (getprop("autopilot/route-manager/wp/eta-seconds") / 60 - nav_mins) * 60;  # remove whole minutes for seconds
+                    if (nav_secs < 0) {  # tiny fix
+                        nav_mins = nav_mins - 1;
+                        nav_secs = 60 + nav_secs;
+                    }
+                    LADCanvas.vsd_stpt_eta.setText(sprintf("%02d:%02d", nav_mins, nav_secs));
+                } else {
+                    LADCanvas.vsd_stpt_eta.setText("XX:XX");
+                }
+                
+                if (getprop("autopilot/route-manager/wp/true-bearing-deg") != nil) {
+                    LADCanvas.vsd_stpt_bearing.setText(sprintf("B %03d", getprop("autopilot/route-manager/wp/true-bearing-deg")));
+                } else {
+                    LADCanvas.vsd_stpt_bearing.setText("B 999");
+                }
             } else {
                 LADCanvas.vsd_stpt_eta.setText("XX:XX");
+                LADCanvas.vsd_stpt_dist.setText("N 9999");
+                LADCanvas.vsd_stpt_bearing.setText("B 999");
             }
             
-            if (getprop("autopilot/route-manager/wp/true-bearing-deg") != nil) {
-                LADCanvas.vsd_stpt_bearing.setText(sprintf("B %03d", getprop("autopilot/route-manager/wp/true-bearing-deg")));
-            } else {
-                LADCanvas.vsd_stpt_bearing.setText("B 999");
+        
+            var plan = flightplan();
+            var planSize = plan.getPlanSize();
+            for (stpt_idx = 0; stpt_idx < planSize; stpt_idx+=1) {
+                if (stpt_idx < LADCanvas.stpt_symbols_max) {
+                    var wp = plan.getWP(stpt_idx);
+                    var wpC = geo.Coord.new();
+                    if (wp.alt_cstr != nil) {  # steerpoints don't necessarily got an altitude
+                        wpC.set_latlon(wp.lat,wp.lon,wp.alt_cstr);
+                    } else {
+                        wpC.set_latlon(wp.lat,wp.lon,0);
+                    }
+                    steerDir = [geo.aircraft_position().course_to(wpC), vector.Math.getPitch(geo.aircraft_position(), wpC)];  # id 0 is bearing, id 1 is elevation
+                    wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
+                    wpelev = -steerDir[1];  # elevation to the steerpoint (20* means 20* down)
+                    if (steerDir[1] != nil) {  # that's a safety, why not after all?
+                        LADCanvas.stpt_symbols[stpt_idx].setVisible(1);
+                        LADCanvas.stpt_texts[stpt_idx].setVisible(1);
+                        LADCanvas.stpt_texts[stpt_idx].setText(sprintf("%d", stpt_idx));
+                        x_move = wpbear * 1354 / 60;
+                        y_move = wpelev * 1131 / 60;
+                        
+                        if (x_move > 677*2-85) {  # clamp the translation's values so it don't get outta the screen
+                            x_move = 677*2-85;
+                        } elsif (x_move < -(677*2-85)) {
+                            x_move = -(677*2-85);
+                        }
+                        if (y_move > 1110) {
+                            y_move = 1110
+                        } elsif (y_move < -1110) {
+                            y_move = -1110
+                        }
+                        
+                        LADCanvas.stpt_symbols[stpt_idx].setTranslation(x_move, y_move);
+                        LADCanvas.stpt_texts[stpt_idx].setTranslation(677*2+x_move, 2262+500+145+y_move);
+                        if (stpt_idx == getprop("autopilot/route-manager/current-wp")) {  # if this is the current steerpoint, make it bigger/brighter/bolder, plus change color
+                            LADCanvas.stpt_symbols[stpt_idx].setStrokeLineWidth(7);
+                            LADCanvas.stpt_symbols[stpt_idx].setColor(prst_rose.r,prst_rose.g,prst_rose.b);
+                            LADCanvas.stpt_texts[stpt_idx].setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b);
+                        } else {
+                            LADCanvas.stpt_symbols[stpt_idx].setStrokeLineWidth(4);
+                            LADCanvas.stpt_symbols[stpt_idx].setColor(prst_purple.r,prst_purple.g,prst_purple.b);
+                            LADCanvas.stpt_texts[stpt_idx].setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b);
+                        }
+                    }
+                }
             }
         } else {
             LADCanvas.vsd_stpt_eta.setText("XX:XX");
@@ -1148,214 +1223,24 @@ update = func() {
             LADCanvas.vsd_stpt_bearing.setText("B 999");
         }
         
-    
-        var plan = flightplan();
-        var planSize = plan.getPlanSize();
-        for (stpt_idx = 0; stpt_idx < planSize; stpt_idx+=1) {
-            if (stpt_idx < LADCanvas.stpt_symbols_max) {
-                var wp = plan.getWP(stpt_idx);
-                var wpC = geo.Coord.new();
-                if (wp.alt_cstr != nil) {  # steerpoints don't necessarily got an altitude
-                    wpC.set_latlon(wp.lat,wp.lon,wp.alt_cstr);
-                } else {
-                    wpC.set_latlon(wp.lat,wp.lon,0);
-                }
-                steerDir = [geo.aircraft_position().course_to(wpC), vector.Math.getPitch(geo.aircraft_position(), wpC)];  # id 0 is bearing, id 1 is elevation
-                wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
-                wpelev = -steerDir[1];  # elevation to the steerpoint (20* means 20* down)
-                if (steerDir[1] != nil) {  # that's a safety, why not after all?
-                    LADCanvas.stpt_symbols[stpt_idx].setVisible(1);
-                    LADCanvas.stpt_texts[stpt_idx].setVisible(1);
-                    LADCanvas.stpt_texts[stpt_idx].setText(sprintf("%d", stpt_idx));
-                    x_move = wpbear * 1354 / 60;
-                    y_move = wpelev * 1131 / 60;
-                    
-                    if (x_move > 677*2-85) {  # clamp the translation's values so it don't get outta the screen
-                        x_move = 677*2-85;
-                    } elsif (x_move < -(677*2-85)) {
-                        x_move = -(677*2-85);
-                    }
-                    if (y_move > 1110) {
-                        y_move = 1110
-                    } elsif (y_move < -1110) {
-                        y_move = -1110
-                    }
-                    
-                    LADCanvas.stpt_symbols[stpt_idx].setTranslation(x_move, y_move);
-                    LADCanvas.stpt_texts[stpt_idx].setTranslation(677*2+x_move, 2262+500+145+y_move);
-                    if (stpt_idx == getprop("autopilot/route-manager/current-wp")) {  # if this is the current steerpoint, make it bigger/brighter/bolder, plus change color
-                        LADCanvas.stpt_symbols[stpt_idx].setStrokeLineWidth(7);
-                        LADCanvas.stpt_symbols[stpt_idx].setColor(prst_rose.r,prst_rose.g,prst_rose.b);
-                        LADCanvas.stpt_texts[stpt_idx].setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b);
-                    } else {
-                        LADCanvas.stpt_symbols[stpt_idx].setStrokeLineWidth(4);
-                        LADCanvas.stpt_symbols[stpt_idx].setColor(prst_purple.r,prst_purple.g,prst_purple.b);
-                        LADCanvas.stpt_texts[stpt_idx].setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b);
-                    }
-                }
-            }
+        # Do not display any unused steerpoint boxes
+        for (var nv = stpt_idx; nv < LADCanvas.stpt_symbols_max;nv += 1) {
+            LADCanvas.stpt_symbols[nv].setVisible(0);
+            LADCanvas.stpt_texts[nv].setVisible(0);
         }
-    } else {
-        LADCanvas.vsd_stpt_eta.setText("XX:XX");
-        LADCanvas.vsd_stpt_dist.setText("N 9999");
-        LADCanvas.vsd_stpt_bearing.setText("B 999");
-    }
-    
-    # Do not display any unused steerpoint boxes
-    for (var nv = stpt_idx; nv < LADCanvas.stpt_symbols_max;nv += 1) {
-        LADCanvas.stpt_symbols[nv].setVisible(0);
-        LADCanvas.stpt_texts[nv].setVisible(0);
-    }
-    
-    # Update the target symbols
-    var target_idx = 0;
-    var found_lock = 0;
-    var lock_assigned = 0;
-    foreach (contact ; awg_9.tgts_list) {
-        if (contact.get_display() == 1) { 
-            if (awg_9.active_u == contact) { # If it's the active radar lock we got
-                found_lock = 1;
-            }
-            if (target_idx < LADCanvas.tgt_symbols_max) {
-            
-                contact_data = datalink.get_data(contact.get_Callsign());
-                if (contact_data == nil or !contact_data.is_known()) {
-                    unknown = 1;
-                } else {
-                    unknown = 0;
-                }
-
-                if (unknown == 0) {
-                    friendly = contact_data.is_friendly();
-                    hostile = contact_data.is_hostile();
-                    on_link = contact_data.on_link();
-                } else {
-                    friendly = 0;
-                    hostile = 0;
-                    on_link = 0;
-                }
-                
-                if (on_link) {
-                    LADCanvas.tgt_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
-                    LADCanvas.tgt_texts[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
-                } elsif (friendly) {
-                    LADCanvas.tgt_symbols[target_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
-                    LADCanvas.tgt_texts[target_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
-                } elsif (hostile) {
-                    LADCanvas.tgt_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
-                    LADCanvas.tgt_texts[target_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
-                } else {
-                    LADCanvas.tgt_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-                    LADCanvas.tgt_texts[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
-                }
-                
-                LADCanvas.tgt_symbols[target_idx].setVisible(1);
-                LADCanvas.tgt_texts[target_idx].setVisible(1);
-                xc = contact.get_deviation(getprop("orientation/heading-deg")) or 0;
-                yc = -contact.get_total_elevation(getprop("orientation/pitch-deg")) or 0;
-                LADCanvas.tgt_symbols[target_idx].setTranslation(xc*1354/60, yc*1131/60); # the factors is to let display correspond to 120 degrees wide and height.
-                LADCanvas.tgt_texts[target_idx].setTranslation(677*2+(xc*1354/60), 2262+500+145+(yc*1131/60)); # the factors is to let display correspond to 120 degrees wide and height.
-                if (found_lock == 1 and lock_assigned == 0) {
-                    LADCanvas.locked_box.setTranslation(xc*1354/60, yc*1131/60); # the factors is to let display correspond to 120 degrees wide and height.
-                    lock_assigned = 1;  # so others don't take the lock symbology from it
-                }
-                if (contact.get_model() != nil and typeLookup[contact.get_model()] != nil) {
-                    contact_type = typeLookup[contact.get_model()];
-                    contact_alt = contact.get_altitude() * 0.001;  # So it's in thousands of feet
-                    LADCanvas.tgt_texts[target_idx].setText(sprintf("%s %02d", contact_type, contact_alt));
-                } else {  # Model's unknown to our radar
-                    contact_alt = contact.get_altitude() * 0.001;  # So it's in thousands of feet
-                    LADCanvas.tgt_texts[target_idx].setText(sprintf("UNK %02d", contact_alt));
-                }
-                target_idx += 1;
-            }
-        }
-    }
-    
-    if (found_lock == 1) {
-        LADCanvas.locked_box.setVisible(1);
-        LADCanvas.vsd_tgt_true_speed.setVisible(1);
-        LADCanvas.vsd_tgt_bearing.setVisible(1);
-        LADCanvas.vsd_tgt_heading.setVisible(1);
-        LADCanvas.vsd_tgt_aspect.setVisible(1);
-        LADCanvas.vsd_tgt_altitude.setVisible(1);
-        LADCanvas.vsd_tgt_range.setVisible(1);
-        LADCanvas.vsd_tgt_closure_pin.setVisible(1);
-        LADCanvas.vsd_tgt_closure_text.setVisible(1);
         
-        if (awg_9.active_u != nil) { # safety
-            # Update current target's info texts across the VSD
-            LADCanvas.vsd_tgt_true_speed.setText(sprintf("T %03d", awg_9.active_u.get_Speed()));
-            LADCanvas.vsd_tgt_bearing.setText(sprintf("B %03d", awg_9.active_u.get_bearing()));
-            LADCanvas.vsd_tgt_heading.setText(sprintf("H %03d", awg_9.active_u.get_heading()));
-            
-            tgt_aspect = math.round(awg_9.active_u.get_aspect()/10.0);
-
-            if (math.abs(tgt_aspect) > 17) {
-                tgt_aspect = "H";
-            } elsif (math.abs(tgt_aspect) < 1) {
-                tgt_aspect = "T";
-            } else {
-                tgt_aspect = sprintf("%2d%s", math.abs(tgt_aspect), tgt_aspect > 0 ? "R" : "L");
-            }
-                                                
-            LADCanvas.vsd_tgt_aspect.setText(tgt_aspect);
-            LADCanvas.vsd_tgt_altitude.setText(sprintf("%05d", awg_9.active_u.get_altitude()));
-            LADCanvas.vsd_tgt_range.setText(sprintf("%03.1f NM", awg_9.active_u.get_range()));
-            LADCanvas.vsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
-            
-            # Scale:
-            # To be at 600 (moving 2,275px up), closing speed must be 3,000 KTS
-            closing_y = awg_9.active_u.get_closure_rate() * 3000 / 2275;
-            if (closing_y > 2275) {  # clamp the values
-                closing_y = 2275; # max down px value
-            } elsif (closing_y < -2275) {
-                closing_y = -2275; # max up px value
-            }
-            LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0, -closing_y);
-            LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140, 2875-closing_y);
-        }
-    } else {
-        LADCanvas.locked_box.setVisible(0);
-        LADCanvas.vsd_tgt_true_speed.setVisible(0);
-        LADCanvas.vsd_tgt_bearing.setVisible(0);
-        LADCanvas.vsd_tgt_heading.setVisible(0);
-        LADCanvas.vsd_tgt_aspect.setVisible(0);
-        LADCanvas.vsd_tgt_altitude.setVisible(0);
-        LADCanvas.vsd_tgt_range.setVisible(0);
-        LADCanvas.vsd_tgt_closure_pin.setVisible(0);
-        LADCanvas.vsd_tgt_closure_text.setVisible(0);
-    }
-    
-    # Do not display any unused target boxes
-    for (var nv = target_idx; nv < LADCanvas.tgt_symbols_max;nv += 1) {
-        LADCanvas.tgt_symbols[nv].setVisible(0);
-        LADCanvas.tgt_texts[nv].setVisible(0);
-    }
-    
-    # Update the datalink symbols
-    var dlnk_idx = 0;
-    var datalink_connections = datalink.get_all_callsigns();
-    foreach (contact ; datalink_connections) {
-        already_on_rdr = 0;  # if its' on our radar, we don't display it.
-        foreach(rdrcontact ; awg_9.tgts_list) {
-            if (rdrcontact.get_Callsign() == contact) {
-                already_on_rdr = 1;
-            }
-        }
-        if (already_on_rdr == 0) { 
-            if (dlnk_idx < LADCanvas.dlnk_symbols_max) {
-            
-                contact_data = datalink.get_data(contact);
-                contact_idx = contact_data.index();
-                if (contact_idx != nil) {  # can make things bug sometimes
-                    contact_model = getprop("/ai/models/multiplayer["~contact_idx~"]/model-short");
-                    contact_lat = getprop("/ai/models/multiplayer["~contact_idx~"]/position/latitude-deg");
-                    contact_lon = getprop("/ai/models/multiplayer["~contact_idx~"]/position/longitude-deg");
-                    contact_alt = getprop("/ai/models/multiplayer["~contact_idx~"]/position/altitude-ft");
-                    contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
-                    contact_bearing = geo.aircraft_position().course_to(contact_coord);
-                    contact_elevation = vector.Math.getPitch(geo.aircraft_position(), contact_coord);
+        # Update the target symbols
+        var target_idx = 0;
+        var found_lock = 0;
+        var lock_assigned = 0;
+        foreach (contact ; awg_9.tgts_list) {
+            if (contact.get_display() == 1) { 
+                if (awg_9.active_u == contact) { # If it's the active radar lock we got
+                    found_lock = 1;
+                }
+                if (target_idx < LADCanvas.tgt_symbols_max) {
+                
+                    contact_data = datalink.get_data(contact.get_Callsign());
                     if (contact_data == nil or !contact_data.is_known()) {
                         unknown = 1;
                     } else {
@@ -1373,43 +1258,183 @@ update = func() {
                     }
                     
                     if (on_link) {
-                        LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
-                        LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
+                        LADCanvas.tgt_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
+                        LADCanvas.tgt_texts[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
                     } elsif (friendly) {
-                        LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
-                        LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
+                        LADCanvas.tgt_symbols[target_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
+                        LADCanvas.tgt_texts[target_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
                     } elsif (hostile) {
-                        LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
-                        LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
+                        LADCanvas.tgt_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
+                        LADCanvas.tgt_texts[target_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
                     } else {
-                        LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-                        LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
+                        LADCanvas.tgt_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+                        LADCanvas.tgt_texts[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
                     }
                     
-                    LADCanvas.dlnk_symbols[dlnk_idx].setVisible(1);
-                    LADCanvas.dlnk_texts[dlnk_idx].setVisible(1);
-                    xc = deviation_normdeg(getprop("orientation/heading-deg"), contact_bearing);
-                    yc = -deviation_normdeg(getprop("orientation/pitch-deg"), contact_elevation);
-                    LADCanvas.dlnk_symbols[dlnk_idx].setTranslation(xc*1354/60, yc*1131/60); # the factors is to let display correspond to 120 degrees wide and height.
-                    LADCanvas.dlnk_texts[dlnk_idx].setTranslation(677*2+(xc*1354/60), 2262+500+145+(yc*1131/60)); # the factors is to let display correspond to 120 degrees wide and height.
-                    if (contact_model != nil and typeLookup[contact_model] != nil) {
-                        contact_type = typeLookup[contact_model];
-                        contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
-                        LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("%s %02d", contact_type, contact_alt));
-                    } else {  # Model's unknown to our radar
-                        contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
-                        LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("UNK %02d", contact_alt));
+                    LADCanvas.tgt_symbols[target_idx].setVisible(1);
+                    LADCanvas.tgt_texts[target_idx].setVisible(1);
+                    xc = contact.get_deviation(getprop("orientation/heading-deg")) or 0;
+                    yc = -contact.get_total_elevation(getprop("orientation/pitch-deg")) or 0;
+                    LADCanvas.tgt_symbols[target_idx].setTranslation(xc*1354/60, yc*1131/60); # the factors is to let display correspond to 120 degrees wide and height.
+                    LADCanvas.tgt_texts[target_idx].setTranslation(677*2+(xc*1354/60), 2262+500+145+(yc*1131/60)); # the factors is to let display correspond to 120 degrees wide and height.
+                    if (found_lock == 1 and lock_assigned == 0) {
+                        LADCanvas.locked_box.setTranslation(xc*1354/60, yc*1131/60); # the factors is to let display correspond to 120 degrees wide and height.
+                        lock_assigned = 1;  # so others don't take the lock symbology from it
                     }
-                    dlnk_idx += 1;
+                    if (contact.get_model() != nil and typeLookup[contact.get_model()] != nil) {
+                        contact_type = typeLookup[contact.get_model()];
+                        contact_alt = contact.get_altitude() * 0.001;  # So it's in thousands of feet
+                        LADCanvas.tgt_texts[target_idx].setText(sprintf("%s %02d", contact_type, contact_alt));
+                    } else {  # Model's unknown to our radar
+                        contact_alt = contact.get_altitude() * 0.001;  # So it's in thousands of feet
+                        LADCanvas.tgt_texts[target_idx].setText(sprintf("UNK %02d", contact_alt));
+                    }
+                    target_idx += 1;
                 }
             }
         }
-    }
-    
-    # Do not display any unused target boxes
-    for (var nv = dlnk_idx; nv < LADCanvas.dlnk_symbols_max;nv += 1) {
-        LADCanvas.dlnk_symbols[nv].setVisible(0);
-        LADCanvas.dlnk_texts[nv].setVisible(0);
+        
+        if (found_lock == 1) {
+            LADCanvas.locked_box.setVisible(1);
+            LADCanvas.vsd_tgt_true_speed.setVisible(1);
+            LADCanvas.vsd_tgt_bearing.setVisible(1);
+            LADCanvas.vsd_tgt_heading.setVisible(1);
+            LADCanvas.vsd_tgt_aspect.setVisible(1);
+            LADCanvas.vsd_tgt_altitude.setVisible(1);
+            LADCanvas.vsd_tgt_range.setVisible(1);
+            LADCanvas.vsd_tgt_closure_pin.setVisible(1);
+            LADCanvas.vsd_tgt_closure_text.setVisible(1);
+            
+            if (awg_9.active_u != nil) { # safety
+                # Update current target's info texts across the VSD
+                LADCanvas.vsd_tgt_true_speed.setText(sprintf("T %03d", awg_9.active_u.get_Speed()));
+                LADCanvas.vsd_tgt_bearing.setText(sprintf("B %03d", awg_9.active_u.get_bearing()));
+                LADCanvas.vsd_tgt_heading.setText(sprintf("H %03d", awg_9.active_u.get_heading()));
+                
+                tgt_aspect = math.round(awg_9.active_u.get_aspect()/10.0);
+
+                if (math.abs(tgt_aspect) > 17) {
+                    tgt_aspect = "H";
+                } elsif (math.abs(tgt_aspect) < 1) {
+                    tgt_aspect = "T";
+                } else {
+                    tgt_aspect = sprintf("%2d%s", math.abs(tgt_aspect), tgt_aspect > 0 ? "R" : "L");
+                }
+                                                    
+                LADCanvas.vsd_tgt_aspect.setText(tgt_aspect);
+                LADCanvas.vsd_tgt_altitude.setText(sprintf("%05d", awg_9.active_u.get_altitude()));
+                LADCanvas.vsd_tgt_range.setText(sprintf("%03.1f NM", awg_9.active_u.get_range()));
+                LADCanvas.vsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
+                
+                # Scale:
+                # To be at 600 (moving 2,275px up), closing speed must be 3,000 KTS
+                closing_y = awg_9.active_u.get_closure_rate() * 3000 / 2275;
+                if (closing_y > 2275) {  # clamp the values
+                    closing_y = 2275; # max down px value
+                } elsif (closing_y < -2275) {
+                    closing_y = -2275; # max up px value
+                }
+                LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0, -closing_y);
+                LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140, 2875-closing_y);
+            }
+        } else {
+            LADCanvas.locked_box.setVisible(0);
+            LADCanvas.vsd_tgt_true_speed.setVisible(0);
+            LADCanvas.vsd_tgt_bearing.setVisible(0);
+            LADCanvas.vsd_tgt_heading.setVisible(0);
+            LADCanvas.vsd_tgt_aspect.setVisible(0);
+            LADCanvas.vsd_tgt_altitude.setVisible(0);
+            LADCanvas.vsd_tgt_range.setVisible(0);
+            LADCanvas.vsd_tgt_closure_pin.setVisible(0);
+            LADCanvas.vsd_tgt_closure_text.setVisible(0);
+        }
+        
+        # Do not display any unused target boxes
+        for (var nv = target_idx; nv < LADCanvas.tgt_symbols_max;nv += 1) {
+            LADCanvas.tgt_symbols[nv].setVisible(0);
+            LADCanvas.tgt_texts[nv].setVisible(0);
+        }
+        
+        # Update the datalink symbols
+        var dlnk_idx = 0;
+        var datalink_connections = datalink.get_all_callsigns();
+        foreach (contact ; datalink_connections) {
+            already_on_rdr = 0;  # if its' on our radar, we don't display it.
+            foreach(rdrcontact ; awg_9.tgts_list) {
+                if (rdrcontact.get_Callsign() == contact) {
+                    already_on_rdr = 1;
+                }
+            }
+            if (already_on_rdr == 0) { 
+                if (dlnk_idx < LADCanvas.dlnk_symbols_max) {
+                
+                    contact_data = datalink.get_data(contact);
+                    contact_idx = contact_data.index();
+                    if (contact_idx != nil) {  # can make things bug sometimes
+                        contact_model = getprop("/ai/models/multiplayer["~contact_idx~"]/model-short");
+                        contact_lat = getprop("/ai/models/multiplayer["~contact_idx~"]/position/latitude-deg");
+                        contact_lon = getprop("/ai/models/multiplayer["~contact_idx~"]/position/longitude-deg");
+                        contact_alt = getprop("/ai/models/multiplayer["~contact_idx~"]/position/altitude-ft");
+                        contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
+                        contact_bearing = geo.aircraft_position().course_to(contact_coord);
+                        contact_elevation = vector.Math.getPitch(geo.aircraft_position(), contact_coord);
+                        if (contact_data == nil or !contact_data.is_known()) {
+                            unknown = 1;
+                        } else {
+                            unknown = 0;
+                        }
+
+                        if (unknown == 0) {
+                            friendly = contact_data.is_friendly();
+                            hostile = contact_data.is_hostile();
+                            on_link = contact_data.on_link();
+                        } else {
+                            friendly = 0;
+                            hostile = 0;
+                            on_link = 0;
+                        }
+                        
+                        if (on_link) {
+                            LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
+                            LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
+                        } elsif (friendly) {
+                            LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
+                            LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
+                        } elsif (hostile) {
+                            LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
+                            LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
+                        } else {
+                            LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+                            LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
+                        }
+                        
+                        LADCanvas.dlnk_symbols[dlnk_idx].setVisible(1);
+                        LADCanvas.dlnk_texts[dlnk_idx].setVisible(1);
+                        xc = deviation_normdeg(getprop("orientation/heading-deg"), contact_bearing);
+                        yc = -deviation_normdeg(getprop("orientation/pitch-deg"), contact_elevation);
+                        LADCanvas.dlnk_symbols[dlnk_idx].setTranslation(xc*1354/60, yc*1131/60); # the factors is to let display correspond to 120 degrees wide and height.
+                        LADCanvas.dlnk_texts[dlnk_idx].setTranslation(677*2+(xc*1354/60), 2262+500+145+(yc*1131/60)); # the factors is to let display correspond to 120 degrees wide and height.
+                        if (contact_model != nil and typeLookup[contact_model] != nil) {
+                            contact_type = typeLookup[contact_model];
+                            contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
+                            LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("%s %02d", contact_type, contact_alt));
+                        } else {  # Model's unknown to our radar
+                            contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
+                            LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("UNK %02d", contact_alt));
+                        }
+                        dlnk_idx += 1;
+                    }
+                }
+            }
+        }
+        
+        # Do not display any unused target boxes
+        for (var nv = dlnk_idx; nv < LADCanvas.dlnk_symbols_max;nv += 1) {
+            LADCanvas.dlnk_symbols[nv].setVisible(0);
+            LADCanvas.dlnk_texts[nv].setVisible(0);
+        }
+    } else {
+        LADCanvas.VSDScreen.setVisible(0);
     }
 }
 
