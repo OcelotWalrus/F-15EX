@@ -5037,10 +5037,10 @@
             <file>Nasal/canvas/MFD_Generic.nas</file>
             <file>Nasal/HUD/HUD_main_ex.nas</file>
             <file>Nasal/HUD/hmd.nas</file>
-            <file>Nasal/VSD/VSD_main.nas</file>
+            <!--file>Nasal/VSD/VSD_main.nas</file>
             <file>Nasal/TEWS/TEWS_main.nas</file>
-            <file>Nasal/MPCD/MPCD_main.nas</file>
-            <file>Nasal/LAD/lad.nas</file>
+            <file>Nasal/MPCD/MPCD_main.nas</file-->
+            <file>Nasal/LAD/LAD.nas</file>
         </displays>
     </nasal>
 
