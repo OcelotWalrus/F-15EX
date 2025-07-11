@@ -121,7 +121,7 @@ var prst_red_dark = {"r": .3764, "g": .0076, "b": .0076};  # 2.5 times darker th
 
 # Settings
 var main_screens = {
-    "left": "PACS",
+    "left": "VSD",
     "center": "PACS",
     "right": "HSD",
 };
@@ -872,7 +872,7 @@ var LAD_Device = {
 };
 
 var LADCanvas = nil;
-var update_loop = nil;
+var update_loop_lad = nil;
 
 update = func() {
 
@@ -1066,6 +1066,8 @@ update = func() {
     } elsif (main_screens.right == "VSD") {
         VSD_ON = 1;
         LADCanvas.VSDScreen.setTranslation((8192/3)*2,0);  # Default position's position for the left main screen
+    } else {
+        VSD_ON = 0;
     }
     
     ## VSD Updates
@@ -1073,7 +1075,7 @@ update = func() {
         LADCanvas.VSDScreen.setVisible(1);
         # Update the texts
         LADCanvas.vsd_rdr_range_txt.setText(sprintf("%03d NM", getprop("instrumentation/radar/radar2-range")));
-        if (getprop("instrumentation/radar/radar-standby")) {  # if radar's standy
+        if (getprop("instrumentation/radar/radar-standby")) {  # if radar's standby
             LADCanvas.vsd_rdr_mode_1.setText("S");
             LADCanvas.vsd_rdr_mode_2.setText("T");
             LADCanvas.vsd_rdr_mode_3.setText("Y");
@@ -1439,5 +1441,5 @@ update = func() {
 }
 
 LADCanvas = LAD_Device.new({"node": "LADImage"});
-update_loop = maketimer(.1, update);
-update_loop.start();
+update_loop_lad = maketimer(.1, update);
+update_loop_lad.start();

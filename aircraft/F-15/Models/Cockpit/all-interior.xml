@@ -1196,6 +1196,19 @@
       </greater-than>
     </condition>
   </animation>
+  <animation>
+    <type>select</type>
+    <object-name>EnginesDImage</object-name>
+    <condition>
+      <or>
+          <property>sim/model/f15/controls/electrics/emerg-gen-switch</property>
+          <greater-than>
+            <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
+            <value>0</value>
+          </greater-than>
+      </or>
+    </condition>
+  </animation>
 
   <animation>
     <type>knob</type>
@@ -2172,6 +2185,11 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>LADImage</object-name>
   </effect>
+  <effect>
+    <name>f15interior</name>
+    <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
+    <object-name>EnginesDImage</object-name>
+  </effect>
   <animation>
     <object-name>LADImage</object-name>
     <type>material</type>
@@ -2186,6 +2204,25 @@
     </condition>
     <emission>
       <factor-prop>sim/model/f15/controls/LAD/mode</factor-prop>
+      <red>  0.5</red>
+      <green>0.5</green>
+      <blue> 0.5</blue>
+    </emission>
+  </animation>
+  <animation>
+    <object-name>EnginesDImage</object-name>
+    <type>material</type>
+    <condition>
+      <greater-than>
+        <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+        <value>0</value>
+      </greater-than>
+      <not>
+        <property>/sim/rendering/rembrandt/enabled</property>
+      </not>
+    </condition>
+    <emission>
+      <factor-prop>sim/model/f15/controls/EHD/brightness</factor-prop>
       <red>  0.5</red>
       <green>0.5</green>
       <blue> 0.5</blue>

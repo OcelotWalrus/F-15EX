@@ -1109,6 +1109,10 @@
                         <contrast type="double">0.6</contrast>
                         <on-off type="bool">0</on-off>
                     </LAD>
+                    <EHD>
+                        <brightness type="double">1</brightness>
+                        <contrast type="double">0.6</contrast>
+                    </EHD>
                     <HUD>
                         <brightness type="double">1</brightness>
                         <on-off type="bool">0</on-off>
@@ -5041,6 +5045,7 @@
             <file>Nasal/TEWS/TEWS_main.nas</file>
             <file>Nasal/MPCD/MPCD_main.nas</file-->
             <file>Nasal/LAD/LAD.nas</file>
+            <file>Nasal/LAD/EHD.nas</file>
         </displays>
     </nasal>
 
