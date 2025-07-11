@@ -7,6 +7,7 @@
 # over the avionics, the weaponry and the whole aircraft pretty much.
 # ---------------------------
 # Future features (TODO's) :
+# //VSD Display//:
 # - Differentiate evading, "neutral" and incoming contacts using different
 # symbology, without the need of locking it and looking at its closing speed
 # - Add the DLZ (Dynamic Launch Zone), to complement the closing speed
@@ -469,7 +470,7 @@ var LAD_Device = {
             .setTranslation(1355+1355+20+1355+1355+20,500)
             .setStrokeLineWidth(20)
             .setColor(prst_red.r,prst_red.g,prst_red.b);
-        
+
         m.main_screen_box_1.setVisible(0);
         m.main_screen_box_2.setVisible(0);
         m.main_screen_box_3.setVisible(0);
@@ -515,10 +516,11 @@ var LAD_Device = {
             .lineTo(677*3,2300*2+500-75)
             .setStrokeLineWidth(10)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
-        
+
         # VSD Symbologies
         # Standard symbology (speed, alt, horizon etc.)
         m.vsd_horizon_line = m.VSDScreen.createChild("path")
+            .setCenter(1355,1150*2+500+75)
             .moveTo(1355-40,1150*2+500+75)
             .lineTo(677-75,1150*2+500+75) # Left horizontal line
             .vert(85) # Left vertical line
@@ -528,21 +530,21 @@ var LAD_Device = {
             .setStrokeLineWidth(14)
             .set("z-index",10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
-        m.vsd_ground_speed = m.VSDScreen.createChild("text")    
+        m.vsd_ground_speed = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("G 455")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(155,2300*2+500+10)
             .setFont(aircraft.HUDFont);
-        m.vsd_airspeed = m.VSDScreen.createChild("text")    
+        m.vsd_airspeed = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("T 327")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(1282*2,2300*2+500+10)
             .setFont(aircraft.HUDFont);
-        m.vsd_stpt_eta = m.VSDScreen.createChild("text")    
+        m.vsd_stpt_eta = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("XX:XX")
             .setAlignment("center-center")
@@ -564,49 +566,49 @@ var LAD_Device = {
             .setTranslation(970,2300*2+500+10)
             .setFont(aircraft.HUDFont);
         # Radar
-        m.vsd_rdr_range_txt = m.VSDScreen.createChild("text")    
+        m.vsd_rdr_range_txt = m.VSDScreen.createChild("text")
             .setFontSize(80, 1.4)
             .setText("050 NM")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2555,535)
             .setFont(aircraft.HUDFont);
-        m.vsd_rdr_mode_1 = m.VSDScreen.createChild("text")    
+        m.vsd_rdr_mode_1 = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("T")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2645+35,700)
             .setFont(aircraft.HUDFont);
-        m.vsd_rdr_mode_2 = m.VSDScreen.createChild("text")    
+        m.vsd_rdr_mode_2 = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("W")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2645+35,780)
             .setFont(aircraft.HUDFont);
-        m.vsd_rdr_mode_3 = m.VSDScreen.createChild("text")    
+        m.vsd_rdr_mode_3 = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("S")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2645+35,860)
             .setFont(aircraft.HUDFont);
-        m.vsd_rdr_filter_1 = m.VSDScreen.createChild("text")    
+        m.vsd_rdr_filter_1 = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("A")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2645+35,980)
             .setFont(aircraft.HUDFont);
-        m.vsd_rdr_filter_2 = m.VSDScreen.createChild("text")    
+        m.vsd_rdr_filter_2 = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("/")
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2645+35,1060)
             .setFont(aircraft.HUDFont);
-        m.vsd_rdr_filter_3 = m.VSDScreen.createChild("text")    
+        m.vsd_rdr_filter_3 = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("A")
             .setAlignment("center-center")
@@ -670,7 +672,7 @@ var LAD_Device = {
             .setStrokeLineWidth(15)
             .set("z-index",10)
             .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
-        
+
         # Create the steerpoints symbols
         m.stpt_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
         m.stpt_symbols = setsize([], m.stpt_symbols_max);
@@ -700,7 +702,7 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.stpt_texts[i] = m.stpt_txt;
         }
-        
+
         # Create the radar target symbols
         m.tgt_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
         m.tgt_symbols = setsize([], m.tgt_symbols_max);
@@ -730,7 +732,7 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.tgt_texts[i] = m.tgt_txt;
         }
-        
+
         m.locked_box = m.VSDScreen.createChild("path")
             .moveTo(677*2-38,2262+500-10)
             .lineTo(677*2-38,2262+500+122)
@@ -741,7 +743,7 @@ var LAD_Device = {
             .setVisible(0)
             .set("z-index",15)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
-        
+
         # Create the datalink contacts symbols
         m.dlnk_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
         m.dlnk_symbols = setsize([], m.dlnk_symbols_max);
@@ -769,7 +771,7 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.dlnk_texts[i] = m.dlnk_txt;
         }
-        
+
         # Texts giving info about the current radar target
         m.vsd_tgt_true_speed = m.VSDScreen.createChild("text")
             .setFontSize(85, 1.4)
@@ -1050,13 +1052,13 @@ update = func() {
         LADCanvas.ils_text_down.setColor(prst_white.r,prst_white.g,prst_white.b);
         LADCanvas.ils_box.setColor(prst_white.r,prst_white.g,prst_white.b);
     }
-    
+
     # Main center screens updates
     # We determine which "displays" are online (VSD, HSD, PACS etc...)
     # Allowing us to update only needed displays.
     # We also shift (translate) online displays to the correct position,
     # whether they're on the left, center or right main screens.
-    
+
     if (main_screens.left == "VSD") {
         VSD_ON = 1;
         LADCanvas.VSDScreen.setTranslation(0,0);  # Default position's position for the left main screen
@@ -1069,7 +1071,7 @@ update = func() {
     } else {
         VSD_ON = 0;
     }
-    
+
     ## VSD Updates
     if (VSD_ON) {  # Optimization, we only wanna update the VSD display if it's online
         LADCanvas.VSDScreen.setVisible(1);
@@ -1108,13 +1110,13 @@ update = func() {
         } elsif (new_y_pos_hori < -1960) {
             new_y_pos_hori = -1960;
         }
-        LADCanvas.vsd_horizon_line.setTranslation (0.0, -new_y_pos_hori-pitch_offset);
-        #LADCanvas.vsd_horizon_line.setRotation (-getprop("orientation/roll-deg") * DTOR);
-        
+        LADCanvas.vsd_horizon_line.setTranslation(0.0, -new_y_pos_hori-pitch_offset);
+        LADCanvas.vsd_horizon_line.setRotation(-getprop("orientation/roll-deg") * DTOR);
+
         # Update some texts giving info about ourselves
         LADCanvas.vsd_ground_speed.setText(sprintf("G %03d", getprop("velocities/groundspeed-kt")));
         LADCanvas.vsd_airspeed.setText(sprintf("T %03d", getprop("velocities/airspeed-kt")));
-        
+
         # Move the azimuth carat around
         var azimuth_sweep = getprop("sim/model/f15/instrumentation/awg-9/sweep-factor");
         var carat_sweep = 0;
@@ -1122,7 +1124,7 @@ update = func() {
             carat_sweep = azimuth_sweep * 1280;
         }
         LADCanvas.vsd_azimuth_carat.setTranslation(carat_sweep, 0.0);
-        
+
         # Update the azimuth circles'
         if (getprop("instrumentation/radar/az-field") == 120) {
             LADCanvas.vsd_azimuth_limit_circle_right_60.setVisible(1);
@@ -1135,11 +1137,11 @@ update = func() {
             LADCanvas.vsd_azimuth_limit_circle_right_30.setVisible(1);
             LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(1);
         }
-        
+
         # Update the steerpoint symbols
         var stpt_idx = 0;
         if (getprop("sim/model/instrumentation/vhf/mode") == 0) {  # if we're in normal nav mode (not TACAN or ILS)
-        
+
             # Update the wp dist/ETA texts
             if (getprop("autopilot/route-manager/active")) {  # if route-manager's active
                 LADCanvas.vsd_stpt_eta.setText("XX:XX");
@@ -1148,7 +1150,7 @@ update = func() {
                 } else {
                     LADCanvas.vsd_stpt_dist.setText("N 9999");
                 }
-                
+
                 if (getprop("autopilot/route-manager/wp/eta-seconds") != nil) {
                     nav_mins = sprintf("%.0f", getprop("autopilot/route-manager/wp/eta-seconds") / 60);
                     nav_secs = (getprop("autopilot/route-manager/wp/eta-seconds") / 60 - nav_mins) * 60;  # remove whole minutes for seconds
@@ -1160,7 +1162,7 @@ update = func() {
                 } else {
                     LADCanvas.vsd_stpt_eta.setText("XX:XX");
                 }
-                
+
                 if (getprop("autopilot/route-manager/wp/true-bearing-deg") != nil) {
                     LADCanvas.vsd_stpt_bearing.setText(sprintf("B %03d", getprop("autopilot/route-manager/wp/true-bearing-deg")));
                 } else {
@@ -1171,8 +1173,8 @@ update = func() {
                 LADCanvas.vsd_stpt_dist.setText("N 9999");
                 LADCanvas.vsd_stpt_bearing.setText("B 999");
             }
-            
-        
+
+
             var plan = flightplan();
             var planSize = plan.getPlanSize();
             for (stpt_idx = 0; stpt_idx < planSize; stpt_idx+=1) {
@@ -1193,7 +1195,7 @@ update = func() {
                         LADCanvas.stpt_texts[stpt_idx].setText(sprintf("%d", stpt_idx));
                         x_move = wpbear * 1354 / 60;
                         y_move = wpelev * 1131 / 60;
-                        
+
                         if (x_move > 677*2-85) {  # clamp the translation's values so it don't get outta the screen
                             x_move = 677*2-85;
                         } elsif (x_move < -(677*2-85)) {
@@ -1204,7 +1206,7 @@ update = func() {
                         } elsif (y_move < -1110) {
                             y_move = -1110
                         }
-                        
+
                         LADCanvas.stpt_symbols[stpt_idx].setTranslation(x_move, y_move);
                         LADCanvas.stpt_texts[stpt_idx].setTranslation(677*2+x_move, 2262+500+145+y_move);
                         if (stpt_idx == getprop("autopilot/route-manager/current-wp")) {  # if this is the current steerpoint, make it bigger/brighter/bolder, plus change color
@@ -1224,24 +1226,24 @@ update = func() {
             LADCanvas.vsd_stpt_dist.setText("N 9999");
             LADCanvas.vsd_stpt_bearing.setText("B 999");
         }
-        
+
         # Do not display any unused steerpoint boxes
         for (var nv = stpt_idx; nv < LADCanvas.stpt_symbols_max;nv += 1) {
             LADCanvas.stpt_symbols[nv].setVisible(0);
             LADCanvas.stpt_texts[nv].setVisible(0);
         }
-        
+
         # Update the target symbols
         var target_idx = 0;
         var found_lock = 0;
         var lock_assigned = 0;
         foreach (contact ; awg_9.tgts_list) {
-            if (contact.get_display() == 1) { 
+            if (contact.get_display() == 1) {
                 if (awg_9.active_u == contact) { # If it's the active radar lock we got
                     found_lock = 1;
                 }
                 if (target_idx < LADCanvas.tgt_symbols_max) {
-                
+
                     contact_data = datalink.get_data(contact.get_Callsign());
                     if (contact_data == nil or !contact_data.is_known()) {
                         unknown = 1;
@@ -1258,7 +1260,7 @@ update = func() {
                         hostile = 0;
                         on_link = 0;
                     }
-                    
+
                     if (on_link) {
                         LADCanvas.tgt_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
                         LADCanvas.tgt_texts[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
@@ -1272,7 +1274,7 @@ update = func() {
                         LADCanvas.tgt_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
                         LADCanvas.tgt_texts[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
                     }
-                    
+
                     LADCanvas.tgt_symbols[target_idx].setVisible(1);
                     LADCanvas.tgt_texts[target_idx].setVisible(1);
                     xc = contact.get_deviation(getprop("orientation/heading-deg")) or 0;
@@ -1295,7 +1297,7 @@ update = func() {
                 }
             }
         }
-        
+
         if (found_lock == 1) {
             LADCanvas.locked_box.setVisible(1);
             LADCanvas.vsd_tgt_true_speed.setVisible(1);
@@ -1306,13 +1308,13 @@ update = func() {
             LADCanvas.vsd_tgt_range.setVisible(1);
             LADCanvas.vsd_tgt_closure_pin.setVisible(1);
             LADCanvas.vsd_tgt_closure_text.setVisible(1);
-            
+
             if (awg_9.active_u != nil) { # safety
                 # Update current target's info texts across the VSD
                 LADCanvas.vsd_tgt_true_speed.setText(sprintf("T %03d", awg_9.active_u.get_Speed()));
                 LADCanvas.vsd_tgt_bearing.setText(sprintf("B %03d", awg_9.active_u.get_bearing()));
                 LADCanvas.vsd_tgt_heading.setText(sprintf("H %03d", awg_9.active_u.get_heading()));
-                
+
                 tgt_aspect = math.round(awg_9.active_u.get_aspect()/10.0);
 
                 if (math.abs(tgt_aspect) > 17) {
@@ -1322,12 +1324,12 @@ update = func() {
                 } else {
                     tgt_aspect = sprintf("%2d%s", math.abs(tgt_aspect), tgt_aspect > 0 ? "R" : "L");
                 }
-                                                    
+
                 LADCanvas.vsd_tgt_aspect.setText(tgt_aspect);
                 LADCanvas.vsd_tgt_altitude.setText(sprintf("%05d", awg_9.active_u.get_altitude()));
                 LADCanvas.vsd_tgt_range.setText(sprintf("%03.1f NM", awg_9.active_u.get_range()));
                 LADCanvas.vsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
-                
+
                 # Scale:
                 # To be at 600 (moving 2,275px up), closing speed must be 3,000 KTS
                 closing_y = awg_9.active_u.get_closure_rate() * 3000 / 2275;
@@ -1350,13 +1352,13 @@ update = func() {
             LADCanvas.vsd_tgt_closure_pin.setVisible(0);
             LADCanvas.vsd_tgt_closure_text.setVisible(0);
         }
-        
+
         # Do not display any unused target boxes
         for (var nv = target_idx; nv < LADCanvas.tgt_symbols_max;nv += 1) {
             LADCanvas.tgt_symbols[nv].setVisible(0);
             LADCanvas.tgt_texts[nv].setVisible(0);
         }
-        
+
         # Update the datalink symbols
         var dlnk_idx = 0;
         var datalink_connections = datalink.get_all_callsigns();
@@ -1367,9 +1369,9 @@ update = func() {
                     already_on_rdr = 1;
                 }
             }
-            if (already_on_rdr == 0) { 
+            if (already_on_rdr == 0) {
                 if (dlnk_idx < LADCanvas.dlnk_symbols_max) {
-                
+
                     contact_data = datalink.get_data(contact);
                     contact_idx = contact_data.index();
                     if (contact_idx != nil) {  # can make things bug sometimes
@@ -1395,7 +1397,7 @@ update = func() {
                             hostile = 0;
                             on_link = 0;
                         }
-                        
+
                         if (on_link) {
                             LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
                             LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
@@ -1409,7 +1411,7 @@ update = func() {
                             LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
                             LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
                         }
-                        
+
                         LADCanvas.dlnk_symbols[dlnk_idx].setVisible(1);
                         LADCanvas.dlnk_texts[dlnk_idx].setVisible(1);
                         xc = deviation_normdeg(getprop("orientation/heading-deg"), contact_bearing);
@@ -1429,7 +1431,7 @@ update = func() {
                 }
             }
         }
-        
+
         # Do not display any unused target boxes
         for (var nv = dlnk_idx; nv < LADCanvas.dlnk_symbols_max;nv += 1) {
             LADCanvas.dlnk_symbols[nv].setVisible(0);
