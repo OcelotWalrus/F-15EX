@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   fill="#00ff11"
+   width="800"
+   height="800"
+   viewBox="0 0 32 32"
+   id="Layer_1"
+   data-name="Layer 1"
+   version="1.1"
+   sodipodi:docname="TACAN.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="32"
+       height="32"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .cls-1 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <circle
+     cx="16"
+     cy="14"
+     r="2"
+     id="circle1" />
+  <path
+     d="M 20,28 H 12 A 1,1 0 0 1 11,27 V 21.2656 L 7.2612,14.7231 2.4854,11.8574 A 1,1 0 0 1 2.1318,10.5039 l 4,-7 A 1,1 0 0 1 7.5146,3.1426 L 12.2769,6 h 7.4462 l 4.7623,-2.8574 a 1,1 0 0 1 1.3828,0.3613 l 4,7 a 1,1 0 0 1 -0.3536,1.3535 L 24.7388,14.7231 21,21.2656 V 27 a 1,1 0 0 1 -1,1 z m -7,-2 h 6 V 20.7346 L 23.2616,13.2768 27.646,10.6462 24.6387,5.3831 20.277,8 H 11.723 L 7.3613,5.3831 4.354,10.6462 8.7384,13.2768 13,20.7346 Z"
+     id="path1" />
+  <rect
+     id="TACANSymbol"
+     data-name="&lt;Transparent Rectangle&gt;"
+     class="cls-1"
+     width="32"
+     height="32"
+     transform="scale(-1)"
+     x="-32"
+     y="-32" />
+</svg>

@@ -1,0 +1,819 @@
+<?xml version="1.0"?>
+<PropertyList>
+	<name>mission-plan</name>
+  	<modal>false</modal>
+  	<layout>vbox</layout>
+  	<draggable>true</draggable>
+    <resizable>false</resizable>
+    <width>1350</width>
+    <!--<height>250</height>-->
+    
+    <nasal>
+        <open><![CDATA[
+        	setprop("f16/preplanning-status", "");
+			var s = steerpoints.getNumber(555);
+			if (s != nil) {
+				setprop("f16/avionics/pilot-aid/bulls-eye-lat", s.lat);
+				setprop("f16/avionics/pilot-aid/bulls-eye-lon", s.lon);
+			}
+			setprop("f16/avionics/pilot-aid/c1-stpt", 300);
+			s = steerpoints.getNumber(getprop("f16/avionics/pilot-aid/c1-stpt"));# 
+			if (s != nil) {
+				setprop("f16/avionics/pilot-aid/c1-lat", s.lat);
+				setprop("f16/avionics/pilot-aid/c1-lon", s.lon);
+				setprop("f16/avionics/pilot-aid/c1-rad", s.radius);
+				setprop("f16/avionics/pilot-aid/c1-typ", s.type);
+				#setprop("f16/avionics/pilot-aid/c1-col", s.color==0?"RED":(s.color==1?"YEL":"GRN"));
+			} else {
+				setprop("f16/avionics/pilot-aid/c1-lat", 0);
+				setprop("f16/avionics/pilot-aid/c1-lon", 0);
+				setprop("f16/avionics/pilot-aid/c1-rad", 40);
+				setprop("f16/avionics/pilot-aid/c1-typ", " 11");
+				#setprop("f16/avionics/pilot-aid/c1-col", "YEL");
+			}
+			
+            var load_line1 = func(path) {
+                steerpoints.loadLine(0,path.getValue());
+            }
+            
+            var load_line2 = func(path) {
+                steerpoints.loadLine(1,path.getValue());
+            }
+            var load_line3 = func(path) {
+                steerpoints.loadLine(2,path.getValue());
+            }
+            
+            var load_line4 = func(path) {
+                steerpoints.loadLine(3,path.getValue());
+            }
+
+            #var dlg = props.globals.getNode("/sim/gui/dialogs/route-manager", 1);
+            
+            var load_stpts = func(path) {
+                steerpoints.loadSTPTs(path.getValue());
+            }
+            var save_stpts = func(path) {
+                steerpoints.saveSTPTs(path.getValue());
+            }
+
+            var defaultDirInFileSelector = getprop("/sim/fg-home") ~ "/Export";
+
+            var file_selector_1 = gui.FileSelector.new(
+              callback: load_line1, title: "Load Lines 1", button: "Load",
+              dir: defaultDirInFileSelector, dotfiles: 1, pattern: ["*.gpx","*.fgfp"]);
+            var file_selector_2 = gui.FileSelector.new(
+              callback: load_line2, title: "Load Lines 2", button: "Load",
+              dir: defaultDirInFileSelector, dotfiles: 1, pattern: ["*.gpx","*.fgfp"]);
+            var file_selector_3 = gui.FileSelector.new(
+              callback: load_line3, title: "Load Lines 3", button: "Load",
+              dir: defaultDirInFileSelector, dotfiles: 1, pattern: ["*.gpx","*.fgfp"]);
+            var file_selector_4 = gui.FileSelector.new(
+              callback: load_line4, title: "Load Lines 4", button: "Load",
+              dir: defaultDirInFileSelector, dotfiles: 1, pattern: ["*.gpx","*.fgfp"]);
+
+             var file_selector_dtc = gui.FileSelector.new(
+              callback: load_stpts, title: "Load data", button: "Load",
+              dir: defaultDirInFileSelector, dotfiles: 1, pattern: ["*.f16dtc"]);
+            var save_selector_dtc = gui.FileSelector.new(
+              callback: save_stpts, title: "Save data", button: "Save",
+              dir: defaultDirInFileSelector, dotfiles: 1, file: "f16-dtc-data.f16dtc", pattern: ["*.f16dtc"]);
+            
+        ]]></open>
+
+        <close><![CDATA[
+            file_selector_1.del();            
+            file_selector_2.del();            
+            file_selector_3.del();            
+            file_selector_4.del();            
+            file_selector_dtc.del();            
+            save_selector_dtc.del();
+        ]]></close>
+    </nasal>
+
+    <group>
+		<layout>hbox</layout>
+		<text>
+			<halign>right</halign>
+			<label>F-15EX Eagle II Mission Data</label>
+		</text>
+
+		<group>
+			<layout>table</layout>
+			<button>
+				<row>0</row>
+				<col>1</col>
+				<halign>right</halign>
+				<pref-width>20</pref-width>
+				<pref-height>20</pref-height>
+				<legend>X</legend>
+				<key>Esc</key>
+				<binding>
+					<command>dialog-close</command>
+				</binding>
+			</button>
+		</group>
+	</group>
+
+	<hrule/>
+
+	<text><halign>center</halign><label>Data Transfer Cartridge settings</label></text>
+	<empty><stretch>1</stretch></empty>
+
+	<group>
+		<layout>hbox</layout>
+		<button>
+	        <legend>Load DTC</legend>
+	        <equal>true</equal>
+	        <binding>
+	            <command>nasal</command>
+	            <script>file_selector_dtc.open()</script>
+	        </binding>
+	    </button>
+	    <button>
+	        <legend>Save DTC</legend>
+	        <equal>true</equal>
+	        <enable>
+	        	<value>1</value>
+	        </enable>
+	        <binding>
+	            <command>nasal</command>
+	            <script>save_selector_dtc.open();</script>
+	        </binding>
+	    </button>
+	</group>
+
+	<empty><stretch>1</stretch></empty>
+	<hrule/>
+
+	<text><halign>center</halign><label>Radio Channels</label></text>
+	<empty><stretch>1</stretch></empty>
+	
+	<group>
+	    <layout>vbox</layout>
+	    <group>
+		    <layout>hbox</layout>
+
+            <text><halign>left</halign><label>Radio 1</label></text>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>MHz (active)</label>
+		      	<property>instrumentation/comm[0]/frequencies/selected-mhz</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>MHz (standby)</label>
+		      	<property>instrumentation/comm[0]/frequencies/standby-mhz</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+	    </group>
+	    <group>
+		    <layout>hbox</layout>
+
+            <text><halign>left</halign><label>Radio 2</label></text>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>MHz (active)</label>
+		      	<property>instrumentation/comm[1]/frequencies/selected-mhz</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>MHz (standby)</label>
+		      	<property>instrumentation/comm[1]/frequencies/standby-mhz</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+	    </group>
+	    <group>
+		    <layout>hbox</layout>
+
+            <text><halign>left</halign><label>ILS (Nav 1)</label></text>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>MHz (active)</label>
+		      	<property>instrumentation/nav[0]/frequencies/selected-mhz</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>MHz (standby)</label>
+		      	<property>instrumentation/nav[0]/frequencies/standby-mhz</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>deg (Radial)</label>
+		      	<property>instrumentation/nav[0]/radials/selected-deg</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+	    </group>
+	    <group>
+		    <layout>hbox</layout>
+
+            <text><halign>left</halign><label>TACAN</label></text>
+		    <combo>
+              <name>tacan-1</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+              <live>true</live>
+              <property>/instrumentation/tacan/frequencies/selected-channel[1]</property>
+              <value>0</value>
+              <value>1</value>
+              <value>2</value>
+              <value>3</value>
+              <value>4</value>
+              <value>5</value>
+              <value>6</value>
+              <value>7</value>
+              <value>8</value>
+              <value>9</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>tacan-1</object-name>
+              </binding>
+            </combo>
+            <!---->
+            <combo>
+              <name>tacan-2</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+              <live>true</live>
+              <property>/instrumentation/tacan/frequencies/selected-channel[2]</property>
+              <value>0</value>
+              <value>1</value>
+              <value>2</value>
+              <value>3</value>
+              <value>4</value>
+              <value>5</value>
+              <value>6</value>
+              <value>7</value>
+              <value>8</value>
+              <value>9</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>tacan-2</object-name>
+              </binding>
+            </combo>
+
+            <combo>
+              <name>tacan-3</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+              <live>true</live>
+              <property>/instrumentation/tacan/frequencies/selected-channel[3]</property>
+              <value>0</value>
+              <value>1</value>
+              <value>2</value>
+              <value>3</value>
+              <value>4</value>
+              <value>5</value>
+              <value>6</value>
+              <value>7</value>
+              <value>8</value>
+              <value>9</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>tacan-3</object-name>
+              </binding>
+            </combo>
+
+            <combo>
+              <name>tacan-4</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+              <live>true</live>
+              <property>/instrumentation/tacan/frequencies/selected-channel[4]</property>
+              <value>X</value>
+              <value>Y</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>tacan-4</object-name>
+              </binding>
+            </combo>
+		    <input>
+		      	<width>150</width>
+		      	<height>25</height>
+		      	<label>MHz</label>
+		      	<property>instrumentation/tacan/frequencies/selected-mhz</property>
+		      	<live>true</live>
+		      	<halign>left</halign>
+	            <binding>
+	                <command>dialog-apply</command>
+	          	</binding>
+		    </input>
+	    </group>
+	</group>
+
+	<empty><stretch>1</stretch></empty>
+	<hrule/>
+
+	<text><halign>center</halign><label>Bullseye designation</label></text>
+	<empty><stretch>1</stretch></empty>
+	
+	<group>
+		<layout>hbox</layout>
+
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Lat (deg)</label>
+		  	<property>sim/model/f15/fcs/bullseye-lat</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+	      	<color>
+	      		<red>0.45</red>
+				<green>0.55</green>
+				<blue>0.85</blue>
+	      	</color>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Lon (deg)</label>
+		  	<property>sim/model/f15/fcs/bullseye-lon</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+	      	<color>
+	      		<red>0.45</red>
+				<green>0.55</green>
+				<blue>0.85</blue>
+	      	</color>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Alt (ft)</label>
+		  	<property>sim/model/f15/fcs/bullseye-alt</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+	      	<color>
+	      		<red>0.45</red>
+				<green>0.55</green>
+				<blue>0.85</blue>
+	      	</color>
+		</input>
+		<!--checkbox>
+			<label>Display BE</label>
+			<halign>right</halign>
+			<live>true</live>
+			<property>f16/avionics/pilot-aid/bulls-eye-defined</property>
+			<binding>
+				<command>dialog-apply</command>
+			</binding>
+		</checkbox-->
+	</group>
+
+	<empty><stretch>1</stretch></empty>
+	<hrule/>
+	
+	<text><halign>center</halign><label>Threat Circles</label></text>
+	<empty><stretch>1</stretch></empty>
+	
+	<group>
+		<layout>hbox</layout>
+
+        <combo>
+              <name>threat-circle-combo</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+		  	  <label>Index</label>
+              <live>true</live>
+              <property>/controls/mission-planning/selected-threat-circle</property>
+              <value>0</value>
+              <value>1</value>
+              <value>2</value>
+              <value>3</value>
+              <value>4</value>
+              <value>5</value>
+              <value>6</value>
+              <value>7</value>
+              <value>8</value>
+              <value>9</value>
+              <value>10</value>
+              <value>11</value>
+              <value>12</value>
+              <value>13</value>
+              <value>14</value>
+              <value>15</value>
+              <value>16</value>
+              <value>17</value>
+              <value>18</value>
+              <value>19</value>
+              <value>20</value>
+              <value>21</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>threat-circle-combo</object-name>
+              </binding>
+              <binding>
+                <command>nasal</command>
+                <script>
+                
+                    setprop("/controls/mission-planning/selected-threat-circle-lat", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].lat);
+                    setprop("/controls/mission-planning/selected-threat-circle-lon", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].lon);
+                    setprop("/controls/mission-planning/selected-threat-circle-color", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].color);
+                    setprop("/controls/mission-planning/selected-threat-circle-radius-nm", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].radius);
+                    setprop("/controls/mission-planning/selected-threat-circle-enabled", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].enabled);
+                    setprop("/controls/mission-planning/selected-threat-circle-label", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].label);
+                
+                </script>
+              </binding>
+        </combo>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Lat (deg)</label>
+             <property>/controls/mission-planning/selected-threat-circle-lat</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Lon (deg)</label>
+            <property>/controls/mission-planning/selected-threat-circle-lon</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Radius (NM)</label>
+            <property>/controls/mission-planning/selected-threat-circle-radius-nm</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Label</label>
+            <property>/controls/mission-planning/selected-threat-circle-label</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<combo>
+              <name>threat-circle-combo-color</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+		  	  <label>Color</label>
+              <live>true</live>
+              <property>/controls/mission-planning/selected-threat-circle-color</property>
+              <value>red</value>
+              <value>blue</value>
+              <value>green</value>
+              <value>yellow</value>
+              <value>orange</value>
+              <value>blue</value>
+              <value>purple</value>
+              <value>rose</value>
+              <value>marron</value>
+              <value>cyan</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>threat-circle-combo-color</object-name>
+              </binding>
+        </combo>
+		<checkbox>
+			<label>Displayed</label>
+			<halign>right</halign>
+			<live>true</live>
+			<property>/controls/mission-planning/selected-threat-circle-enabled</property>
+			<binding>
+				<command>dialog-apply</command>
+			</binding>
+		</checkbox>
+		<button>
+			<legend>Apply</legend>
+			<halign>center</halign>
+			<binding>
+				<command>nasal</command>
+				<script><![CDATA[
+					aircraft.push_threat_circle_data_from_dialog();
+				]]></script>
+			</binding>
+		</button>
+	</group>
+
+	<empty><stretch>1</stretch></empty>
+	<hrule/>
+
+	<text><halign>center</halign><label>Identification Friend and Foe and Tactical Data Link</label></text>
+	<empty><stretch>1</stretch></empty>
+
+	<group>
+		<layout>hbox</layout>
+			   <input>
+				  <width>75</width>
+				  <height>25</height>
+				  <label>IFF M4 Channel</label>
+				  <property>instrumentation/iff/channel-selection</property>
+				  <live>true</live>
+				  <halign>center</halign>
+			      	<binding>
+			           <command>dialog-apply</command>
+			      	</binding>
+			      	<color>
+	      				<red>0.45</red>
+						<green>0.55</green>
+						<blue>0.85</blue>
+	      			</color>
+			   </input>
+			   <checkbox>
+                    <property>instrumentation/iff/power</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>instrumentation/iff/power</property>
+                    </binding>
+                </checkbox>
+			   <button>
+				    <legend>Clear</legend>
+				    <halign>center</halign>
+				    <binding>
+					    <command>nasal</command>
+					    <script><![CDATA[
+						    setprop("instrumentation/iff/channel-selection", 0);
+					    ]]></script>
+				    </binding>
+				</button>
+	</group>
+
+	<group>
+		<layout>hbox</layout>
+			   <input>
+				  <width>75</width>
+				  <height>25</height>
+				  <label>Link-16 Channel</label>
+				  <property>instrumentation/datalink/channel</property>
+				  <live>true</live>
+				  <halign>center</halign>
+			      	<binding>
+			           <command>dialog-apply</command>
+			      	</binding>
+			      	<color>
+	      				<red>0.45</red>
+						<green>0.55</green>
+						<blue>0.85</blue>
+	      			</color>
+			   </input>
+                <checkbox>
+                    <property>instrumentation/datalink/power</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>instrumentation/datalink/power</property>
+                    </binding>
+                </checkbox>
+			    <button>
+				    <legend>Clear</legend>
+				    <halign>center</halign>
+				    <binding>
+					    <command>nasal</command>
+					    <script><![CDATA[
+						    setprop("instrumentation/datalink/channel", 0);
+					    ]]></script>
+				    </binding>
+				</button>
+	</group>
+
+    <empty><stretch>1</stretch></empty>
+    
+    <hrule/>
+    
+    <text><label>Altitude Decks</label></text>
+    
+    <group>
+        <layout>hbox</layout>
+        <default-padding>0</default-padding>
+
+        <group>
+            <layout>vbox</layout>
+            <default-padding>1</default-padding>
+
+            <empty>
+                <pref-height>2</pref-height>
+            </empty>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Altitude Deck Minimum</label>
+                </text>
+
+                <input>
+        		  	<width>250</width>
+        		  	<height>25</height>
+        		  	<label>FT</label>
+        		  	<property>sim/model/f15/avionics/altitude-deck-min</property>
+        		  	<live>true</live>
+        		  	<halign>left</halign>
+        	        <binding>
+        	            <command>dialog-apply</command>
+        	      	</binding>
+        		</input>
+        		<checkbox>
+                    <property>sim/model/f15/avionics/altitude-deck-min-enabled</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>sim/model/f15/avionics/altitude-deck-min-enabled</property>
+                    </binding>
+                </checkbox>
+            </group>
+
+            <group>
+                <layout>hbox</layout>
+
+                <text>
+                    <label>Altitude Deck Maximum</label>
+                </text>
+
+                <input>
+        		  	<width>250</width>
+        		  	<height>25</height>
+        		  	<label>FT</label>
+        		  	<property>sim/model/f15/avionics/altitude-deck-max</property>
+        		  	<live>true</live>
+        		  	<halign>left</halign>
+        	        <binding>
+        	            <command>dialog-apply</command>
+        	      	</binding>
+        		</input>
+        		<checkbox>
+                    <property>sim/model/f15/avionics/altitude-deck-max-enabled</property>
+                    <live>true</live>
+                    <binding>
+                        <command>property-toggle</command>
+                        <property>sim/model/f15/avionics/altitude-deck-max-enabled</property>
+                    </binding>
+                </checkbox>
+            </group>
+        </group>
+    </group>
+
+    <empty><stretch>1</stretch></empty>
+    
+    <hrule/>
+
+    <text><label>Kneeboards</label></text>
+    
+    <group>
+		<layout>hbox</layout>
+	    <group>
+			<layout>hbox</layout>
+	    	<button>
+				<legend>Load Left MDC</legend>
+				<binding>
+					<command>nasal</command>
+					<script><![CDATA[
+						knee.get_knee_file_gui_l();
+					]]></script>
+				</binding>
+			</button>
+			<checkbox>
+				<label>Visible</label>
+				<halign>center</halign>
+				<live>true</live>
+				<property>sim/model/f15/avionics/kneeboard-left</property>
+				<binding>
+					<command>dialog-apply</command>
+				</binding>
+			</checkbox>
+		</group>
+		<group>
+			<layout>hbox</layout>
+			<button>
+				<legend>Load Right MDC</legend>
+				<binding>
+					<command>nasal</command>
+					<script><![CDATA[
+						knee.get_knee_file_gui_r();
+					]]></script>
+				</binding>
+			</button>
+			<checkbox>
+				<label>Visible</label>
+				<halign>center</halign>
+				<live>true</live>
+				<property>sim/model/f15/avionics/kneeboard-right</property>
+				<binding>
+					<command>dialog-apply</command>
+				</binding>
+			</checkbox>
+		</group>
+	</group>
+	<group>
+		<layout>hbox</layout>
+	    <group>
+			<layout>hbox</layout>
+	    	<button>
+				<legend>Load WSO Left MDC</legend>
+				<binding>
+					<command>nasal</command>
+					<script><![CDATA[
+						knee.get_knee_file_gui_l_wso();
+					]]></script>
+				</binding>
+			</button>
+			<checkbox>
+				<label>Visible</label>
+				<halign>center</halign>
+				<live>true</live>
+				<property>sim/model/f15/avionics/kneeboard-left-wso</property>
+				<binding>
+					<command>dialog-apply</command>
+				</binding>
+			</checkbox>
+		</group>
+		<group>
+			<layout>hbox</layout>
+			<button>
+				<legend>Load WSO Right MDC</legend>
+				<binding>
+					<command>nasal</command>
+					<script><![CDATA[
+						knee.get_knee_file_gui_r_wso();
+					]]></script>
+				</binding>
+			</button>
+			<checkbox>
+				<label>Visible</label>
+				<halign>center</halign>
+				<live>true</live>
+				<property>sim/model/f15/avionics/kneeboard-right-wso</property>
+				<binding>
+					<command>dialog-apply</command>
+				</binding>
+			</checkbox>
+		</group>
+	</group>
+
+	<hrule/>
+
+	<text>
+		<halign>left</halign>
+		<live>true</live>
+		<format>I/O Status: %s</format>
+		<property>sim/model/f15/preplanning-status</property>
+	</text>
+
+	<empty><stretch>1</stretch></empty>
+
+</PropertyList>

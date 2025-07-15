@@ -56,6 +56,16 @@ var knownSurface = {
     "depot":       nil,
     "truck":     nil,
     "tower":     nil,
+    "S-75":     nil,
+    "S-200":    nil,
+    "S-300":     nil,
+    "MIM104D":    nil,
+    "s300":        nil,
+    "SA-6":        nil,
+    "SA-3":            nil,
+    "MIM-104D":      nil,
+    "zsu-23":      nil,
+    "ZSU-IR":       nil,
 };
 
 var damageLog = events.LogBuffer.new(echo: 0);
@@ -329,8 +339,9 @@ var rdr_loop = func(notification) {
     # Share all of our radar contacts over datalink
     # On the F-15EX with its AN/APG-82(V)1 AESA radar, targets don't need to be locked on to be tracked,
     # so the whole panel of available radar contacts are sent over to the datalink network
+    # We also share the EPAWSS' contacts over datalink now
     foreach(contact; tgts_list) {
-        if (getprop("instrumentation/datalink/sending") == 0) {  # so we're not overwriting a GPS spot that's being sent
+        if (getprop("instrumentation/datalink/sending") == 0 and (contact.get_display() or contact.get_EPAWSS_visible())) {  # so we're not overwriting a GPS spot that's being sent, safety, not sure that's needed
 	       datalink.send_data({"contacts":[{"callsign":contact.get_Callsign(),"iff":0}]});
         }
     }
@@ -1296,6 +1307,7 @@ var Target = {
         obj.name = c.getNode("name");
         obj.TAS = c.getNode("velocities/true-airspeed-kt");
         obj.TransponderId = c.getNode("instrumentation/transponder/transmitted-id");
+        obj.verticalSpeedFPS = c.getNode("velocities/vertical-speed-fps");
 
 
         obj.Model = c.getNode("model-short");
@@ -1616,11 +1628,17 @@ else
 	set_behind_terrain : func(n) {
 		me.Behind_terrain.setBoolValue(n);
 	},
+	get_EPAWSS_visible : func() {
+	    return contact.get_range() <= getprop("instrumentation/radar/radar2-range") and (contact.get_RWR_visible() or contact.isRadiating(geo.aircraft_position()) or contact.isSpikingMe());
+	},
 	get_RWR_visible : func() {
 		return me.RWRVisible.getValue();
 	},
 	set_RWR_visible : func(n) {
 		me.RWRVisible.setBoolValue(n);
+	},
+	get_Ecm_Signal_Norm : func() {  # Added by Jimmy L. Miles
+	    return me.EcmSignalNorm.getValue();
 	},
 	get_fading : func() {
 		var fading = me.Fading.getValue();
@@ -1646,6 +1664,13 @@ else
         if (me.TAS != nil)
         {
             return me.TAS.getValue();
+        }
+        return 0;
+    },
+    get_Vertical_Speed: func() {  # Added by Jimmy L. Miles
+        if (me.verticalSpeedFPS != nil)
+        {
+            return me.verticalSpeedFPS.getValue();
         }
         return 0;
     },

@@ -4,7 +4,7 @@
 var load_knee_l = func(path) {
     path = path.getValue();
     if (io.stat(path) == nil){
-        setprop("f16/preplanning-status", "Loading kneeboard failed");
+        setprop("sim/model/f15/preplanning-status", "Loading kneeboard failed");
         print("Loading kneeboard failed");
         gui.showDialog("loadfail");
         return;
@@ -13,7 +13,7 @@ var load_knee_l = func(path) {
     var data = nil;
     call(func{vi = io.open(path,'r'); data = split("\n",string.replace(io.readfile(path),"\r",""));},nil, var err = []);
     if (size(err) > 0) {
-        setprop("f16/preplanning-status", err[0]);
+        setprop("sim/model/f15/preplanning-status", err[0]);
         print(err[0]);
         gui.showDialog("loadfail");
         return;
@@ -24,13 +24,13 @@ var load_knee_l = func(path) {
     if (file_selector_l != nil) {
         #file_selector_l.close();
     }
-    setprop("f16/preplanning-status", "Kneeboard loaded");
+    setprop("sim/model/f15/preplanning-status", "Kneeboard loaded");
 }
 
 var load_knee_r = func(path) {
     path = path.getValue();
     if (io.stat(path) == nil){
-        setprop("f16/preplanning-status", "Loading kneeboard failed");
+        setprop("sim/model/f15/preplanning-status", "Loading kneeboard failed");
         print("Loading kneeboard failed");
         gui.showDialog("loadfail");
         return;
@@ -39,7 +39,7 @@ var load_knee_r = func(path) {
     var data = nil;
     call(func{vi = io.open(path,'r'); data = split("\n",string.replace(io.readfile(path),"\r",""));},nil, var err = []);
     if (size(err) > 0) {
-        setprop("f16/preplanning-status", err[0]);
+        setprop("sim/model/f15/preplanning-status", err[0]);
         print(err[0]);
         gui.showDialog("loadfail");
         return;
@@ -51,13 +51,13 @@ var load_knee_r = func(path) {
     if (file_selector_r != nil) {
         #file_selector_r.close();
     }
-    setprop("f16/preplanning-status", "Kneeboard loaded");
+    setprop("sim/model/f15/preplanning-status", "Kneeboard loaded");
 }
 
 var load_knee_l_wso = func(path) {
     path = path.getValue();
     if (io.stat(path) == nil){
-        setprop("f16/preplanning-status", "Loading kneeboard failed");
+        setprop("sim/model/f15/preplanning-status", "Loading kneeboard failed");
         print("Loading kneeboard failed");
         gui.showDialog("loadfail");
         return;
@@ -66,7 +66,7 @@ var load_knee_l_wso = func(path) {
     var data = nil;
     call(func{vi = io.open(path,'r'); data = split("\n",string.replace(io.readfile(path),"\r",""));},nil, var err = []);
     if (size(err) > 0) {
-        setprop("f16/preplanning-status", err[0]);
+        setprop("sim/model/f15/preplanning-status", err[0]);
         print(err[0]);
         gui.showDialog("loadfail");
         return;
@@ -77,13 +77,13 @@ var load_knee_l_wso = func(path) {
     if (file_selector_l_wso != nil) {
         #file_selector_l_wso.close();
     }
-    setprop("f16/preplanning-status", "Kneeboard loaded");
+    setprop("sim/model/f15/preplanning-status", "Kneeboard loaded");
 }
 
 var load_knee_r_wso = func(path) {
     path = path.getValue();
     if (io.stat(path) == nil){
-        setprop("f16/preplanning-status", "Loading kneeboard failed");
+        setprop("sim/model/f15/preplanning-status", "Loading kneeboard failed");
         print("Loading kneeboard failed");
         gui.showDialog("loadfail");
         return;
@@ -92,7 +92,7 @@ var load_knee_r_wso = func(path) {
     var data = nil;
     call(func{vi = io.open(path,'r'); data = split("\n",string.replace(io.readfile(path),"\r",""));},nil, var err = []);
     if (size(err) > 0) {
-        setprop("f16/preplanning-status", err[0]);
+        setprop("sim/model/f15/preplanning-status", err[0]);
         print(err[0]);
         gui.showDialog("loadfail");
         return;
@@ -103,7 +103,7 @@ var load_knee_r_wso = func(path) {
     if (file_selector_r_wso != nil) {
         #file_selector_r_wso.close();
     }
-    setprop("f16/preplanning-status", "Kneeboard loaded");
+    setprop("sim/model/f15/preplanning-status", "Kneeboard loaded");
 }
 
 var file_selector_r = nil;

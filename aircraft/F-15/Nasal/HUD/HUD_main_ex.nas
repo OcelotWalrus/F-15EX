@@ -920,10 +920,10 @@ var F15HUD = {
 														"RadarStandby",
 														"RadarFilterMode"], 0.1, func(val)
 														{
-															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin)) {
+															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin) and !val.ControlsGearGearDown) {
 																obj.altitudeDeck.show();
 																setprop("sim/model/f15/avionics/altitude-deck-hit", 1);
-															} elsif (val.AltitudeDeckMaxEnabled and (val.AltimeterIndicatedAltitudeFt > val.AltitudeDeckMax)) {
+															} elsif (val.AltitudeDeckMaxEnabled and (val.AltimeterIndicatedAltitudeFt > val.AltitudeDeckMax) and !val.ControlsGearGearDown) {
 																obj.altitudeDeck.show();
 																setprop("sim/model/f15/avionics/altitude-deck-hit", 1);
 															} else {

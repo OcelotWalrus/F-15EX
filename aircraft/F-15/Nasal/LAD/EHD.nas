@@ -102,122 +102,125 @@ var update_loop_ehd = nil;
 
 update = func() {
     
-    # Engines gens texts update
-    engine_l_out = getprop("sim/model/f15/lights/ca-l-gen-out");
-    engine_r_out = getprop("sim/model/f15/lights/ca-r-gen-out");
-    status_l = "ON";
-    status_r = "ON";
-    if (engine_l_out) {
-        status_l = "OFF";
-    }
-    if (engine_r_out    ) {
-        status_r = "OFF";
-    }
-    EHDCanvas.eng_l_status.setText(status_l);
-    EHDCanvas.eng_r_status.setText(status_r);
+    # We make sure we don't run none of that if the EHD screen's offline
+    if (getprop("sim/model/f15/controls/electrics/emerg-gen-switch") or getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0) {
+        # Engines gens texts update
+        engine_l_out = getprop("sim/model/f15/lights/ca-l-gen-out");
+        engine_r_out = getprop("sim/model/f15/lights/ca-r-gen-out");
+        status_l = "ON";
+        status_r = "ON";
+        if (engine_l_out) {
+            status_l = "OFF";
+        }
+        if (engine_r_out    ) {
+            status_r = "OFF";
+        }
+        EHDCanvas.eng_l_status.setText(status_l);
+        EHDCanvas.eng_r_status.setText(status_r);
 
-    # Nozzle opening percentage texts update
-    EHDCanvas.EHDsvg.getElementById("left_noz_percent").setText(sprintf("%02d", getprop("sim/multiplay/generic/float[10]") * 100));
-    EHDCanvas.EHDsvg.getElementById("right_noz_percent").setText(sprintf("%02d", getprop("sim/multiplay/generic/float[11]") * 100));
-    
-    # Util Oil Press Hydraulics status update
-    util_pressure = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi");
-    operable = util_pressure > 1200;  # It needs to be higher than 1,200 psi in order for the JFS to work
-    saturated = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/saturated");
-    
-    fail_hardover = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/malfunction/fail_hardover");
-    fail_stuck = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/malfunction/fail_stuck");
-    fail_zero = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/malfunction/fail_zero");
-    
-    status = "";
-    if (saturated) {
-        status = "SATUR";
-    } elsif (operable) {
-        status = "OPER";
-    } elsif (!operable) {
-        status = "INOP";
-    } elsif (fail_hardover) {
-        status = "HARDOV";
-    } elsif (fail_stuck) {
-        status = "STUCK";
-    } elsif (fail_zero) {
-        status = "ZERO";
-    } else { # that's a safety
-        status = "INOP";
-    }
-    
-    EHDCanvas.EHDsvg.getElementById("left_oil_press_status").setText(status);
-    EHDCanvas.EHDsvg.getElementById("right_oil_press_status").setText(status);
-    
-    # Update the engines' temperature carats
-    eng_l_temp = getprop("engines/engine[0]/egt-degC");
-    eng_r_temp = getprop("engines/engine[1]/egt-degC");
-    if (eng_l_temp == nil) {  # at sim startup, these values are null
-        eng_l_temp = 0;
-    }
-    if (eng_r_temp == nil) {
-        eng_r_temp = 0;
-    }
-    
-    EHDCanvas.left_engine_temp_value.setText(sprintf("%04d", eng_l_temp * 1.8 + 32));
-    EHDCanvas.right_engine_temp_value.setText(sprintf("%04d", eng_r_temp * 1.8 + 32));
-    
-    EHDCanvas.left_engine_temp_value.setTranslation(0, eng_l_temp * 22 / 300);
-    EHDCanvas.right_engine_temp_value.setTranslation(0, eng_r_temp * 22 / 300);
-    EHDCanvas.left_eng_temp_carat.setTranslation(0, eng_l_temp * 22 / 300);
-    EHDCanvas.right_eng_temp_carat.setTranslation(0, eng_r_temp * 22 / 300);
-    
-    # Update fuel levels
-    current_fuel_lbs = getprop("sim/model/f15/instrumentation/fuel-gauges/total-display");
-    volume_percent = getprop("consumables/fuel/total-fuel-norm");
-    if (current_fuel_lbs == nil) {  # at sim startup, the values are null so that fixes errors printing, even though it doesn't prevent the thing to run properly after that
-        current_fuel_lbs = 12000;
-    }
-    if (current_fuel_lbs == nil) {
-        volume_percent = 100;
-    }
-    total_fuel_gal = getprop("consumables/fuel/tank[0]/capacity-gal_us") + getprop("consumables/fuel/tank[1]/capacity-gal_us") + getprop("consumables/fuel/tank[2]/capacity-gal_us") + getprop("consumables/fuel/tank[3]/capacity-gal_us") + getprop("consumables/fuel/tank[4]/capacity-gal_us") + getprop("consumables/fuel/tank[5]/capacity-gal_us") + getprop("consumables/fuel/tank[6]/capacity-gal_us") + getprop("consumables/fuel/tank[7]/capacity-gal_us") + getprop("consumables/fuel/tank[8]/capacity-gal_us") + getprop("consumables/fuel/tank[9]/capacity-gal_us");
-    total_fuel_lbs = total_fuel_gal / .158730;
-    
-    EHDCanvas.EHDsvg.getElementById("total_fuel_levels").setText(sprintf("%05d / %05d lbs", current_fuel_lbs, total_fuel_lbs));
-    
-    # Note:
-    # Outer Tanks includes External Droptanks and Conformals
-    # Center tank internal tanks and external center tank
-    left_capacity = getprop("consumables/fuel/tank[5]/capacity-gal_us") + getprop("consumables/fuel/tank[8]/capacity-gal_us");  # disabled tanks return 0
-    left_level = getprop("consumables/fuel/tank[5]/level-gal_us") + getprop("consumables/fuel/tank[8]/level-gal_us");
-    
-    right_capacity = getprop("consumables/fuel/tank[6]/capacity-gal_us") + getprop("consumables/fuel/tank[9]/capacity-gal_us");
-    right_level = getprop("consumables/fuel/tank[6]/level-gal_us") + getprop("consumables/fuel/tank[9]/level-gal_us");
-    
-    interal_capacity = getprop("consumables/fuel/tank[0]/capacity-gal_us") + getprop("consumables/fuel/tank[1]/capacity-gal_us") + getprop("consumables/fuel/tank[2]/capacity-gal_us") + getprop("consumables/fuel/tank[3]/capacity-gal_us") + getprop("consumables/fuel/tank[4]/capacity-gal_us") + getprop("consumables/fuel/tank[7]/capacity-gal_us");
-    internal_level = getprop("consumables/fuel/tank[0]/level-gal_us") + getprop("consumables/fuel/tank[1]/level-gal_us") + getprop("consumables/fuel/tank[2]/level-gal_us") + getprop("consumables/fuel/tank[3]/level-gal_us") + getprop("consumables/fuel/tank[4]/level-gal_us") + getprop("consumables/fuel/tank[7]/level-gal_us");
-    
-    left_percentage = left_level / left_capacity;
-    right_percentage = right_level / right_capacity;
-    center_percentage = internal_level / interal_capacity;
+        # Nozzle opening percentage texts update
+        EHDCanvas.EHDsvg.getElementById("left_noz_percent").setText(sprintf("%02d", getprop("sim/multiplay/generic/float[10]") * 100));
+        EHDCanvas.EHDsvg.getElementById("right_noz_percent").setText(sprintf("%02d", getprop("sim/multiplay/generic/float[11]") * 100));
+        
+        # Util Oil Press Hydraulics status update
+        util_pressure = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi");
+        operable = util_pressure > 1200;  # It needs to be higher than 1,200 psi in order for the JFS to work
+        saturated = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/saturated");
+        
+        fail_hardover = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/malfunction/fail_hardover");
+        fail_stuck = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/malfunction/fail_stuck");
+        fail_zero = getprop("fdm/jsbsim/systems/hydraulics/util-system-accumulator-psi/malfunction/fail_zero");
+        
+        status = "";
+        if (saturated) {
+            status = "SATUR";
+        } elsif (operable) {
+            status = "OPER";
+        } elsif (!operable) {
+            status = "INOP";
+        } elsif (fail_hardover) {
+            status = "HARDOV";
+        } elsif (fail_stuck) {
+            status = "STUCK";
+        } elsif (fail_zero) {
+            status = "ZERO";
+        } else { # that's a safety
+            status = "INOP";
+        }
+        
+        EHDCanvas.EHDsvg.getElementById("left_oil_press_status").setText(status);
+        EHDCanvas.EHDsvg.getElementById("right_oil_press_status").setText(status);
+        
+        # Update the engines' temperature carats
+        eng_l_temp = getprop("engines/engine[0]/egt-degC");
+        eng_r_temp = getprop("engines/engine[1]/egt-degC");
+        if (eng_l_temp == nil) {  # at sim startup, these values are null
+            eng_l_temp = 0;
+        }
+        if (eng_r_temp == nil) {
+            eng_r_temp = 0;
+        }
+        
+        EHDCanvas.left_engine_temp_value.setText(sprintf("%04d", eng_l_temp * 1.8 + 32));
+        EHDCanvas.right_engine_temp_value.setText(sprintf("%04d", eng_r_temp * 1.8 + 32));
+        
+        EHDCanvas.left_engine_temp_value.setTranslation(0, eng_l_temp * 22 / 300);
+        EHDCanvas.right_engine_temp_value.setTranslation(0, eng_r_temp * 22 / 300);
+        EHDCanvas.left_eng_temp_carat.setTranslation(0, eng_l_temp * 22 / 300);
+        EHDCanvas.right_eng_temp_carat.setTranslation(0, eng_r_temp * 22 / 300);
+        
+        # Update fuel levels
+        current_fuel_lbs = getprop("sim/model/f15/instrumentation/fuel-gauges/total-display");
+        volume_percent = getprop("consumables/fuel/total-fuel-norm");
+        if (current_fuel_lbs == nil) {  # at sim startup, the values are null so that fixes errors printing, even though it doesn't prevent the thing to run properly after that
+            current_fuel_lbs = 12000;
+        }
+        if (current_fuel_lbs == nil) {
+            volume_percent = 100;
+        }
+        total_fuel_gal = getprop("consumables/fuel/tank[0]/capacity-gal_us") + getprop("consumables/fuel/tank[1]/capacity-gal_us") + getprop("consumables/fuel/tank[2]/capacity-gal_us") + getprop("consumables/fuel/tank[3]/capacity-gal_us") + getprop("consumables/fuel/tank[4]/capacity-gal_us") + getprop("consumables/fuel/tank[5]/capacity-gal_us") + getprop("consumables/fuel/tank[6]/capacity-gal_us") + getprop("consumables/fuel/tank[7]/capacity-gal_us") + getprop("consumables/fuel/tank[8]/capacity-gal_us") + getprop("consumables/fuel/tank[9]/capacity-gal_us");
+        total_fuel_lbs = total_fuel_gal / .158730;
+        
+        EHDCanvas.EHDsvg.getElementById("total_fuel_levels").setText(sprintf("%05d / %05d lbs", current_fuel_lbs, total_fuel_lbs));
+        
+        # Note:
+        # Outer Tanks includes External Droptanks and Conformals
+        # Center tank internal tanks and external center tank
+        left_capacity = getprop("consumables/fuel/tank[5]/capacity-gal_us") + getprop("consumables/fuel/tank[8]/capacity-gal_us");  # disabled tanks return 0
+        left_level = getprop("consumables/fuel/tank[5]/level-gal_us") + getprop("consumables/fuel/tank[8]/level-gal_us");
+        
+        right_capacity = getprop("consumables/fuel/tank[6]/capacity-gal_us") + getprop("consumables/fuel/tank[9]/capacity-gal_us");
+        right_level = getprop("consumables/fuel/tank[6]/level-gal_us") + getprop("consumables/fuel/tank[9]/level-gal_us");
+        
+        interal_capacity = getprop("consumables/fuel/tank[0]/capacity-gal_us") + getprop("consumables/fuel/tank[1]/capacity-gal_us") + getprop("consumables/fuel/tank[2]/capacity-gal_us") + getprop("consumables/fuel/tank[3]/capacity-gal_us") + getprop("consumables/fuel/tank[4]/capacity-gal_us") + getprop("consumables/fuel/tank[7]/capacity-gal_us");
+        internal_level = getprop("consumables/fuel/tank[0]/level-gal_us") + getprop("consumables/fuel/tank[1]/level-gal_us") + getprop("consumables/fuel/tank[2]/level-gal_us") + getprop("consumables/fuel/tank[3]/level-gal_us") + getprop("consumables/fuel/tank[4]/level-gal_us") + getprop("consumables/fuel/tank[7]/level-gal_us");
+        
+        left_percentage = left_level / left_capacity;
+        right_percentage = right_level / right_capacity;
+        center_percentage = internal_level / interal_capacity;
 
-    EHDCanvas.center_tank_full.setTranslation(0,(1 - center_percentage) * 87.349);
-    EHDCanvas.left_tank_full.setTranslation(0,(1 - left_percentage) * 87.349);
-    EHDCanvas.right_tank_full.setTranslation(0,(1 - right_percentage) * 87.349);
-    
-    # Update engines RPM
-    eng_l_rpm = getprop("engines/engine[0]/n2");
-    eng_r_rpm = getprop("engines/engine[1]/n2");
-    if (eng_l_rpm == nil) {  # is null at sim startup
-        eng_l_rpm = 0;
+        EHDCanvas.center_tank_full.setTranslation(0,(1 - center_percentage) * 87.349);
+        EHDCanvas.left_tank_full.setTranslation(0,(1 - left_percentage) * 87.349);
+        EHDCanvas.right_tank_full.setTranslation(0,(1 - right_percentage) * 87.349);
+        
+        # Update engines RPM
+        eng_l_rpm = getprop("engines/engine[0]/n2");
+        eng_r_rpm = getprop("engines/engine[1]/n2");
+        if (eng_l_rpm == nil) {  # is null at sim startup
+            eng_l_rpm = 0;
+        }
+        if (eng_r_rpm == nil) {  # is null at sim startup
+            eng_r_rpm = 0;
+        }
+        
+        # 110 rpm = 90*
+        # 70 rpm = 90*70/110
+        EHDCanvas.EHDsvg.getElementById("left_engine_rpm_actual_number").setText(sprintf("%03d", eng_l_rpm));
+        EHDCanvas.EHDsvg.getElementById("right_engine_rpm_actual_number").setText(sprintf("%03d", eng_r_rpm));
+        
+        EHDCanvas.left_rpm_needle.setRotation((-95 * (eng_l_rpm / 110))*D2R);
+        EHDCanvas.right_rpm_needle.setRotation((95 * (eng_r_rpm / 110))*D2R);
     }
-    if (eng_r_rpm == nil) {  # is null at sim startup
-        eng_r_rpm = 0;
-    }
-    
-    # 110 rpm = 90*
-    # 70 rpm = 90*70/110
-    EHDCanvas.EHDsvg.getElementById("left_engine_rpm_actual_number").setText(sprintf("%03d", eng_l_rpm));
-    EHDCanvas.EHDsvg.getElementById("right_engine_rpm_actual_number").setText(sprintf("%03d", eng_r_rpm));
-    
-    EHDCanvas.left_rpm_needle.setRotation((-95 * (eng_l_rpm / 110))*D2R);
-    EHDCanvas.right_rpm_needle.setRotation((95 * (eng_r_rpm / 110))*D2R);
 }
 
 EHDCanvas = EHD_Device.new({"node": "EnginesDImage"});

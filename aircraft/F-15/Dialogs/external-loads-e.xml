@@ -833,17 +833,6 @@
             </button>
 
 			<button>
-                <legend>Mission Parameters</legend>
-                <binding>
-                    <command>nasal</command>
-                    <script>
-						var mission_config = gui.Dialog.new("dialog[5]","Aircraft/F-15/Dialogs/mission-config.xml");
-						mission_config.open();
-					</script>
-                </binding>
-            </button>
-
-			<button>
                 <legend>GPS Target Config</legend>
                 <binding>
                     <command>nasal</command>
@@ -1488,101 +1477,6 @@
             </group>
 
             <hrule/>
-
-			<text><label>Kneeboards</label></text>
-
-		    <group>
-				<layout>hbox</layout>
-			    <group>
-					<layout>hbox</layout>
-			    	<button>
-						<legend>Load Left MDC</legend>
-						<binding>
-							<command>nasal</command>
-							<script><![CDATA[
-								knee.get_knee_file_gui_l();
-							]]></script>
-						</binding>
-					</button>
-					<checkbox>
-						<label>Visible</label>
-						<halign>center</halign>
-						<live>true</live>
-						<property>sim/model/f15/avionics/kneeboard-left</property>
-						<binding>
-							<command>dialog-apply</command>
-						</binding>
-					</checkbox>
-				</group>
-				<group>
-					<layout>hbox</layout>
-					<button>
-						<legend>Load Right MDC</legend>
-						<binding>
-							<command>nasal</command>
-							<script><![CDATA[
-								knee.get_knee_file_gui_r();
-							]]></script>
-						</binding>
-					</button>
-					<checkbox>
-						<label>Visible</label>
-						<halign>center</halign>
-						<live>true</live>
-						<property>sim/model/f15/avionics/kneeboard-right</property>
-						<binding>
-							<command>dialog-apply</command>
-						</binding>
-					</checkbox>
-				</group>
-			</group>
-			<group>
-				<layout>hbox</layout>
-			    <group>
-					<layout>hbox</layout>
-			    	<button>
-						<legend>Load Left WSO MDC</legend>
-						<binding>
-							<command>nasal</command>
-							<script><![CDATA[
-								knee.get_knee_file_gui_l_wso();
-							]]></script>
-						</binding>
-					</button>
-					<checkbox>
-						<label>Visible</label>
-						<halign>center</halign>
-						<live>true</live>
-						<property>sim/model/f15/avionics/kneeboard-left-wso</property>
-						<binding>
-							<command>dialog-apply</command>
-						</binding>
-					</checkbox>
-				</group>
-				<group>
-					<layout>hbox</layout>
-					<button>
-						<legend>Load Right WSO MDC</legend>
-						<binding>
-							<command>nasal</command>
-							<script><![CDATA[
-								knee.get_knee_file_gui_r_wso();
-							]]></script>
-						</binding>
-					</button>
-					<checkbox>
-						<label>Visible</label>
-						<halign>center</halign>
-						<live>true</live>
-						<property>sim/model/f15/avionics/kneeboard-right-wso</property>
-						<binding>
-							<command>dialog-apply</command>
-						</binding>
-					</checkbox>
-				</group>
-			</group>
-
-			<hrule/>
 
 		</group>
 

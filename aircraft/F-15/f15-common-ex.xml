@@ -934,6 +934,9 @@
                     <target-lat type="double">0</target-lat>
                     <target-alt type="double">0</target-alt> <!-- now in feet-->
                     <target-lock type="bool">false</target-lock>
+                    <bullseye-lat type="double">0</bullseye-lat>
+                    <bullseye-lon type="double">0</bullseye-lon>
+                    <bullseye-alt type="double">0</bullseye-alt>
                 </fcs>
                 <armament>
                     <fall-time-sec type="double">0</fall-time-sec>
@@ -1934,6 +1937,16 @@
 						</binding>
 					</item>
 -->
+                    <item n="3">
+                        <label>Mission Preplanning</label>
+                        <binding>
+                            <command>nasal</command>
+                            <script>
+						        var mission_planning = gui.Dialog.new("dialog[9]","Aircraft/F-15/gui/dialogs/mission-plan.xml");
+						        mission_planning.open();
+					        </script>
+                        </binding>
+                    </item>
                     <item n="4">
                         <label>Combat event log</label>
                         <binding>
@@ -1942,13 +1955,6 @@
                         </binding>
                     </item>
                     <item n="5">
-                        <label>IFF and Datalink</label>
-                        <binding>
-                            <command>dialog-show</command>
-                            <dialog-name>iff-datalink</dialog-name>
-                        </binding>
-                    </item>
-                    <item n="6">
                         <label>Training Scenario</label>
                         <binding>
                             <command>nasal</command>
@@ -1958,7 +1964,7 @@
 					        </script>
                         </binding>
                     </item>
-		            <item n="12">
+		            <item n="6">
 			            <label>Tacview Options</label>
                         <binding>
                             <command>dialog-show</command>
@@ -4252,6 +4258,15 @@
             <target-management-switch-x n="1" type="float">0</target-management-switch-x>
             <target-management-switch-y n="1" type="float">0</target-management-switch-y>
         </displays>
+        <mission-planning>
+            <selected-threat-circle type="int">0</selected-threat-circle>
+            <selected-threat-circle-radius-nm type="double">0</selected-threat-circle-radius-nm>
+            <selected-threat-circle-lat type="double">0</selected-threat-circle-lat>
+            <selected-threat-circle-lon type="double">0</selected-threat-circle-lon>
+            <selected-threat-circle-enabled type="bool">false</selected-threat-circle-enabled>
+            <selected-threat-circle-color type="string">red</selected-threat-circle-color>
+            <selected-threat-circle-label type="string"></selected-threat-circle-label>
+        </mission-planning>
         <seat>
             <pilot-helmet-volume-attenuation type="int">0</pilot-helmet-volume-attenuation>
         </seat>
@@ -4842,7 +4857,7 @@
             <ranges n="10"><entry type="int">250</entry></ranges>
             <ranges n="11"><entry type="int">275</entry></ranges>
             <ref-range type="double">70</ref-range>
-            <ref-strength type="double">3.8</ref-strength>
+            <ref-strength type="double">7</ref-strength>  <!-- estimation of APG-82 V(1), around 6.5 and 7.5 so gave it 7 -->
             <scan_partition_size type="double">10</scan_partition_size>!
             <scan_visibility_check_interval type="double">3</scan_visibility_check_interval>!
             <serviceable type="bool">true</serviceable>!

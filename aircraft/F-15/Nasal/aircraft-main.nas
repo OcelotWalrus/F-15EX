@@ -664,6 +664,47 @@ last_position = nil;
 distanceNode = props.globals.getNode("/position/distance-flown-nm",1);
 distanceNode.setValue(0);
 
+var threat_circles = [  # vector containing the data for all threat circles
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+    {"lat": 0, "lon": 0, "radius": 0, "enabled": 0, "color": "red", "label": ""},
+];
+
+var push_threat_circle_data_from_dialog = func () {  # used to push data from the mission planning dialog to the actual threat circles
+    circle_idx = getprop("/controls/mission-planning/selected-threat-circle");
+    circle_radius = getprop("/controls/mission-planning/selected-threat-circle-radius-nm");
+    circle_lat = getprop("/controls/mission-planning/selected-threat-circle-lat");
+    circle_lon = getprop("/controls/mission-planning/selected-threat-circle-lon");
+    circle_on = getprop("/controls/mission-planning/selected-threat-circle-enabled");
+    circle_color = getprop("/controls/mission-planning/selected-threat-circle-color");
+    circle_label = getprop("/controls/mission-planning/selected-threat-circle-label");
+    threat_circles[circle_idx].lat = circle_lat;
+    threat_circles[circle_idx].lon = circle_lon;
+    threat_circles[circle_idx].radius = circle_radius;
+    threat_circles[circle_idx].enabled = circle_on;
+    threat_circles[circle_idx].color = circle_color;
+    threat_circles[circle_idx].label = circle_label;
+    setprop("sim/model/f15/preplanning-status", sprintf("Updated Threat Circle %02d", circle_idx));
+}
+
 var F15MainModule =
 {
     update: func(notification){

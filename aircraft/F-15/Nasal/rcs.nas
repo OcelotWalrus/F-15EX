@@ -25,6 +25,7 @@ var rcs_database = {
     "f-14b-bs":                 0.0001, #low so it doesn't show up on radar
     "F-15C":                    10,     #low end of sources
     "F-15D":                    11,     #low end of sources
+    "F-15EX":                   25,     #low end of sources
     "f15-bs":                   0.0001,
     "F-16":                     2,
     "JA37-Viggen":              3,      
@@ -39,6 +40,8 @@ var rcs_database = {
     "Blackbird-SR71A-BigTail":  0.30,
     "MiG-21bis":                3.5,
     "MiG-21MF-75":              3.5,
+    "MiG-23MLD":                5.0,
+    "MiG-23ML":                 5.0,
     "Typhoon":                  0.5,
     "B-1B":                     6,
     "707":                      100,
@@ -49,6 +52,7 @@ var rcs_database = {
     "C-137R":                   100,
     "RC-137R":                  100,
     "EC-137R":                  110,
+    "E-3R":                     110,
     "E-8R":                     100,
     "KC-10A":                   90,
     "KC-10A-GE":                90,
@@ -79,6 +83,7 @@ var rcs_database = {
 # Notice that the non-SEA of these have been very reduced to simulate hard to find in ground clutter
     "depot":                    1,
     "ZSU-23-4M":                0.04,
+    "SA-3":                     0.12,
     "SA-6":                     0.10,
     "buk-m2":                   0.08,
     "S-75":                     0.12,
@@ -86,7 +91,8 @@ var rcs_database = {
     "s-300":                    0.16,
     "MIM104D":                  0.15,
     "truck":                    0.02,
-    "missile_frigate":          450, 
+    "missile_frigate":          450,
+    "fleet":                    1000, 
     "frigate":                  450,
     "tower":                    0.25,   #gone
     "gci":                      0.50,
@@ -104,9 +110,8 @@ var rcs_database = {
     "USS-NORMANDY":             450,    
     "USS-LakeChamplain":        450,    
     "USS-OliverPerry":          450,    
-    "USS-SanAntonio":           450,    
+    "USS-SanAntonio":           450,  
 };
-
 var prevVisible = {};
 
 var inRadarRange = func (contact, myRadarDistance_nm, myRadarStrength_rcs) {
