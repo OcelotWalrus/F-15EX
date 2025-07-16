@@ -2,49 +2,22 @@
 
 <PropertyList>
 
- <path>flare.ac</path>
+ <path>Models/Effects/flare.ac</path>
 
- <animation>
-  <type>billboard</type>
-  <spherical>true</spherical>
- </animation>
-
- <animation>
-  <type>dist-scale</type>
-  <object-name>flare</object-name>
-  <object-name>flare_trail</object-name>
-  <interpolation>
-   <entry><ind>0</ind><dep>1.0</dep></entry>
-   <entry><ind>5000</ind><dep>50.0</dep></entry>
-  </interpolation>
- </animation>
-
- <animation>
-  <type>material</type>
-  <object-name>flare</object-name>
-  <emission>
-   <factor-prop>/sim/time/elapsed-sec</factor-prop>
-   <offset>1.0</offset>
-   <red>  -0.2</red>
-   <green>-0.2</green>
-   <blue> -0.2</blue>
-  </emission>
- </animation>
+  <effect>
+    <inherits-from>Aircraft/F-15/Models/Effects/flare</inherits-from>
+    <object-name>procedural_light</object-name>
+  </effect>
 
   <animation>
-    <type>scale</type>
-    <object-name>flare</object-name>
-    <object-name>flare_trail</object-name>
-    <property>/sim/time/sun-angle-rad</property>
-    <x-min>0.700</x-min>
-    <y-min>0.700</y-min>
-    <z-min>0.700</z-min>
-    <x-offset>-1</x-offset>
-    <y-offset>-1</y-offset>
-    <z-offset>-1</z-offset>
-    <x-factor>0.5</x-factor>
-    <y-factor>0.5</y-factor>
-    <z-factor>0.5</z-factor>
+    <type>dist-scale</type>
+    <object-name>procedural_light</object-name>
+    <interpolation>
+      <entry><ind>0</ind><dep>7.5</dep></entry>
+      <entry><ind>3750</ind><dep>15.0</dep></entry>
+      <entry><ind>5000</ind><dep>25.0</dep></entry>
+      <entry><ind>7500</ind><dep>40.0</dep></entry>
+    </interpolation>
   </animation>
 
  <model>
