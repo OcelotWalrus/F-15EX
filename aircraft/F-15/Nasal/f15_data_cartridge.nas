@@ -70,7 +70,7 @@ var load_cartridge = func(path) {
             if (key == "DATALINK") {
                 setprop("instrumentation/datalink/channel", num(items[1]));
             } elsif (key == "IFF") {
-                setprop("instrumentation/iff/channel", num(items[1]));
+                setprop("instrumentation/iff/channel-selection", num(items[1]));
             } elsif (key == "BINGO") {
                 setprop("sim/model/f15/controls/fuel/bingo", num(items[1]));
             } elsif (key == "TACAN") {
@@ -136,7 +136,7 @@ var save_cartridge = func(path) {
     path_value = path.getValue();
     
     ret = "";
-    ret = ret~sprintf("IFF,%d|", getprop("instrumentation/iff/channel"));
+    ret = ret~sprintf("IFF,%d|", getprop("instrumentation/iff/channel-selection"));
     ret = ret~sprintf("DATALINK,%d|", getprop("instrumentation/datalink/channel"));
     ret = ret~sprintf("COM1,%.2f,%.2f|", getprop("instrumentation/comm[0]/frequencies/selected-mhz"), getprop("instrumentation/comm[0]/frequencies/standby-mhz"));
     ret = ret~sprintf("COM2,%.2f,%.2f|", getprop("instrumentation/comm[1]/frequencies/selected-mhz"), getprop("instrumentation/comm[1]/frequencies/standby-mhz"));
