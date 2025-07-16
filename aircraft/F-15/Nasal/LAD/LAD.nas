@@ -232,13 +232,13 @@ var LAD_Device = {
             .setText("CAUTION")
             .setAlignment("center-center")
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
-            .setTranslation(670,230)
+            .setTranslation(740,230)
             .setFont(aircraft.HUDFont);
         m.caution_box = m.upper_panel.createChild("path")
             .vert(230*2)
-            .horiz(270*2)
+            .horiz(330*2)
             .vert(-230*2)
-            .horiz(-270*2)
+            .horiz(-330*2)
             .setTranslation(400,20)
             .setStrokeLineWidth(20)
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
@@ -248,14 +248,14 @@ var LAD_Device = {
             .setText("A/P")
             .setAlignment("center-center")
             .setColor(prst_purple.r,prst_purple.g,prst_purple.b)
-            .setTranslation(670+460*2,230)
+            .setTranslation(670+460*1.5-20,230)
             .setFont(aircraft.HUDFont);
         m.autopilot_box = m.upper_panel.createChild("path")
             .vert(230*2)
             .horiz(270*2)
             .vert(-230*2)
             .horiz(-270*2)
-            .setTranslation(400+460*2,20)
+            .setTranslation(400+460*1.5-20,20)
             .setStrokeLineWidth(20)
             .setColor(prst_purple.r,prst_purple.g,prst_purple.b);
 
@@ -265,28 +265,28 @@ var LAD_Device = {
             .setText("R1")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1280+460*2,115)
+            .setTranslation(1280+460*1.5-20,115)
             .setFont(aircraft.HUDFont);
         m.radio1_text_center = m.upper_panel.createChild("text")
             .setFontSize(120, 1.4)
             .setText("OFF")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1280+460*2,230)
+            .setTranslation(1280+460*1.5-20,230)
             .setFont(aircraft.HUDFont);
         m.radio1_text_down = m.upper_panel.createChild("text")
             .setFontSize(100, 1.4)
             .setText("113.76 MHz")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1280+460,345)
+            .setTranslation(1280+460*1.5-20,345)
             .setFont(aircraft.HUDFont);
         m.radio1_box = m.upper_panel.createChild("path")
             .vert(230*2)
             .horiz(320*2)
             .vert(-230*2)
             .horiz(-320*2)
-            .setTranslation(960+460*2,20)
+            .setTranslation(960+460*1.5-20,20)
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
@@ -296,28 +296,28 @@ var LAD_Device = {
             .setText("R2")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1940+460*2,115)
+            .setTranslation(1940+460*1.5-20,115)
             .setFont(aircraft.HUDFont);
         m.radio2_text_center = m.upper_panel.createChild("text")
             .setFontSize(120, 1.4)
             .setText("OFF")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1940+460*2,230)
+            .setTranslation(1940+460*1.5-20,230)
             .setFont(aircraft.HUDFont);
         m.radio2_text_down = m.upper_panel.createChild("text")
             .setFontSize(100, 1.4)
             .setText("113.76 MHz")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1940+460*2,345)
+            .setTranslation(1940+460*1.5-20,345)
             .setFont(aircraft.HUDFont);
         m.radio2_box = m.upper_panel.createChild("path")
             .vert(230*2)
             .horiz(320*2)
             .vert(-230*2)
             .horiz(-320*2)
-            .setTranslation(1620+460*2,20)
+            .setTranslation(1620+460*1.5-20,20)
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
@@ -1615,10 +1615,10 @@ update_lad = func() {
         }
         
         # Update the A/P light, depending if autopilot's on or not, we change the text's size and the colors
-        autopilot_on = getprop("autopilot/pitch-active") and getprop("autopilot/roll-active");
+        autopilot_on = getprop("autopilot/internal/pitch-active") and getprop("autopilot/internal/roll-active");
         if (autopilot_on) {
-            LADCanvas.autopilot_text.setColor(prst_rose.r,prst_rose.g,prst_rose.b).setFontSize(165, 1.4);
-            LADCanvas.autopilot_box.setColor(prst_rose.r,prst_rose.g,prst_rose.b);
+            LADCanvas.autopilot_text.setColor(prst_green.r,prst_green.g,prst_green.b).setFontSize(165, 1.4);
+            LADCanvas.autopilot_box.setColor(prst_green.r,prst_green.g,prst_green.b);
         } else {
             LADCanvas.autopilot_text.setColor(prst_white.r,prst_white.g,prst_white.b).setFontSize(120, 1.4);
             LADCanvas.autopilot_box.setColor(prst_white.r,prst_white.g,prst_white.b);
