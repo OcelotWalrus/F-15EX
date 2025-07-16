@@ -5065,6 +5065,9 @@
             <file>Nasal/LAD/LAD.nas</file>
             <file>Nasal/LAD/EHD.nas</file>
         </displays>
+        <cartridge>
+            <file>Nasal/f15_data_cartridge.nas</file>
+        </cartridge>
     </nasal>
 
 </PropertyList>

@@ -37,9 +37,6 @@
 # incorrect, when used alongside translations (when applying a translation AND a rotation to an object).
 # ---------------------------
 # Future features (TODO's) :
-# //Upper Panel// :
-# - Remove the Transponder box, shift all the boxes that were in between that Transponder box and the caution box, to be at the position of the former Transponder box,
-# and add a A/P (autopilot) light indicator box on the right of the caution box
 # //VSD Display// :
 # - Use different symbols for SAMs, AAAs and ships contacts
 # - Differentiate evading, "neutral" and incoming contacts using different
@@ -245,6 +242,22 @@ var LAD_Device = {
             .setTranslation(400,20)
             .setStrokeLineWidth(20)
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+        
+        m.autopilot_text = m.upper_panel.createChild("text")
+            .setFontSize(165, 1.4)
+            .setText("A/P")
+            .setAlignment("center-center")
+            .setColor(prst_purple.r,prst_purple.g,prst_purple.b)
+            .setTranslation(670+460*2,230)
+            .setFont(aircraft.HUDFont);
+        m.autopilot_box = m.upper_panel.createChild("path")
+            .vert(230*2)
+            .horiz(270*2)
+            .vert(-230*2)
+            .horiz(-270*2)
+            .setTranslation(400+460*2,20)
+            .setStrokeLineWidth(20)
+            .setColor(prst_purple.r,prst_purple.g,prst_purple.b);
 
         # Radio 1 (Comm 1) box
         m.radio1_text_up = m.upper_panel.createChild("text")
@@ -252,28 +265,28 @@ var LAD_Device = {
             .setText("R1")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1280,115)
+            .setTranslation(1280+460*2,115)
             .setFont(aircraft.HUDFont);
         m.radio1_text_center = m.upper_panel.createChild("text")
             .setFontSize(120, 1.4)
             .setText("OFF")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1280,230)
+            .setTranslation(1280+460*2,230)
             .setFont(aircraft.HUDFont);
         m.radio1_text_down = m.upper_panel.createChild("text")
             .setFontSize(100, 1.4)
             .setText("113.76 MHz")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1280,345)
+            .setTranslation(1280+460,345)
             .setFont(aircraft.HUDFont);
         m.radio1_box = m.upper_panel.createChild("path")
             .vert(230*2)
             .horiz(320*2)
             .vert(-230*2)
             .horiz(-320*2)
-            .setTranslation(960,20)
+            .setTranslation(960+460*2,20)
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
@@ -283,59 +296,28 @@ var LAD_Device = {
             .setText("R2")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1940,115)
+            .setTranslation(1940+460*2,115)
             .setFont(aircraft.HUDFont);
         m.radio2_text_center = m.upper_panel.createChild("text")
             .setFontSize(120, 1.4)
             .setText("OFF")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1940,230)
+            .setTranslation(1940+460*2,230)
             .setFont(aircraft.HUDFont);
         m.radio2_text_down = m.upper_panel.createChild("text")
             .setFontSize(100, 1.4)
             .setText("113.76 MHz")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(1940,345)
+            .setTranslation(1940+460*2,345)
             .setFont(aircraft.HUDFont);
         m.radio2_box = m.upper_panel.createChild("path")
             .vert(230*2)
             .horiz(320*2)
             .vert(-230*2)
             .horiz(-320*2)
-            .setTranslation(1620,20)
-            .setStrokeLineWidth(20)
-            .setColor(prst_white.r,prst_white.g,prst_white.b);
-
-        # Transponder box
-        m.transponder_text_up = m.upper_panel.createChild("text")
-            .setFontSize(135, 1.4)
-            .setText("MODE 3/A")
-            .setAlignment("center-center")
-            .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(2620,115)
-            .setFont(aircraft.HUDFont);
-        m.transponder_text_center = m.upper_panel.createChild("text")
-            .setFontSize(100, 1.4)
-            .setText("1763")
-            .setAlignment("center-center")
-            .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(2620,230)
-            .setFont(aircraft.HUDFont);
-        m.transponder_text_down = m.upper_panel.createChild("text")
-            .setFontSize(120, 1.4)
-            .setText("STBY")
-            .setAlignment("center-center")
-            .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(2620,345)
-            .setFont(aircraft.HUDFont);
-        m.transponder_box = m.upper_panel.createChild("path")
-            .vert(230*2)
-            .horiz(320*2)
-            .vert(-230*2)
-            .horiz(-320*2)
-            .setTranslation(2280,20)
+            .setTranslation(1620+460*2,20)
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
 
@@ -452,6 +434,8 @@ var LAD_Device = {
         m.upper_panel.setVisible(1);
         m.caution_text.setVisible(1);
         m.caution_box.setVisible(1);
+        m.autopilot_text.setVisible(1);
+        m.autopilot_box.setVisible(1);
         m.time_text_hrs.setVisible(1);
         m.time_text_mins.setVisible(1);
         m.time_text_secs.setVisible(1);
@@ -464,10 +448,6 @@ var LAD_Device = {
         m.radio2_text_center.setVisible(1);
         m.radio2_text_down.setVisible(1);
         m.radio2_box.setVisible(1);
-        m.transponder_text_up.setVisible(1);
-        m.transponder_text_center.setVisible(1);
-        m.transponder_text_down.setVisible(1);
-        m.transponder_box.setVisible(1);
         m.iff_text_up.setVisible(1);
         m.iff_text_center.setVisible(1);
         m.iff_text_down.setVisible(1);
@@ -904,6 +884,13 @@ var LAD_Device = {
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
             .setTranslation(1235+300,500+35)
             .setFont(aircraft.HUDFont);
+        m.vsd_tgt_model = m.VSDScreen.createChild("text")
+            .setFontSize(85, 1.4)
+            .setText("MIG23")
+            .setAlignment("center-center")
+            .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
+            .setTranslation(1235+300+500,500+35)
+            .setFont(aircraft.HUDFont);
         m.vsd_tgt_closure_pin = m.VSDScreen.createChild("path")
             .moveTo(677*4-75,1150*2+500+75)
             .lineTo(677*4-75-75,1150*2+500+75+65)
@@ -962,6 +949,7 @@ var LAD_Device = {
         m.vsd_tgt_altitude.setVisible(0);
         m.vsd_tgt_range.setVisible(0);
         m.vsd_tgt_fps.setVisible(0);
+        m.vsd_tgt_model.setVisible(0);
         m.vsd_tgt_closure_pin.setVisible(0);
         m.vsd_tgt_closure_text.setVisible(0);
 
@@ -1197,7 +1185,7 @@ var LAD_Device = {
         
         # Radar symbology
         m.hsd_radar_x = (m.hsd_radar_range_px_x) * math.cos((90 - 60) * D2R);
-        m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 60) * D2R);
+        m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 30) * D2R);
         m.hsd_cone_60 = m.HSDScreen.createChild("path")
             .moveTo(1355,1150*2+500+75)
             .lineTo(1355+m.hsd_radar_x,1150*2+500+75+m.hsd_radar_y)
@@ -1625,6 +1613,16 @@ update_lad = func() {
             LADCanvas.caution_text.setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b).setFontSize(120, 1.4);
             LADCanvas.caution_box.setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
         }
+        
+        # Update the A/P light, depending if autopilot's on or not, we change the text's size and the colors
+        autopilot_on = getprop("autopilot/pitch-active") and getprop("autopilot/roll-active");
+        if (autopilot_on) {
+            LADCanvas.autopilot_text.setColor(prst_rose.r,prst_rose.g,prst_rose.b).setFontSize(165, 1.4);
+            LADCanvas.autopilot_box.setColor(prst_rose.r,prst_rose.g,prst_rose.b);
+        } else {
+            LADCanvas.autopilot_text.setColor(prst_white.r,prst_white.g,prst_white.b).setFontSize(120, 1.4);
+            LADCanvas.autopilot_box.setColor(prst_white.r,prst_white.g,prst_white.b);
+        }
 
         # Update the time's box
         time_secs = getprop("sim/time/local-day-seconds");
@@ -1669,38 +1667,6 @@ update_lad = func() {
             LADCanvas.radio2_text_down.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.radio2_box.setColor(prst_green.r,prst_green.g,prst_green.b);
         }
-
-        # Update the transponder's box
-        transponder_code = getprop("instrumentation/transponder/id-code");
-        transponder_mode = getprop("instrumentation/transponder/inputs/knob-mode");
-        if (transponder_mode == 0) {
-            transponder_mode = "OFF";
-        } elsif (transponder_mode == 1) {
-            transponder_mode = "STBY";
-        } elsif (transponder_mode == 2) {
-            transponder_mode = "TEST";
-        } elsif (transponder_mode == 3) {
-            transponder_mode = "GROUND";
-        } elsif (transponder_mode == 4) {
-            transponder_mode = "ON";
-        } elsif (transponder_mode == 5) {
-            transponder_mode = "ALTI";
-        }
-
-        if (transponder_mode == "ON" or transponder_mode == "ALTI") {
-            LADCanvas.transponder_text_up.setColor(prst_green.r,prst_green.g,prst_green.b);
-            LADCanvas.transponder_text_center.setColor(prst_green.r,prst_green.g,prst_green.b);
-            LADCanvas.transponder_text_down.setColor(prst_green.r,prst_green.g,prst_green.b);
-            LADCanvas.transponder_box.setColor(prst_green.r,prst_green.g,prst_green.b);
-        } else {
-            LADCanvas.transponder_text_up.setColor(prst_white.r,prst_white.g,prst_white.b);
-            LADCanvas.transponder_text_center.setColor(prst_white.r,prst_white.g,prst_white.b);
-            LADCanvas.transponder_text_down.setColor(prst_white.r,prst_white.g,prst_white.b);
-            LADCanvas.transponder_box.setColor(prst_white.r,prst_white.g,prst_white.b);
-        }
-
-        LADCanvas.transponder_text_center.setText(sprintf("%04d", transponder_code));
-        LADCanvas.transponder_text_down.setText(transponder_mode);
 
         # Update the IFF's box
         iff_channel = getprop("instrumentation/iff/channel_prop");
@@ -2108,6 +2074,7 @@ update_lad = func() {
                 LADCanvas.vsd_tgt_altitude.setVisible(1);
                 LADCanvas.vsd_tgt_range.setVisible(1);
                 LADCanvas.vsd_tgt_fps.setVisible(1);
+                LADCanvas.vsd_tgt_model.setVisible(1);
                 LADCanvas.vsd_tgt_closure_pin.setVisible(1);
                 LADCanvas.vsd_tgt_closure_text.setVisible(1);
 
@@ -2132,6 +2099,12 @@ update_lad = func() {
                     LADCanvas.vsd_tgt_range.setText(sprintf("%03.1f NM", awg_9.active_u.get_range()));
                     LADCanvas.vsd_tgt_fps.setText(sprintf("FPS %04d", awg_9.active_u.get_Vertical_Speed()));
                     LADCanvas.vsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
+                    
+                    
+                    model = "UNKNOWN";
+                    if (awg_9.active_u.ModelType != "")
+                        model = awg_9.active_u.ModelType;
+                    LADCanvas.vsd_tgt_model.setText(model);
 
                     # Scale:
                     # To be at 600 (moving 2,275px up), closing speed must be 3,000 KTS
@@ -2153,6 +2126,7 @@ update_lad = func() {
                 LADCanvas.vsd_tgt_altitude.setVisible(0);
                 LADCanvas.vsd_tgt_range.setVisible(0);
                 LADCanvas.vsd_tgt_fps.setVisible(0);
+                LADCanvas.vsd_tgt_model.setVisible(0);
                 LADCanvas.vsd_tgt_closure_pin.setVisible(0);
                 LADCanvas.vsd_tgt_closure_text.setVisible(0);
             }
