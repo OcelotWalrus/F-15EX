@@ -702,7 +702,7 @@ var push_threat_circle_data_from_dialog = func () {  # used to push data from th
     threat_circles[circle_idx].enabled = circle_on;
     threat_circles[circle_idx].color = circle_color;
     threat_circles[circle_idx].label = circle_label;
-    setprop("sim/model/f15/preplanning-status", sprintf("Updated Threat Circle %02d", circle_idx));
+    setprop("sim/model/f15/preplanning-status", sprintf("Updated DTC GPS-Spot %02d", circle_idx));
 }
 
 var F15MainModule =

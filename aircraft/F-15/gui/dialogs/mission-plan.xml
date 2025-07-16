@@ -410,7 +410,7 @@
 	<empty><stretch>1</stretch></empty>
 	<hrule/>
 	
-	<text><halign>center</halign><label>Threat Circles</label></text>
+	<text><halign>center</halign><label>DTC GPS-Spots / Threat Circles</label></text>
 	<empty><stretch>1</stretch></empty>
 	
 	<group>

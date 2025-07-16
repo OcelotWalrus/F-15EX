@@ -2349,10 +2349,13 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>payload/armament/spike-air</property>
-                    <value>1</value>
-                </equals>
+                <or>
+                    <equals>
+                        <property>payload/armament/spike-air</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/model/f15/epawss/new-threat</property>
+                </or>
             </condition>
             <volume>
                 <property>/sim/current-view/internal</property>

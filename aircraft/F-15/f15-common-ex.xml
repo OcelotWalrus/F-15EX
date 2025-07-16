@@ -887,6 +887,9 @@
                 </default_exit>
             </map>
             <f15>
+                <epawss>
+                    <new-threat type="bool">false</new-threat>
+                </epawss>
                 <effects>
                     <rust type="bool">true</rust>
                     <rust-mag type="double">.15</rust-mag>

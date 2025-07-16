@@ -1010,7 +1010,7 @@ var F15HUD = {
                                                                 obj.window15.setVisible(1);
                                                                 obj.window16.setVisible(1);
                                                                 obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
-                                                                obj.window16.setText(sprintf("FLR %03d",getprop("ai/submodels/submodel[6]/count")));
+                                                                obj.window16.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[6]/count")));
 																obj.boreSymbol.hide();
                                                                 weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
                                                                 obj.window11.setText(weapon_type);

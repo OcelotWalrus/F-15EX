@@ -8,9 +8,10 @@
 # ---------------------------
 # Available Displays :
 # - VSD (Vertical Situation Display)  - covers radar, navigation, datalink and pretty much everything
-# - HSD (Vertical Situation Display)  - covers radar, navigation, datalink, EPAWSS, radio and pretty much everything
+# - HSD (Horizontal Situation Display)  - covers radar, navigation, datalink, EPAWSS, radio and pretty much everything
+# - PACS (Programmable Armament Control Set)  - allows to see different stats about current pylons and loadout, and setup jettison
 # Upcoming Displays :
-# - PACS (Programmable Armament Control Set)
+# - ADI (Attitude Director Indicator)
 # - DSRS (Datalink Sharing & Receiving Control Set)  - People on datalink, number of hostiles, friendlies and unknowns, number of locally shared radar and EPAWSS contacts, and a panel to check received GPS-Spots and send GPS-Spots + basic map just giving pos of datalink contacts, with a tactile button allowing to go through contacts like in radar and get info about them
 # - ETSD (EPAWSS Threat Summary Display)  - Number of contacts, number of threats, jamming on/off, datalink sharing on/off, active threat yes/no + type(MLW, MAW, spike) + basic HSD with info toward EPAWSS
 # - TSD (Tactical Situation Display)  - Actually, merge that with the HSD (just an imagery map beneath every symbology)
@@ -62,6 +63,8 @@
 # - Display target pod's looking position with a unique symbol
 # - Show steerpoints that are clamped differently so they can be acknowledged
 # - Add the DLZ (Dynamic Launch Zone), to complement the closing speed
+# //PACS Display// :
+# - Add the Jettison page (waiting for the interiors to finish because there are switches that configure jettison in there.
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
@@ -1193,8 +1196,8 @@ var LAD_Device = {
         }
         
         # Radar symbology
-        m.hsd_radar_x = (m.hsd_radar_range_px_x) * math.cos((90 - 60) * D2R) * 2;
-        m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 60) * D2R) * 2;
+        m.hsd_radar_x = (m.hsd_radar_range_px_x) * math.cos((90 - 60) * D2R);
+        m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 60) * D2R);
         m.hsd_cone_60 = m.HSDScreen.createChild("path")
             .moveTo(1355,1150*2+500+75)
             .lineTo(1355+m.hsd_radar_x,1150*2+500+75+m.hsd_radar_y)
@@ -1204,8 +1207,8 @@ var LAD_Device = {
             .setStrokeLineWidth(20)
             .set("z-index",10)
             .setColor(prst_green.r,prst_green.g,prst_green.b);
-        m.hsd_radar_x = (m.hsd_radar_range_px_x) * math.cos((90 - 30) * D2R) * 2;
-        m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 30) * D2R) * 2;
+        m.hsd_radar_x = (m.hsd_radar_range_px_x) * math.cos((90 - 30) * D2R);
+        m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 30) * D2R);
         m.hsd_cone_30 = m.HSDScreen.createChild("path")
             .moveTo(1355,1150*2+500+75)
             .lineTo(1355+m.hsd_radar_x,1150*2+500+75+m.hsd_radar_y)
@@ -1432,6 +1435,69 @@ var LAD_Device = {
         m.hsd_bullseye_title.setVisible(1);
         m.hsd_distance_indicator_1_3.setVisible(1);
         m.hsd_distance_indicator_2_3.setVisible(1);
+        
+        ## PACS Display
+        m.PACSmode = 0;  # 0 A/A ; 1 A/G ; 2 JETTISON
+        
+        # Parse the PACS.svg file
+        m.PACSScreen = m.svg.createGroup();
+        m.pacs_pres = canvas.parsesvg(m.PACSScreen, "Nasal/LAD/PACS.svg", {'font-mapper': aircraft.hud_font_mapper});
+        m.PACSScreen.setScale(1,.9);
+        
+        # Import what needs to be imported
+        
+        # Shared objects
+        m.pacs_mode_text = m.PACSScreen.getElementById("view_mode_text");
+        m.pacs_arming_time = m.PACSScreen.getElementById("arm_time_counter");
+        m.pacs_chaff = m.PACSScreen.getElementById("chaff_count");
+        m.pacs_flare = m.PACSScreen.getElementById("flare_count");
+        m.pacs_rounds = m.PACSScreen.getElementById("rounds_count");
+        m.pacs_arm_1 = m.PACSScreen.getElementById("arm_count_0");
+        m.pacs_arm_2 = m.PACSScreen.getElementById("arm_count_1");
+        m.pacs_arm_3 = m.PACSScreen.getElementById("arm_count_2");
+        m.pacs_fuel_amount_left = m.PACSScreen.getElementById("left_tank");
+        m.pacs_fuel_amount_center = m.PACSScreen.getElementById("center_tank");
+        m.pacs_fuel_amount_right = m.PACSScreen.getElementById("right_tank");
+        m.aim9_cool_box = m.PACSScreen.getElementById("AIM9_COOL_BOX");
+        m.aim9_cool_text = m.PACSScreen.getElementById("AIM9_COOL_TEXT");
+        m.navpod_mounted_text = m.PACSScreen.getElementById("nav-mounted-text");
+        m.tpod_mounted_text = m.PACSScreen.getElementById("tpod-mounted-text");
+        m.irst_pod_mounted_text = m.PACSScreen.getElementById("legion-pod-mounted-text");
+        m.ecm_pod_mounted_text = m.PACSScreen.getElementById("ecm-pod-mounted-text");
+        
+        # Load all stations' symbology
+        
+        m.pacs_stations_idx = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,20,21,22,23,24,25];
+        
+        
+        m.pacs_station_boxes_up = setsize([], 26);  # there are stations from 0 to 25
+        m.pacs_station_boxes_down = setsize([], 26);
+        m.pacs_station_boxes_up_text = setsize([], 26);
+        m.pacs_station_boxes_down_text = setsize([], 26);
+        foreach(idx; m.pacs_stations_idx) {
+            m.pacs_station_boxes_up[idx] = m.PACSScreen.getElementById("BOX_UP_S"~idx~"");
+            m.pacs_station_boxes_down[idx] = m.PACSScreen.getElementById("BOX_DOWN_S"~idx~"");
+            m.pacs_station_boxes_up_text[idx] = m.PACSScreen.getElementById("BOX_UP_TEXT_S"~idx~"");
+            m.pacs_station_boxes_down_text[idx] = m.PACSScreen.getElementById("BOX_DOWN_TEXT_S"~idx~"");
+        }
+        
+        m.pacs_mode_text.setVisible(1);
+        m.pacs_arming_time.setVisible(0);
+        m.pacs_chaff.setVisible(1);
+        m.pacs_flare.setVisible(1);
+        m.pacs_rounds.setVisible(1);
+        m.pacs_arm_1.setVisible(1);
+        m.pacs_arm_2.setVisible(1);
+        m.pacs_arm_3.setVisible(1);
+        m.pacs_fuel_amount_left.setVisible(1);
+        m.pacs_fuel_amount_center.setVisible(1);
+        m.pacs_fuel_amount_right.setVisible(1);
+        m.aim9_cool_box.setVisible(0);
+        m.aim9_cool_text.setVisible(0);
+        m.navpod_mounted_text.setVisible(0);
+        m.tpod_mounted_text.setVisible(0);
+        m.irst_pod_mounted_text.setVisible(0);
+        m.ecm_pod_mounted_text.setVisible(0);
 
         return m;
     },
@@ -1439,12 +1505,13 @@ var LAD_Device = {
 
 var LADCanvas = nil;
 var update_loop_lad = nil;
+var epawss_contacts = [];
 
 # Utilities
 var deviation_normdeg = func(our_heading, target_bearing) {
-	var dev_norm = target_bearing-our_heading;
+    var dev_norm = target_bearing-our_heading;
     dev_norm=geo.normdeg180(dev_norm);
-	return dev_norm;
+    return dev_norm;
 }
 
 var ellipse_clamp = func(x_move, y_move, mode=0) {  # Used to clamp an object if it's outside the HSD great circle's ellipse
@@ -1767,6 +1834,19 @@ update_lad = func() {
             LADCanvas.HSDScreenCircles.setTranslation((8192/3)*2,0);
         } else {
             HSD_ON = 0;
+        }
+        
+        if (main_screens.left == "PACS") {
+            PACS_ON = 1;
+            LADCanvas.PACSScreen.setTranslation(0,620);  # Default position's position for the left main screen
+        } elsif (main_screens.center == "PACS") {
+            PACS_ON = 1;
+            LADCanvas.PACSScreen.setTranslation(8192/3,620);
+        } elsif (main_screens.right == "PACS") {
+            PACS_ON = 1;
+            LADCanvas.PACSScreen.setTranslation((8192/3)*2,620);
+        } else {
+            PACS_ON = 0;
         }
 
         ## VSD Updates
@@ -2656,9 +2736,35 @@ update_lad = func() {
             }
             
             # Process the EPAWSS contacts
+            var epawss_contacts_instant = [];
             var epawss_idx = 0;
             foreach (contact ; awg_9.tgts_list) {
                 if (contact.get_EPAWSS_visible()) {
+                    append(epawss_contacts_instant, contact);
+                    already_on_epawss = 0;
+                    foreach(threat; epawss_contacts) {
+                        if (threat != nil and threat.get_Callsign() == contact.get_Callsign()) {
+                            already_on_epawss = 1;
+                        }
+                    }
+                    if (already_on_epawss == 0) {
+                        continue_process = 0;
+                        if (datalink.get_data(contact.get_Callsign()) != nil and (!datalink.get_data(contact.get_Callsign()).is_friendly() or !datalink.get_data(contact.get_Callsign()).on_link())) {
+                            continue_process = 1;
+                        } elsif (datalink.get_data(contact.get_Callsign()) == nil) {
+                            continue_process = 1;
+                        }
+                        
+                        if (continue_process == 1) {
+                            setprop("sim/model/f15/epawss/new-threat", 1);
+                            append(epawss_contacts, contact);
+                            settimer (func { setprop("sim/model/f15/epawss/new-threat", 0); }, 1);
+                            
+                        }
+                    }
+                
+                    # Just determine whether we should play the warning sound for when a new threat is detected
+                
                     already_on_rdr = 0;  # if its' on our radar, we don't display it.
                     foreach(rdrcontact ; valid_radar_targets) {
                         if (rdrcontact == contact.get_Callsign()) {
@@ -2706,6 +2812,18 @@ update_lad = func() {
                             epawss_idx += 1;
                         }
                     }
+                }
+            }
+            
+            for(var nv = 0; nv < size(epawss_contacts); nv += 1) {
+                found = 0;
+                foreach(instant_contact; epawss_contacts_instant) {
+                    if (instant_contact != nil and epawss_contacts[nv] != nil and instant_contact.get_Callsign() == epawss_contacts[nv].get_Callsign()) {
+                        found = 1;
+                    }
+                }
+                if (found == 0) {
+                    epawss_contacts[nv] = nil;
                 }
             }
             
@@ -2770,7 +2888,6 @@ update_lad = func() {
                         circle_color = prst_marron;
                     }
                     
-                    print(circle_range+circle_radius);
                     if (circle_range+circle_radius*1.5 < getprop("instrumentation/radar/radar2-range") * 1.25) {  # If it perfectly fits into the HSD great circle
                         
                         LADCanvas.HSDScreenCircles.createChild("path")
@@ -2849,6 +2966,715 @@ update_lad = func() {
             LADCanvas.HSDScreen.setVisible(0);
             LADCanvas.HSDScreenLines.setVisible(0);
             LADCanvas.HSDScreenCircles.setVisible(0);
+        }
+        
+        
+        # PACS Updates
+        if (PACS_ON == 1) {
+            LADCanvas.PACSScreen.setVisible(1);
+            
+            # Shared updates:
+            pacs_mode_str = "";
+            
+            if (getprop("sim/model/f15/controls/armament/weapon-selector") == 5) {  # Automatically switch to A/G when weapon selected is A/G
+                LADCanvas.PACSmode = 1;
+            } else {  # otherwise, switch back to A/A
+                LADCanvas.PACSmode = 0;
+            }
+            
+            if (LADCanvas.PACSmode == 0) {
+                pacs_mode_str = "A/A";
+            } elsif (LADCanvas.PACSmode == 1) {
+                pacs_mode_str = "A/G";
+            } elsif (LADCanvas.PACSmode == 2) {
+                pacs_mode_str = "JETT";
+            }
+            LADCanvas.pacs_mode_text.setText(pacs_mode_str);
+
+            LADCanvas.pacs_chaff.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
+            LADCanvas.pacs_flare.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[6]/count")));
+            
+            LADCanvas.pacs_rounds.setText(sprintf("ROUNDS %03d", getprop("sim/model/f15/systems/gun/rounds")));
+
+            tank_center_text = "OUT";
+            tank_right_text = "OUT";
+            tank_left_text = "OUT";
+
+            tank_mounted_center = getprop("consumables/fuel/tank[7]/capacity-gal_us") != 0;
+            tank_mounted_right = getprop("consumables/fuel/tank[6]/capacity-gal_us") != 0;
+            tank_mounted_left = getprop("consumables/fuel/tank[5]/capacity-gal_us") != 0;
+            
+            if (tank_mounted_center) {
+                tank_center_text = sprintf("%05d lbs", getprop("consumables/fuel/tank[7]/level-lbs"));
+            }
+            if (tank_mounted_right) {
+                tank_right_text = sprintf("%05d lbs", getprop("consumables/fuel/tank[6]/level-lbs"));
+            }
+            if (tank_mounted_left) {
+                tank_left_text = sprintf("%05d lbs", getprop("consumables/fuel/tank[5]/level-lbs"));
+            }
+
+            LADCanvas.pacs_fuel_amount_left.setText(sprintf("L %s", tank_left_text));
+            LADCanvas.pacs_fuel_amount_center.setText(sprintf("C %s", tank_center_text));
+            LADCanvas.pacs_fuel_amount_right.setText(sprintf("R %s", tank_right_text));
+            
+            LADCanvas.navpod_mounted_text.setVisible(getprop("/sim/model/f15/stores/nav-mounted"));
+            LADCanvas.tpod_mounted_text.setVisible(getprop("sim/model/f15/stores/tgp-mounted"));
+            LADCanvas.irst_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/irst-mounted"));
+            LADCanvas.ecm_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/ecm-mounted"));
+            
+            # A/A mode updates
+            
+            if (LADCanvas.PACSmode == 0) {  # A/A
+                
+                LADCanvas.pacs_arm_1.setVisible(1);
+                LADCanvas.pacs_arm_2.setVisible(1);
+                LADCanvas.pacs_arm_3.setVisible(1);
+                LADCanvas.pacs_arm_1.setText(sprintf("SRM %02d", getprop("sim/model/f15/systems/armament/aim9/count")));
+                LADCanvas.pacs_arm_2.setText(sprintf("AAM %02d", getprop("sim/model/f15/systems/armament/aim120/count")));
+                LADCanvas.pacs_arm_3.setText(sprintf("GRND %02d", getprop("sim/model/f15/systems/armament/agm/count")));
+                LADCanvas.pacs_arming_time.setVisible(0);
+            
+                weapon_selector = getprop("sim/model/f15/controls/armament/weapon-selector");  # 0-guns,1-srm,2-amraam,5-ground
+                master_arm = getprop("sim/model/f15/controls/armament/master-arm-switch");
+                if (weapon_selector == 1) {
+                    if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon() == "AIM-9X") {
+                        LADCanvas.aim9_cool_box.setVisible(pylons.fcs.getSelectedWeapon().isCooling);
+                    } else {
+                        LADCanvas.aim9_cool_box.setVisible(0);
+                    }
+                    LADCanvas.aim9_cool_text.setVisible(1);
+                } else {
+                    LADCanvas.aim9_cool_box.setVisible(0);
+                    LADCanvas.aim9_cool_text.setVisible(0);
+                }
+            
+                foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
+                    loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+                    
+                    if (loaded_type == "AIM-9X") {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                        if (getprop("payload/armament/station/id-"~pylon_idx~"-set") != "2 x AIM-9X Block I Sidewinder") {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AIM9X");
+                        } else {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2AIM9X");
+                        }
+                        if (weapon_selector == 1) {
+                            if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                        } else {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("SRM");
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                        }
+                    } elsif (loaded_type == "AIM-120D") {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                        if (getprop("payload/armament/station/id-"~pylon_idx~"-set") != "2 x AIM-120D AMRAAM") {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("A120D");
+                        } else {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2A120D");
+                        }
+                        if (weapon_selector == 2) {
+                            if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                        } else {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("AAM");
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                        }
+                    } else {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                    }
+                }
+            } elsif (LADCanvas.PACSmode == 1) {  # A/G mode updates
+
+                LADCanvas.aim9_cool_box.setVisible(0);
+                LADCanvas.aim9_cool_text.setVisible(0);
+                LADCanvas.pacs_arm_1.setVisible(1);
+                LADCanvas.pacs_arm_2.setVisible(1);
+                LADCanvas.pacs_arm_3.setVisible(1);
+                LADCanvas.pacs_arm_1.setText(sprintf("SRM %02d", getprop("sim/model/f15/systems/armament/aim9/count")));
+                LADCanvas.pacs_arm_2.setText(sprintf("AAM %02d", getprop("sim/model/f15/systems/armament/aim120/count")));
+                
+                # Timer for the time till armed
+                LADCanvas.pacs_arming_time.setVisible(1);
+                weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
+                if (weap != nil) {
+                    if (weap.ready_time != 0) { # Only if the weapon has a ready timer
+                        curr_time = getprop("sim/time/elapsed-sec");
+                        standby_time = weap.ready_standby_time;  # time at which the weapon started readyin process
+                        if (curr_time > (standby_time + weap.ready_time)) {  # weapon's ready
+                            LADCanvas.pacs_arming_time.setText("ARMED");
+                        } else {
+                            timer = math.round((standby_time + weap.ready_time) - curr_time);
+                            timer_sec = timer;
+                            timer_min = math.floor(timer / 60);
+                            if (timer_min > 0) {
+                                timer_sec = timer_sec - timer_min * 60;
+                            }
+                            LADCanvas.pacs_arming_time.setText(sprintf("STBY %02d:%02d", timer_min, timer_sec));
+                        }
+                    } else {
+                        LADCanvas.pacs_arming_time.setText("ARMED");
+                    }
+                } else {
+                    LADCanvas.pacs_arming_time.setText("STANDBY");
+                }
+
+                weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
+                if (weapon_type != nil and weapon_type != "") {  # additonnaly display the current ground weapon's count along the total ground ordnance count
+                    LADCanvas.pacs_arm_3.setText(sprintf("%2d/%2d GRND", pylons.fcs.getAmmoOfType(weapon_type), getprop("sim/model/f15/systems/armament/agm/count")));
+                } else {
+                    LADCanvas.pacs_arm_3.setText(sprintf("%2d GRND", getprop("sim/model/f15/systems/armament/agm/count")));
+                }
+                
+                weapon_selector = getprop("sim/model/f15/controls/armament/weapon-selector");  # 0-guns,1-srm,2-amraam,5-ground
+                master_arm = getprop("sim/model/f15/controls/armament/master-arm-switch");
+            
+                foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
+                    loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+                    
+                    if (loaded_type == "AGM-65B") {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                        if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "2 x AGM-65B") {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2AG65B");
+                        } elsif (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x AGM-65B") {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3AG65B");
+                        } else {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG65B");
+                        }
+                        if (weapon_selector == 5) {
+                            if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                        } else {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("MAV");
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                        }
+                    } elsif (loaded_type == "AGM-65D") {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                        if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "2 x AGM-65D") {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2AG65D");
+                        } elsif (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x AGM-65D") {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3AG65D");
+                        } else {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG65D");
+                        }
+                        if (weapon_selector == 5) {
+                            if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                        } else {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("MAV");
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                        }
+                    } elsif (loaded_type == "AGM-84D") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG84D");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("HARP");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AGM-84E") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG84E");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("SLAM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AGM-88E") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG88E");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("HARM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AGM-119A") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG119A");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("PENG");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AGM-154A") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG154A");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("JSOW");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AGM-158A") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG158A");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("JASSM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AGM-158C") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG158C");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("LRSAM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AGM-158C") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG158C");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("LRASM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "AN/ALQ-184(V) ECM Pod") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("ECM184");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("ECM184");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "CBU-87") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x CBU-87") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3CBU87");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("CBU87");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("CEM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "CBU-105") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "2 x CBU-105") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2CBU105");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("CBU105");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("SFW");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "GBU-12") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x GBU-12") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3GBU12");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("GBU12");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("PAVWY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "GBU-31") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("GBU31");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("JDAM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "GBU-32") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "2 x GBU-32") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2GBU32");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("GBU32");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("JDAM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "GBU-39") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "4 x GBU-39") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("4GBU39");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("GBU39");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("SDB");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "GBU-54") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "2 x GBU-54") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2GBU54");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("GBU54");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("LZJADM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "GBU-54") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "2 x GBU-54") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2GBU54");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("GBU54");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("LZJADM");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "M151" or loaded_type == "LAU-68C") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x M151") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3M151");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("M151");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("HYD");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "MK-82") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x MK-82") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3MK82");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("MK82");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("MK82");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "MK-82AIR") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x MK-82AIR") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3MKAIR");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("MKAIR");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("MKAIR");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "MK-83") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "3 x MK-83") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("3MK83");
+                            } else {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("MK83");
+                            }
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("MK83");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                    } elsif (loaded_type == "MK-84") {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("MK84");
+                            if (weapon_selector == 5) {
+                                if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                                } else {
+                                    LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                    LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                    LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                                }
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("MK84");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                  } else {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                  }
+                }
+            }
+        } else {
+            LADCanvas.PACSScreen.setVisible(0);
         }
     }
 }

@@ -1629,7 +1629,7 @@ else
 		me.Behind_terrain.setBoolValue(n);
 	},
 	get_EPAWSS_visible : func() {
-	    return contact.get_range() <= getprop("instrumentation/radar/radar2-range") and (contact.get_RWR_visible() or contact.isRadiating(geo.aircraft_position()) or contact.isSpikingMe());
+	    return me.get_range() <= getprop("instrumentation/radar/radar2-range") and (me.get_RWR_visible() or me.isRadiating(geo.aircraft_position()) or me.isSpikingMe());
 	},
 	get_RWR_visible : func() {
 		return me.RWRVisible.getValue();

@@ -175,7 +175,7 @@ update = func() {
         if (current_fuel_lbs == nil) {  # at sim startup, the values are null so that fixes errors printing, even though it doesn't prevent the thing to run properly after that
             current_fuel_lbs = 12000;
         }
-        if (current_fuel_lbs == nil) {
+        if (volume_percent == nil) {
             volume_percent = 100;
         }
         total_fuel_gal = getprop("consumables/fuel/tank[0]/capacity-gal_us") + getprop("consumables/fuel/tank[1]/capacity-gal_us") + getprop("consumables/fuel/tank[2]/capacity-gal_us") + getprop("consumables/fuel/tank[3]/capacity-gal_us") + getprop("consumables/fuel/tank[4]/capacity-gal_us") + getprop("consumables/fuel/tank[5]/capacity-gal_us") + getprop("consumables/fuel/tank[6]/capacity-gal_us") + getprop("consumables/fuel/tank[7]/capacity-gal_us") + getprop("consumables/fuel/tank[8]/capacity-gal_us") + getprop("consumables/fuel/tank[9]/capacity-gal_us");
@@ -223,6 +223,6 @@ update = func() {
     }
 }
 
-EHDCanvas = EHD_Device.new({"node": "EnginesDImage"});
+EHDCanvas = EHD_Device.new({"node": "EHDImage"});
 update_loop_ehd = maketimer(.1, update);
 update_loop_ehd.start();
