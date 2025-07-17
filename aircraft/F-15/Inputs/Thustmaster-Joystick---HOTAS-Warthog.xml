@@ -244,24 +244,15 @@
     <binding>
       <command type="string">nasal</command>
       <script type="string">
-           
-              if (getprop("fdm/jsbsim/fcs/steer-maneuver"))
-              {
-                  gui.popupTip("Maneuver NWS disabled");
-                  setprop("fdm/jsbsim/fcs/steer-maneuver",0)
-              }
-              else
-              {
-                  gui.popupTip("Maneuver NWS enabled");
-                  setprop("fdm/jsbsim/fcs/steer-maneuver",1)
-              }
-          
+        setprop("fdm/jsbsim/fcs/steer-maneuver",1);
       </script>
-      <module type="string">__js0</module>
-      <offset type="double">1</offset>
     </binding>
     <mod-up>
       <binding type="string">
+        <command type="string">nasal</command>
+          <script type="string">
+            setprop("fdm/jsbsim/fcs/steer-maneuver",0);
+          </script>
       </binding>
     </mod-up>
   </button>
