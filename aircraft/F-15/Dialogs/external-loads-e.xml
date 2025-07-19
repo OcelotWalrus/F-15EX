@@ -1758,10 +1758,6 @@
                             <property>payload/weight[12]/selected</property>
                             <live>true</live>
                             <value>Empty</value>
-                            <value>2 x CATM-9X Sidewinder Dummy</value>
-                            <value>2 x CATM-120D AMRAAM Dummy</value>
-                            <value>2 x AIM-9X Block I Sidewinder</value>
-                            <value>2 x AIM-120D AMRAAM</value>
                             <value>2 x AGM-65B</value>
                             <value>2 x AGM-65D</value>
                             <value>1 x AGM-84D</value>
@@ -2583,10 +2579,6 @@
 							<property>payload/weight[15]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
-                            <value>2 x CATM-9X Sidewinder Dummy</value>
-                            <value>2 x CATM-120D AMRAAM Dummy</value>
-							<value>2 x AIM-9X Block I Sidewinder</value>
-							<value>2 x AIM-120D AMRAAM</value>
                             <value>2 x AGM-65B</value>
                             <value>2 x AGM-65D</value>
                             <value>1 x AGM-84D</value>

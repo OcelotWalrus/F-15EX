@@ -742,7 +742,7 @@ var air_sup = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.aim120dw);
-		pylonex1b.loadSet(pylonSets.doubleaim120d);
+		pylonex1b.loadSet(pylonSets.empty);
 		pylonex1c.loadSet(pylonSets.aim120dw);
 
 		pylon2a.loadSet(pylonSets.aim120dw);
@@ -762,7 +762,7 @@ var air_sup = func {
 		pylon8c.loadSet(pylonSets.aim120dw);
 
 		pylonex2a.loadSet(pylonSets.aim120dw);
-		pylonex2b.loadSet(pylonSets.doubleaim120d);
+		pylonex2b.loadSet(pylonSets.empty);
 		pylonex2c.loadSet(pylonSets.aim120dw);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
@@ -777,11 +777,11 @@ var air_sup = func {
 
         reloadCannon();
 
-		setprop("payload/weight[12]/selected","2 x AIM-120D AMRAAM");
+		setprop("payload/weight[12]/selected","Empty");
 		setprop("payload/weight[1]/selected","2 x AIM-120D AMRAAM");
         setprop("payload/weight[5]/selected","Droptank");
         setprop("payload/weight[9]/selected","2 x AIM-120D AMRAAM");
-		setprop("payload/weight[15]/selected","2 x AIM-120D AMRAAM");
+		setprop("payload/weight[15]/selected","Empty");
 
         setprop("consumables/fuel/tank[5]/selected",0);
         setprop("consumables/fuel/tank[6]/selected",0);
@@ -860,7 +860,7 @@ var defensive_counter_str = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.aim120dw);
-		pylonex1b.loadSet(pylonSets.doubleaim120d);
+		pylonex1b.loadSet(pylonSets.empty);
 		pylonex1c.loadSet(pylonSets.aim120dw);
 
 		pylon2a.loadSet(pylonSets.aim9xw);
@@ -880,7 +880,7 @@ var defensive_counter_str = func {
 		pylon8c.loadSet(pylonSets.aim9xw);
 
 		pylonex2a.loadSet(pylonSets.aim120dw);
-		pylonex2b.loadSet(pylonSets.doubleaim120d);
+		pylonex2b.loadSet(pylonSets.empty);
 		pylonex2c.loadSet(pylonSets.aim120dw);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
@@ -895,11 +895,11 @@ var defensive_counter_str = func {
 
         reloadCannon();
 
-		setprop("payload/weight[12]/selected","2 x AIM-120D AMRAAM");
+		setprop("payload/weight[12]/selected","Empty");
 		setprop("payload/weight[1]/selected","2 x AIM-9X Block I Sidewinder");
         setprop("payload/weight[5]/selected","Droptank");
         setprop("payload/weight[9]/selected","2 x AIM-9X Block I Sidewinder");
-		setprop("payload/weight[15]/selected","2 x AIM-120D AMRAAM");
+		setprop("payload/weight[15]/selected","Empty");
 
         setprop("consumables/fuel/tank[5]/selected",0);
         setprop("consumables/fuel/tank[6]/selected",0);
