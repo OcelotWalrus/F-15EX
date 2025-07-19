@@ -37,6 +37,9 @@
 # incorrect, when used alongside translations (when applying a translation AND a rotation to an object).
 # ---------------------------
 # Future features (TODO's) :
+# //General// :
+# - Readability must be improved: some texts and symbology are kinda small, and their color don't help to, making them hard to read
+# without leaning onto them.
 # //VSD Display// :
 # - Use different symbols for SAMs, AAAs and ships contacts
 # - Differentiate evading, "neutral" and incoming contacts using different
@@ -61,6 +64,7 @@
 # - Show steerpoints that are clamped differently so they can be acknowledged
 # - Add the DLZ (Dynamic Launch Zone), to complement the closing speed
 # //PACS Display// :
+# - Allow weapons to be programmed when you click on 'em.
 # - Add the Jettison page (waiting for the interiors to finish because there are switches that configure jettison in there.
 # ---------------------------
 # Author: Jimmy L. Miles
@@ -141,8 +145,8 @@ var typeLookup = { # database of known radar signatures
 };
 
 # Preset Colors
-var prst_black = {"r": 0, "g": 0, "b": .015};
-var prst_white = {"r": .98, "g": .98, "b": .98};
+var prst_black = {"r": 0, "g": 0, "b": 0};
+var prst_white = {"r": 1, "g": 1, "b": 1};
 var prst_green = {"r": 0, "g": 255 / 255, "b": 58 / 255};
 var prst_yellow = {"r": 234 / 255, "g": 255 / 255, "b": 0 / 255};
 var prst_yellow_dark = {"r": 94 / 255, "g": 105 / 255, "b": 0 / 255};  # 2.5 times darker than regular yellow
@@ -2395,6 +2399,7 @@ update_lad = func() {
                         if (stpt_idx != 0) {  # If we got a former steerpoint (only stpt 0 don't got none)
                             var former_x_move = x_move;
                             var former_y_move = y_move;
+                            var former_wpC = wpC;
                             draw_line = 1;
                         }
                     
@@ -2437,7 +2442,7 @@ update_lad = func() {
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
                                         .setFontSize(42, 1.4)
-                                        .setText(sprintf("N %02.1f", -wprng))
+                                        .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))
                                         .setAlignment("center-center")
                                         .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
                                         .setTranslation(text_dir[0],text_dir[1])
@@ -2463,7 +2468,7 @@ update_lad = func() {
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
                                         .setFontSize(35, 1.4)
-                                        .setText(sprintf("N %02.1f", -wprng))
+                                        .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))  # distance from former steerpoint to current steerpoint.
                                         .setAlignment("center-center")
                                         .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
                                         .setTranslation(text_dir[0],text_dir[1])
@@ -2642,7 +2647,7 @@ update_lad = func() {
                             contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
                             contact_bearing = geo.aircraft_position().course_to(contact_coord);
                             contact_elevation = vector.Math.getPitch(geo.aircraft_position(), contact_coord);
-                            contact_heading = getprop("/ai/models/multiplayer["~me.index~"]/orientation/true-heading-deg");
+                            contact_heading = getprop("/ai/models/multiplayer["~contact_idx~"]/orientation/true-heading-deg");
                             contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
                             contact_range = contact_coord.direct_distance_to(geo.aircraft_position()) * M2NM;
                             if (contact_data == nil or !contact_data.is_known()) {
