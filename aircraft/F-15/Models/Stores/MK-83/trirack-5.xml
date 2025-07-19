@@ -12,7 +12,7 @@
         <y-m>-0.48223</y-m>
         <z-m>-0.19419</z-m>
         <pitch-deg>0</pitch-deg>
-        <roll-deg>90</roll-deg>
+        <roll-deg>-45</roll-deg>
       </offsets>
     </model>
 
@@ -24,7 +24,7 @@
         <y-m>0</y-m>
         <z-m>-0.54412</z-m>
         <pitch-deg>0</pitch-deg>
-        <roll-deg>180</roll-deg>
+        <roll-deg>0</roll-deg>
       </offsets>
     </model>
 
@@ -36,7 +36,7 @@
         <y-m>0.48223</y-m>
         <z-m>-0.19419</z-m>
         <pitch-deg>0</pitch-deg>
-        <roll-deg>-90</roll-deg>
+        <roll-deg>45</roll-deg>
       </offsets>
     </model>
 

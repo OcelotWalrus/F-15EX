@@ -198,6 +198,13 @@ update = func() {
         left_percentage = left_level / left_capacity;
         right_percentage = right_level / right_capacity;
         center_percentage = internal_level / interal_capacity;
+        
+        if (left_percentage == nil) {
+            left_percentage = 0;
+        }
+        if (right_percentage == nil) {
+            right_percentage = 0;
+        }
 
         EHDCanvas.center_tank_full.setTranslation(0,(1 - center_percentage) * 87.349);
         EHDCanvas.left_tank_full.setTranslation(0,(1 - left_percentage) * 87.349);

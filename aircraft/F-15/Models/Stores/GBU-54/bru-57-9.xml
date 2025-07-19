@@ -12,7 +12,6 @@
         <y-m>-0.3</y-m>
         <z-m>-0.389</z-m>
         <pitch-deg>0</pitch-deg>
-        <roll-deg>180</roll-deg>
       </offsets>
     </model>
 
@@ -24,7 +23,6 @@
         <y-m>0.3</y-m>
         <z-m>-0.389</z-m>
         <pitch-deg>0</pitch-deg>
-        <roll-deg>180</roll-deg>
       </offsets>
     </model>
 
