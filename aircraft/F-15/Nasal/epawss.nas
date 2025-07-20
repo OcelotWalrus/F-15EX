@@ -1,0 +1,256 @@
+# F-15EX EPAWSS (Eagle Passive Active Warning Survivability System)
+# ---------------------------
+# The EPAWSS is the Eagle II's TEWS passive radar that detects airborne, ground or ship-based
+# radars, identifies them as threats or not, filter threats to give the pilot which threat
+# is the primary at the situation, detects missile launches and airborne missile activities.
+# ---------------------------
+# Available Functions :
+# ---------------------------
+# Stats:
+# - The EPAWSS' range is said to be 222 km, which is 120 NM.
+# ---------------------------
+# Notes :
+# - For optimization concerns, we run the targets' update loop every .5 secondes, but it's actually
+# ran only if a model was added or removed in the sim.
+# - Aspects of the code such as the contacts list update is parts of the awg_9.nas's own update function.
+# - The awg_9.nas's Target class is reused by the EPAWSS.
+# - How the EPAWSS sorts threats is in the following way: different conditions add up points. The contact with the most points is defined as primary threat.
+#  supreme level - an approaching missile - + 9999 (overrides anything else. if they're multiple, we take the one with the biggest closure rate / dist ratio)
+#  1st level - a traget that we've detected launching a missile less than 5 mins ago - +100
+#  2nd level - if the threat's spiking us - +75
+#  3rd level - if the threat's ECM signal is of the highest norm (ECM norm 1) + 50
+#  4th level - if the threat's ECM signal is higher than 3 (ECM norm 2) + 25
+#  5th level - if the threat's a SAM or an AAA (but not necessarily locking us) + 10
+#  6th level - if the threat's heading toward us + 40 (-1 points per degree away from us in bearing)
+#  7th level - if it's an AEW&C + 10
+#  and also: -1/2 points per 1 NM of distance between the aircraft and the EPAWSS contact.
+#  and also: +10 points per 25 kts of closure rate. (ratio so it's actually 2.5 points per 1 kt of closure rate, can remove points if closure rate is negative)
+# ---------------------------
+# Future features (TODO's) :
+# ---------------------------
+# Author: Jimmy L. Miles
+# ---------------------------
+
+# Constants
+var epawss_range = 120;  # 120 NM
+var scan_update_tgt_list = 0;  # boolean
+var contacts_list = [];
+var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);
+
+var AIR = 0;
+var MARINE = 1;
+var SURFACE = 2;
+var ORDNANCE = 3;
+
+var knownShips = {
+    "missile_frigate":       nil,
+    "frigate":       nil,
+    "fleet":       nil,
+    "USS-LakeChamplain":     nil,
+    "USS-NORMANDY":     nil,
+    "USS-OliverPerry":     nil,
+    "USS-SanAntonio":     nil,
+};
+
+var knownSurface = {
+    "buk-m2":       nil,
+    "s-300":       nil,
+    "gci":       nil,
+    "depot":       nil,
+    "truck":     nil,
+    "tower":     nil,
+    "S-75":     nil,
+    "S-200":    nil,
+    "S-300":     nil,
+    "MIM104D":    nil,
+    "s300":        nil,
+    "SA-6":        nil,
+    "SA-3":            nil,
+    "MIM-104D":      nil,
+    "zsu-23":      nil,
+    "ZSU-IR":       nil,
+};
+
+# Listeners
+setlistener("/ai/models/model-added", func(v){
+    if (!scan_update_tgt_list) {
+        scan_update_tgt_list = 1;
+    }
+});
+
+setlistener("/ai/models/model-removed", func(v){
+    if (!scan_update_tgt_list) {
+        scan_update_tgt_list = 1;
+    }
+});
+
+setlistener("instrumentation/radar/radar-filter-mode", func(v){
+    if (!scan_update_tgt_list) {
+        scan_update_tgt_list = 1;
+    }
+});
+
+# API Functions
+
+var update_epawss_contacts = func() {  # computes the list of contacts of the EPAWSS
+
+	our_true_heading = getprop("orientation/heading-deg");
+	our_alt = getprop("position/altitude-ft");
+
+	# Reset nearest_range score
+	nearest_u = tmp_nearest_u;
+	nearest_rng = tmp_nearest_rng;
+	tmp_nearest_rng = nil;
+	tmp_nearest_u = nil;
+
+    if (scan_update_tgt_list and EpawssOn.getValue())  # we only update if a listener has been set off and the Epawss is online
+    {
+		scan_update_tgt_list = 0;
+        contacts_list = [];
+
+        var raw_list = Mp.getChildren();
+
+        foreach( var c; raw_list )
+        {
+            var type = c.getName();
+
+            if (c.getNode("valid") == nil or !c.getNode("valid").getValue()) {
+                continue;
+            }
+            var ordnance = 1;
+            if (c.getNode("missile") == nil or !c.getNode("missile").getValue()) {
+                # a little superflous atm. since the typecheck below will filter out ordnance. Their type look like: aim-9 or agm-88 etc etc.
+                ordnance = 0;
+            }
+            if (type == "multiplayer" or type == "tanker" or type == "aircraft" or type == "carrier"
+                or type == "ship" or type == "groundvehicle" or type=="daVinci_SU-34" or type=="F-15EX")   # daVinci_SU-34 and F-15EX are for the training scenario bot
+            {
+                var u = awg_9.Target.new(c);  # we reuse the radar's target class
+
+                var u_rng = u.get_range();
+                if (ordnance) {
+                    u.setClass(ORDNANCE);
+                } elsif (type == "tanker" or type == "aircraft") {
+                    u.setClass(AIR);
+                } elsif (type=="carrier") {
+                    u.setClass(MARINE);
+                } elsif (type=="groundvehicle") {
+                    u.setClass(SURFACE);
+                } else {
+                    # multiplayer or ship:
+                    var mdl = u.get_model();
+                    if (contains(knownSurface,mdl)) {
+                        u.setClass(SURFACE);
+                    } elsif (contains(knownShips,mdl)) {
+                        u.setClass(MARINE);
+                    } elsif (u.get_altitude() < 1.5 and u.get_altitude() > -1.5) {
+                        u.setClass(MARINE);
+                    } elsif (u.get_Speed() < 60) {
+                        u.setClass(SURFACE);
+                    }
+                    # notice the default class is set to AIR
+                }
+            }
+        }
+        scan_update_visibility = 1;
+        contacts_list = sort (contacts_list, func (a,b) {a.get_range()-b.get_range()});
+
+    }
+    var idx = 0;
+
+    for (var scan_tgt_idx = 0;scan_tgt_idx < size(contacts_list); scan_tgt_idx += 1) {
+
+        u = contacts_list[scan_tgt_idx];
+
+		var u_display = 0;
+		var u_fading = u.get_fading() - fading_speed;
+        var u_rng = u.get_range();
+
+        awg_9.compute_rwr(1, u, u_rng);
+        # Test if target has a radar. Compute if we are illuminated. This propery used by ECM
+        # over MP, should be standardized, like "ai/models/multiplayer[0]/radar/radar-standby".
+
+        if (scan_update_visibility) {
+            # check for visible by EPAWSS taking into account if the contact is
+            # emitting, radiating at our coords, or directly spiking us.
+            u.set_behind_terrain(0);
+            if (!u.get_EPAWSS_visible()) {
+                u.set_visible(0);
+                msg = "out of EPAWSS detection";
+            } else if (TerrainManager.IsVisible(u.propNode,notification) == 0) {
+                msg = "behind terrain";
+                u.set_behind_terrain(1);
+                u.set_visible(0);
+                scan_hidden_by_terrain += 1;
+            } else {
+                msg = "visible";
+                u.set_visible(1);
+            }
+        }
+
+        # if target within range, and not acting (i.e. a RIO/backseat/copilot)
+        if (u_rng != nil and (u_rng < epawss_range  and u.not_acting == 0 )) {
+            u.set_display(1);
+        } else {
+            u.set_display(0);  # don't display backseaters etc.
+        }
+
+        #
+        # if not displayed then we can continue to the next in the list.
+        if (!u.get_display())
+          continue;
+    }
+}
+
+var get_radar_type = func(contact) {  # returns either 0 (airborne radar), 1 (ground radar) or 2 (sea radar).
+    raw_type = contact.get_type();
+    if (raw_type == MARINE) {
+        return 2;
+    } elsif (raw_type == SURFACE) {
+        return 1
+    } else {
+        return 0;
+    }
+}
+
+var determine_primary_threat = func() {  # returns the primary threat's internal callsign. Returns null if there ain't none
+    points_list = {};
+    foreach(u; contacts_list) {
+        if (u.get_visible() and u.get_display()) {  # If it's an actually valid EPAWSS contact
+            points = 0;
+            
+            is_a_missile_approaching = u.getUnique() != nil and u.get_Callsign() != nil and damage.approached[u.get_Callsign()~u.getUnique()] != nil;
+            points += (is_a_missile_approaching and u.get_visible() and u.get_display() and damage.approached[u.get_Callsign()~u.getUnique()] < 300) * 9999 + (u.get_closure_rate()/u.get_range());  # if it's an approaching missile. We also add a ratio closure rate/dist to determine which approaching missile is more threatening if they're multiple detected
+            if (is_a_missile_approaching) {
+                continue;  # go to the next target, skip all below point computing
+            }
+            
+            is_missile_launcher = u.getUnique() != nil and u.get_Callsign() != nil and damage.launched[u.get_Callsign()~u.getUnique()] != nil;
+            points += (is_missile_launcher and u.get_visible() and u.get_display() and damage.launched[u.get_Callsign()~u.getUnique()] < 300) * 100;  # if it's a missile launcher that we've detected (less than 5 mins ago) and it's not hidden by terrain or RCS, we add 100 pts
+            
+            points += u.isSpikingMe() * 75  # 2nd level
+            points += (u.get_Ecm_Signal_Norm() == 1) * 50  # 3nd level
+            points += (u.get_Ecm_Signal_Norm() == 2) * 25  # 4th level
+            
+            is_a_sam_or_aaa = (u.get_model() != nil) and (displays.typeLookup[contact.get_model()] != nil) and (displays.typeLookup[contact.get_model()] == "SAM" or displays.typeLookup[contact.get_model()] == "AAA");  # we're reusing the LAD.nas's typeLookup variable
+            points += is_a_sam_or_aaa * 10;  # 5th level
+            
+            is_approaching = u.isApproaching();  
+            if (is_approaching != nil) {
+                points += 40 - is_approaching;  # 6th level
+            }
+            
+            is_an_awacs = (u.get_model() != nil) and (displays.typeLookup[contact.get_model()] != nil) and (displays.typeLookup[contact.get_model()] == "AEW&C");  # we're reusing the LAD.nas's typeLookup variable
+            points += is_an_awacs * 10;  # 7th level
+            
+            points -= u.get_range() * .5;  # distance reduction
+            points += u.get_closure_rate() * 2.5;  # closure rate increment
+            
+            points_list[u.get_Callsign()~u.getUnique()] = points;
+        }
+    }
+}
+
+# Loops
+update_list_epawss = maketimer(.5, update_epawss_contacts);
+update_list_epawss.start();

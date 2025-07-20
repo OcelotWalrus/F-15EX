@@ -115,7 +115,7 @@ var typeLookup = { # database of known radar signatures
     "A-10":                     "F/B",
     "A-10-model":               "F/B",
     "Typhoon":                  "F/B",
-    "f16":                      "F",
+    "f16":                      "F/B",
     "Tu-95MR":                  "B",
     "Tu-160-Blackjack":         "B",
     "AN-225-Mrija":             "C",#transport
@@ -1497,7 +1497,6 @@ var LAD_Device = {
 
 var LADCanvas = nil;
 var update_loop_lad = nil;
-var epawss_contacts = [];
 
 # Utilities
 var deviation_normdeg = func(our_heading, target_bearing) {
@@ -2715,35 +2714,9 @@ update_lad = func() {
             }
             
             # Process the EPAWSS contacts
-            var epawss_contacts_instant = [];
             var epawss_idx = 0;
-            foreach (contact ; awg_9.tgts_list) {
-                if (contact.get_EPAWSS_visible()) {
-                    append(epawss_contacts_instant, contact);
-                    already_on_epawss = 0;
-                    foreach(threat; epawss_contacts) {
-                        if (threat != nil and threat.get_Callsign() == contact.get_Callsign()) {
-                            already_on_epawss = 1;
-                        }
-                    }
-                    if (already_on_epawss == 0) {
-                        continue_process = 0;
-                        if (datalink.get_data(contact.get_Callsign()) != nil and (!datalink.get_data(contact.get_Callsign()).is_friendly() or !datalink.get_data(contact.get_Callsign()).on_link())) {
-                            continue_process = 1;
-                        } elsif (datalink.get_data(contact.get_Callsign()) == nil) {
-                            continue_process = 1;
-                        }
-                        
-                        if (continue_process == 1) {
-                            setprop("sim/model/f15/epawss/new-threat", 1);
-                            append(epawss_contacts, contact);
-                            settimer (func { setprop("sim/model/f15/epawss/new-threat", 0); }, 1);
-                            
-                        }
-                    }
-                
-                    # Just determine whether we should play the warning sound for when a new threat is detected
-                
+            foreach (contact ; epawss.contacts_list) {
+                if (contact.get_visible() and contact.get_display()) {  # If it's all good
                     already_on_rdr = 0;  # if its' on our radar, we don't display it.
                     foreach(rdrcontact ; valid_radar_targets) {
                         if (rdrcontact == contact.get_Callsign()) {
@@ -2782,27 +2755,15 @@ update_lad = func() {
                             }
                             
                             # We determine whether it's a threat depending on its ECM signal norm, don't know if it's correct or any good
-                            if (1 == 1) {#contact.get_Ecm_Signal_Norm() != nil and contact.get_Ecm_Signal_Norm() >= 1) {
-                                LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setVisible(1);
-                                LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setTranslation(x_move, y_move);
-                            } else {
-                                LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setVisible(0);
-                            }
+                            #if (1 == 1) {#contact.get_Ecm_Signal_Norm() != nil and contact.get_Ecm_Signal_Norm() >= 1) {
+                            #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setVisible(1);
+                            #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setTranslation(x_move, y_move);
+                            #} else {
+                            #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setVisible(0);
+                            #}
                             epawss_idx += 1;
                         }
                     }
-                }
-            }
-            
-            for(var nv = 0; nv < size(epawss_contacts); nv += 1) {
-                found = 0;
-                foreach(instant_contact; epawss_contacts_instant) {
-                    if (instant_contact != nil and epawss_contacts[nv] != nil and instant_contact.get_Callsign() == epawss_contacts[nv].get_Callsign()) {
-                        found = 1;
-                    }
-                }
-                if (found == 0) {
-                    epawss_contacts[nv] = nil;
                 }
             }
             

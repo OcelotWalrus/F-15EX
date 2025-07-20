@@ -1629,7 +1629,7 @@ else
 		me.Behind_terrain.setBoolValue(n);
 	},
 	get_EPAWSS_visible : func() {
-	    return me.get_range() <= getprop("instrumentation/radar/radar2-range") and (me.get_RWR_visible() or me.isRadiating(geo.aircraft_position()) or me.isSpikingMe());
+	    return me.get_range() <= 120 and (me.get_RWR_visible() or me.isRadiating(geo.aircraft_position()) or me.isSpikingMe());
 	},
 	get_RWR_visible : func() {
 		return me.RWRVisible.getValue();
@@ -1859,6 +1859,23 @@ else
 			return 1;
 		}
 		return 0;
+	},
+	isApproaching: func(own_geo_position) {  # Added by Jimmy L. Miles
+	    # Simple but efficient way to determine:
+	    # we check if the target's got their nose pointed on us, with a 30* margin,
+	    # and if they're closing in (positive closing speed).
+	    bearing_to_own = geo.course(me.get_Coord().lat(), me.get_Coord().lon(), own_geo_position.lat(), own_geo_position.lon());
+	    diff = math.abs(bearing_to_own - me.get_heading());
+	    if (diff > 180) {
+            diff = 360 - diff;
+        }
+        
+        if (me.get_closure_rate() > 0 and diff <= 30) {  # it's heading toward us
+            return diff;
+        } else {
+            return nil;
+        }
+        # We return the diff in degrees if it's approaching, else we return null
 	},
     isVirtual: func {
         # used by missile-code

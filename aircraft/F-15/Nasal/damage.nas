@@ -210,8 +210,8 @@ var radar_signatures = {
 
 
 var id2warhead = [];
-var launched = {};# callsign: elapsed-sec
-var approached = {};# callsign: uniqueID
+var launched = {};# callsign: uniqueID
+var approached = {};# callsign: elapsed-sec
 var heavy_smoke = [61,62,63,65,92,96,97,100];
 
 var k = keys(warheads);

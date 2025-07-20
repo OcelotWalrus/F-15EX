@@ -889,6 +889,9 @@
             <f15>
                 <epawss>
                     <new-threat type="bool">false</new-threat>
+                    <scan-id type="int">0</scan-id>
+                    <scan-tgt-count type="int">0</scan-tgt-count>
+                    <epawss-on type="bool">false</epawss-on>
                 </epawss>
                 <effects>
                     <rust type="bool">true</rust>
@@ -5036,6 +5039,9 @@
         <knee>
             <file>Aircraft/F-15/Nasal/kneeboards.nas</file>
         </knee>
+        <epawss>
+            <file>Aircraft/F-15/Nasal/epawss.nas</file>
+        </epawss>
         <aircraft>
             <file>Aircraft/F-15/Nasal/liveries.nas</file>
             <file>Aircraft/F-15/Nasal/aircraft-main.nas</file>
