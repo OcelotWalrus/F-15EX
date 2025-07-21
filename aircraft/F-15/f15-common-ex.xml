@@ -2754,7 +2754,7 @@
                 <DLZ-optimal-closing-mach type="double">2.0</DLZ-optimal-closing-mach> <!-- TODO: Check this -->
                 <seeker-beam-width-deg type="double">3.5</seeker-beam-width-deg><!-- source: CNATRA P-825 --> <!-- TODO: Check this -->
                 <reaquire type="bool">false</reaquire>
-                <lock-on-after-launch type="bool">false</lock-on-after-launch> <!-- TODO: Do we want loal? -->
+                <lock-on-after-launch type="bool">true</lock-on-after-launch> <!-- TODO: Do we want loal? -->
                 <auto-switch-target-allowed type="bool">false</auto-switch-target-allowed>
                 <prowl-flight type="string">gyro-pitch</prowl-flight>
                 <switch-time-sec type="double">5</switch-time-sec>
