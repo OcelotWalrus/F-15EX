@@ -1,13 +1,13 @@
 # F-15EX EPAWSS (Eagle Passive Active Warning Survivability System)
 # ---------------------------
-# The EPAWSS is the Eagle II's TEWS passive radar that detects airborne, ground or ship-based
+# The EPAWSS is the Eagle II's RWR that detects airborne, ground or ship-based
 # radars, identifies them as threats or not, filter threats to give the pilot which threat
 # is the primary at the situation, detects missile launches and airborne missile activities.
 # ---------------------------
 # Available Functions :
 # ---------------------------
 # Stats:
-# - The EPAWSS' range is said to be 222 km, which is 120 NM.
+# - The EPAWSS' range is said to be 222 km, which is 120 NM. That includes detection of radars and missile launches.
 # ---------------------------
 # Notes :
 # - For optimization concerns, we run the targets' update loop every .5 secondes, but it's actually
@@ -27,6 +27,8 @@
 #  and also: +10 points per 25 kts of closure rate. (ratio so it's actually 2.5 points per 1 kt of closure rate, can remove points if closure rate is negative)
 # ---------------------------
 # Future features (TODO's) :
+# - For the AI light and its sound, move it from the awg_9.nas to the epawss.nas file, and check if it's a friendly or not
+# - Add a sound when there's an incoming missile
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
@@ -34,8 +36,11 @@
 # Constants
 var epawss_range = 120;  # 120 NM
 var scan_update_tgt_list = 0;  # boolean
+var contacts_list_callsigns = [];
+var former_contacts_list_callsigns = [];
 var contacts_list = [];
 var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);
+var Mp = props.globals.getNode("ai/models");
 
 var AIR = 0;
 var MARINE = 1;
@@ -94,18 +99,10 @@ setlistener("instrumentation/radar/radar-filter-mode", func(v){
 
 var update_epawss_contacts = func() {  # computes the list of contacts of the EPAWSS
 
-	our_true_heading = getprop("orientation/heading-deg");
-	our_alt = getprop("position/altitude-ft");
-
-	# Reset nearest_range score
-	nearest_u = tmp_nearest_u;
-	nearest_rng = tmp_nearest_rng;
-	tmp_nearest_rng = nil;
-	tmp_nearest_u = nil;
-
     if (scan_update_tgt_list and EpawssOn.getValue())  # we only update if a listener has been set off and the Epawss is online
     {
 		scan_update_tgt_list = 0;
+		
         contacts_list = [];
 
         var raw_list = Mp.getChildren();
@@ -150,20 +147,20 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
                     }
                     # notice the default class is set to AIR
                 }
+                append(contacts_list, u);
             }
         }
         scan_update_visibility = 1;
         contacts_list = sort (contacts_list, func (a,b) {a.get_range()-b.get_range()});
-
     }
+    
     var idx = 0;
 
+    former_contacts_list_callsigns = contacts_list_callsigns;
     for (var scan_tgt_idx = 0;scan_tgt_idx < size(contacts_list); scan_tgt_idx += 1) {
 
         u = contacts_list[scan_tgt_idx];
 
-		var u_display = 0;
-		var u_fading = u.get_fading() - fading_speed;
         var u_rng = u.get_range();
 
         awg_9.compute_rwr(1, u, u_rng);
@@ -195,10 +192,25 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
             u.set_display(0);  # don't display backseaters etc.
         }
 
-        #
+        if (u.get_display() and u.get_visible()) {
+            append(contacts_list_callsigns, u);
+        }
+
         # if not displayed then we can continue to the next in the list.
         if (!u.get_display())
           continue;
+    }
+    
+    # We go through each current contacts list, and if there's one or multiple that ain't in the former contacts list, we play the new contact sound
+    # Also share our EPAWSS contacts over datalink
+    foreach(contact; contacts_list_callsigns) {
+        if (former_contacts_list_callsigns[u.get_Callsign()] == nil) {
+            setprop("sim/model/f15/epawss/new-threat", 1);
+            settimer(setprop("sim/model/f15/epawss/new-threat", 0), .5);
+        }
+        if (getprop("instrumentation/datalink/sending") == 0) {  # safety, so we ain't overwriting smth that's already being sent over datalink
+            datalink.send_data({"contacts":[{"callsign":u.get_Callsign(),"iff":0}]});
+        }
     }
 }
 
@@ -213,8 +225,8 @@ var get_radar_type = func(contact) {  # returns either 0 (airborne radar), 1 (gr
     }
 }
 
-var determine_primary_threat = func() {  # returns the primary threat's internal callsign. Returns null if there ain't none
-    points_list = {};
+var determine_primary_threat = func() {  # returns the primary threat's internal unique ID and how many points its got in a vector. Returns null if there ain't none
+    points_list = [];
     foreach(u; contacts_list) {
         if (u.get_visible() and u.get_display()) {  # If it's an actually valid EPAWSS contact
             points = 0;
@@ -228,9 +240,9 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
             is_missile_launcher = u.getUnique() != nil and u.get_Callsign() != nil and damage.launched[u.get_Callsign()~u.getUnique()] != nil;
             points += (is_missile_launcher and u.get_visible() and u.get_display() and damage.launched[u.get_Callsign()~u.getUnique()] < 300) * 100;  # if it's a missile launcher that we've detected (less than 5 mins ago) and it's not hidden by terrain or RCS, we add 100 pts
             
-            points += u.isSpikingMe() * 75  # 2nd level
-            points += (u.get_Ecm_Signal_Norm() == 1) * 50  # 3nd level
-            points += (u.get_Ecm_Signal_Norm() == 2) * 25  # 4th level
+            points += u.isSpikingMe() * 75;  # 2nd level
+            points += (u.get_Ecm_Signal_Norm() == 1) * 50;  # 3nd level
+            points += (u.get_Ecm_Signal_Norm() == 2) * 25;  # 4th level
             
             is_a_sam_or_aaa = (u.get_model() != nil) and (displays.typeLookup[contact.get_model()] != nil) and (displays.typeLookup[contact.get_model()] == "SAM" or displays.typeLookup[contact.get_model()] == "AAA");  # we're reusing the LAD.nas's typeLookup variable
             points += is_a_sam_or_aaa * 10;  # 5th level
@@ -246,9 +258,32 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
             points -= u.get_range() * .5;  # distance reduction
             points += u.get_closure_rate() * 2.5;  # closure rate increment
             
-            points_list[u.get_Callsign()~u.getUnique()] = points;
+            data = {};
+            data.unique = u.get_Callsign()~u.getUnique();
+            data.points = points;
+            
+            append(points_list, data);
         }
     }
+    
+    # We go through each in the list, and update the "greatest points" variable if any higher than before
+    max_points_num = 0;
+    max_points = "";
+    var first = 1;
+    foreach(u; points_list) {
+        if (first) {
+            max_points_num = u.points();
+            max_points = u.unique();
+        } else {
+            if (u.points() > max_points_num) {
+                max_points_num = u.points();
+                max_points = u.unique();
+            }
+        }
+        first = 0;
+    }
+    
+    return [max_points, max_points_num];
 }
 
 # Loops

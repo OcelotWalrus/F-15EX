@@ -339,9 +339,8 @@ var rdr_loop = func(notification) {
     # Share all of our radar contacts over datalink
     # On the F-15EX with its AN/APG-82(V)1 AESA radar, targets don't need to be locked on to be tracked,
     # so the whole panel of available radar contacts are sent over to the datalink network
-    # We also share the EPAWSS' contacts over datalink now
     foreach(contact; tgts_list) {
-        if (getprop("instrumentation/datalink/sending") == 0 and (contact.get_display() or contact.get_EPAWSS_visible())) {  # so we're not overwriting a GPS spot that's being sent, safety, not sure that's needed
+        if (getprop("instrumentation/datalink/sending") == 0 and contact.get_display() and contact.get_visible()) {  # so we're not overwriting a GPS spot that's being sent, safety, not sure that's needed
 	       datalink.send_data({"contacts":[{"callsign":contact.get_Callsign(),"iff":0}]});
         }
     }

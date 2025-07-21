@@ -41,6 +41,7 @@
 # - Readability must be improved: some texts and symbology are kinda small, and their color don't help to, making them hard to read
 # without leaning onto them.
 # //VSD Display// :
+# - Display the radar's vertical scan carat
 # - Use different symbols for SAMs, AAAs and ships contacts
 # - Differentiate evading, "neutral" and incoming contacts using different
 # symbology, without the need of locking it and looking at its closing speed
@@ -51,6 +52,7 @@
 # - For steerpoints that are clamped, use a different symbol to acknowledge that
 # - For datalink contacts that are clamped, use a different symbol to acknowledge that
 # //HSD Display// :
+# - Fix the position of datalink contacts
 # - Display threat circles so that they can display on a certain part (if visually there's parts outside and some ain't)
 # - Show true headings around the great circle and make them move to be at the correct position
 # - Use different symbols for SAM and AAA contacts
@@ -2755,7 +2757,7 @@ update_lad = func() {
                             }
                             
                             # We determine whether it's a threat depending on its ECM signal norm, don't know if it's correct or any good
-                            #if (1 == 1) {#contact.get_Ecm_Signal_Norm() != nil and contact.get_Ecm_Signal_Norm() >= 1) {
+                            #if (1 == 1) #contact.get_Ecm_Signal_Norm() != nil and contact.get_Ecm_Signal_Norm() >= 1) {
                             #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setVisible(1);
                             #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setTranslation(x_move, y_move);
                             #} else {

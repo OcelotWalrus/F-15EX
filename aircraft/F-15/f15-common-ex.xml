@@ -889,9 +889,8 @@
             <f15>
                 <epawss>
                     <new-threat type="bool">false</new-threat>
-                    <scan-id type="int">0</scan-id>
-                    <scan-tgt-count type="int">0</scan-tgt-count>
                     <epawss-on type="bool">false</epawss-on>
+                    <epawss-volume type="double">.75</epawss-volume>
                 </epawss>
                 <effects>
                     <rust type="bool">true</rust>
@@ -2629,7 +2628,7 @@
             <rwr_audio_extended type="bool">true</rwr_audio_extended>
             <tacview_supported type="bool">true</tacview_supported>
             <m28_auto type="bool">false</m28_auto>
-            <mlw_max type="double">150</mlw_max>
+            <mlw_max type="double">120</mlw_max>
             <auto_flare_caller type="bool">false</auto_flare_caller>
         </d-config>
         <armament>
@@ -5039,9 +5038,6 @@
         <knee>
             <file>Aircraft/F-15/Nasal/kneeboards.nas</file>
         </knee>
-        <epawss>
-            <file>Aircraft/F-15/Nasal/epawss.nas</file>
-        </epawss>
         <aircraft>
             <file>Aircraft/F-15/Nasal/liveries.nas</file>
             <file>Aircraft/F-15/Nasal/aircraft-main.nas</file>
@@ -5058,6 +5054,9 @@
             <file>Aircraft/F-15/Nasal/ext_stores.nas</file>
             <file>Aircraft/F-15/Nasal/crash-and-stress.nas</file>
         </aircraft>
+        <epawss>
+            <file>Aircraft/F-15/Nasal/epawss.nas</file>
+        </epawss>
         <tacview>
             <file>Aircraft/F-15/Nasal/tacview.nas</file>
         </tacview>
