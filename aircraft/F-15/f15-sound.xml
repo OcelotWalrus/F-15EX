@@ -1728,7 +1728,315 @@
             <reference-dist>1</reference-dist>
             <max-dist>200</max-dist>
         </fuel-bowser>
+        
+        <squeal>
+            <name>touchdown squeal outside</name>
+            <path>Aircraft/F-15/Sounds/touchdown.wav</path>
+            <condition>
+                <not>
+                    <property>sim/current-view/internal</property>
+                </not>
+                <or>
+                    <property>fdm/jsbsim/gear/unit[1]/WOW</property>
+                    <property>fdm/jsbsim/gear/unit[2]/WOW</property>
+                </or>
+            </condition>
+            <reference-dist>150</reference-dist>
+            <max-dist>500</max-dist>
+            <position>
+                <x>1.2</x>
+                <y>0.0</y>
+                <z>-0.6</z>
+            </position>
+            <volume>
+                <property>velocities/speed-down-fps</property>
+                <factor>0.05</factor>
+            </volume>
+            <volume>
+                <property>velocities/airspeed-kt</property>
+                <factor>0.01</factor>
+            </volume>
+            <pitch>
+                <property>velocities/airspeed-kt</property>
+                <factor>0.0025</factor>
+                <offset>1.2</offset>
+            </pitch>
+        </squeal>
+        <squeal>
+            <name>touchdown squeal inside</name>
+            <path>Aircraft/F-15/Sounds/touchdown.wav</path>
+            <condition>
+                <and>
+                    <or>
+                        <property>fdm/jsbsim/gear/unit[1]/WOW</property>
+                        <property>fdm/jsbsim/gear/unit[2]/WOW</property>
+                    </or>
+                    <less-than>
+                        <property>velocities/vertical-speed-fps</property>
+                        <value>-0.05</value>
+                    </less-than>
+                </and>
+            </condition>
+            <!--reference-dist>150</reference-dist>
+            <max-dist>500</max-dist-->
+            <position>
+                <x>2.64670</x>
+                <y>0.01</y>
+                <z>-2.1</z>
+            </position>
+            <volume>
+                <property>sim/current-view/internal</property>
+                <factor>0.9</factor>
+            </volume>
+            <volume>
+                <property>velocities/groundspeed-kt</property>
+                <factor>0.01</factor>
+                <max>1.0</max>
+            </volume>
+            <pitch>
+                <property>velocities/groundspeed-kt</property>
+                <factor>0.0025</factor>
+                <offset>1.2</offset>
+            </pitch>
+        </squeal>
+        <squeal>
+            <name>touchdown squeal inside NLG</name>
+            <path>Aircraft/F-15/Sounds/touchdown.wav</path>
+            <condition>
+                <and>
+                    <property>fdm/jsbsim/gear/unit/WOW</property>
+                    <less-than>
+                        <property>velocities/vertical-speed-fps</property>
+                        <value>-0.05</value>
+                    </less-than>
+                </and>
+            </condition>
+            <!--reference-dist>150</reference-dist>
+            <max-dist>500</max-dist-->
+            <position>
+                <x>2.64670</x>
+                <y>0.01</y>
+                <z>-2.1</z>
+            </position>
+            <volume>
+                <property>sim/current-view/internal</property>
+                <factor>0.35</factor>
+            </volume>
+            <volume>
+                <property>velocities/groundspeed-kt</property>
+                <factor>0.01</factor>
+                <max>1.0</max>
+            </volume>
+            <pitch>
+                <property>velocities/groundspeed-kt</property>
+                <factor>0.0025</factor>
+                <offset>1.2</offset>
+            </pitch>
+        </squeal>
+        
+        <rumble>
+            <name>gear rumble</name>
+            <mode>looped</mode>
+            <path>Aircraft/F-15/Sounds/ground_roll.wav</path>
+            <condition>
+                <property>sim/current-view/internal</property>
+                <or>
+                    <property>fdm/jsbsim/gear/unit[1]/WOW</property>
+                    <property>fdm/jsbsim/gear/unit[2]/WOW</property>
+                </or>
+            </condition>
+            <reference-dist>30</reference-dist>
+            <max-dist>100</max-dist>
+            <position>
+                <x>1.2</x>
+                <y>0.0</y>
+                <z>-0.6</z>
+            </position>
+            <volume>
+                <property>velocities/groundspeed-kt</property>
+                <factor>.004</factor>
+            </volume>
+        </rumble>
+        
+        <brake>
+            <name>speedbrake</name>
+            <path>Aircraft/F-15/Sounds/speedbrake.wav</path>
+            <mode>in-transit</mode>
+            <property>fdm/jsbsim/fcs/speedbrake-pos-norm</property>
+            <reference-dist>3</reference-dist>
+            <max-dist>10</max-dist>
+            <position>
+                <x>0.01</x>
+                <y>0.01</y>
+                <z>0.01</z>
+            </position>
+            <pitch>
+                <factor>1</factor>
+                <offset>0</offset>
+                <min>0</min>
+                <max>2</max>
+            </pitch>
+            <volume>
+                <max>0.28</max>
+            </volume>
+        </brake>
+        <boom-contact>
+            <name>boom-contact</name>
+            <mode>once</mode>
+            <type>avionics</type>
+            <path>Aircraft/F-15/Sounds/boom_contact.wav</path>
+            <condition>
+                <equals>
+                    <property>systems/refuel/contact</property>
+                    <value>1</value>
+                </equals>
+            </condition>
+            <volume>
+                <property>sim/current-view/internal</property>
+                <factor>1</factor>
+                <max>1</max>
+            </volume>
+        </boom-contact>
+        
+        <ambience>
+            <name>ambience_outside</name>
+            <mode>looped</mode>
+            <path>Aircraft/F-15/Sounds/ambience_outside.wav</path>
+            <type>avionics</type>
+            <condition>
+                <not>
+                    <property>sim/current-view/internal</property>
+                </not>
+                <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+                <property>fdm/jsbsim/gear/unit[1]/WOW</property>
+                <property>fdm/jsbsim/gear/unit[2]/WOW</property>
+                <not>
+                    <property>engines/engine[0]/running</property>
+                </not>
+            </condition>
+            <volume>
+                <factor>0.20</factor>
+            </volume>
+        </ambience>
+        <ambience>
+            <name>ambience_inside</name>
+            <mode>looped</mode>
+            <path>Aircraft/F-15/Sounds/ambience_outside.wav</path>
+            <type>avionics</type>
+            <condition>
+                <property>sim/current-view/internal</property>
+                <property>fdm/jsbsim/gear/unit[0]/WOW</property>
+                <property>fdm/jsbsim/gear/unit[1]/WOW</property>
+                <property>fdm/jsbsim/gear/unit[2]/WOW</property>
+                <not>
+                    <property>engines/engine[0]/running</property>
+                </not>
+            </condition>
+            <volume>
+                <factor>0.08</factor>
+            </volume>
+        </ambience>
 
+        <rain>
+            <name>rainHittingFuselage</name>
+            <mode>looped</mode>
+            <path>Aircraft/F-15/Sounds/rain.wav</path>
+            <type>avionics</type>
+            <condition>
+                <not>
+                    <property>sim/current-view/internal</property>
+                </not>
+                <greater-than>
+                    <property>/environment/rain-norm</property>
+                    <value>0</value>
+                </greater-than>
+            </condition>
+            <volume>
+                <property>/environment/rain-norm</property>
+                <factor>0.39</factor>
+            </volume>
+        </rain>
+        <rain>
+            <name>rainHittingFuselageInt</name>
+            <mode>looped</mode>
+            <path>Aircraft/F-15/Sounds/rain.wav</path>
+            <type>avionics</type>
+            <condition>
+                <property>sim/current-view/internal</property>
+                <greater-than>
+                    <property>/environment/rain-norm</property>
+                    <value>0</value>
+                </greater-than>
+            </condition>
+            <volume>
+                <property>/environment/rain-norm</property>
+                <factor>0.37</factor>
+            </volume>
+            <volume>
+                <property>fdm/jsbsim/fcs/canopy-pos-norm</property>
+                <offset>0.125</offset>
+                <factor>1</factor>
+                <max>1</max>
+            </volume>
+        </rain>
+        <rain-windshield>
+            <name>rainHittingWindshieldInt</name>
+            <mode>looped</mode>
+            <path>Aircraft/F-15/Sounds/rain-windshield.wav</path>
+            <type>avionics</type>
+            <condition>
+                <property>sim/current-view/internal</property>
+                <greater-than>
+                    <property>/environment/rain-norm</property>
+                    <value>0</value>
+                </greater-than>
+            </condition>
+            <volume>
+                <property>velocities/airspeed-kt</property>
+                <factor>0.0075</factor>
+                <min>0.04</min>
+                <max>0.40</max>
+            </volume>
+        </rain-windshield>
+
+        <aircraft-crash>
+            <name>aircraft-impact</name>
+            <path>Aircraft/F-15/Sounds/aircraft-crash.wav</path>
+            <mode>once</mode>
+            <condition>
+                <equals>
+                    <property>damage/sounds/crash-on</property>
+                    <value>1</value>
+                </equals>
+            </condition>
+            <position>
+                <x>0.01</x>
+                <y>0.01</y>
+                <z>0.01</z>
+            </position>
+            <volume>
+                <factor>1</factor>
+            </volume>
+        </aircraft-crash>
+        <aircraft-water-crash>
+            <name>aircraft-water-crash</name>
+            <path>Aircraft/F-15/Sounds/aircraft-water-crash.wav</path>
+            <mode>once</mode>
+            <condition>
+                <equals>
+                    <property>damage/sounds/water-crash-on</property>
+                    <value>1</value>
+                </equals>
+            </condition>
+            <position>
+                <x>0.01</x>
+                <y>0.01</y>
+                <z>0.01</z>
+            </position>
+            <volume>
+                <factor>1</factor>
+            </volume>
+        </aircraft-water-crash>
         <nearby-explode>
             <name>nearby-explode</name>
             <path>Aircraft/F-15/Sounds/aircraft-explode.wav</path>
@@ -2343,27 +2651,97 @@
             </volume>
         </pullup>
 
+
+        <rwr>
+            <name>rwr-launch</name>
+            <path>Aircraft/F-15/Sounds/rwr/rwr-launch.wav</path>
+            <mode>loop</mode>
+            <type>avionics</type>
+            <condition>
+                <and>
+                    <not>
+                        <equals>
+                            <property>sound/rwr-launch</property>
+                            <value type="string" />
+                        </equals>
+                    </not>
+                    <not>
+                        <equals>
+                            <property>sound/rwr-launch-sam</property>
+                            <value>1</value>
+                        </equals>
+                    </not>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
+            </condition>
+            <volume>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
+            </volume>
+        </rwr>
+        <rwr>
+            <name>rwr-sam-launch</name>
+            <path>Aircraft/F-15/Sounds/rwr/rwr-launch.wav</path>
+            <mode>loop</mode>
+            <type>avionics</type>
+            <condition>
+                <and>
+                    <not>
+                        <equals>
+                            <property>sound/rwr-launch</property>
+                            <value type="string" />
+                        </equals>
+                    </not>
+                    <equals>
+                        <property>sound/rwr-launch-sam</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
+            </condition>
+            <volume>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
+            </volume>
+        </rwr>
+        <rwr>
+            <name>rwr-new-threat</name>
+            <path>Aircraft/F-15/Sounds/rwr/rwr-new.wav</path>
+            <mode>once</mode>
+            <type>avionics</type>
+            <condition>
+                <and>
+                    <property>sim/model/f15/epawss/new-threat</property>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
+            </condition>
+            <volume>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
+            </volume>
+        </rwr>
         <rwr>
             <name>rwr-spike-air</name>
             <path>Aircraft/F-15/Sounds/rwr/rwr-lock-01.wav</path>
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <or>
+                <and>
                     <equals>
                         <property>payload/armament/spike-air</property>
                         <value>1</value>
                     </equals>
-                    <property>sim/model/f15/epawss/new-threat</property>
-                </or>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
         <rwr>
             <name>rwr-missile-warning</name>
@@ -2371,18 +2749,19 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <or>
-                    <property>payload/armament/MAW-active</property>
-                    <property>payload/armament/MAW-semiactive</property>
-                </or>
+                <and>
+                    <or>
+                        <property>payload/armament/MAW-active</property>
+                        <property>payload/armament/MAW-semiactive</property>
+                    </or>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
         <rwr>
             <name>rwr-spike-02</name>
@@ -2390,18 +2769,19 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>payload/armament/spike-gnd-02</property>
-                    <value>1</value>
-                </equals>
+                <and>
+                    <equals>
+                        <property>payload/armament/spike-gnd-02</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
         <rwr>
             <name>rwr-spike-11</name>
@@ -2409,18 +2789,19 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>payload/armament/spike-gnd-11</property>
-                    <value>1</value>
-                </equals>
+                <and>
+                    <equals>
+                        <property>payload/armament/spike-gnd-11</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
         <rwr>
             <name>rwr-spike-20</name>
@@ -2428,18 +2809,19 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>payload/armament/spike-gnd-20</property>
-                    <value>1</value>
-                </equals>
+                <and>
+                    <equals>
+                        <property>payload/armament/spike-gnd-20</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
         <rwr>
             <name>rwr-spike-23</name>
@@ -2447,18 +2829,19 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>payload/armament/spike-gnd-23</property>
-                    <value>1</value>
-                </equals>
+                <and>
+                    <equals>
+                        <property>payload/armament/spike-gnd-23</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
         <rwr>
             <name>rwr-spike-p2</name>
@@ -2466,18 +2849,19 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>payload/armament/spike-gnd-p2</property>
-                    <value>1</value>
-                </equals>
+                <and>
+                    <equals>
+                        <property>payload/armament/spike-gnd-p2</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
         <rwr>
             <name>rwr-spike-nk</name>
@@ -2485,18 +2869,19 @@
             <mode>looped</mode>
             <type>avionics</type>
             <condition>
-                <equals>
-                    <property>payload/armament/spike-gnd-nk</property>
-                    <value>1</value>
-                </equals>
+                <and>
+                    <equals>
+                        <property>payload/armament/spike-gnd-nk</property>
+                        <value>1</value>
+                    </equals>
+                    <property>sim/current-view/internal</property>
+                    <property>sim/model/f15/epawss/epawss-on</property>
+                </and>
             </condition>
             <volume>
-                <property>/sim/current-view/internal</property>
-                <factor>0.70</factor>
+                <property>sim/model/f15/epawss/epawss-volume</property>
+                <factor>1</factor>
             </volume>
-            <!--volume>
-                <property>f15/avionics/rwr-volume</property>
-            </volume-->
         </rwr>
 
         <gamma>
