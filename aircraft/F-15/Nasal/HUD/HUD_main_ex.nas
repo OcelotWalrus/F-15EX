@@ -542,9 +542,9 @@ var F15HUD = {
 
                                           obj.heading_tape.setTranslation (obj.heading_tape_position,0);
                                       }),
-            props.UpdateManager.FromHashList(["OrientationRollDeg","OrientationPitchDeg", "IsRefueling", "IsDumpingFuel", "FuelPercentage", "CurrentFuelLb"], 0.025, func(val)
+            props.UpdateManager.FromHashList(["OrientationRollDeg","OrientationPitchDeg", "IsRefueling", "IsRefueling2", "IsDumpingFuel", "FuelPercentage", "CurrentFuelLb"], 0.025, func(val)
                                     {
-                                        if (val.IsRefueling == 1) {
+                                        if (val.IsRefueling == 1 or val.IsRefueling2 == 1) {
                                             obj.fuel_amount.setText(sprintf("REFUELING - %s/100", math.floor(val.FuelPercentage * 100)));
                                             obj.fuel_now.setText(sprintf("%s LBS", math.floor(val.CurrentFuelLb)));
                                             obj.fuel_amount.setVisible(1);
@@ -2350,6 +2350,7 @@ input = {
 		GroundAlt                               : "instrumentation/tfs/ground-altitude-ft-now",
 		RadarFilterMode                         : "instrumentation/radar/radar-filter-mode",
 		IsRefueling                             : "fdm/jsbsim/propulsion/refuel",
+		IsRefueling2                            : "systems/refuel/contact",
 		IsDumpingFuel                           : "fdm/jsbsim/propulsion/fuel_dump",
 		CurrentFuelLb                           : "sim/model/f15/instrumentation/fuel-gauges/total-display",
 		FuelPercentage                          : "consumables/fuel/total-fuel-norm",

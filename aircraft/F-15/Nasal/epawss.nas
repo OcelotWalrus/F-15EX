@@ -16,7 +16,7 @@
 # - The awg_9.nas's Target class is reused by the EPAWSS.
 # - How the EPAWSS sorts threats is in the following way: different conditions add up points. The contact with the most points is defined as primary threat.
 #  supreme level - an approaching missile - + 9999 (overrides anything else. if they're multiple, we take the one with the biggest closure rate / dist ratio)
-#  1st level - a traget that we've detected launching a missile less than 5 mins ago - +100
+#  1st level - a target that we've detected launching a missile less than 5 mins ago - +100
 #  2nd level - if the threat's spiking us - +75
 #  3rd level - if the threat's ECM signal is of the highest norm (ECM norm 1) + 50
 #  4th level - if the threat's ECM signal is higher than 3 (ECM norm 2) + 25
@@ -28,7 +28,7 @@
 # ---------------------------
 # Future features (TODO's) :
 # - For the AI light and its sound, move it from the awg_9.nas to the epawss.nas file, and check if it's a friendly or not
-# - Add a sound when there's an incoming missile
+# - Add the EPAWSS to the systems, so it can be damaged by missiles and etc.
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
