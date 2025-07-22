@@ -35,12 +35,14 @@
 
 # Constants
 var epawss_range = 120;  # 120 NM
-var scan_update_tgt_list = 0;  # boolean
-var contacts_list_callsigns = [];
-var former_contacts_list_callsigns = [];
-var contacts_list = [];
-var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);
+var scan_update_tgt_list = 0;  # boolean, gets set to 1 when a new model has been added the the world or when the radar filter mode (A/A, A/G, A/SEA) has been changed
+var contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts
+var former_contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts of the last scan
+var contacts_list = [];  # list of all EPAWSS contacts, all children of the awg_9.Target class
+var new_threats = [];  # Used when displaying EPAWSS contacts, allowing to highlight new threats from already-detected ones. List of callsigns
+var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);  # EPAWSS master switch
 var Mp = props.globals.getNode("ai/models");
+var primary_threat_callsign = "";
 
 var AIR = 0;
 var MARINE = 1;
@@ -167,6 +169,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
         # Test if target has a radar. Compute if we are illuminated. This propery used by ECM
         # over MP, should be standardized, like "ai/models/multiplayer[0]/radar/radar-standby".
 
+        scan_update_visibility = 1;
         if (scan_update_visibility) {
             # check for visible by EPAWSS taking into account if the contact is
             # emitting, radiating at our coords, or directly spiking us.
@@ -193,7 +196,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
         }
 
         if (u.get_display() and u.get_visible()) {
-            append(contacts_list_callsigns, u);
+            append(contacts_list_callsigns, u.get_Callsign());
         }
 
         # if not displayed then we can continue to the next in the list.
@@ -203,13 +206,21 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
     
     # We go through each current contacts list, and if there's one or multiple that ain't in the former contacts list, we play the new contact sound
     # Also share our EPAWSS contacts over datalink
+    new_threats = [];
     foreach(contact; contacts_list_callsigns) {
-        if (former_contacts_list_callsigns[u.get_Callsign()] == nil) {
+        found = 0;
+        foreach(former_contact; former_contacts_list_callsigns) {
+            if (former_contact == contact) {
+                found = 1;
+            }
+        }
+        if (found == 0) {
             setprop("sim/model/f15/epawss/new-threat", 1);
             settimer(setprop("sim/model/f15/epawss/new-threat", 0), .5);
+            append(new_threats, contact);
         }
         if (getprop("instrumentation/datalink/sending") == 0) {  # safety, so we ain't overwriting smth that's already being sent over datalink
-            datalink.send_data({"contacts":[{"callsign":u.get_Callsign(),"iff":0}]});
+            datalink.send_data({"contacts":[{"callsign": contact, "iff": 0}]});
         }
     }
 }
@@ -269,7 +280,8 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
     # We go through each in the list, and update the "greatest points" variable if any higher than before
     max_points_num = 0;
     max_points = "";
-    var first = 1;
+    callsign = "";
+    first = 1;
     foreach(u; points_list) {
         if (first) {
             max_points_num = u.points();
@@ -283,9 +295,24 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
         first = 0;
     }
     
+    primary_threat_callsign = max_points;  # in format `u.get_Callsign()~u.getUnique()`
     return [max_points, max_points_num];
 }
 
+var is_missile_launcher = func(contact) {  # simple function to determine if given contact is a missile launcher
+    var launchCallsign = getprop("sound/rwr-launch");
+    var semiCallsign = getprop("payload/armament/MAW-semiactive-callsign");
+    
+    if (contact.get_Callsign() == launchCallsign or contact.get_Callsign() == semiCallsign) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 # Loops
-update_list_epawss = maketimer(.5, update_epawss_contacts);
+update_list_epawss = maketimer(1, update_epawss_contacts);  # gets updated only every 1 seconds
 update_list_epawss.start();
+
+update_primary_threat = maketimer(2, determine_primary_threat);   # gets updated only every 2 seconds
+update_primary_threat.start()

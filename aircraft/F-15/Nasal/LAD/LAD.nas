@@ -177,6 +177,8 @@ var VSD_ON = 0;
 var PACS_ON = 0;
 var HSD_ON = 0;
 
+var elapsed = getprop("sim/time/elapsed-sec");
+
 var LAD_Device = {
 
     canvas_settings: {
@@ -1253,33 +1255,63 @@ var LAD_Device = {
             .setFont(aircraft.HUDFont);
         
         # Create the EPAWSS symbols
-        m.epawss_symbols_hsd_hat = setsize([], m.stpt_symbols_max);
+        m.epawss_symbols_hsd_hat = setsize([], m.stpt_symbols_max);  # hats are for airborne radars
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
             m.epawss = m.HSDScreen.createChild("path")
-                .moveTo(677*2,2262+500-60-65)
-                .lineTo(677*2-90,2262+500+45-65)
-                .moveTo(677*2,2262+500-60-65)
-                .lineTo(677*2+90,2262+500+45-65)
-                .setStrokeLineWidth(15)
+                .moveTo(677*2,2262+500-60-65+25+10+15)
+                .lineTo(677*2-40,2262+500-60-65+25+20+10+15)
+                .moveTo(677*2,2262+500-60-65+25+10+15)
+                .lineTo(677*2+40,2262+500-60-65+25+20+10+15)
+                .setStrokeLineWidth(7)
                 .setVisible(0)
                 .set("z-index",20)
                 .setColor(prst_orange_dark.r,prst_orange_dark.g,prst_orange_dark.b);
             m.epawss_symbols_hsd_hat[i] = m.epawss;
         }
-        m.epawss_symbols_hsd_threat_circle = setsize([], m.stpt_symbols_max);
-        for (var i = 0; i < m.stpt_symbols_max; i += 1){
-            m.epawss_threat = m.HSDScreen.createChild("path")
+        m.epawss_symbols_hsd_missile_launch = setsize([], m.stpt_symbols_max+1);  # used for missile launches
+        for (var i = 0; i < m.stpt_symbols_max+1; i += 1){  # +1 for MAW
+            m.epawss_launch = m.HSDScreen.createChild("path")
                 .moveTo(677*2-70,2262+500)
-                .arcSmallCW(70*(10/19),45, 0, 70*2, 0)
-                .arcSmallCW(70*(10/19),45, 0, -70*2, 0)
+                .arcSmallCW(70*(10/19),60, 0, 70*2, 0)
+                .arcSmallCW(70*(10/19),60, 0, -70*2, 0)
+                .setStrokeLineWidth(15)
+                .setStrokeDashArray([5,10])
+                .setVisible(0)
+                .set("z-index",22)
+                .setColor(prst_orange.r,prst_orange.g,prst_orange.b);
+            m.epawss_symbols_hsd_missile_launch[i] = m.epawss_launch;
+        }
+        m.epawss_symbols_hsd_primary_threat = setsize([], m.stpt_symbols_max+1);  # used for missile launches
+        for (var i = 0; i < m.stpt_symbols_max+1; i += 1){  # +1 for MAW
+            m.epawss_threat = m.HSDScreen.createChild("path")
+                .moveTo(677*2,2262+500+70*2)
+                .lineTo(677*2+70,2262+500)
+                .moveTo(677*2+70,2262+500)
+                .lineTo(677*2,2262+500-70*2)
+                .moveTo(677*2,2262+500-70*2)
+                .lineTo(677*2-70,2262+500)
+                .moveTo(677*2,2262+500+70*2)
+                .lineTo(677*2-70,2262+500)
+                .moveTo(677*2,2262+500+70*2)
                 .setStrokeLineWidth(15)
                 .setVisible(0)
-                .set("z-index",20)
-                .setColor(prst_orange.r,prst_orange.g,prst_orange.b);
-            m.epawss_symbols_hsd_threat_circle[i] = m.epawss_threat;
+                .set("z-index",21)
+                .setColor(prst_red.r,prst_red.g,prst_red.b);
+            m.epawss_symbols_hsd_primary_threat[i] = m.epawss_threat;
         }
-        m.epawss_texts_hsd = setsize([], m.stpt_symbols_max);
+        m.epawss_symbols_hsd_new_contact = setsize([], m.stpt_symbols_max);  # used for new contacts
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
+            m.epawss_new = m.HSDScreen.createChild("path")
+                .moveTo(677*2-70,2262+500-15)
+                .arcSmallCW(70*(10/19),60, 0, 70*2, 0)
+                .setStrokeLineWidth(15)
+                .setVisible(0)
+                .set("z-index",23)
+                .setColor(prst_orange.r,prst_orange.g,prst_orange.b);
+            m.epawss_symbols_hsd_new_contact[i] = m.epawss_new;
+        }
+        m.epawss_texts_hsd = setsize([], m.stpt_symbols_max+1);
+        for (var i = 0; i < m.stpt_symbols_max+1; i += 1){  # +1 for MAW
             m.epawss_txt = m.HSDScreen.createChild("text")  # far down, bottom left
                 .setFontSize(110, 1.4)
                 .setText("F/B")
@@ -1287,7 +1319,7 @@ var LAD_Device = {
                 .setColor(prst_orange.r,prst_orange.g,prst_orange.b)
                 .setTranslation(677*2,2262+500)
                 .setVisible(0)
-                .set("z-index",20)
+                .set("z-index",24)
                 .setFont(aircraft.HUDFont);
             m.epawss_texts_hsd[i] = m.epawss_txt;
         }
@@ -1605,6 +1637,8 @@ var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_
 }
 
 update_lad = func() {
+
+    elapsed = getprop("sim/time/elapsed-sec");
 
     # We make sure we don't run none of that if the LAD screen's offline
     if (getprop("sim/model/f15/controls/LAD/mode") > 0 and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0) {
@@ -2647,6 +2681,7 @@ update_lad = func() {
                             contact_alt = getprop("/ai/models/multiplayer["~contact_idx~"]/position/altitude-ft");
                             contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
                             contact_bearing = geo.aircraft_position().course_to(contact_coord);
+                            contact_bearing_rel = deviation_normdeg(getprop("orientation/heading-deg"), contact_bearing);
                             contact_elevation = vector.Math.getPitch(geo.aircraft_position(), contact_coord);
                             contact_heading = getprop("/ai/models/multiplayer["~contact_idx~"]/orientation/true-heading-deg");
                             contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
@@ -2684,8 +2719,8 @@ update_lad = func() {
                             LADCanvas.dlnk_symbols_hsd[dlnk_idx].setVisible(1);
                             LADCanvas.dlnk_texts_hsd[dlnk_idx].setVisible(1);
 
-                            var x_move = (contact_range*LADCanvas.hsd_nm_to_px_x)*math.sin(contact_bearing*D2R);
-                            var y_move = -(contact_range*LADCanvas.hsd_nm_to_px_y)*math.cos(contact_bearing*D2R);
+                            var x_move = (contact_range*LADCanvas.hsd_nm_to_px_x)*math.sin(contact_bearing_rel*D2R);
+                            var y_move = -(contact_range*LADCanvas.hsd_nm_to_px_y)*math.cos(contact_bearing_rel*D2R);
                             
                             # If the point is outside of the circle, we don't let it get away of it and we place it at the very edge of the HSD circle
                             # The circle is actually an ellipse, in a way that it appears as a circle on the LAD
@@ -2749,20 +2784,46 @@ update_lad = func() {
                             LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setTranslation(x_move, y_move);
                             LADCanvas.epawss_texts_hsd[epawss_idx].setTranslation(677*2+x_move, 2262+500+y_move);
                             
+                            # Display contact's indentified type (F, F/B, B, AEW&C, TNKR etc.)
                             if (contact.get_model() != nil and typeLookup[contact.get_model()] != nil) {
                                 contact_type = typeLookup[contact.get_model()];
                                 LADCanvas.epawss_texts_hsd[epawss_idx].setText(contact_type);
+                            } elsif (contact.get_type() == awg_9.ORDNANCE) {  # if it's a missile (generally, just ordnance
+                                LADCanvas.epawss_texts_hsd[epawss_idx].setText("M");
                             } else {  # Model's unknown to our radar
                                 LADCanvas.epawss_texts_hsd[epawss_idx].setText("UNK");
                             }
                             
-                            # We determine whether it's a threat depending on its ECM signal norm, don't know if it's correct or any good
-                            #if (1 == 1) #contact.get_Ecm_Signal_Norm() != nil and contact.get_Ecm_Signal_Norm() >= 1) {
-                            #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setVisible(1);
-                            #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setTranslation(x_move, y_move);
-                            #} else {
-                            #    LADCanvas.epawss_symbols_hsd_threat_circle[epawss_idx].setVisible(0);
-                            #}
+                            # Display the new threat upper circle if it's one
+                            found = 0;
+                            foreach(new_threat; epawss.new_threats) {
+                                if (contact.get_Callsign() == new_threat) {
+                                    found = 1;
+                                }
+                            }
+                            if (found == 1) {
+                                LADCanvas.epawss_symbols_hsd_new_contact[epawss_idx].setVisible(1);
+                                LADCanvas.epawss_symbols_hsd_new_contact[epawss_idx].setTranslation(x_move, y_move);
+                            } else {
+                                LADCanvas.epawss_symbols_hsd_new_contact[epawss_idx].setVisible(0);
+                            }
+                            
+                            # Display the primary threat double triangle if that's the one
+                            if (u.get_Callsign()~u.getUnique() == epawss.primary_threat_callsign) {
+                                LADCanvas.epawss_symbols_hsd_primary_threat[epawss_idx].setVisible(1);
+                                LADCanvas.epawss_symbols_hsd_primary_threat[epawss_idx].setTranslation(x_move, y_move);
+                            } else {
+                                LADCanvas.epawss_symbols_hsd_primary_threat[epawss_idx].setVisible(0);
+                            }
+                            
+                            # Display the blinking circle if it's a missile launcher, or if it's an approaching missile
+                            if ((epawss.is_missile_launcher(u) or contact.get_type() == awg_9.ORDNANCE) and 5*(elapsed-int(elapsed))>2.5) {  # 4Hz blink
+                                LADCanvas.epawss_symbols_hsd_missile_launch[nv].setVisible(1);
+                                LADCanvas.epawss_symbols_hsd_missile_launch[epawss_idx].setTranslation(x_move, y_move);
+                            } else {
+                                LADCanvas.epawss_symbols_hsd_missile_launch[nv].setVisible(0);
+                            }
+
                             epawss_idx += 1;
                         }
                     }
@@ -2772,8 +2833,37 @@ update_lad = func() {
             # Do not display any unused EPAWSS symbology
             for (var nv = epawss_idx; nv < LADCanvas.stpt_symbols_max;nv += 1) {
                 LADCanvas.epawss_symbols_hsd_hat[nv].setVisible(0);
-                LADCanvas.epawss_symbols_hsd_threat_circle[nv].setVisible(0);
                 LADCanvas.epawss_texts_hsd[nv].setVisible(0);
+                LADCanvas.epawss_symbols_hsd_missile_launch[nv].setVisible(0);
+                LADCanvas.epawss_symbols_hsd_primary_threat[nv].setVisible(0);
+                LADCanvas.epawss_symbols_hsd_new_contact[nv].setVisible(0);
+            }
+            
+            # If there's a Missile Approach Warning, display it (MAW)
+            var maw_epawss_idx = 21;
+            if (getprop("payload/armament/MAW-active") and getprop("sim/model/f15/epawss/epawss-on")) {
+                maw_bearing = getprop("payload/armament/MAW-bearing");
+                deviation = -geo.normdeg180(maw_bearing - getprop("orientation/heading-deg")) + 90;
+                x_move = math.cos(deviation * D2R)*(LADCanvas.hsd_great_circle_radius*10/19)*(1/3);
+                y_move = -math.sin(deviation * D2R)*(LADCanvas.hsd_great_circle_radius)*(1/3);
+
+                #LADCanvas.epawss_texts_hsd[maw_epawss_idx].setRotation(-(deviation+90)*D2R);
+                #LADCanvas.epawss_symbols_hsd_missile_launch[maw_epawss_idx].setRotation(-(deviation+90)*D2R);
+                #LADCanvas.epawss_symbols_hsd_primary_threat[maw_epawss_idx].setRotation(-(deviation+90)*D2R);
+
+                LADCanvas.epawss_texts_hsd[maw_epawss_idx].setText("M");
+
+                LADCanvas.epawss_texts_hsd[maw_epawss_idx].setTranslation(677*2+x_move, 2262+500+y_move);
+                LADCanvas.epawss_symbols_hsd_missile_launch[maw_epawss_idx].setTranslation(x_move, y_move);
+                LADCanvas.epawss_symbols_hsd_primary_threat[maw_epawss_idx].setTranslation(x_move, y_move);
+
+                LADCanvas.epawss_texts_hsd[maw_epawss_idx].setVisible(1);
+                LADCanvas.epawss_symbols_hsd_missile_launch[maw_epawss_idx].setVisible(1);
+                LADCanvas.epawss_symbols_hsd_primary_threat[maw_epawss_idx].setVisible(1);
+            } else {
+                LADCanvas.epawss_texts_hsd[maw_epawss_idx].setVisible(0);
+                LADCanvas.epawss_symbols_hsd_missile_launch[maw_epawss_idx].setVisible(0);
+                LADCanvas.epawss_symbols_hsd_primary_threat[maw_epawss_idx].setVisible(0);
             }
             
             # Update the radar cone
