@@ -29,19 +29,24 @@
 # Future features (TODO's) :
 # - For the AI light and its sound, move it from the awg_9.nas to the epawss.nas file, and check if it's a friendly or not
 # - Add the EPAWSS to the systems, so it can be damaged by missiles and etc.
+# - Made the EPAWSS panel on the right panel of the interiors.
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
 
 # Constants
 var epawss_range = 120;  # 120 NM
-var scan_update_tgt_list = 0;  # boolean, gets set to 1 when a new model has been added the the world or when the radar filter mode (A/A, A/G, A/SEA) has been changed
+var scan_update_tgt_list = 1;  # boolean, gets set to 1 when a new model has been added the the world or when the radar filter mode (A/A, A/G, A/SEA) has been changed
+var scan_update_visibility = 1;
 var contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts
 var former_contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts of the last scan
 var contacts_list = [];  # list of all EPAWSS contacts, all children of the awg_9.Target class
 var new_threats = [];  # Used when displaying EPAWSS contacts, allowing to highlight new threats from already-detected ones. List of callsigns
 var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);  # EPAWSS master switch
 var Mp = props.globals.getNode("ai/models");
+var ElapsedSec = props.globals.getNode("sim/time/elapsed-sec");
+var scan_next_tgt_check = ElapsedSec.getValue() + 2;
+var ScanVisibilityCheckInterval = props.globals.getNode("instrumentation/radar/scan_visibility_check_interval", 1);
 var primary_threat_callsign = "";
 
 var AIR = 0;
@@ -158,57 +163,64 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
     
     var idx = 0;
 
-    former_contacts_list_callsigns = contacts_list_callsigns;
+    former_contacts_list_callsigns = [];
+    foreach(contact; contacts_list_callsigns) {
+        append(former_contacts_list_callsigns, contact);
+    }
+    contacts_list_callsigns = [];
     for (var scan_tgt_idx = 0;scan_tgt_idx < size(contacts_list); scan_tgt_idx += 1) {
 
         u = contacts_list[scan_tgt_idx];
 
         var u_rng = u.get_range();
 
-        awg_9.compute_rwr(1, u, u_rng);
-        # Test if target has a radar. Compute if we are illuminated. This propery used by ECM
-        # over MP, should be standardized, like "ai/models/multiplayer[0]/radar/radar-standby".
-
-        scan_update_visibility = 1;
+        
+        
+        if (scan_update_visibility) {
+            scan_update_visibility = 0;
+        } else if (ElapsedSec.getValue() > scan_next_tgt_check) {
+            scan_next_tgt_check = ElapsedSec.getValue()  + ScanVisibilityCheckInterval.getValue();
+            scan_update_visibility = 1;
+        }
+        
         if (scan_update_visibility) {
             # check for visible by EPAWSS taking into account if the contact is
             # emitting, radiating at our coords, or directly spiking us.
             u.set_behind_terrain(0);
             if (!u.get_EPAWSS_visible()) {
+                #print("out of EPAWSS detection");
                 u.set_visible(0);
-                msg = "out of EPAWSS detection";
-            } else if (TerrainManager.IsVisible(u.propNode,notification) == 0) {
-                msg = "behind terrain";
+            } else if (awg_9.TerrainManager.IsVisible(u.propNode, nil) == 0) {
+                #print("behind terrain");
                 u.set_behind_terrain(1);
                 u.set_visible(0);
-                scan_hidden_by_terrain += 1;
             } else {
-                msg = "visible";
+                #print("visible");
                 u.set_visible(1);
             }
+            scan_update_visibility = 0;
         }
-
-        # if target within range, and not acting (i.e. a RIO/backseat/copilot)
-        if (u_rng != nil and (u_rng < epawss_range  and u.not_acting == 0 )) {
-            u.set_display(1);
-        } else {
-            u.set_display(0);  # don't display backseaters etc.
+        
+        var radar_mode = getprop("instrumentation/radar/radar-mode");
+        if (radar_mode == nil) {
+            radar_mode = 0;
+        } if (radar_mode >= 3) {
+            radar_active = 0;
         }
-
-        if (u.get_display() and u.get_visible()) {
+        
+        if (u.get_visible()) {
             append(contacts_list_callsigns, u.get_Callsign());
         }
 
-        # if not displayed then we can continue to the next in the list.
-        if (!u.get_display())
-          continue;
+        # Test if target has a radar. Compute if we are illuminated. This propery used by ECM
+        # over MP, should be standardized, like "ai/models/multiplayer[0]/radar/radar-standby".
+        awg_9.compute_rwr(radar_mode, u, u_rng);
     }
     
     # We go through each current contacts list, and if there's one or multiple that ain't in the former contacts list, we play the new contact sound
     # Also share our EPAWSS contacts over datalink
-    new_threats = [];
     foreach(contact; contacts_list_callsigns) {
-        found = 0;
+        var found = 0;
         foreach(former_contact; former_contacts_list_callsigns) {
             if (former_contact == contact) {
                 found = 1;
@@ -216,8 +228,9 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
         }
         if (found == 0) {
             setprop("sim/model/f15/epawss/new-threat", 1);
-            settimer(setprop("sim/model/f15/epawss/new-threat", 0), .5);
+            settimer(func {setprop("sim/model/f15/epawss/new-threat", 0); }, .4);
             append(new_threats, contact);
+            settimer(func {remove(new_threats, contact); }, 45);  # remove it from new threats after 45 seconds (clear the new threat symbol of the LAD's HSD)
         }
         if (getprop("instrumentation/datalink/sending") == 0) {  # safety, so we ain't overwriting smth that's already being sent over datalink
             datalink.send_data({"contacts":[{"callsign": contact, "iff": 0}]});
@@ -239,31 +252,31 @@ var get_radar_type = func(contact) {  # returns either 0 (airborne radar), 1 (gr
 var determine_primary_threat = func() {  # returns the primary threat's internal unique ID and how many points its got in a vector. Returns null if there ain't none
     points_list = [];
     foreach(u; contacts_list) {
-        if (u.get_visible() and u.get_display()) {  # If it's an actually valid EPAWSS contact
+        if (u.get_visible()) {  # If it's an actually valid EPAWSS contact
             points = 0;
             
             is_a_missile_approaching = u.getUnique() != nil and u.get_Callsign() != nil and damage.approached[u.get_Callsign()~u.getUnique()] != nil;
-            points += (is_a_missile_approaching and u.get_visible() and u.get_display() and damage.approached[u.get_Callsign()~u.getUnique()] < 300) * 9999 + (u.get_closure_rate()/u.get_range());  # if it's an approaching missile. We also add a ratio closure rate/dist to determine which approaching missile is more threatening if they're multiple detected
+            points += (is_a_missile_approaching and u.get_visible() and damage.approached[u.get_Callsign()~u.getUnique()] < 300) * 9999 + (u.get_closure_rate()/u.get_range());  # if it's an approaching missile. We also add a ratio closure rate/dist to determine which approaching missile is more threatening if they're multiple detected
             if (is_a_missile_approaching) {
                 continue;  # go to the next target, skip all below point computing
             }
             
-            is_missile_launcher = u.getUnique() != nil and u.get_Callsign() != nil and damage.launched[u.get_Callsign()~u.getUnique()] != nil;
-            points += (is_missile_launcher and u.get_visible() and u.get_display() and damage.launched[u.get_Callsign()~u.getUnique()] < 300) * 100;  # if it's a missile launcher that we've detected (less than 5 mins ago) and it's not hidden by terrain or RCS, we add 100 pts
+            is_missile_launcher_points = u.getUnique() != nil and u.get_Callsign() != nil and damage.launched[u.get_Callsign()~u.getUnique()] != nil;
+            points += (is_missile_launcher_points and u.get_visible() and damage.launched[u.get_Callsign()~u.getUnique()] < 300) * 100;  # if it's a missile launcher that we've detected (less than 5 mins ago) and it's not hidden by terrain or RCS, we add 100 pts
             
             points += u.isSpikingMe() * 75;  # 2nd level
             points += (u.get_Ecm_Signal_Norm() == 1) * 50;  # 3nd level
             points += (u.get_Ecm_Signal_Norm() == 2) * 25;  # 4th level
             
-            is_a_sam_or_aaa = (u.get_model() != nil) and (displays.typeLookup[contact.get_model()] != nil) and (displays.typeLookup[contact.get_model()] == "SAM" or displays.typeLookup[contact.get_model()] == "AAA");  # we're reusing the LAD.nas's typeLookup variable
+            is_a_sam_or_aaa = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "SAM" or displays.typeLookup[u.get_model()] == "AAA");  # we're reusing the LAD.nas's typeLookup variable
             points += is_a_sam_or_aaa * 10;  # 5th level
             
-            is_approaching = u.isApproaching();  
+            is_approaching = u.isApproaching(geo.aircraft_position());  
             if (is_approaching != nil) {
                 points += 40 - is_approaching;  # 6th level
             }
             
-            is_an_awacs = (u.get_model() != nil) and (displays.typeLookup[contact.get_model()] != nil) and (displays.typeLookup[contact.get_model()] == "AEW&C");  # we're reusing the LAD.nas's typeLookup variable
+            is_an_awacs = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "AEW&C");  # we're reusing the LAD.nas's typeLookup variable
             points += is_an_awacs * 10;  # 7th level
             
             points -= u.get_range() * .5;  # distance reduction
@@ -284,12 +297,12 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
     first = 1;
     foreach(u; points_list) {
         if (first) {
-            max_points_num = u.points();
-            max_points = u.unique();
+            max_points_num = u.points;
+            max_points = u.unique;
         } else {
             if (u.points() > max_points_num) {
-                max_points_num = u.points();
-                max_points = u.unique();
+                max_points_num = u.points;
+                max_points = u.unique;
             }
         }
         first = 0;
@@ -311,8 +324,8 @@ var is_missile_launcher = func(contact) {  # simple function to determine if giv
 }
 
 # Loops
-update_list_epawss = maketimer(1, update_epawss_contacts);  # gets updated only every 1 seconds
-update_list_epawss.start();
+update_list_epawss = maketimer(.5, update_epawss_contacts);
+update_primary_threat = maketimer(.5, determine_primary_threat);
 
-update_primary_threat = maketimer(2, determine_primary_threat);   # gets updated only every 2 seconds
-update_primary_threat.start()
+update_list_epawss.start();
+update_primary_threat.start();

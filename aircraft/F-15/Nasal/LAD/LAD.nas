@@ -38,22 +38,27 @@
 # ---------------------------
 # Future features (TODO's) :
 # //General// :
-# - Readability must be improved: some texts and symbology are kinda small, and their color don't help to, making them hard to read
+# - Readability must be improved: some texts and symbology are kinda small, and their color ain't no help too, making 'em hard to read
 # without leaning onto them.
 # //VSD Display// :
-# - Display the radar's vertical scan carat
+# - Display the steering dot, ASE circle.
+# - For the closure rate carat, actually use distance where bottom is 0 and top is max radar range.
+# - Display altitude carat with numbers in format 29-9 for 29,900ft, where vertical middile is same altitude, and top max altitude allowed by the radar.
+# - RWS Mode: no target speed, no precise target altitude (round altitude at +2-2thousands) No AIM lock + no heading
+# - Move selection cursor to select a contact (remove next target button)
+# - bleps: make em boxes, with tail up or down depending on closing speed (when TWS, change tail's orientation depending on target's heading if it's one of the locked targets)
+# - TWS: select different contacts to be tracked (up to 20), then you can use the next target button to switch between locked targets
+# - use specific symbology for specific current tracked target
 # - Use different symbols for SAMs, AAAs and ships contacts
 # - Differentiate evading, "neutral" and incoming contacts using different
 # symbology, without the need of locking it and looking at its closing speed
-# - Add the DLZ (Dynamic Launch Zone), to complement the closing speed
-# - Add the ASEs (Allowable Steering Error) when having a target locked and
-# having a Sidewinder or AMRAAM armed
 # - Have some text in the upper part, separated by rulers telling distance, bearing and ETA from bullseye (not sure if there's enough room left)
 # - For steerpoints that are clamped, use a different symbol to acknowledge that
 # - For datalink contacts that are clamped, use a different symbol to acknowledge that
+# - Use better symbology for datalink contacts so they're more visible
 # //HSD Display// :
-# - Fix the position of datalink contacts
-# - Display threat circles so that they can display on a certain part (if visually there's parts outside and some ain't)
+# - Fix the position of datalink contacts, and fix symbology to make em visible
+# - Display threat circles so that they can display on a certain part (if visually there's parts outside and some ain't) Note: (maybe use something like the sit-mask.png)
 # - Show true headings around the great circle and make them move to be at the correct position
 # - Use different symbols for SAM and AAA contacts
 # - Display contacts heading by rotating 'em. FUCK I SPENT 1 DAY TRYNA FIGURE OUT WHY THAT THING IS FUCKED UP AND DONT WORK FOR NO GODDAMN REASON SON OF A
@@ -742,6 +747,34 @@ var LAD_Device = {
             .setStrokeLineWidth(15)
             .set("z-index",10)
             .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
+        m.vsd_vert_coverage_circle_down = m.VSDScreen.createChild("path")
+            .moveTo(75-25,2262+500)
+            .arcSmallCW(25,25, 0, 25*2, 0)
+            .arcSmallCW(25,25, 0, -25*2, 0)
+            .setStrokeLineWidth(15)
+            .set("z-index",10)
+            .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
+        m.vsd_vert_coverage_circle_up = m.VSDScreen.createChild("path")
+            .moveTo(75-25,2262+500)
+            .arcSmallCW(25,25, 0, 25*2, 0)
+            .arcSmallCW(25,25, 0, -25*2, 0)
+            .setStrokeLineWidth(15)
+            .set("z-index",10)
+            .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
+        m.vsd_vert_coverage_text_down = m.VSDScreen.createChild("text")  # far down, bottom right
+            .setFontSize(80, 1.4)
+            .setText("10-5")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(80+75+60,2262+500)
+            .setFont(aircraft.HUDFont);
+        m.vsd_vert_coverage_text_up = m.VSDScreen.createChild("text")  # far down, bottom right
+            .setFontSize(80, 1.4)
+            .setText("50-3")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(80+75+60,2262+500)
+            .setFont(aircraft.HUDFont);
 
         # Create the steerpoints symbols
         m.stpt_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
@@ -900,10 +933,10 @@ var LAD_Device = {
             .setTranslation(1235+300+500,500+35)
             .setFont(aircraft.HUDFont);
         m.vsd_tgt_closure_pin = m.VSDScreen.createChild("path")
-            .moveTo(677*4-75,1150*2+500+75)
-            .lineTo(677*4-75-75,1150*2+500+75+65)
-            .moveTo(677*4-75,1150*2+500+75)
-            .lineTo(677*4-75-75,1150*2+500+75-65)
+            .moveTo(677*4-75,1150*4+500+75)
+            .lineTo(677*4-75-75,1150*4+500+75+65)
+            .moveTo(677*4-75,1150*4+500+75)
+            .lineTo(677*4-75-75,1150*4+500+75-65)
             .setStrokeLineWidth(6)
             .set("z-index",15)
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
@@ -912,7 +945,7 @@ var LAD_Device = {
             .setText("0637")
             .setAlignment("center-center")
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
-            .setTranslation(677*4-75-140,1150*2+500+75)
+            .setTranslation(677*4-75-140,1150*4+500+75)
             .setFont(aircraft.HUDFont);
 
         m.VSDScreen.setVisible(1);
@@ -943,13 +976,17 @@ var LAD_Device = {
         m.vsd_rdr_filter_1.setVisible(1);
         m.vsd_rdr_filter_2.setVisible(1);
         m.vsd_rdr_filter_3.setVisible(1);
-        m.vsd_azimuth_center.setVisible(1);
-        m.vsd_azimuth_right.setVisible(1);
-        m.vsd_azimuth_left.setVisible(1);
+        m.vsd_azimuth_center.setVisible(0);  # not used anymore
+        m.vsd_azimuth_right.setVisible(0);  # not used anymore
+        m.vsd_azimuth_left.setVisible(0);  # not used anymore
         m.vsd_azimuth_limit_circle_right_60.setVisible(1);
         m.vsd_azimuth_limit_circle_left_60.setVisible(1);
         m.vsd_azimuth_limit_circle_right_30.setVisible(0);
         m.vsd_azimuth_limit_circle_left_30.setVisible(0);
+        m.vsd_vert_coverage_circle_down.setVisible(1);
+        m.vsd_vert_coverage_circle_up.setVisible(1);
+        m.vsd_vert_coverage_text_down.setVisible(1);
+        m.vsd_vert_coverage_text_up.setVisible(1);
         m.vsd_tgt_true_speed.setVisible(0);
         m.vsd_tgt_bearing.setVisible(0);
         m.vsd_tgt_heading.setVisible(0);
@@ -1239,10 +1276,10 @@ var LAD_Device = {
             
         # Radar target information
         m.hsd_tgt_closure_pin = m.HSDScreen.createChild("path")
-            .moveTo(677*4-75,1150*2+500+75)
-            .lineTo(677*4-75-75,1150*2+500+75+65)
-            .moveTo(677*4-75,1150*2+500+75)
-            .lineTo(677*4-75-75,1150*2+500+75-65)
+            .moveTo(677*4-75,1150*4+500+75)
+            .lineTo(677*4-75-75,1150*4+500+75+65)
+            .moveTo(677*4-75,1150*4+500+75)
+            .lineTo(677*4-75-75,1150*4+500+75-65)
             .setStrokeLineWidth(6)
             .set("z-index",15)
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
@@ -1251,7 +1288,7 @@ var LAD_Device = {
             .setText("0637")
             .setAlignment("center-center")
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
-            .setTranslation(677*4-75-140,1150*2+500+75)
+            .setTranslation(677*4-75-140,1150*4+500+75)
             .setFont(aircraft.HUDFont);
         
         # Create the EPAWSS symbols
@@ -1262,7 +1299,7 @@ var LAD_Device = {
                 .lineTo(677*2-40,2262+500-60-65+25+20+10+15)
                 .moveTo(677*2,2262+500-60-65+25+10+15)
                 .lineTo(677*2+40,2262+500-60-65+25+20+10+15)
-                .setStrokeLineWidth(7)
+                .setStrokeLineWidth(10)
                 .setVisible(0)
                 .set("z-index",20)
                 .setColor(prst_orange_dark.r,prst_orange_dark.g,prst_orange_dark.b);
@@ -1929,6 +1966,25 @@ update_lad = func() {
                 LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(1);
             }
 
+            var azimuth_vertical = getprop("instrumentation/radar/ho-field");
+            y_move_vert_up = -azimuth_vertical * 1131/60 + 160;
+            y_move_vert_down = azimuth_vertical * 1131/60 - 80;
+
+            LADCanvas.vsd_vert_coverage_circle_down.setTranslation(0, y_move_vert_down);
+            LADCanvas.vsd_vert_coverage_circle_up.setTranslation(0, y_move_vert_up);
+            LADCanvas.vsd_vert_coverage_text_down.setTranslation(80+75+60,2262+500+y_move_vert_down);
+            LADCanvas.vsd_vert_coverage_text_up.setTranslation(80+75+60,2262+500+y_move_vert_up);
+            
+            # Compute radar altitude coverage
+            range_ft = getprop("instrumentation/radar/radar2-range") * 6076.12;  # 6076.12 is NM2FT coefficient
+            sin_angle = math.sin(azimuth_vertical*D2R);
+
+            min_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") - range_ft * sin_angle) / 1000;  # / 1000 to only keep the thousands
+            max_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") + range_ft * sin_angle) / 1000;
+            
+            LADCanvas.vsd_vert_coverage_text_up.setText(sprintf("%d-%d", max_alt, (max_alt - int(max_alt)) * 10));
+            LADCanvas.vsd_vert_coverage_text_down.setText(sprintf("%d-%d", min_alt, (min_alt - int(min_alt)) * -10));
+
             # Update the steerpoint symbols
             var stpt_idx = 0;
             if (getprop("sim/model/instrumentation/vhf/mode") == 0) {  # if we're in normal nav mode (not TACAN or ILS)
@@ -2146,15 +2202,15 @@ update_lad = func() {
                     LADCanvas.vsd_tgt_model.setText(model);
 
                     # Scale:
-                    # To be at 600 (moving 2,275px up), closing speed must be 3,000 KTS
-                    closing_y = awg_9.active_u.get_closure_rate() * 3000 / 2275;
-                    if (closing_y > 2275) {  # clamp the values
-                        closing_y = 2275; # max down px value
-                    } elsif (closing_y < -2275) {
-                        closing_y = -2275; # max up px value
+                    # To be at max (moving 4,600px up), target range must be max radar range
+                    range_y = awg_9.active_u.get_range() * getprop("instrumentation/radar/radar2-range") / 4600;
+                    if (range_y > 4560) {  # clamp the values
+                        range_y = 4560; # max down px value
+                    } elsif (range_y < -4560) {
+                        range_y = -4560; # max up px value
                     }
-                    LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0, -closing_y);
-                    LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140, 2875-closing_y);
+                    LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0, - range_y);
+                    LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140, 2875- range_y);
                 }
             } else {
                 LADCanvas.locked_box.setVisible(0);
@@ -2534,7 +2590,7 @@ update_lad = func() {
             var found_lock = 0;
             var lock_assigned = 0;
             foreach (contact ; awg_9.tgts_list) {
-                if (contact.get_display() == 1) {
+                if (contact.get_display() == 1 and !getprop("instrumentation/radar/radar-standby")) {
                     if (awg_9.active_u == contact) { # If it's the active radar lock we got
                         found_lock = 1;
                     }
@@ -2629,15 +2685,15 @@ update_lad = func() {
                     LADCanvas.hsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
                     
                     # Scale:
-                    # To be at 600 (moving 2,275px up), closing speed must be 3,000 KTS
-                    closing_y = awg_9.active_u.get_closure_rate() * 3000 / 2275;
-                    if (closing_y > 2275) {  # clamp the values
-                        closing_y = 2275; # max down px value
-                    } elsif (closing_y < -2275) {
-                        closing_y = -2275; # max up px value
+                    # To be at 600 (moving 4,600px up), target's range must be at radar max range
+                    range_y = awg_9.active_u.get_range() * getprop("instrumentation/radar/radar2-range") / 4600;
+                    if (range_y > 4560) {  # clamp the values
+                        range_y = 4560; # max down px value
+                    } elsif (range_y < -4560) {
+                        range_y = -4560; # max up px value
                     }
-                    LADCanvas.hsd_tgt_closure_pin.setTranslation(0.0, -closing_y);
-                    LADCanvas.hsd_tgt_closure_text.setTranslation(677*4-75-140, 2875-closing_y);
+                    LADCanvas.hsd_tgt_closure_pin.setTranslation(0.0, - range_y);
+                    LADCanvas.hsd_tgt_closure_text.setTranslation(677*4-75-140, 1150*4+500+75 - range_y);
                 }
             } else {
                 LADCanvas.locked_box_hsd.setVisible(0);
@@ -2753,7 +2809,7 @@ update_lad = func() {
             # Process the EPAWSS contacts
             var epawss_idx = 0;
             foreach (contact ; epawss.contacts_list) {
-                if (contact.get_visible() and contact.get_display()) {  # If it's all good
+                if (contact.get_visible() and contact.get_range() < getprop("instrumentation/radar/radar2-range") * 1.25) {  # If it's all good
                     already_on_rdr = 0;  # if its' on our radar, we don't display it.
                     foreach(rdrcontact ; valid_radar_targets) {
                         if (rdrcontact == contact.get_Callsign()) {
@@ -2763,7 +2819,7 @@ update_lad = func() {
                     if (epawss_idx < LADCanvas.tgt_symbols_max and already_on_rdr == 0) {
 
                         contact_data = datalink.get_data(contact.get_Callsign());
-                        if (contact_data == nil or !contact_data.is_known()) {
+                        if (contact_data == nil) {
                             unknown = 1;
                         } else {
                             unknown = 0;
@@ -2772,7 +2828,6 @@ update_lad = func() {
                         if (unknown == 1) {  # We don't display it if we already got it on datalink, we don't need an EPAWSS contact
                         
                             # Basic position and changing text
-                            LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setVisible(1);
                             LADCanvas.epawss_texts_hsd[epawss_idx].setVisible(1);
                             
                             tgt_bear = contact.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing to the contact
@@ -2781,7 +2836,6 @@ update_lad = func() {
                             var x_move = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);
                             var y_move = -(tgt_rng*LADCanvas.hsd_nm_to_px_y)*math.cos(tgt_bear*D2R);
                             
-                            LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setTranslation(x_move, y_move);
                             LADCanvas.epawss_texts_hsd[epawss_idx].setTranslation(677*2+x_move, 2262+500+y_move);
                             
                             # Display contact's indentified type (F, F/B, B, AEW&C, TNKR etc.)
@@ -2792,6 +2846,14 @@ update_lad = func() {
                                 LADCanvas.epawss_texts_hsd[epawss_idx].setText("M");
                             } else {  # Model's unknown to our radar
                                 LADCanvas.epawss_texts_hsd[epawss_idx].setText("UNK");
+                            }
+                            
+                            # Display the hat if it's an airborne radar
+                            if (contact.get_type() == awg_9.AIR) {
+                                LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setTranslation(x_move, y_move);
+                                LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setVisible(1);
+                            } else {
+                                LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setVisible(0);
                             }
                             
                             # Display the new threat upper circle if it's one
@@ -2809,7 +2871,7 @@ update_lad = func() {
                             }
                             
                             # Display the primary threat double triangle if that's the one
-                            if (u.get_Callsign()~u.getUnique() == epawss.primary_threat_callsign) {
+                            if (contact.get_Callsign()~contact.getUnique() == epawss.primary_threat_callsign) {
                                 LADCanvas.epawss_symbols_hsd_primary_threat[epawss_idx].setVisible(1);
                                 LADCanvas.epawss_symbols_hsd_primary_threat[epawss_idx].setTranslation(x_move, y_move);
                             } else {
@@ -2817,11 +2879,11 @@ update_lad = func() {
                             }
                             
                             # Display the blinking circle if it's a missile launcher, or if it's an approaching missile
-                            if ((epawss.is_missile_launcher(u) or contact.get_type() == awg_9.ORDNANCE) and 5*(elapsed-int(elapsed))>2.5) {  # 4Hz blink
-                                LADCanvas.epawss_symbols_hsd_missile_launch[nv].setVisible(1);
+                            if ((epawss.is_missile_launcher(contact) or contact.get_type() == awg_9.ORDNANCE) and 5*(elapsed-int(elapsed))>2.5) {  # 4Hz blink
+                                LADCanvas.epawss_symbols_hsd_missile_launch[epawss_idx].setVisible(1);
                                 LADCanvas.epawss_symbols_hsd_missile_launch[epawss_idx].setTranslation(x_move, y_move);
                             } else {
-                                LADCanvas.epawss_symbols_hsd_missile_launch[nv].setVisible(0);
+                                LADCanvas.epawss_symbols_hsd_missile_launch[epawss_idx].setVisible(0);
                             }
 
                             epawss_idx += 1;
@@ -2840,7 +2902,7 @@ update_lad = func() {
             }
             
             # If there's a Missile Approach Warning, display it (MAW)
-            var maw_epawss_idx = 21;
+            var maw_epawss_idx = 21;  # id of the object specifically made for the Missile Approach Warning
             if (getprop("payload/armament/MAW-active") and getprop("sim/model/f15/epawss/epawss-on")) {
                 maw_bearing = getprop("payload/armament/MAW-bearing");
                 deviation = -geo.normdeg180(maw_bearing - getprop("orientation/heading-deg")) + 90;

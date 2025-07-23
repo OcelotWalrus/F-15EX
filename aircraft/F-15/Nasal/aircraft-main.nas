@@ -401,6 +401,22 @@ var toggle_awareness_views = func() {
     }
 }
 
+var LADView = func () {  # lean into the LAD
+    if (getprop("sim/current-view/view-number") == 0) {
+        var hd = getprop("sim/current-view/heading-offset-deg");
+        var hd_t = 360;
+        if (hd < 180) {
+          hd_t = hd_t - 360;
+        }
+        interpolate("sim/current-view/field-of-view", 42.59, 0.66);
+        interpolate("sim/current-view/heading-offset-deg", hd_t,0.66);
+        interpolate("sim/current-view/pitch-offset-deg", -9.18,0.66);
+        interpolate("sim/current-view/roll-offset-deg", 0,0.66);
+        interpolate("sim/current-view/x-offset-m", 0, 1);
+        interpolate("sim/current-view/y-offset-m", 1.26915, 1);
+        interpolate("sim/current-view/z-offset-m", -5.09, 1);
+    }
+}
 
 var quickstart = func() {
 #    setprop("controls/electric/engine[0]/generator",1);
@@ -602,11 +618,52 @@ var chute_release = func() {
 
 var chuteLoop = maketimer(0.05, chuteLoopFunc);
 
+var checkNumber = func {
+    # Check if number is nil or NaN and print to console if it is.
+    # Can take any number of arguments.
+    foreach(var test ; arg) {
+        if (test[0] == nil or debug.isnan(test[0])) {
+            print("ERROR: Variable ",test[1]," is not valid number NaN=",debug.isnan(test[0])," nil=",test[0]==nil);
+            return 0;
+        }
+    }
+    return 1;
+}
+
 var resetView = func () {
-  setprop("sim/current-view/field-of-view", getprop("sim/current-view/config/default-field-of-view-deg"));
-  setprop("sim/current-view/heading-offset-deg", getprop("sim/current-view/config/heading-offset-deg"));
-  setprop("sim/current-view/pitch-offset-deg", getprop("sim/current-view/config/pitch-offset-deg"));
-  setprop("sim/current-view/roll-offset-deg", getprop("sim/current-view/config/roll-offset-deg"));
+    var hd = getprop("sim/current-view/heading-offset-deg");
+    var hd_t = getprop("sim/current-view/config/heading-offset-deg");
+    var field = getprop("sim/current-view/config/default-field-of-view-deg");
+    var raw = getprop("sim/current-view/view-number-raw");
+    var pos = getprop("sim/current-view/config/pitch-offset-deg");
+    var ros = getprop("sim/current-view/config/roll-offset-deg");
+    if (!checkNumber([hd,"hd"],[hd_t,"hd_t"],[field,"field"],[raw,"raw"],[pos,"pos"],[ros,"ros"])) {
+        print("Problem was in view ", raw);
+        return;
+    }
+    if (hd > 180) {
+        hd_t = hd_t + 360;
+    }
+    interpolate("sim/current-view/field-of-view", field, 0.66);
+    interpolate("sim/current-view/heading-offset-deg", hd_t,0.66);
+    interpolate("sim/current-view/pitch-offset-deg", pos,0.66);
+    interpolate("sim/current-view/roll-offset-deg", ros,0.66);
+
+    #if (getprop("sim/current-view/view-number") == 0) {
+
+    var x = getprop("sim/view["~raw~"]/config/x-offset-m");
+    var y = getprop("sim/view["~raw~"]/config/y-offset-m");
+    var z = getprop("sim/view["~raw~"]/config/z-offset-m");
+    if (!checkNumber([x,"x"],[y,"y"],[z,"z"])) {
+        print("Problem was in view ", raw);
+        return;
+    }
+    interpolate("sim/current-view/x-offset-m", x, 1);
+    interpolate("sim/current-view/y-offset-m", y, 1);
+    interpolate("sim/current-view/z-offset-m", z, 1);
+    #} else {
+    #  interpolate("sim/current-view/x-offset-m", 0, 1);
+    #}
 }
 
 dynamic_view.register(func {

@@ -962,9 +962,9 @@ var TerrainManager = {
 
     # There is no terrain on earth that can be between these altitudes
     # so shortcut the whole thing and return now.
-    if(fn.altitude_ft > 8900 and SelectCoord.alt() > 8900){
+    #if(fn.altitude_ft > 8900 and SelectCoord.alt() > 8900){
  #       return 1;   cannot compare ft and meters
-    }
+    #}
 
 
             me.myOwnPos = geo.aircraft_position();
@@ -1258,12 +1258,14 @@ wcs_mode_toggle = func() {
 	if ( wcs_current_mode == wcs_mode_pulse_srch ) {
         wcs_current_mode = wcs_mode_tws_auto;
 		AzField.setValue(60);
+		HoField.setValue(90);  #+/- 45 degrees
 		ddd_screen_width = 0.0422;
 	}
     else #if ( wcs_current_mode == wcs_mode_tws_auto )
     {
         wcs_current_mode = wcs_mode_pulse_srch;
 		AzField.setValue(120);
+		HoField.setValue(120);
 		ddd_screen_width = 0.0844;
 	}
     setprop("sim/model/"~this_model~"/instrumentation/radar-awg-9/wcs-mode", wcs_current_mode);
@@ -1273,12 +1275,14 @@ wcs_mode_update = func() {
 	if ( WcsMode.getValue() ==  wcs_mode_tws_auto) {
 		wcs_current_mode = wcs_mode_tws_auto;
 		AzField.setValue(60);
+		HoField.setValue(90);  #+/- 45 degrees
 		ddd_screen_width = 0.0422;
 	}
     else #if ( WcsMode.getNode("pulse-srch").getBoolValue() )
     {
         wcs_current_mode = wcs_mode_pulse_srch;
 		AzField.setValue(120);
+		HoField.setValue(120);
 		ddd_screen_width = 0.0844;
 	}
     setprop("sim/model/"~this_model~"/instrumentation/radar-awg-9/wcs-mode", wcs_current_mode);
@@ -1863,7 +1867,7 @@ else
 	    # Simple but efficient way to determine:
 	    # we check if the target's got their nose pointed on us, with a 30* margin,
 	    # and if they're closing in (positive closing speed).
-	    bearing_to_own = geo.course(me.get_Coord().lat(), me.get_Coord().lon(), own_geo_position.lat(), own_geo_position.lon());
+	    bearing_to_own = own_geo_position.course_to(me.get_Coord());
 	    diff = math.abs(bearing_to_own - me.get_heading());
 	    if (diff > 180) {
             diff = 360 - diff;

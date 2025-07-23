@@ -414,7 +414,7 @@
             </key>
             <key>
                 <name>#</name>
-                <desc>Toggle between CCIP and CCRP bombing mode</desc>
+                <desc>Switch between CCIP and CCRP bombing mode</desc>
             </key>
             <key>
                 <name>Ctrl-n</name>
@@ -435,6 +435,10 @@
             <key>
                 <name>Ctrl-z</name>
                 <desc>Go through different situational awareness camera views.</desc>
+            </key>
+            <key>
+                <name>Ctrl-o</name>
+                <desc>Lean onto the LAD (Large Area Display).</desc>
             </key>
             <key>
                 <name>y/Y</name>
@@ -4386,6 +4390,15 @@
                     <script>awg_9.wcs_mode_toggle()</script>
                 </binding>
             </key>
+            
+            <key n="15">
+                <name>Ctrl-o</name>
+                <desc>Lean onto the LAD</desc>
+                <binding>
+                    <command>nasal</command>
+                    <script>aircraft.LADView()</script>
+                </binding>
+            </key>
 
             <key n="33">
                 <name>!</name>
@@ -4416,7 +4429,7 @@
 
             <key n="35">
                 <name>#</name>
-                <desc>Toggle between CCIP and CCRP bombing modes</desc>
+                <desc>Switch between CCIP and CCRP bombing modes</desc>
                 <binding>
                     <command>nasal</command>
                     <script>pylons.fcs.toggleDropMode()</script>
@@ -4425,7 +4438,7 @@
 
             <key n="22">
                 <name>Ctrl-v</name>
-                <desc>Select pilot's view (view 0) or toggle between pilot's and RIO's view</desc>
+                <desc>Select pilot's view (view 0) or switch between pilot's and RIO's view</desc>
                 <binding>
                     <command>nasal</command>
                     <script>aircraft.toggle_cockpit_views();</script>
