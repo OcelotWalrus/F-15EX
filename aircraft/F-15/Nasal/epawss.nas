@@ -29,7 +29,7 @@
 # Future features (TODO's) :
 # - For the AI light and its sound, move it from the awg_9.nas to the epawss.nas file, and check if it's a friendly or not
 # - Add the EPAWSS to the systems, so it can be damaged by missiles and etc.
-# - Made the EPAWSS panel on the right panel of the interiors.
+# - Make the EPAWSS panel on the right panel of the interiors.
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
@@ -300,7 +300,7 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
             max_points_num = u.points;
             max_points = u.unique;
         } else {
-            if (u.points() > max_points_num) {
+            if (u.points > max_points_num) {
                 max_points_num = u.points;
                 max_points = u.unique;
             }
