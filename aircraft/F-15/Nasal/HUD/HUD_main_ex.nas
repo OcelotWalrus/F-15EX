@@ -934,7 +934,7 @@ var F15HUD = {
 		                                                     	obj.flyup.setText("FLYUP");
 		                                                     	obj.flyup.show();
 															} elsif (getprop("sim/time/elapsed-sec") > 2 and val.BingoFuel > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
-		                                                     	obj.flyup.setText("FUEL");
+		                                                     	obj.flyup.setText("BINGO");
 		                                                     	obj.flyup.show();
 															} elsif (val.VNE < val.VelocitiesAirspeedKt) {
 															} else {

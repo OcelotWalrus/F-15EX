@@ -755,7 +755,7 @@ var F15_HMD = {
                                                          obj.flyup.setText("LIMIT");
                                                          obj.flyup.show();
                                                  } elsif (val.BingoFuel == 1) {
-                                                         obj.flyup.setText("FUEL");
+                                                         obj.flyup.setText("BINGO");
                                                          obj.flyup.show();
                                                  } else {
                                                          obj.flyup.hide();
