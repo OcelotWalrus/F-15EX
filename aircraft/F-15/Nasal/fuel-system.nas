@@ -312,6 +312,13 @@ setlistener("sim/model/f15/controls/fuel/dump-switch", func(v) {
     }
 });
 
+setlistener("sim/model/f15/lights/ca-bingo-fuel", func(v) {
+    if (v == 1) {  # if we've got bingo fuel warning, we stop fuel dump automatically
+        setprop("sim/multiplay/generic/int[0]", 0);
+        setprop("fdm/jsbsim/propulsion/fuel_dump",0);
+    }
+});
+
 
 var r_probe = aircraft.door.new("sim/model/f15/refuel/", 1);
 var RprobePos        = props.globals.getNode("sim/model/f15/refuel/position-norm", 1);
