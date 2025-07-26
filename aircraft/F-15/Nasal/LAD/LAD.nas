@@ -2512,8 +2512,14 @@ update_lad = func() {
                             # If the point is outside of the circle, we don't let it get away of it and we place it at the very edge of the HSD circle
                             # The circle is actually an ellipse, in a way that it appears as a circle on the LAD
                             move_dir = ellipse_clamp(x_move, y_move);
+                            clamped = x_move =! move_dir[0] or y_move != move_dir[1];;
                             x_move = move_dir[0];
                             y_move = move_dir[1];
+                            
+                            if (clamped) {  # Don't display the steerpoint if it's outta the screen, though we still display the connecting lines
+                                LADCanvas.stpt_symbols_hsd[stpt_idx].setVisible(0);
+                                LADCanvas.stpt_texts_hsd[stpt_idx].setVisible(0);
+                            }
 
                             LADCanvas.stpt_symbols_hsd[stpt_idx].setTranslation(x_move, y_move);
                             LADCanvas.stpt_texts_hsd[stpt_idx].setTranslation(677*2+x_move, 2262+500+145+y_move);
