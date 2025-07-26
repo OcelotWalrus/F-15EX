@@ -27,7 +27,7 @@
 # got on our radar, it's the radar's info that we're gonna use. And if we got an EPAWSS contact
 # that's already on our datalink, or radar, then we don't display it.
 # - Due a stupid act o' mine, the height on the canvas is distorted, due to the 3d model on which
-# it's projected on being 19" x 10" but the canvas being 8192px x 8192px. That makes so that for
+# it's projected on being 19" x 10" but the canvas being 8,192px x 8,192px. That makes so that for
 # circles to look like circles, they must be ellipse where the horizontal radius is given a scale
 # of 10/19 compared to the vertical radius. It also makes so that when converting pixels to nautical
 # miles - like in the HSD where range is displayed (not in the VSD for example because in a vertical
@@ -47,7 +47,7 @@
 # - RWS Mode: no target speed, no precise target altitude (round altitude at +2-2thousands) No AIM lock + no heading
 # - Move selection cursor to select a contact (remove next target button)
 # - bleps: make em boxes, with tail up or down depending on closing speed (when TWS, change tail's orientation depending on target's heading if it's one of the locked targets)
-# - TWS: select different contacts to be tracked (up to 20), then you can use the next target button to switch between locked targets
+# - TWS (actually no cuz it's TWS Auto: select different contacts to be tracked (up to 20), then you can use the next target button to switch between locked targets
 # - use specific symbology for specific current tracked target
 # - Use different symbols for SAMs, AAAs and ships contacts
 # - Differentiate evading, "neutral" and incoming contacts using different
@@ -3132,7 +3132,7 @@ update_lad = func() {
                 weapon_selector = getprop("sim/model/f15/controls/armament/weapon-selector");  # 0-guns,1-srm,2-amraam,5-ground
                 master_arm = getprop("sim/model/f15/controls/armament/master-arm-switch");
                 if (weapon_selector == 1) {
-                    if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon() == "AIM-9X") {
+                    if (pylons.fcs.getSelectedWeapon() != nil and (pylons.fcs.getSelectedWeapon() == "AIM-9X" or pylons.fcs.getSelectedWeapon() == "CATM-9X")) {
                         LADCanvas.aim9_cool_box.setVisible(pylons.fcs.getSelectedWeapon().isCooling);
                     } else {
                         LADCanvas.aim9_cool_box.setVisible(0);
@@ -3189,6 +3189,48 @@ update_lad = func() {
                             }
                         } else {
                             LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("AAM");
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                        }
+                    } elsif (loaded_type == "CATM-120D") {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                        if (getprop("payload/armament/station/id-"~pylon_idx~"-set") != "2 x CATM-120D AMRAAM Dummy") {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("C120D");
+                        } else {
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2C120D");
+                        }
+                        if (weapon_selector == 2) {
+                            if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                        } else {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("CATM2");
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                        }
+                    } elsif (loaded_type == "CATM-9X") {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("CTM9X");
+                        if (weapon_selector == 2) {
+                            if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                            } else {
+                                LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("STBY");
+                                LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                                LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                            }
+                        } else {
+                            LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("CATM9");
                             LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
                             LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
                         }
