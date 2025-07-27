@@ -19,6 +19,7 @@
 # - NFLIR (Navigation Forward-Looking Infrared)  - Allows to configure the FLIR pod and actively look through it
 # - IRST (Infrared Search & Track)  - Allows to configure the Legion IRST pod and actively look through it and control it and track heat signatures. (Implement Legion IRST Pod functionalities first)
 # - FCTRLS (Flight Controls)  - A display like in the EX interiors photo where you can see the state of every flight controls (elevators, flaps, rudders, etc.), as well as if they're damaged or not
+# - DTMD (Data Cartridge Mission Data) - A display that allows to see the data loaded by the Data Cartridge and modify it, and apply the changes.
 # ---------------------------
 # Notes:
 # - When displaying contacts, there are 3 types of 'em: radar contacts, datalink contacts and

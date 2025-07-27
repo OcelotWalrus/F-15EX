@@ -27,6 +27,7 @@
 # - `DECKMax,<altitude>,<enabled>` example: `DeckMax,42000,1`  - Configures the maximum altitude deck. <altitude> is the altitude (in feet) at which if
 # the pilot goes over, a `altitude` warning will set off. <enabled> should be either 1 or 0, where 1 enables it and 0 disables it.
 # - `BINGO,<fuel_lbs>` example: `BINGO,7500`  - Sets the amount of fuel (in lbs) at which the bingo warning sets off.
+# - `SQUAWK,<4-digit-code>` example : `SQUAWK,1200`  - Sets the transponder's code
 # - `STPT,<index>,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-ft>` example: `STPT,0,37.2,-115.6,12000`  - Adds a steerpoint (waypoint on the route-manager).
 # <index> is the index of the Steerpoint, defining its order (if it's 0, it'll be the first one on the route, 4 the fourth one.). If you don't want a specific
 # altitude for the steerpoint, set the <altitude-ft> parameter to -9999.
@@ -44,6 +45,7 @@
 # the following one being acknowledged as index 1 even if 2 was stated
 # ---------------------------
 # Author: Jimmy L. Miles
+# ---------------------------
 
 var dtcLast = nil;  # variable to store the latest touched data cartridge's data
 
@@ -73,6 +75,8 @@ var load_cartridge = func(path) {
                 setprop("instrumentation/iff/channel-selection", num(items[1]));
             } elsif (key == "BINGO") {
                 setprop("sim/model/f15/controls/fuel/bingo", num(items[1]));
+            } elsif (key == "SQUAWK") {
+                setprop("instrumentation/transponder/id-code", num(items[1]));
             } elsif (key == "TACAN") {
                 setprop("instrumentation/tacan/frequencies/selected-mhz", num(items[1]));
             } elsif (key == "DECKMin") {
@@ -142,6 +146,7 @@ var save_cartridge = func(path) {
     ret = ret~sprintf("COM2,%.2f,%.2f|", getprop("instrumentation/comm[1]/frequencies/selected-mhz"), getprop("instrumentation/comm[1]/frequencies/standby-mhz"));
     ret = ret~sprintf("ILS,%.2f,%.2f,%3d|", getprop("instrumentation/nav[0]/frequencies/selected-mhz"), getprop("instrumentation/nav[0]/frequencies/standby-mhz"), getprop("instrumentation/nav[0]/radials/selected-deg"));
     ret = ret~sprintf("BINGO,%d|", getprop("sim/model/f15/controls/fuel/bingo"));
+    ret = ret~sprintf("SQUAWK,%d|", getprop("instrumentation/transponder/id-code"));
     ret = ret~sprintf("TACAN,%.2f|", getprop("instrumentation/tacan/frequencies/selected-mhz"));
     ret = ret~sprintf("DECKMin,%d,%d|", getprop("sim/model/f15/avionics/altitude-deck-min"), getprop("sim/model/f15/avionics/altitude-deck-min-enabled"));
     ret = ret~sprintf("DECKMax,%d,%d|", getprop("sim/model/f15/avionics/altitude-deck-max"), getprop("sim/model/f15/avionics/altitude-deck-max-enabled"));
