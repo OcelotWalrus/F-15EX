@@ -5282,6 +5282,7 @@
     <object-name>formation-light-brightness-knob</object-name>
     <object-name>formation-light-brightness-knob</object-name>
     <object-name>nav-control-intensity-knob</object-name>
+    <object-name>epawss-volume-knob</object-name>
   </effect>
   <!-- lights -->
   <animation>
@@ -17215,11 +17216,13 @@
     <object-name>InteriorBucket</object-name>
     <object-name>seat-cushion</object-name>
     <object-name>aces2</object-name>
+    <object-name>ejection-master</object-name>
   </effect>
   <animation>
     <type>select</type>
     <object-name>aces2</object-name>
     <object-name>seat-cushion</object-name>
+    <object-name>ejection-master</object-name>
     <condition>
       <not><property>sim/model/f15/ejected</property></not>
     </condition>
@@ -17288,6 +17291,331 @@
       <property>sim/model/f15/avionics/kneeboard-right-wso</property>
     </condition>
   </animation>
-  <!--Renamed objects:
-      mount: fib_mount-->
+  
+  <!-- Data Cartridge Panel -->
+  <animation>
+    <type>knob</type>
+    <visible>true</visible>
+    <object-name>dtm-panel</object-name>
+    <action>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script><![CDATA[
+            var defaultDirInFileSelector = getprop("/sim/fg-home") ~ "/Export";
+            var file_selector_dtc = gui.FileSelector.new(
+              callback: cartridge.load_cartridge, title: "Load data", button: "Load",
+              dir: defaultDirInFileSelector, dotfiles: 1, pattern: ["*.f15dtc"]);
+            
+            file_selector_dtc.open();
+        ]]></script>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <visible>true</visible>
+    <object-name>dtm-switch</object-name>
+    <action>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>nasal</command>
+        <script><![CDATA[
+            var defaultDirInFileSelector = getprop("/sim/fg-home") ~ "/Export";
+            var save_selector_dtc = gui.FileSelector.new(
+              callback: cartridge.save_cartridge, title: "Save data", button: "Save",
+              dir: defaultDirInFileSelector, dotfiles: 1, file: "f15-dtc-data.f15dtc", pattern: ["*.f15dtc"]);
+            
+            save_selector_dtc.open();
+        ]]></script>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <visible>true</visible>
+    <object-name>dtm-switch</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+        <property>sim/model/f15/controls/interiors/dtm-save-button</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/interiors/dtm-save-button</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>dtm-switch</object-name>
+    <property>sim/model/f15/controls/interiors/dtm-save-button</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.003</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.6251</x-m>
+      <y-m> 0.3209</y-m>
+      <z-m> 0.6550</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+  </animation>
+  
+  <!-- EPAWSS Panel -->
+  <animation>
+    <type>rotate</type>
+    <object-name>epawss-volume-knob</object-name>
+    <property>sim/model/f15/epawss/epawss-volume</property>
+    <offset-deg>180</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.511</x-m>
+      <y-m>0.3405</y-m>
+      <z-m>.6751</z-m>
+    </center>
+    <axis>
+        <z>-1</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>epawss-volume-knob</object-name>
+    <property>sim/model/f15/epawss/epawss-volume</property>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/epawss/epawss-volume</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <object-name>epawss-new-threat-alarm</object-name>
+    <type>material</type>
+    <condition>
+     <and>
+      <or>
+        <property>sim/model/f15/lights/master-test-lights</property>
+        <or>
+          <not>
+            <equals>
+              <property>sound/rwr-launch</property>
+              <value type="string" />
+            </equals>
+          </not>
+          <equals>
+            <property>payload/armament/spike-air</property>
+            <value>1</value>
+          </equals>
+          <property>payload/armament/MAW-active</property>
+          <property>payload/armament/MAW-semiactive</property>
+          <equals>
+            <property>payload/armament/spike-gnd-02</property>
+            <value>1</value>
+          </equals>
+          <equals>
+            <property>payload/armament/spike-gnd-11</property>
+            <value>1</value>
+          </equals>
+          <equals>
+            <property>payload/armament/spike-gnd-20</property>
+            <value>1</value>
+          </equals>
+          <equals>
+            <property>payload/armament/spike-gnd-23</property>
+            <value>1</value>
+          </equals>
+          <equals>
+            <property>payload/armament/spike-gnd-p2</property>
+            <value>1</value>
+          </equals>
+          <equals>
+            <property>payload/armament/spike-gnd-nk</property>
+            <value>1</value>
+          </equals>
+        </or>
+      </or>
+      <greater-than>
+        <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+        <value>0</value>
+      </greater-than>
+      <property>sim/model/f15/epawss/epawss-on</property>
+     </and>
+    </condition>
+    <emission>
+      <factor>1</factor>
+      <red>1</red>
+      <green>1</green>
+      <blue>1</blue>
+    </emission>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>epawss-master-switch</object-name>
+    <property>sim/model/f15/epawss/epawss-on</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.510</x-m>
+      <y-m>0.3075</y-m>
+      <z-m>0.6751</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/epawss/epawss-on</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>ejection-master</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>sim/model/f15/ejection-master</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>ejection-master</object-name>
+    <property>sim/model/f15/ejection-master</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>-90</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.299</x-m>
+      <y-m>0.2366</y-m>
+      <z-m>0.6747</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>expendables-guard-lever</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>sim/model/f15/epawss/expendables-guard</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>expendables-guard-lever</object-name>
+    <property>sim/model/f15/epawss/expendables-guard</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>-55</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.55</x-m>
+      <y-m>0.4023</y-m>
+      <z-m>0.6848</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>expendables-master-switch</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>sim/model/f15/epawss/expendables-master</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>expendables-master-switch</object-name>
+    <property>sim/model/f15/epawss/expendables-master</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.527</x-m>
+      <y-m>0.4017</y-m>
+      <z-m>0.6751</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
 </PropertyList>

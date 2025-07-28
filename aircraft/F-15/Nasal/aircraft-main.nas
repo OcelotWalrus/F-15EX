@@ -545,14 +545,14 @@ var cold_and_dark = func()
 
 # Ejection
 var eject_f15 = func{
-    if (getprop("sim/model/f15/ejected")) {
+    if (getprop("sim/model/f15/ejected") or !getprop("sim/model/f15/ejection-master")) {
         return;
     }
     # ACES II activation
     #view.setViewByIndex(1);
     setprop("sim/model/f15/ejected", 1);
-    #settimer(eject2, 1.5);# this is to give the sim time to load the exterior view, so there is no stutter while seat fires and it gets stuck.
-    eject2();
+    settimer(eject2, 1.5);# this is to give the sim time to load the exterior view, so there is no stutter while seat fires and it gets stuck.
+    #eject2();
     damage.damageLog.push("Pilot ejected");
 }
 
@@ -560,7 +560,6 @@ var eject2 = func{
     setprop("canopy/not-serviceable", 1);
     var es = armament.AIM.new(10, "es","gamma", nil ,[-1.85,0,0.7]);
     var es2 = armament.AIM.new(20, "es","gamma", nil ,[0.65,0,0.7]);
-    #setprop("fdm/jsbsim/fcs/canopy/hinges/serviceable",0);
     es.releaseAtNothing();
     viewMissile.view_firing_missile(es);
     settimer(func {es2.releaseAtNothing();},0.5);

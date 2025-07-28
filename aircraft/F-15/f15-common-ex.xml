@@ -10,7 +10,7 @@
    | xii: F-14 origin of radar, missiles. Most have been modified but Alexis's excellent work was a good basis. (pre 2015) {original F-15C/D model}
    | Nikolai V. Chr.: Improvements to Weapons, Radar HUD (2015->current) {original F-15C/D model}
    | Jimmy L. Miles : Various liveries, improvement and modifications to the HUD, some work on the cockpit interiors, creation of a PDF manual, extension of payload options through new ammunitions and new hardpoints, addition for aerodynamical effects, addition of new sound effects, of a dragchute (taken from that of the F-16), addition of flaps and gear overspeed damage, addition of wing's over G damage, enhancement of the exhaust trail (taken from that of the F-16), implementation of A/G and A/SEA operations, implementation of pilot ejection, the whole EHD (Engines-Hydraulics Display), the whole LAD (Large Area Display), creation of the GBU-32 JDAM and GBU-39 SDB 3d models, creation of new weapons' behaviours such as the AIM-120D or the AGM-158C LRSAM, implementation of the HMCSD (taken from that of the F-16), as well as some work on the exteriors model, implementation of more complex IFF and DATALINK systems (GPS-Spots sharing, radar and EPAWSS contacts sharing etc.), the whole EPAWSS (Eagle Passive-Active Warning Survivability System), addition of the Data Cartridge Transfer system (inspired by that of the F-16). {newest F-15EX model}
-   | Robert Andrews : Major work on the cockpit interiors (99% of the work) {newest F-15EX model}
+   | Robert Andrews : Major work on the cockpit interiors (99% of the work), also taught Jimmy L. Miles some Blender {newest F-15EX model}
    | ________________________________________________________________
    | Various authors have contributed liveries as per commit history.
 -->
@@ -897,6 +897,8 @@
                     <new-threat type="bool">false</new-threat>
                     <epawss-on type="bool">false</epawss-on>
                     <epawss-volume type="double">.75</epawss-volume>
+                    <expendables-master type="bool">false</expendables-master>
+                    <expendables-guard type="bool">true</expendables-guard>
                 </epawss>
                 <effects>
                     <rust type="bool">true</rust>
@@ -916,6 +918,7 @@
                     <version type="bool">1</version>
                 </scene>
                 <ejected type="bool">false</ejected>
+                <ejection-master type="bool">false</ejection-master>
                 <force-tgp type="bool">false</force-tgp>
                 <stores>
                     <nav-mounted type="bool">false</nav-mounted>
@@ -984,10 +987,10 @@
                     <hmd-slaving type="bool">false</hmd-slaving>
                     <n-reset type="double">0</n-reset>
                     <thrust-weight-ratio type="double">1</thrust-weight-ratio>
-                    <kneeboard-left type="bool">true</kneeboard-left>
-                    <kneeboard-right type="bool">true</kneeboard-right>
-                    <kneeboard-left-wso type="bool">true</kneeboard-left-wso>
-                    <kneeboard-right-wso type="bool">true</kneeboard-right-wso>
+                    <kneeboard-left type="bool">false</kneeboard-left>
+                    <kneeboard-right type="bool">false</kneeboard-right>
+                    <kneeboard-left-wso type="bool">false</kneeboard-left-wso>
+                    <kneeboard-right-wso type="bool">false</kneeboard-right-wso>
                 </avionics>
                 <flir>
                     <input>
@@ -1081,6 +1084,9 @@
                     <gear>
                         <ld-gear-handle-anim type="double">0</ld-gear-handle-anim>
                     </gear>
+                    <interiors>
+                        <dtm-save-button type="bool">false</dtm-save-button>
+                    </interiors>
 
                     <pilots-displays>
                         <steer>
