@@ -15,7 +15,7 @@
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
      id="namedview1"
-     pagecolor="#000012"
+     pagecolor="#000000"
      bordercolor="#eeeeee"
      borderopacity="1"
      inkscape:showpageshadow="0"
@@ -292,17 +292,17 @@
        rx="0.17394361"
        inkscape:label="left_tank_full" />
     <path
-       style="fill:#000012;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
        d="m 16.008569,473.92597 62.134951,-47.48302 -0.723551,-0.63312 -61.86362,-0.54266 -1.356658,49.20146 z"
        id="path4"
        inkscape:label="black_box_fuel_panels_left" />
     <path
-       style="fill:#000012;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
        d="m 169.57587,424.19737 63.2267,48.28152 v -48.28152 z"
        id="path3"
        inkscape:label="black_box_fuel_panels_right" />
     <rect
-       style="mix-blend-mode:normal;fill:#000012;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
+       style="mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;stroke-opacity:0"
        id="rect2"
        width="247.799"
        height="29.991163"
@@ -427,7 +427,7 @@
        cy="191.32497"
        r="50" />
     <path
-       style="display:inline;fill:#000012;fill-opacity:1;stroke:none;stroke-width:1.524;stroke-dasharray:0.762, 1.0668;stroke-dashoffset:0;stroke-opacity:0.847835"
+       style="display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.524;stroke-dasharray:0.762, 1.0668;stroke-dashoffset:0;stroke-opacity:0.847835"
        d="m 29.000617,245.32018 -0.180888,-56.97965 -0.180888,-7.23551 4.341307,3.0751 54.809,-0.72356 -2.35154,-48.29703 -112.512202,-1.44711 0.361775,111.24599 z"
        id="path9"
        inkscape:label="left_engine_rpm_hider_box" />
@@ -596,7 +596,7 @@
            style="fill-opacity:1;stroke:none;stroke-opacity:0"
            id="tspan30">L STATUS</tspan></tspan></text>
     <rect
-       style="fill:#d35b00;stroke:#000012;stroke-width:2.6416;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#d35b00;stroke:#000000;stroke-width:2.6416;stroke-dasharray:none;stroke-opacity:1"
        id="rect3"
        width="36.837002"
        height="35.046513"
@@ -670,7 +670,7 @@
          y="35.902238"
          id="tspan34">°F</tspan></text>
     <rect
-       style="fill:#d35b00;stroke:#000012;stroke-width:2.6416;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#d35b00;stroke:#000000;stroke-width:2.6416;stroke-dasharray:none;stroke-opacity:1"
        id="rect3-6"
        width="36.837002"
        height="35.046513"
@@ -798,7 +798,7 @@
        ry="50.012714"
        inkscape:label="right_engine_rpm_circle" />
     <path
-       style="display:inline;fill:#000012;fill-opacity:1;stroke:none;stroke-width:1.524;stroke-dasharray:0.762, 1.0668;stroke-dashoffset:0;stroke-opacity:0.847835"
+       style="display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.524;stroke-dasharray:0.762, 1.0668;stroke-dashoffset:0;stroke-opacity:0.847835"
        d="m 221.80061,245.77271 -0.11543,-56.99273 0.14318,-7.23663 -4.32435,3.06081 -54.80057,-0.9135 2.0999,-48.30053 112.47963,-1.05787 0.21673,111.27152 z"
        id="path9-0"
        inkscape:label="right_engine_rpm_hider_box" />

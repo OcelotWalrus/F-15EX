@@ -821,7 +821,7 @@ var flareLoop = func {
       and getprop("ai/submodels/submodel[5]/flare-release-snd") == 0) {
     flareCount = getprop("ai/submodels/submodel[5]/count");
     flareStart = getprop("sim/time/elapsed-sec");
-    if (flareCount > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
+    if (flareCount > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0 and getprop("sim/model/f15/epawss/expendables-master")) {
       # release a flare
       setprop("ai/submodels/submodel[5]/flare-release-snd", 1);
       setprop("ai/submodels/submodel[5]/flare-release", 1);

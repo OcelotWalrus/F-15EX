@@ -215,6 +215,7 @@
                     <!--Windscreen Heating-->
                     <windscreen-factor1>6750</windscreen-factor1>
                     <windscreen-frost-amount-dmd-rate>0.1</windscreen-frost-amount-dmd-rate>
+                    <windscreen-frost-dmd type="double">0</windscreen-frost-dmd>
                     <windscreen-heater-power-watts />
                     <windscreen-heater-watts-second>46</windscreen-heater-watts-second>
                     <!--Watts per second ramp up on heater input consumption-->
@@ -1025,6 +1026,7 @@
                 <cft type="float">1</cft>
                 <controls>
                     <windshield-heat type="int">0</windshield-heat>
+                    <windshield-heat-switch-pos type="int">0</windshield-heat-switch-pos> <!-- 0 off 1 auto 2 on -->
                     <CAS>
                         <cas-pitch-enable type="int">1</cas-pitch-enable>
                         <cas-roll-enable type="int">1</cas-roll-enable>
@@ -1086,6 +1088,10 @@
                     </gear>
                     <interiors>
                         <dtm-save-button type="bool">false</dtm-save-button>
+                        <eng-master-pos-l type="bool">false</eng-master-pos-l>
+                        <eng-master-pos-r type="bool">false</eng-master-pos-r>
+                        <eng-master-pos-l-force type="bool">false</eng-master-pos-l-force>
+                        <eng-master-pos-r-force type="bool">false</eng-master-pos-r-force>
                     </interiors>
 
                     <pilots-displays>
@@ -1125,18 +1131,43 @@
                     </TID>
                     <LAD>
                         <mode type="int">2</mode>
-                        <brightness type="double">1</brightness>
                         <contrast type="double">0.6</contrast>
                         <on-off type="bool">0</on-off>
+                        <buttons-pressed>
+                            <LADButton00 type="bool">false</LADButton00>
+                            <LADButton01 type="bool">false</LADButton01>
+                            <LADButton02 type="bool">false</LADButton02>
+                            <LADButton03 type="bool">false</LADButton03>
+                            <LADButton04 type="bool">false</LADButton04>
+                            <LADButton05 type="bool">false</LADButton05>
+                            <LADButton06 type="bool">false</LADButton06>
+                            <LADButton07 type="bool">false</LADButton07>
+                            <LADButton08 type="bool">false</LADButton08>
+                            <LADButton09 type="bool">false</LADButton09>
+                            <LADButton10 type="bool">false</LADButton10>
+                            <LADButton11 type="bool">false</LADButton11>
+                            <LADButton12 type="bool">false</LADButton12>
+                            <LADButton13 type="bool">false</LADButton13>
+                            <LADButton14 type="bool">false</LADButton14>
+                            <LADButton15 type="bool">false</LADButton15>
+                            <LADButton16 type="bool">false</LADButton16>
+                            <LADButton17 type="bool">false</LADButton17>
+                            <LADButton18 type="bool">false</LADButton18>
+                            <LADButton19 type="bool">false</LADButton19>
+                        </buttons-pressed>
                     </LAD>
                     <EHD>
-                        <brightness type="double">1</brightness>
+                        <mode type="int">2</mode> <!-- 0 off 1 night 2 day -->
                         <contrast type="double">0.6</contrast>
                     </EHD>
                     <HUD>
                         <brightness type="double">1</brightness>
                         <on-off type="bool">0</on-off>
                     </HUD>
+                    <UFC>
+                        <mode type="int">2</mode> <!-- 0 off 1 night 2 day. Only for the screen -->
+                        <contrast type="double">0.6</contrast>
+                    </UFC>
                 </controls>
                 <fx>
                     <burner type="int">0</burner>
@@ -4319,6 +4350,12 @@
             <eng-inst type="int">3</eng-inst>
             <warn-caution type="int">5</warn-caution>
             <radio2-brightness type="double">0.6</radio2-brightness>
+            
+            <ufc-inst type="int">0</ufc-inst>
+            <chart-inst type="int">0</chart-inst>
+            
+            <daylight-mode type="int">0</daylight-mode>  <!-- 0 day 1 night-->
+            <storm-flood type="double">0</storm-flood>  <!-- 0 day 1 night-->
 
             <!-- component values for lighting. these are set for 100W tungsten ref: http://planetpixelemporium.com/tutorialpages/light.html -->
             <panel-red type="double">1.000</panel-red>

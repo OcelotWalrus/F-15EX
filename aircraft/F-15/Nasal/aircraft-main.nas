@@ -816,6 +816,41 @@ var F15MainModule =
             setprop("payload/weight[24]/selected", "Empty");
             setprop("payload/weight[25]/selected", "Empty");
         }
+        
+        # Compute the engine master switches' position
+        if (getprop("sim/model/f15/controls/interiors/eng-master-pos-r-force")) {
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-r", 1);
+        } else {
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-r", !(getprop("engines/engine[1]/starter") or getprop("engines/engine[1]/running")));
+        }
+        if (getprop("sim/model/f15/controls/interiors/eng-master-pos-l-force")) {
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-l", 1);
+        } else {
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-l", !(getprop("engines/engine[0]/starter") or getprop("engines/engine[0]/running")));
+        }
+        
+        # Force update different displays' daylight mode (day or night)
+        if (getprop("controls/lighting/daylight-mode") == 0) {  # day mode (brt)
+            setprop("sim/model/f15/controls/LAD/mode", 2);
+            setprop("sim/model/f15/controls/EHD/mode", 2);
+        } elsif (getprop("controls/lighting/daylight-mode") == 1) {  # night mode (dim)
+            setprop("sim/model/f15/controls/LAD/mode", 1);
+            setprop("sim/model/f15/controls/EHD/mode", 1);
+        }
+        
+        # Windshield heat computing: if switch is off, set to off, is switch is on, set to on, if it's auto set heating to on if the windshield is frozen
+        if (getprop("sim/model/f15/controls/windshield-heat-switch-pos") == 0) {
+            setprop("sim/model/f15/controls/windshield-heat", 0);
+        } elsif (getprop("sim/model/f15/controls/windshield-heat-switch-pos") == 2) {
+            setprop("sim/model/f15/controls/windshield-heat", 1);
+        } elsif (getprop("sim/model/f15/controls/windshield-heat-switch-pos") == 1) {
+            setprop("sim/model/f15/controls/windshield-heat", getprop("fdm/jsbsim/systems/ecs/windscreen-frost-dmd"));
+        }
+        
+        # Make sure CAS is always enabled (it ain't in the F-15EX) but we still keep it in this model cause it's based offa the C model
+        setprop("sim/model/f15/controls/CAS/cas-yaw-enable", 1);
+        setprop("sim/model/f15/controls/CAS/cas-pitch-enable", 1);
+        setprop("sim/model/f15/controls/CAS/cas-roll-enable", 1);
 
         # Make sure the radar is set to standby when the gear's down
         if (getprop("controls/gear/gear-down") == 1) {

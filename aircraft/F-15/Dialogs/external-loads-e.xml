@@ -813,13 +813,6 @@
 					</script>
                 </binding>
             </button>
-			<button>
-                <legend>Aircraft Lighting</legend>
-                <binding>
-                    <command>nasal</command>
-                    <script>aircraft.dlg_lighting.open();</script>
-                </binding>
-            </button>
 
 			<button>
                 <legend>Flir Config</legend>

@@ -1192,21 +1192,19 @@
       <property>sim/model/f15/controls/LAD/mode</property>
       <greater-than>
         <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
-        <value>0</value>
+        <value>5</value>
       </greater-than>
     </condition>
   </animation>
   <animation>
     <type>select</type>
-    <object-name>EnginesDImage</object-name>
+    <object-name>EHDImage</object-name>
     <condition>
-      <or>
-          <property>sim/model/f15/controls/electrics/emerg-gen-switch</property>
-          <greater-than>
-            <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
-            <value>0</value>
-          </greater-than>
-      </or>
+      <property>sim/model/f15/controls/EHD/mode</property>
+      <greater-than>
+         <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
+         <value>0</value>
+      </greater-than>
     </condition>
   </animation>
 
@@ -2188,7 +2186,7 @@
   <effect>
     <name>f15interior</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
-    <object-name>EnginesDImage</object-name>
+    <object-name>EHDImage</object-name>
   </effect>
   <animation>
     <object-name>LADImage</object-name>
@@ -2196,7 +2194,7 @@
     <condition>
       <greater-than>
         <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
-        <value>0</value>
+        <value>5</value>
       </greater-than>
       <not>
         <property>/sim/rendering/rembrandt/enabled</property>
@@ -2210,7 +2208,7 @@
     </emission>
   </animation>
   <animation>
-    <object-name>EnginesDImage</object-name>
+    <object-name>EHDImage</object-name>
     <type>material</type>
     <condition>
       <greater-than>
@@ -2222,7 +2220,7 @@
       </not>
     </condition>
     <emission>
-      <factor-prop>sim/model/f15/controls/EHD/brightness</factor-prop>
+      <factor-prop>sim/model/f15/controls/EHD/mode</factor-prop>
       <red>  0.5</red>
       <green>0.5</green>
       <blue> 0.5</blue>
@@ -2508,39 +2506,42 @@
       mount: Im_mount-->
   <!--Merged from Instruments/left-side-panel.xml-->
   <animation>
-    <type>knob</type>
-    <object-name>oxy-test-switch</object-name>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>oxy-bit-button</object-name>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>nasal</command>
+        <script>
+            setprop("fdm/jsbsim/systems/ecs/oxygen-qty-test", 1);
+        </script>
+      </binding>
+      <mod-up>
+          <binding>
+            <command>nasal</command>
+            <script>
+                setprop("fdm/jsbsim/systems/ecs/oxygen-qty-test", 0);
+            </script>
+          </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>oxy-bit-button</object-name>
     <property>fdm/jsbsim/systems/ecs/oxygen-qty-test</property>
-    <factor>-1</factor>
+    <factor>-.0006</factor>
     <center>
-      <x-m>0.0081</x-m>
-      <y-m>-0.0017</y-m>
-      <z-m>-0.0529</z-m>
+      <x-m>-5.707</x-m>
+      <y-m>.4538</y-m>
+      <z-m>0.6756</z-m>
     </center>
     <axis>
-      <x>1</x>
+      <x>0</x>
       <y>0</y>
-      <z>0</z>
+      <z>1</z>
     </axis>
-    <action>
-      <binding>
-        <command>property-adjust</command>
-        <property>fdm/jsbsim/systems/ecs/oxygen-qty-test</property>
-        <factor>1</factor>
-        <min>1</min>
-        <max>1</max>
-        <wrap>false</wrap>
-      </binding>
-    </action>
-    <release>
-      <binding>
-        <command>property-adjust</command>
-        <property>fdm/jsbsim/systems/ecs/oxygen-qty-test</property>
-        <step>0</step>
-        <min>0</min>
-        <max>0</max>
-      </binding>
-    </release>
   </animation>
   <animation>
     <type>pick</type>
@@ -2558,7 +2559,16 @@
     <type>rotate</type>
     <object-name>oxy-supply-switch</object-name>
     <property>fdm/jsbsim/systems/ecs/liquid-oxygen-activated</property>
-    <factor>-45</factor>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>30</dep>
+      </entry>
+    </interpolation>
     <center>
       <x-m>-5.6949</x-m>
       <y-m>0.3974</y-m>
@@ -2569,11 +2579,107 @@
     </axis>
   </animation>
   <animation>
-    <type>knob</type>
+    <type>rotate</type>
+    <object-name>oxy-needle</object-name>
+    <property>fdm/jsbsim/systems/ecs/oxygen-pressure-psi</property>
+    <factor>-0.6</factor>
+    <offset-deg>60</offset-deg>
+    <center>
+      <x-m>-5.732</x-m>
+      <y-m>0.3692</y-m>
+      <z-m>0.6733</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>oxy-flow-switch</object-name>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>nasal</command>
+        <script>
+            if (getprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode") == 0) {
+                setprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode", 1)
+            } elsif (getprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode") == 1) {
+                setprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode", 2)
+            } elsif (getprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode") == 2) {
+                setprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode", 0)
+            }
+        </script>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>oxy-flow-switch</object-name>
+    <property>fdm/jsbsim/systems/ecs/oxygen-supply-mode</property>
+    <interpolation>
+      <entry>
+        <ind>1</ind>
+        <dep>30</dep>
+      </entry>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-30</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.6949</x-m>
+      <y-m>0.3094</y-m>
+      <z-m>0.664</z-m>
+    </center>
+    <axis>
+      <y>1</y>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>anti-fog-switch</object-name>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>nasal</command>
+        <script>
+            if (getprop("fdm/jsbsim/systems/ecs/anti-fog") == 0) {
+                setprop("fdm/jsbsim/systems/ecs/anti-fog", 1)
+            } elsif (getprop("fdm/jsbsim/systems/ecs/anti-fog") == 1) {
+                setprop("fdm/jsbsim/systems/ecs/anti-fog", 2)
+            } elsif (getprop("fdm/jsbsim/systems/ecs/anti-fog") == 2) {
+                setprop("fdm/jsbsim/systems/ecs/anti-fog", 0)
+            }
+        </script>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
     <object-name>anti-fog-switch</object-name>
     <property>fdm/jsbsim/systems/ecs/anti-fog</property>
-    <factor>30</factor>
-    <offset-deg>-30</offset-deg>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>30</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-30</dep>
+      </entry>
+    </interpolation>
     <center>
       <x-m>-5.6911</x-m>
       <y-m>0.5209</y-m>
@@ -2584,22 +2690,12 @@
       <y>1</y>
       <z>0</z>
     </axis>
-    <action>
-      <binding>
-        <command>property-adjust</command>
-        <property>fdm/jsbsim/systems/ecs/anti-fog</property>
-        <factor>1</factor>
-        <min>0</min>
-        <max>2</max>
-        <wrap>false</wrap>
-      </binding>
-    </action>
   </animation>
   <animation>
     <type>knob</type>
     <object-name>windshield-heat-switch</object-name>
-    <property>sim/model/f15/controls/windshield-heat</property>
-    <factor>-60</factor>
+    <property>sim/model/f15/controls/windshield-heat-switch-pos</property>
+    <factor>-30</factor>
     <offset-deg>30</offset-deg>
     <center>
       <x-m>-5.6349</x-m>
@@ -2614,10 +2710,10 @@
     <action>
       <binding>
         <command>property-adjust</command>
-        <property>sim/model/f15/controls/windshield-heat</property>
+        <property>sim/model/f15/controls/windshield-heat-switch-pos</property>
         <factor>1</factor>
         <min>0</min>
-        <max>1</max>
+        <max>2</max>
         <wrap>false</wrap>
       </binding>
     </action>
@@ -4469,7 +4565,7 @@
     <interpolation>
       <entry>
         <ind>0</ind>
-        <dep>-50</dep>
+        <dep>-40</dep>
       </entry>
       <entry>
         <ind>1</ind>
@@ -4477,9 +4573,9 @@
       </entry>
     </interpolation>
     <center>
-      <x-m>-5.65485</x-m>
+      <x-m>-5.65456</x-m>
       <y-m>0.30604</y-m>
-      <z-m>0.68</z-m>
+      <z-m>0.67552</z-m>
     </center>
     <axis>
       <x>0</x>
@@ -4507,7 +4603,7 @@
     <interpolation>
       <entry>
         <ind>0</ind>
-        <dep>-50</dep>
+        <dep>-40</dep>
       </entry>
       <entry>
         <ind>1</ind>
@@ -4515,9 +4611,9 @@
       </entry>
     </interpolation>
     <center>
-      <x-m>-5.65485</x-m>
+      <x-m>-5.65456</x-m>
       <y-m>0.32359</y-m>
-      <z-m>0.68</z-m>
+      <z-m>0.67552</z-m>
     </center>
     <axis>
       <x>0</x>
@@ -4738,26 +4834,23 @@
       <binding>
         <command>nasal</command>
         <script>
-                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
-                    {
-                    if ( (!getprop("engines/engine[0]/running") or getprop("engines/engine[0]/running")=="false") and  getprop("controls/engines/engine[0]/cutoff"))
-                    {
-                    setprop("controls/engines/engine[0]/starter",1);
-                    settimer(func { setprop("controls/engines/engine[0]/cutoff",0) }, 0.2);
-                    }
-                    else
-                    {
-                    setprop("controls/engines/engine[0]/cutoff",1-getprop("controls/engines/engine[0]/cutoff"));
-                    }
-                    }
-                </script>
+        if(getprop("sim/model/f15/controls/engs/l-eng-master-guard") and !getprop("controls/engines/engine[0]/starter") and !getprop("engines/engine[0]/running")) {
+            setprop("controls/engines/engine[0]/starter", 1);
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-l-force", 0);
+        } elsif(getprop("sim/model/f15/controls/engs/l-eng-master-guard") and (getprop("controls/engines/engine[0]/starter") or getprop("engines/engine[0]/running"))) {
+            setprop("controls/engines/engine[0]/starter", 0);
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-l-force", 1);
+        } else {
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-l-force", 0);       
+        }
+        </script>
       </binding>
     </action>
   </animation>
   <animation>
     <type>rotate</type>
     <object-name>l-eng-master-switch</object-name>
-    <property>controls/engines/engine[0]/cutoff</property>
+    <property>sim/model/f15/controls/interiors/eng-master-pos-l</property>
     <factor>-70</factor>
     <center>
       <x-m>-5.617</x-m>
@@ -4774,7 +4867,7 @@
     <type>rotate</type>
     <object-name>l-eng-master-guard</object-name>
     <property>sim/model/f15/controls/engs/l-eng-master-guard</property>
-    <factor>90</factor>
+    <factor>60</factor>
     <center>
       <x-m>-5.628</x-m>
       <y-m>0.3089</y-m>
@@ -4810,23 +4903,23 @@
       <binding>
         <command>nasal</command>
         <script>
-                    if(getprop("sim/model/f15/controls/engs/r-eng-master-guard"))
-                    {
-                    if ( (!getprop("engines/engine[1]/running") or getprop("engines/engine[1]/running")=="false") and  getprop("controls/engines/engine[1]/cutoff"))
-                    {
-                    setprop("controls/engines/engine[1]/starter",1);
-                    settimer(func { setprop("controls/engines/engine[1]/cutoff",0) }, 0.2);
-                    }
-                    else setprop("controls/engines/engine[1]/cutoff",1-getprop("controls/engines/engine[1]/cutoff"));
-                    }
-                </script>
+        if(getprop("sim/model/f15/controls/engs/r-eng-master-guard") and !getprop("controls/engines/engine[1]/starter") and !getprop("engines/engine[1]/running")) {
+            setprop("controls/engines/engine[1]/starter", 1);
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-r-force", 0);
+        } elsif(getprop("sim/model/f15/controls/engs/r-eng-master-guard") and (getprop("controls/engines/engine[1]/starter") or getprop("engines/engine[1]/running"))) {
+            setprop("controls/engines/engine[1]/starter", 0);
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-r-force", 1);
+        } else {
+            setprop("sim/model/f15/controls/interiors/eng-master-pos-r-force", 0);       
+        }
+        </script>
       </binding>
     </action>
   </animation>
   <animation>
     <type>rotate</type>
     <object-name>r-eng-master-switch</object-name>
-    <property>controls/engines/engine[1]/cutoff</property>
+    <property>sim/model/f15/controls/interiors/eng-master-pos-r</property>
     <factor>-70</factor>
     <center>
       <x-m>-5.617</x-m>
@@ -4843,7 +4936,7 @@
     <type>rotate</type>
     <object-name>r-eng-master-guard</object-name>
     <property>sim/model/f15/controls/engs/r-eng-master-guard</property>
-    <factor>90</factor>
+    <factor>60</factor>
     <center>
       <x-m>-5.628</x-m>
       <y-m>0.39689</y-m>
@@ -4886,9 +4979,9 @@
     </axis>
   </animation>
   <!-- Interior Lighting panel-->
-  <animation>
+  <!--animation>
     <type>knob</type>
-    <object-name>lighting-console-right-knob</object-name>
+    <object-name>lighting-spare-knob</object-name>
     <property>controls/lighting/r-console</property>
     <factor>-30</factor>
     <offset-deg>153</offset-deg>
@@ -4912,10 +5005,10 @@
         <wrap>false</wrap>
       </binding>
     </action>
-  </animation>
+  </animation-->
   <animation>
     <type>knob</type>
-    <object-name>lighting-console-left-knob</object-name>
+    <object-name>lighting-consoles-knob</object-name>
     <property>controls/lighting/l-console</property>
     <factor>-30</factor>
     <offset-deg>153</offset-deg>
@@ -4938,12 +5031,20 @@
         <max>10</max>
         <wrap>false</wrap>
       </binding>
+      <binding>
+        <command>property-adjust</command>
+        <property>controls/lighting/r-console</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>10</max>
+        <wrap>false</wrap>
+      </binding>
     </action>
   </animation>
   <animation>
     <type>knob</type>
-    <object-name>lighting-aux-inst-knob</object-name>
-    <property>controls/lighting/aux-inst</property>
+    <object-name>lighting-ufc-knob</object-name>
+    <property>controls/lighting/ufc-inst</property>
     <factor>-30</factor>
     <offset-deg>153</offset-deg>
     <center>
@@ -4959,7 +5060,7 @@
     <action>
       <binding>
         <command>property-adjust</command>
-        <property>controls/lighting/aux-inst</property>
+        <property>controls/lighting/ufc-inst</property>
         <factor>1</factor>
         <min>0</min>
         <max>10</max>
@@ -4968,36 +5069,46 @@
     </action>
   </animation>
   <animation>
-    <type>knob</type>
-    <object-name>lighting-eng-inst-knob</object-name>
-    <property>controls/lighting/eng-inst</property>
-    <factor>-30</factor>
-    <offset-deg>153</offset-deg>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>lighting-day-night-switch</object-name>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>property-toggle</command>
+        <property>controls/lighting/daylight-mode</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>lighting-day-night-switch</object-name>
+    <property>controls/lighting/daylight-mode</property>
+    <interpolation>
+      <entry>
+        <ind>1</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>0</ind>
+        <dep>-45</dep>
+      </entry>
+    </interpolation>
     <center>
-      <x-m>-5.4527</x-m>
-      <y-m>0.5178</y-m>
-      <z-m>0.6753</z-m>
+      <x-m>-5.45</x-m>
+      <y-m>0.5157</y-m>
+      <z-m>0.6761</z-m>
     </center>
     <axis>
       <x>0</x>
-      <y>0</y>
-      <z>1</z>
+      <y>1</y>
+      <z>0</z>
     </axis>
-    <action>
-      <binding>
-        <command>property-adjust</command>
-        <property>controls/lighting/eng-inst</property>
-        <factor>1</factor>
-        <min>0</min>
-        <max>10</max>
-        <wrap>false</wrap>
-      </binding>
-    </action>
   </animation>
   <animation>
     <type>knob</type>
-    <object-name>lighting-flt-inst-knob</object-name>
-    <property>controls/lighting/flt-inst</property>
+    <object-name>lighting-chart-knob</object-name>
+    <property>controls/lighting/chart-inst</property>
     <factor>-30</factor>
     <offset-deg>153</offset-deg>
     <center>
@@ -5013,7 +5124,7 @@
     <action>
       <binding>
         <command>property-adjust</command>
-        <property>controls/lighting/flt-inst</property>
+        <property>controls/lighting/chart-inst</property>
         <factor>1</factor>
         <min>0</min>
         <max>10</max>
@@ -5024,7 +5135,7 @@
   <animation>
     <type>knob</type>
     <object-name>lighting-storm-flood-knob</object-name>
-    <property>controls/lighting/panel-norm</property>
+    <property>controls/lighting/storm-flood</property>
     <factor>-300</factor>
     <offset-deg>153</offset-deg>
     <center>
@@ -5040,15 +5151,11 @@
     <action>
       <binding>
         <command>property-adjust</command>
-        <property>controls/lighting/panel-norm</property>
+        <property>controls/lighting/storm-flood</property>
         <factor>0.1</factor>
         <min>0</min>
         <max>1</max>
         <wrap>false</wrap>
-      </binding>
-      <binding>
-        <command>nasal</command>
-        <script>setprop("controls/lighting/panel",getprop("controls/lighting/panel-norm")*10.0)</script>
       </binding>
     </action>
   </animation>
@@ -5087,7 +5194,7 @@
     <offset-deg>20</offset-deg>
     <center>
       <x-m>-5.4846</x-m>
-      <y-m>-0.4428</y-m>
+      <y-m>-0.4413</y-m>
       <z-m>0.6712</z-m>
     </center>
     <axis>
@@ -5108,41 +5215,14 @@
   </animation>
   <animation>
     <type>knob</type>
-    <object-name>lighting-stby-inst-switch</object-name>
-    <property>controls/lighting/stby-inst</property>
-    <factor>-50</factor>
-    <offset-deg>20</offset-deg>
-    <center>
-      <x-m>-5.487</x-m>
-      <y-m>-0.5297</y-m>
-      <z-m>0.6705</z-m>
-    </center>
-    <axis>
-      <x>0</x>
-      <y>1</y>
-      <z>0</z>
-    </axis>
-    <action>
-      <binding>
-        <command>property-adjust</command>
-        <property>controls/lighting/stby-inst</property>
-        <factor>1</factor>
-        <min>0</min>
-        <max>1</max>
-        <wrap>false</wrap>
-      </binding>
-    </action>
-  </animation>
-  <animation>
-    <type>knob</type>
     <object-name>air-source-knob</object-name>
     <property>fdm/jsbsim/systems/ecs/bleed-air-source</property>
     <!--<offset-deg>180</offset-deg>-->
     <factor>-90</factor>
     <center>
-      <x-m>-5.574</x-m>
-      <y-m>0.5116</y-m>
-      <z-m>0.6753</z-m>
+      <x-m>-5.573</x-m>
+      <y-m>0.5159</y-m>
+      <z-m>0.6872</z-m>
     </center>
     <axis>
       <x>0</x>
@@ -5270,13 +5350,12 @@
     <object-name>compass-mode-knob</object-name>
     <object-name>nav-mode-knob</object-name>
     <object-name>nav-data-select-knob</object-name>
+    <object-name>lighting-consoles-knob</object-name>
+    <object-name>lighting-spare-knob</object-name>
+    <object-name>lighting-ufc-knob</object-name>
+    <object-name>lighting-chart-knob</object-name>
     <object-name>lighting-warn-caution-knob</object-name>
     <object-name>lighting-storm-flood-knob</object-name>
-    <object-name>lighting-aux-inst-knob</object-name>
-    <object-name>lighting-eng-inst-knob</object-name>
-    <object-name>lighting-flt-inst-knob</object-name>
-    <object-name>lighting-console-right-knob</object-name>
-    <object-name>lighting-console-left-knob</object-name>
     <object-name>ecm-1-mode-knob</object-name>
     <object-name>position-light-brightness-knob</object-name>
     <object-name>formation-light-brightness-knob</object-name>
@@ -17294,11 +17373,11 @@
   
   <!-- Data Cartridge Panel -->
   <animation>
-    <type>knob</type>
+    <type>pick</type>
     <visible>true</visible>
     <object-name>dtm-panel</object-name>
     <action>
-      <repeatable>false</repeatable>
+      <button>0</button>
       <binding>
         <command>nasal</command>
         <script><![CDATA[
@@ -17313,11 +17392,11 @@
     </action>
   </animation>
   <animation>
-    <type>knob</type>
+    <type>pick</type>
     <visible>true</visible>
     <object-name>dtm-switch</object-name>
     <action>
-      <repeatable>false</repeatable>
+      <button>0</button>
       <binding>
         <command>nasal</command>
         <script><![CDATA[
@@ -17332,7 +17411,7 @@
     </action>
   </animation>
   <animation>
-    <type>knob</type>
+    <type>pick</type>
     <visible>true</visible>
     <object-name>dtm-switch</object-name>
     <action>
@@ -17414,52 +17493,54 @@
     <type>material</type>
     <condition>
      <and>
-      <or>
-        <property>sim/model/f15/lights/master-test-lights</property>
         <or>
-          <not>
-            <equals>
-              <property>sound/rwr-launch</property>
-              <value type="string" />
-            </equals>
-          </not>
-          <equals>
-            <property>payload/armament/spike-air</property>
-            <value>1</value>
-          </equals>
-          <property>payload/armament/MAW-active</property>
-          <property>payload/armament/MAW-semiactive</property>
-          <equals>
-            <property>payload/armament/spike-gnd-02</property>
-            <value>1</value>
-          </equals>
-          <equals>
-            <property>payload/armament/spike-gnd-11</property>
-            <value>1</value>
-          </equals>
-          <equals>
-            <property>payload/armament/spike-gnd-20</property>
-            <value>1</value>
-          </equals>
-          <equals>
-            <property>payload/armament/spike-gnd-23</property>
-            <value>1</value>
-          </equals>
-          <equals>
-            <property>payload/armament/spike-gnd-p2</property>
-            <value>1</value>
-          </equals>
-          <equals>
-            <property>payload/armament/spike-gnd-nk</property>
-            <value>1</value>
-          </equals>
-        </or>
+          <and>
+              <or>
+                  <not>
+                    <equals>
+                      <property>sound/rwr-launch</property>
+                      <value type="string" />
+                    </equals>
+                  </not>
+                  <equals>
+                    <property>payload/armament/spike-air</property>
+                    <value>1</value>
+                  </equals>
+                  <property>payload/armament/MAW-active</property>
+                  <property>payload/armament/MAW-semiactive</property>
+                  <equals>
+                    <property>payload/armament/spike-gnd-02</property>
+                    <value>1</value>
+                  </equals>
+                  <equals>
+                    <property>payload/armament/spike-gnd-11</property>
+                    <value>1</value>
+                  </equals>
+                  <equals>
+                    <property>payload/armament/spike-gnd-20</property>
+                    <value>1</value>
+                  </equals>
+                  <equals>
+                    <property>payload/armament/spike-gnd-23</property>
+                    <value>1</value>
+                  </equals>
+                  <equals>
+                    <property>payload/armament/spike-gnd-p2</property>
+                    <value>1</value>
+                  </equals>
+                  <equals>
+                    <property>payload/armament/spike-gnd-nk</property>
+                    <value>1</value>
+                  </equals>
+              </or>
+              <property>sim/model/f15/epawss/epawss-on</property>
+          </and>
+          <property>sim/model/f15/lights/master-test-lights</property>
       </or>
       <greater-than>
         <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
         <value>0</value>
       </greater-than>
-      <property>sim/model/f15/epawss/epawss-on</property>
      </and>
     </condition>
     <emission>
@@ -17617,5 +17698,990 @@
       <y>1</y>
       <z>0</z>
     </axis>
+  </animation>
+  
+  <!-- LAD controls -->
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton00</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton00</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton00</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton00</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton00</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.193</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton01</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton01</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton01</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton01</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton01</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.171</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton02</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton02</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton02</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton02</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton02</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.149</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton03</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton03</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton03</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton03</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton03</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.127</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton04</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton04</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton04</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton04</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton04</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.105</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton05</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton05</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton05</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton05</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton05</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.083</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton06</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton06</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton06</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton06</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton06</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.061</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton07</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton07</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton07</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton07</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton07</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.039</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton08</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton08</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton08</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton08</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton08</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 1.017</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton09</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton09</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton09</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton09</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton09</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m>-0.2395</y-m>
+      <z-m> 0.995</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton10</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton10</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton10</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton10</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton10</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.193</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton11</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton11</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton11</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton11</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton11</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.171</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton12</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton12</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton12</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton12</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton12</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.149</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton13</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton13</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton13</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton13</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton13</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.127</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton14</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton14</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton14</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton14</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton14</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.105</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton15</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton15</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton15</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton15</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton15</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.083</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton16</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton16</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton16</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton16</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton16</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.061</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton17</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton17</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton17</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton17</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton17</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.039</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton18</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton18</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton18</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton18</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton18</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 1.017</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>LADButton19</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+         <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton19</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton19</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>LADButton19</object-name>
+    <property>sim/model/f15/controls/LAD/buttons-pressed/LADButton19</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.005</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.697</x-m>
+      <y-m> 0.2381</y-m>
+      <z-m> 0.995</z-m>
+    </center>
+    <axis>
+      <x>-1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  
+  <!-- Throttles cutoff position animation and cutoff click interaction-->
+  <animation>
+    <type>rotate</type>
+    <object-name>throttle-left</object-name>
+    <type>rotate</type>
+    <property>controls/engines/engine[0]/cutoff</property>
+    <factor>-10</factor>
+    <center>
+      <x-m>-5.4852</x-m>
+      <y-m>-0.3714</y-m>
+      <z-m>0.645</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>-1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>throttle-right</object-name>
+    <type>rotate</type>
+    <property>controls/engines/engine[1]/cutoff</property>
+    <factor>-10</factor>
+    <center>
+      <x-m>-5.4919</x-m>
+      <y-m>-0.3287</y-m>
+      <z-m>0.6426</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>-1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>throttle-left</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>controls/engines/engine[0]/cutoff</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>throttle-right</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>controls/engines/engine[1]/cutoff</property>
+      </binding>
+    </action>
   </animation>
 </PropertyList>

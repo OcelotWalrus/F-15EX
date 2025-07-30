@@ -21,7 +21,7 @@ var screen_width = 937.5;  # defined by EHD.svg
 var screen_height = 2048;  # defined by EHD.svg
 
 # Preset Colors. These values are the same across all of the EX's displays, so make sure to update the others if you update that one
-var prst_black = {"r": 0, "g": 0, "b": .07};
+var prst_black = {"r": 0, "g": 0, "b": 0};
 var prst_white = {"r": .98, "g": .98, "b": .98};
 var prst_green = {"r": 0, "g": 255 / 255, "b": 58 / 255};
 var prst_yellow = {"r": 234 / 255, "g": 255 / 255, "b": 0 / 255};
