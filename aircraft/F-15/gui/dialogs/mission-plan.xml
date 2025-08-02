@@ -7,11 +7,11 @@
     <resizable>false</resizable>
     <width>1350</width>
     <!--<height>250</height>-->
-    
+
     <nasal>
         <open><![CDATA[
             var defaultDirInFileSelector = getprop("/sim/fg-home") ~ "/Export";
-        
+
             setprop("sim/model/f15/preplanning-status", "");
             var file_selector_dtc = gui.FileSelector.new(
               callback: cartridge.load_cartridge, title: "Load data", button: "Load",
@@ -19,11 +19,11 @@
             var save_selector_dtc = gui.FileSelector.new(
               callback: cartridge.save_cartridge, title: "Save data", button: "Save",
               dir: defaultDirInFileSelector, dotfiles: 1, file: "f15-dtc-data.f15dtc", pattern: ["*.f15dtc"]);
-            
+
         ]]></open>
 
         <close><![CDATA[
-            file_selector_dtc.del();            
+            file_selector_dtc.del();
             save_selector_dtc.del();
         ]]></close>
     </nasal>
@@ -85,7 +85,7 @@
 
 	<text><halign>center</halign><label>Radio Channels</label></text>
 	<empty><stretch>1</stretch></empty>
-	
+
 	<group>
 	    <layout>vbox</layout>
 	    <group>
@@ -282,7 +282,7 @@
 
 	<text><halign>center</halign><label>Bullseye designation</label></text>
 	<empty><stretch>1</stretch></empty>
-	
+
 	<group>
 		<layout>hbox</layout>
 
@@ -347,10 +347,10 @@
 
 	<empty><stretch>1</stretch></empty>
 	<hrule/>
-	
+
 	<text><halign>center</halign><label>DTC GPS-Spots / Threat Circles</label></text>
 	<empty><stretch>1</stretch></empty>
-	
+
 	<group>
 		<layout>hbox</layout>
 
@@ -390,14 +390,14 @@
               <binding>
                 <command>nasal</command>
                 <script>
-                
+
                     setprop("/controls/mission-planning/selected-threat-circle-lat", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].lat);
                     setprop("/controls/mission-planning/selected-threat-circle-lon", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].lon);
                     setprop("/controls/mission-planning/selected-threat-circle-color", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].color);
                     setprop("/controls/mission-planning/selected-threat-circle-radius-nm", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].radius);
                     setprop("/controls/mission-planning/selected-threat-circle-enabled", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].enabled);
                     setprop("/controls/mission-planning/selected-threat-circle-label", aircraft.threat_circles[getprop("/controls/mission-planning/selected-threat-circle")].label);
-                
+
                 </script>
               </binding>
         </combo>
@@ -491,7 +491,7 @@
 	<empty><stretch>1</stretch></empty>
 	<hrule/>
 
-	<text><halign>center</halign><label>Identification Friend and Foe and Tactical Data Link</label></text>
+	<text><halign>center</halign><label>Identification Friend and Foe and Joint Tactical Information Distribution System</label></text>
 	<empty><stretch>1</stretch></empty>
 
 	<group>
@@ -512,14 +512,6 @@
 						<blue>0.85</blue>
 	      			</color>
 			   </input>
-			   <checkbox>
-                    <property>instrumentation/iff/power</property>
-                    <live>true</live>
-                    <binding>
-                        <command>property-toggle</command>
-                        <property>instrumentation/iff/power</property>
-                    </binding>
-                </checkbox>
 			   <button>
 				    <legend>Clear</legend>
 				    <halign>center</halign>
@@ -537,7 +529,7 @@
 			   <input>
 				  <width>75</width>
 				  <height>25</height>
-				  <label>Link-16 Channel</label>
+				  <label>JTIDS Channel</label>
 				  <property>instrumentation/datalink/channel</property>
 				  <live>true</live>
 				  <halign>center</halign>
@@ -550,14 +542,6 @@
 						<blue>0.85</blue>
 	      			</color>
 			   </input>
-                <checkbox>
-                    <property>instrumentation/datalink/power</property>
-                    <live>true</live>
-                    <binding>
-                        <command>property-toggle</command>
-                        <property>instrumentation/datalink/power</property>
-                    </binding>
-                </checkbox>
 			    <button>
 				    <legend>Clear</legend>
 				    <halign>center</halign>
@@ -571,11 +555,11 @@
 	</group>
 
     <empty><stretch>1</stretch></empty>
-    
+
     <hrule/>
-    
+
     <text><label>Altitude Decks</label></text>
-    
+
     <group>
         <layout>hbox</layout>
         <default-padding>0</default-padding>
@@ -647,11 +631,11 @@
     </group>
 
     <empty><stretch>1</stretch></empty>
-    
+
     <hrule/>
 
     <text><label>Kneeboards</label></text>
-    
+
     <group>
 		<layout>hbox</layout>
 	    <group>

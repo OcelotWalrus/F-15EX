@@ -42,7 +42,7 @@ var contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts
 var former_contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts of the last scan
 var contacts_list = [];  # list of all EPAWSS contacts, all children of the awg_9.Target class
 var new_threats = [];  # Used when displaying EPAWSS contacts, allowing to highlight new threats from already-detected ones. List of callsigns
-var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);  # EPAWSS master switch
+var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);  # EPAWSS RWR master switch
 var Mp = props.globals.getNode("ai/models");
 var ElapsedSec = props.globals.getNode("sim/time/elapsed-sec");
 var scan_next_tgt_check = ElapsedSec.getValue() + 2;
@@ -102,6 +102,11 @@ setlistener("instrumentation/radar/radar-filter-mode", func(v){
     }
 });
 
+setlistener("sim/model/f15/epawss/epawss-on", func(v){
+    contacts_list = [];
+    scan_update_tgt_list = 1;
+});
+
 # API Functions
 
 var update_epawss_contacts = func() {  # computes the list of contacts of the EPAWSS
@@ -109,7 +114,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
     if (scan_update_tgt_list and EpawssOn.getValue())  # we only update if a listener has been set off and the Epawss is online
     {
 		scan_update_tgt_list = 0;
-		
+
         contacts_list = [];
 
         var raw_list = Mp.getChildren();
@@ -160,7 +165,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
         scan_update_visibility = 1;
         contacts_list = sort (contacts_list, func (a,b) {a.get_range()-b.get_range()});
     }
-    
+
     var idx = 0;
 
     former_contacts_list_callsigns = [];
@@ -174,15 +179,15 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
 
         var u_rng = u.get_range();
 
-        
-        
+
+
         if (scan_update_visibility) {
             scan_update_visibility = 0;
         } else if (ElapsedSec.getValue() > scan_next_tgt_check) {
             scan_next_tgt_check = ElapsedSec.getValue()  + ScanVisibilityCheckInterval.getValue();
             scan_update_visibility = 1;
         }
-        
+
         if (scan_update_visibility) {
             # check for visible by EPAWSS taking into account if the contact is
             # emitting, radiating at our coords, or directly spiking us.
@@ -200,14 +205,14 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
             }
             scan_update_visibility = 0;
         }
-        
+
         var radar_mode = getprop("instrumentation/radar/radar-mode");
         if (radar_mode == nil) {
             radar_mode = 0;
         } if (radar_mode >= 3) {
             radar_active = 0;
         }
-        
+
         if (u.get_visible()) {
             append(contacts_list_callsigns, u.get_Callsign());
         }
@@ -216,7 +221,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
         # over MP, should be standardized, like "ai/models/multiplayer[0]/radar/radar-standby".
         awg_9.compute_rwr(radar_mode, u, u_rng);
     }
-    
+
     # We go through each current contacts list, and if there's one or multiple that ain't in the former contacts list, we play the new contact sound
     # Also share our EPAWSS contacts over datalink
     foreach(contact; contacts_list_callsigns) {
@@ -232,7 +237,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
             append(new_threats, contact);
             settimer(func {remove(new_threats, contact); }, 45);  # remove it from new threats after 45 seconds (clear the new threat symbol of the LAD's HSD)
         }
-        if (getprop("instrumentation/datalink/sending") == 0) {  # safety, so we ain't overwriting smth that's already being sent over datalink
+        if (getprop("instrumentation/datalink/sending") == 0 and getprop("sim/model/f15/avionics/jtids-selected-mode-knob") != 3) {  # safety, so we ain't overwriting smth that's already being sent over datalink - JTIDS knob 3d position is silent/receive-only mode
             datalink.send_data({"contacts":[{"callsign": contact, "iff": 0}]});
         }
     }
@@ -254,42 +259,42 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
     foreach(u; contacts_list) {
         if (u.get_visible()) {  # If it's an actually valid EPAWSS contact
             points = 0;
-            
+
             is_a_missile_approaching = u.getUnique() != nil and u.get_Callsign() != nil and damage.approached[u.get_Callsign()~u.getUnique()] != nil;
             points += (is_a_missile_approaching and u.get_visible() and damage.approached[u.get_Callsign()~u.getUnique()] < 300) * 9999 + (u.get_closure_rate()/u.get_range());  # if it's an approaching missile. We also add a ratio closure rate/dist to determine which approaching missile is more threatening if they're multiple detected
             if (is_a_missile_approaching) {
                 continue;  # go to the next target, skip all below point computing
             }
-            
+
             is_missile_launcher_points = u.getUnique() != nil and u.get_Callsign() != nil and damage.launched[u.get_Callsign()~u.getUnique()] != nil;
             points += (is_missile_launcher_points and u.get_visible() and damage.launched[u.get_Callsign()~u.getUnique()] < 300) * 100;  # if it's a missile launcher that we've detected (less than 5 mins ago) and it's not hidden by terrain or RCS, we add 100 pts
-            
+
             points += u.isSpikingMe() * 75;  # 2nd level
             points += (u.get_Ecm_Signal_Norm() == 1) * 50;  # 3nd level
             points += (u.get_Ecm_Signal_Norm() == 2) * 25;  # 4th level
-            
+
             is_a_sam_or_aaa = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "SAM" or displays.typeLookup[u.get_model()] == "AAA");  # we're reusing the LAD.nas's typeLookup variable
             points += is_a_sam_or_aaa * 10;  # 5th level
-            
-            is_approaching = u.isApproaching(geo.aircraft_position());  
+
+            is_approaching = u.isApproaching(geo.aircraft_position());
             if (is_approaching != nil) {
                 points += 40 - is_approaching;  # 6th level
             }
-            
+
             is_an_awacs = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "AEW&C");  # we're reusing the LAD.nas's typeLookup variable
             points += is_an_awacs * 10;  # 7th level
-            
+
             points -= u.get_range() * .5;  # distance reduction
             points += u.get_closure_rate() * 2.5;  # closure rate increment
-            
+
             data = {};
             data.unique = u.get_Callsign()~u.getUnique();
             data.points = points;
-            
+
             append(points_list, data);
         }
     }
-    
+
     # We go through each in the list, and update the "greatest points" variable if any higher than before
     max_points_num = 0;
     max_points = "";
@@ -307,7 +312,7 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
         }
         first = 0;
     }
-    
+
     primary_threat_callsign = max_points;  # in format `u.get_Callsign()~u.getUnique()`
     return [max_points, max_points_num];
 }
@@ -315,7 +320,7 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
 var is_missile_launcher = func(contact) {  # simple function to determine if given contact is a missile launcher
     var launchCallsign = getprop("sound/rwr-launch");
     var semiCallsign = getprop("payload/armament/MAW-semiactive-callsign");
-    
+
     if (contact.get_Callsign() == launchCallsign or contact.get_Callsign() == semiCallsign) {
         return 1;
     } else {

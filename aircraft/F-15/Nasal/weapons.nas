@@ -801,13 +801,11 @@ var hitmessage = func(typeOrd) {
 # setup impact listener
 setlistener("/ai/models/model-impact3", impact_listener, 0, 0);
 
-# tiny fix
-#setlistener("ai/submodels/submodel[5]/count", func {
-#    setprop("ai/submodels/submodel[6]/count", getprop("ai/submodels/submodel[5]/count"));
-#});
-
 var flareCount = -1;
+var chaffCount = -1;
 var flareStart = -1;
+var sendChaff = 0;
+var sendFlare = 0;
 
 var flareLoop = func {
   # Flare release
@@ -815,20 +813,57 @@ var flareLoop = func {
     setprop("ai/submodels/submodel[5]/flare-release-snd", 0);
     setprop("ai/submodels/submodel[5]/flare-release-out-snd", 0);
   }
-  var flareOn = getprop("ai/submodels/submodel[5]/flare-release-cmd");
+  if (getprop("ai/submodels/submodel[5]/chaff-release-snd") == nil) {
+    setprop("ai/submodels/submodel[5]/chaff-release-snd", 0);
+    setprop("ai/submodels/submodel[5]/chaff-release-out-snd", 0);
+  }
+  var flareOn = getprop("ai/submodels/submodel[5]/flare-release-cmd");  # generic, same for flares and chaffs
   if (flareOn == 1 and getprop("ai/submodels/submodel[5]/flare-release") == 0
       and getprop("ai/submodels/submodel[5]/flare-release-out-snd") == 0
-      and getprop("ai/submodels/submodel[5]/flare-release-snd") == 0) {
+      and getprop("ai/submodels/submodel[5]/flare-release-snd") == 0
+      and getprop("ai/submodels/submodel[5]/chaff-release") == 0
+      and getprop("ai/submodels/submodel[5]/chaff-release-out-snd") == 0
+      and getprop("ai/submodels/submodel[5]/chaff-release-snd") == 0) {
     flareCount = getprop("ai/submodels/submodel[5]/count");
+    chaffCount = getprop("ai/submodels/submodel[13]/count");
     flareStart = getprop("sim/time/elapsed-sec");
-    if (flareCount > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0 and getprop("sim/model/f15/epawss/expendables-master")) {
-      # release a flare
-      setprop("ai/submodels/submodel[5]/flare-release-snd", 1);
-      setprop("ai/submodels/submodel[5]/flare-release", 1);
-      setprop("rotors/main/blade[3]/flap-deg", flareStart);
-      setprop("rotors/main/blade[3]/position-deg", flareStart);
+    if (getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0 and getprop("sim/model/f15/epawss/expendables-master")) {
+    
+      # depending on the expendables sel switch, we release flares, chaffs, or boths
+      if (getprop("sim/model/f15/epawss/expendables-sel") == 0) {  # "both" mode
+        sendFlare = 1;
+        sendChaff = 1;
+      } elsif (getprop("sim/model/f15/epawss/expendables-sel") == 1) {  # "flare" mode
+        sendFlare = 1;
+        sendChaff = 0;
+      } elsif (getprop("sim/model/f15/epawss/expendables-sel") == 2) {  # "chaff" mode
+        sendFlare = 0;
+        sendChaff = 1;
+      } elsif (getprop("sim/model/f15/epawss/expendables-sel") == 3) {  # "auto" mode  (TODO make it)
+        sendFlare = 1;
+        sendChaff = 1;
+      }
+      
+      # make sure we still got flares and chaffs to spare
+      if (flareCount <= 0) {
+        sendFlare = 0;
+      }
+      if (chaffCount <= 0) {
+        sendChaff = 0;
+      }
+      
+      if (sendFlare) {
+        setprop("ai/submodels/submodel[5]/flare-release-snd", 1);
+        setprop("ai/submodels/submodel[5]/flare-release", 1);
+        setprop("rotors/main/blade[3]/flap-deg", flareStart);  # release a flare
+      }
+      if (sendChaff) {
+        setprop("ai/submodels/submodel[5]/chaff-release-snd", 1);
+        setprop("ai/submodels/submodel[5]/chaff-release", 1);
+        setprop("rotors/main/blade[3]/position-deg", flareStart);  # release a chaff
+      }
     } else {
-      # play the sound for out of flares
+      # play the sound for outta flares
       setprop("ai/submodels/submodel[5]/flare-release-out-snd", 1);
     }
   }
@@ -839,15 +874,28 @@ var flareLoop = func {
   if (getprop("ai/submodels/submodel[5]/flare-release-snd") == 1 and (flareStart + delay) < getprop("sim/time/elapsed-sec")) {
     setprop("ai/submodels/submodel[5]/flare-release-snd", 0);
     setprop("rotors/main/blade[3]/flap-deg", 0);
+  }
+  if (getprop("ai/submodels/submodel[5]/chaff-release-snd") == 1 and (flareStart + delay) < getprop("sim/time/elapsed-sec")) {
+    setprop("ai/submodels/submodel[5]/chaff-release-snd", 0);
     setprop("rotors/main/blade[3]/position-deg", 0);
   }
+  
   if (getprop("ai/submodels/submodel[5]/flare-release-out-snd") == 1 and (flareStart + delay) < getprop("sim/time/elapsed-sec")) {
     setprop("ai/submodels/submodel[5]/flare-release-out-snd", 0);
   }
+  if (getprop("ai/submodels/submodel[5]/chaff-release-out-snd") == 1 and (flareStart + delay) < getprop("sim/time/elapsed-sec")) {
+    setprop("ai/submodels/submodel[5]/chaff-release-out-snd", 0);
+  }
+  
   if (flareCount > getprop("ai/submodels/submodel[5]/count")) {
     # A flare was released in last loop, we stop releasing flares, so user have to press button again to release new.
     setprop("ai/submodels/submodel[5]/flare-release", 0);
     flareCount = -1;
+  }
+  if (chaffCount > getprop("ai/submodels/submodel[13]/count")) {
+    # A flare was released in last loop, we stop releasing flares, so user have to press button again to release new.
+    setprop("ai/submodels/submodel[5]/chaff-release", 0);
+    chaffCount = -1;
   }
   settimer(flareLoop, 0.1);
 };

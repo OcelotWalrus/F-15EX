@@ -363,12 +363,17 @@ var n2_r = getprop("engines/engine[1]/n2");
 }
 
 var two_seater = getprop("fdm/jsbsim/metrics/two-place-canopy");
-if (two_seater)
-logprint(3, "F-15 two seat variant (B,D,E,EX)");
+if (two_seater) {
+    logprint(3, "F-15 two seat variant (B,D,E,EX)");
+}
 
 setlistener("sim/model/f15/controls/AFCS/cas-takeoff-trim", func(v) {
-    logprint(3, "Takeoff trim");
-    setprop("controls/flight/elevator-trim", -0.43);
+    if (getprop("sim/model/f15/controls/AFCS/cas-takeoff-trim") == 1) {
+        logprint(3, "Takeoff trim");
+        interpolate("controls/flight/elevator-trim", -0.43, 3);  # takes 3 seconds
+        settimer(func { setprop("sim/model/f15/controls/AFCS/cas-takeoff-trim-finished", 1); }, 3);
+        settimer(func { setprop("sim/model/f15/controls/AFCS/cas-takeoff-trim-finished", 0); }, 4);
+    }
 });
 #----------------------------------------------------------------------------
 # View change: Ctrl-V switchback to view #0 but switch to Rio view when already
@@ -408,12 +413,12 @@ var LADView = func () {  # lean into the LAD
         if (hd < 180) {
           hd_t = hd_t - 360;
         }
-        interpolate("sim/current-view/field-of-view", 42.59, 0.66);
+        interpolate("sim/current-view/field-of-view", 47.03, 0.66);
         interpolate("sim/current-view/heading-offset-deg", hd_t,0.66);
         interpolate("sim/current-view/pitch-offset-deg", -9.18,0.66);
         interpolate("sim/current-view/roll-offset-deg", 0,0.66);
         interpolate("sim/current-view/x-offset-m", 0, 1);
-        interpolate("sim/current-view/y-offset-m", 1.26915, 1);
+        interpolate("sim/current-view/y-offset-m", 1.20915, 1);
         interpolate("sim/current-view/z-offset-m", -5.09, 1);
     }
 }
@@ -816,7 +821,7 @@ var F15MainModule =
             setprop("payload/weight[24]/selected", "Empty");
             setprop("payload/weight[25]/selected", "Empty");
         }
-        
+
         # Compute the engine master switches' position
         if (getprop("sim/model/f15/controls/interiors/eng-master-pos-r-force")) {
             setprop("sim/model/f15/controls/interiors/eng-master-pos-r", 1);
@@ -828,7 +833,7 @@ var F15MainModule =
         } else {
             setprop("sim/model/f15/controls/interiors/eng-master-pos-l", !(getprop("engines/engine[0]/starter") or getprop("engines/engine[0]/running")));
         }
-        
+
         # Force update different displays' daylight mode (day or night)
         if (getprop("controls/lighting/daylight-mode") == 0) {  # day mode (brt)
             setprop("sim/model/f15/controls/LAD/mode", 2);
@@ -837,7 +842,7 @@ var F15MainModule =
             setprop("sim/model/f15/controls/LAD/mode", 1);
             setprop("sim/model/f15/controls/EHD/mode", 1);
         }
-        
+
         # Windshield heat computing: if switch is off, set to off, is switch is on, set to on, if it's auto set heating to on if the windshield is frozen
         if (getprop("sim/model/f15/controls/windshield-heat-switch-pos") == 0) {
             setprop("sim/model/f15/controls/windshield-heat", 0);
@@ -846,16 +851,52 @@ var F15MainModule =
         } elsif (getprop("sim/model/f15/controls/windshield-heat-switch-pos") == 1) {
             setprop("sim/model/f15/controls/windshield-heat", getprop("fdm/jsbsim/systems/ecs/windscreen-frost-dmd"));
         }
-        
+
         # Make sure CAS is always enabled (it ain't in the F-15EX) but we still keep it in this model cause it's based offa the C model
         setprop("sim/model/f15/controls/CAS/cas-yaw-enable", 1);
         setprop("sim/model/f15/controls/CAS/cas-pitch-enable", 1);
         setprop("sim/model/f15/controls/CAS/cas-roll-enable", 1);
 
-        # Make sure the radar is set to standby when the gear's down
+        # Syn knob's radar mode with the actual radar mode
+        if (getprop("sim/model/f15/radar-awg-9/selected-mode-knob") == 0) {
+            setprop("instrumentation/radar/radar-mode", 3);
+        } elsif (getprop("sim/model/f15/radar-awg-9/selected-mode-knob") == 1) {
+            setprop("instrumentation/radar/radar-mode", 2);
+        } elsif (getprop("sim/model/f15/radar-awg-9/selected-mode-knob") == 2) {
+            setprop("instrumentation/radar/radar-mode", 1);
+        } elsif (getprop("sim/model/f15/radar-awg-9/selected-mode-knob") == 3) {
+            setprop("instrumentation/radar/radar-mode", 0);
+        }
+        # Make sure the radar is actually set to standby when the gear's down
         if (getprop("controls/gear/gear-down") == 1) {
             setprop("instrumentation/radar/radar-mode", 2);
         }
+        
+        # Sensors panel props synchronization shit
+        if (getprop("sim/model/f15/avionics/tfr-flir-switch-pos") == 2) {
+            setprop("sim/model/f15/avionics/tfr-flir-on", 1);
+        } else {
+            setprop("sim/model/f15/avionics/tfr-flir-on", 0);
+        }
+        
+        if (getprop("sim/model/f15/avionics/radar-altimeter-switch-pos") == 1) {
+            setprop("sim/model/f15/avionics/radar-altimeter-online", 1);
+        } else {
+            setprop("sim/model/f15/avionics/radar-altimeter-online", 0);
+        }
+        
+        if (getprop("sim/model/f15/avionics/nav-flir-switch-pos") == 2) {
+            setprop("sim/model/f15/avionics/hud-flir-on", 1);
+        } else {
+            setprop("sim/model/f15/avionics/hud-flir-on", 0);
+        }
+        
+        if (getprop("sim/model/f15/avionics/jtids-selected-mode-knob") == 2 or getprop("sim/model/f15/avionics/jtids-selected-mode-knob") == 3) {  # "norm" or "silent" knob position
+            setprop("instrumentation/datalink/power", 1);
+        } else {
+            setprop("instrumentation/datalink/power", 0);
+        }
+        
 
         # Taken from the F-16
         if (getprop("payload/armament/es/flags/deploy-id-10") != nil) {
@@ -973,7 +1014,7 @@ var F15MainModule =
 
         # Calculate time till crash for flyup display
         # Same method here as in the F-16 (copy-and-paste)
-        if ((getprop("velocities/speed-east-fps") != 0 or getprop("velocities/speed-north-fps") != 0) and getprop("fdm/jsbsim/gear/unit[0]/WOW") != 1 and
+        if (getprop("sim/model/f15/avionics/radar-altimeter-online") and getprop("sim/model/f15/avionics/flyup-master-switch") and (getprop("velocities/speed-east-fps") != 0 or getprop("velocities/speed-north-fps") != 0) and getprop("fdm/jsbsim/gear/unit[0]/WOW") != 1 and
               getprop("fdm/jsbsim/gear/unit[1]/WOW") != 1 and (
              (getprop("fdm/jsbsim/gear/gear-pos-norm")<1)
             or (getprop("fdm/jsbsim/gear/gear-pos-norm")>0.99 and getprop("/position/altitude-agl-ft") > 164)

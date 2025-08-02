@@ -815,17 +815,6 @@
             </button>
 
 			<button>
-                <legend>Flir Config</legend>
-                <binding>
-                    <command>nasal</command>
-                    <script>
-						var flir_config = gui.Dialog.new("dialog[4]","Aircraft/F-15/Dialogs/flir-config.xml");
-						flir_config.open();
-					</script>
-                </binding>
-            </button>
-
-			<button>
                 <legend>GPS Target Config</legend>
                 <binding>
                     <command>nasal</command>
@@ -1633,8 +1622,9 @@
                             setprop("sim/model/f15/systems/gun/rounds",925);
 						    setprop("/ai/submodels/submodel[4]/count",185);
                             <!-- flares and chaffs -->
-                            setprop("/ai/submodels/submodel[5]/count",220);
-                            setprop("/ai/submodels/submodel[6]/count",220);
+                            setprop("/ai/submodels/submodel[5]/count",90);
+                            setprop("/ai/submodels/submodel[6]/count",90);
+                            setprop("/ai/submodels/submodel[13]/count",180);
                         </binding>
                     </mod-up>
                 </button>
@@ -1648,8 +1638,9 @@
                             setprop("sim/model/f15/systems/gun/rounds",925);
                             setprop("/ai/submodels/submodel[4]/count",185);
                             <!-- flares and chaffs -->
-                            setprop("/ai/submodels/submodel[5]/count",220);
-                            setprop("/ai/submodels/submodel[6]/count",220);
+                            setprop("/ai/submodels/submodel[5]/count",90);
+                            setprop("/ai/submodels/submodel[6]/count",90);
+                            setprop("/ai/submodels/submodel[13]/count",180);
                         </script>
                     </binding>
                 </button>
@@ -3182,14 +3173,17 @@
 					        	<property>ai/submodels/submodel[5]/count</property>
 					        	<live>1</live>
 					        	<min>0</min>
-					        	<max>220</max>
+					        	<max>90</max>
 					        	<binding>
 					        		<command>dialog-apply</command>
 					        		<object-name>Flares Count</object-name>
 					        	</binding>
-					        	<binding>
-					        		<command>dialog-apply</command>
-					        		<object-name>Chaffs Count</object-name>
+								<binding>
+					            	<command>nasal</command>  <!-- snyc both flare submodels -->
+					            	<script>
+					            	    v = getprop("ai/submodels[5]/count");
+					            	    setprop("/ai/submodels/submodel[6]/count",v);
+					            	</script>
 					        	</binding>
 					        </slider>
 					        <slider>
@@ -3202,14 +3196,10 @@
 									  </or>
 								</enable>
 					        	<name>Chaffs Count</name>
-					        	<property>ai/submodels/submodel[6]/count</property>
+					        	<property>ai/submodels/submodel[13]/count</property>
 					        	<live>1</live>
 					        	<min>0</min>
-					        	<max>220</max>
-					        	<binding>
-					        		<command>dialog-apply</command>
-					        		<object-name>Flares Count</object-name>
-					        	</binding>
+					        	<max>180</max>
 					        	<binding>
 					        		<command>dialog-apply</command>
 					        		<object-name>Chaffs Count</object-name>
@@ -3238,7 +3228,7 @@
 					        	<label>xxxxxxxx</label>
 					        	<live>true</live>
 					        	<format>%3d</format>
-					        	<property>ai/submodels/submodel[6]/count</property>
+					        	<property>ai/submodels/submodel[13]/count</property>
 					        </text>
 					    </group>
 					</group>

@@ -406,22 +406,23 @@ var getCCIP = func {
 
 var reloadCannon = func {
 	if (getprop("sim/model/f15/variant") == "EX") {  # EX variant's got more capacity
-	    setprop("ai/submodels/submodel[5]/count", 220);
-	    setprop("ai/submodels/submodel[6]/count", 220);#flares
+	    setprop("ai/submodels/submodel[5]/count", 90);#flare
+		setprop("ai/submodels/submodel[6]/count", 90);#flare
+	    setprop("ai/submodels/submodel[13]/count", 180);#chaff
 	    cannon.reloadAmmo();
 	    setprop("/systems/gun/rounds",925);
         setprop("/ai/submodels/submodel[4]/count",185);
 	} else {
-		setprop("ai/submodels/submodel[5]/count", 100);
-		setprop("ai/submodels/submodel[6]/count", 100);#flares
+		setprop("ai/submodels/submodel[5]/count", 100);#flare
+		setprop("ai/submodels/submodel[13]/count", 100);#chaff
 		cannon.reloadAmmo();
 		setprop("/systems/gun/rounds",675);
 	}
 }
 
 var unloadCannon = func {
-	setprop("ai/submodels/submodel[5]/count", 0);
-	setprop("ai/submodels/submodel[6]/count", 0);#flares
+	setprop("ai/submodels/submodel[5]/count", 0);#flare
+	setprop("ai/submodels/submodel[13]/count", 0);#chaff
 	setprop("/systems/gun/rounds",0);
 }
 
@@ -3236,12 +3237,12 @@ var bore_loop = func {
     if (fcs != nil) {
         var standby = getprop("instrumentation/radar/radar-standby");
         var aim = fcs.getSelectedWeapon();
-        
+
         # Slave the seeker to the bore at the HMD, if it's active
         if (aim != nil and (aim.type == "AIM-9X" or aim.type == "CATM-9X" or aim.type == "AGM-65B" or aim.type == "AGM-65D" or aim.type == "AGM-88E" or aim.type == "AGM-119A")) {
             var hmd_active = getprop("payload/armament/hmd-active");
             var hmd_slaving = getprop("sim/model/f15/avionics/hmd-slaving");
-            
+
             if (hmd_active and hmd_slaving and aim.status < 1) {
         		aim.setContacts(awg_9.completeList);
         		var h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
@@ -3261,7 +3262,7 @@ var bore_loop = func {
             	}
             }
         }
-        
+
         if (aim != nil and (aim.type == "AIM-9" or aim.type == "AIM-9X" or aim.type == "CATM-9X")) {
 			var hmd_active = getprop("payload/armament/hmd-active");
 

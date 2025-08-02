@@ -1191,7 +1191,7 @@
     <condition>
       <property>sim/model/f15/controls/LAD/mode</property>
       <greater-than>
-        <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
+        <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
         <value>5</value>
       </greater-than>
     </condition>
@@ -1202,7 +1202,7 @@
     <condition>
       <property>sim/model/f15/controls/EHD/mode</property>
       <greater-than>
-         <property>fdm/jsbsim/systems/electrics/ac-left-main-bus</property>
+         <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
          <value>0</value>
       </greater-than>
     </condition>
@@ -3727,28 +3727,28 @@
     </action>
   </animation>
   <animation>
-    <type>translate</type>
+    <type>rotate</type>
     <object-name>anti-collision-switch</object-name>
     <property>sim/multiplay/generic/int[3]</property>
     <interpolation>
       <entry>
         <ind>0</ind>
-        <dep>0</dep>
+        <dep>30</dep>
       </entry>
       <entry>
         <ind>1</ind>
-        <dep>0.003</dep>
+        <dep>-30</dep>
       </entry>
     </interpolation>
     <center>
-      <x-m>-5.3579</x-m>
-      <y-m> 0.3521</y-m>
-      <z-m> 0.6550</z-m>
+      <x-m>-5.3510</x-m>
+      <y-m>-0.352</y-m>
+      <z-m>0.6583</z-m>
     </center>
     <axis>
       <x>0</x>
-      <y>0</y>
-      <z>1</z>
+      <y>1</y>
+      <z>0</z>
     </axis>
   </animation>
   <!-- Radio2 -->
@@ -4073,7 +4073,7 @@
     <offset-deg>30</offset-deg>
     <center>
       <x-m>-5.3223</x-m>
-      <y-m>-0.353</y-m>
+      <y-m>-0.352</y-m>
       <z-m>0.6583</z-m>
     </center>
     <axis>
@@ -4088,6 +4088,331 @@
         <factor>1</factor>
         <min>0</min>
         <max>2</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <!-- Sensors panel -->
+  <animation>
+    <type>knob</type>
+    <object-name>terrain-follow-rdr-switch</object-name>
+    <property>sim/model/f15/avionics/tfr-flir-switch-pos</property>
+    <factor>-45</factor>
+    <offset-deg>45</offset-deg>
+    <center>
+      <x-m>-5.277</x-m>
+      <y-m>-0.3926</y-m>
+      <z-m>0.6608</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/tfr-flir-switch-pos</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>2</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>radar-altimeter-master-switch</object-name>
+    <property>sim/model/f15/avionics/radar-altimeter-switch-pos</property>
+    <factor>-45</factor>
+    <offset-deg>45</offset-deg>
+    <center>
+      <x-m>-5.277</x-m>
+      <y-m>-0.3576</y-m>
+      <z-m>0.6608</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/radar-altimeter-switch-pos</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>2</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>nav-flir-mstr-switch</object-name>
+    <property>sim/model/f15/avionics/nav-flir-switch-pos</property>
+    <factor>-45</factor>
+    <offset-deg>45</offset-deg>
+    <center>
+      <x-m>-5.225</x-m>
+      <y-m>-0.3253</y-m>
+      <z-m>0.6608</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/nav-flir-switch-pos</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>2</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>cc-reset-push-button</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+        <property>sim/model/f15/avionics/cc-reset-button-pos</property>
+        <value>1</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>sim/model/f15/avionics/cc-reset-button-pos</property>
+          <value>0</value>
+        </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>cc-reset-push-button</object-name>
+    <property>sim/model/f15/avionics/cc-reset-button-pos</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0.003</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.183</x-m>
+      <y-m> 0.3254</y-m>
+      <z-m> 0.6608</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>radar-power-sensor-knob</object-name>
+    <property>sim/model/f15/radar-awg-9/selected-mode-knob</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-45</dep>
+      </entry>
+      <entry>
+        <ind>3</ind>
+        <dep>-90</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.28</x-m>
+      <y-m>-0.3265</y-m>
+      <z-m>0.6608</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/radar-awg-9/selected-mode-knob</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>3</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>nav-flir-gain-knob</object-name>
+    <property>sim/model/f15/avionics/hud-flir-brt</property>
+    <offset-deg>180</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.2248</x-m>
+      <y-m>-0.3551</y-m>
+      <z-m>.6608</z-m>
+    </center>
+    <axis>
+        <x>0</x>
+        <y>0</y>
+        <z>-1</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>nav-flir-gain-knob</object-name>
+    <property>sim/model/f15/avionics/hud-flir-brt</property>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/hud-flir-brt</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>nav-flir-level-knob</object-name>
+    <property>sim/model/f15/avionics/hud-flir-cont</property>
+    <offset-deg>180</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.2248</x-m>
+      <y-m>-0.3551</y-m>
+      <z-m>.6608</z-m>
+    </center>
+    <axis>
+        <x>0</x>
+        <y>0</y>
+        <z>-1</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>nav-flir-level-knob</object-name>
+    <property>sim/model/f15/avionics/hud-flir-cont</property>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/hud-flir-cont</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>ins-mode-knob</object-name>
+    <property>sim/model/f15/avionics/ins-selected-mode-knob</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-45</dep>
+      </entry>
+      <entry>
+        <ind>3</ind>
+        <dep>-90</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.226</x-m>
+      <y-m>-0.3928</y-m>
+      <z-m>0.6608</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/ins-selected-mode-knob</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>3</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>jtids-mode-knob</object-name>
+    <property>sim/model/f15/avionics/jtids-selected-mode-knob</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-45</dep>
+      </entry>
+      <entry>
+        <ind>3</ind>
+        <dep>-90</dep>
+      </entry>
+      <entry>
+        <ind>4</ind>
+        <dep>-145</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.187</x-m>
+      <y-m>-0.3776</y-m>
+      <z-m>0.6608</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/jtids-selected-mode-knob</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>4</max>
         <wrap>false</wrap>
       </binding>
     </action>
@@ -4418,7 +4743,7 @@
       </entry>
     </interpolation>
     <center>
-      <x-m>-5.6251</x-m>
+      <x-m>-5.6221</x-m>
       <y-m> 0.3209</y-m>
       <z-m> 0.6550</z-m>
     </center>
@@ -5289,35 +5614,24 @@
   <effect>
     <name>f15panel-left</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-left</inherits-from>
-    <object-name>lsp_mpcd-mount</object-name>
-    <object-name>cas-panel-top</object-name>
     <object-name>ext-lt-panel-top</object-name>
-    <object-name>fuel-panel-top</object-name>
-    <object-name>iff-panel-top</object-name>
-    <object-name>ils-tacan-panel-top</object-name>
-    <object-name>ky58-panel-top</object-name>
-    <object-name>misc-panel-top</object-name>
-    <object-name>radar-panel</object-name>
-    <object-name>radio2-panel</object-name>
-    <object-name>lsp_mpcd-mount</object-name>
+    <object-name>sensors-panel-top</object-name>
+    <object-name>fcp-panel-top</object-name>
   </effect>
   <effect>
     <name>f15panel-right</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-right</inherits-from>
-    <object-name>liquid-oxy-gauge</object-name>
-    <object-name>oxygen-pressure-gauge</object-name>
-    <object-name>tews-panel-top</object-name>
-    <object-name>nav-control-panel-top</object-name>
+    <object-name>epawss-panel-top</object-name>
     <object-name>engine-panel-top</object-name>
     <object-name>oxygen-panel-top</object-name>
+    <object-name>oxygen-pressure-gauge</object-name>
+    <object-name>oxygen-needle</object-name>
     <object-name>ecs-panel-top</object-name>
     <object-name>temp-panel-top</object-name>
     <object-name>interior-lighting-panel-top</object-name>
-    <object-name>ecm-top-panel-r</object-name>
-    <object-name>ecm-top-panel-l</object-name>
-    <object-name>compass-panel-top</object-name>
+    <object-name>nuc-panel-top</object-name>
   </effect>
-  <effect>
+  <!--effect>
     <name>f15panel-knob</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-knob</inherits-from>
     <object-name>r2-freq-radio2-ics-knob</object-name>
@@ -5362,7 +5676,12 @@
     <object-name>formation-light-brightness-knob</object-name>
     <object-name>nav-control-intensity-knob</object-name>
     <object-name>epawss-volume-knob</object-name>
-  </effect>
+    <object-name>radar-power-sensor-knob</object-name>
+    <object-name>ins-mode-knob</object-name>
+    <object-name>jtids-mode-knob</object-name>
+    <object-name>nav-flir-gain-knob</object-name>
+    <object-name>nav-flir-level-knob</object-name>
+  </effect-->
   <!-- lights -->
   <animation>
     <type>select</type>
@@ -5394,7 +5713,7 @@
     <condition>
       <or>
         <property>sim/model/f15/lights/master-test-lights</property>
-        <property>sim/model/f15/controls/AFCS/cas-takeoff-trim</property>
+        <property>sim/model/f15/controls/AFCS/cas-takeoff-trim-finished</property>
       </or>
       <greater-than>
         <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
@@ -5415,7 +5734,7 @@
       <not>
         <or>
           <property>sim/model/f15/lights/master-test-lights</property>
-          <property>sim/model/f15/controls/AFCS/cas-takeoff-trim</property>
+          <property>sim/model/f15/controls/AFCS/cas-takeoff-trim-finished</property>
         </or>
         <greater-than>
           <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
@@ -6630,7 +6949,7 @@
               <value>36</value>
             </less-than>
             <less-than>
-              <property>/ai/submodels/submodel[6]/count</property>
+              <property>/ai/submodels/submodel[13]/count</property>
               <value>36</value>
             </less-than>
           </or>
@@ -17552,8 +17871,8 @@
   </animation>
   <animation>
     <type>knob</type>
-    <object-name>epawss-master-switch</object-name>
-    <property>sim/model/f15/epawss/epawss-on</property>
+    <object-name>ewws-master-switch</object-name>
+    <property>sim/model/f15/epawss/ewws-on</property>
     <interpolation>
       <entry>
         <ind>0</ind>
@@ -17567,6 +17886,129 @@
     <center>
       <x-m>-5.510</x-m>
       <y-m>0.3075</y-m>
+      <z-m>0.6751</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/epawss/ewws-on</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>expendables-sel-switch</object-name>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>nasal</command>
+        <script>
+          if (getprop("sim/model/f15/epawss/expendables-sel") == 0) {
+            setprop("sim/model/f15/epawss/expendables-sel", 1);
+          } elsif (getprop("sim/model/f15/epawss/expendables-sel") == 1) {
+            setprop("sim/model/f15/epawss/expendables-sel", 2);
+          } elsif (getprop("sim/model/f15/epawss/expendables-sel") == 2) {
+            setprop("sim/model/f15/epawss/expendables-sel", 3);
+          } elsif (getprop("sim/model/f15/epawss/expendables-sel") == 3) {
+            setprop("sim/model/f15/epawss/expendables-sel", 0);
+          }
+        </script>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>expendables-sel-switch</object-name>
+    <property>sim/model/f15/epawss/expendables-sel</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-45</dep>
+      </entry>
+      <entry>
+        <ind>3</ind>
+        <dep>0</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.569</x-m>
+      <y-m>0.3837</y-m>
+      <z-m>0.6751</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>expendables-sel-switch</object-name>
+    <property>sim/model/f15/epawss/expendables-sel</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>3</ind>
+        <dep>-45</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.569</x-m>
+      <y-m>0.3837</y-m>
+      <z-m>0.6751</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>rwr-mstr-switch</object-name>
+    <property>sim/model/f15/epawss/epawss-on</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>-45</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.569</x-m>
+      <y-m>0.3117</y-m>
       <z-m>0.6751</z-m>
     </center>
     <axis>
@@ -17689,9 +18131,9 @@
       </entry>
     </interpolation>
     <center>
-      <x-m>-5.527</x-m>
-      <y-m>0.4017</y-m>
-      <z-m>0.6751</z-m>
+      <x-m>-5.53</x-m>
+      <y-m>.4019</y-m>
+      <z-m>.6751</z-m>
     </center>
     <axis>
       <x>0</x>
@@ -18684,4 +19126,260 @@
       </binding>
     </action>
   </animation>
+  <!-- Secondary misc panel -->
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>nuclear-switch</object-name>
+    <property>sim/model/f15/controls/interiors/nuclear-consent-pos</property>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>nasal</command>
+        <script>
+            if (getprop("sim/model/f15/controls/interiors/nuclear-guard-pos") == 1) {
+                if (getprop("sim/model/f15/controls/interiors/nuclear-consent-pos") == 0) {
+                    setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 1);
+                } elsif (getprop("sim/model/f15/controls/interiors/nuclear-consent-pos") == 1) {
+                    setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 2);
+                } elsif (getprop("sim/model/f15/controls/interiors/nuclear-consent-pos") == 2) {
+                    setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 0);
+                }
+            }
+        </script>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>nuclear-switch</object-name>
+    <property>sim/model/f15/controls/interiors/nuclear-consent-pos</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>45</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-45</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.347</x-m>
+      <y-m>0.5136</y-m>
+      <z-m>0.6749</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>nuclear-guard</object-name>
+    <property>sim/model/f15/controls/interiors/nuclear-guard-pos</property>
+    <action>
+      <button>0</button>
+      <binding>
+        <condition>
+          <not>
+             <equals>
+               <property>sim/model/f15/controls/interiors/nuclear-consent-pos</property>
+               <value>2</value>
+             </equals>
+          </not>
+        </condition>
+        <command>property-toggle</command>
+        <property>sim/model/f15/controls/interiors/nuclear-guard-pos</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>nuclear-guard</object-name>
+    <property>sim/model/f15/controls/interiors/nuclear-guard-pos</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>75</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.324</x-m>
+      <y-m>0.5132</y-m>
+      <z-m>0.6751</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  
+  <!-- Flight Control Panel (FCP) -->
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>fcp-bit-button</object-name>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>nasal</command>
+        <script>
+            setprop("sim/model/f15/controls/interiors/fcp-bit-button", 1);
+        </script>
+      </binding>
+      <mod-up>
+          <binding>
+            <command>nasal</command>
+            <script>
+                setprop("sim/model/f15/controls/interiors/fcp-bit-button", 0);
+            </script>
+          </binding>
+      </mod-up>
+    </action>
+  </animation>
+  <animation>
+    <type>translate</type>
+    <object-name>fcp-bit-button</object-name>
+    <property>sim/model/f15/controls/interiors/fcp-bit-button</property>
+    <factor>-.001</factor>
+    <center>
+      <x-m>-5.628</x-m>
+      <y-m>-.388</y-m>
+      <z-m>.6613</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>flyup-guard-lever</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>sim/model/f15/avionics/flyup-master-guard</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>flyup-guard-lever</object-name>
+    <property>sim/model/f15/avionics/flyup-master-guard</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>-55</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.667</x-m>
+      <y-m>-.353</y-m>
+      <z-m>.6691</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>flyup-master-switch</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>sim/model/f15/avionics/flyup-master-switch</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>flyup-master-switch</object-name>
+    <property>sim/model/f15/avionics/flyup-master-switch</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>50</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>-50</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.645</x-m>
+      <y-m>-.3535</y-m>
+      <z-m>.6613</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>pick</type>
+    <visible>true</visible>
+    <object-name>tf-couple-switch</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-toggle</command>
+        <property>sim/model/f15/avionics/tf-couple-switch</property>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>tf-couple-switch</object-name>
+    <property>sim/model/f15/avionics/tf-couple-switch</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>50</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>-50</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.654</x-m>
+      <y-m>-.3099</y-m>
+      <z-m>.6613</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+
 </PropertyList>

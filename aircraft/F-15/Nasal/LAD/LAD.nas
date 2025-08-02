@@ -12,7 +12,7 @@
 # - PACS (Programmable Armament Control Set)  - allows to see different stats about current pylons and loadout, and setup jettison
 # Upcoming Displays :
 # - ADI (Attitude Director Indicator)
-# - DSRS (Datalink Sharing & Receiving Control Set)  - People on datalink, number of hostiles, friendlies and unknowns, number of locally shared radar and EPAWSS contacts, and a panel to check received GPS-Spots and send GPS-Spots + basic map just giving pos of datalink contacts, with a tactile button allowing to go through contacts like in radar and get info about them
+# - JTIDS (Datalink Sharing & Receiving Control Set)  - People on datalink, number of hostiles, friendlies and unknowns, number of locally shared radar and EPAWSS contacts, and a panel to check received GPS-Spots and send GPS-Spots + basic map just giving pos of datalink contacts, with a tactile button allowing to go through contacts like in radar and get info about them
 # - ETSD (EPAWSS Threat Summary Display)  - Number of contacts, number of threats, jamming on/off, datalink sharing on/off, active threat yes/no + type(MLW, MAW, spike) + basic HSD with info toward EPAWSS
 # - TSD (Tactical Situation Display)  - Actually, merge that with the HSD (just an imagery map beneath every symbology)
 # - TPOD (Targeting Pod)  - Allows to configure the targeting pod and actively control it
@@ -256,7 +256,7 @@ var LAD_Device = {
             .setTranslation(400,20)
             .setStrokeLineWidth(20)
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-        
+
         m.autopilot_text = m.upper_panel.createChild("text")
             .setFontSize(165, 1.4)
             .setText("A/P")
@@ -1030,7 +1030,7 @@ var LAD_Device = {
             .setStrokeDashArray([20,40])
             .set("z-index",10)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
-        
+
         m.hsd_circle_2_3 = m.HSDScreen.createChild("path")
             .moveTo(1355-m.hsd_great_circle_radius*(2/3),1150*2+500)
             .setCenter(1355,1150*2+500)
@@ -1049,7 +1049,7 @@ var LAD_Device = {
             .setStrokeLineWidth(7)
             .set("z-index",0)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
-            
+
         m.hsd_line_h = m.HSDScreen.createChild("path")
             .moveTo(1355-(m.hsd_great_circle_radius*(10/19))*2+75,1150*2+500+75)
             .lineTo(1355+(m.hsd_great_circle_radius*(10/19))*2-75,1150*2+500+75)
@@ -1062,7 +1062,7 @@ var LAD_Device = {
             .setStrokeLineWidth(7)
             .set("z-index",0)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
-        
+
         m.hsd_distance_indicator_1_3 = m.HSDScreen.createChild("text")  # far down, right of the center column
             .setFontSize(50, 1.4)
             .setText("20.8NM")
@@ -1079,8 +1079,8 @@ var LAD_Device = {
             .setTranslation(1355+85,1150*2+500+75)
             .set("z-index",0)
             .setFont(aircraft.HUDFont);
-            
-            
+
+
         m.heading_pin = m.HSDScreen.createChild("path")
             .moveTo(1355,1150*2+500+75-m.hsd_great_circle_radius*2)
             .lineTo(1355-50,1150*2+500+75-m.hsd_great_circle_radius*2+90)
@@ -1105,7 +1105,7 @@ var LAD_Device = {
             #.setStrokeDashArray([50,35])
             .set("z-index",10)
             .setColor(prst_rose.r,prst_rose.g,prst_rose.b);
-        
+
         # Information texts (ground speed, true speed etc.)
         m.hsd_ground_speed = m.HSDScreen.createChild("text")
             .setFontSize(100, 1.4)
@@ -1170,7 +1170,7 @@ var LAD_Device = {
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(130,2300*2+500-70-120-120-120)
             .setFont(aircraft.HUDFont);
-            
+
         m.hsd_bullseye_eta = m.HSDScreen.createChild("text")
             .setFontSize(120, 1.4)
             .setText("XX:XX")
@@ -1199,7 +1199,7 @@ var LAD_Device = {
             .setColor(prst_blue.r,prst_blue.g,prst_blue.b)
             .setTranslation(677*4-130,2300*2+500-70-120-120-120)
             .setFont(aircraft.HUDFont);
-            
+
         # Create the steerpoints symbols
         m.stpt_symbols_hsd = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
@@ -1228,7 +1228,7 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.stpt_texts_hsd[i] = m.stpt_txt;
         }
-        
+
         # Radar symbology
         m.hsd_radar_x = (m.hsd_radar_range_px_x) * math.cos((90 - 60) * D2R);
         m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 30) * D2R);
@@ -1274,7 +1274,7 @@ var LAD_Device = {
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2555+10,535+160+130+25)
             .setFont(aircraft.HUDFont);
-            
+
         # Radar target information
         m.hsd_tgt_closure_pin = m.HSDScreen.createChild("path")
             .moveTo(677*4-75,1150*4+500+75)
@@ -1291,7 +1291,7 @@ var LAD_Device = {
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
             .setTranslation(677*4-75-140,1150*4+500+75)
             .setFont(aircraft.HUDFont);
-        
+
         # Create the EPAWSS symbols
         m.epawss_symbols_hsd_hat = setsize([], m.stpt_symbols_max);  # hats are for airborne radars
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
@@ -1361,7 +1361,7 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.epawss_texts_hsd[i] = m.epawss_txt;
         }
-        
+
         # Create the radar target symbols
         m.tgt_symbols_hsd = setsize([], m.tgt_symbols_max);
         for (var i = 0; i < m.tgt_symbols_max; i += 1){
@@ -1422,7 +1422,7 @@ var LAD_Device = {
             .setVisible(0)
             .set("z-index",15)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
-        
+
         # Create the datalink contacts symbols
         m.dlnk_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
         m.dlnk_symbols_hsd = setsize([], m.dlnk_symbols_max);
@@ -1450,10 +1450,10 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.dlnk_texts_hsd[i] = m.dlnk_txt;
         }
-        
+
         # Data cartridge loaded data symbology
         m.HSDScreenCircles = m.svg.createGroup();  # used only for HSD circled areas , which need to be all deleted if they're updated
-        
+
         var bullseye_radius = 1.5;
         m.hsd_bullseye_aim = m.HSDScreen.createChild("path")
             .moveTo(1355-bullseye_radius*m.hsd_nm_to_px_x,1150*2+500)
@@ -1499,17 +1499,17 @@ var LAD_Device = {
         m.hsd_bullseye_title.setVisible(1);
         m.hsd_distance_indicator_1_3.setVisible(1);
         m.hsd_distance_indicator_2_3.setVisible(1);
-        
+
         ## PACS Display
         m.PACSmode = 0;  # 0 A/A ; 1 A/G ; 2 JETTISON
-        
+
         # Parse the PACS.svg file
         m.PACSScreen = m.svg.createGroup();
         m.pacs_pres = canvas.parsesvg(m.PACSScreen, "Nasal/LAD/PACS.svg", {'font-mapper': aircraft.hud_font_mapper});
         m.PACSScreen.setScale(1,.9);
-        
+
         # Import what needs to be imported
-        
+
         # Shared objects
         m.pacs_mode_text = m.PACSScreen.getElementById("view_mode_text");
         m.pacs_arming_time = m.PACSScreen.getElementById("arm_time_counter");
@@ -1528,12 +1528,12 @@ var LAD_Device = {
         m.tpod_mounted_text = m.PACSScreen.getElementById("tpod-mounted-text");
         m.irst_pod_mounted_text = m.PACSScreen.getElementById("legion-pod-mounted-text");
         m.ecm_pod_mounted_text = m.PACSScreen.getElementById("ecm-pod-mounted-text");
-        
+
         # Load all stations' symbology
-        
+
         m.pacs_stations_idx = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,20,21,22,23,24,25];
-        
-        
+
+
         m.pacs_station_boxes_up = setsize([], 26);  # there are stations from 0 to 25
         m.pacs_station_boxes_down = setsize([], 26);
         m.pacs_station_boxes_up_text = setsize([], 26);
@@ -1544,7 +1544,7 @@ var LAD_Device = {
             m.pacs_station_boxes_up_text[idx] = m.PACSScreen.getElementById("BOX_UP_TEXT_S"~idx~"");
             m.pacs_station_boxes_down_text[idx] = m.PACSScreen.getElementById("BOX_DOWN_TEXT_S"~idx~"");
         }
-        
+
         m.pacs_mode_text.setVisible(1);
         m.pacs_arming_time.setVisible(0);
         m.pacs_chaff.setVisible(1);
@@ -1583,7 +1583,7 @@ var ellipse_clamp = func(x_move, y_move, mode=0) {  # Used to clamp an object if
         scale = 1 / math.sqrt(ellipse_value);
         x_move = x_move * scale;
         y_move = y_move * scale;
-        
+
     } elsif (mode == 1) {  # use to move the object to the closest point of the ellipse
         scale = 1 / math.sqrt(ellipse_value);
         x_move = x_move * scale;
@@ -1622,12 +1622,12 @@ var path_text_perpendicular_vector_computing = func(coord_1, coord_2, offset=40)
     midpoint = [(coord_1[0]+coord_2[0])/2, (coord_1[1]+coord_2[1])/2];
     # Angles in radians
     rotation = math.atan2(coord_2[1]-coord_1[1], coord_2[0]-coord_1[0]);
-                                    
+
     # Perpendicular unit vector
     direction = [-(coord_2[1]-coord_1[1]), coord_2[0]-coord_1[0]];
     length = math.sqrt(direction[0]*direction[0] + direction[1]*direction[1]);
     unit_normal = [direction[0] / length, direction[1] / length];
-                                    
+
     # Offset position above the line
     return [midpoint[0] + offset * unit_normal[0], midpoint[1] + offset * unit_normal[1], rotation];
 }
@@ -1647,7 +1647,7 @@ var is_inside_static = func(x, y, center_static, radiuses_static, static_rotatio
 
 # Don't work GODDAMN
 var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_radius, center_x, center_y, center_x_static, center_y_static, ellipse2_horizon_radius, ellipse2_vertic_radius, step=2.5, ellipse_rot=0, static_rotation=0) {
-    
+
     intersect_points = [];
     for (var t = 0; t < 360; t += step) {
         var rad = t * math.pi / 180;
@@ -1690,7 +1690,7 @@ update_lad = func() {
             LADCanvas.caution_text.setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b).setFontSize(120, 1.4);
             LADCanvas.caution_box.setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
         }
-        
+
         # Update the A/P light, depending if autopilot's on or not, we change the text's size and the colors
         autopilot_on = getprop("autopilot/internal/pitch-active") and getprop("autopilot/internal/roll-active");
         if (autopilot_on) {
@@ -1792,13 +1792,17 @@ update_lad = func() {
         LADCanvas.dtl_text_center.setText(sprintf("hash %04d", datalink_channel));
         LADCanvas.dtl_text_down.setText(sprintf("ON LINK : %02d", on_link_count));
         if (datalink_power) {
-            LADCanvas.dtl_text_up.setText("DTLNK - ON");
+            if (getprop("sim/model/f15/avionics/jtids-selected-mode-knob") == 3) {  # If we're in silent mode
+                LADCanvas.dtl_text_up.setText("JTIDS - SIL");
+            } else {
+                LADCanvas.dtl_text_up.setText("JTIDS - ON");
+            }
             LADCanvas.dtl_text_up.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.dtl_text_center.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.dtl_text_down.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.dtl_box.setColor(prst_green.r,prst_green.g,prst_green.b);
         } else {
-            LADCanvas.dtl_text_up.setText("DTLNK - OFF");
+            LADCanvas.dtl_text_up.setText("JTIDS - OFF");
             LADCanvas.dtl_text_up.setColor(prst_white.r,prst_white.g,prst_white.b);
             LADCanvas.dtl_text_center.setColor(prst_white.r,prst_white.g,prst_white.b);
             LADCanvas.dtl_text_down.setColor(prst_white.r,prst_white.g,prst_white.b);
@@ -1878,7 +1882,7 @@ update_lad = func() {
         } else {
             HSD_ON = 0;
         }
-        
+
         if (main_screens.left == "PACS") {
             PACS_ON = 1;
             LADCanvas.PACSScreen.setTranslation(0,620);  # Default position's position for the left main screen
@@ -1939,7 +1943,7 @@ update_lad = func() {
             LADCanvas.vsd_altitude.setText(sprintf("ALT %05d", getprop("instrumentation/altimeter/indicated-altitude-ft")));
             LADCanvas.vsd_fps.setText(sprintf("FPS %04d", getprop("velocities/down-relground-fps")));
             LADCanvas.vsd_heading_true.setText(sprintf("H %03d", getprop("orientation/heading-deg")));
-            
+
             if (getprop("autopilot/route-manager/current-wp") == -1) {
                 LADCanvas.vsd_stpt_index.setText("No.00");
             } else {
@@ -1975,14 +1979,14 @@ update_lad = func() {
             LADCanvas.vsd_vert_coverage_circle_up.setTranslation(0, y_move_vert_up);
             LADCanvas.vsd_vert_coverage_text_down.setTranslation(80+75+60,2262+500+y_move_vert_down);
             LADCanvas.vsd_vert_coverage_text_up.setTranslation(80+75+60,2262+500+y_move_vert_up);
-            
+
             # Compute radar altitude coverage
             range_ft = getprop("instrumentation/radar/radar2-range") * 6076.12;  # 6076.12 is NM2FT coefficient
             sin_angle = math.sin(azimuth_vertical*D2R);
 
             min_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") - range_ft * sin_angle) / 1000;  # / 1000 to only keep the thousands
             max_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") + range_ft * sin_angle) / 1000;
-            
+
             LADCanvas.vsd_vert_coverage_text_up.setText(sprintf("%d-%d", max_alt, (max_alt - int(max_alt)) * 10));
             LADCanvas.vsd_vert_coverage_text_down.setText(sprintf("%d-%d", min_alt, (min_alt - int(min_alt)) * -10));
 
@@ -2127,10 +2131,10 @@ update_lad = func() {
                         LADCanvas.tgt_texts[target_idx].setVisible(1);
                         xc = contact.get_deviation(getprop("orientation/heading-deg")) or 0;
                         yc = -contact.get_total_elevation(getprop("orientation/pitch-deg")) or 0;
-                        
+
                         x_move = xc*1354/60;
                         y_move = yc*1131/60;
-                        
+
                         if (x_move > 1340) {  # clamp the translation's values so it don't get outta the screen
                                 x_move = 1340;
                         } elsif (x_move < -1340) {
@@ -2141,7 +2145,7 @@ update_lad = func() {
                         } elsif (y_move < -1110) {
                             y_move = -1110
                         }
-                        
+
                         LADCanvas.tgt_symbols[target_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
                         LADCanvas.tgt_texts[target_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
                         if (found_lock == 1 and lock_assigned == 0) {
@@ -2195,8 +2199,8 @@ update_lad = func() {
                     LADCanvas.vsd_tgt_range.setText(sprintf("%03.1f NM", awg_9.active_u.get_range()));
                     LADCanvas.vsd_tgt_fps.setText(sprintf("FPS %04d", awg_9.active_u.get_Vertical_Speed()));
                     LADCanvas.vsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
-                    
-                    
+
+
                     model = "UNKNOWN";
                     if (awg_9.active_u.ModelType != "")
                         model = awg_9.active_u.ModelType;
@@ -2288,13 +2292,13 @@ update_lad = func() {
 
                             LADCanvas.dlnk_symbols[dlnk_idx].setVisible(1);
                             LADCanvas.dlnk_texts[dlnk_idx].setVisible(1);
-                            
+
                             xc = deviation_normdeg(getprop("orientation/heading-deg"), contact_bearing);
                             yc = -deviation_normdeg(getprop("orientation/pitch-deg"), contact_elevation);
-                            
+
                             x_move = xc*1354/60;
                             y_move = yc*1131/60;
-                            
+
                             if (x_move > 1340) {  # clamp the translation's values so it don't get outta the screen
                                     x_move = 1340;
                             } elsif (x_move < -1340) {
@@ -2305,7 +2309,7 @@ update_lad = func() {
                             } elsif (y_move < -1110) {
                                 y_move = -1110
                             }
-                            
+
                             LADCanvas.dlnk_symbols[dlnk_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             LADCanvas.dlnk_texts[dlnk_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             if (contact_model != nil and typeLookup[contact_model] != nil) {
@@ -2337,18 +2341,18 @@ update_lad = func() {
             LADCanvas.HSDScreen.setVisible(1);
             LADCanvas.HSDScreenLines.setVisible(1);
             LADCanvas.HSDScreenCircles.setVisible(1);
-            
+
             # Update measures
             LADCanvas.hsd_nm_to_px_x = (LADCanvas.hsd_great_circle_radius*2*(10/19)) / ((getprop("instrumentation/radar/radar2-range") * 1.25));
             LADCanvas.hsd_nm_to_px_y = (LADCanvas.hsd_great_circle_radius*2) / ((getprop("instrumentation/radar/radar2-range") * 1.25));
-            
+
             # Update informational texts
             LADCanvas.hsd_ground_speed.setText(sprintf("G %03d", getprop("velocities/groundspeed-kt")));
             LADCanvas.hsd_airspeed.setText(sprintf("T %03d", getprop("velocities/airspeed-kt")));
             LADCanvas.hsd_heading_true.setText(sprintf("H %03d", getprop("orientation/heading-deg")));
             LADCanvas.hsd_altitude.setText(sprintf("ALT %05d", getprop("instrumentation/altimeter/indicated-altitude-ft")));
             LADCanvas.hsd_fps.setText(sprintf("FPS %04d", getprop("velocities/down-relground-fps")));
-            
+
             LADCanvas.hsd_radar_range_text.setText(sprintf("%02d NM", getprop("instrumentation/radar/radar2-range")));
             if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # A / A
                 LADCanvas.hsd_radar_filter.setText("  A/A");
@@ -2357,7 +2361,7 @@ update_lad = func() {
             } elsif (getprop("instrumentation/radar/radar-filter-mode") == 2) {  # A / SEA
                 LADCanvas.hsd_radar_filter.setText("A/SEA");
             }
-            
+
             if (getprop("instrumentation/radar/radar-standby")) {  # If radar's standby, we don't display none of that
                 LADCanvas.hsd_radar_mode.setText(" STANDBY");
             } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # If we're in TWS AUTO mode
@@ -2365,10 +2369,10 @@ update_lad = func() {
             } else {
                 LADCanvas.hsd_radar_mode.setText("     RWS");
             }
-            
-            
+
+
             # Make different heading pins spin around the circle (TACAN, ILS, A/P, bullseye etc.) for bearing info
-            
+
             # A/P
             # We determine which mode is actively used (Heading bug or True heading, not NAV1, there's a specific pin for NAV1, a.k.a. ILS)
             heading_mode = 0;  # 0 = offline, 1 = heading bug, 2 = true heading
@@ -2377,7 +2381,7 @@ update_lad = func() {
             } elsif (getprop("sim/gui/dialogs/autopilot/true-heading-hold")) {
                 heading_mode = 2;
             }
-            
+
             if (heading_mode == 1) {
                 #bearing_to_heading = geo.normdeg180(getprop("autopilot/settings/heading-bug-deg") - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
                 #heading_pin_ap_dir = ellipse_position_and_angle(bearing_to_heading, (LADCanvas.hsd_great_circle_radius * 10/19), LADCanvas.hsd_great_circle_radius, center_x=1355, center_y=1150*2+500+75);
@@ -2400,8 +2404,8 @@ update_lad = func() {
             } else {
                 LADCanvas.heading_pin_autopilot.setVisible(0);
             }
-            
-            
+
+
             # Bullseye info text update
             var bullseye_coord = geo.Coord.new().set_latlon(getprop("sim/model/f15/fcs/bullseye-lat"),getprop("sim/model/f15/fcs/bullseye-lon"),getprop("sim/model/f15/fcs/bullseye-alt")*FT2M);
             var bullseye_bearing = geo.normdeg180(geo.aircraft_position().course_to(bullseye_coord) - getprop("orientation/heading-deg"));  # relative bearing
@@ -2414,7 +2418,7 @@ update_lad = func() {
                 var bullseye_eta = bullseye_range / getprop("velocities/groundspeed-kt");
                 var bullseye_eta_secs = bullseye_eta * 3600;
             }
-            
+
             if (getprop("sim/model/f15/fcs/bullseye-lat") == 0 and getprop("sim/model/f15/fcs/bullseye-lon") == 0 and getprop("sim/model/f15/fcs/bullseye-alt") == 0) {  # default bullseye values. We know if it ain't defined that way
                 LADCanvas.hsd_bullseye_dist.setText("N 9999.9");
                 LADCanvas.hsd_bullseye_bearing.setText("B 999");
@@ -2435,16 +2439,16 @@ update_lad = func() {
                     LADCanvas.hsd_bullseye_eta.setText("XX:XX");
                 }
             }
-            
-            
+
+
             # Steerpoints / Flight plan updates
-            
+
             if (getprop("autopilot/route-manager/current-wp") == -1) {
                 LADCanvas.hsd_stpt_current.setText("No.00");
             } else {
                 LADCanvas.hsd_stpt_current.setText(sprintf("No.%02d", getprop("autopilot/route-manager/current-wp")));
             }
-            
+
             if (getprop("sim/model/instrumentation/vhf/mode") == 0) {  # if we're in normal nav mode (not TACAN or ILS)
 
                 # Remove all former steerpoint-connecting lines
@@ -2481,12 +2485,12 @@ update_lad = func() {
                     LADCanvas.hsd_stpt_dist.setText("N 9999");
                     LADCanvas.hsd_stpt_bearing.setText("B 999");
                 }
-                
+
                 var plan = flightplan();
                 var planSize = plan.getPlanSize();
                 for (stpt_idx = 0; stpt_idx < planSize; stpt_idx+=1) {
                     if (stpt_idx < LADCanvas.stpt_symbols_max) {
-                    
+
                         draw_line = 0;
                         if (stpt_idx != 0) {  # If we got a former steerpoint (only stpt 0 don't got none)
                             var former_x_move = x_move;
@@ -2494,11 +2498,11 @@ update_lad = func() {
                             var former_wpC = wpC;
                             draw_line = 1;
                         }
-                    
+
                         var wp = plan.getWP(stpt_idx);
                         var wpC = geo.Coord.new();
                         wpC.set_latlon(wp.lat,wp.lon,0);  # we don't care about the altitude here, we're in a HSD, not a VSD
-                        
+
                         steerDir = [geo.aircraft_position().course_to(wpC), geo.aircraft_position().distance_to(wpC)*M2NM];  # id 0 is bearing, id 1 is range
                         wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
                         wprng = -steerDir[1];  # direct distance from the steerpoint
@@ -2506,7 +2510,7 @@ update_lad = func() {
                             LADCanvas.stpt_symbols_hsd[stpt_idx].setVisible(1);
                             LADCanvas.stpt_texts_hsd[stpt_idx].setVisible(1);
                             LADCanvas.stpt_texts_hsd[stpt_idx].setText(sprintf("%d", stpt_idx));
-                            
+
                             var x_move = -(wprng*LADCanvas.hsd_nm_to_px_x)*math.sin(wpbear*D2R);
                             var y_move = (wprng*LADCanvas.hsd_nm_to_px_y)*math.cos(wpbear*D2R);
 
@@ -2516,7 +2520,7 @@ update_lad = func() {
                             clamped = x_move =! move_dir[0] or y_move != move_dir[1];;
                             x_move = move_dir[0];
                             y_move = move_dir[1];
-                            
+
                             if (clamped) {  # Don't display the steerpoint if it's outta the screen, though we still display the connecting lines
                                 LADCanvas.stpt_symbols_hsd[stpt_idx].setVisible(0);
                                 LADCanvas.stpt_texts_hsd[stpt_idx].setVisible(0);
@@ -2535,7 +2539,7 @@ update_lad = func() {
                                         .setStrokeLineWidth(5)
                                         .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
                                         .update();
-                                    
+
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
@@ -2561,7 +2565,7 @@ update_lad = func() {
                                         .setStrokeLineWidth(5)
                                         .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
                                         .update();
-                                    
+
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
@@ -2585,13 +2589,13 @@ update_lad = func() {
                 LADCanvas.hsd_stpt_dist.setText("N 9999");
                 LADCanvas.hsd_stpt_bearing.setText("B 999");
             }
-            
+
             # Do not display any unused steerpoint boxes
             for (var nv = stpt_idx; nv < LADCanvas.stpt_symbols_max;nv += 1) {
                 LADCanvas.stpt_symbols_hsd[nv].setVisible(0);
                 LADCanvas.stpt_texts_hsd[nv].setVisible(0);
             }
-            
+
             # Update the radar target symbols
             var target_idx = 0;
             var found_lock = 0;
@@ -2646,7 +2650,7 @@ update_lad = func() {
                         var x_move = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);
                         var y_move = -(tgt_rng*LADCanvas.hsd_nm_to_px_y)*math.cos(tgt_bear*D2R);
                         var rotation = geo.normdeg(contact.get_heading()-getprop("orientation/heading-deg")+180)*D2R;
-                        
+
                         LADCanvas.tgt_symbols_hsd[target_idx].setTranslation(x_move,y_move); # the factors is to let display correspond to 120 degrees wide and height.
                         LADCanvas.tgt_symbols_hsd_ships[target_idx].setTranslation(x_move,y_move); # the factors is to let display correspond to 120 degrees wide and height.
                         LADCanvas.tgt_texts_hsd[target_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
@@ -2688,9 +2692,9 @@ update_lad = func() {
 
                 if (awg_9.active_u != nil) { # safety
                     # Update current target's info texts across the HSD
-                    
+
                     LADCanvas.hsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
-                    
+
                     # Scale:
                     # To be at 600 (moving 4,600px up), target's range must be at radar max range
                     range_y = awg_9.active_u.get_range() * getprop("instrumentation/radar/radar2-range") / 4600;
@@ -2721,7 +2725,7 @@ update_lad = func() {
                 LADCanvas.tgt_texts_hsd[nv].setVisible(0);
                 LADCanvas.tgt_symbols_hsd_ships[nv].setVisible(0);
             }
-            
+
             # Update the datalink symbols
             var dlnk_idx = 0;
             var datalink_connections = datalink.get_all_callsigns();
@@ -2784,13 +2788,13 @@ update_lad = func() {
 
                             var x_move = (contact_range*LADCanvas.hsd_nm_to_px_x)*math.sin(contact_bearing_rel*D2R);
                             var y_move = -(contact_range*LADCanvas.hsd_nm_to_px_y)*math.cos(contact_bearing_rel*D2R);
-                            
+
                             # If the point is outside of the circle, we don't let it get away of it and we place it at the very edge of the HSD circle
                             # The circle is actually an ellipse, in a way that it appears as a circle on the LAD
                             move_dir = ellipse_clamp(x_move, y_move);
                             x_move = move_dir[0];
                             y_move = move_dir[1];
-                            
+
                             LADCanvas.dlnk_symbols_hsd[dlnk_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             LADCanvas.dlnk_texts_hsd[dlnk_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             if (contact_model != nil and typeLookup[contact_model] != nil) {
@@ -2812,7 +2816,7 @@ update_lad = func() {
                 LADCanvas.dlnk_symbols_hsd[nv].setVisible(0);
                 LADCanvas.dlnk_texts_hsd[nv].setVisible(0);
             }
-            
+
             # Process the EPAWSS contacts
             var epawss_idx = 0;
             foreach (contact ; epawss.contacts_list) {
@@ -2833,18 +2837,18 @@ update_lad = func() {
                         }
 
                         if (unknown == 1) {  # We don't display it if we already got it on datalink, we don't need an EPAWSS contact
-                        
+
                             # Basic position and changing text
                             LADCanvas.epawss_texts_hsd[epawss_idx].setVisible(1);
-                            
+
                             tgt_bear = contact.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing to the contact
                             tgt_rng = contact.get_range();  # direct distance to target
 
                             var x_move = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);
                             var y_move = -(tgt_rng*LADCanvas.hsd_nm_to_px_y)*math.cos(tgt_bear*D2R);
-                            
+
                             LADCanvas.epawss_texts_hsd[epawss_idx].setTranslation(677*2+x_move, 2262+500+y_move);
-                            
+
                             # Display contact's indentified type (F, F/B, B, AEW&C, TNKR etc.)
                             if (contact.get_model() != nil and typeLookup[contact.get_model()] != nil) {
                                 contact_type = typeLookup[contact.get_model()];
@@ -2854,7 +2858,7 @@ update_lad = func() {
                             } else {  # Model's unknown to our radar
                                 LADCanvas.epawss_texts_hsd[epawss_idx].setText("UNK");
                             }
-                            
+
                             # Display the hat if it's an airborne radar
                             if (contact.get_type() == awg_9.AIR) {
                                 LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setTranslation(x_move, y_move);
@@ -2862,7 +2866,7 @@ update_lad = func() {
                             } else {
                                 LADCanvas.epawss_symbols_hsd_hat[epawss_idx].setVisible(0);
                             }
-                            
+
                             # Display the new threat upper circle if it's one
                             found = 0;
                             foreach(new_threat; epawss.new_threats) {
@@ -2876,7 +2880,7 @@ update_lad = func() {
                             } else {
                                 LADCanvas.epawss_symbols_hsd_new_contact[epawss_idx].setVisible(0);
                             }
-                            
+
                             # Display the primary threat double triangle if that's the one
                             if (contact.get_Callsign()~contact.getUnique() == epawss.primary_threat_callsign) {
                                 LADCanvas.epawss_symbols_hsd_primary_threat[epawss_idx].setVisible(1);
@@ -2884,7 +2888,7 @@ update_lad = func() {
                             } else {
                                 LADCanvas.epawss_symbols_hsd_primary_threat[epawss_idx].setVisible(0);
                             }
-                            
+
                             # Display the blinking circle if it's a missile launcher, or if it's an approaching missile
                             if ((epawss.is_missile_launcher(contact) or contact.get_type() == awg_9.ORDNANCE) and 5*(elapsed-int(elapsed))>2.5) {  # 4Hz blink
                                 LADCanvas.epawss_symbols_hsd_missile_launch[epawss_idx].setVisible(1);
@@ -2898,7 +2902,7 @@ update_lad = func() {
                     }
                 }
             }
-            
+
             # Do not display any unused EPAWSS symbology
             for (var nv = epawss_idx; nv < LADCanvas.stpt_symbols_max;nv += 1) {
                 LADCanvas.epawss_symbols_hsd_hat[nv].setVisible(0);
@@ -2907,7 +2911,7 @@ update_lad = func() {
                 LADCanvas.epawss_symbols_hsd_primary_threat[nv].setVisible(0);
                 LADCanvas.epawss_symbols_hsd_new_contact[nv].setVisible(0);
             }
-            
+
             # If there's a Missile Approach Warning, display it (MAW)
             var maw_epawss_idx = 21;  # id of the object specifically made for the Missile Approach Warning
             if (getprop("payload/armament/MAW-active") and getprop("sim/model/f15/epawss/epawss-on")) {
@@ -2934,7 +2938,7 @@ update_lad = func() {
                 LADCanvas.epawss_symbols_hsd_missile_launch[maw_epawss_idx].setVisible(0);
                 LADCanvas.epawss_symbols_hsd_primary_threat[maw_epawss_idx].setVisible(0);
             }
-            
+
             # Update the radar cone
             if (!getprop("instrumentation/radar/radar-standby")) {  # if radar's standby, we don't display the cone
                 if (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # If radar's in TWS Auto
@@ -2948,17 +2952,17 @@ update_lad = func() {
                 LADCanvas.hsd_cone_60.setVisible(0);
                 LADCanvas.hsd_cone_30.setVisible(0);
             }
-            
+
             # Update circles' horizontal range scales
             LADCanvas.hsd_distance_indicator_1_3.setTranslation(1355+85,1150*2+500+75-(getprop("instrumentation/radar/radar2-range")*1.25*LADCanvas.hsd_nm_to_px_y)/3+125);
             LADCanvas.hsd_distance_indicator_2_3.setTranslation(1355+85,1150*2+500+75-(getprop("instrumentation/radar/radar2-range")*1.25*LADCanvas.hsd_nm_to_px_y)/3*2+125);
             LADCanvas.hsd_distance_indicator_1_3.setText(sprintf("N%3.1f", (getprop("instrumentation/radar/radar2-range")*1.25)/3));
             LADCanvas.hsd_distance_indicator_2_3.setText(sprintf("N%3.1f", (getprop("instrumentation/radar/radar2-range")*1.25)/3*2));
-            
+
             # Update the TACAN's station position
             #LADCanvas.hsd_tacan_symbol.setVisible(1);
             #LADCanvas.hsd_tacan_symbol.setTranslation(1355+85,1150*2+500+7);
-            
+
             # Draw the HSD circled areas
             LADCanvas.HSDScreenCircles.removeAllChildren();
             foreach(threat_circle; aircraft.threat_circles) {
@@ -2988,9 +2992,9 @@ update_lad = func() {
                     } elsif (threat_circle.color == "marron") {
                         circle_color = prst_marron;
                     }
-                    
+
                     if (circle_range+circle_radius*1.5 < getprop("instrumentation/radar/radar2-range") * 1.25) {  # If it perfectly fits into the HSD great circle
-                        
+
                         LADCanvas.HSDScreenCircles.createChild("path")
                             .moveTo(1355-circle_radius*LADCanvas.hsd_nm_to_px_x,1150*2+500)
                             .arcSmallCW(circle_radius*LADCanvas.hsd_nm_to_px_x,circle_radius*LADCanvas.hsd_nm_to_px_y, 0, circle_radius*LADCanvas.hsd_nm_to_px_y*2, 0)
@@ -3015,7 +3019,7 @@ update_lad = func() {
                             .update();
                     } else {
                         inside_points = get_points_inside_for_ellipse(circle_radius*LADCanvas.hsd_nm_to_px_x, circle_radius*LADCanvas.hsd_nm_to_px_y, 1355-circle_radius*LADCanvas.hsd_nm_to_px_x-x_move-circle_radius*LADCanvas.hsd_nm_to_px_x/2, 1150*2+500-y_move, 1355-LADCanvas.hsd_great_circle_radius, 1150*2+500, LADCanvas.hsd_great_circle_radius*10/19, LADCanvas.hsd_great_circle_radius, step=2.5);
-                        
+
                         #LADCanvas.HSDScreenLines.createChild("text")  # TODO: Find a way to do the same with the ellipse but with the text
                             #.setFontSize((circle_radius*LADCanvas.hsd_nm_to_px_x)/1.5, 1.4)
                             #.setText(threat_circle.label)
@@ -3047,7 +3051,7 @@ update_lad = func() {
                     }
                 }
             }
-            
+
             # Draw the bullseye's aim
             var bullseye_radius = 1.5;  # It's always 1.5 NM and it can't be changed
             # The three following values are now defined on top when updating the bullseye info texts
@@ -3062,27 +3066,27 @@ update_lad = func() {
                 var y_move = (bullseye_range*LADCanvas.hsd_nm_to_px_y)*math.cos(bullseye_bearing*D2R);
                 LADCanvas.hsd_bullseye_aim.setTranslation(-x_move,-y_move);
             }
-            
+
         } else {
             LADCanvas.HSDScreen.setVisible(0);
             LADCanvas.HSDScreenLines.setVisible(0);
             LADCanvas.HSDScreenCircles.setVisible(0);
         }
-        
-        
+
+
         # PACS Updates
         if (PACS_ON == 1) {
             LADCanvas.PACSScreen.setVisible(1);
-            
+
             # Shared updates:
             pacs_mode_str = "";
-            
+
             if (getprop("sim/model/f15/controls/armament/weapon-selector") == 5) {  # Automatically switch to A/G when weapon selected is A/G
                 LADCanvas.PACSmode = 1;
             } else {  # otherwise, switch back to A/A
                 LADCanvas.PACSmode = 0;
             }
-            
+
             if (LADCanvas.PACSmode == 0) {
                 pacs_mode_str = "A/A";
             } elsif (LADCanvas.PACSmode == 1) {
@@ -3092,9 +3096,9 @@ update_lad = func() {
             }
             LADCanvas.pacs_mode_text.setText(pacs_mode_str);
 
-            LADCanvas.pacs_chaff.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
-            LADCanvas.pacs_flare.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[6]/count")));
-            
+            LADCanvas.pacs_chaff.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[13]/count")));
+            LADCanvas.pacs_flare.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[5]/count")));
+
             LADCanvas.pacs_rounds.setText(sprintf("ROUNDS %03d", getprop("sim/model/f15/systems/gun/rounds")));
 
             tank_center_text = "OUT";
@@ -3104,7 +3108,7 @@ update_lad = func() {
             tank_mounted_center = getprop("consumables/fuel/tank[7]/capacity-gal_us") != 0;
             tank_mounted_right = getprop("consumables/fuel/tank[6]/capacity-gal_us") != 0;
             tank_mounted_left = getprop("consumables/fuel/tank[5]/capacity-gal_us") != 0;
-            
+
             if (tank_mounted_center) {
                 tank_center_text = sprintf("%05d lbs", getprop("consumables/fuel/tank[7]/level-lbs"));
             }
@@ -3118,16 +3122,16 @@ update_lad = func() {
             LADCanvas.pacs_fuel_amount_left.setText(sprintf("L %s", tank_left_text));
             LADCanvas.pacs_fuel_amount_center.setText(sprintf("C %s", tank_center_text));
             LADCanvas.pacs_fuel_amount_right.setText(sprintf("R %s", tank_right_text));
-            
+
             LADCanvas.navpod_mounted_text.setVisible(getprop("/sim/model/f15/stores/nav-mounted"));
             LADCanvas.tpod_mounted_text.setVisible(getprop("sim/model/f15/stores/tgp-mounted"));
             LADCanvas.irst_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/irst-mounted"));
             LADCanvas.ecm_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/ecm-mounted"));
-            
+
             # A/A mode updates
-            
+
             if (LADCanvas.PACSmode == 0) {  # A/A
-                
+
                 LADCanvas.pacs_arm_1.setVisible(1);
                 LADCanvas.pacs_arm_2.setVisible(1);
                 LADCanvas.pacs_arm_3.setVisible(1);
@@ -3135,7 +3139,7 @@ update_lad = func() {
                 LADCanvas.pacs_arm_2.setText(sprintf("AAM %02d", getprop("sim/model/f15/systems/armament/aim120/count")));
                 LADCanvas.pacs_arm_3.setText(sprintf("GRND %02d", getprop("sim/model/f15/systems/armament/agm/count")));
                 LADCanvas.pacs_arming_time.setVisible(0);
-            
+
                 weapon_selector = getprop("sim/model/f15/controls/armament/weapon-selector");  # 0-guns,1-srm,2-amraam,5-ground
                 master_arm = getprop("sim/model/f15/controls/armament/master-arm-switch");
                 if (weapon_selector == 1) {
@@ -3149,10 +3153,10 @@ update_lad = func() {
                     LADCanvas.aim9_cool_box.setVisible(0);
                     LADCanvas.aim9_cool_text.setVisible(0);
                 }
-            
+
                 foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
                     loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
-                    
+
                     if (loaded_type == "AIM-9X") {
                         LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
@@ -3257,7 +3261,7 @@ update_lad = func() {
                 LADCanvas.pacs_arm_3.setVisible(1);
                 LADCanvas.pacs_arm_1.setText(sprintf("SRM %02d", getprop("sim/model/f15/systems/armament/aim9/count")));
                 LADCanvas.pacs_arm_2.setText(sprintf("AAM %02d", getprop("sim/model/f15/systems/armament/aim120/count")));
-                
+
                 # Timer for the time till armed
                 LADCanvas.pacs_arming_time.setVisible(1);
                 weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
@@ -3289,13 +3293,13 @@ update_lad = func() {
                 } else {
                     LADCanvas.pacs_arm_3.setText(sprintf("%2d GRND", getprop("sim/model/f15/systems/armament/agm/count")));
                 }
-                
+
                 weapon_selector = getprop("sim/model/f15/controls/armament/weapon-selector");  # 0-guns,1-srm,2-amraam,5-ground
                 master_arm = getprop("sim/model/f15/controls/armament/master-arm-switch");
-            
+
                 foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
                     loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
-                    
+
                     if (loaded_type == "AGM-65B") {
                         LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);

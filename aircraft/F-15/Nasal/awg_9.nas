@@ -340,7 +340,7 @@ var rdr_loop = func(notification) {
     # On the F-15EX with its AN/APG-82(V)1 AESA radar, targets don't need to be locked on to be tracked,
     # so the whole panel of available radar contacts are sent over to the datalink network
     foreach(contact; tgts_list) {
-        if (getprop("instrumentation/datalink/sending") == 0 and contact.get_display() and contact.get_visible()) {  # so we're not overwriting a GPS spot that's being sent, safety, not sure that's needed
+        if (getprop("instrumentation/datalink/sending") == 0 and contact.get_display() and contact.get_visible() and getprop("sim/model/f15/avionics/jtids-selected-mode-knob") != 3) {  # so we're not overwriting a GPS spot that's being sent, safety, not sure that's needed - JTIDS 3rd positon is silent/receive-only position
 	       datalink.send_data({"contacts":[{"callsign":contact.get_Callsign(),"iff":0}]});
         }
     }
@@ -364,11 +364,11 @@ var rdr_loop = func(notification) {
                     }
                     callsign = sprintf("%s%02d", connection, count);
                     append(dtl_share_stpts, {"sender": connection , "callsign" : callsign , "gps_spot" : gps_spot});
-                    
+
                     # Notify the pilot and logs it
                     if (different == 1) {
-                        var out = sprintf("Datalink GPS-Spot received under callsign %s .", callsign);
-                        var out_detailed = sprintf("Datalink GPS-Spot received under callsign %s . Lat: %.5f deg, Lon: %.5f deg, Alt: %.2f ft.", callsign, gps_spot.lat(), gps_spot.lon(), gps_spot.alt()*M2FT);
+                        var out = sprintf("JTIDS GPS-Spot received under callsign %s .", callsign);
+                        var out_detailed = sprintf("JTIDS GPS-Spot received under callsign %s . Lat: %.5f deg, Lon: %.5f deg, Alt: %.2f ft.", callsign, gps_spot.lat(), gps_spot.lon(), gps_spot.alt()*M2FT);
                         screen.log.write(out, 1,1,0);
                         print(out_detailed);
                         damageLog.push(out_detailed);
@@ -1138,11 +1138,11 @@ rwr_warning_indication = func(u) {
 #else print("RWR: out of range");
 	# Compute global threat situation for undiscriminant warning lights
 	# and discrete (normalized) definition of threat strength.
-	if ( u_ecm_signal > 1 and u_ecm_signal < 3 ) {
+	if ( u_ecm_signal > 1 and u_ecm_signal < 3 and getprop("sim/model/f15/epawss/ewws-on")) {
 		EcmAlert1.setBoolValue(1);
 		ecm_alert1 = 1;
 		u_ecm_signal_norm = 2;
-	} elsif ( u_ecm_signal >= 3 ) {
+	} elsif ( u_ecm_signal >= 3 and getprop("sim/model/f15/epawss/ewws-on")) {
 		EcmAlert2.setBoolValue(1);
 		ecm_alert2 = 1;
 		u_ecm_signal_norm = 1;
@@ -1872,7 +1872,7 @@ else
 	    if (diff > 180) {
             diff = 360 - diff;
         }
-        
+
         if (me.get_closure_rate() > 0 and diff <= 30) {  # it's heading toward us
             return diff;
         } else {

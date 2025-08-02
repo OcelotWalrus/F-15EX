@@ -21,7 +21,7 @@
 # If no label is intended, set `XXX` as the label. <displayed> should be either 1 or 0, where 1 enables it and 0 disables it. Here are all the available color codes:
 # - red - yellow - blue - rose - purple - orange - green - cyan - marron.
 # - `IFF,<iff_hash>` example: `IFF,2547`  - IFF channel, must stay between 1 and 9999.
-# - `DATALINK,<datalink_hash>` example: `DATALINK,2547`  - DATALINK channel, must stay between 1 and 9999.
+# - `DATALINK,<datalink_hash>` example: `DATALINK,2547`  - JTIDS/DATALINK channel, must stay between 1 and 9999.
 # - `DECKMin,<altitude>,<enabled>` example: `DECKMin,10000,1`  - Configures the minimum altitude deck. <altitude> is the altitude (in feet) at which if
 # the pilot goes under, a `altitude` warning will set off. <enabled> should be either 1 or 0, where 1 enables it and 0 disables it.
 # - `DECKMax,<altitude>,<enabled>` example: `DeckMax,42000,1`  - Configures the maximum altitude deck. <altitude> is the altitude (in feet) at which if
@@ -34,9 +34,9 @@
 # - `BULLSEYE,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-feet>` example: `BULLSEYE,37.2,-115.6,0`  -  Coordinates for the bullseye
 # ---------------------------
 # Notes:
-# - When loading a DTC, if data blocks such as DECKMin are missing, it won't cause a bug, though the minimum altitude 
-# deck won't be applied. That means that if you're writing the data cartridge by hand, even if some data blocks do not 
-# matter to you, set them at a 'standby' value so that you make sure they're disabled. You don't have to worry about 
+# - When loading a DTC, if data blocks such as DECKMin are missing, it won't cause a bug, though the minimum altitude
+# deck won't be applied. That means that if you're writing the data cartridge by hand, even if some data blocks do not
+# matter to you, set them at a 'standby' value so that you make sure they're disabled. You don't have to worry about
 # that when saving it through the Eagle II pre-planning in-game GUI dialog.
 # - When loading data cartridges, if unique data blocks - such as DATALINK - are set multiple times, it's the
 # latest iteration that will actually matter.
@@ -63,7 +63,7 @@ var load_cartridge = func(path) {
         # Here we actually parse the data in it
         var blocks = split("|", text);
         var planned = nil;  # If we got a flight plan
-        
+
 
         foreach(item; blocks) {
             var items = split(",", item);
@@ -138,7 +138,7 @@ var load_cartridge = func(path) {
 
 var save_cartridge = func(path) {
     path_value = path.getValue();
-    
+
     ret = "";
     ret = ret~sprintf("IFF,%d|", getprop("instrumentation/iff/channel-selection"));
     ret = ret~sprintf("DATALINK,%d|", getprop("instrumentation/datalink/channel"));
@@ -151,7 +151,7 @@ var save_cartridge = func(path) {
     ret = ret~sprintf("DECKMin,%d,%d|", getprop("sim/model/f15/avionics/altitude-deck-min"), getprop("sim/model/f15/avionics/altitude-deck-min-enabled"));
     ret = ret~sprintf("DECKMax,%d,%d|", getprop("sim/model/f15/avionics/altitude-deck-max"), getprop("sim/model/f15/avionics/altitude-deck-max-enabled"));
     ret = ret~sprintf("BULLSEYE,%.4f,%.4f,%d|", getprop("sim/model/f15/fcs/bullseye-lat"), getprop("sim/model/f15/fcs/bullseye-lon"), getprop("sim/model/f15/fcs/bullseye-alt"));
-    
+
     var idx = 0;
     # Go through each DTC GPS Spots and push 'em
     foreach(gps_spot; aircraft.threat_circles) {
@@ -168,7 +168,7 @@ var save_cartridge = func(path) {
         ret = ret~sprintf("GPSSpot,%d,%.5f,%.5f,%.2f,%s,%s,%d|", spot_index, spot_lat, spot_lon, spot_radius, spot_label, spot_color, spot_enabled);
         idx += 1;
     }
-    
+
     plan = flightplan();
     var planSize = plan.getPlanSize();
     # Go through each waypoint in the route manager and push 'em
@@ -182,7 +182,7 @@ var save_cartridge = func(path) {
         }
         ret = ret~sprintf("STPT,%d,%.5f,%.5f,%d|", idx, wp_lat, wp_lon, wp_alt);
     }
-    
+
     var text = ret;
 
     var opn = nil;

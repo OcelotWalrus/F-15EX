@@ -386,7 +386,7 @@ var DamageRecipient =
                   if (launch == nil or elapsed - launch > 300) {
                     launch = elapsed;
                     launched[notification.Callsign~notification.UniqueIdentity] = launch;
-                    if (notification.Position.direct_distance_to(ownPos)*M2NM < mlw_max) {
+                    if (notification.Position.direct_distance_to(ownPos)*M2NM < mlw_max and getprop("sim/model/f15/epawss/ewws-on")) {
                       setprop("payload/armament/MLW-bearing", bearing);
                       setprop("payload/armament/MLW-launcher", notification.Callsign);
                       setprop("payload/armament/MLW-count", getprop("payload/armament/MLW-count")+1);
@@ -405,10 +405,10 @@ var DamageRecipient =
                 if (!radarOn and !CWIOn) return emesary.Transmitter.ReceiptStatus_OK;# this should be little more complex later
                 #var heading = getprop("orientation/heading-deg");
                 #var clock = geo.normdeg(bearing - heading);
-                if (radarOn) {
+                if (radarOn and getprop("sim/model/f15/epawss/ewws-on")) {
                     setprop("payload/armament/MAW-bearing", bearing);
                     setprop("payload/armament/MAW-active", 1);# resets every 1 seconds
-                } elsif (CWIOn) {
+                } elsif (CWIOn and getprop("sim/model/f15/epawss/ewws-on")) {
                     setprop("payload/armament/MAW-semiactive", 1);# resets every 1 seconds
                     if (notification.Callsign != nil) setprop("payload/armament/MAW-semiactive-callsign", notification.Callsign);# resets every 1 seconds
                 }
@@ -1373,7 +1373,7 @@ var processCallsigns = func () {
       var callsign = player.getChild("callsign").getValue();
       callsign_struct[callsign] = player;
       var str6 = player.getNode("sim/multiplay/generic/string[6]");
-      if (str6 != nil and str6.getValue() != nil and str6.getValue() != "" and size(""~str6.getValue())==4 and left(md5(myCallsign),4) == str6.getValue()) {
+      if (str6 != nil and str6.getValue() != nil and str6.getValue() != "" and size(""~str6.getValue())==4 and left(md5(myCallsign),4) == str6.getValue() and getprop("sim/model/f15/epawss/epawss-on")) {
         painted = 1;
         if (rwr_audio_extended) {
           append(paint_list, getModel(player.getNode("sim/model/path")));

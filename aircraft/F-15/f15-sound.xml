@@ -2598,6 +2598,20 @@
                 <max>1</max>
             </volume>
         </flare>
+        
+        <flare>
+            <name>chaff</name>
+            <mode>looped</mode>
+            <type>avionics</type>
+            <path>Aircraft/F-15/Sounds/ground-rattle.wav</path>  <!-- yeah that's the sound we use for chaffs ;) -->
+            <condition>
+                <property>ai/submodels/submodel[5]/chaff-release-snd</property>
+            </condition>
+            <volume>
+                <factor>1</factor>
+                <max>1</max>
+            </volume>
+        </flare>
 
         <flare>
             <name>flareOut</name>
@@ -2672,7 +2686,6 @@
                         </equals>
                     </not>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2698,7 +2711,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2715,7 +2727,6 @@
                 <and>
                     <property>sim/model/f15/epawss/new-threat</property>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2735,7 +2746,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2755,7 +2765,6 @@
                         <property>payload/armament/MAW-semiactive</property>
                     </or>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2775,7 +2784,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2795,7 +2803,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2815,7 +2822,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2835,7 +2841,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2855,7 +2860,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>
@@ -2875,7 +2879,6 @@
                         <value>1</value>
                     </equals>
                     <property>sim/current-view/internal</property>
-                    <property>sim/model/f15/epawss/epawss-on</property>
                 </and>
             </condition>
             <volume>

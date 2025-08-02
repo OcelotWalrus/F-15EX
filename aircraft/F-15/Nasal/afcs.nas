@@ -221,7 +221,7 @@ var routeManagerUpdate = func {
 # This is very basic I guess, but works
 # This part was made by Jimmy L. Miles
 var TerFolRadUpdate = func() {
-    var tfr_enabled = (getprop("sim/model/f15/payload/selected/lantirn-nav-pod") and getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/controls/AFCS/att-hold") == 1);
+    var tfr_enabled = (getprop("sim/model/f15/payload/selected/lantirn-nav-pod") and getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/controls/AFCS/att-hold") == 1 and getprop("sim/model/f15/avionics/tf-couple-switch"));
     if (tfr_enabled) {
         setprop("instrumentation/tfs/delay-big-sec", 25);
 

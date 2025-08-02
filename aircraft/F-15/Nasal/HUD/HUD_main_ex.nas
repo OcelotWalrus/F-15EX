@@ -637,7 +637,7 @@ var F15HUD = {
                                                             obj.window14.setText(sprintf(" %04d fps", math.round(val.FeetPerSecond)));
                                                             obj.window14.setVisible(1);
 
-															if (val.AltitudeAGL > 0) {
+															if (getprop("sim/model/f15/avionics/radar-altimeter-online")) {
 																obj.window19.setText(sprintf("%04d ftAGL", math.round(val.AltitudeAGL)));
 																obj.window19.setVisible(1);
 															} else {
@@ -1009,8 +1009,8 @@ var F15HUD = {
                                                                 obj.window11.setVisible(1);
                                                                 obj.window15.setVisible(1);
                                                                 obj.window16.setVisible(1);
-                                                                obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[5]/count")));
-                                                                obj.window16.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[6]/count")));
+                                                                obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[13]/count")));
+                                                                obj.window16.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[5]/count")));
 																obj.boreSymbol.hide();
                                                                 weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
                                                                 obj.window11.setText(weapon_type);
