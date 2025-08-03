@@ -791,9 +791,10 @@ var F15MainModule =
         var frame_count = math.mod(notification.FrameCount,8);
 
         # Check for GPU is external electrical power switch is online
-        if (getprop("fdm/jsbsim/systems/electrics/ground-power") and !getprop("fdm/jsbsim/systems/electrics/ground-power-gpu")) {
+        if (getprop("sim/model/f15/controls/interiors/ground-power-switch") == 1 and getprop("fdm/jsbsim/systems/electrics/ground-power-gpu")) {
+            setprop("fdm/jsbsim/systems/electrics/ground-power", 1);
+        } else {
             setprop("fdm/jsbsim/systems/electrics/ground-power", 0);
-            screen.log.write("Demand a Ground Power Unit in the F-15EX Eagle II config panel to connect external power!");
         }
 
         # Make sure ripple number is at least 1 and not higher than 4
@@ -1011,6 +1012,19 @@ var F15MainModule =
             setprop("/controls/gear/brake-right", 0);
             setprop("/controls/gear/brake-parking", 0);
         }
+        
+        # Calculate the percentage of electrical power for the interiors' gauge
+        elec_power = 0;
+        if (getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {  # basic electrical power gauge, just for display really
+            if (getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") == 1) {
+                elec_power = .25;
+            } elsif (getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") == 5) {
+                elec_power = .5;
+            } elsif (getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") == 75) {
+                elec_power = 1;
+            }
+        }
+        interpolate("sim/model/f15/controls/interiors/elec-power-percentage", elec_power, 3 * elec_power);
 
         # Calculate time till crash for flyup display
         # Same method here as in the F-16 (copy-and-paste)

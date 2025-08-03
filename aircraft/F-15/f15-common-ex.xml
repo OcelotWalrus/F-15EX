@@ -1107,6 +1107,8 @@
                         <nuclear-consent-pos type="int">1</nuclear-consent-pos> <!-- 0 jett enable 1 safe 2 arm -->
                         <nuclear-guard-pos type="bool">false</nuclear-guard-pos>
                         <fcp-bit-button type="bool">false</fcp-bit-button>
+                        <ground-power-switch type="bool">false</ground-power-switch>
+                        <elec-power-percentage type="float">0</elec-power-percentage>
                     </interiors>
 
                     <pilots-displays>

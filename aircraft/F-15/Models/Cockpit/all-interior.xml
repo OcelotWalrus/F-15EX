@@ -4426,8 +4426,8 @@
     <offset-deg>-30</offset-deg>
     <center>
       <x-m>-5.672</x-m>
-      <y-m>-0.5163</y-m>
-      <z-m>0.6583</z-m>
+      <y-m>-0.5153</y-m>
+      <z-m>0.6605</z-m>
     </center>
     <axis>
       <x>0</x>
@@ -4539,15 +4539,111 @@
       </entry>
     </interpolation>
     <center>
-      <x-m>-5.6611</x-m>
-      <y-m>-0.4441</y-m>
-      <z-m>0.6541</z-m>
+      <x-m>-5.663</x-m>
+      <y-m>-.4429</y-m>
+      <z-m>0.6610</z-m>
     </center>
     <axis>
       <x>0</x>
       <y>1</y>
       <z>0</z>
     </axis>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>misc-ldg-light-bulb1</object-name>
+    <property>sim/multiplay/generic/int[6]</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>30</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-30</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.663</x-m>
+      <y-m>-.4429</y-m>
+      <z-m>0.6610</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>misc-ldg-light-bulb2</object-name>
+    <property>sim/multiplay/generic/int[6]</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>30</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-30</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.663</x-m>
+      <y-m>-.4429</y-m>
+      <z-m>0.6610</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  <animation>
+    <object-name>misc-ldg-light-bulb2</object-name>
+    <type>material</type>
+    <condition>
+      <or>
+        <greater-than>
+          <property>sim/multiplay/generic/int[6]</property>
+          <value>0</value>
+        </greater-than>
+        <property>sim/model/f15/lights/master-test-lights</property>
+      </or>
+    </condition>
+    <emission>
+      <factor>1</factor>
+      <red>1</red>
+      <green>1</green>
+      <blue>1</blue>
+    </emission>
+  </animation>
+  <animation>
+    <object-name>misc-ldg-light-bulb1</object-name>
+    <type>material</type>
+    <condition>
+      <or>
+        <greater-than>
+          <property>sim/multiplay/generic/int[6]</property>
+          <value>1</value>
+        </greater-than>
+        <property>sim/model/f15/lights/master-test-lights</property>
+      </or>
+    </condition>
+    <emission>
+      <factor>1</factor>
+      <red>1</red>
+      <green>1</green>
+      <blue>1</blue>
+    </emission>
   </animation>
   <!--<animation>
         <type>knob</type>
@@ -4808,8 +4904,8 @@
     <factor>-35</factor>
     <offset-deg>35</offset-deg>
     <center>
-      <x-m>-5.55754</x-m>
-      <y-m>-0.44201</y-m>
+      <x-m>-5.558</x-m>
+      <y-m>-0.4465</y-m>
       <z-m>0.6583</z-m>
     </center>
     <axis>
@@ -4835,8 +4931,8 @@
     <factor>-35</factor>
     <offset-deg>35</offset-deg>
     <center>
-      <x-m>-5.58577</x-m>
-      <y-m>-0.48621</y-m>
+      <x-m>-5.586</x-m>
+      <y-m>-.4868</y-m>
       <z-m>0.6583</z-m>
     </center>
     <axis>
@@ -4955,14 +5051,14 @@
       <repeatable>false</repeatable>
       <binding>
         <command>property-toggle</command>
-        <property>fdm/jsbsim/systems/electrics/ground-power</property>
+        <property>sim/model/f15/controls/interiors/ground-power-switch</property>
       </binding>
     </action>
   </animation>
   <animation>
     <type>rotate</type>
     <object-name>eng-ext-power-switch</object-name>
-    <property>fdm/jsbsim/systems/electrics/ground-power</property>
+    <property>sim/model/f15/controls/interiors/ground-power-switch</property>
     <interpolation>
       <entry>
         <ind>0</ind>
@@ -5617,6 +5713,10 @@
     <object-name>ext-lt-panel-top</object-name>
     <object-name>sensors-panel-top</object-name>
     <object-name>fcp-panel-top</object-name>
+    <object-name>elec-panel-top</object-name>
+    <object-name>elec-power-gauge</object-name>
+    <object-name>misc-panel-top</object-name>
+    <object-name>fuel-panel-top</object-name>
   </effect>
   <effect>
     <name>f15panel-right</name>
@@ -5684,8 +5784,8 @@
   </effect-->
   <!-- lights -->
   <animation>
-    <type>select</type>
     <object-name>jfs-ready-lamp-on</object-name>
+    <type>material</type>
     <condition>
       <or>
         <property>sim/model/f15/lights/master-test-lights</property>
@@ -5696,10 +5796,6 @@
         <value>0</value>
       </greater-than>
     </condition>
-  </animation>
-  <animation>
-    <object-name>jfs-ready-lamp-on</object-name>
-    <type>material</type>
     <emission>
       <factor>1</factor>
       <red>1</red>
@@ -19137,7 +19233,7 @@
       <binding>
         <command>nasal</command>
         <script>
-            if (getprop("sim/model/f15/controls/interiors/nuclear-guard-pos") == 1) {
+            if (getprop("sim/model/f15/controls/interiors/nuclear-guard-pos") == 1 or (getprop("sim/model/f15/controls/interiors/nuclear-guard-pos") == 0 and getprop("sim/model/f15/controls/interiors/nuclear-consent-pos") == 0)) {
                 if (getprop("sim/model/f15/controls/interiors/nuclear-consent-pos") == 0) {
                     setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 1);
                 } elsif (getprop("sim/model/f15/controls/interiors/nuclear-consent-pos") == 1) {
@@ -19382,4 +19478,22 @@
     </axis>
   </animation>
 
+  <!-- Elec Panel -->
+  <animation>
+    <type>rotate</type>
+    <object-name>elec-needle</object-name>
+    <property>sim/model/f15/controls/interiors/elec-power-percentage</property>
+    <factor>-175</factor>
+    <offset-deg>90</offset-deg>
+    <center>
+      <x-m>-5.72</x-m>
+      <y-m>-.3222</y-m>
+      <z-m>.6604</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+  </animation>
 </PropertyList>
