@@ -916,6 +916,7 @@ var F15HUD = {
 														"VNE",
 														"TimeTilCrash",
 														"BingoFuel",
+														"FuelLow",
 														"VelocitiesAirspeedKt",
 														"RadarStandby",
 														"RadarFilterMode"], 0.1, func(val)
@@ -933,10 +934,15 @@ var F15HUD = {
 															if (val.TimeTilCrash != nil and val.TimeTilCrash > 0 and val.TimeTilCrash < 8) {
 		                                                     	obj.flyup.setText("FLYUP");
 		                                                     	obj.flyup.show();
+															} elsif (getprop("sim/time/elapsed-sec") > 2 and val.FuelLow > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
+		                                                     	obj.flyup.setText("FUEL");
+		                                                     	obj.flyup.show();
 															} elsif (getprop("sim/time/elapsed-sec") > 2 and val.BingoFuel > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
 		                                                     	obj.flyup.setText("BINGO");
 		                                                     	obj.flyup.show();
 															} elsif (val.VNE < val.VelocitiesAirspeedKt) {
+															    obj.flyup.setText("LIMIT");
+		                                                     	obj.flyup.show();
 															} else {
 																obj.flyup.hide();
 															}
@@ -2336,6 +2342,7 @@ input = {
 		VNE                                     : "limits/vne",
         TimeTilCrash                            : "instrumentation/radar/time-till-crash",
 		BingoFuel                               : "sim/model/f15/lights/ca-bingo-fuel",
+		FuelLow                                 : "sim/model/f15/lights/ca-fuel-low",
 		RadarStandby                            : "instrumentation/radar/radar-standby",
 		ArmamentRippleCount                     : "controls/armament/dual",
 		NavigationMode                          : "sim/model/instrumentation/vhf/mode",

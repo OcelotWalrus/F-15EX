@@ -898,7 +898,8 @@
                     <new-threat type="bool">false</new-threat>
                     <epawss-on type="bool">false</epawss-on>  <!-- RWR master -->
                     <ewws-on type="bool">false</ewws-on>  <!-- threat receiver (Air intercept, SAM, MLW, MAW) -->
-                    <epawss-volume type="double">.75</epawss-volume>
+                    <caution-volume type="double">.75</caution-volume>
+                    <alert-volume type="double">.9</alert-volume>
                     <expendables-master type="bool">false</expendables-master>
                     <expendables-guard type="bool">true</expendables-guard>
                     <expendables-sel type="int">0</expendables-sel> <!-- 0 auto 1 flare 2 chaff 3 auto -->
@@ -1109,6 +1110,13 @@
                         <fcp-bit-button type="bool">false</fcp-bit-button>
                         <ground-power-switch type="bool">false</ground-power-switch>
                         <elec-power-percentage type="float">0</elec-power-percentage>
+                        
+                        <wpn-volume-knob type="double">.75</wpn-volume-knob>
+                        <betty-volume-knob type="double">.75</betty-volume-knob>
+                        <tacan-volume-knob type="double">.8</tacan-volume-knob>
+                        
+                        <iff-master-switch type="int">0</iff-master-switch> <!-- 0 emerg 1 norm 2 low-->
+                        <iff-mode4-switch type="int">0</iff-mode4-switch> <!-- 0 out 1 A 2 B-->
                     </interiors>
 
                     <pilots-displays>

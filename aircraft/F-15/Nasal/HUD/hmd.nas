@@ -754,6 +754,9 @@ var F15_HMD = {
                                                  } elsif (val.VNE < val.VelocitiesAirspeedKt) {
                                                          obj.flyup.setText("LIMIT");
                                                          obj.flyup.show();
+                                                 } elsif (val.FuelLow == 1) {
+                                                         obj.flyup.setText("FUEL");
+                                                         obj.flyup.show();
                                                  } elsif (val.BingoFuel == 1) {
                                                          obj.flyup.setText("BINGO");
                                                          obj.flyup.show();
@@ -1998,6 +2001,7 @@ input = {
 		VNE                                     : "limits/vne",
         TimeTilCrash                            : "instrumentation/radar/time-till-crash",
 		BingoFuel                               : "sim/model/f15/lights/ca-bingo-fuel",
+		FuelLow                                 : "sim/model/f15/lights/ca-fuel-low",
 		RadarStandby                            : "instrumentation/radar/radar-standby",
 		ArmamentRippleCount                     : "controls/armament/dual",
 		NavigationMode                          : "sim/model/instrumentation/vhf/mode",

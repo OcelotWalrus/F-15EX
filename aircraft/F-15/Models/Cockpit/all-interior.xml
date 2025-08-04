@@ -3503,45 +3503,6 @@
   </animation>
   <animation>
     <type>knob</type>
-    <object-name>iff-master-switch</object-name>
-    <property>instrumentation/transponder/inputs/master-mode</property>
-    <interpolation>
-      <entry>
-        <ind>0</ind>
-        <dep>20</dep>
-      </entry>
-      <entry>
-        <ind>1</ind>
-        <dep>0</dep>
-      </entry>
-      <entry>
-        <ind>2</ind>
-        <dep>-20</dep>
-      </entry>
-    </interpolation>
-    <center>
-      <x-m>-5.2972</x-m>
-      <y-m>-0.446</y-m>
-      <z-m>0.6594</z-m>
-    </center>
-    <axis>
-      <x>0</x>
-      <y>1</y>
-      <z>0</z>
-    </axis>
-    <action>
-      <binding>
-        <command>property-adjust</command>
-        <property>instrumentation/transponder/inputs/master-mode</property>
-        <factor>1</factor>
-        <min>0</min>
-        <max>2</max>
-        <wrap>false</wrap>
-      </binding>
-    </action>
-  </animation>
-  <animation>
-    <type>knob</type>
     <object-name>iff-mode4-1-switch</object-name>
     <property>instrumentation/transponder/inputs/mode4-1-mode</property>
     <interpolation>
@@ -5557,7 +5518,7 @@
     <type>knob</type>
     <object-name>lighting-storm-flood-knob</object-name>
     <property>controls/lighting/storm-flood</property>
-    <factor>-300</factor>
+    <factor>-30</factor>
     <offset-deg>153</offset-deg>
     <center>
       <x-m>-5.4047</x-m>
@@ -5573,9 +5534,9 @@
       <binding>
         <command>property-adjust</command>
         <property>controls/lighting/storm-flood</property>
-        <factor>0.1</factor>
+        <factor>0.5</factor>
         <min>0</min>
-        <max>1</max>
+        <max>10</max>
         <wrap>false</wrap>
       </binding>
     </action>
@@ -5717,6 +5678,7 @@
     <object-name>elec-power-gauge</object-name>
     <object-name>misc-panel-top</object-name>
     <object-name>fuel-panel-top</object-name>
+    <object-name>misc2-panel-top</object-name>
   </effect>
   <effect>
     <name>f15panel-right</name>
@@ -17874,36 +17836,6 @@
   
   <!-- EPAWSS Panel -->
   <animation>
-    <type>rotate</type>
-    <object-name>epawss-volume-knob</object-name>
-    <property>sim/model/f15/epawss/epawss-volume</property>
-    <offset-deg>180</offset-deg>
-    <factor>260</factor>
-    <center>
-      <x-m>-5.511</x-m>
-      <y-m>0.3405</y-m>
-      <z-m>.6751</z-m>
-    </center>
-    <axis>
-        <z>-1</z>
-    </axis>
-  </animation>
-  <animation>
-    <type>knob</type>
-    <object-name>epawss-volume-knob</object-name>
-    <property>sim/model/f15/epawss/epawss-volume</property>
-    <action>
-      <binding>
-        <command>property-adjust</command>
-        <property>sim/model/f15/epawss/epawss-volume</property>
-        <factor>0.05</factor>
-        <min>0</min>
-        <max>1</max>
-        <wrap>false</wrap>
-      </binding>
-    </action>
-  </animation>
-  <animation>
     <object-name>epawss-new-threat-alarm</object-name>
     <type>material</type>
     <condition>
@@ -19495,5 +19427,251 @@
       <y>0</y>
       <z>1</z>
     </axis>
+  </animation>
+  
+  <!-- Secondary Misc Panel -->
+  
+  <animation>
+    <type>knob</type>
+    <object-name>epawss-caution-knob</object-name>
+    <property>sim/model/f15/epawss/caution-volume</property>
+    <offset-deg>-135</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.347</x-m>
+      <y-m>-.5199</y-m>
+      <z-m>.6777</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/epawss/caution-volume</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>epawss-alert-vol</object-name>
+    <property>sim/model/f15/epawss/alert-volume</property>
+    <offset-deg>-135</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.347</x-m>
+      <y-m>-.5199</y-m>
+      <z-m>.6777</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/epawss/alert-volume</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+
+  <animation>
+    <type>knob</type>
+    <object-name>betty-vol</object-name>
+    <property>sim/model/f15/controls/interiors/betty-volume-knob</property>
+    <offset-deg>-135</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.347</x-m>
+      <y-m>-.486</y-m>
+      <z-m>.6777</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/betty-volume-knob</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>wpn-vol</object-name>
+    <property>sim/model/f15/controls/interiors/wpn-volume-knob</property>
+    <offset-deg>-135</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.347</x-m>
+      <y-m>-.486</y-m>
+      <z-m>.6777</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/wpn-volume-knob</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+
+  <animation>
+    <type>knob</type>
+    <object-name>ils-vol</object-name>
+    <property>sim/model/f15/instrumentation/ils/volume-norm</property>
+    <offset-deg>-135</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.347</x-m>
+      <y-m>-.4519</y-m>
+      <z-m>.6777</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/instrumentation/ils/volume-norm</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>tacan-vol</object-name>
+    <property>sim/model/f15/controls/interiors/tacan-volume-knob</property>
+    <offset-deg>-135</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.347</x-m>
+      <y-m>-.4519</y-m>
+      <z-m>.6777</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/tacan-volume-knob</property>
+        <factor>0.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  
+  <animation>
+    <type>knob</type>
+    <object-name>iff-mode4-switch</object-name>
+    <property>sim/model/f15/controls/interiors/iff-mode4-switch</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>30</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-30</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.208</x-m>
+      <y-m>-.5225</y-m>
+      <z-m>.6614</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/iff-mode4-switch</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>2</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>iff-master-switch</object-name>
+    <property>sim/model/f15/controls/interiors/iff-master-switch</property>
+    <interpolation>
+      <entry>
+        <ind>0</ind>
+        <dep>30</dep>
+      </entry>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>2</ind>
+        <dep>-30</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.206</x-m>
+      <y-m>-.4492</y-m>
+      <z-m>.6614</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/iff-master-switch</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>2</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
   </animation>
 </PropertyList>

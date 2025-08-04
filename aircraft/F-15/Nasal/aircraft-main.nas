@@ -898,6 +898,17 @@ var F15MainModule =
             setprop("instrumentation/datalink/power", 0);
         }
         
+        # Misc 2 panel props synchronization dookie
+        if (getprop("sim/model/f15/controls/interiors/iff-mode4-switch") > 0 and getprop("sim/model/f15/controls/interiors/iff-master-switch") == 1) {
+            setprop("instrumentation/iff/power", 1);
+        } else {
+            setprop("instrumentation/iff/power", 0);
+        }
+        
+        if (getprop("sim/model/f15/controls/interiors/iff-master-switch") >= 0) {  # always true
+            setprop("instrumentation/transponder/inputs/knob-mode", 4);  # ON mode
+        }
+        
 
         # Taken from the F-16
         if (getprop("payload/armament/es/flags/deploy-id-10") != nil) {
