@@ -9,8 +9,8 @@
    | Enrique Laso: Original external 3d model (2015). {original F-15C/D model}
    | xii: F-14 origin of radar, missiles. Most have been modified but Alexis's excellent work was a good basis. (pre 2015) {original F-15C/D model}
    | Nikolai V. Chr.: Improvements to Weapons, Radar HUD (2015->current) {original F-15C/D model}
-   | Jimmy L. Miles : Various liveries, improvement and modifications to the HUD, major rework over the interiors to transform it into the EX model's interiors (completely made new textures, new shapes for certain buttons and various changes in the panels as well too), creation of a PDF manual, extension of payload options through new ammunitions and new hardpoints, addition for aerodynamical effects, addition of new sound effects, of a dragchute (taken from that of the F-16), addition of flaps and gear overspeed damage, addition of wing's over G damage, enhancement of the exhaust trail (taken from that of the F-16), implementation of A/G and A/SEA operations, implementation of pilot ejection, the whole EHD (Engines-Hydraulics Display), the whole LAD (Large Area Display), creation of the GBU-32 JDAM and GBU-39 SDB 3d models, creation of new weapons' behaviors such as the AIM-120D or the AGM-158C LRSAM, implementation of the HMCSD (taken from that of the F-16), as well as some work on the exteriors model, implementation of more complex IFF and JTIDS (datalink) systems (GPS-Spots sharing, radar and EPAWSS contacts sharing etc.), the whole EPAWSS (Eagle Passive-Active Warning Survivability System) suite, addition of the Data Cartridge Transfer system (inspired by that of the F-16). {newest F-15EX model}
-   | Robert Andrews : Major work on the cockpit interiors (LAD case and buttons, whole UFC panel), also taught Jimmy L. Miles some Blender {newest F-15EX model}
+   | Jimmy L. Miles : Various liveries, improvement and modifications to the HUD, major rework over the interiors to transform it into the EX model's interiors (completely made new textures, new shapes for certain buttons and various changes in the panels as well too), creation of a PDF manual, extension of payload options through new ordnances and new hardpoints, addition of aerodynamical effects, addition of new sound effects, of a dragchute (taken from that of the F-16), addition of flaps and gear overspeed damage, addition of wing's over G damage, enhancement of the exhaust trail (taken from that of the F-16), implementation of A/G and A/SEA operations, implementation of pilot ejection, the whole EHD (Engines-Hydraulics Display), the whole LAD (Large Area Display), creation of the GBU-32 JDAM and GBU-39 SDB 3d models, creation of new weapons' behaviors such as the AIM-120D or the AGM-158C LRSAM, implementation of the HMCSD (taken from that of the F-16), as well as some work on the exteriors model, implementation and integration of more complex IFF and JTIDS (datalink) systems functionalities (GPS-Spots sharing, IFF interrogating, radar and EPAWSS contacts sharing etc.), the whole EPAWSS (Eagle Passive-Active Warning Survivability System) suite, addition of the Data Cartridge Transfer system (inspired by that of the F-16), various enhancements to the awg_9.nas Target class, adding various useful functions. {newest F-15EX model}
+   | Robert Andrews : Major work on the cockpit interiors (LAD case and buttons, whole UFC panel), also taught Jimmy L. Miles some Blender! {newest F-15EX model}
    | ________________________________________________________________
    | Various authors have contributed liveries as per commit history.
 -->
@@ -445,7 +445,11 @@
             </key>
             <key>
                 <name>y/Y</name>
-                <desc>Select next/prev target (by distance).</desc>
+                <desc>Select next/prev radar target TWS AUTO (by distance).</desc>
+            </key>
+            <key>
+                <name>x</name>
+                <desc>Interrogate current radar target through IFF Mode 4/5</desc>
             </key>
             <key>
                 <name>Q</name>
@@ -453,11 +457,11 @@
             </key>
             <key>
                 <name>Ctrl-q</name>
-                <desc>Toggle chaff/flare release</desc>
+                <desc>Trigger countermeasures release</desc>
             </key>
             <key>
                 <name>I</name>
-                <desc>Toggle chaff/flare release (burst mode)</desc>
+                <desc>Toggle countermeasures burst mode</desc>
             </key>
             <key>
                 <name>S</name>
@@ -4802,6 +4806,16 @@
                     <script>aircraft.refuel_probe_switch_cycle();</script>
                 </binding>
             </key>
+            
+            <key n="120">
+                <name>x</name>
+                <desc>IFF Interrogate Mode 4/5 current radar target</desc>
+                <binding>
+                    <command>property-assign</command>
+                    <property>instrumentation/iff/interrogate-cmd</property>
+                    <value>1</value>
+                </binding>
+            </key>
 
             <key n="109">
                 <name>m</name>
@@ -4965,6 +4979,8 @@
             <activate type="bool">true</activate>
             <channel-selection type="int">4217</channel-selection>
             <response type="bool">false</response>
+            <response-sound type="bool">false</response-sound>
+            <interrogate-cmd type="bool">false</interrogate-cmd>
         </iff>
         <datalink>
             <sending type="bool">false</sending>

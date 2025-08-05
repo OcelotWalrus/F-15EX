@@ -1295,6 +1295,12 @@ wcs_mode_update = func() {
 
 # Target class
 # ---------------------------------------------------------------------
+# Additions by Jimmy L. Miles
+# - get_Vertical_Speed()  # returns vertical speed of target
+# - isApproaching()  # Utilized by epawss.nas : return how many degrees the target is away if it's approaching, else, return null
+# - getIffResponse()  # Returns a boolean determining whether this target has responded to us through IFF Mode 4/5.
+# - requestIFF()  # Interrogate the target through IFF Mode 4/5 and update its IFF status thus, and also returns is IFF status (as getIffResponse does)
+# ---------------------------------------------------------------------
 var Target = {
 	new : func (c) {
 		var obj = { parents : [Target]};
@@ -1315,6 +1321,8 @@ var Target = {
         obj.TAS = c.getNode("velocities/true-airspeed-kt");
         obj.TransponderId = c.getNode("instrumentation/transponder/transmitted-id");
         obj.verticalSpeedFPS = c.getNode("velocities/vertical-speed-fps");
+        
+        obj.iff_response = 0;
 
 
         obj.Model = c.getNode("model-short");
@@ -1884,6 +1892,14 @@ else
         }
         # We return the diff in degrees if it's approaching, else we return null
 	},
+	getIffResponse: func() {  # Added by Jimmy L. Miles
+	    return me.iff_response;
+	},
+	requestIFF: func() {  # Added by Jimmy L. Miles
+	    iff.last_interogate = systime();  # update some variable in iff.nas. don't seem to be used though
+	    me.iff_response = iff.interrogate(me.propNode);
+	    return me.iff_response;
+	},
     isVirtual: func {
         # used by missile-code
         return FALSE;
@@ -2187,3 +2203,20 @@ var ContactTGP = {
 		return myBearing;
 	},
 };
+
+setlistener("instrumentation/iff/interrogate-cmd", func(v) {  # Target interrogation command
+    if (getprop("instrumentation/iff/interrogate-cmd") == 1) {
+        if (active_u != nil) {
+            iff_resp = active_u.requestIFF();
+        } else {
+            iff_resp = 0;
+        }
+        setprop("instrumentation/iff/response", iff_resp);
+        if (iff_resp) {
+            setprop("instrumentation/iff/response-sound", 1);
+            settimer(func {setprop("instrumentation/iff/response-sound", 0);}, .5);  # Reset sound trigger right after
+            settimer(func {setprop("instrumentation/iff/response", 0);}, 10);  # Reset prop after 10 secs
+        }
+        settimer(func {setprop("instrumentation/iff/interrogate-cmd", 0);}, 1.5);  # Reset interrogate command
+    }
+});

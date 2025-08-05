@@ -20,14 +20,14 @@
 # 'threat circles' displayed on the LAD's HSD and also displayed at some other places. Index can go from 0 to 21. If the radius is equal to 0, it won't be displayed.
 # If no label is intended, set `XXX` as the label. <displayed> should be either 1 or 0, where 1 enables it and 0 disables it. Here are all the available color codes:
 # - red - yellow - blue - rose - purple - orange - green - cyan - marron.
-# - `IFF,<iff_hash>` example: `IFF,2547`  - IFF channel, must stay between 1 and 9999.
+# - `IFF,<iff_hash>` example: `IFF,2547`  - IFF Mode 4/5 channel, must stay between 1 and 9999.
 # - `DATALINK,<datalink_hash>` example: `DATALINK,2547`  - JTIDS/DATALINK channel, must stay between 1 and 9999.
 # - `DECKMin,<altitude>,<enabled>` example: `DECKMin,10000,1`  - Configures the minimum altitude deck. <altitude> is the altitude (in feet) at which if
 # the pilot goes under, a `altitude` warning will set off. <enabled> should be either 1 or 0, where 1 enables it and 0 disables it.
 # - `DECKMax,<altitude>,<enabled>` example: `DeckMax,42000,1`  - Configures the maximum altitude deck. <altitude> is the altitude (in feet) at which if
 # the pilot goes over, a `altitude` warning will set off. <enabled> should be either 1 or 0, where 1 enables it and 0 disables it.
 # - `BINGO,<fuel_lbs>` example: `BINGO,7500`  - Sets the amount of fuel (in lbs) at which the bingo warning sets off.
-# - `SQUAWK,<4-digit-code>` example : `SQUAWK,1200`  - Sets the transponder's code
+# - `SQUAWK,<4-digit-code>` example : `SQUAWK,1200`  - Sets the IFF Mode 1, 2 and 3/A transponder's code
 # - `STPT,<index>,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-ft>` example: `STPT,0,37.2,-115.6,12000`  - Adds a steerpoint (waypoint on the route-manager).
 # <index> is the index of the Steerpoint, defining its order (if it's 0, it'll be the first one on the route, 4 the fourth one.). If you don't want a specific
 # altitude for the steerpoint, set the <altitude-ft> parameter to -9999.

@@ -351,17 +351,24 @@ var LAD_Device = {
             .setFont(aircraft.HUDFont);
         m.iff_text_center = m.upper_panel.createChild("text")
             .setFontSize(100, 1.4)
-            .setText("hash 4217")
+            .setText("M1/2-0000")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
             .setTranslation(3295,230)
             .setFont(aircraft.HUDFont);
-        m.iff_text_down = m.upper_panel.createChild("text")
-            .setFontSize(120, 1.4)
-            .setText("NO RESP")
+        m.iff_text_mode3 = m.upper_panel.createChild("text")
+            .setFontSize(100, 1.4)
+            .setText("M3/A-0301")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(3295,345)
+            .setTranslation(3295,325)
+            .setFont(aircraft.HUDFont);
+        m.iff_text_mode5 = m.upper_panel.createChild("text")
+            .setFontSize(100, 1.4)
+            .setText("M4/5-4217")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(3295,420)
             .setFont(aircraft.HUDFont);
         m.iff_box = m.upper_panel.createChild("path")
             .vert(230*2)
@@ -470,7 +477,8 @@ var LAD_Device = {
         m.radio2_box.setVisible(1);
         m.iff_text_up.setVisible(1);
         m.iff_text_center.setVisible(1);
-        m.iff_text_down.setVisible(1);
+        m.iff_text_mode3.setVisible(1);
+        m.iff_text_mode5.setVisible(1);
         m.iff_box.setVisible(1);
         m.dtl_text_up.setVisible(1);
         m.dtl_text_center.setVisible(1);
@@ -1748,33 +1756,38 @@ update_lad = func() {
         }
 
         # Update the IFF's box
-        iff_channel = getprop("instrumentation/iff/channel_prop");
-        iff_power = getprop("instrumentation/iff/power_prop");
+        iff_channel = getprop("instrumentation/transponder/id-code");
+        mode5_channel = getprop("instrumentation/iff/channel_prop");
+        iff_power = getprop("instrumentation/transponder/inputs/knob-mode") == 4;
+        mode5_power = getprop("instrumentation/iff/power_prop");
         iff_response = getprop("instrumentation/iff/response");
 
-        LADCanvas.iff_text_center.setText(sprintf("hash %04d", iff_channel));
+        LADCanvas.iff_text_center.setText(sprintf("M1/2-%04d", iff_channel));
+        LADCanvas.iff_text_mode3.setText(sprintf("M3/A-%04d", iff_channel));
+        LADCanvas.iff_text_mode5.setText(sprintf("M4/5-%04d", mode5_channel));
 
         if (iff_power) {
             LADCanvas.iff_text_up.setText("IFF - ON");
             LADCanvas.iff_text_up.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.iff_text_center.setColor(prst_green.r,prst_green.g,prst_green.b);
-            LADCanvas.iff_text_down.setColor(prst_green.r,prst_green.g,prst_green.b);
-            LADCanvas.iff_box.setColor(prst_green.r,prst_green.g,prst_green.b);
+            LADCanvas.iff_text_mode3.setColor(prst_green.r,prst_green.g,prst_green.b);
+            if (iff_response) {
+                LADCanvas.iff_box.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+            } else {
+                LADCanvas.iff_box.setColor(prst_green.r,prst_green.g,prst_green.b);
+            }
         } else {
             LADCanvas.iff_text_up.setText("IFF - OFF");
             LADCanvas.iff_text_up.setColor(prst_white.r,prst_white.g,prst_white.b);
             LADCanvas.iff_text_center.setColor(prst_white.r,prst_white.g,prst_white.b);
-            LADCanvas.iff_text_down.setColor(prst_white.r,prst_white.g,prst_white.b);
+            LADCanvas.iff_text_mode3.setColor(prst_white.r,prst_white.g,prst_white.b);
             LADCanvas.iff_box.setColor(prst_white.r,prst_white.g,prst_white.b);
         }
-        if (iff_response) {
-            LADCanvas.iff_text_down.setText("RESPONSE");
-            LADCanvas.iff_text_up.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-            LADCanvas.iff_text_center.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-            LADCanvas.iff_text_down.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-            LADCanvas.iff_box.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+        
+        if (mode5_power) {
+            LADCanvas.iff_text_mode5.setColor(prst_green.r,prst_green.g,prst_green.b);
         } else {
-            LADCanvas.iff_text_down.setText("NO RESP");
+            LADCanvas.iff_text_mode5.setColor(prst_white.r,prst_white.g,prst_white.b);
         }
 
         # Update the Datalink's box
@@ -1791,7 +1804,7 @@ update_lad = func() {
             }
         }
 
-        LADCanvas.dtl_text_center.setText(sprintf("hash %04d", datalink_channel));
+        LADCanvas.dtl_text_center.setText(sprintf("Link16-%04d", datalink_channel));
         LADCanvas.dtl_text_down.setText(sprintf("ON LINK : %02d", on_link_count));
         if (datalink_power) {
             if (getprop("sim/model/f15/avionics/jtids-selected-mode-knob") == 3) {  # If we're in silent mode
@@ -2115,11 +2128,11 @@ update_lad = func() {
                         }
 
                         if (unknown == 0) {
-                            friendly = contact_data.is_friendly();
+                            friendly = contact_data.is_friendly() or contact.getIffResponse();
                             hostile = contact_data.is_hostile();
                             on_link = contact_data.on_link();
                         } else {
-                            friendly = 0;
+                            friendly = contact.getIffResponse();
                             hostile = 0;
                             on_link = 0;
                         }
@@ -2249,10 +2262,10 @@ update_lad = func() {
             
             var chaff_idx = 0;
             foreach (chaff ; chaffs_pos) {
-                print(chaff_idx);
+                #print(chaff_idx);
                 if (elapsed - chaff.release_time > (27 * rand() / 1.5)) {  # if the chaff is too old
                     remove(chaffs_pos, chaff);  # remove it from the list
-                    print("CHAFF TOO OLD");
+                    #print("CHAFF TOO OLD");
                 } else {
                     steerDir = [geo.aircraft_position().course_to(chaff.gps), vector.Math.getPitch(geo.aircraft_position(), chaff.gps)];  # id 0 is bearing, id 1 is elevation
                     wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
@@ -2262,23 +2275,12 @@ update_lad = func() {
                         LADCanvas.chaff_symbols[chaff_idx].setVisible(1);
                         x_move = wpbear * 1354 / 60;
                         y_move = wpelev * 1131 / 60;
-
-                        if (x_move > 677*2-85) {  # clamp the translation's values so it don't get outta the screen
-                            x_move = 677*2-85;  # there ain't no way this is needed but still here as a safety
-                        } elsif (x_move < -(677*2-85)) {
-                            x_move = -(677*2-85);
-                        }
-                        if (y_move > 1110) {
-                            y_move = 1110
-                        } elsif (y_move < -1110) {
-                            y_move = -1110
-                        }
                         
                         LADCanvas.chaff_symbols[chaff_idx].setTranslation(x_move, y_move);
                         print("CHAFF DRAWN");
                         chaff_idx += 1;
                     } else {
-                        print("CHAFF AIN'T VISIBLE");
+                        #print("CHAFF AIN'T VISIBLE");
                     }
                 }
             }
@@ -2666,11 +2668,11 @@ update_lad = func() {
                         }
 
                         if (unknown == 0) {
-                            friendly = contact_data.is_friendly();
+                            friendly = contact_data.is_friendly() or contact.getIffResponse();
                             hostile = contact_data.is_hostile();
                             on_link = contact_data.on_link();
                         } else {
-                            friendly = 0;
+                            friendly = contact.getIffResponse();
                             hostile = 0;
                             on_link = 0;
                         }
