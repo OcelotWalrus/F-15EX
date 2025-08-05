@@ -801,7 +801,7 @@ var LAD_Device = {
                 .lineTo(677*2,2262+500+112)
                 .lineTo(677*2+22,2262+500)
                 .lineTo(677*2,2262+500)
-                .setStrokeLineWidth(4)
+                .setStrokeLineWidth(6)
                 .setVisible(0)
                 .set("z-index",15)
                 .setColor(prst_purple.r,prst_purple.g,prst_purple.b);
@@ -810,7 +810,7 @@ var LAD_Device = {
         m.stpt_texts = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
             m.stpt_txt = m.VSDScreen.createChild("text")  # far down, bottom left
-                .setFontSize(85, 1.4)
+                .setFontSize(95, 1.4)
                 .setText("STPT 1")
                 .setAlignment("center-center")
                 .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
@@ -1238,7 +1238,7 @@ var LAD_Device = {
                 .lineTo(677*2,2262+500+112)
                 .lineTo(677*2+22,2262+500)
                 .lineTo(677*2,2262+500)
-                .setStrokeLineWidth(4)
+                .setStrokeLineWidth(6)
                 .setVisible(0)
                 .set("z-index",15)
                 .setColor(prst_purple.r,prst_purple.g,prst_purple.b);
@@ -1247,7 +1247,7 @@ var LAD_Device = {
         m.stpt_texts_hsd = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
             m.stpt_txt = m.HSDScreen.createChild("text")  # far down, bottom left
-                .setFontSize(85, 1.4)
+                .setFontSize(95, 1.4)
                 .setText("STPT 1")
                 .setAlignment("center-center")
                 .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
@@ -2589,14 +2589,14 @@ update_lad = func() {
                                     LADCanvas.HSDScreenLines.createChild("path")
                                         .moveTo(677*2+x_move,2262+500+y_move)
                                         .lineTo(677*2+former_x_move,2262+500+former_y_move)
-                                        .setStrokeLineWidth(5)
+                                        .setStrokeLineWidth(8)
                                         .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
                                         .update();
 
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
-                                        .setFontSize(42, 1.4)
+                                        .setFontSize(60, 1.4)
                                         .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))
                                         .setAlignment("center-center")
                                         .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
@@ -2615,14 +2615,14 @@ update_lad = func() {
                                     LADCanvas.HSDScreenLines.createChild("path")
                                         .moveTo(677*2+x_move,2262+500+y_move)
                                         .lineTo(677*2+former_x_move,2262+500+former_y_move)
-                                        .setStrokeLineWidth(5)
+                                        .setStrokeLineWidth(6)
                                         .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
                                         .update();
 
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
-                                        .setFontSize(35, 1.4)
+                                        .setFontSize(55, 1.4)
                                         .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))  # distance from former steerpoint to current steerpoint.
                                         .setAlignment("center-center")
                                         .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
