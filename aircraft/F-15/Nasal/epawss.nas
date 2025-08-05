@@ -25,6 +25,7 @@
 #  7th level - if it's an AEW&C + 10
 #  and also: -1/2 points per 1 NM of distance between the aircraft and the EPAWSS contact.
 #  and also: +10 points per 25 kts of closure rate. (ratio so it's actually 2.5 points per 1 kt of closure rate, can remove points if closure rate is negative)
+#  and also: if it's a tanker, it's not considered a threat at all
 # ---------------------------
 # Future features (TODO's) :
 # - For the AI light and its sound, move it from the awg_9.nas to the epawss.nas file, and check if it's a friendly or not
@@ -283,6 +284,9 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
 
             is_an_awacs = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "AEW&C");  # we're reusing the LAD.nas's typeLookup variable
             points += is_an_awacs * 10;  # 7th level
+            
+            is_a_tanker = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "TNKR");  # we're reusing the LAD.nas's typeLookup variable
+            points -= is_an_awacs * 10000;  # not a threat if it's a tanker!
 
             points -= u.get_range() * .5;  # distance reduction
             points += u.get_closure_rate() * 2.5;  # closure rate increment

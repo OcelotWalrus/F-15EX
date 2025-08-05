@@ -942,23 +942,27 @@ var selectCheck = func {
 
 var TerrainManager = {
 #
-    # returns true if the node (position) is visible taking into accoun terrain
-    IsVisible: func(node, fn) {
+    # returns true if the node (position) is visible taking into account terrain
+    IsVisible: func(node, fn, SelectCoordForce = nil) {
 
-    var SelectCoord = geo.Coord.new();
-    var x = nil;
-    var y = nil;
-    var z = nil;
-    call(func {
-        x = node.getNode("position/global-x").getValue();
-        y = node.getNode("position/global-y").getValue();
-        z = node.getNode("position/global-z").getValue(); },
-        nil, var err = []);
+        if (SelectCoordForce == nil) {  # Edited by Jimmy L. Miles. So we can terrain check with an arbitrary coordinate
+            var SelectCoord = geo.Coord.new();
+            var x = nil;
+            var y = nil;
+            var z = nil;
+            call(func {
+                x = node.getNode("position/global-x").getValue();
+                y = node.getNode("position/global-y").getValue();
+                z = node.getNode("position/global-z").getValue(); },
+                nil, var err = []);
 
-    if(x == nil or y == nil or z == nil) {
-                return 1;
-    }
-    var SelectCoord = geo.Coord.new().set_xyz(x, y, z);
+            if(x == nil or y == nil or z == nil) {
+                        return 1;
+            }
+            var SelectCoord = geo.Coord.new().set_xyz(x, y, z);
+        } else {
+            var SelectCoord = SelectCoordForce;
+        }
 
     # There is no terrain on earth that can be between these altitudes
     # so shortcut the whole thing and return now.

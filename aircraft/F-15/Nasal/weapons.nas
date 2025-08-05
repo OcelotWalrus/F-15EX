@@ -840,8 +840,21 @@ var flareLoop = func {
         sendFlare = 0;
         sendChaff = 1;
       } elsif (getprop("sim/model/f15/epawss/expendables-sel") == 3) {  # "auto" mode  (TODO make it)
-        sendFlare = 1;
-        sendChaff = 1;
+        # The logic behind it:
+        # When a level is true, it's its parameter that are chosen, and other levels ain't ran
+        # 1st level # If we got a MLW or a MAW # chaff
+        # 2nd level # If we're getting spiked (by any type) # chaff+flare
+        # if they're all false, we choose only flare
+        if (getprop("payload/armament/MAW-active") or getprop("payload/armament/MAW-semiactive") or (getprop("sound/rwr-launch") != "" and getprop("sound/rwr-launch") != nil)) {
+            sendChaff = 1;
+            sendFlare = 0;
+        } elsif (getprop("payload/armament/spike-air") or getprop("payload/armament/spike-gnd-02") or getprop("payload/armament/spike-gnd-11") or getprop("payload/armament/spike-gnd-20") or getprop("payload/armament/spike-gnd-23") or getprop("payload/armament/spike-gnd-p2") or getprop("payload/armament/spike-gnd-nk")) {
+            sendChaff = 1;
+            sendFlare = 1;
+        } else {
+            sendFlare = 1;
+            sendChaff = 0;
+        }
       }
       
       # make sure we still got flares and chaffs to spare

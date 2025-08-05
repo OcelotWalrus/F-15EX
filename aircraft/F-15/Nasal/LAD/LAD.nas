@@ -152,10 +152,16 @@ var typeLookup = { # database of known radar signatures
     "hunter":                   "BOAT",
 };
 
+chaff_lasts = {};  # Vector containing data about each radar contact's unique and their
+                   # chaff node. This is used to draw the chaffs on the VSD
+chaffs_pos = [];  # Vector containing data about chaffs (their geographic position
+                  # and the time at which they were released. If they're expired, they're removed)
+
 # Preset Colors
 var prst_black = {"r": 0, "g": 0, "b": 0};
 var prst_white = {"r": 1, "g": 1, "b": 1};
 var prst_green = {"r": 0, "g": 255 / 255, "b": 58 / 255};
+var prst_green_dark = {"r": 6 / 255, "g": 172 / 255, "b": 44 / 255};
 var prst_yellow = {"r": 234 / 255, "g": 255 / 255, "b": 0 / 255};
 var prst_yellow_dark = {"r": 94 / 255, "g": 105 / 255, "b": 0 / 255};  # 2.5 times darker than regular yellow
 var prst_purple = {"r": .7, "g": 0, "b": 1};
@@ -836,6 +842,21 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.tgt_texts[i] = m.tgt_txt;
         }
+        
+        # Chaff bleps symbols
+        m.chaff_symbols_max = 35; # random number, can always be increased or decreased if we ever need to
+        m.chaff_symbols = setsize([], m.chaff_symbols_max);
+        for (var i = 0; i < m.chaff_symbols_max; i += 1){
+            m.chaff = m.VSDScreen.createChild("path")
+                .moveTo(677*2,2262+500-12*0.5)
+	            .vert(44)
+	            .setStrokeLineWidth(44)
+	            .setStrokeLineCap("butt")
+                .set("z-index",10)
+                .setVisible(0)
+                .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
+            m.chaff_symbols[i] = m.chaff;
+        }
 
         m.locked_box = m.VSDScreen.createChild("path")
             .moveTo(677*2-38,2262+500-10)
@@ -853,9 +874,9 @@ var LAD_Device = {
         m.dlnk_symbols = setsize([], m.dlnk_symbols_max);
         for (var i = 0; i < m.dlnk_symbols_max; i += 1){
             m.dlnk = m.VSDScreen.createChild("path")
-                .moveTo(677*2,2262+500)
-                .arcSmallCW(6,6,0,0,12)
-                .arcSmallCW(6,6,0,0,-12)
+                .moveTo(677*2-24,2262+500)
+                .arcSmallCW(24,24,0,0,48)
+                .arcSmallCW(24,24,0,0,-48)
                 .setStrokeLineWidth(7)
                 .setVisible(0)
                 .set("z-index",15)
@@ -1275,23 +1296,6 @@ var LAD_Device = {
             .setTranslation(2555+10,535+160+130+25)
             .setFont(aircraft.HUDFont);
 
-        # Radar target information
-        m.hsd_tgt_closure_pin = m.HSDScreen.createChild("path")
-            .moveTo(677*4-75,1150*4+500+75)
-            .lineTo(677*4-75-75,1150*4+500+75+65)
-            .moveTo(677*4-75,1150*4+500+75)
-            .lineTo(677*4-75-75,1150*4+500+75-65)
-            .setStrokeLineWidth(6)
-            .set("z-index",15)
-            .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-        m.hsd_tgt_closure_text = m.HSDScreen.createChild("text")
-            .setFontSize(85, 1.4)
-            .setText("0637")
-            .setAlignment("center-center")
-            .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
-            .setTranslation(677*4-75-140,1150*4+500+75)
-            .setFont(aircraft.HUDFont);
-
         # Create the EPAWSS symbols
         m.epawss_symbols_hsd_hat = setsize([], m.stpt_symbols_max);  # hats are for airborne radars
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
@@ -1428,9 +1432,9 @@ var LAD_Device = {
         m.dlnk_symbols_hsd = setsize([], m.dlnk_symbols_max);
         for (var i = 0; i < m.dlnk_symbols_max; i += 1){
             m.dlnk = m.HSDScreen.createChild("path")
-                .moveTo(677*2,2262+500)
-                .arcSmallCW(6,6,0,0,12)
-                .arcSmallCW(6,6,0,0,-12)
+                .moveTo(677*2-24,2262+500)
+                .arcSmallCW(24,24,0,0,48)
+                .arcSmallCW(24,24,0,0,-48)
                 .setStrokeLineWidth(7)
                 .setVisible(0)
                 .set("z-index",15)
@@ -1491,8 +1495,6 @@ var LAD_Device = {
         m.hsd_radar_range_text.setVisible(1);
         m.hsd_radar_mode.setVisible(1);
         m.hsd_radar_filter.setVisible(1);
-        m.hsd_tgt_closure_pin.setVisible(0);
-        m.hsd_tgt_closure_text.setVisible(0);
         m.hsd_bullseye_eta.setVisible(1);
         m.hsd_bullseye_dist.setVisible(1);
         m.hsd_bullseye_bearing.setVisible(1);
@@ -2090,6 +2092,15 @@ update_lad = func() {
             var found_lock = 0;
             var lock_assigned = 0;
             foreach (contact ; awg_9.tgts_list) {
+            
+                # Check for chaffs. We don't need the target to be visible for that, visible checks are ran on the chaffs themselves
+                if (contact.getChaffNode() != nil and contact.getChaffNode().getValue() != nil and contact.getChaffNode().getValue() != 0) {
+                    if (contact.getChaffNode().getValue() != chaff_lasts[contact.getUnique()]) {
+                        chaff_lasts[contact.getUnique()] = contact.getChaffNode().getValue();  # released a new flare
+                        append(chaffs_pos, {"gps": contact.get_Coord(), "release_time": elapsed});
+                    }
+                }
+            
                 if (contact.get_display() == 1) {
                     if (awg_9.active_u == contact) { # If it's the active radar lock we got
                         found_lock = 1;
@@ -2114,17 +2125,17 @@ update_lad = func() {
                         }
 
                         if (on_link) {
-                            LADCanvas.tgt_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
-                            LADCanvas.tgt_texts[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
+                            LADCanvas.tgt_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b, contact.get_fading());
+                            LADCanvas.tgt_texts[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b, contact.get_fading());
                         } elsif (friendly) {
-                            LADCanvas.tgt_symbols[target_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
-                            LADCanvas.tgt_texts[target_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
+                            LADCanvas.tgt_symbols[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b, contact.get_fading());
+                            LADCanvas.tgt_texts[target_idx].setColor(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b, contact.get_fading());
                         } elsif (hostile) {
-                            LADCanvas.tgt_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
-                            LADCanvas.tgt_texts[target_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
+                            LADCanvas.tgt_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b, contact.get_fading());
+                            LADCanvas.tgt_texts[target_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b, contact.get_fading());
                         } else {
-                            LADCanvas.tgt_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
-                            LADCanvas.tgt_texts[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
+                            LADCanvas.tgt_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, contact.get_fading());
+                            LADCanvas.tgt_texts[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b, contact.get_fading());
                         }
 
                         LADCanvas.tgt_symbols[target_idx].setVisible(1);
@@ -2136,7 +2147,7 @@ update_lad = func() {
                         y_move = yc*1131/60;
 
                         if (x_move > 1340) {  # clamp the translation's values so it don't get outta the screen
-                                x_move = 1340;
+                                x_move = 1340;  # don't know why I did this there ain't no way a radar contact is outta the VSD screen ???!
                         } elsif (x_move < -1340) {
                             x_move = -1340;
                         }
@@ -2208,14 +2219,11 @@ update_lad = func() {
 
                     # Scale:
                     # To be at max (moving 4,600px up), target range must be max radar range
-                    range_y = awg_9.active_u.get_range() * getprop("instrumentation/radar/radar2-range") / 4600;
-                    if (range_y > 4560) {  # clamp the values
-                        range_y = 4560; # max down px value
-                    } elsif (range_y < -4560) {
-                        range_y = -4560; # max up px value
-                    }
-                    LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0, - range_y);
-                    LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140, 2875- range_y);
+                    range_y = 4600 * awg_9.active_u.get_range() / getprop("instrumentation/radar/radar2-range");
+                    range_y += 75;  # Fix because the shit starts at outside of the grid, but still inside of the VSD outline
+
+                    LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0,-range_y);
+                    LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140,5175-range_y);
                 }
             } else {
                 LADCanvas.locked_box.setVisible(0);
@@ -2235,6 +2243,49 @@ update_lad = func() {
             for (var nv = target_idx; nv < LADCanvas.tgt_symbols_max;nv += 1) {
                 LADCanvas.tgt_symbols[nv].setVisible(0);
                 LADCanvas.tgt_texts[nv].setVisible(0);
+            }
+            
+            # Draw the chaff bleps
+            
+            var chaff_idx = 0;
+            foreach (chaff ; chaffs_pos) {
+                print(chaff_idx);
+                if (elapsed - chaff.release_time > (27 * rand() / 1.5)) {  # if the chaff is too old
+                    remove(chaffs_pos, chaff);  # remove it from the list
+                    print("CHAFF TOO OLD");
+                } else {
+                    steerDir = [geo.aircraft_position().course_to(chaff.gps), vector.Math.getPitch(geo.aircraft_position(), chaff.gps)];  # id 0 is bearing, id 1 is elevation
+                    wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
+                    wpelev = -steerDir[1];  # elevation to the steerpoint (20* means 20* down)
+                    hidden_by_terrain = !awg_9.TerrainManager.IsVisible(nil, nil, SelectCoordForce=chaff.gps);
+                    if (!hidden_by_terrain and wpbear < getprop("instrumentation/radar/az-field")/2 and wpbear > -getprop("instrumentation/radar/az-field")/2 and wpbear < getprop("instrumentation/radar/ho-field")/2 and wpbear > -getprop("instrumentation/radar/ho-field")/2) {  # we're making sure that the chaff ain't outta our radar's cone!
+                        LADCanvas.chaff_symbols[chaff_idx].setVisible(1);
+                        x_move = wpbear * 1354 / 60;
+                        y_move = wpelev * 1131 / 60;
+
+                        if (x_move > 677*2-85) {  # clamp the translation's values so it don't get outta the screen
+                            x_move = 677*2-85;  # there ain't no way this is needed but still here as a safety
+                        } elsif (x_move < -(677*2-85)) {
+                            x_move = -(677*2-85);
+                        }
+                        if (y_move > 1110) {
+                            y_move = 1110
+                        } elsif (y_move < -1110) {
+                            y_move = -1110
+                        }
+                        
+                        LADCanvas.chaff_symbols[chaff_idx].setTranslation(x_move, y_move);
+                        print("CHAFF DRAWN");
+                        chaff_idx += 1;
+                    } else {
+                        print("CHAFF AIN'T VISIBLE");
+                    }
+                }
+            }
+            
+            # Do not display any unused chaff bleps
+            for (var nv = chaff_idx; nv < LADCanvas.chaff_symbols_max;nv += 1) {
+                LADCanvas.chaff_symbols[nv].setVisible(0);
             }
 
             # Update the datalink symbols
@@ -2280,8 +2331,8 @@ update_lad = func() {
                                 LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
                                 LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
                             } elsif (friendly) {
-                                LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
-                                LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
+                                LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_green.r,prst_green.g,prst_green.b);
+                                LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b);
                             } elsif (hostile) {
                                 LADCanvas.dlnk_symbols[dlnk_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
                                 LADCanvas.dlnk_texts[dlnk_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
@@ -2629,9 +2680,9 @@ update_lad = func() {
                             LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
                             LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
                         } elsif (friendly) {
-                            LADCanvas.tgt_symbols_hsd[target_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
-                            LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
-                            LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
+                            LADCanvas.tgt_symbols_hsd[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b);
+                            LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b);
+                            LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b);
                         } elsif (hostile) {
                             LADCanvas.tgt_symbols_hsd[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
                             LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
@@ -2687,13 +2738,9 @@ update_lad = func() {
                 #LADCanvas.vsd_tgt_altitude.setVisible(1);
                 #LADCanvas.vsd_tgt_range.setVisible(1);
                 #LADCanvas.vsd_tgt_fps.setVisible(1);
-                LADCanvas.hsd_tgt_closure_pin.setVisible(1);
-                LADCanvas.hsd_tgt_closure_text.setVisible(1);
 
                 if (awg_9.active_u != nil) { # safety
                     # Update current target's info texts across the HSD
-
-                    LADCanvas.hsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
 
                     # Scale:
                     # To be at 600 (moving 4,600px up), target's range must be at radar max range
@@ -2703,8 +2750,6 @@ update_lad = func() {
                     } elsif (range_y < -4560) {
                         range_y = -4560; # max up px value
                     }
-                    LADCanvas.hsd_tgt_closure_pin.setTranslation(0.0, - range_y);
-                    LADCanvas.hsd_tgt_closure_text.setTranslation(677*4-75-140, 1150*4+500+75 - range_y);
                 }
             } else {
                 LADCanvas.locked_box_hsd.setVisible(0);
@@ -2715,8 +2760,6 @@ update_lad = func() {
                 #LADCanvas.vsd_tgt_altitude.setVisible(0);
                 #LADCanvas.vsd_tgt_range.setVisible(0);
                 #LADCanvas.vsd_tgt_fps.setVisible(0);
-                LADCanvas.hsd_tgt_closure_pin.setVisible(0);
-                LADCanvas.hsd_tgt_closure_text.setVisible(0);
             }
 
             # Do not display any unused target boxes
@@ -2773,8 +2816,8 @@ update_lad = func() {
                                 LADCanvas.dlnk_symbols_hsd[dlnk_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
                                 LADCanvas.dlnk_texts_hsd[dlnk_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
                             } elsif (friendly) {
-                                LADCanvas.dlnk_symbols_hsd[dlnk_idx].setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
-                                LADCanvas.dlnk_texts_hsd[dlnk_idx].setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
+                                LADCanvas.dlnk_symbols_hsd[dlnk_idx].setColor(prst_green.r,prst_green.g,prst_green.b);
+                                LADCanvas.dlnk_texts_hsd[dlnk_idx].setColor(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b);
                             } elsif (hostile) {
                                 LADCanvas.dlnk_symbols_hsd[dlnk_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
                                 LADCanvas.dlnk_texts_hsd[dlnk_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
@@ -2914,7 +2957,7 @@ update_lad = func() {
 
             # If there's a Missile Approach Warning, display it (MAW)
             var maw_epawss_idx = 21;  # id of the object specifically made for the Missile Approach Warning
-            if (getprop("payload/armament/MAW-active") and getprop("sim/model/f15/epawss/epawss-on")) {
+            if (getprop("payload/armament/MAW-active") or getprop("payload/armament/MAW-semiactive")) {  # Note: EWWS must be on
                 maw_bearing = getprop("payload/armament/MAW-bearing");
                 deviation = -geo.normdeg180(maw_bearing - getprop("orientation/heading-deg")) + 90;
                 x_move = math.cos(deviation * D2R)*(LADCanvas.hsd_great_circle_radius*10/19)*(1/3);
