@@ -239,7 +239,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
             settimer(func {remove(new_threats, contact); }, 45);  # remove it from new threats after 45 seconds (clear the new threat symbol of the LAD's HSD)
         }
         if (getprop("instrumentation/datalink/sending") == 0 and getprop("sim/model/f15/avionics/jtids-selected-mode-knob") != 3) {  # safety, so we ain't overwriting smth that's already being sent over datalink - JTIDS knob 3d position is silent/receive-only mode
-            datalink.send_data({"contacts":[{"callsign": contact, "iff": 0}]});
+            datalink.send_data({"contacts":[{"callsign": contact, "iff": 0}]});  # sending unknown data because EPAWSS can't know
         }
     }
 }

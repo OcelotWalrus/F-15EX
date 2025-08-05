@@ -341,7 +341,11 @@ var rdr_loop = func(notification) {
     # so the whole panel of available radar contacts are sent over to the datalink network
     foreach(contact; tgts_list) {
         if (getprop("instrumentation/datalink/sending") == 0 and contact.get_display() and contact.get_visible() and getprop("sim/model/f15/avionics/jtids-selected-mode-knob") != 3) {  # so we're not overwriting a GPS spot that's being sent, safety, not sure that's needed - JTIDS 3rd positon is silent/receive-only position
-	       datalink.send_data({"contacts":[{"callsign":contact.get_Callsign(),"iff":0}]});
+            iff_status = 0;  # unknown
+            if (contact.getIffResponse() == 1) {
+                iff_status = 2;  # friendly
+            }
+	       datalink.send_data({"contacts":[{"callsign":contact.get_Callsign(),"iff": iff_status}]});
         }
     }
 
