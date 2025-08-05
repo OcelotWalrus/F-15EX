@@ -91999,9 +91999,9 @@ refs 4
 7 0.28244 0.811508
 kids 0
 OBJECT poly
-name "EHDImage"
+name "EFHDImage"
 data 8
-EHDImage
+EFHDImage
 crease 40.0
 texture "tranbg.png"
 numvert 4

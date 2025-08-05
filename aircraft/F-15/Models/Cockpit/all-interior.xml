@@ -1198,9 +1198,9 @@
   </animation>
   <animation>
     <type>select</type>
-    <object-name>EHDImage</object-name>
+    <object-name>EFHDImage</object-name>
     <condition>
-      <property>sim/model/f15/controls/EHD/mode</property>
+      <property>sim/model/f15/controls/EFHD/mode</property>
       <greater-than>
          <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
          <value>0</value>
@@ -2186,7 +2186,7 @@
   <effect>
     <name>f15interior</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
-    <object-name>EHDImage</object-name>
+    <object-name>EFHDImage</object-name>
   </effect>
   <animation>
     <object-name>LADImage</object-name>
@@ -2208,7 +2208,7 @@
     </emission>
   </animation>
   <animation>
-    <object-name>EHDImage</object-name>
+    <object-name>EFHDImage</object-name>
     <type>material</type>
     <condition>
       <greater-than>
@@ -2220,7 +2220,7 @@
       </not>
     </condition>
     <emission>
-      <factor-prop>sim/model/f15/controls/EHD/mode</factor-prop>
+      <factor-prop>sim/model/f15/controls/EFHD/mode</factor-prop>
       <red>  0.5</red>
       <green>0.5</green>
       <blue> 0.5</blue>

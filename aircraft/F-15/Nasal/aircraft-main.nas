@@ -838,10 +838,10 @@ var F15MainModule =
         # Force update different displays' daylight mode (day or night)
         if (getprop("controls/lighting/daylight-mode") == 0) {  # day mode (brt)
             setprop("sim/model/f15/controls/LAD/mode", 2);
-            setprop("sim/model/f15/controls/EHD/mode", 2);
+            setprop("sim/model/f15/controls/EFHD/mode", 2);
         } elsif (getprop("controls/lighting/daylight-mode") == 1) {  # night mode (dim)
             setprop("sim/model/f15/controls/LAD/mode", 1);
-            setprop("sim/model/f15/controls/EHD/mode", 1);
+            setprop("sim/model/f15/controls/EFHD/mode", 1);
         }
 
         # Windshield heat computing: if switch is off, set to off, is switch is on, set to on, if it's auto set heating to on if the windshield is frozen
