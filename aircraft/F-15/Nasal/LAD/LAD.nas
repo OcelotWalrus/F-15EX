@@ -37,17 +37,11 @@
 # incorrect, when used alongside translations (when applying a translation AND a rotation to an object).
 # ---------------------------
 # Future features (TODO's) :
-# //General// :
-# - Readability must be improved: some texts and symbology are kinda small, and their color ain't no help too, making 'em hard to read
-# without leaning onto them.
 # //VSD Display// :
+# - For RWS radar mode, give bleps lil' tails, that are down when closing in and up when evading
 # - Display the steering dot, ASE circle.
-# - bleps: make em boxes, with tail up or down depending on closing speed (when TWS, change tail's orientation depending on target's heading if it's one of the locked targets)
 # - Display the DLZ and the Missile Time Of Launch
-# - use specific symbology for specific current tracked target
 # - Use different symbols for SAMs, AAAs and ships contacts
-# - Differentiate evading, "neutral" and incoming contacts using different
-# symbology, without the need of locking it and looking at its closing speed
 # - Have some text in the upper part, separated by rulers telling distance, bearing and ETA from bullseye (not sure if there's enough room left)
 # - For steerpoints that are clamped, use a different symbol to acknowledge that
 # - For datalink contacts that are clamped, use a different symbol to acknowledge that

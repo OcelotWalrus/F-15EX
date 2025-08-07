@@ -1202,11 +1202,33 @@
                     <UFC>
                         <mode type="int">2</mode> <!-- 0 off 1 night 2 day. Only for the screen -->
                         <contrast type="double">0.6</contrast>
+                        <buttons-pressed>
+                            <UFCButton00 type="bool">false</UFCButton00>
+                            <UFCButton01 type="bool">false</UFCButton01>
+                            <UFCButton02 type="bool">false</UFCButton02>
+                            <UFCButton03 type="bool">false</UFCButton03>
+                            <UFCButton04 type="bool">false</UFCButton04>
+                            <UFCButton05 type="bool">false</UFCButton05>
+                            <UFCButton06 type="bool">false</UFCButton06>
+                            <UFCButton07 type="bool">false</UFCButton07>
+                            <UFCButton08 type="bool">false</UFCButton08>
+                            <UFCButton09 type="bool">false</UFCButton09>
+                            <UFCButton010 type="bool">false</UFCButton010>
+                            <UFCButton011 type="bool">false</UFCButton011>
+                            <UFCButton012 type="bool">false</UFCButton012>
+                            <UFCButton013 type="bool">false</UFCButton013>
+                            <UFCButton014 type="bool">false</UFCButton014>
+                            <UFCButton015 type="bool">false</UFCButton015>
+                            <UFCButton016 type="bool">false</UFCButton016>
+                            <UFCButton017 type="bool">false</UFCButton017>
+                            <UFCButton018 type="bool">false</UFCButton018>
+                            <UFCButton019 type="bool">false</UFCButton019>
+                        </buttons-pressed>
                     </UFC>
                 </controls>
                 <fx>
                     <burner type="int">0</burner>
-                    <heat-blur-on type="bool">false</heat-blur-on>
+                    <heat-blur-on type="bool">true</heat-blur-on>
                     <rotate-flame>1</rotate-flame>
                 </fx>
                 <instrumentation>
