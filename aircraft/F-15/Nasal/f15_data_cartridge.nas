@@ -14,7 +14,8 @@
 # are all the different data block types:
 # - `RADIO1,<active_channel_mhz>,<standby_channel_mhz>` example: `RADIO1,114.5,135.55`.  - Active and standby MHz frequencies of Radio 1 (Comm 1)
 # - `RADIO2,<active_channel_mhz>,<standby_channel_mhz>` example: `RADIO2,114.5,135.55`.  - Active and standby MHz frequencies of Radio 2 (Comm 2)
-# - `ILS,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `ILS,114.5,135.55,284`.  - Active and standby MHz frequencies of ILS (Nav 1) and radial in degrees
+# - `ILS,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `ILS,114.5,135.55,284`.  - Active and standby MHz frequencies of ILS (Nav 1) and radial settingin degrees
+# - `NAV2,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `NAV2,114.5,135.55,284`.  - Active and standby MHz frequencies of Nav 2 radio and radial setting in degrees
 # - `TACAN,<tacan_channel_mhz>` example: `TACAN,123.5`.  - TACAN channel, not in '029Y' format but MHz format
 # - `GPSSpot,<index>,<latitude_decimal_deg>,<longitude_decimal_deg>,<radius_nm>,<label>,<color_code>,<displayed>` example: `GPSSpot,0,37.2,-115.6,25,SAM,red,1`.  - These are for the
 # 'threat circles' displayed on the LAD's HSD and also displayed at some other places. Index can go from 0 to 21. If the radius is equal to 0, it won't be displayed.
@@ -89,6 +90,10 @@ var load_cartridge = func(path) {
                 setprop("instrumentation/nav[0]/frequencies/selected-mhz", num(items[1]));
                 setprop("instrumentation/nav[0]/frequencies/standby-mhz", num(items[2]));
                 setprop("instrumentation/nav[0]/radials/selected-deg", num(items[3]));
+            } elsif (key == "NAV2") {
+                setprop("instrumentation/nav[1]/frequencies/selected-mhz", num(items[1]));
+                setprop("instrumentation/nav[1]/frequencies/standby-mhz", num(items[2]));
+                setprop("instrumentation/nav[1]/radials/selected-deg", num(items[3]));
             } elsif (key == "RADIO1") {
                 setprop("instrumentation/comm[0]/frequencies/selected-mhz", num(items[1]));
                 setprop("instrumentation/comm[0]/frequencies/standby-mhz", num(items[2]));
@@ -145,6 +150,7 @@ var save_cartridge = func(path) {
     ret = ret~sprintf("COM1,%.2f,%.2f|", getprop("instrumentation/comm[0]/frequencies/selected-mhz"), getprop("instrumentation/comm[0]/frequencies/standby-mhz"));
     ret = ret~sprintf("COM2,%.2f,%.2f|", getprop("instrumentation/comm[1]/frequencies/selected-mhz"), getprop("instrumentation/comm[1]/frequencies/standby-mhz"));
     ret = ret~sprintf("ILS,%.2f,%.2f,%3d|", getprop("instrumentation/nav[0]/frequencies/selected-mhz"), getprop("instrumentation/nav[0]/frequencies/standby-mhz"), getprop("instrumentation/nav[0]/radials/selected-deg"));
+    ret = ret~sprintf("NAV2,%.2f,%.2f,%3d|", getprop("instrumentation/nav[1]/frequencies/selected-mhz"), getprop("instrumentation/nav[1]/frequencies/standby-mhz"), getprop("instrumentation/nav[1]/radials/selected-deg"));
     ret = ret~sprintf("BINGO,%d|", getprop("sim/model/f15/controls/fuel/bingo"));
     ret = ret~sprintf("SQUAWK,%d|", getprop("instrumentation/transponder/id-code"));
     ret = ret~sprintf("TACAN,%.2f|", getprop("instrumentation/tacan/frequencies/selected-mhz"));

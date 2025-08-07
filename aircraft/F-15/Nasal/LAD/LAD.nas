@@ -19,7 +19,6 @@
 # - NFLIR (Navigation Forward-Looking Infrared)  - Allows to configure the FLIR pod and actively look through it
 # - IRST (Infrared Search & Track)  - Allows to configure the Legion IRST pod and actively look through it and control it and track heat signatures. (Implement Legion IRST Pod functionalities first)
 # - FCTRLS (Flight Controls)  - A display like in the EX interiors photo where you can see the state of every flight controls (elevators, flaps, rudders, etc.), as well as if they're damaged or not
-# - DTMD (Data Cartridge Mission Data) - A display that allows to see the data loaded by the Data Cartridge and modify it, and apply the changes.
 # ---------------------------
 # Notes:
 # - When displaying contacts, there are 3 types of 'em: radar contacts, datalink contacts and
@@ -29,7 +28,7 @@
 # that's already on our datalink, or radar, then we don't display it.
 # - Due a stupid act o' mine, the height on the canvas is distorted, due to the 3d model on which
 # it's projected on being 19" x 10" but the canvas being 8,192px x 8,192px. That makes so that for
-# circles to look like circles, they must be ellipse where the horizontal radius is given a scale
+# circles to look like circles, they must be ellipses where the horizontal radius is given a scale
 # of 10/19 compared to the vertical radius. It also makes so that when converting pixels to nautical
 # miles - like in the HSD where range is displayed (not in the VSD for example because in a vertical
 # view there's no range [horizontal range to be exact]) - different coefficients must be given, in which
@@ -43,12 +42,8 @@
 # without leaning onto them.
 # //VSD Display// :
 # - Display the steering dot, ASE circle.
-# - For the closure rate carat, actually use distance where bottom is 0 and top is max radar range.
-# - Display altitude carat with numbers in format 29-9 for 29,900ft, where vertical middile is same altitude, and top max altitude allowed by the radar.
-# - RWS Mode: no target speed, no precise target altitude (round altitude at +2-2thousands) No AIM lock + no heading
-# - Move selection cursor to select a contact (remove next target button)
 # - bleps: make em boxes, with tail up or down depending on closing speed (when TWS, change tail's orientation depending on target's heading if it's one of the locked targets)
-# - TWS (actually no cuz it's TWS Auto: select different contacts to be tracked (up to 20), then you can use the next target button to switch between locked targets
+# - Display the DLZ and the Missile Time Of Launch
 # - use specific symbology for specific current tracked target
 # - Use different symbols for SAMs, AAAs and ships contacts
 # - Differentiate evading, "neutral" and incoming contacts using different
@@ -58,7 +53,7 @@
 # - For datalink contacts that are clamped, use a different symbol to acknowledge that
 # - Use better symbology for datalink contacts so they're more visible
 # //HSD Display// :
-# - Fix the position of datalink contacts, and fix symbology to make em visible
+# - Display our datalink-compatible ordnance live with their target connected with a dashed line
 # - Display threat circles so that they can display on a certain part (if visually there's parts outside and some ain't) Note: (maybe use something like the sit-mask.png)
 # - Show true headings around the great circle and make them move to be at the correct position
 # - Use different symbols for SAM and AAA contacts
@@ -69,8 +64,6 @@
 # - Display the ILS station's pos (useful for tanker or carrier ops), with also bearing (with numbers and a pointer), dist and ETA
 # - Display the bullseye's relative bearing using a pointer around the HSD great circle
 # - Display target pod's looking position with a unique symbol
-# - Show steerpoints that are clamped differently so they can be acknowledged
-# - Add the DLZ (Dynamic Launch Zone), to complement the closing speed
 # //PACS Display// :
 # - Allow weapons to be programmed when you click on 'em.
 # - Add the Jettison page (waiting for the interiors to finish because there are switches that configure jettison in there.
@@ -98,12 +91,17 @@ var typeLookup = { # database of known radar signatures
     "m2000-5B":                 "F/B",
     "MiG-21bis":                "F/B",
     "KC-137R":                  "TNKR",
-    "KC-137R-RT":               "TNKR",#TNKR = Boom TDRG=drouge
+    "KC-137R-RT":               "TNKR",
     "707-TT":                   "TNKR",
     "KC-30A":                   "TNKR",
     "Voyager-KC":               "TNKR",
     "KC-10A":                   "TNKR",
     "KC-10A-GE":                "TNKR",
+    "MD-11F-GE":                "TNKR",
+    "MD-11F-PW":                "TNKR",
+    "MD-11-GE":                 "TNKR",
+    "MD-11-PW":                 "TNKR",
+    "KMD-11":                   "TNKR",
     "EC-137R":                  "AEW&C",#awacs airborne and groundborne
     "RC-137R":                  "AEW&C",
     "E-3R":                     "AEW&C",
@@ -663,27 +661,6 @@ var LAD_Device = {
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(2555,535)
             .setFont(aircraft.HUDFont);
-        m.vsd_rdr_mode_1 = m.VSDScreen.createChild("text")
-            .setFontSize(100, 1.4)
-            .setText("T")
-            .setAlignment("center-center")
-            .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645+35,700)
-            .setFont(aircraft.HUDFont);
-        m.vsd_rdr_mode_2 = m.VSDScreen.createChild("text")
-            .setFontSize(100, 1.4)
-            .setText("W")
-            .setAlignment("center-center")
-            .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645+35,780)
-            .setFont(aircraft.HUDFont);
-        m.vsd_rdr_mode_3 = m.VSDScreen.createChild("text")
-            .setFontSize(100, 1.4)
-            .setText("S")
-            .setAlignment("center-center")
-            .setColor(prst_green.r,prst_green.g,prst_green.b)
-            .setTranslation(2645+35,860)
-            .setFont(aircraft.HUDFont);
         m.vsd_rdr_filter_1 = m.VSDScreen.createChild("text")
             .setFontSize(100, 1.4)
             .setText("A")
@@ -734,6 +711,14 @@ var LAD_Device = {
             .setStrokeLineWidth(10)
             .set("z-index",10)
             .setColor(prst_marron.r,prst_marron.g,prst_marron.b);
+        m.vsd_elevation_carat = m.VSDScreen.createChild("path")
+            .moveTo(75,2260+500)
+            .lineTo(75+75,2260+500-25)
+            .moveTo(75,2260+500)
+            .lineTo(75+75,2260+500+25)
+            .setStrokeLineWidth(10)
+            .set("z-index",10)
+            .setColor(prst_marron.r,prst_marron.g,prst_marron.b);
         m.vsd_azimuth_limit_circle_right_60 = m.VSDScreen.createChild("path")
             .moveTo(1282*2+75-25,2300*2+500-75)
             .arcSmallCW(25,25, 0, 25*2, 0)
@@ -763,14 +748,14 @@ var LAD_Device = {
             .set("z-index",10)
             .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
         m.vsd_vert_coverage_circle_down = m.VSDScreen.createChild("path")
-            .moveTo(75-25,2262+500)
+            .moveTo(75-65,2262+500)
             .arcSmallCW(25,25, 0, 25*2, 0)
             .arcSmallCW(25,25, 0, -25*2, 0)
             .setStrokeLineWidth(15)
             .set("z-index",10)
             .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
         m.vsd_vert_coverage_circle_up = m.VSDScreen.createChild("path")
-            .moveTo(75-25,2262+500)
+            .moveTo(75-65,2262+500)
             .arcSmallCW(25,25, 0, 25*2, 0)
             .arcSmallCW(25,25, 0, -25*2, 0)
             .setStrokeLineWidth(15)
@@ -781,14 +766,22 @@ var LAD_Device = {
             .setText("10-5")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(80+75+60,2262+500)
+            .setTranslation(75+75,2262+500)
             .setFont(aircraft.HUDFont);
         m.vsd_vert_coverage_text_up = m.VSDScreen.createChild("text")  # far down, bottom right
             .setFontSize(80, 1.4)
             .setText("50-3")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
-            .setTranslation(80+75+60,2262+500)
+            .setTranslation(75+75,2262+500)
+            .setFont(aircraft.HUDFont);
+        
+        m.vsd_radar_mode_text = m.VSDScreen.createChild("text")
+            .setFontSize(150, 1.4)
+            .setText("1 TWSM")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(155+210,2300*2+500+10-210)
             .setFont(aircraft.HUDFont);
 
         # Create the steerpoints symbols
@@ -826,12 +819,10 @@ var LAD_Device = {
         m.tgt_symbols = setsize([], m.tgt_symbols_max);
         for (var i = 0; i < m.tgt_symbols_max; i += 1){
             m.tgt = m.VSDScreen.createChild("path")
-                .moveTo(677*2,2262+500)
-                .lineTo(677*2-22,2262+500)
-                .lineTo(677*2,2262+500+112)
-                .lineTo(677*2+22,2262+500)
-                .lineTo(677*2,2262+500)
-                .setStrokeLineWidth(7)
+                .moveTo(677*2,2262+500+50*.5)
+	            .vert(50)
+	            .setStrokeLineWidth(25)
+	            .setStrokeLineCap("butt")
                 .setVisible(0)
                 .set("z-index",15)
                 .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
@@ -856,9 +847,9 @@ var LAD_Device = {
         m.chaff_symbols = setsize([], m.chaff_symbols_max);
         for (var i = 0; i < m.chaff_symbols_max; i += 1){
             m.chaff = m.VSDScreen.createChild("path")
-                .moveTo(677*2,2262+500-12*0.5)
+                .moveTo(677*2,2262+500-44*0.5)
 	            .vert(44)
-	            .setStrokeLineWidth(44)
+	            .setStrokeLineWidth(88)
 	            .setStrokeLineCap("butt")
                 .set("z-index",10)
                 .setVisible(0)
@@ -866,7 +857,7 @@ var LAD_Device = {
             m.chaff_symbols[i] = m.chaff;
         }
 
-        m.locked_box = m.VSDScreen.createChild("path")
+        m.vsd_cursor = m.VSDScreen.createChild("path")
             .moveTo(677*2-38,2262+500-10)
             .lineTo(677*2-38,2262+500+122)
             .moveTo(677*2+38,2262+500-10)
@@ -874,8 +865,8 @@ var LAD_Device = {
             .moveTo(677*2,2262+500)
             .setStrokeLineWidth(9)
             .setVisible(0)
-            .set("z-index",15)
-            .setColor(prst_white.r,prst_white.g,prst_white.b);
+            .set("z-index",20)
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
 
         # Create the datalink contacts symbols
         m.dlnk_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
@@ -999,10 +990,9 @@ var LAD_Device = {
         m.vsd_route_manager_ruler_1.setVisible(1);
         m.vsd_route_manager_ruler_2.setVisible(1);
         m.vsd_azimuth_carat.setVisible(1);
+        m.vsd_elevation_carat.setVisible(1);
+        m.vsd_cursor.setVisible(1);
         m.vsd_rdr_range_txt.setVisible(1);
-        m.vsd_rdr_mode_1.setVisible(1);
-        m.vsd_rdr_mode_2.setVisible(1);
-        m.vsd_rdr_mode_3.setVisible(1);
         m.vsd_rdr_filter_1.setVisible(1);
         m.vsd_rdr_filter_2.setVisible(1);
         m.vsd_rdr_filter_3.setVisible(1);
@@ -1017,6 +1007,7 @@ var LAD_Device = {
         m.vsd_vert_coverage_circle_up.setVisible(1);
         m.vsd_vert_coverage_text_down.setVisible(1);
         m.vsd_vert_coverage_text_up.setVisible(1);
+        m.vsd_radar_mode_text.setVisible(1);
         m.vsd_tgt_true_speed.setVisible(0);
         m.vsd_tgt_bearing.setVisible(0);
         m.vsd_tgt_heading.setVisible(0);
@@ -1916,19 +1907,6 @@ update_lad = func() {
             LADCanvas.VSDScreen.setVisible(1);
             # Update the texts
             LADCanvas.vsd_rdr_range_txt.setText(sprintf("%03d NM", getprop("instrumentation/radar/radar2-range")));
-            if (getprop("instrumentation/radar/radar-standby")) {  # if radar's standby
-                LADCanvas.vsd_rdr_mode_1.setText("S");
-                LADCanvas.vsd_rdr_mode_2.setText("T");
-                LADCanvas.vsd_rdr_mode_3.setText("Y");
-            } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # if radar's in TWS mode
-                LADCanvas.vsd_rdr_mode_1.setText("T");
-                LADCanvas.vsd_rdr_mode_2.setText("W");
-                LADCanvas.vsd_rdr_mode_3.setText("S");
-            } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 3) {  # if radar's in RWS mode
-                LADCanvas.vsd_rdr_mode_1.setText("R");
-                LADCanvas.vsd_rdr_mode_2.setText("W");
-                LADCanvas.vsd_rdr_mode_3.setText("S");
-            }
             if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # if radar's A/A
                 LADCanvas.vsd_rdr_filter_1.setText("A");
                 LADCanvas.vsd_rdr_filter_3.setText("A");
@@ -1952,6 +1930,58 @@ update_lad = func() {
             LADCanvas.vsd_horizon_line.setTranslation(0.0, -new_y_pos_hori-pitch_offset);
             LADCanvas.vsd_horizon_line.setRotation(-getprop("orientation/roll-deg") * DTOR);
 
+            # Update the radar bars / mode text
+            radar_mode_str = "";
+            if (getprop("instrumentation/radar/radar-standby")) {
+                radar_mode_str = "STBY";
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch) {
+                radar_mode_str = "RWS";
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto) {
+                radar_mode_str = "TWSA";
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man) {
+                radar_mode_str = "TWSM";
+            }
+            LADCanvas.vsd_radar_mode_text.setText(sprintf("%d %s", awg_9.HoFieldBars.getValue(), radar_mode_str));
+
+            # Update the cursor's placement, given input degrees
+            if (awg_9.wcs_current_mode != awg_9.wcs_mode_tws_auto) {  # The cursor moves on its own in TWS AUTO and cannot be controlled
+                var cursor_az_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-az");
+                var cursor_el_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-el");
+                var cursor_x_move = cursor_az_deg * 1354 / 60;
+                var cursor_y_move = cursor_el_deg * (1131*2) / 60;
+                var cursor_hit_boundaries_el = cursor_y_move > 1110*2 or cursor_y_move < -1110*2;
+
+                if (cursor_x_move > 1354-38*3) {  # We clamp the values of azimuth of the cursor
+                    cursor_x_move = 1354-38*3;
+                } elsif (cursor_x_move < -1354+38*3) {
+                    cursor_x_move = -1354+38*3;
+                }
+
+                if (cursor_hit_boundaries_el) {
+                    # If the elevation boundary is hit upward (and the elevation bars value can still go up), we reset the cursor position and increase the elevation bars value
+                    # Same thing for downward
+                    if (cursor_y_move > 0 and awg_9.HoFieldBars.getValue() != 2) {  # Is positive, so downward; 2 is min
+                        cursor_x_move = 0;
+                        cursor_y_move = 0;
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
+                        awg_9.HoFieldBars.setValue(awg_9.HoFieldBars.getValue() - 2);
+                    } elsif (cursor_y_move < 0 and awg_9.HoFieldBars.getValue() != 8) {  # Is negative, so upward; 8 is max
+                        cursor_x_move = 0;
+                        cursor_y_move = 0;
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
+                        awg_9.HoFieldBars.setValue(awg_9.HoFieldBars.getValue() + 2);
+                    }
+                }
+
+                var cursor_pos = [677*2+cursor_x_move, 2262+500+cursor_y_move];
+                LADCanvas.vsd_cursor.setTranslation(cursor_x_move, cursor_y_move);
+                LADCanvas.vsd_cursor.setVisible(1);
+            } else {
+                LADCanvas.vsd_cursor.setVisible(1);
+            }
+
             # Update some texts giving info about ourselves
             LADCanvas.vsd_ground_speed.setText(sprintf("G %03d", getprop("velocities/groundspeed-kt")));
             LADCanvas.vsd_airspeed.setText(sprintf("T %03d", getprop("velocities/airspeed-kt")));
@@ -1965,13 +1995,16 @@ update_lad = func() {
                 LADCanvas.vsd_stpt_index.setText(sprintf("No.%02d", getprop("autopilot/route-manager/current-wp")));
             }
 
-            # Move the azimuth carat around
+            # Move the azimuth and elevation carats around
             var azimuth_sweep = getprop("sim/model/f15/instrumentation/awg-9/sweep-factor");
             var carat_sweep = 0;
             if (azimuth_sweep != nil) {  # this property is created in awg_9.nas, so at startup it's null
                 carat_sweep = azimuth_sweep * 1280;
             }
             LADCanvas.vsd_azimuth_carat.setTranslation(carat_sweep, 0.0);
+            
+            carat_elev_pxs = awg_9.HoFieldOffset.getValue() * (1110*2) / 60;
+            LADCanvas.vsd_elevation_carat.setTranslation(0, carat_elev_pxs);
 
             # Update the azimuth circles'
             if (getprop("instrumentation/radar/az-field") == 120) {
@@ -1986,24 +2019,29 @@ update_lad = func() {
                 LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(1);
             }
 
-            var azimuth_vertical = getprop("instrumentation/radar/ho-field");
-            y_move_vert_up = -azimuth_vertical * 1131/60 + 160;
-            y_move_vert_down = azimuth_vertical * 1131/60 - 80;
-
-            LADCanvas.vsd_vert_coverage_circle_down.setTranslation(0, y_move_vert_down);
-            LADCanvas.vsd_vert_coverage_circle_up.setTranslation(0, y_move_vert_up);
-            LADCanvas.vsd_vert_coverage_text_down.setTranslation(80+75+60,2262+500+y_move_vert_down);
-            LADCanvas.vsd_vert_coverage_text_up.setTranslation(80+75+60,2262+500+y_move_vert_up);
-
-            # Compute radar altitude coverage
-            range_ft = getprop("instrumentation/radar/radar2-range") * 6076.12;  # 6076.12 is NM2FT coefficient
-            sin_angle = math.sin(azimuth_vertical*D2R);
-
-            min_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") - range_ft * sin_angle) / 1000;  # / 1000 to only keep the thousands
-            max_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") + range_ft * sin_angle) / 1000;
-
-            LADCanvas.vsd_vert_coverage_text_up.setText(sprintf("%d-%d", max_alt, (max_alt - int(max_alt)) * 10));
-            LADCanvas.vsd_vert_coverage_text_down.setText(sprintf("%d-%d", min_alt, (min_alt - int(min_alt)) * -10));
+            max_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up) * .001;  # in thousands of feet
+            min_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down) * .001;
+            
+            y_move_max = max_alt * -2220 / 60;
+            y_move_min = min_alt * -2220 / 60;
+            
+            if (y_move_max > 2200) {  # We clamp the values of elevation of the carat
+                y_move_max = 2200;
+            } elsif (y_move_max < -2200) {
+                y_move_max = -2200;
+            }
+            if (y_move_min > 2200) {
+                y_move_min = 2200;
+            } elsif (y_move_min < -2200) {
+                y_move_min = -2200;
+            }
+            
+            LADCanvas.vsd_vert_coverage_circle_up.setTranslation(0, y_move_max);
+            LADCanvas.vsd_vert_coverage_circle_down.setTranslation(0, y_move_min);
+            LADCanvas.vsd_vert_coverage_text_up.setTranslation(75+75,2262+500+y_move_max);
+            LADCanvas.vsd_vert_coverage_text_down.setTranslation(75+75,2262+500+y_move_min);
+            LADCanvas.vsd_vert_coverage_text_up.setText(sprintf("%d", max_alt));
+            LADCanvas.vsd_vert_coverage_text_down.setText(sprintf("%d", min_alt));
 
             # Update the steerpoint symbols
             var stpt_idx = 0;
@@ -2061,17 +2099,17 @@ update_lad = func() {
                             LADCanvas.stpt_texts[stpt_idx].setVisible(1);
                             LADCanvas.stpt_texts[stpt_idx].setText(sprintf("%d", stpt_idx));
                             x_move = wpbear * 1354 / 60;
-                            y_move = wpelev * 1131 / 60;
+                            y_move = wpelev * (1131 * 2) / 60;
 
-                            if (x_move > 677*2-85) {  # clamp the translation's values so it don't get outta the screen
-                                x_move = 677*2-85;
-                            } elsif (x_move < -(677*2-85)) {
-                                x_move = -(677*2-85);
+                            if (x_move > 1300) {  # clamp the translation's values so it don't get outta the screen
+                                x_move = 1300;
+                            } elsif (x_move < -1300) {
+                                x_move = -1300;
                             }
-                            if (y_move > 1110) {
-                                y_move = 1110
-                            } elsif (y_move < -1110) {
-                                y_move = -1110
+                            if (y_move > 1072) {
+                                y_move = 1072
+                            } elsif (y_move < -1072) {
+                                y_move = -1072
                             }
 
                             LADCanvas.stpt_symbols[stpt_idx].setTranslation(x_move, y_move);
@@ -2157,23 +2195,25 @@ update_lad = func() {
                         yc = -contact.get_total_elevation(getprop("orientation/pitch-deg")) or 0;
 
                         x_move = xc*1354/60;
-                        y_move = yc*1131/60;
+                        y_move = yc*(1131*2)/60;
 
-                        if (x_move > 1340) {  # clamp the translation's values so it don't get outta the screen
-                                x_move = 1340;  # don't know why I did this there ain't no way a radar contact is outta the VSD screen ???!
-                        } elsif (x_move < -1340) {
-                            x_move = -1340;
+                        if (x_move > 1300) {  # clamp the translation's values so it don't get outta the screen
+                                x_move = 1300;  # don't know why I did this there ain't no way a radar contact is outta the VSD screen ???!
+                        } elsif (x_move < -1300) {
+                            x_move = -1300;
                         }
-                        if (y_move > 1110) {
-                            y_move = 1110
-                        } elsif (y_move < -1110) {
-                            y_move = -1110
+                        if (y_move > 1072) {
+                            y_move = 1072
+                        } elsif (y_move < -1072) {
+                            y_move = -1072
                         }
 
                         LADCanvas.tgt_symbols[target_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
                         LADCanvas.tgt_texts[target_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
                         if (found_lock == 1 and lock_assigned == 0) {
-                            LADCanvas.locked_box.setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
+                            if (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto) {  # in TWS AUTO, the cursor's automatic
+                                LADCanvas.vsd_cursor.setTranslation(x_move, y_move);
+                            }
                             lock_assigned = 1;  # so others don't take the lock symbology from it
                         }
                         if (contact.get_model() != nil and typeLookup[contact.get_model()] != nil) {
@@ -2190,7 +2230,7 @@ update_lad = func() {
             }
 
             if (found_lock == 1) {
-                LADCanvas.locked_box.setVisible(1);
+                
                 LADCanvas.vsd_tgt_true_speed.setVisible(1);
                 LADCanvas.vsd_tgt_bearing.setVisible(1);
                 LADCanvas.vsd_tgt_heading.setVisible(1);
@@ -2201,6 +2241,14 @@ update_lad = func() {
                 LADCanvas.vsd_tgt_model.setVisible(1);
                 LADCanvas.vsd_tgt_closure_pin.setVisible(1);
                 LADCanvas.vsd_tgt_closure_text.setVisible(1);
+
+                if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch) {  # In RWS mode, we don't get as much and precise info as in TWS
+                    LADCanvas.vsd_tgt_true_speed.setVisible(0);
+                    LADCanvas.vsd_tgt_heading.setVisible(0);
+                    LADCanvas.vsd_tgt_aspect.setVisible(0);
+                    LADCanvas.vsd_tgt_fps.setVisible(0);
+                    LADCanvas.vsd_tgt_model.setVisible(0);
+                }
 
                 if (awg_9.active_u != nil) { # safety
                     # Update current target's info texts across the VSD
@@ -2239,7 +2287,6 @@ update_lad = func() {
                     LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140,5175-range_y);
                 }
             } else {
-                LADCanvas.locked_box.setVisible(0);
                 LADCanvas.vsd_tgt_true_speed.setVisible(0);
                 LADCanvas.vsd_tgt_bearing.setVisible(0);
                 LADCanvas.vsd_tgt_heading.setVisible(0);
@@ -2274,7 +2321,7 @@ update_lad = func() {
                     if (!hidden_by_terrain and wpbear < getprop("instrumentation/radar/az-field")/2 and wpbear > -getprop("instrumentation/radar/az-field")/2 and wpbear < getprop("instrumentation/radar/ho-field")/2 and wpbear > -getprop("instrumentation/radar/ho-field")/2) {  # we're making sure that the chaff ain't outta our radar's cone!
                         LADCanvas.chaff_symbols[chaff_idx].setVisible(1);
                         x_move = wpbear * 1354 / 60;
-                        y_move = wpelev * 1131 / 60;
+                        y_move = wpelev * (1131 * 2) / 60;
                         
                         LADCanvas.chaff_symbols[chaff_idx].setTranslation(x_move, y_move);
                         print("CHAFF DRAWN");
@@ -2350,29 +2397,23 @@ update_lad = func() {
                             yc = -deviation_normdeg(getprop("orientation/pitch-deg"), contact_elevation);
 
                             x_move = xc*1354/60;
-                            y_move = yc*1131/60;
+                            y_move = yc*(1131*2)/60;
 
-                            if (x_move > 1340) {  # clamp the translation's values so it don't get outta the screen
-                                    x_move = 1340;
-                            } elsif (x_move < -1340) {
-                                x_move = -1340;
+                            if (x_move > 1300) {  # clamp the translation's values so it don't get outta the screen
+                                    x_move = 1300;
+                            } elsif (x_move < -1300) {
+                                x_move = -1300;
                             }
-                            if (y_move > 1110) {
-                                y_move = 1110
-                            } elsif (y_move < -1110) {
-                                y_move = -1110
+                            if (y_move > 1072) {
+                                y_move = 1072
+                            } elsif (y_move < -1072) {
+                                y_move = -1072
                             }
 
                             LADCanvas.dlnk_symbols[dlnk_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             LADCanvas.dlnk_texts[dlnk_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
-                            if (contact_model != nil and typeLookup[contact_model] != nil) {
-                                contact_type = typeLookup[contact_model];
-                                contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
-                                LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("%s %02d", contact_type, contact_alt));
-                            } else {  # Model's unknown to our radar
-                                contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
-                                LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("UNK %02d", contact_alt));
-                            }
+                            contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
+                            LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("%s %02d", contact, contact_alt));
                             dlnk_idx += 1;
                         }
                     }
@@ -2417,10 +2458,12 @@ update_lad = func() {
 
             if (getprop("instrumentation/radar/radar-standby")) {  # If radar's standby, we don't display none of that
                 LADCanvas.hsd_radar_mode.setText(" STANDBY");
-            } elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # If we're in TWS AUTO mode
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto) {  # If we're in TWS AUTO mode
                 LADCanvas.hsd_radar_mode.setText("TWS AUTO");
-            } else {
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch) {  # If we're in RWS mode
                 LADCanvas.hsd_radar_mode.setText("     RWS");
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man) {  # If we're in TWS MAN mode
+                LADCanvas.hsd_radar_mode.setText(" TWS MAN");
             }
 
 
@@ -2842,14 +2885,8 @@ update_lad = func() {
 
                             LADCanvas.dlnk_symbols_hsd[dlnk_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             LADCanvas.dlnk_texts_hsd[dlnk_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
-                            if (contact_model != nil and typeLookup[contact_model] != nil) {
-                                contact_type = typeLookup[contact_model];
-                                contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
-                                LADCanvas.dlnk_texts_hsd[dlnk_idx].setText(sprintf("%s %02d", contact_type, contact_alt));
-                            } else {  # Model's unknown to our radar
-                                contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
-                                LADCanvas.dlnk_texts_hsd[dlnk_idx].setText(sprintf("UNK %02d", contact_alt));
-                            }
+                            contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
+                            LADCanvas.dlnk_texts_hsd[dlnk_idx].setText(sprintf("%s %02d", contact, contact_alt));
                             dlnk_idx += 1;
                         }
                     }
@@ -2986,7 +3023,7 @@ update_lad = func() {
 
             # Update the radar cone
             if (!getprop("instrumentation/radar/radar-standby")) {  # if radar's standby, we don't display the cone
-                if (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == 6) {  # If radar's in TWS Auto
+                if (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man) {  # If radar's in TWS AUTO/MAN
                     LADCanvas.hsd_cone_60.setVisible(0);
                     LADCanvas.hsd_cone_30.setVisible(1);
                 } else {

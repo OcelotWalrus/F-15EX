@@ -21,10 +21,13 @@
  #                       : Fabien Barber
  #                       : Nikolai V. Chr
  #                       : Justin Nicholson
+ #                       : Jimmy L. Miles (F-15EX retake), implementation of further 
+ #                                        modes (RWS, TWS MAN and TWS AUTO) across the different F-15EX's systems,
+ #                                        implementation of more complex elevation scan with bars.
  #
- #	Date                 : 4 June 2018
+ #	Date                 : August 7 2025
  #
- #	Version              : 2.8b
+ #	Version              : 2.9
  #
  #  Released under GPL V2
  #
@@ -90,7 +93,9 @@ var HudTgtClosureRate = props.globals.getNode("sim/model/"~this_model~"/instrume
 var HudTgtDistance = props.globals.getNode("sim/model/"~this_model~"/instrumentation/radar-awg-9/hud/distance", 1);
 var DebugMode         = props.globals.getNode("instrumentation/radar/debug-mode", 1);
 var AzField           = props.globals.getNode("instrumentation/radar/az-field", 1);
-var HoField           = props.globals.getNode("instrumentation/radar/ho-field", 1);
+var HoFieldBars       = props.globals.getNode("instrumentation/radar/ho-field-bars", 1);  # Number of "bars"
+var HoField           = props.globals.getNode("instrumentation/radar/ho-field", 1);  # Actual angle coverage
+var HoFieldOffset     = props.globals.getNode("instrumentation/radar/ho-field-offset", 1);  # Offset of the antenna in elevation (10 means 10 degrees down from aircraft LOS
 var RangeRadar2       = props.globals.getNode("instrumentation/radar/radar2-range",1);
 var RadarStandby      = props.globals.getNode("instrumentation/radar/radar-standby",1);
 var RadarMode         = props.globals.getNode("instrumentation/radar/radar-mode",1);
@@ -113,12 +118,15 @@ var myRadarRange_rcs = getprop("instrumentation/radar/ref-range");
 var awg9_trace = 0;
 var wcs_mode_pd_srch = 1;
 var wcs_mode_pd_stt = 2;
-var wcs_mode_pulse_srch = 3;
+var wcs_mode_pulse_srch = 3;  # This is actually RWR
 var wcs_mode_pulse_stt = 4;
-var wcs_mode_rws = 5;
+var wcs_mode_rws = 5;  # Not actual RWS
 var wcs_mode_tws_auto = 6;
 var wcs_mode_tws_man = 7;
 var wcs_current_mode = wcs_mode_pulse_srch;
+
+var coverage_up = 0;  # Max altitude coverage
+var coverage_down = 0;  # Min altitude coverage
 
 var completeList = [];
 
@@ -180,6 +188,14 @@ ScanPartitionSize.setIntValue(10); # size of partition to run per frame.
 # |               `---+--''              |
 # |                   |                  |
 #  `''''''''''''''''''|'''''''''''''''''''
+
+# Bars / elevation coverage correlation table (Jimmy L. Miles)
+# [Note: both TWS MAN and AUTO work the exact same way concerning bars, so TWS stands for both of 'em]
+# [From 2 bars to 6 bars, values are taken from the APG-63 radar's performance, but for 8 bars values are purely guessed and mayn't be accurate]
+# 2 bars - RWS: 6* - TWS: 4*
+# 4 bars - RWS: 13* - TWS: 7*
+# 6 bars - RWS: 20* - TWS: 10*
+# 8 bars - RWS: 26* - TWS: 15*
 
 #
 # local variables related to the simulation of the radar.
@@ -323,6 +339,8 @@ var rdr_loop = func(notification) {
         if (our_radar_stanby) {
             armament.contact = nil;
             active_u = nil;
+		} elsif (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == awg_9.wcs_mode_pulse_srch) {  # Can't get locks in RWS mode
+            armament.contact = nil;
 		}
 	} elsif ( size(tgts_list) > 0 ) {
 		foreach( u; tgts_list ) {
@@ -333,6 +351,53 @@ var rdr_loop = func(notification) {
 	} else {
         setprop("sim/multiplay/generic/string[6]", "");
 	}
+	
+	# In TWS AUTO mode, bars are handled automatically:
+	# If there ain't no current active target, it's the highest bars setting that gets selected and the antenna's offset degs will always try to stay parallel to the horizon line (level)
+	# If we do got a current active target though, it's the bar setting 2 that gets selected (or up to 4/6/8 if there are other available targets that are considered urgent threats by the EPAWSS and that are outside of the 2-bar reach), and the antenna's offset degs will always try to look toward the current active target.
+	
+	# Synchronize the elevation angle coverage properties with the input'd elevation bars
+	# Refer to beginning of the file with the table
+	# 2 bars - RWS: 6* - TWS: 4*
+    # 4 bars - RWS: 13* - TWS: 7*
+    # 6 bars - RWS: 20* - TWS: 10*
+    # 8 bars - RWS: 26* - TWS: 15*
+	if (HoFieldBars.getValue() == 2) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	        HoField.setValue(6);
+	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
+	        HoField.setValue(4);
+	    }
+	} elsif (HoFieldBars.getValue() == 4) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	        HoField.setValue(13);
+	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
+	        HoField.setValue(7);
+	    }
+	} elsif (HoFieldBars.getValue() == 6) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	        HoField.setValue(20);
+	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
+	        HoField.setValue(10);
+	    }
+	} elsif (HoFieldBars.getValue() == 8) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	        HoField.setValue(26);
+	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
+	        HoField.setValue(15);
+	    }
+	}
+	
+	# Compute radar elevation altitude coverage
+    # Note: positive degrees mean downward
+    range_ft = getprop("instrumentation/radar/radar2-range") * 6076.12;  # 6076.12 is NM2FT coefficient
+    actual_degrees_coverage_up = HoFieldOffset.getValue() - HoField.getValue()/2;  # Take in count antenna offset
+    actual_degrees_coverage_down = HoFieldOffset.getValue() + HoField.getValue()/2;
+    actual_degrees_coverage_up_rad = actual_degrees_coverage_up * D2R;  # Convert to radians
+    actual_degrees_coverage_down_rad = actual_degrees_coverage_down * D2R;
+            
+    awg_9.coverage_up = range_ft * -math.tan(actual_degrees_coverage_up_rad);  # How many feet up us
+    awg_9.coverage_down = range_ft * math.tan(actual_degrees_coverage_down_rad);  # How many feet down us
 
     # Following Datalink code has been made by Jimmy L. Miles
 
@@ -660,7 +725,11 @@ if(awg9_trace)
 #1;MP2 within  azimuth 126.4171942282486 field=-60->60
 #1;MP2 within  azimuth -130.0592982116802 field=-60->60  (s->w quadrant)
 #0;MP1 within  azimuth 164.2283073827575 field=-60->60
-            if (radar_mode < 2 and math.abs(u.deviationA) < az_fld/2 and math.abs(u.deviationE) < HoField.getValue()/2) {#richard, I had to fix 2 bugs here.
+            
+            max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + coverage_up;  # in thousands of feet
+            min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - coverage_down;
+            inside_elev_field = u.get_altitude() < max_alt and u.get_altitude() > min_alt;
+            if (radar_mode < 2 and math.abs(u.deviationA) < az_fld/2 and inside_elev_field) {#richard, I had to fix 2 bugs here.
                 u.set_display(u.get_visible() and !RadarStandby.getValue() and u.get_type() != ORDNANCE);
                 if(awg9_trace > 1)
                    print(scan_tgt_idx,";",u.get_Callsign()," within  azimuth ", u.deviationA, " elev=", u.deviationE);
@@ -889,7 +958,7 @@ var selectCheck = func {
         }
         awg_9.sel_prev_target =0;
     }
-    else if (awg_9.sel_next_target)
+    else if (awg_9.sel_next_target and getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == awg_9.wcs_mode_tws_auto)
     {
         var dist  = 0;
 
@@ -898,7 +967,7 @@ var selectCheck = func {
             dist = awg_9.active_u.get_range();
         }
         if (awg9_trace)
-            print("Sel next target: dist=",dist);
+            print("Sel next target AUTO: dist=",dist);
 
         var sorted_dist = sort (awg_9.tgts_list, func (a,b) {a.get_range()-b.get_range()});
         var nxt=nil;
@@ -940,6 +1009,54 @@ var selectCheck = func {
             if (awg9_trace)
                 printf("nxt: %s %3.1f", nxt.Callsign.getValue(), nxt.get_range());
         }
+        awg_9.sel_next_target =0;
+    }
+    else if (awg_9.sel_next_target)
+    {
+    
+        # We're not in no auto mode as in TWS, so to the pilot has to manually put the
+        # radar's VSD cursor upon a target to select it.
+        cursor_az_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-az");  # Cursor's azimuth and elevation
+        cursor_el_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-el");
+
+        if (awg9_trace) {
+            print(sprintf("Sel cursor target MAN; cursor degrees: %.1f AZ, %.1f EL", cursor_az_deg, cursor_el_deg));
+        }
+
+        dist_dic = [];  # A vector that contains `{unique: "<tgt class>", dist_deg: "<accuracy in deci deg>"}`'s. We then go each of 'em an pick the one that's the closest to the cursor. Note that targets that ain't close enough to the cursor (must be close to at least 2 degrees) ain't taken into account
+        foreach(var u; awg_9.tgts_list) {
+            xc = u.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing of the target
+            yc = -u.get_total_elevation(getprop("orientation/pitch-deg")) or 0;  # relative elevation of the target
+            
+            # If the cursor is at least 2 degrees away in both azimuth and elevation
+            close_enough = math.abs(cursor_az_deg - xc) < 2 and math.abs(cursor_el_deg - yc) < 2;
+            if (close_enough) {
+                append(dist_dic, {unique: u, dist_deg: math.abs(cursor_az_deg - xc) + math.abs(cursor_el_deg - yc)});
+            }
+        }
+        
+        best_dist_deg = 5000;  # huge unreal value so it gets updated the first time
+        best_dist_deg_contact = nil;
+        foreach(curr_data; dist_dic) {
+            if (curr_data.dist_deg < best_dist_deg) {
+                best_dist_deg = curr_data.dist_deg;
+                best_dist_deg_contact = curr_data.unique;
+            }
+        }
+        
+        if (best_dist_deg_contact != nil) {  # If it's nul, then there ain't no target in the cursor's range
+            active_u = best_dist_deg_contact;
+            active_u_callsign = best_dist_deg_contact.get_Callsign();
+            
+            if (awg9_trace) {
+                print(sprintf("Selected radar target %s of deg dist %.2f", active_u_callsign, best_dist_deg));
+            }
+        } else {
+            if (awg9_trace) {
+                print("No target was found to be close enough to the cursor to be selected...");
+            }
+        }
+        
         awg_9.sel_next_target =0;
     }
 }
@@ -1017,8 +1134,8 @@ var hud_nearest_tgt = func() {
 		var u_dev_rad = (90 - active_u.get_deviation(our_true_heading)) * D2R;
 		var u_elev_rad = (90 - active_u.get_total_elevation(our_pitch)) * D2R;
 if(awg9_trace >= 1)
-print("active_u ",wcs_mode, active_u.get_range()," Display", active_u.get_display(), "dev ",active_u.deviation," ",l_az_fld," ",r_az_fld);
-		if (wcs_current_mode == wcs_mode_tws_auto
+print("active_u ",wcs_mode, active_u.get_range()," Display", active_u.get_display(), "dev ",active_u.get_deviation(our_true_heading)," ",l_az_fld," ",r_az_fld);
+		if ((wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man)
 			and active_u.get_display()
 			and active_u.deviationA > l_az_fld
 			and active_u.deviationA < r_az_fld) {
@@ -1264,16 +1381,16 @@ wcs_mode_toggle = func() {
 	#foreach (var n; props.globals.getNode("sim/model/"~this_model~"/instrumentation/radar-awg-9/wcs-mode").getChildren()) {
 #	if ( pilot_lock and ! we_are_bs ) { return }
 	if ( wcs_current_mode == wcs_mode_pulse_srch ) {
+        wcs_current_mode = wcs_mode_tws_man;
+		AzField.setValue(60);
+		ddd_screen_width = 0.0422;
+	} elsif ( wcs_current_mode == wcs_mode_tws_man ) {
         wcs_current_mode = wcs_mode_tws_auto;
 		AzField.setValue(60);
-		HoField.setValue(90);  #+/- 45 degrees
 		ddd_screen_width = 0.0422;
-	}
-    else #if ( wcs_current_mode == wcs_mode_tws_auto )
-    {
+	} elsif ( wcs_current_mode == wcs_mode_tws_auto ) {
         wcs_current_mode = wcs_mode_pulse_srch;
 		AzField.setValue(120);
-		HoField.setValue(120);
 		ddd_screen_width = 0.0844;
 	}
     setprop("sim/model/"~this_model~"/instrumentation/radar-awg-9/wcs-mode", wcs_current_mode);
@@ -1283,14 +1400,14 @@ wcs_mode_update = func() {
 	if ( WcsMode.getValue() ==  wcs_mode_tws_auto) {
 		wcs_current_mode = wcs_mode_tws_auto;
 		AzField.setValue(60);
-		HoField.setValue(90);  #+/- 45 degrees
 		ddd_screen_width = 0.0422;
-	}
-    else #if ( WcsMode.getNode("pulse-srch").getBoolValue() )
-    {
-        wcs_current_mode = wcs_mode_pulse_srch;
+	} elsif ( WcsMode.getValue() == wcs_mode_tws_man) {
+		wcs_current_mode = wcs_mode_tws_man;
+		AzField.setValue(60);
+		ddd_screen_width = 0.0422;
+	} elsif ( WcsMode.getValue() ==  wcs_mode_pulse_srch) {
+		wcs_current_mode = wcs_mode_pulse_srch;
 		AzField.setValue(120);
-		HoField.setValue(120);
 		ddd_screen_width = 0.0844;
 	}
     setprop("sim/model/"~this_model~"/instrumentation/radar-awg-9/wcs-mode", wcs_current_mode);

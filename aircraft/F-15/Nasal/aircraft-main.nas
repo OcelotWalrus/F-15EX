@@ -898,6 +898,14 @@ var F15MainModule =
             setprop("instrumentation/datalink/power", 0);
         }
         
+        if (getprop("sim/model/f15/controls/interiors/rwr-mstr-switch") == 1) {
+            setprop("sim/model/f15/epawss/epawss-on", 1);
+            setprop("instrumentation/ecm/on-off", 1);
+        } else {
+            setprop("sim/model/f15/epawss/epawss-on", 0);
+            setprop("instrumentation/ecm/on-off", 0);
+        }
+        
         # Misc 2 panel props synchronization dookie
         if (getprop("sim/model/f15/controls/interiors/iff-mode4-switch") > 0 and getprop("sim/model/f15/controls/interiors/iff-master-switch") == 1) {
             setprop("instrumentation/iff/power", 1);

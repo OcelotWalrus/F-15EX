@@ -9,7 +9,7 @@
    | Enrique Laso: Original external 3d model (2015). {original F-15C/D model}
    | xii: F-14 origin of radar, missiles. Most have been modified but Alexis's excellent work was a good basis. (pre 2015) {original F-15C/D model}
    | Nikolai V. Chr.: Improvements to Weapons, Radar HUD (2015->current) {original F-15C/D model}
-   | Jimmy L. Miles : Various liveries, improvement and modifications to the HUD, major rework over the interiors to transform it into the EX model's interiors (completely made new textures, new shapes for certain buttons and various changes in the panels as well too), creation of a PDF manual, extension of payload options through new ordnances and new hardpoints, addition of aerodynamical effects, addition of new sound effects, of a dragchute (taken from that of the F-16), addition of flaps and gear overspeed damage, addition of wing's over G damage, enhancement of the exhaust trail (taken from that of the F-16), implementation of A/G and A/SEA operations, implementation of pilot ejection, the whole EFHD (Engines-Hydraulics Display), the whole LAD (Large Area Display), creation of the GBU-32 JDAM and GBU-39 SDB 3d models, creation of new weapons' behaviors such as the AIM-120D or the AGM-158C LRSAM, implementation of the HMCSD (taken from that of the F-16), as well as some work on the exteriors model, implementation and integration of more complex IFF and JTIDS (datalink) systems functionalities (GPS-Spots sharing, IFF interrogating, radar and EPAWSS contacts sharing etc.), the whole EPAWSS (Eagle Passive-Active Warning Survivability System) suite, addition of the Data Cartridge Transfer system (inspired by that of the F-16), various enhancements to the awg_9.nas Target class, adding various useful functions. {newest F-15EX model}
+   | Jimmy L. Miles : Various liveries, improvement and modifications to the HUD, major rework over the interiors to transform it into the EX model's interiors (completely made new textures, new shapes for certain buttons and various changes in the panels as well too), creation of a PDF manual, extension of payload options through new ordnances and new hardpoints, addition of aerodynamical effects, addition of new sound effects, of a dragchute (taken from that of the F-16), addition of flaps and gear overspeed damage, addition of wing's over G damage, enhancement of the exhaust trail (taken from that of the F-16), implementation of A/G and A/SEA operations, implementation of pilot ejection, the whole EFHD (Engines-Hydraulics Display), the whole LAD (Large Area Display), creation of the GBU-32 JDAM and GBU-39 SDB 3d models, creation of new weapons' behaviors such as the AIM-120D or the AGM-158C LRSAM, implementation of the HMCSD (taken from that of the F-16), as well as some work on the exteriors model, implementation and integration of more complex IFF and JTIDS (datalink) systems functionalities (GPS-Spots sharing, IFF interrogating, radar and EPAWSS contacts sharing etc.), the whole EPAWSS (Eagle Passive-Active Warning Survivability System) suite, addition of the Data Cartridge Transfer system (inspired by that of the F-16), various enhancements to the awg_9.nas Target class, adding various useful functions, enhancements of the awg_9.nas radar code, by developing more radar modes (RWS, TWS MAN), by adding cursor selection through the LAD's VSD.and the inability to get a lock through RWS mode and further improvements {newest F-15EX model}
    | Robert Andrews : Major work on the cockpit interiors (LAD case and buttons, whole UFC panel), also taught Jimmy L. Miles some Blender! {newest F-15EX model}
    | ________________________________________________________________
    | Various authors have contributed liveries as per commit history.
@@ -421,7 +421,7 @@
             </key>
             <key>
                 <name>Ctrl-n</name>
-                <desc>Toggle Radar PULSE SRCH / TWS AUTO Mode</desc>
+                <desc>Switch through radar modes (RWS, TWS MAN, TWS AUTO)</desc>
             </key>
             <key>
                 <name>!</name>
@@ -1121,6 +1121,9 @@
                         
                         <iff-master-switch type="int">0</iff-master-switch> <!-- 0 emerg 1 norm 2 low-->
                         <iff-mode4-switch type="int">0</iff-mode4-switch> <!-- 0 out 1 A 2 B-->
+                        <radio1-3-channel-knob type="float">118</radio1-3-channel-knob>
+                        <radio2-4-channel-knob type="float">118</radio2-4-channel-knob>
+                        <rwr-mstr-switch type="bool">false</rwr-mstr-switch>
                     </interiors>
 
                     <pilots-displays>
@@ -1163,6 +1166,8 @@
                         <mode type="int">2</mode>
                         <contrast type="double">0.6</contrast>
                         <on-off type="bool">0</on-off>
+                        <cursor-deg-el type="double">0</cursor-deg-el> <!-- positive means down -->
+                        <cursor-deg-az type="double">0</cursor-deg-az> <!-- positive means right -->
                         <buttons-pressed>
                             <LADButton00 type="bool">false</LADButton00>
                             <LADButton01 type="bool">false</LADButton01>
@@ -4381,7 +4386,7 @@
             <warn-caution type="int">5</warn-caution>
             <radio2-brightness type="double">0.6</radio2-brightness>
 
-            <ufc-inst type="int">0</ufc-inst>
+            <ufc-inst type="double">0</ufc-inst>
             <chart-inst type="int">0</chart-inst>
 
             <daylight-mode type="int">0</daylight-mode>  <!-- 0 day 1 night-->
@@ -4927,7 +4932,9 @@
         </tacan>
         <radar>
             <az-field type="int">120</az-field>
-            <ho-field type="int">120</ho-field><!-- bars -->
+            <ho-field type="int">120</ho-field>  <!-- amount of degrees coverage -->
+            <ho-field-bars type="int">2</ho-field-bars><!-- bars -->
+            <ho-field-offset type="int">0</ho-field-offset><!-- antenna elevation deg offset -->
             <cycle-range type="bool">false</cycle-range>
             <debug-mode type="int">0</debug-mode>
             <display-rdr type="bool">true</display-rdr>!
@@ -4940,9 +4947,9 @@
             <radar-mode type="int">1</radar-mode>!
             <radar-filter-mode type="int">0</radar-filter-mode> <!-- 0: AIR, 1: GROUND, 2: SEA -->
             <radar-standby type="bool">false</radar-standby>
-            <radar2-range type="double">50</radar2-range><!-- default range -->
-            <range type="double">160</range>
-            <range-selected type="double">50</range-selected>
+            <radar2-range type="double">80</radar2-range><!-- default range -->
+            <range type="double">275</range>
+            <range-selected type="double">80</range-selected>
             <ranges n="0"><entry type="int">5</entry></ranges>
             <ranges n="1"><entry type="int">10</entry></ranges>
             <ranges n="2"><entry type="int">20</entry></ranges>
@@ -4955,7 +4962,7 @@
             <ranges n="9"><entry type="int">200</entry></ranges>
             <ranges n="10"><entry type="int">250</entry></ranges>
             <ranges n="11"><entry type="int">275</entry></ranges>
-            <ref-range type="double">70</ref-range>
+            <ref-range type="double">100</ref-range>
             <ref-strength type="double">7</ref-strength>  <!-- estimation of APG-82 V(1), around 6.5 and 7.5 so gave it 7 -->
             <scan_partition_size type="double">10</scan_partition_size>!
             <scan_visibility_check_interval type="double">3</scan_visibility_check_interval>!

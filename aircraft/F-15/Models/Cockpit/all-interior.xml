@@ -5427,7 +5427,7 @@
     <type>knob</type>
     <object-name>lighting-ufc-knob</object-name>
     <property>controls/lighting/ufc-inst</property>
-    <factor>-30</factor>
+    <factor>-300</factor>
     <offset-deg>153</offset-deg>
     <center>
       <x-m>-5.4894</x-m>
@@ -5443,9 +5443,9 @@
       <binding>
         <command>property-adjust</command>
         <property>controls/lighting/ufc-inst</property>
-        <factor>1</factor>
+        <factor>.05</factor>
         <min>0</min>
-        <max>10</max>
+        <max>1</max>
         <wrap>false</wrap>
       </binding>
     </action>
@@ -5681,6 +5681,32 @@
     <object-name>misc2-panel-top</object-name>
   </effect>
   <effect>
+    <name>f15panel-ufc</name>
+    <inherits-from>Aircraft/F-15/Models/Effects/f15panel-ufc</inherits-from>
+    <object-name>UFC</object-name>
+    <object-name>UFC-lil-box</object-name>
+    <object-name>UFCButton00</object-name>
+    <object-name>UFCButton01</object-name>
+    <object-name>UFCButton02</object-name>
+    <object-name>UFCButton03</object-name>
+    <object-name>UFCButton04</object-name>
+    <object-name>UFCButton05</object-name>
+    <object-name>UFCButton06</object-name>
+    <object-name>UFCButton07</object-name>
+    <object-name>UFCButton08</object-name>
+    <object-name>UFCButton09</object-name>
+    <object-name>UFCButton010</object-name>
+    <object-name>UFCButton011</object-name>
+    <object-name>UFCButton012</object-name>
+    <object-name>UFCButton013</object-name>
+    <object-name>UFCButton014</object-name>
+    <object-name>UFCButton015</object-name>
+    <object-name>UFCButton016</object-name>
+    <object-name>UFCButton017</object-name>
+    <object-name>UFCButton018</object-name>
+    <object-name>UFCButton019</object-name>
+  </effect>
+  <effect>
     <name>f15panel-right</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-right</inherits-from>
     <object-name>epawss-panel-top</object-name>
@@ -5693,57 +5719,38 @@
     <object-name>interior-lighting-panel-top</object-name>
     <object-name>nuc-panel-top</object-name>
   </effect>
-  <!--effect>
+  <effect>
     <name>f15panel-knob</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-knob</inherits-from>
-    <object-name>r2-freq-radio2-ics-knob</object-name>
-    <object-name>radio2-jtids-knob</object-name>
-    <object-name>r2-freq-radio2-ics-knob</object-name>
-    <object-name>r2-freq-radio2-ics-knob</object-name>
-    <object-name>r2-freq-radio2-ics-knob</object-name>
-    <object-name>radio2-mode-knob</object-name>
-    <object-name>radio2-r2-knob</object-name>
-    <object-name>radio2-ics-knob</object-name>
-    <object-name>radio2-wpn-knob</object-name>
-    <object-name>tacan-volume-knob</object-name>
-    <object-name>tacan-mode-knob</object-name>
-    <object-name>tacan-channel-inner-knob</object-name>
-    <object-name>tacan-channel-outer-knob</object-name>
-    <object-name>ils-freq-outer-knob</object-name>
-    <object-name>ils-freq-inner-knob</object-name>
-    <object-name>radar-gmtr-knob</object-name>
-    <object-name>radar-framestore-knob</object-name>
-    <object-name>radar-spl-mode-knob</object-name>
-    <object-name>radar-el-scan-knob</object-name>
-    <object-name>radar-power-knob</object-name>
-    <object-name>radar-mode-knob</object-name>
-    <object-name>compass-lat-knob</object-name>
-    <object-name>ils-volume-knob</object-name>
-    <object-name>compass-sync-knob</object-name>
-    <object-name>ecm-2-mode-knob</object-name>
-    <object-name>air-source-knob</object-name>
     <object-name>cabin-temp-knob</object-name>
-    <object-name>compass-mode-knob</object-name>
-    <object-name>nav-mode-knob</object-name>
-    <object-name>nav-data-select-knob</object-name>
     <object-name>lighting-consoles-knob</object-name>
     <object-name>lighting-spare-knob</object-name>
     <object-name>lighting-ufc-knob</object-name>
     <object-name>lighting-chart-knob</object-name>
     <object-name>lighting-warn-caution-knob</object-name>
     <object-name>lighting-storm-flood-knob</object-name>
-    <object-name>ecm-1-mode-knob</object-name>
+    <object-name>formation-light-brightness-knob</object-name>
     <object-name>position-light-brightness-knob</object-name>
-    <object-name>formation-light-brightness-knob</object-name>
-    <object-name>formation-light-brightness-knob</object-name>
-    <object-name>nav-control-intensity-knob</object-name>
-    <object-name>epawss-volume-knob</object-name>
     <object-name>radar-power-sensor-knob</object-name>
     <object-name>ins-mode-knob</object-name>
     <object-name>jtids-mode-knob</object-name>
-    <object-name>nav-flir-gain-knob</object-name>
     <object-name>nav-flir-level-knob</object-name>
-  </effect-->
+    <object-name>nav-flir-gain-knob</object-name>
+    <object-name>epawss-caution-knob</object-name>
+    <object-name>epawss-alert-vol</object-name>
+    <object-name>betty-vol</object-name>
+    <object-name>wpn-vol</object-name>
+    <object-name>ils-vol</object-name>
+    <object-name>tacan-vol</object-name>
+    <object-name>radio1-select-knob</object-name>
+    <object-name>radio2-select-knob</object-name>
+    <object-name>radio3-select-knob</object-name>
+    <object-name>radio4-select-knob</object-name>
+    <object-name>radio1-channel-knob</object-name>
+    <object-name>radio2-channel-knob</object-name>
+    <object-name>hud-brt-knob</object-name>
+    <object-name>hmd-brt-knob</object-name>
+  </effect>
   <!-- lights -->
   <animation>
     <object-name>jfs-ready-lamp-on</object-name>
@@ -18023,7 +18030,7 @@
   <animation>
     <type>knob</type>
     <object-name>rwr-mstr-switch</object-name>
-    <property>sim/model/f15/epawss/epawss-on</property>
+    <property>sim/model/f15/controls/interiors/rwr-mstr-switch</property>
     <interpolation>
       <entry>
         <ind>0</ind>
@@ -18047,7 +18054,7 @@
     <action>
       <binding>
         <command>property-adjust</command>
-        <property>sim/model/f15/epawss/epawss-on</property>
+        <property>sim/model/f15/controls/interiors/rwr-mstr-switch</property>
         <factor>1</factor>
         <min>0</min>
         <max>1</max>
@@ -19670,6 +19677,223 @@
         <factor>1</factor>
         <min>0</min>
         <max>2</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  
+  <!-- UFC -->
+  <animation>
+    <type>knob</type>
+    <object-name>hud-brt-knob</object-name>
+    <property>sim/model/f15/controls/HUD/brightness</property>
+    <offset-deg>135</offset-deg>
+    <factor>-180</factor>
+    <center>
+      <x-m>-5.601</x-m>
+      <y-m>-.05728</y-m>
+      <z-m>1.331</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/HUD/brightness</property>
+        <factor>.05</factor>
+        <min>0</min>
+        <max>1.5</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>hmd-brt-knob</object-name>
+    <property>sim/model/f15/avionics/hmd-sym</property>
+    <offset-deg>135</offset-deg>
+    <factor>-180</factor>
+    <center>
+      <x-m>-5.601</x-m>
+      <y-m>-.08882</y-m>
+      <z-m>1.356</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/avionics/hmd-sym</property>
+        <factor>.05</factor>
+        <min>0</min>
+        <max>1.5</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  
+  <animation>
+    <type>knob</type>
+    <object-name>radio1-channel-knob</object-name>
+    <property>sim/model/f15/controls/interiors/radio1-3-channel-knob</property>
+    <factor>360</factor>
+    <center>
+      <x-m>-5.596</x-m>
+      <y-m>-0.02451</y-m>
+      <z-m>1.317</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/radio1-3-channel-knob</property>
+        <factor>.025</factor>
+        <min>118</min>
+        <max>137</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>radio2-channel-knob</object-name>
+    <property>sim/model/f15/controls/interiors/radio2-4-channel-knob</property>
+    <factor>360</factor>
+    <center>
+      <x-m>-5.596</x-m>
+      <y-m>0.0852</y-m>
+      <z-m>1.318</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/radio2-4-channel-knob</property>
+        <factor>.025</factor>
+        <min>118</min>
+        <max>137</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>radio1-select-knob</object-name>
+    <property>instrumentation/comm[0]/volume</property>
+    <offset-deg>135</offset-deg>
+    <factor>-180</factor>
+    <center>
+      <x-m>-5.591</x-m>
+      <y-m>-0.02363</y-m>
+      <z-m>1.358</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>instrumentation/comm[0]/volume</property>
+        <factor>.025</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>radio3-select-knob</object-name>
+    <property>sim/model/f15/instrumentation/ils/volume-norm</property>
+    <offset-deg>135</offset-deg>
+    <factor>-180</factor>
+    <center>
+      <x-m>-5.591</x-m>
+      <y-m>-0.02363</y-m>
+      <z-m>1.358</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/instrumentation/ils/volume-norm</property>
+        <factor>.025</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>radio2-select-knob</object-name>
+    <property>instrumentation/comm[1]/volume</property>
+    <offset-deg>135</offset-deg>
+    <factor>-180</factor>
+    <center>
+      <x-m>-5.591</x-m>
+      <y-m>.08414</y-m>
+      <z-m>1.359</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>instrumentation/comm[1]/volume</property>
+        <factor>.025</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>radio4-select-knob</object-name>
+    <property>instrumentation/nav[1]/volume</property>
+    <offset-deg>135</offset-deg>
+    <factor>-180</factor>
+    <center>
+      <x-m>-5.591</x-m>
+      <y-m>.08414</y-m>
+      <z-m>1.359</z-m>
+    </center>
+    <axis>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>instrumentation/nav[1]/volume</property>
+        <factor>.025</factor>
+        <min>0</min>
+        <max>1</max>
         <wrap>false</wrap>
       </binding>
     </action>
