@@ -1168,6 +1168,9 @@
                         <on-off type="bool">0</on-off>
                         <cursor-deg-el type="double">0</cursor-deg-el> <!-- positive means down -->
                         <cursor-deg-az type="double">0</cursor-deg-az> <!-- positive means right -->
+                        <screen-touch-cmd type="bool">false</screen-touch-cmd>
+                        <screen-touch-x type="double">0</screen-touch-x>
+                        <screen-touch-y type="double">0</screen-touch-y>
                         <buttons-pressed>
                             <LADButton00 type="bool">false</LADButton00>
                             <LADButton01 type="bool">false</LADButton01>
@@ -1194,6 +1197,9 @@
                     <EFHD>
                         <mode type="int">2</mode> <!-- 0 off 1 night 2 day -->
                         <contrast type="double">0.6</contrast>
+                        <screen-touch-cmd type="bool">false</screen-touch-cmd>
+                        <screen-touch-x type="double">0</screen-touch-x>
+                        <screen-touch-y type="double">0</screen-touch-y>
                     </EFHD>
                     <HUD>
                         <brightness type="double">1</brightness>

@@ -20819,4 +20819,52 @@
       <z>0</z>
     </axis>
   </animation>
+  
+  <!-- Touchable Screens -->
+  <animation>
+       <type>touch</type>
+       <visible>true</visible>
+       <object-name>LADImage</object-name>
+       <action>
+           <touch>0</touch>
+           <repeatable>false</repeatable>
+           <binding>
+               <command>nasal</command>
+               <script>
+                # Values we get here are normalized, where 1 for x means max right,
+                # and 1 for y means max top
+                x_px = cmdarg().getNode("x").getValue() * 8192;
+                y_px = math.abs(math.abs(cmdarg().getNode("y").getValue() - 1) * 8192);
+                
+                
+                setprop("sim/model/f15/controls/LAD/screen-touch-cmd", 1);
+                setprop("sim/model/f15/controls/LAD/screen-touch-x", x_px);
+                setprop("sim/model/f15/controls/LAD/screen-touch-y", y_px);
+               </script>
+           </binding>
+       </action>
+   </animation>
+  <animation>
+       <type>touch</type>
+       <visible>true</visible>
+       <object-name>EFHDImage</object-name>
+       <action>
+           <touch>0</touch>
+           <repeatable>false</repeatable>
+           <binding>
+               <command>nasal</command>
+               <script>
+                # Values we get here are normalized, where 1 for x means max right,
+                # and 1 for y means max top
+                x_px = cmdarg().getNode("x").getValue() * 937.5;  # 937.5 width of the EFHD canvas
+                y_px = math.abs(math.abs(cmdarg().getNode("y").getValue() - 1) * 2048);  # 2,048 height of the EFHD canvas
+                
+                
+                setprop("sim/model/f15/controls/EFHD/screen-touch-cmd", 1);
+                setprop("sim/model/f15/controls/EFHD/screen-touch-x", x_px);
+                setprop("sim/model/f15/controls/EFHD/screen-touch-y", y_px);
+               </script>
+           </binding>
+       </action>
+   </animation>
 </PropertyList>

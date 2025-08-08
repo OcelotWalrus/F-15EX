@@ -23,11 +23,11 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="1.4626932"
-     inkscape:cx="429.00316"
-     inkscape:cy="1339.6521"
-     inkscape:window-width="2560"
-     inkscape:window-height="1379"
+     inkscape:zoom="1.9977906"
+     inkscape:cx="235.2599"
+     inkscape:cy="658.47743"
+     inkscape:window-width="1920"
+     inkscape:window-height="1019"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -256,6 +256,30 @@
        width="335.25949"
        height="112.41001"
        id="rect1-26-6-4-42-0" />
+    <rect
+       x="1.9337118"
+       y="1.9337118"
+       width="393.27084"
+       height="145.28311"
+       id="rect1-2-7" />
+    <rect
+       x="1.9337118"
+       y="1.9337118"
+       width="335.25949"
+       height="112.41001"
+       id="rect1-26-0-8" />
+    <rect
+       x="1.9337118"
+       y="1.9337118"
+       width="335.25949"
+       height="112.41001"
+       id="rect1-26-6-4-3" />
+    <rect
+       x="1.9337118"
+       y="1.9337118"
+       width="335.25949"
+       height="112.41001"
+       id="rect1-26-6-2-0-0" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -317,7 +341,7 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="45.607603"
-         id="tspan2"><tspan
+         id="tspan49"><tspan
            style="font-size:48px"
            id="tspan1">ENG L GEN</tspan></tspan></text>
     <text
@@ -328,16 +352,25 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan3">% OPEN</tspan></text>
+         id="tspan50">% OPEN</tspan></text>
     <text
        xml:space="preserve"
-       transform="matrix(0.26458333,0,0,0.26458333,102.43697,104.55339)"
+       transform="matrix(0.26458333,0,0,0.26458333,102.60957,148.76542)"
        id="oil-press-status-title"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-26-0);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan4">OIL PRESS</tspan></text>
+         id="tspan51">OIL PSI</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,102.63765,161.11281)"
+       id="fuel-flow-title"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-26-0-8);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:highlight-color="#3b80ee"><tspan
+         x="1.9335938"
+         y="35.902238"
+         id="tspan52">FLOW PPH</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,80.889173,86.522908)"
@@ -346,7 +379,7 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan5">80%</tspan></text>
+         id="tspan53">80%</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,149.60967,85.097521)"
@@ -355,7 +388,7 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan6">80%</tspan></text>
+         id="tspan54">80%</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,79.248229,522.60954)"
@@ -364,7 +397,16 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan7">12,257 / 18,4500 lbs</tspan></text>
+         id="tspan55">12,257 / 18,4500 lbs</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,84.776213,411.77629)"
+       id="bingo_fuel_amount"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-2-7);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:highlight-color="#3b80ee"><tspan
+         x="1.9335938"
+         y="35.902238"
+         id="tspan56">BINGO 10000 lbs</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,33.978824,26.821572)"
@@ -372,8 +414,8 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-4);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
-         y="45.607603"
-         id="tspan9">OFF</tspan></text>
+         y="35.902238"
+         id="tspan57">OFF</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,185.19316,26.266884)"
@@ -381,8 +423,8 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-4-8);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
-         y="45.607603"
-         id="tspan11">OFF</tspan></text>
+         y="35.902238"
+         id="tspan58">OFF</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,164.03027,6.1357186)"
@@ -391,9 +433,9 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="45.607603"
-         id="tspan13"><tspan
+         id="tspan60"><tspan
            style="font-size:48px"
-           id="tspan12">ENG R GEN</tspan></tspan></text>
+           id="tspan59">ENG R GEN</tspan></tspan></text>
     <rect
        style="fill:none;fill-opacity:0;stroke:#fafafa;stroke-width:1.778;stroke-dasharray:none;stroke-opacity:1"
        id="center_tank"
@@ -439,9 +481,9 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan15"><tspan
+         id="tspan62"><tspan
            style="fill-opacity:1;stroke:none;stroke-opacity:0"
-           id="tspan14">L NOZ</tspan></tspan></text>
+           id="tspan61">L NOZ</tspan></tspan></text>
     <rect
        style="display:inline;fill:#d35b00;fill-opacity:1;stroke:#fafafa;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
        id="left_noz_box"
@@ -459,18 +501,27 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan17"><tspan
+         id="tspan64"><tspan
            style="fill-opacity:1;stroke:none;stroke-opacity:0"
-           id="tspan16">R NOZ</tspan></tspan></text>
+           id="tspan63">R NOZ</tspan></tspan></text>
     <text
        xml:space="preserve"
-       transform="matrix(0.26458333,0,0,0.26458333,76.460729,149.43464)"
+       transform="matrix(0.26458333,0,0,0.26458333,65.852525,149.03733)"
        id="left_oil_press_status"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-26-6-4);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan18">OPER</tspan></text>
+         id="tspan65">057</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,58.113721,160.90126)"
+       id="fuel_flow_left"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-26-6-4-3);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:highlight-color="#3b80ee"><tspan
+         x="1.9335938"
+         y="35.902238"
+         id="tspan66">10000</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,102.07863,202.97867)"
@@ -480,11 +531,11 @@
        inkscape:label="engine-rpm-label"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan19">FAN RPM
+         id="tspan67">FAN RPM
 </tspan><tspan
          x="1.9335938"
          y="82.568864"
-         id="tspan20">PERCENT</tspan></text>
+         id="tspan68">PERCENT</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,24.925112,250.8531)"
@@ -494,7 +545,7 @@
        inkscape:label="left_engine_rpm_zero"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan21">00</tspan></text>
+         id="tspan69">00</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,72.511798,228.3965)"
@@ -504,7 +555,7 @@
        inkscape:label="left_engine_rpm_sixty"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan22">60</tspan></text>
+         id="tspan70">60</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.2040182,0,0,0.19866207,53.341874,240.71766)"
@@ -514,7 +565,7 @@
        inkscape:label="left_engine_rpm_thirty"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan23">30</tspan></text>
+         id="tspan71">30</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.2040182,0,0,0.19866207,20.55772,176.73053)"
@@ -524,7 +575,7 @@
        inkscape:label="left_engine_rpm_actual_number"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan24">000</tspan></text>
+         id="tspan72">000</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.2040182,0,0,0.19866207,83.715348,206.42732)"
@@ -534,7 +585,7 @@
        inkscape:label="left_engine_rpm_ninety"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan25">90</tspan></text>
+         id="tspan73">90</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,88.200778,180.26135)"
@@ -544,7 +595,7 @@
        inkscape:label="left_engine_rpm_onehundredandten"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan26">110</tspan></text>
+         id="tspan74">110</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.18905999,0,0,0.24810302,45.517685,394.80933)"
@@ -554,7 +605,7 @@
        inkscape:label="left_engine_temp_legend"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan27">°F</tspan></text>
+         id="tspan75">°F</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.18905999,0,0,0.24810302,88.143275,303.78001)"
@@ -564,7 +615,7 @@
        inkscape:label="left_engine_temp_value"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan28">0000</tspan></text>
+         id="tspan76">0000</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.18905999,0,0,0.24810302,142.45088,304.02121)"
@@ -574,7 +625,7 @@
        inkscape:label="right_engine_temp_value"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan29">0000</tspan></text>
+         id="tspan77">0000</tspan></text>
     <rect
        style="display:inline;fill:#d35b00;fill-opacity:1;stroke:#fafafa;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
        id="right_noz_box-4"
@@ -592,9 +643,9 @@
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="31.51773"
-         id="tspan31"><tspan
+         id="tspan79"><tspan
            style="fill-opacity:1;stroke:none;stroke-opacity:0"
-           id="tspan30">L STATUS</tspan></tspan></text>
+           id="tspan78">L STATUS</tspan></tspan></text>
     <rect
        style="fill:#d35b00;stroke:#000000;stroke-width:2.6416;stroke-dasharray:none;stroke-opacity:1"
        id="rect3"
@@ -614,9 +665,9 @@
        inkscape:label="left_engine_temp_title"><tspan
          x="1.9335938"
          y="31.51773"
-         id="tspan33"><tspan
+         id="tspan81"><tspan
            style="font-size:19.486px;fill-opacity:1;stroke:none;stroke-opacity:0"
-           id="tspan32">L TEMP</tspan></tspan></text>
+           id="tspan80">L TEMP</tspan></tspan></text>
     <path
        style="fill:#fafafa;stroke-width:1.524;fill-opacity:1;stroke-dasharray:none;stroke:#fafafa;stroke-opacity:1"
        d="M 0.51162791,52.186046 247.6279,53.081396"
@@ -668,7 +719,7 @@
        inkscape:label="right_engine_temp_legend"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan34">°F</tspan></text>
+         id="tspan82">°F</tspan></text>
     <rect
        style="fill:#d35b00;stroke:#000000;stroke-width:2.6416;stroke-dasharray:none;stroke-opacity:1"
        id="rect3-6"
@@ -688,9 +739,9 @@
        inkscape:label="right_engine_temp_title"><tspan
          x="1.9335938"
          y="31.51773"
-         id="tspan36"><tspan
+         id="tspan84"><tspan
            style="font-size:19.486px;fill-opacity:1;stroke:none;stroke-opacity:0"
-           id="tspan35">R TEMP</tspan></tspan></text>
+           id="tspan83">R TEMP</tspan></tspan></text>
     <rect
        style="fill:#c09500;fill-opacity:1;stroke:#d6d7d7;stroke-width:1.524;stroke-dasharray:0.381, 0.381;stroke-dashoffset:0;stroke-opacity:0.847835"
        id="rect5-9"
@@ -811,7 +862,7 @@
        inkscape:label="right_engine_rpm_zero"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan37">00</tspan></text>
+         id="tspan85">00</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26443645,-0.00688213,0.00459363,0.26461075,165.76071,228.83472)"
@@ -821,7 +872,7 @@
        inkscape:label="right_engine_rpm_sixty"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan38">60</tspan></text>
+         id="tspan86">60</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.20394636,-0.0033567,0.00154906,0.19870655,187.95992,241.14641)"
@@ -831,7 +882,7 @@
        inkscape:label="right_engine_rpm_thirty"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan39">30</tspan></text>
+         id="tspan87">30</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.20397397,7.1075584e-5,-0.00178675,0.2097705,214.59769,174.66274)"
@@ -841,7 +892,7 @@
        inkscape:label="right_engine_rpm_actual_number"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan40">000</tspan></text>
+         id="tspan88">000</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.20356799,0.01177119,0.00532746,0.19940948,157.2998,206.37442)"
@@ -851,7 +902,7 @@
        inkscape:label="right_engine_rpm_ninety"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan41">90</tspan></text>
+         id="tspan89">90</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26452498,-7.3025716e-4,-0.00156168,0.26464601,143.97657,180.48681)"
@@ -861,7 +912,7 @@
        inkscape:label="right_engine_rpm_onehundredandten"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan42">110</tspan></text>
+         id="tspan90">110</tspan></text>
     <rect
        style="fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:1.03403;stroke-dasharray:0.517016, 0.723825;stroke-dashoffset:0;stroke-opacity:0.847835"
        id="right_engine_rpm_needle"
@@ -921,13 +972,22 @@
        transform="matrix(-0.31391723,-0.94945035,-0.95110904,0.30885529,0,0)" />
     <text
        xml:space="preserve"
-       transform="matrix(0.26458333,0,0,0.26458333,150.96964,148.7328)"
+       transform="matrix(0.26458333,0,0,0.26458333,169.3171,148.53437)"
        id="right_oil_press_status"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-26-6-2-0);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
        inkscape:highlight-color="#3b80ee"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan43">OPER</tspan></text>
+         id="tspan91">057</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,163.59941,160.89924)"
+       id="fuel_flow_right"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-26-6-2-0-0);display:inline;fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:5.76;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:highlight-color="#3b80ee"><tspan
+         x="1.9335938"
+         y="35.902238"
+         id="tspan92">10000</tspan></text>
     <rect
        style="display:inline;fill:#d35b00;fill-opacity:1;stroke:#fafafa;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
        id="oil_press_right_box"
@@ -946,9 +1006,9 @@
        inkscape:label="right_oil_press_status_title"><tspan
          x="1.9335938"
          y="35.902238"
-         id="tspan45"><tspan
+         id="tspan94"><tspan
            style="font-size:32.5145px;fill-opacity:1;stroke:none;stroke-opacity:0"
-           id="tspan44">R STATUS</tspan></tspan></text>
+           id="tspan93">R STATUS</tspan></tspan></text>
     <rect
        style="fill:#fafafa;fill-opacity:1;stroke:none;stroke-width:1.33163;stroke-dasharray:0.665811, 0.932136;stroke-dashoffset:0;stroke-opacity:1"
        id="rect10-1-4-3"
