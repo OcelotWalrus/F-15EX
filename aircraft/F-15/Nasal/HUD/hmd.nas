@@ -626,7 +626,7 @@ var F15_HMD = {
                                             obj.ASEC120Aspect.setColorFill(obj.color);
                                             obj.ASEC65Aspect.setColorFill(obj.color);
                                           } elsif (val.HmdSym != nil and val.HmdPower != nil) {
-                                            var brt = val.HmdSym * val.HmdPower;
+                                            var brt = val.HmdSym * val.HmdPower * (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") >= 75);
                                             # Ref: 16PR16226 page 60, adjusted up slightly
                                             var night_ratio = 0.6;
                                             obj.daylight_red = math.min(1, obj.extrapolate(val.Red, 0, 0.85, 0, 1));# treat 0.85 as full day light, so it dont have to june and noon at equator to get full brightness

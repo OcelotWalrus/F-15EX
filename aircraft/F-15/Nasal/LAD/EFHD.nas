@@ -168,7 +168,7 @@ var point_in_quad = func(point, quad) {
 update = func() {
     
     # We make sure we don't run none of that if the EFHD screen's offline
-    if (getprop("sim/model/f15/controls/electrics/emerg-gen-switch") or getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0) {
+    if (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0) {
         # Update variables
         touch_command = getprop("sim/model/f15/controls/EFHD/screen-touch-cmd");
         
@@ -254,15 +254,21 @@ update = func() {
             EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("%05d / %05d lbs", left_pounds, left_total_pounds));
         }
         
-        left_percentage = left_level / left_capacity;
-        right_percentage = right_level / right_capacity;
-        center_percentage = internal_level / internal_capacity;
-        
-        if (left_percentage == nil) {
+        # We make sure no values are null
+        if (left_level == nil or left_capacity == nil or left_capacity == 0) {
             left_percentage = 0;
+        } else {
+            left_percentage = left_level / left_capacity;
         }
-        if (right_percentage == nil) {
+        if (internal_level == nil or internal_capacity == nil or internal_capacity == 0) {
+            center_percentage = 0;
+        } else {
+            center_percentage = internal_level / internal_capacity;
+        }
+        if (right_level == nil or right_capacity == nil or right_capacity == 0) {
             right_percentage = 0;
+        } else {
+            right_percentage = right_level / right_capacity;
         }
 
         EFHDCanvas.center_tank_full.setTranslation(0,(1 - center_percentage) * 87.349);

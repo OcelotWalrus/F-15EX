@@ -4546,7 +4546,7 @@
 
             <key n="22">
                 <name>Ctrl-v</name>
-                <desc>Select pilot's view (view 0) or switch between pilot's and RIO's view</desc>
+                <desc>Select pilot's view (view 0) or switch between pilot's and WSO's view</desc>
                 <binding>
                     <command>nasal</command>
                     <script>aircraft.toggle_cockpit_views();</script>
@@ -5200,6 +5200,7 @@
             <file>Nasal/MPCD/MPCD_main.nas</file-->
             <file>Nasal/LAD/LAD.nas</file>
             <file>Nasal/LAD/EFHD.nas</file>
+            <file>Nasal/LAD/UFC.nas</file>
         </displays>
         <cartridge>
             <file>Nasal/f15_data_cartridge.nas</file>

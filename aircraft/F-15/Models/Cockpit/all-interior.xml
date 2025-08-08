@@ -1207,6 +1207,17 @@
       </greater-than>
     </condition>
   </animation>
+  <animation>
+    <type>select</type>
+    <object-name>UFCImage</object-name>
+    <condition>
+      <property>sim/model/f15/controls/UFC/mode</property>
+      <greater-than>
+         <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+         <value>5</value>
+      </greater-than>
+    </condition>
+  </animation>
 
   <animation>
     <type>knob</type>
@@ -2188,6 +2199,11 @@
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
     <object-name>EFHDImage</object-name>
   </effect>
+  <effect>
+    <name>f15interior</name>
+    <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
+    <object-name>UFCImage</object-name>
+  </effect>
   <animation>
     <object-name>LADImage</object-name>
     <type>material</type>
@@ -2221,6 +2237,25 @@
     </condition>
     <emission>
       <factor-prop>sim/model/f15/controls/EFHD/mode</factor-prop>
+      <red>  0.5</red>
+      <green>0.5</green>
+      <blue> 0.5</blue>
+    </emission>
+  </animation>
+  <animation>
+    <object-name>UFCImage</object-name>
+    <type>material</type>
+    <condition>
+      <greater-than>
+        <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+        <value>5</value>
+      </greater-than>
+      <not>
+        <property>/sim/rendering/rembrandt/enabled</property>
+      </not>
+    </condition>
+    <emission>
+      <factor-prop>sim/model/f15/controls/UFC/mode</factor-prop>
       <red>  0.5</red>
       <green>0.5</green>
       <blue> 0.5</blue>
