@@ -19,15 +19,15 @@
 # Some Notes :
 # - Current proportions in the model are 2.849173228" (width) by .455" (height), making it a 6 1/4 ratio (width/height)
 # ---------------------------
-# Planned Features :
-# - 
-# ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
 
 ## Variables
 var stored_input = "";  # Variable in which we store the pilot's input'd info (ex. "129.5" if we're entering a radio's frequency in MHz)
                         # It's always a string even if it's numeric data, it gets translated if needed.
+var inputting = 0;  # Used to determine whether the pilot is expected to input data or not
+var bad_data = 0;  # Used to determine whether the "BAD DATA" label should be displayed or not. This is triggered when an inputted stored_input ain't no valid one
+var bad_data_clear_called = 0;  # Used to determined if we've already started 3-second countdown till BAD DATA disappears
 
 # Menus
 # Each specific menu/sub-menu got a specific integer ID for 'em.
@@ -39,7 +39,10 @@ var curr_menu = dft_menu;  # Default menu
 # Autopilot
 var autopilot_main_menu = 1;  # Displays different options (INFO, HDG MD, PTCH MD, THROT)
 var autopilot_info_menu = 2;  # Displays info about current autopilot nav
-var autopilot_heading_menu = 3;  # TODO
+var autopilot_heading_menu = 3;  # Allows to configure autopilot heading controls
+var autopilot_altitude_menu = 4;  # Allows to configure autopilot altitude controls
+var autopilot_altitude_menu_sec = 5;
+var autopilot_auto_throttle_menu = 6;
 
 # Measures
 var screen_ratio = 6.25;
@@ -227,7 +230,111 @@ var UFC_Device = {
 var UFCCanvas = nil;
 var update_loop_ufc = nil;
 
-update = func() {
+# Setup the A/P properties, taken from gui/dialogs/autopilot.xml
+var dlg = props.globals.getNode("/sim/gui/dialogs/autopilot", 1);
+
+Group = {
+    new : func(name, options) {
+        var m = { parents: [Group] };
+        m.name = name;
+        m.enabled = 0;
+        m.mode = options[0];
+        m.options = [];
+
+        var locks = props.globals.getNode("/autopilot/locks", 1);
+        if (locks.getNode(name) == nil or locks.getNode(name, 1).getValue() == nil) {
+            locks.getNode(name, 1).setValue("");
+        }
+        m.lock = locks.getNode(name);
+        m.active = dlg.getNode(name ~ "-active", 1);
+
+        foreach (var o; options) {
+            var node = dlg.getNode(o);
+            if (node == nil) {
+                node = dlg.getNode(o, 1);
+                node.setBoolValue(0);
+            }
+            append(m.options, node);
+            if (m.lock.getValue() == o) {
+                m.mode = o;
+            }
+        }
+        m.listener = setlistener(m.lock, func(n) { m.update(n.getValue()) }, 1);
+        return m;
+    },
+    del : func {
+        removelistener(me.listener);
+    },
+
+    ## handle checkbox
+    #
+    enable : func {
+        me.enabled = me.active.getBoolValue();
+        me.lock.setValue(me.enabled ? me.mode : "");
+    },
+
+    ## handle radiobuttons
+    #
+    set : func(mode) {
+        me.mode = mode;
+        foreach (var o; me.options) {
+            o.setBoolValue(o.getName() == mode);
+        }
+        if (me.enabled) {
+            me.lock.setValue(mode);
+        }
+    },
+
+    ## update checkboxes/radiobuttons state from the AP (listener callback)
+    #
+    update : func(mode) {
+        me.enabled = (mode != "");
+        me.active.setBoolValue(me.enabled);
+        if (mode == "") {
+            mode = me.mode;
+        }
+        foreach (var o; me.options) {
+            o.setBoolValue(o.getName() == mode);
+        }
+    },
+};
+
+
+## create and initialize input field properties if necessary
+#
+var apset = props.globals.getNode("/autopilot/settings", 1);
+foreach (var p; ["heading-bug-deg", "target-roll-deg", "true-heading-deg", "vertical-speed-fpm",
+                 "target-pitch-deg", "target-fpa-deg", "target-altitude-ft",
+                 "target-agl-ft", "target-speed-kt", "target-speed-mach"]) {
+
+    if ((var n = apset.getNode(p)) == nil or n.getType() == "NONE") {
+        apset.getNode(p, 1).setDoubleValue(0);
+    }
+}
+
+# - first entry ("heading" etc.) is the target property in /autopilot/locks/ *and*
+#   the checkbox state property name (with "-active" appended);
+# - second entry is a list of available options for the /autopilot/locks/* property
+#   and used as radio button state property; the first list entry is used as default
+#
+var hdg = Group.new("heading",  ["dg-heading-hold", "wing-leveler", "true-heading-hold", "nav1-hold"]);
+var vel = Group.new("speed",    ["speed-with-throttle-mach"]);
+var alt = Group.new("altitude", ["altitude-hold", "vertical-speed-hold", "pitch-hold",
+                                 "fpa-hold", "agl-hold", "gs1-hold"]);
+
+# Utilities
+
+var is_numeric = func(str) {  # Returns if inputted string in numeric
+    if (typeof(str) == "scalar") return 1;
+    if (typeof(str) != "string") return 0;
+
+    var num = str2num(str);
+
+    return typeof(num) == "scalar" and num == num;
+};
+
+
+update_loop_func = func() {
     
     # We make sure we don't run none of that if the UFC screen's offline
     if (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 5) {
@@ -242,6 +349,15 @@ update = func() {
             if (displays.a_1_pres == 1) {  # Take us to INFO autopilot menu
                 curr_menu = autopilot_info_menu;
                 displays.a_1_pres = 0;
+            } elsif (displays.n_2_pres == 1) {  # Take us to autopilot HEADING CONTROL menu
+                curr_menu = autopilot_heading_menu;
+                displays.n_2_pres = 0;
+            } elsif (displays.b_3_pres == 1) {  # Take us to autopilot HEADING CONTROL menu
+                curr_menu = autopilot_altitude_menu;
+                displays.b_3_pres = 0;
+            } elsif (displays.w_4_pres == 1) {  # Take us to autopilot HEADING CONTROL menu
+                curr_menu = autopilot_auto_throttle_menu;
+                displays.w_4_pres = 0;
             }
         } elsif (curr_menu == autopilot_info_menu) {
             heading_text = "True H XXX";
@@ -268,6 +384,8 @@ update = func() {
                 altitude_text = sprintf("Alt H %05d", getprop("autopilot/settings/target-altitude-ft"));
             } elsif (getprop("sim/gui/dialogs/autopilot/gs1-hold")) {
                 altitude_text = " Nav 1 Glide";
+            } elsif (getprop("sim/gui/dialogs/autopilot/fpa-hold")) {
+                altitude_text = sprintf(" FPA Hld %02d", getprop("autopilot/settings/target-fpa-deg"));
             }
         
             throttle_text = sprintf("Ma %1.2f", getprop("autopilot/settings/target-speed-mach"));
@@ -275,33 +393,891 @@ update = func() {
             if (!auto_throttle_on) {
                 throttle_text = "Ma OFF";
             }
-            #UFCCanvas.UFCText.setText(" True H XXX Alt H XXXXX Ma XXXX");
             UFCCanvas.UFCText.setText(sprintf("%s %s %s", heading_text, altitude_text, throttle_text));
+        } elsif (curr_menu == autopilot_heading_menu) {
+            heading_text = "True H XXX";
+            if (!getprop("sim/gui/dialogs/autopilot/heading-active")) {
+                heading_text = "Hdg Off 1.Lvl 2.Bug 3.Tru 4.Nav";
+                if (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    hdg.set("wing-leveler");
+                    displays.a_1_pres = 0;
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    hdg.enable();  # Enable heading control
+                } elsif (displays.n_2_pres == 1) {
+                    hdg.set("dg-heading-hold");
+                    displays.n_2_pres = 0;
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    hdg.enable();  # Enable heading control
+                } elsif (displays.b_3_pres == 1) {
+                    hdg.set("true-heading-hold");
+                    displays.b_3_pres = 0;
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    hdg.enable();  # Enable heading control
+                } elsif (displays.w_4_pres == 1) {
+                    hdg.set("nav1-hold");
+                    displays.w_4_pres = 0;
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    hdg.enable();  # Enable heading control
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/wing-leveler")) {
+                heading_text = "Wings Level 1.Bug 2.True 3.Nav";
+                if (displays.a_1_pres == 1) {  # Handle mode changes
+                    hdg.set("dg-heading-hold");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    hdg.set("true-heading-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    hdg.set("nav1-hold");
+                    displays.b_3_pres = 0;
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/dg-heading-hold")) {
+                heading_text = sprintf("Bug H %03d 1.Level 2.True 3.Nav", getprop("autopilot/settings/heading-bug-deg"));
+
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    # - is between 0 and 360
+                    
+                    if (!is_numeric(stored_input) or !((stored_input + 0) >= 0 and (stored_input + 0) <= 360)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/heading-bug-deg", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    hdg.set("wing-leveler");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    hdg.set("true-heading-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1 and !inputting) {
+                    hdg.set("nav1-hold");
+                    displays.b_3_pres = 0;
+                }
+                
+                
+                if (size(stored_input) < 3) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+                
+            } elsif (getprop("sim/gui/dialogs/autopilot/true-heading-hold")) {
+                heading_text = sprintf("True H %03d 1.Level 2.Bug 3.Nav", getprop("autopilot/settings/true-heading-deg"));
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    # - is between 0 and 360
+                    
+                    if (!is_numeric(stored_input) or !((stored_input + 0) >= 0 and (stored_input + 0) <= 360)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/true-heading-deg", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    hdg.set("wing-leveler");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    hdg.set("dg-heading-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1 and !inputting) {
+                    hdg.set("nav1-hold");
+                    displays.b_3_pres = 0;
+                }
+                
+                
+                if (size(stored_input) < 3) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/nav1-hold")) {
+                heading_text = " Nav1 CDI 1.Level 2.Bug 3.True";
+                
+                if (displays.a_1_pres == 1) {  # Handle mode changes
+                    hdg.set("wing-leveler");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    hdg.set("dg-heading-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    hdg.set("true-heading-hold");
+                    displays.b_3_pres = 0;
+                }
+            }
+            UFCCanvas.UFCText.setText(heading_text);
+        } elsif (curr_menu == autopilot_altitude_menu) {
+            altitude_text = "";
+            if (!getprop("sim/gui/dialogs/autopilot/altitude-active")) {
+                altitude_text = "Alt OFF 1.Alt H 2.Ptch H 3.Nxt";
+                
+                if (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    alt.enable();  # Turn on altitude mode
+                    alt.set("altitude-hold");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    alt.enable();  # Turn on altitude mode
+                    alt.set("pitch-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1 and !inputting) {
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    alt.enable();  # Turn on altitude mode
+                    curr_menu = autopilot_altitude_menu_sec;
+                    displays.b_3_pres = 0;
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/altitude-hold")) {
+                altitude_text = sprintf("Alt %05d 1.Ptch H 2.FPA 3.Nxt", getprop("autopilot/settings/target-altitude-ft"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    
+                    if (!is_numeric(stored_input)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/target-altitude-ft", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("pitch-hold");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    alt.set("fpa-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1 and !inputting) {
+                    curr_menu = autopilot_altitude_menu_sec;
+                    displays.b_3_pres = 0;
+                }
+                
+                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/pitch-hold")) {
+                altitude_text = sprintf(" Ptch %02d 1.Alt H 2.FPA H 3.Nxt", getprop("autopilot/settings/target-pitch-deg"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    # - between -90 and 90
+                    
+                    if (!is_numeric(stored_input) or !(stored_input >= -90 and stored_input <= 90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/target-pitch-deg", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("altitude-hold");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    alt.set("fpa-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1 and !inputting) {
+                    curr_menu = autopilot_altitude_menu_sec;
+                    displays.b_3_pres = 0;
+                }
+                
+                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/fpa-hold")) {
+                altitude_text = sprintf("FPA %02d 1.Alt H 2.Ptch H 3.Nxt", getprop("autopilot/settings/target-fpa-deg"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    # - between -90 and 90
+                    
+                    if (!is_numeric(stored_input) or !(stored_input >= 90 and stored_input <= 90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/target-fpa-deg", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("altitude-hold");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    alt.set("pitch-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1 and !inputting) {
+                    curr_menu = autopilot_altitude_menu_sec;
+                    displays.b_3_pres = 0;
+                }
+                
+                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/vertical-speed-hold")) {
+                altitude_text = sprintf("FPM %05d 1.Alt H 2.Ptch 3.Nxt", getprop("autopilot/settings/vertical-speed-fpm"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    
+                    if (!is_numeric(stored_input)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/vertical-speed-fpm", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("altitude-hold");
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    alt.set("pitch-hold");
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1 and !inputting) {
+                    curr_menu = autopilot_altitude_menu_sec;
+                    displays.b_3_pres = 0;
+                }
+                
+                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            }
+
+            UFCCanvas.UFCText.setText(altitude_text);
+        } elsif (curr_menu == autopilot_altitude_menu_sec) {
+            altitude_text = "";
+            if (!getprop("sim/gui/dialogs/autopilot/altitude-active")) {
+                altitude_text = "   Alt OFF 1.FPA Hld 2.FPM Hld";
+                
+                if (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("fpa-hold");
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    alt.enable();  # Turn on altitude mode
+                    curr_menu = autopilot_altitude_menu;
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting) {
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    alt.enable();  # Turn on altitude mode
+                    alt.set("vertical-speed-hold");
+                    curr_menu = autopilot_altitude_menu;
+                    displays.n_2_pres = 0;
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/altitude-hold")) {
+                altitude_text = sprintf("           Alt %05d 1.FPM Hld", getprop("autopilot/settings/target-altitude-ft"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    
+                    if (!is_numeric(stored_input)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/target-altitude-ft", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("vertical-speed-hold");
+                    curr_menu = autopilot_altitude_menu;
+                    displays.a_1_pres = 0;
+                }
+                
+                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/pitch-hold")) {
+                altitude_text = sprintf("             Ptch %02d 1.FPM Hld", getprop("autopilot/settings/target-pitch-deg"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    # - between -90 and 90
+                    
+                    if (!is_numeric(stored_input) or !(stored_input >= 90 and stored_input <= 90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/target-pitch-deg", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("vertical-speed-hold");
+                    curr_menu = autopilot_altitude_menu;
+                    displays.a_1_pres = 0;
+                }
+                
+                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/fpa-hold")) {
+                altitude_text = sprintf("             FPA %02d 1.FPM Hld", getprop("autopilot/settings/target-fpa-deg"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    # - between -90 and 90
+                    
+                    if (!is_numeric(stored_input) or !(stored_input >= 90 and stored_input <= 90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/target-fpa-deg", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("fpa-hold");
+                    curr_menu = autopilot_altitude_menu;
+                    displays.a_1_pres = 0;
+                }
+                
+                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/vertical-speed-hold")) {
+                altitude_text = sprintf("           FPM %05d 1.FPA Hld", getprop("autopilot/settings/vertical-speed-fpm"));
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data heading inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data heading inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    
+                    if (!is_numeric(stored_input)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/vertical-speed-fpm", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Handle mode changes
+                    alt.set("vertical-speed-hold");
+                    curr_menu = autopilot_altitude_menu;
+                    displays.a_1_pres = 0;
+                }
+                
+                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    }
+                }
+            }
+            
+            UFCCanvas.UFCText.setText(altitude_text);
+        } elsif (curr_menu == autopilot_auto_throttle_menu) {
+            throttle_text = "";
+            throttle_text = "                              ";
+            
+            if (!getprop("sim/gui/dialogs/autopilot/speed-active")) {
+                throttle_text = "    Auto Throt. OFF 1.Activate";
+                
+                if (displays.a_1_pres == 1) {  # Turn ON auto throttle
+                    setprop("sim/gui/dialogs/autopilot/speed-active", 1);
+                    vel.enable();
+                    vel.set("speed-with-throttle-mach");
+                    displays.a_1_pres = 0;
+                }
+            } elsif (getprop("sim/gui/dialogs/autopilot/speed-active")) {
+                aug_on_off_text = "";
+                if (getprop("autopilot/locks/autothrottle-permit-augmentation")) {
+                    aug_on_off_text = " ON";
+                } else {
+                    aug_on_off_text = "OFF";
+                }
+                
+                if (displays.data_pres == 1) {  # Pilot's initiating data Mach inputting
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1) {  # Pilot's confirming data Mach inputting
+                
+                    # We check if the stored input is correct
+                    # - is a number
+                    # - is positive  (not needed cause we don't allow the hyphen press here)
+                    
+                    if (!is_numeric(stored_input) or !(stored_input + 0) > 0) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("autopilot/settings/target-speed-mach", stored_input + 0);
+                    }
+                
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                } elsif (displays.a_1_pres == 1 and !inputting) {  # Toggle Augmentation use (afterburner)
+                    setprop("autopilot/locks/autothrottle-permit-augmentation", !getprop("autopilot/locks/autothrottle-permit-augmentation"));
+                    displays.a_1_pres = 0;
+                }
+                
+                if (size(stored_input) < 4) {  # Max amount of data that can be inputted (one for unit, one for decimal dot, two for decimal values)
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    } elsif (displays.decimal_pres == 1) {
+                        stored_input = stored_input~".";
+                        displays.decimal_pres = 0;
+                    }
+                }
+                
+                throttle_text = sprintf("Ma. %1.2f, Aug %s 1.Toggle Aug", getprop("autopilot/settings/target-speed-mach"), aug_on_off_text);
+            }
+        
+            UFCCanvas.UFCText.setText(throttle_text);
+        }
+        
+        # If there's a bad data warning, we display it no matter what, for 3 whole seconds
+        # Else-If we're inputting, we display the inputted data no matter what
+        if (displays.bad_data == 1) {
+            UFCCanvas.UFCText.setText("                      BAD DATA");
+            if (displays.bad_data_clear_called == 0) {  # If bad data ain't been called yet - first time displaying it since last bad_data trigger
+                settimer(func {displays.bad_data = 0; displays.bad_data_clear_called = 0;},3);
+                displays.bad_data_clear_called = 1;
+            }
+        } elsif (displays.inputting == 1) {
+            stored_input_size = size(stored_input);
+            if (stored_input_size == 0) {
+                stored_input_size = 1;
+            }  # Fix
+            spaces_count = 30 - stored_input_size - size("ENTER DATA:");  # We make sure the inputted data is always aligned right
+            inputting_to_display = "ENTER DATA:";
+            for (var i = 0; i < spaces_count; i += 1) {
+                inputting_to_display ~= " ";
+            }
+            inputting_to_display ~= stored_input;
+            UFCCanvas.UFCText.setText(inputting_to_display);
         }
         
         # Handle standalone button triggers
-        if (displays.ap_pres == 1) {  # Toggle AFCS Attitude mode (autopilot) and force-display the autopilot menu if autopilot has been set on
+        if (displays.ap_pres == 1) {  # Toggle both heading and altitude autopilot modes and force-display the autopilot menu if autopilot has been set on
             stored_input = "";  # Since we force-display, we reset the pilot's input
-            setprop("sim/model/f15/controls/AFCS/att-hold", !getprop("sim/model/f15/controls/AFCS/att-hold"));
-            if (getprop("sim/model/f15/controls/AFCS/att-hold") == 1) {
+            if (getprop("sim/gui/dialogs/autopilot/heading-active") or getprop("sim/gui/dialogs/autopilot/altitude-active") or getprop("sim/gui/dialogs/autopilot/speed-active")) {
+                setprop("sim/gui/dialogs/autopilot/heading-active", 0);
+                setprop("sim/gui/dialogs/autopilot/altitude-active", 0);
+                setprop("sim/gui/dialogs/autopilot/speed-active", 0);
+            } else {
+                setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                setprop("sim/gui/dialogs/autopilot/altitude-active", 1);
+                setprop("sim/gui/dialogs/autopilot/speed-active", 0);
+            }
+            hdg.enable();
+            alt.enable();
+            vel.enable();
+            if (getprop("sim/gui/dialogs/autopilot/heading-active") == 1) {
                 curr_menu = autopilot_main_menu;
             }
             displays.ap_pres = 0;
-        }
-        if (displays.menu_pres == 1) {  # Takes us back to the last menu
+        } elsif (displays.menu_pres == 1) {  # Takes us back to the last menu
             stored_input = "";  # Since we force-display, we reset the pilot's input
             if (curr_menu == autopilot_main_menu) {
                 curr_menu = dft_menu;
-            } elsif (curr_menu == autopilot_info_menu or curr_menu == autopilot_heading_menu) {
+            } elsif (curr_menu == autopilot_info_menu or curr_menu == autopilot_heading_menu or curr_menu == autopilot_altitude_menu or curr_menu == autopilot_auto_throttle_menu) {
                 curr_menu = autopilot_main_menu;
+            } elsif (curr_menu == autopilot_altitude_menu_sec) {
+                curr_menu = autopilot_altitude_menu;
             }
             
             displays.menu_pres = 0;
+        } elsif (displays.clr_pres == 1) {  # Cancel data inputting
+            stored_input = "";
+            inputting = 0;
+            displays.clr_pres = 0;
         }
         
     }
 }
 
 UFCCanvas = UFC_Device.new({"node": "UFCImage"});
-update_loop_ufc = maketimer(.25, update);  # We don't need to make it run that often, it's just a text display at the end of the day
+update_loop_ufc = maketimer(.25, update_loop_func);  # We don't need to make it run that often, it's just a text display at the end of the day
 update_loop_ufc.start();

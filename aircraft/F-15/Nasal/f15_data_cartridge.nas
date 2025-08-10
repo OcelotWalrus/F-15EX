@@ -50,7 +50,7 @@
 
 var dtcLast = nil;  # variable to store the latest touched data cartridge's data
 
-# Takes in parameter the path to the cartride file.
+# Takes in parameter the path to the cartridge file.
 var load_cartridge = func(path) {
     path_value = path.getValue();
 
