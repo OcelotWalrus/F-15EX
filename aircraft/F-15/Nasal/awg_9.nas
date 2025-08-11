@@ -23,7 +23,9 @@
  #                       : Justin Nicholson
  #                       : Jimmy L. Miles (F-15EX retake), implementation of further 
  #                                        modes (RWS, TWS MAN and TWS AUTO) across the different F-15EX's systems,
- #                                        implementation of more complex elevation scan with bars.
+ #                                        implementation of more complex elevation scan with bars-like system.
+ #                                        implementation of more complex azimuth scan with ability to offset the
+ #                                        azimuth scan.
  #
  #	Date                 : August 7 2025
  #
@@ -93,9 +95,15 @@ var HudTgtClosureRate = props.globals.getNode("sim/model/"~this_model~"/instrume
 var HudTgtDistance = props.globals.getNode("sim/model/"~this_model~"/instrumentation/radar-awg-9/hud/distance", 1);
 var DebugMode         = props.globals.getNode("instrumentation/radar/debug-mode", 1);
 var AzField           = props.globals.getNode("instrumentation/radar/az-field", 1);
+var AzFieldOffset     = props.globals.getNode("instrumentation/radar/az-field-offset", 1);  # Offset of the antennae in azimuth (positive means right-ward)
+var az_coverage_left = 60;
+var az_coverage_right = 60;
 var HoFieldBars       = props.globals.getNode("instrumentation/radar/ho-field-bars", 1);  # Number of "bars"
 var HoField           = props.globals.getNode("instrumentation/radar/ho-field", 1);  # Actual angle coverage
 var HoFieldOffset     = props.globals.getNode("instrumentation/radar/ho-field-offset", 1);  # Offset of the antenna in elevation (10 means 10 degrees down from aircraft LOS
+var actual_degrees_coverage_up = 0;  # Degrees of coverage up from our aircraft's level. Negative here means up
+var actual_degrees_coverage_down = 0;  # Degrees of coverage down from our aircraft's level
+var field_offset = 0;  # Actual field offset (Antennae offset + aircraft's pitch)
 var RangeRadar2       = props.globals.getNode("instrumentation/radar/radar2-range",1);
 var RadarStandby      = props.globals.getNode("instrumentation/radar/radar-standby",1);
 var RadarMode         = props.globals.getNode("instrumentation/radar/radar-mode",1);
@@ -391,13 +399,19 @@ var rdr_loop = func(notification) {
 	# Compute radar elevation altitude coverage
     # Note: positive degrees mean downward
     range_ft = getprop("instrumentation/radar/radar2-range") * 6076.12;  # 6076.12 is NM2FT coefficient
-    actual_degrees_coverage_up = HoFieldOffset.getValue() - HoField.getValue()/2;  # Take in count antenna offset
-    actual_degrees_coverage_down = HoFieldOffset.getValue() + HoField.getValue()/2;
-    actual_degrees_coverage_up_rad = actual_degrees_coverage_up * D2R;  # Convert to radians
-    actual_degrees_coverage_down_rad = actual_degrees_coverage_down * D2R;
+    awg_9.field_offset = HoFieldOffset.getValue() - getprop("orientation/pitch-deg");  # Take in count antenna offset AND pitch offsets
+    awg_9.actual_degrees_coverage_up = field_offset - HoField.getValue()/2;
+    awg_9.actual_degrees_coverage_down = field_offset + HoField.getValue()/2;
+    actual_degrees_coverage_up_rad = awg_9.actual_degrees_coverage_up * D2R;  # Convert to radians
+    actual_degrees_coverage_down_rad = awg_9.actual_degrees_coverage_down * D2R;
             
     awg_9.coverage_up = range_ft * -math.tan(actual_degrees_coverage_up_rad);  # How many feet up us
     awg_9.coverage_down = range_ft * math.tan(actual_degrees_coverage_down_rad);  # How many feet down us
+    
+    # Compute radar azimuth angle coverage (max right and max left)
+    
+    awg_9.az_coverage_left = awg_9.AzField.getValue() / 2 - awg_9.AzFieldOffset.getValue();
+    awg_9.az_coverage_right = awg_9.AzField.getValue() / 2 + awg_9.AzFieldOffset.getValue();
 
     # Following Datalink code has been made by Jimmy L. Miles
 
@@ -455,16 +469,15 @@ var az_scan = func(notification) {
     awg9_trace = DebugMode.getValue();
 
 	# Antena az scan. Angular speed is constant but angle covered varies (120 or 60 deg ATM).
-	var fld_frac = az_fld / 120;                    # the screen (and the max scan angle) covers 120 deg, but we may use less (az_fld).
+	var fld_frac = (az_coverage_left + az_coverage_right) / 120;                    # the screen (and the max scan angle) covers 120 deg, but we may use less (az_fld).
 	var fswp_spd = swp_spd / fld_frac;              # So the duration (fswp_spd) of a complete scan will depend on the fraction we use.
     var rwr_done = 0;
 	swp_fac = math.sin(cnt * fswp_spd) * fld_frac;  # Build a sinusoude, each step based on a counter incremented by the main UPDATE_PERIOD
 	SwpFac.setValue(swp_fac);                       # Update this value on the property tree so we can use it for the sweep line animation.
-	swp_deg = az_fld / 2 * swp_fac;                 # Now get the actual deviation of the antenae in deg,
+	swp_deg = (az_coverage_left + az_coverage_right) / 2 * swp_fac;                 # Now get the actual deviation of the antenae in deg,
 	swp_dir = swp_deg < swp_deg_last ? 0 : 1;       # and the direction.
-	#if ( az_fld == nil ) { az_fld = 74 } # commented 20110911 if really needed it shouls had been on top of the func.
-	l_az_fld = - az_fld / 2;
-	r_az_fld = az_fld / 2;
+	l_az_fld = az_coverage_left;
+	r_az_fld = az_coverage_right;
 
 	var fading_speed = 0.015;   # Used for the screen animation, dots get bright when the sweep line goes over, then fade.
 
@@ -726,10 +739,11 @@ if(awg9_trace)
 #1;MP2 within  azimuth -130.0592982116802 field=-60->60  (s->w quadrant)
 #0;MP1 within  azimuth 164.2283073827575 field=-60->60
             
-            max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + coverage_up;  # in thousands of feet
-            min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - coverage_down;
+            max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;
+            min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down;
             inside_elev_field = u.get_altitude() < max_alt and u.get_altitude() > min_alt;
-            if (radar_mode < 2 and math.abs(u.deviationA) < az_fld/2 and inside_elev_field) {#richard, I had to fix 2 bugs here.
+            inside_az_field = (u.deviationA > -awg_9.az_coverage_left and u.deviationA < awg_9.az_coverage_right) or (u.deviationA < -awg_9.az_coverage_left and u.deviationA > awg_9.az_coverage_right);
+            if (radar_mode < 2 and inside_az_field and inside_elev_field) {#richard, I had to fix 2 bugs here.
                 u.set_display(u.get_visible() and !RadarStandby.getValue() and u.get_type() != ORDNANCE);
                 if(awg9_trace > 1)
                    print(scan_tgt_idx,";",u.get_Callsign()," within  azimuth ", u.deviationA, " elev=", u.deviationE);
@@ -2112,7 +2126,7 @@ var compute_rwr = func(radar_mode, u, u_rng){
     if (radar_mode < 2 and !u.get_behind_terrain()) {
         # in this sense it is actually us that is illuminating them, but for TEWS this is fine.
         var horizon = u.get_horizon( our_alt );
-        var u_az_field = az_fld/2.0;
+        var u_az_field = 60;
 #print ("u_rng=",u_rng," horizon=",horizon);
          if (  u_rng < horizon ) {
             var our_deviation_deg = deviation_normdeg(u.get_heading(), u.get_bearing());

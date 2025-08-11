@@ -874,32 +874,32 @@ var F15MainModule =
         if (getprop("controls/gear/gear-down") == 1) {
             setprop("instrumentation/radar/radar-mode", 2);
         }
-        
+
         # Sensors panel props synchronization shit
         if (getprop("sim/model/f15/avionics/tfr-flir-switch-pos") == 2) {
             setprop("sim/model/f15/avionics/tfr-flir-on", 1);
         } else {
             setprop("sim/model/f15/avionics/tfr-flir-on", 0);
         }
-        
+
         if (getprop("sim/model/f15/avionics/radar-altimeter-switch-pos") == 1) {
             setprop("sim/model/f15/avionics/radar-altimeter-online", 1);
         } else {
             setprop("sim/model/f15/avionics/radar-altimeter-online", 0);
         }
-        
+
         if (getprop("sim/model/f15/avionics/nav-flir-switch-pos") == 2) {
             setprop("sim/model/f15/avionics/hud-flir-on", 1);
         } else {
             setprop("sim/model/f15/avionics/hud-flir-on", 0);
         }
-        
+
         if (getprop("sim/model/f15/avionics/jtids-selected-mode-knob") == 2 or getprop("sim/model/f15/avionics/jtids-selected-mode-knob") == 3) {  # "norm" or "silent" knob position
             setprop("instrumentation/datalink/power", 1);
         } else {
             setprop("instrumentation/datalink/power", 0);
         }
-        
+
         if (getprop("sim/model/f15/controls/interiors/rwr-mstr-switch") == 1) {
             setprop("sim/model/f15/epawss/epawss-on", 1);
             setprop("instrumentation/ecm/on-off", 1);
@@ -907,18 +907,18 @@ var F15MainModule =
             setprop("sim/model/f15/epawss/epawss-on", 0);
             setprop("instrumentation/ecm/on-off", 0);
         }
-        
+
         # Misc 2 panel props synchronization dookie
         if (getprop("sim/model/f15/controls/interiors/iff-mode4-switch") > 0 and getprop("sim/model/f15/controls/interiors/iff-master-switch") == 1) {
             setprop("instrumentation/iff/power", 1);
         } else {
             setprop("instrumentation/iff/power", 0);
         }
-        
+
         if (getprop("sim/model/f15/controls/interiors/iff-master-switch") >= 0) {  # always true
             setprop("instrumentation/transponder/inputs/knob-mode", 4);  # ON mode
         }
-        
+
 
         # Taken from the F-16
         if (getprop("payload/armament/es/flags/deploy-id-10") != nil) {
@@ -956,6 +956,8 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 800*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-154A") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 1065*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "2 x AGM-154A") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 1065*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 25);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-158A" or getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-158C") {  # A and C variants both got the same weight
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 2150*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "1 x AGM-88E") {
@@ -1033,7 +1035,7 @@ var F15MainModule =
             setprop("/controls/gear/brake-right", 0);
             setprop("/controls/gear/brake-parking", 0);
         }
-        
+
         # Calculate the percentage of electrical power for the interiors' gauge
         elec_power = 0;
         if (getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {  # basic electrical power gauge, just for display really

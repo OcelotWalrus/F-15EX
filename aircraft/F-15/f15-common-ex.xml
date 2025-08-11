@@ -9,7 +9,7 @@
    | Enrique Laso: Original external 3d model (2015). {original F-15C/D model}
    | xii: F-14 origin of radar, missiles. Most have been modified but Alexis's excellent work was a good basis. (pre 2015) {original F-15C/D model}
    | Nikolai V. Chr.: Improvements to Weapons, Radar HUD (2015->current) {original F-15C/D model}
-   | Jimmy L. Miles : Various liveries, improvement and modifications to the HUD, major rework over the interiors to transform it into the EX model's interiors (completely made new textures, new shapes for certain buttons and various changes in the panels as well too), creation of a PDF manual, extension of payload options through new ordnances and new hardpoints, addition of aerodynamical effects, addition of new sound effects, of a dragchute (taken from that of the F-16), addition of flaps and gear overspeed damage, addition of wing's over G damage, enhancement of the exhaust trail (taken from that of the F-16), implementation of A/G and A/SEA operations, implementation of pilot ejection, the whole EFHD (Engines-Hydraulics Display), the whole LAD (Large Area Display), creation of the GBU-32 JDAM and GBU-39 SDB 3d models, creation of new weapons' behaviors such as the AIM-120D or the AGM-158C LRSAM, implementation of the HMCSD (taken from that of the F-16), as well as some work on the exteriors model, implementation and integration of more complex IFF and JTIDS (datalink) systems functionalities (GPS-Spots sharing, IFF interrogating, radar and EPAWSS contacts sharing etc.), the whole EPAWSS (Eagle Passive-Active Warning Survivability System) suite, addition of the Data Cartridge Transfer system (inspired by that of the F-16), various enhancements to the awg_9.nas Target class, adding various useful functions, enhancements of the awg_9.nas radar code, by developing more radar modes (RWS, TWS MAN), by adding cursor selection through the LAD's VSD.and the inability to get a lock through RWS mode and further improvements {newest F-15EX model}
+   | Jimmy L. Miles : Various liveries, improvement and modifications to the HUD, major rework over the interiors to transform it into the EX model's interiors (completely made new textures, new shapes for certain buttons and various changes in the panels as well too), creation of a PDF manual, extension of payload options through new ordnances and new hardpoints, addition of aerodynamical effects, addition of new sound effects, of a dragchute (taken from that of the F-16), addition of flaps and gear overspeed damage, addition of wing's over G damage, enhancement of the exhaust trail (taken from that of the F-16), implementation of A/G and A/SEA operations, implementation of pilot ejection, the whole EFHD (Engines-Hydraulics Display), the whole LAD (Large Area Display), creation of the GBU-32 JDAM and GBU-39 SDB 3d models, creation of new weapons' behaviors such as the AIM-120D or the AGM-158C LRSAM, implementation of the HMCSD (taken from that of the F-16), as well as some work on the exteriors model, implementation and integration of more complex IFF and JTIDS (datalink) systems functionalities (GPS-Spots sharing, IFF interrogating, radar and EPAWSS contacts sharing etc.), the whole EPAWSS (Eagle Passive-Active Warning Survivability System) suite, addition of the Data Cartridge Transfer system (inspired by that of the F-16), various enhancements to the awg_9.nas Target class, adding various useful functions, enhancements of the awg_9.nas radar code, by developing more radar modes (RWS, TWS MAN), by adding cursor selection through the LAD's VSD.and the inability to get a lock through RWS mode, developing elevation scan complexity with antennae elevation direction and bars, developing azimuth scan complexity by allow custom degrees scan and antenna azimuth direction control and further improvements {newest F-15EX model}
    | Robert Andrews : Major work on the cockpit interiors (LAD case and buttons, whole UFC panel), also taught Jimmy L. Miles some Blender! {newest F-15EX model}
    | ________________________________________________________________
    | Various authors have contributed liveries as per commit history.
@@ -1114,11 +1114,11 @@
                         <fcp-bit-button type="bool">false</fcp-bit-button>
                         <ground-power-switch type="bool">false</ground-power-switch>
                         <elec-power-percentage type="float">0</elec-power-percentage>
-                        
+
                         <wpn-volume-knob type="double">.75</wpn-volume-knob>
                         <betty-volume-knob type="double">.75</betty-volume-knob>
                         <tacan-volume-knob type="double">.8</tacan-volume-knob>
-                        
+
                         <iff-master-switch type="int">0</iff-master-switch> <!-- 0 emerg 1 norm 2 low-->
                         <iff-mode4-switch type="int">0</iff-mode4-switch> <!-- 0 out 1 A 2 B-->
                         <radio1-3-channel-knob type="float">118</radio1-3-channel-knob>
@@ -4849,7 +4849,7 @@
                     <script>aircraft.refuel_probe_switch_cycle();</script>
                 </binding>
             </key>
-            
+
             <key n="120">
                 <name>x</name>
                 <desc>IFF Interrogate Mode 4/5 current radar target</desc>
@@ -4970,6 +4970,7 @@
         </tacan>
         <radar>
             <az-field type="int">120</az-field>
+            <az-field-offset type="int">0</az-field-offset>
             <ho-field type="int">120</ho-field>  <!-- amount of degrees coverage -->
             <ho-field-bars type="int">2</ho-field-bars><!-- bars -->
             <ho-field-offset type="int">0</ho-field-offset><!-- antenna elevation deg offset -->

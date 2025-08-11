@@ -706,36 +706,23 @@ var LAD_Device = {
             .set("z-index",10)
             .setColor(prst_marron.r,prst_marron.g,prst_marron.b);
         m.vsd_elevation_carat = m.VSDScreen.createChild("path")
-            .moveTo(75,2260+500)
-            .lineTo(75+75,2260+500-25)
-            .moveTo(75,2260+500)
-            .lineTo(75+75,2260+500+25)
+            .moveTo(75,2262+500)
+            .lineTo(75+75,2262+500-25)
+            .moveTo(75,2262+500)
+            .lineTo(75+75,2262+500+25)
+            .moveTo(75,2262+500)
             .setStrokeLineWidth(10)
             .set("z-index",10)
             .setColor(prst_marron.r,prst_marron.g,prst_marron.b);
-        m.vsd_azimuth_limit_circle_right_60 = m.VSDScreen.createChild("path")
-            .moveTo(1282*2+75-25,2300*2+500-75)
+        m.vsd_azimuth_limit_circle_right = m.VSDScreen.createChild("path")
+            .moveTo(677*2-50,2300*2+500-75)
             .arcSmallCW(25,25, 0, 25*2, 0)
             .arcSmallCW(25,25, 0, -25*2, 0)
             .setStrokeLineWidth(15)
             .set("z-index",10)
             .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
-        m.vsd_azimuth_limit_circle_left_60 = m.VSDScreen.createChild("path")
-            .moveTo(75-25,2300*2+500-75)
-            .arcSmallCW(25,25, 0, 25*2, 0)
-            .arcSmallCW(25,25, 0, -25*2, 0)
-            .setStrokeLineWidth(15)
-            .set("z-index",10)
-            .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
-        m.vsd_azimuth_limit_circle_right_30 = m.VSDScreen.createChild("path")
-            .moveTo(677*3-50,2300*2+500-75)
-            .arcSmallCW(25,25, 0, 25*2, 0)
-            .arcSmallCW(25,25, 0, -25*2, 0)
-            .setStrokeLineWidth(15)
-            .set("z-index",10)
-            .setColor(prst_marron_dark.r,prst_marron_dark.g,prst_marron_dark.b);
-        m.vsd_azimuth_limit_circle_left_30 = m.VSDScreen.createChild("path")
-            .moveTo(677,2300*2+500-75)
+        m.vsd_azimuth_limit_circle_left = m.VSDScreen.createChild("path")
+            .moveTo(677*2,2300*2+500-75)
             .arcSmallCW(25,25, 0, 25*2, 0)
             .arcSmallCW(25,25, 0, -25*2, 0)
             .setStrokeLineWidth(15)
@@ -993,10 +980,8 @@ var LAD_Device = {
         m.vsd_azimuth_center.setVisible(0);  # not used anymore
         m.vsd_azimuth_right.setVisible(0);  # not used anymore
         m.vsd_azimuth_left.setVisible(0);  # not used anymore
-        m.vsd_azimuth_limit_circle_right_60.setVisible(1);
-        m.vsd_azimuth_limit_circle_left_60.setVisible(1);
-        m.vsd_azimuth_limit_circle_right_30.setVisible(0);
-        m.vsd_azimuth_limit_circle_left_30.setVisible(0);
+        m.vsd_azimuth_limit_circle_right.setVisible(1);
+        m.vsd_azimuth_limit_circle_left.setVisible(1);
         m.vsd_vert_coverage_circle_down.setVisible(1);
         m.vsd_vert_coverage_circle_up.setVisible(1);
         m.vsd_vert_coverage_text_down.setVisible(1);
@@ -1244,6 +1229,12 @@ var LAD_Device = {
         }
 
         # Radar symbology
+        # Data cartridge loaded data symbology
+        m.HSDScreenRdrCones = m.svg.createGroup();  # used only for HSD radar cones, which need to be all deleted if they're updated
+        
+        # Following pre-drawn radar cones ain't in no use no more,
+        # we now display the radar cone instantly, because I've implemented
+        # directional azimuth scan etc.
         m.hsd_radar_x = (m.hsd_radar_range_px_x) * math.cos((90 - 60) * D2R);
         m.hsd_radar_y = -(m.hsd_radar_range_px_y) * math.sin((90 - 30) * D2R);
         m.hsd_cone_60 = m.HSDScreen.createChild("path")
@@ -1481,7 +1472,7 @@ var LAD_Device = {
         m.hsd_stpt_bearing.setVisible(1);
         m.hsd_stpt_dist.setVisible(1);
         m.hsd_stpt_current.setVisible(1);
-        m.hsd_cone_60.setVisible(1);
+        m.hsd_cone_60.setVisible(0);  # Not used anymore since we got directional azimuth scan
         m.hsd_cone_30.setVisible(0);
         m.heading_pin.setVisible(1);
         m.heading_pin_autopilot.setVisible(0);
@@ -1869,16 +1860,19 @@ update_lad = func() {
             LADCanvas.HSDScreen.setTranslation(0,0);  # Default position's position for the left main screen
             LADCanvas.HSDScreenLines.setTranslation(0,0);
             LADCanvas.HSDScreenCircles.setTranslation(0,0);
+            LADCanvas.HSDScreenRdrCones.setTranslation(0,0);
         } elsif (main_screens.center == "HSD") {
             HSD_ON = 1;
             LADCanvas.HSDScreen.setTranslation(8192/3,0);
             LADCanvas.HSDScreenLines.setTranslation(8192/3,0);
             LADCanvas.HSDScreenCircles.setTranslation(8192/3,0);
+            LADCanvas.HSDScreenRdrCones.setTranslation((8192/3),0);
         } elsif (main_screens.right == "HSD") {
             HSD_ON = 1;
             LADCanvas.HSDScreen.setTranslation((8192/3)*2,0);
             LADCanvas.HSDScreenLines.setTranslation((8192/3)*2,0);
             LADCanvas.HSDScreenCircles.setTranslation((8192/3)*2,0);
+            LADCanvas.HSDScreenRdrCones.setTranslation((8192/3)*2,0);
         } else {
             HSD_ON = 0;
         }
@@ -1937,6 +1931,13 @@ update_lad = func() {
             }
             LADCanvas.vsd_radar_mode_text.setText(sprintf("%d %s", awg_9.HoFieldBars.getValue(), radar_mode_str));
 
+            # Update Azimuth angle coverage circles
+            x_move_right = awg_9.az_coverage_right * (677*2-75) / 60;
+            x_move_left = awg_9.az_coverage_left * -(677*2-75) / 60;
+            
+            LADCanvas.vsd_azimuth_limit_circle_right.setTranslation(x_move_right, 0);
+            LADCanvas.vsd_azimuth_limit_circle_left.setTranslation(x_move_left, 0);
+
             # Update the cursor's placement, given input degrees
             if (awg_9.wcs_current_mode != awg_9.wcs_mode_tws_auto) {  # The cursor moves on its own in TWS AUTO and cannot be controlled
                 var cursor_az_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-az");
@@ -1944,6 +1945,7 @@ update_lad = func() {
                 var cursor_x_move = cursor_az_deg * 1354 / 60;
                 var cursor_y_move = cursor_el_deg * (1131*2) / 60;
                 var cursor_hit_boundaries_el = cursor_y_move > 1110*2 or cursor_y_move < -1110*2;
+                var cursor_hit_boundaries_az = cursor_x_move > 1354-38*3 or cursor_x_move < -1354+38*3;
 
                 if (cursor_x_move > 1354-38*3) {  # We clamp the values of azimuth of the cursor
                     cursor_x_move = 1354-38*3;
@@ -1967,6 +1969,22 @@ update_lad = func() {
                         setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
                         awg_9.HoFieldBars.setValue(awg_9.HoFieldBars.getValue() + 2);
                     }
+                } elsif (cursor_hit_boundaries_az) {
+                    # If the azimuth boundary is hit leftward, azimuth scan is decreased by 10, if it's hit rightward, it's increased by ten
+                    # Limits are 10 and 120.
+                    if (cursor_x_move > 0 and awg_9.AzField.getValue() < 120) {  # Positive, so right-ward
+                        cursor_x_move = 0;
+                        cursor_y_move = 0;
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
+                        awg_9.AzField.setValue(awg_9.AzField.getValue() + 10);
+                    } elsif (cursor_x_move < 0 and awg_9.AzField.getValue() > 10) {  # Negative, so left-ward
+                        cursor_x_move = 0;
+                        cursor_y_move = 0;
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
+                        setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
+                        awg_9.AzField.setValue(awg_9.AzField.getValue() - 10);
+                    }
                 }
 
                 var cursor_pos = [677*2+cursor_x_move, 2262+500+cursor_y_move];
@@ -1975,6 +1993,19 @@ update_lad = func() {
             } else {
                 LADCanvas.vsd_cursor.setVisible(1);
             }
+            
+            # Update AzFieldOffset depending on the cursor's placement
+            
+            # Clamp the value
+            az_deg_offset = getprop("sim/model/f15/controls/LAD/cursor-deg-az");
+            max_allowable_az_offset = (120-awg_9.AzField.getValue()) / 2;  # How much the antennae can go left or right
+            if (az_deg_offset > max_allowable_az_offset) {
+                az_deg_offset = max_allowable_az_offset;
+            } elsif (az_deg_offset < -max_allowable_az_offset) {
+                az_deg_offset = -max_allowable_az_offset;
+            }
+            awg_9.AzFieldOffset.setValue(az_deg_offset);
+            
 
             # Update some texts giving info about ourselves
             LADCanvas.vsd_ground_speed.setText(sprintf("G %03d", getprop("velocities/groundspeed-kt")));
@@ -1991,44 +2022,21 @@ update_lad = func() {
 
             # Move the azimuth and elevation carats around
             var azimuth_sweep = getprop("sim/model/f15/instrumentation/awg-9/sweep-factor");
+            azimuth_offset = getprop("instrumentation/radar/az-field-offset");
             var carat_sweep = 0;
             if (azimuth_sweep != nil) {  # this property is created in awg_9.nas, so at startup it's null
-                carat_sweep = azimuth_sweep * 1280;
+                carat_sweep = azimuth_sweep * 1280 + azimuth_offset * 1280 / 60;
             }
             LADCanvas.vsd_azimuth_carat.setTranslation(carat_sweep, 0.0);
             
-            carat_elev_pxs = awg_9.HoFieldOffset.getValue() * (1110*2) / 60;
+            carat_elev_pxs = awg_9.HoFieldOffset.getValue() * 2220 / 60;
             LADCanvas.vsd_elevation_carat.setTranslation(0, carat_elev_pxs);
-
-            # Update the azimuth circles'
-            if (getprop("instrumentation/radar/az-field") == 120) {
-                LADCanvas.vsd_azimuth_limit_circle_right_60.setVisible(1);
-                LADCanvas.vsd_azimuth_limit_circle_left_60.setVisible(1);
-                LADCanvas.vsd_azimuth_limit_circle_right_30.setVisible(0);
-                LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(0);
-            } elsif (getprop("instrumentation/radar/az-field") == 60) {
-                LADCanvas.vsd_azimuth_limit_circle_right_60.setVisible(0);
-                LADCanvas.vsd_azimuth_limit_circle_left_60.setVisible(0);
-                LADCanvas.vsd_azimuth_limit_circle_right_30.setVisible(1);
-                LADCanvas.vsd_azimuth_limit_circle_left_30.setVisible(1);
-            }
 
             max_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up) * .001;  # in thousands of feet
             min_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down) * .001;
             
-            y_move_max = max_alt * -2220 / 60;
-            y_move_min = min_alt * -2220 / 60;
-            
-            if (y_move_max > 2200) {  # We clamp the values of elevation of the carat
-                y_move_max = 2200;
-            } elsif (y_move_max < -2200) {
-                y_move_max = -2200;
-            }
-            if (y_move_min > 2200) {
-                y_move_min = 2200;
-            } elsif (y_move_min < -2200) {
-                y_move_min = -2200;
-            }
+            y_move_max = awg_9.actual_degrees_coverage_up * 2220 / 30;
+            y_move_min = awg_9.actual_degrees_coverage_down * 2220 / 30;
             
             LADCanvas.vsd_vert_coverage_circle_up.setTranslation(0, y_move_max);
             LADCanvas.vsd_vert_coverage_circle_down.setTranslation(0, y_move_min);
@@ -2141,7 +2149,7 @@ update_lad = func() {
                 # Check for chaffs. We don't need the target to be visible for that, visible checks are ran on the chaffs themselves
                 if (contact.getChaffNode() != nil and contact.getChaffNode().getValue() != nil and contact.getChaffNode().getValue() != 0) {
                     if (contact.getChaffNode().getValue() != chaff_lasts[contact.getUnique()]) {
-                        chaff_lasts[contact.getUnique()] = contact.getChaffNode().getValue();  # released a new flare
+                        chaff_lasts[contact.getUnique()] = contact.getChaffNode().getValue();  # released a new chaff
                         append(chaffs_pos, {"gps": contact.get_Coord(), "release_time": elapsed});
                     }
                 }
@@ -2303,25 +2311,24 @@ update_lad = func() {
             
             var chaff_idx = 0;
             foreach (chaff ; chaffs_pos) {
-                #print(chaff_idx);
                 if (elapsed - chaff.release_time > (27 * rand() / 1.5)) {  # if the chaff is too old
                     remove(chaffs_pos, chaff);  # remove it from the list
-                    #print("CHAFF TOO OLD");
                 } else {
                     steerDir = [geo.aircraft_position().course_to(chaff.gps), vector.Math.getPitch(geo.aircraft_position(), chaff.gps)];  # id 0 is bearing, id 1 is elevation
                     wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
                     wpelev = -steerDir[1];  # elevation to the steerpoint (20* means 20* down)
                     hidden_by_terrain = !awg_9.TerrainManager.IsVisible(nil, nil, SelectCoordForce=chaff.gps);
-                    if (!hidden_by_terrain and wpbear < getprop("instrumentation/radar/az-field")/2 and wpbear > -getprop("instrumentation/radar/az-field")/2 and wpbear < getprop("instrumentation/radar/ho-field")/2 and wpbear > -getprop("instrumentation/radar/ho-field")/2) {  # we're making sure that the chaff ain't outta our radar's cone!
+                    max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;  # Radar altitude coverage
+                    min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down;
+                    inside_elev_field = chaff.gps.alt() < max_alt and chaff.gps.alt() > min_alt;
+                    inside_az_field = (wpbear > -awg_9.az_coverage_left and wpbear < awg_9.az_coverage_right) or (wpbear < -awg_9.az_coverage_left and wpbear > awg_9.az_coverage_right);
+                    if (!hidden_by_terrain and inside_elev_field and math.abs(wpbear) < awg_9.az_fld/2) {  # we're making sure that the chaff ain't outta our radar's cone!
                         LADCanvas.chaff_symbols[chaff_idx].setVisible(1);
                         x_move = wpbear * 1354 / 60;
                         y_move = wpelev * (1131 * 2) / 60;
                         
                         LADCanvas.chaff_symbols[chaff_idx].setTranslation(x_move, y_move);
-                        print("CHAFF DRAWN");
                         chaff_idx += 1;
-                    } else {
-                        #print("CHAFF AIN'T VISIBLE");
                     }
                 }
             }
@@ -2429,10 +2436,13 @@ update_lad = func() {
             LADCanvas.HSDScreen.setVisible(1);
             LADCanvas.HSDScreenLines.setVisible(1);
             LADCanvas.HSDScreenCircles.setVisible(1);
+            LADCanvas.HSDScreenRdrCones.setVisible(1);
 
             # Update measures
             LADCanvas.hsd_nm_to_px_x = (LADCanvas.hsd_great_circle_radius*2*(10/19)) / ((getprop("instrumentation/radar/radar2-range") * 1.25));
             LADCanvas.hsd_nm_to_px_y = (LADCanvas.hsd_great_circle_radius*2) / ((getprop("instrumentation/radar/radar2-range") * 1.25));
+            LADCanvas.hsd_radar_range_px_x = getprop("instrumentation/radar/radar2-range") * LADCanvas.hsd_nm_to_px_x;
+            LADCanvas.hsd_radar_range_px_y = getprop("instrumentation/radar/radar2-range") * LADCanvas.hsd_nm_to_px_y;
 
             # Update informational texts
             LADCanvas.hsd_ground_speed.setText(sprintf("G %03d", getprop("velocities/groundspeed-kt")));
@@ -3015,18 +3025,24 @@ update_lad = func() {
                 LADCanvas.epawss_symbols_hsd_primary_threat[maw_epawss_idx].setVisible(0);
             }
 
-            # Update the radar cone
-            if (!getprop("instrumentation/radar/radar-standby")) {  # if radar's standby, we don't display the cone
-                if (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man) {  # If radar's in TWS AUTO/MAN
-                    LADCanvas.hsd_cone_60.setVisible(0);
-                    LADCanvas.hsd_cone_30.setVisible(1);
-                } else {
-                    LADCanvas.hsd_cone_60.setVisible(1);
-                    LADCanvas.hsd_cone_30.setVisible(0);
-                }
+            # Draw the radar cone
+            if (!getprop("instrumentation/radar/radar-standby")) {  # Ain't drawing the cone if the radar's offline
+                LADCanvas.hsd_radar_x_left = (LADCanvas.hsd_radar_range_px_x) * math.cos((90 + awg_9.az_coverage_left) * D2R);
+                LADCanvas.hsd_radar_y_left = -(LADCanvas.hsd_radar_range_px_y) * math.sin((90 + awg_9.az_coverage_left) * D2R);
+                LADCanvas.hsd_radar_x_right = (LADCanvas.hsd_radar_range_px_x) * math.cos((90 + awg_9.az_coverage_right) * D2R);
+                LADCanvas.hsd_radar_y_right = -(LADCanvas.hsd_radar_range_px_y) * math.sin((90 + awg_9.az_coverage_right) * D2R);
+                LADCanvas.HSDScreenRdrCones.removeAllChildren();  # Reset radar cone layer, we're drawing another one
+                LADCanvas.hsd_radar_cone = LADCanvas.HSDScreenRdrCones.createChild("path")
+                    .moveTo(1355,1150*2+500+75)
+                    .lineTo(1355-LADCanvas.hsd_radar_x_right,1150*2+500+75+LADCanvas.hsd_radar_y_right)
+                    .moveTo(1355,1150*2+500+75)
+                    .lineTo(1355+LADCanvas.hsd_radar_x_left,1150*2+500+75+LADCanvas.hsd_radar_y_left)
+                    .arcSmallCW(LADCanvas.hsd_radar_range_px_x,LADCanvas.hsd_radar_range_px_y, 0, -(LADCanvas.hsd_radar_x_right+LADCanvas.hsd_radar_x_left), LADCanvas.hsd_radar_y_right-LADCanvas.hsd_radar_y_left)
+                    .setStrokeLineWidth(17)
+                    .set("z-index",10)
+                    .setColor(prst_green.r,prst_green.g,prst_green.b);
             } else {
-                LADCanvas.hsd_cone_60.setVisible(0);
-                LADCanvas.hsd_cone_30.setVisible(0);
+                LADCanvas.HSDScreenRdrCones.removeAllChildren();  # Reset radar cone layer
             }
 
             # Update circles' horizontal range scales
@@ -3147,6 +3163,7 @@ update_lad = func() {
             LADCanvas.HSDScreen.setVisible(0);
             LADCanvas.HSDScreenLines.setVisible(0);
             LADCanvas.HSDScreenCircles.setVisible(0);
+            LADCanvas.HSDScreenRdrCones.setVisible(0);
         }
 
 
