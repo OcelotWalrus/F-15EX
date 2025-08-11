@@ -1934,6 +1934,8 @@
                 <bool n="334" alias="/sim/model/f15/payload/selected/an-alq-184-r"/>
                 <bool n="335" alias="/sim/model/f15/payload/selected/an-alq-184-c"/>
                 <bool n="336" alias="/sim/model/f15/payload/selected/legion-pod-irst"/>
+                <bool n="337" alias="/sim/model/f15/payload/selected/agm-154a-double-r"/>
+                <bool n="338" alias="/sim/model/f15/payload/selected/agm-154a-double-l"/>
 
                 <float n="1" alias="/fdm/jsbsim/fcs/rudder-pos-norm"/> <!-- rudders  -->
                 <float n="2" alias="/fdm/jsbsim/fcs/left-aileron-pos-norm"/><!-- left aileron  -->
@@ -2496,6 +2498,10 @@
                 <lbs>1065.0</lbs>
             </opt>
             <opt>
+                <name>2 x AGM-154A</name>
+                <lbs>2155.0</lbs>
+            </opt>
+            <opt>
                 <name>1 x AGM-158A</name>
                 <lbs>2150.0</lbs>
             </opt>
@@ -2668,6 +2674,10 @@
             <opt>
                 <name>1 x AGM-154A</name>
                 <lbs>1065.0</lbs>
+            </opt>
+            <opt>
+                <name>2 x AGM-154A</name>
+                <lbs>2155.0</lbs>
             </opt>
             <opt>
                 <name>1 x AGM-158A</name>

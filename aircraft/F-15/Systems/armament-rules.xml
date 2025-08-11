@@ -2092,6 +2092,12 @@
           <property>payload/armament/station/id-1-type</property>
           <value>AGM-154A</value>
         </equals>
+        <not>
+          <equals>
+            <property>payload/armament/station/id-1-set</property>
+            <value>2 x AGM-154A</value>
+          </equals>
+        </not>
       </and>
     </input>
     <output>sim/model/f15/payload/selected/agm-154a-l</output>
@@ -2114,6 +2120,12 @@
           <property>payload/armament/station/id-9-type</property>
           <value>AGM-154A</value>
         </equals>
+        <not>
+          <equals>
+            <property>payload/armament/station/id-9-set</property>
+            <value>2 x AGM-154A</value>
+          </equals>
+        </not>
       </and>
     </input>
     <output>sim/model/f15/payload/selected/agm-154a-r</output>
@@ -3668,5 +3680,27 @@
       </and>
     </input>
     <output>sim/model/f15/payload/selected/legion-pod-irst</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-1-set</property>
+          <value>2 x AGM-154A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-154a-double-l</output>
+  </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-9-set</property>
+          <value>2 x AGM-154A</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/agm-154a-double-r</output>
   </logic>
 </PropertyList>

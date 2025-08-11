@@ -120,6 +120,7 @@ var pylonSets = {
 	singleagm84e: {name: "1 x AGM-84E", content: ["AGM-84E"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm88e: {name: "1 x AGM-88E", content: ["AGM-88E"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm154a: {name: "1 x AGM-154A", content: ["AGM-154A"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
+	doubleagm154a: {name: "2 x AGM-154A", content: ["AGM-154A", "AGM-154A"], fireOrder: [0, 1], launcherDragArea: 0.0, launcherMass: 25, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm158a: {name: "1 x AGM-158A", content: ["AGM-158A"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm158c: {name: "1 x AGM-158C", content: ["AGM-158C"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
 	singleagm119a: {name: "1 x AGM-119A", content: ["AGM-119A"], fireOrder: [0], launcherDragArea: 0.0, launcherMass: 0, launcherJettisonable: 0, showLongTypeInsteadOfCount: 0, category: 3},
@@ -167,7 +168,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylonex1cset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon2aset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon2bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.hyd70h1, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu32, pylonSets.quadgbu39, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.tripleagm65b, pylonSets.doubleagm65d, pylonSets.tripleagm65d, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm88e, pylonSets.singleagm119a, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon2bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.hyd70h1, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu32, pylonSets.quadgbu39, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.tripleagm65b, pylonSets.doubleagm65d, pylonSets.tripleagm65d, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm88e, pylonSets.singleagm119a, pylonSets.singleagm154a, pylonSets.doubleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon2cset = [pylonSets.empty, pylonSets.smokeWL, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylon3set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
@@ -179,7 +180,7 @@ if (getprop("sim/model/f15/variant") == "EX") { # EX variant has different pylon
 	var pylon7set = [pylonSets.empty, pylonSets.dummyaim120d, pylonSets.doubledummyaim120d, pylonSets.aim7, pylonSets.aim120d, pylonSets.doubleaim120d, pylonSets.mk82, pylonSets.mk82air, pylonSets.mk83, pylonSets.singlem84, pylonSets.singlecbu87, pylonSets.singlecbu105, pylonSets.singlegbu12, pylonSets.singlegbu31, pylonSets.singlegbu32, pylonSets.quadgbu39, pylonSets.singlegbu54, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c];
 
 	var pylon8aset = [pylonSets.empty, pylonSets.smokeWR, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
-	var pylon8bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.hyd70h9, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu32, pylonSets.quadgbu39, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.tripleagm65b, pylonSets.doubleagm65d, pylonSets.tripleagm65d, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm88e, pylonSets.singleagm119a, pylonSets.singleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
+	var pylon8bset = [pylonSets.empty, pylonSets.podEcm184, pylonSets.hyd70h9, pylonSets.doubledummyaim9x, pylonSets.doubledummyaim120d, pylonSets.triplemk83, pylonSets.singlem84, pylonSets.triplecbu87, pylonSets.doublecbu105, pylonSets.doublegbu12, pylonSets.singlegbu31, pylonSets.doublegbu32, pylonSets.quadgbu39, pylonSets.doublegbu54, pylonSets.doubleagm65b, pylonSets.tripleagm65b, pylonSets.doubleagm65d, pylonSets.tripleagm65d, pylonSets.singleagm84d, pylonSets.singleagm84e, pylonSets.singleagm88e, pylonSets.singleagm119a, pylonSets.singleagm154a, pylonSets.doubleagm154a, pylonSets.singleagm158a, pylonSets.singleagm158c, pylonSets.doubleaim9xw, pylonSets.doubleaim120d];
 	var pylon8cset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9w, pylonSets.aim9xw, pylonSets.aim120dw];
 
 	var pylonex2aset = [pylonSets.empty, pylonSets.dummyaim9x, pylonSets.dummyaim120d, pylonSets.aim9xw, pylonSets.aim120dw];
@@ -1924,7 +1925,7 @@ var ag_standoff_jsow = func {
 		pylonex1c.loadSet(pylonSets.empty);
 
         pylon2a.loadSet(pylonSets.aim9xw);
-        pylon2b.loadSet(pylonSets.singleagm154a);
+        pylon2b.loadSet(pylonSets.doubleagm154a);
         pylon2c.loadSet(pylonSets.aim9xw);
 
         pylon3.loadSet(pylonSets.aim120d);
@@ -1936,7 +1937,7 @@ var ag_standoff_jsow = func {
         pylon7.loadSet(pylonSets.aim120d);
 
         pylon8a.loadSet(pylonSets.aim9xw);
-        pylon8b.loadSet(pylonSets.singleagm154a);
+        pylon8b.loadSet(pylonSets.doubleagm154a);
         pylon8c.loadSet(pylonSets.aim9xw);
 
 		pylonex2a.loadSet(pylonSets.empty);
@@ -1956,9 +1957,9 @@ var ag_standoff_jsow = func {
         reloadCannon();
 
 		setprop("payload/weight[12]/selected","Empty");
-		setprop("payload/weight[1]/selected","1 x AGM-154A");
+		setprop("payload/weight[1]/selected","2 x AGM-154A");
         setprop("payload/weight[5]/selected","Droptank");
-        setprop("payload/weight[9]/selected","1 x AGM-154A");
+        setprop("payload/weight[9]/selected","2 x AGM-154A");
 		setprop("payload/weight[15]/selected","Empty");
 
         setprop("consumables/fuel/tank[5]/selected",0);

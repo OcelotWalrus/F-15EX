@@ -5757,6 +5757,24 @@
     <animation>
         <type>select</type>
         <nopreview />
+        <object-name>agm-154a-double-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[338]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>agm-154a-double-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[337]</property>
+        </condition>
+    </animation>
+
+
+    <animation>
+        <type>select</type>
+        <nopreview />
         <object-name>agm-65b-lx</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[320]</property>
@@ -7957,6 +7975,25 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.185</z-m>
+        </offsets>
+    </model>
+
+    <model>
+        <name>agm-154a-double-l</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/bru-57-1.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>-2.78</y-m>
+            <z-m>0.23</z-m>
+        </offsets>
+    </model>
+    <model>
+        <name>agm-154a-double-r</name>
+        <path>Aircraft/F-15/Models/Stores/AGM-154A/bru-57-9.xml</path>
+        <offsets>
+            <x-m>2</x-m>
+            <y-m>2.78</y-m>
+            <z-m>0.23</z-m>
         </offsets>
     </model>
 

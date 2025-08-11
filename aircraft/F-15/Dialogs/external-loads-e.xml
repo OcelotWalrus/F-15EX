@@ -1914,6 +1914,7 @@
 							<value>1 x AGM-88E</value>
 							<value>1 x AGM-119A</value>
 							<value>1 x AGM-154A</value>
+							<value>2 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
 							<value>1 x AGM-158C</value>
 							<value>B61-12</value>
@@ -1923,7 +1924,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-1-type") == "AIM-9X" or getprop("payload/armament/station/id-1-type") == "AIM-120D" or getprop("payload/armament/station/id-1-type") == "CBU-105" or getprop("payload/armament/station/id-1-set") == "2 x AGM-65B" or getprop("payload/armament/station/id-1-set") == "2 x AGM-65D" or getprop("payload/armament/station/id-1-type") == "GBU-12" or getprop("payload/armament/station/id-1-type") == "GBU-54" or getprop("payload/armament/station/id-1-type") == "GBU-32") {
+									if (getprop("payload/armament/station/id-1-type") == "AIM-9X" or getprop("payload/armament/station/id-1-type") == "AIM-120D" or getprop("payload/armament/station/id-1-type") == "CBU-105" or getprop("payload/armament/station/id-1-set") == "2 x AGM-65B" or getprop("payload/armament/station/id-1-set") == "2 x AGM-65D" or getprop("payload/armament/station/id-1-type") == "GBU-12" or getprop("payload/armament/station/id-1-type") == "GBU-54" or getprop("payload/armament/station/id-1-type") == "GBU-32" or getprop("payload/armament/station/id-1-type") == "AGM-154A") {
 										setprop("payload/armament/station/id-1-count", 2);
 									} elsif (getprop("payload/armament/station/id-1-type") == "MK-83" or getprop("payload/armament/station/id-1-type") == "CBU-87" or getprop("payload/armament/station/id-1-set") == "3 x AGM-65B" or getprop("payload/armament/station/id-1-set") == "3 x AGM-65D") {
 										setprop("payload/armament/station/id-1-count", 3);
@@ -2418,6 +2419,7 @@
 							<value>1 x AGM-88E</value>
 							<value>1 x AGM-119A</value>
 							<value>1 x AGM-154A</value>
+							<value>2 x AGM-154A</value>
 							<value>1 x AGM-158A</value>
 							<value>1 x AGM-158C</value>
 							<value>B61-12</value>
@@ -2427,7 +2429,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-									if (getprop("payload/armament/station/id-9-type") == "AIM-9X" or getprop("payload/armament/station/id-9-type") == "AIM-120D" or getprop("payload/armament/station/id-9-type") == "CBU-105" or getprop("payload/armament/station/id-9-set") == "2 x AGM-65B" or getprop("payload/armament/station/id-9-set") == "2 x AGM-65D" or getprop("payload/armament/station/id-9-type") == "GBU-12" or getprop("payload/armament/station/id-9-type") == "GBU-54" or getprop("payload/armament/station/id-9-type") == "GBU-32") {
+									if (getprop("payload/armament/station/id-9-type") == "AIM-9X" or getprop("payload/armament/station/id-9-type") == "AIM-120D" or getprop("payload/armament/station/id-9-type") == "CBU-105" or getprop("payload/armament/station/id-9-set") == "2 x AGM-65B" or getprop("payload/armament/station/id-9-set") == "2 x AGM-65D" or getprop("payload/armament/station/id-9-type") == "GBU-12" or getprop("payload/armament/station/id-9-type") == "GBU-54" or getprop("payload/armament/station/id-9-type") == "GBU-32" or getprop("payload/armament/station/id-9-type") == "AGM-154A") {
 										setprop("payload/armament/station/id-9-count", 2);
 									} elsif (getprop("payload/armament/station/id-9-type") == "MK-83" or getprop("payload/armament/station/id-9-type") == "CBU-87" or getprop("payload/armament/station/id-9-set") == "3 x AGM-65B" or getprop("payload/armament/station/id-9-set") == "3 x AGM-65D") {
 										setprop("payload/armament/station/id-9-count", 3);
