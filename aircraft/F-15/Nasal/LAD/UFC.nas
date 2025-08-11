@@ -727,7 +727,11 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres) {
+                        stored_input = stored_input~"-";
+                        displays.hyphen_0_pres = 0;
+                        displays.shf_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1 and !displays.shf_pres) {
                         stored_input = stored_input~"0";
                         displays.hyphen_0_pres = 0;
                     }
@@ -793,7 +797,11 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres) {
+                        stored_input = stored_input~"-";
+                        displays.hyphen_0_pres = 0;
+                        displays.shf_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1 and !displays.shf_pres) {
                         stored_input = stored_input~"0";
                         displays.hyphen_0_pres = 0;
                     }
@@ -858,7 +866,11 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres) {
+                        stored_input = stored_input~"-";
+                        displays.hyphen_0_pres = 0;
+                        displays.shf_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1 and !displays.shf_pres) {
                         stored_input = stored_input~"0";
                         displays.hyphen_0_pres = 0;
                     }
