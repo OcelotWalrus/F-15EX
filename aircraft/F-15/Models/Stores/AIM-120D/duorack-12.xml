@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PropertyList>
 
-    <path>Aircraft/F-15/Models/Stores/Racks/amber.xml</path>
+    <!--path>Aircraft/F-15/Models/Stores/Racks/LAU-114/LAU-114.xml</path-->
 
     <model>
-        <name>AIM-120D-12-0</name>
+        <name>AIM-120-12-0</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
         <offsets>
             <x-m>-0</x-m>
-            <y-m>-0.185</y-m>
-            <z-m>-0.14</z-m>
+            <y-m>-0.332</y-m>
+            <z-m>-0.08</z-m>
         </offsets>
     </model>
 
     <model>
-        <name>AIM-120D-12-1</name>
+        <name>AIM-120-12-1</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
         <offsets>
             <x-m>-0</x-m>
-            <y-m>0.185</y-m>
-            <z-m>-0.14</z-m>
+            <y-m>0.332</y-m>
+            <z-m>-0.08</z-m>
         </offsets>
     </model>
 
     <animation>
         <type>select</type>
-        <object-name>AIM-120D-12-0</object-name>
+        <object-name>AIM-120-12-0</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-12-type</property>
+                <property>payload/armament/station/id-1-type</property>
                 <value>AIM-120D</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-12-count</property>
+                <property>payload/armament/station/id-1-count</property>
                 <value>0</value>
             </greater-than>
         </condition>
     </animation>
     <animation>
         <type>select</type>
-        <object-name>AIM-120D-12-1</object-name>
+        <object-name>AIM-120-12-1</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-12-type</property>
+                <property>payload/armament/station/id-1-type</property>
                 <value>AIM-120D</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-12-count</property>
+                <property>payload/armament/station/id-1-count</property>
                 <value>1</value>
             </greater-than>
         </condition>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PropertyList>
 
-    <path>Aircraft/F-15/Models/Stores/Racks/amber.xml</path>
+    <!--path>Aircraft/F-15/Models/Stores/Racks/LAU-114/LAU-114.xml</path-->
 
     <model>
-        <name>CATM-120D</name>
+        <name>CATM-120</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/CATM-120B.xml</path>
         <offsets>
             <x-m>-0</x-m>
-            <y-m>-0.185</y-m>
-            <z-m>-0.14</z-m>
+            <y-m>-0.332</y-m>
+            <z-m>-0.08</z-m>
         </offsets>
     </model>
 
     <model>
-        <name>CATM-120D</name>
+        <name>CATM-120</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/CATM-120B.xml</path>
         <offsets>
             <x-m>-0</x-m>
-            <y-m>0.185</y-m>
-            <z-m>-0.14</z-m>
+            <y-m>0.332</y-m>
+            <z-m>-0.08</z-m>
         </offsets>
     </model>
 

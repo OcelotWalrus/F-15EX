@@ -813,7 +813,7 @@ var F15MainModule =
 
         # Make sure that if CFTs are not installed, non-CFT-compatible stations are empty
         if (getprop("fdm/jsbsim/propulsion/cft") != 1 or !getprop("fdm/jsbsim/propulsion/cft")) {
-            setprop("payload/weight[18]/selected", "Empty");
+            #setprop("payload/weight[18]/selected", "Empty");  # Nav pod, you can now have it even without CFTs
             setprop("payload/weight[19]/selected", "Empty");
             setprop("payload/weight[20]/selected", "Empty");
             setprop("payload/weight[21]/selected", "Empty");
@@ -992,6 +992,8 @@ var F15MainModule =
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
             } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "3 x AGM-65D") {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 462.5*getprop("payload/armament/station/id-"~cur_pyl~"-count") + 30);
+            } elsif (getprop("payload/armament/station/id-"~cur_pyl~"-set") == "Legion Pod (IRST)") {
+                setprop("payload/weight["~cur_pyl~"]/weight-lb", 500*getprop("payload/armament/station/id-"~cur_pyl~"-count"));
             } else {
                 setprop("payload/weight["~cur_pyl~"]/weight-lb", 0);
             }

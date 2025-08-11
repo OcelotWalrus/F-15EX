@@ -1742,6 +1742,10 @@
                             <property>payload/weight[12]/selected</property>
                             <live>true</live>
                             <value>Empty</value>
+							<value>2 x CATM-9X Sidewinder Dummy</value>
+							<value>2 x AIM-9X Block I Sidewinder</value>
+							<value>2 x CATM-120D AMRAAM Dummy</value>
+							<value>2 x AIM-120D AMRAAM</value>
                             <value>2 x AGM-65B</value>
                             <value>2 x AGM-65D</value>
                             <value>1 x AGM-84D</value>
@@ -2565,6 +2569,10 @@
 							<property>payload/weight[15]/selected</property>
 							<live>true</live>
 							<value>Empty</value>
+							<value>2 x CATM-9X Sidewinder Dummy</value>
+							<value>2 x AIM-9X Block I Sidewinder</value>
+							<value>2 x CATM-120D AMRAAM Dummy</value>
+							<value>2 x AIM-120D AMRAAM</value>
                             <value>2 x AGM-65B</value>
                             <value>2 x AGM-65D</value>
                             <value>1 x AGM-84D</value>
@@ -2667,7 +2675,7 @@
 							<binding>
 								<command>dialog-apply</command>
 							</binding>
-							<binding>
+							<!--binding>
 								<command>nasal</command>
 								<script>
 									if (getprop("sim/multiplay/generic/bool[70]") != 1) {
@@ -2676,8 +2684,8 @@
 										warn_dialog.open();
 										setprop("payload/weight[18]/selected", "Empty");
 									}
-								</script>
-							</binding>
+								</script>  You can now load the Lantirn Nav Pod even without the CFTs  You still need 'em for the TPOD though
+							</binding-->
 						</combo>
 						<text>
 							<property>payload/weight[18]/weight-lb</property>

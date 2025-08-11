@@ -2380,7 +2380,10 @@
         <nopreview />
         <object-name>su59-l</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[30]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2396,7 +2399,10 @@
         <nopreview />
         <object-name>lau128-l1</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[32]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2452,7 +2458,10 @@
         <nopreview />
         <object-name>lau128-l2</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[41]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2540,7 +2549,10 @@
         <nopreview />
         <object-name>su59-r</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[58]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2556,7 +2568,10 @@
         <nopreview />
         <object-name>lau128-r1</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[60]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2596,7 +2611,10 @@
         <nopreview />
         <object-name>lau128-r2</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[67]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2784,7 +2802,10 @@
         <nopreview />
         <object-name>su59-l</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[30]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2800,7 +2821,10 @@
         <nopreview />
         <object-name>lau128-l1</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[32]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2856,7 +2880,10 @@
         <nopreview />
         <object-name>lau128-l2</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[41]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2944,7 +2971,10 @@
         <nopreview />
         <object-name>su59-r</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[58]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -2960,7 +2990,10 @@
         <nopreview />
         <object-name>lau128-r1</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[60]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3000,7 +3033,10 @@
         <nopreview />
         <object-name>lau128-r2</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[67]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3033,7 +3069,10 @@
         <nopreview />
         <object-name>su59-lx</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[79]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3041,7 +3080,10 @@
         <nopreview />
         <object-name>su59-rx</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[80]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3075,7 +3117,10 @@
         <nopreview />
         <object-name>lau128-l1x</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[82]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3091,7 +3136,10 @@
         <nopreview />
         <object-name>lau128-l2x</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[84]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3107,7 +3155,10 @@
         <nopreview />
         <object-name>lau128-r1x</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[86]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3115,7 +3166,10 @@
         <nopreview />
         <object-name>adu552-r2x</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[87]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3123,7 +3177,10 @@
         <nopreview />
         <object-name>lau128-r2x</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[88]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
     <animation>
@@ -3172,38 +3229,6 @@
         <object-name>2x-aim-9x-rx</object-name>
         <condition>
             <property>sim/multiplay/generic/bool[94]</property>
-        </condition>
-    </animation>
-    <animation>
-        <type>select</type>
-        <nopreview />
-        <object-name>2x-aim-120d-l</object-name>
-        <condition>
-            <property>sim/multiplay/generic/bool[104]</property>
-        </condition>
-    </animation>
-    <animation>
-        <type>select</type>
-        <nopreview />
-        <object-name>2x-aim-120d-r</object-name>
-        <condition>
-            <property>sim/multiplay/generic/bool[105]</property>
-        </condition>
-    </animation>
-    <animation>
-        <type>select</type>
-        <nopreview />
-        <object-name>2x-aim-120d-lx</object-name>
-        <condition>
-            <property>sim/multiplay/generic/bool[103]</property>
-        </condition>
-    </animation>
-    <animation>
-        <type>select</type>
-        <nopreview />
-        <object-name>2x-aim-120d-rx</object-name>
-        <condition>
-            <property>sim/multiplay/generic/bool[106]</property>
         </condition>
     </animation>
     <animation>
@@ -5869,6 +5894,39 @@
             <property>sim/multiplay/generic/bool[331]</property>
         </condition>
     </animation>
+    
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>2x-aim-120d-lx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[103]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>2x-aim-120d-l</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[104]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>2x-aim-120d-r</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[105]</property>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>2x-aim-120d-rx</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[106]</property>
+        </condition>
+    </animation>
 
     <animation>
         <type>select</type>
@@ -5883,7 +5941,10 @@
         <nopreview />
         <object-name>lau68-r</object-name>
         <condition>
-            <property>sim/multiplay/generic/bool[333]</property>
+            <greater-than>
+                <value>0</value>
+                <value>0</value>
+            </greater-than>
         </condition>
     </animation>
 
@@ -6330,22 +6391,13 @@
              <z-m>0.15</z-m>
         </offsets>
     </model>
-
+    
     <model>
         <name>2x-aim-120d-l</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/duorack-1.xml</path>
         <offsets>
              <x-m>2</x-m>
              <y-m>-2.78</y-m>
-             <z-m>0.15</z-m>
-        </offsets>
-    </model>
-    <model>
-        <name>2x-aim-120d-lx</name>
-        <path>Aircraft/F-15/Models/Stores/AIM-120D/duorack-12.xml</path>
-        <offsets>
-             <x-m>3.00</x-m>
-             <y-m>-4.03</y-m>
              <z-m>0.15</z-m>
         </offsets>
     </model>
@@ -6359,6 +6411,15 @@
         </offsets>
     </model>
     <model>
+        <name>2x-aim-120d-lx</name>
+        <path>Aircraft/F-15/Models/Stores/AIM-120D/duorack-12.xml</path>
+        <offsets>
+             <x-m>3.00</x-m>
+             <y-m>-4.03</y-m>
+             <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    <model>
         <name>2x-aim-120d-rx</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/duorack-15.xml</path>
         <offsets>
@@ -6367,6 +6428,7 @@
              <z-m>0.15</z-m>
         </offsets>
     </model>
+
     <model>
         <name>aim-120d-l1x</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/AIM-120B.xml</path>
@@ -9087,6 +9149,17 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.15</z-m>
+        </offsets>
+    </model>
+    
+    <!-- new rails -->
+    <model>
+        <name>new-rails</name>
+        <path>Aircraft/F-15/Models/new-rails.xml</path>
+        <offsets>
+             <x-m>0</x-m>
+             <y-m>0</y-m>
+             <z-m>0</z-m>
         </offsets>
     </model>
 
