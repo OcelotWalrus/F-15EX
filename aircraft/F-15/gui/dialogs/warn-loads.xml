@@ -5,6 +5,7 @@
   <name>warn-loads</name>
   <modal type="bool">false</modal>
   <layout>vbox</layout>
+  <width>500</width>
 
   <group>
     <layout>hbox</layout>
@@ -19,13 +20,14 @@
     </empty>
 
     <button>
-      <pref-width>250</pref-width>
+      <pref-width>16</pref-width>
       <pref-height>16</pref-height>
       <legend></legend>
 
       <default>1</default>
       <keynum>27</keynum>
       <border>2</border>
+      <legend>X</legend>
       <binding>
         <command>dialog-close</command>
       </binding>
@@ -38,9 +40,9 @@
   <hrule/>
 
   <text>
-      <halign>left</halign>
+      <halign>center</halign>
       <property>sim/model/f15/warn-loads-text</property>
-      <label>xxxxxxxx</label>
+      <label>!You need conformal fuel tanks to use that weapon on that hardpoint!</label>
       <live>true</live>
       <format>%s</format>
   </text>

@@ -1743,8 +1743,8 @@
                             <live>true</live>
                             <value>Empty</value>
 							<value>2 x CATM-9X Sidewinder Dummy</value>
-							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x CATM-120D AMRAAM Dummy</value>
+							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
                             <value>2 x AGM-65B</value>
                             <value>2 x AGM-65D</value>
@@ -2043,6 +2043,13 @@
 							<binding>
 								<command>nasal</command>
 								<script>
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-3-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-3-set") != "Empty")) {
+										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
+										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
+										warn_dialog.open();
+										setprop("payload/weight[3]/selected", "Empty");
+									}
+								
 									if (getprop("payload/armament/station/id-3-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-3-count", 2);
 									} elsif (getprop("payload/armament/station/id-3-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-3-set") == "3 x MK-82") {
@@ -2111,6 +2118,13 @@
 							<binding>
 								<command>nasal</command>
 								<script>
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-4-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-4-set") != "Empty")) {
+										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
+										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
+										warn_dialog.open();
+										setprop("payload/weight[4]/selected", "Empty");
+									}
+								
 									if (getprop("payload/armament/station/id-4-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-4-count", 2);
 									} elsif (getprop("payload/armament/station/id-4-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-4-set") == "3 x MK-82") {
@@ -2239,6 +2253,13 @@
 							<binding>
 								<command>nasal</command>
 								<script>
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-6-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-6-set") != "Empty")) {
+										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
+										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
+										warn_dialog.open();
+										setprop("payload/weight[6]/selected", "Empty");
+									}
+								
 									if (getprop("payload/armament/station/id-6-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-6-count", 2);
 									} elsif (getprop("payload/armament/station/id-6-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-6-set") == "3 x MK-82") {
@@ -2307,6 +2328,13 @@
 							<binding>
 								<command>nasal</command>
 								<script>
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-7-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-7-set") != "Empty")) {
+										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
+										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
+										warn_dialog.open();
+										setprop("payload/weight[7]/selected", "Empty");
+									}
+								
 									if (getprop("payload/armament/station/id-7-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-7-count", 2);
 									} elsif (getprop("payload/armament/station/id-7-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-7-set") == "3 x MK-82") {
@@ -2570,8 +2598,8 @@
 							<live>true</live>
 							<value>Empty</value>
 							<value>2 x CATM-9X Sidewinder Dummy</value>
-							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x CATM-120D AMRAAM Dummy</value>
+							<value>2 x AIM-9X Block I Sidewinder</value>
 							<value>2 x AIM-120D AMRAAM</value>
                             <value>2 x AGM-65B</value>
                             <value>2 x AGM-65D</value>
