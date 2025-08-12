@@ -5740,6 +5740,26 @@
     <object-name>UFCButton017</object-name>
     <object-name>UFCButton018</object-name>
     <object-name>UFCButton019</object-name>
+    <object-name>LADButton00</object-name>
+    <object-name>LADButton01</object-name>
+    <object-name>LADButton02</object-name>
+    <object-name>LADButton03</object-name>
+    <object-name>LADButton04</object-name>
+    <object-name>LADButton05</object-name>
+    <object-name>LADButton06</object-name>
+    <object-name>LADButton07</object-name>
+    <object-name>LADButton08</object-name>
+    <object-name>LADButton09</object-name>
+    <object-name>LADButton10</object-name>
+    <object-name>LADButton11</object-name>
+    <object-name>LADButton12</object-name>
+    <object-name>LADButton13</object-name>
+    <object-name>LADButton14</object-name>
+    <object-name>LADButton15</object-name>
+    <object-name>LADButton16</object-name>
+    <object-name>LADButton17</object-name>
+    <object-name>LADButton18</object-name>
+    <object-name>LADButton19</object-name>
   </effect>
   <effect>
     <name>f15panel-right</name>
