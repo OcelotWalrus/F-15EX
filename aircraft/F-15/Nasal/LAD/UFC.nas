@@ -333,6 +333,17 @@ var is_numeric = func(str) {  # Returns if inputted string in numeric
     return typeof(num) == "scalar" and num == num;
 };
 
+var remove_chr = func(chr, str) {  # Remove every "x" character from a string in python
+    var result = "";
+    for (var i = 0; i < size(str); i += 1) {
+        var ch = substr(str, i, 1);
+        if (ch != chr) {
+            result = result~ch;  # Append character if it's not "<chr>"
+        }
+    }
+    return result;
+};
+
 
 update_loop_func = func() {
     
@@ -465,7 +476,7 @@ update_loop_func = func() {
                 }
                 
                 
-                if (size(stored_input) < 3) {  # Max amount of data that can be inputted
+                if (inputting and size(stored_input) < 3) {  # Max amount of data that can be inputted
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -532,7 +543,7 @@ update_loop_func = func() {
                 }
                 
                 
-                if (size(stored_input) < 3) {  # Max amount of data that can be inputted
+                if (inputting and size(stored_input) < 3) {  # Max amount of data that can be inputted
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -633,7 +644,7 @@ update_loop_func = func() {
                     displays.b_3_pres = 0;
                 }
                 
-                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                if (inputting and size(stored_input) < 5) {  # Max amount of data that can be inputted
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -699,7 +710,7 @@ update_loop_func = func() {
                     displays.b_3_pres = 0;
                 }
                 
-                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                if (size(remove_chr("-", stored_input)) < 2 and inputting) {  # Max amount of data that can be inputted. math.abs cause the negative don't count
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -727,7 +738,7 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres and size(stored_input) < 1) {
                         stored_input = stored_input~"-";
                         displays.hyphen_0_pres = 0;
                         displays.shf_pres = 0;
@@ -769,7 +780,7 @@ update_loop_func = func() {
                     displays.b_3_pres = 0;
                 }
                 
-                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                if (size(remove_chr("-", stored_input)) < 2 and inputting) {  # Max amount of data that can be inputted. math.abs cause the negative don't count
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -797,7 +808,7 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres and size(stored_input) < 1) {
                         stored_input = stored_input~"-";
                         displays.hyphen_0_pres = 0;
                         displays.shf_pres = 0;
@@ -838,7 +849,7 @@ update_loop_func = func() {
                     displays.b_3_pres = 0;
                 }
                 
-                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                if (size(remove_chr("-", stored_input)) < 5 and inputting) {  # Max amount of data that can be inputted. math.abs cause the negative don't count
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -866,7 +877,7 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres and size(stored_input) < 1) {
                         stored_input = stored_input~"-";
                         displays.hyphen_0_pres = 0;
                         displays.shf_pres = 0;
@@ -923,7 +934,7 @@ update_loop_func = func() {
                     displays.a_1_pres = 0;
                 }
                 
-                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                if (inputting and size(stored_input) < 5) {  # Max amount of data that can be inputted
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -984,7 +995,7 @@ update_loop_func = func() {
                     displays.a_1_pres = 0;
                 }
                 
-                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                if (size(remove_chr("-", stored_input)) < 2 and inputting) {  # Max amount of data that can be inputted. math.abs cause the negative don't count
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1012,7 +1023,11 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres and size(stored_input) < 1) {
+                        stored_input = stored_input~"-";
+                        displays.hyphen_0_pres = 0;
+                        displays.shf_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1 and !displays.shf_pres) {
                         stored_input = stored_input~"0";
                         displays.hyphen_0_pres = 0;
                     }
@@ -1045,7 +1060,7 @@ update_loop_func = func() {
                     displays.a_1_pres = 0;
                 }
                 
-                if (size(stored_input) < 2) {  # Max amount of data that can be inputted
+                if (size(remove_chr("-", stored_input)) < 2 and inputting) {  # Max amount of data that can be inputted. math.abs cause the negative don't count
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1073,7 +1088,11 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres and size(stored_input) < 1) {
+                        stored_input = stored_input~"-";
+                        displays.hyphen_0_pres = 0;
+                        displays.shf_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1 and !displays.shf_pres) {
                         stored_input = stored_input~"0";
                         displays.hyphen_0_pres = 0;
                     }
@@ -1105,7 +1124,7 @@ update_loop_func = func() {
                     displays.a_1_pres = 0;
                 }
                 
-                if (size(stored_input) < 5) {  # Max amount of data that can be inputted
+                if (size(remove_chr("-", stored_input)) < 5 and inputting) {  # Max amount of data that can be inputted. math.abs cause the negative don't count
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1133,7 +1152,11 @@ update_loop_func = func() {
                     } elsif (displays.c_9_pres == 1) {
                         stored_input = stored_input~"9";
                         displays.c_9_pres = 0;
-                    } elsif (displays.hyphen_0_pres == 1) {
+                    } elsif (displays.hyphen_0_pres == 1 and displays.shf_pres and size(stored_input) < 1) {
+                        stored_input = stored_input~"-";
+                        displays.hyphen_0_pres = 0;
+                        displays.shf_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1 and !displays.shf_pres) {
                         stored_input = stored_input~"0";
                         displays.hyphen_0_pres = 0;
                     }
@@ -1186,7 +1209,7 @@ update_loop_func = func() {
                     displays.a_1_pres = 0;
                 }
                 
-                if (size(stored_input) < 4) {  # Max amount of data that can be inputted (one for unit, one for decimal dot, two for decimal values)
+                if (inputting and size(stored_input) < 4) {  # Max amount of data that can be inputted (one for unit, one for decimal dot, two for decimal values)
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
