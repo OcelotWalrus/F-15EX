@@ -942,7 +942,14 @@ var LAD_Device = {
             .setText("MIG23")
             .setAlignment("center-center")
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
-            .setTranslation(1235+300+500,500+35)
+            .setTranslation(1235+130+500,500+35)
+            .setFont(aircraft.HUDFont);
+        m.vsd_tgt_callsign = m.VSDScreen.createChild("text")
+            .setFontSize(85, 1.4)
+            .setText("Coyote")
+            .setAlignment("center-center")
+            .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
+            .setTranslation(1235+400+500,500+35)
             .setFont(aircraft.HUDFont);
         m.vsd_tgt_closure_pin = m.VSDScreen.createChild("path")
             .moveTo(677*4-75,1150*4+500+75)
@@ -1007,6 +1014,7 @@ var LAD_Device = {
         m.vsd_tgt_model.setVisible(0);
         m.vsd_tgt_closure_pin.setVisible(0);
         m.vsd_tgt_closure_text.setVisible(0);
+        m.vsd_tgt_callsign.setVisible(0);
 
         ## HSD Display
         m.hsd_great_circle_radius = 1150;
@@ -2452,6 +2460,16 @@ update_lad = func() {
 
                     LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0,-range_y);
                     LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140,5175-range_y);
+                    
+                    contact_data = datalink.get_data(awg_9.active_u.get_Callsign());
+                    display_callsign = contact.getIffResponse() or (contact_data != nil and contact_data.is_known() and (contact_data.on_link() or contact_data.is_friendly()));  # If we received an IFF response from him, we got his callsign. If he's on same datalink or someone on data got an IFF response from him, we got his callsign.
+                    if (display_callsign) {  # If we got an IFF response from him, or he his on datalink and he's been identified on IFF
+                        LADCanvas.vsd_tgt_callsign.setVisible(1);
+                        LADCanvas.vsd_tgt_callsign.setText(awg_9.active_u.get_Callsign());
+                    } else {
+                        LADCanvas.vsd_tgt_callsign.setVisible(0);
+                    }
+                    
                 }
             } else {
                 LADCanvas.vsd_tgt_true_speed.setVisible(0);
