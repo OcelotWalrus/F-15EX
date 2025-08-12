@@ -62,10 +62,16 @@
 # - Allow weapons to be programmed when you click on 'em.
 # - Add the Jettison page (waiting for the interiors to finish because there are switches that configure jettison in there.
 # ---------------------------
+# Coordinates of touchable zones: (all measures are in pixels)
+# //VSD Display// :
+# STP/BULLSEYE/TACAN/ILS info box : UP R: 1390, 5030; UP L: 315, 5030; DOWN R: 1390, 5140; DOWN L: 315, 5140.
+# ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
 
 ## Constant Variables
+
+var vsd_nav_box_pos = [[1390, 5030], [315, 5030], [315, 5140] ,[1390, 5140]];
 
 var typeLookup = { # database of known radar signatures
     # Aicraft
@@ -201,6 +207,7 @@ var LAD_Device = {
 
         m.svg.setColorBackground(prst_black.r,prst_black.g,prst_black.b, 1);  # dark-dark gray
 
+        m.screen_touch_pos = [0, 0];  # Position of the "cursor". Where the pilot touched the screen in X an Y coordinates
 
 
         ## The upper panel, it's static and displays basic useful information
@@ -764,6 +771,9 @@ var LAD_Device = {
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(155+210,2300*2+500+10-210)
             .setFont(aircraft.HUDFont);
+            
+        m.vsd_nav_box_mode = 0;  # Controls which nav info we should display on the VSD (0 STPTs, 1 BULLSEYE, 2 TACAN, 3 ILS/NAV1)
+                                 # TACAN and ILS/NAV1 modes are not available yet TODO
 
         # Create the steerpoints symbols
         m.stpt_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
@@ -1548,6 +1558,10 @@ var LAD_Device = {
         m.tpod_mounted_text.setVisible(0);
         m.irst_pod_mounted_text.setVisible(0);
         m.ecm_pod_mounted_text.setVisible(0);
+        
+        m.VSDDisplayTrans = 0;  # For screen touches, we need to know whether each display is a first, second or third slot
+        m.HSDDisplayTrans = 0;
+        m.PACSDisplayTrans = 0;
 
         return m;
     },
@@ -1631,6 +1645,51 @@ var is_inside_static = func(x, y, center_static, radiuses_static, static_rotatio
     return (x_rot*x_rot)/(radiuses_static[0]*radiuses_static[0]) + (y_rot*y_rot)/(radiuses_static[1]*radiuses_static[1]) <= 1;
 }
 
+var point_in_tri = func(px, py, a, b, c) {
+    # This function is used to determine if a point is inside
+    # a triangle. This is also used by point_in_quad() to determine 
+    # if a point is inside any 4-cornered polygon.
+    # ----------
+    # px - should be the x coordinate of the point
+    # py - should be the y coordinate of the point
+    # a - should be a vector containing the x and y coordinate of the first triangle's corner in that order
+    # b - should be a vector containing the x and y coordinate of the second triangle's corner in that order
+    # c - should be a vector containing the x and y coordinate of the third triangle's corner in that order
+
+    var sign = func(p1, p2, p3) {
+        return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
+    };
+
+    p = [px, py];
+    d1 = sign(p, a, b);
+    d2 = sign(p, b, c);
+    d3 = sign(p, c, a);
+
+    has_neg = (d1 < 0) or (d2 < 0) or (d3 < 0);
+    has_pos = (d1 > 0) or (d2 > 0) or (d3 > 0);
+
+    return !(has_neg and has_pos);
+};
+
+var point_in_quad = func(point, quad) {
+    # This function is used for the touchable function: it tells us if a point
+    # (where the pilot touched) is inside a polygon defined by 4 corners.
+    # How it works is that we split the quad into two triangles
+    # and then used point_in_tri() to determine if the point is in either both
+    # triangles. That works for any 4-cornered polygon.
+    # ------------
+    # point - should be a vector containing the x and y coordinates of the point in that order.
+    # quad - should be a vector containing vectors of each of the 4 points of the quad in a following order.
+    # You can find an example of the quad variable in the constant variables with center_tank_quad.
+    
+    a = quad[0];  # up r corner
+    b = quad[1];  # up l corner
+    c = quad[2];  # down l corner
+    d = quad[3];  # down r corner
+    
+    return (point_in_tri(point[0], point[1], d, c, b) or point_in_tri(point[0], point[1], d, a, b));
+}
+
 # Don't work GODDAMN
 var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_radius, center_x, center_y, center_x_static, center_y_static, ellipse2_horizon_radius, ellipse2_vertic_radius, step=2.5, ellipse_rot=0, static_rotation=0) {
 
@@ -1666,6 +1725,36 @@ update_lad = func() {
 
     # We make sure we don't run none of that if the LAD screen's offline
     if (getprop("sim/model/f15/controls/LAD/mode") > 0 and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0) {
+    
+        # Handle screen screen touches
+        if (getprop("sim/model/f15/controls/LAD/screen-touch-cmd") == 1) {  # Screen has been touched
+            setprop("sim/model/f15/controls/LAD/screen-touch-cmd", 0);  # Reset touch trigger command property
+            LADCanvas.screen_touch_pos = [getprop("sim/model/f15/controls/LAD/screen-touch-x"), getprop("sim/model/f15/controls/LAD/screen-touch-y")];  # Update the "cursor"'s pos
+            
+            # VSD Touch boxes
+            if (VSD_ON) {  # Don't run none of that if there ain't no VSD screen
+            
+                # Update the boxes' x position, depending on VSD's slot on the LAD
+                var vsd_nav_box_pos = vsd_nav_box_pos;
+                if (LADCanvas.VSDDisplayTrans != 0) {  # If the display is at slot 0, we don't gotta update the touch zone box's pos
+                    var vsd_nav_box_pos = [];
+                    point_count = 0;  # vector id
+                    foreach(point; vsd_nav_box_pos) {
+                        append(vsd_nav_box_pos, [point[0] + LADCanvas.VSDDisplayTrans, point[1]]);
+                        point_count += 1;
+                    }
+                }
+                
+                if (point_in_quad(LADCanvas.screen_touch_pos, vsd_nav_box_pos)) {  # We touched that box
+                    if (LADCanvas.vsd_nav_box_mode == 3) {  # Wrap up
+                        LADCanvas.vsd_nav_box_mode = 0;
+                    } else {
+                        LADCanvas.vsd_nav_box_mode += 1;
+                    }
+                }
+            }
+        }
+    
         ## Upper panel updates
         # Update the Caution light, depending on if there's a caution or not (also change its size)
         caution = getprop("sim/model/f15/instrumentation/warnings/master-caution");
@@ -1845,12 +1934,15 @@ update_lad = func() {
         if (main_screens.left == "VSD") {
             VSD_ON = 1;
             LADCanvas.VSDScreen.setTranslation(0,0);  # Default position's position for the left main screen
+            LADCanvas.VSDDisplayTrans = 0;
         } elsif (main_screens.center == "VSD") {
             VSD_ON = 1;
             LADCanvas.VSDScreen.setTranslation(8192/3,0);
+            LADCanvas.VSDDisplayTrans = 8192/3;
         } elsif (main_screens.right == "VSD") {
             VSD_ON = 1;
             LADCanvas.VSDScreen.setTranslation((8192/3)*2,0);
+            LADCanvas.VSDDisplayTrans = (8192/3)*2;
         } else {
             VSD_ON = 0;
         }
@@ -1861,18 +1953,21 @@ update_lad = func() {
             LADCanvas.HSDScreenLines.setTranslation(0,0);
             LADCanvas.HSDScreenCircles.setTranslation(0,0);
             LADCanvas.HSDScreenRdrCones.setTranslation(0,0);
+            LADCanvas.HSDDisplayTrans = 0;
         } elsif (main_screens.center == "HSD") {
             HSD_ON = 1;
             LADCanvas.HSDScreen.setTranslation(8192/3,0);
             LADCanvas.HSDScreenLines.setTranslation(8192/3,0);
             LADCanvas.HSDScreenCircles.setTranslation(8192/3,0);
             LADCanvas.HSDScreenRdrCones.setTranslation((8192/3),0);
+            LADCanvas.HSDDisplayTrans = 8192/3;
         } elsif (main_screens.right == "HSD") {
             HSD_ON = 1;
             LADCanvas.HSDScreen.setTranslation((8192/3)*2,0);
             LADCanvas.HSDScreenLines.setTranslation((8192/3)*2,0);
             LADCanvas.HSDScreenCircles.setTranslation((8192/3)*2,0);
             LADCanvas.HSDScreenRdrCones.setTranslation((8192/3)*2,0);
+            LADCanvas.HSDDisplayTrans = (8192/3)*2;
         } else {
             HSD_ON = 0;
         }
@@ -1880,12 +1975,15 @@ update_lad = func() {
         if (main_screens.left == "PACS") {
             PACS_ON = 1;
             LADCanvas.PACSScreen.setTranslation(0,620);  # Default position's position for the left main screen
+            LADCanvas.PACSDisplayTrans = 0;
         } elsif (main_screens.center == "PACS") {
             PACS_ON = 1;
             LADCanvas.PACSScreen.setTranslation(8192/3,620);
+            LADCanvas.PACSDisplayTrans = 8192/3;
         } elsif (main_screens.right == "PACS") {
             PACS_ON = 1;
             LADCanvas.PACSScreen.setTranslation((8192/3)*2,620);
+            LADCanvas.PACSDisplayTrans = (8192/3)*2;
         } else {
             PACS_ON = 0;
         }
@@ -2014,12 +2112,6 @@ update_lad = func() {
             LADCanvas.vsd_fps.setText(sprintf("FPS %04d", getprop("velocities/down-relground-fps")));
             LADCanvas.vsd_heading_true.setText(sprintf("H %03d", getprop("orientation/heading-deg")));
 
-            if (getprop("autopilot/route-manager/current-wp") == -1) {
-                LADCanvas.vsd_stpt_index.setText("No.00");
-            } else {
-                LADCanvas.vsd_stpt_index.setText(sprintf("No.%02d", getprop("autopilot/route-manager/current-wp")));
-            }
-
             # Move the azimuth and elevation carats around
             var azimuth_sweep = getprop("sim/model/f15/instrumentation/awg-9/sweep-factor");
             azimuth_offset = getprop("instrumentation/radar/az-field-offset");
@@ -2045,43 +2137,116 @@ update_lad = func() {
             LADCanvas.vsd_vert_coverage_text_up.setText(sprintf("%d", max_alt));
             LADCanvas.vsd_vert_coverage_text_down.setText(sprintf("%d", min_alt));
 
+            # Update the nav box's display info
+
+            var vsd_display_dist_nav = 999.9;
+            var vsd_nav_bearing = 999;
+            var vsd_no_eta = 1;
+            var vsd_nav_info_text = "No. 00";
+            if (LADCanvas.vsd_nav_box_mode == 0) {  # Standard steerpoint mode
+                LADCanvas.vsd_stpt_eta.setColor(prst_green.r, prst_green.g, prst_green.b);
+                LADCanvas.vsd_stpt_dist.setColor(prst_green.r, prst_green.g, prst_green.b);
+                LADCanvas.vsd_stpt_bearing.setColor(prst_green.r, prst_green.g, prst_green.b);
+                LADCanvas.vsd_stpt_index.setColor(prst_green.r, prst_green.g, prst_green.b);
+                var vsd_display_dist_nav = getprop("autopilot/route-manager/wp/dist");
+                if (vsd_display_dist_nav == nil) {
+                    var vsd_display_dist_nav = 999.9;
+                }
+                
+                var vsd_no_eta = getprop("autopilot/route-manager/wp/eta-seconds") == nil or getprop("velocities/groundspeed-kt") < 150;  # 150 kts is about take off speed, we don't wanna display ETA if we're still on the ground
+                if (!vsd_no_eta) {
+                    var vsd_nav_mins = sprintf("%.0f", getprop("autopilot/route-manager/wp/eta-seconds") / 60);
+                    var vsd_nav_secs = (getprop("autopilot/route-manager/wp/eta-seconds") / 60 - vsd_nav_mins) * 60;  # remove whole minutes for seconds
+                    if (vsd_nav_secs < 0) {  # tiny fix
+                        var vsd_nav_mins = vsd_nav_mins - 1;
+                        var vsd_nav_secs = 60 + vsd_nav_secs;
+                    }
+                }
+                
+                var vsd_nav_bearing = getprop("autopilot/route-manager/wp/true-bearing-deg");
+                if (vsd_nav_bearing == nil) {
+                    var vsd_nav_bearing = 999;
+                }
+                
+                if (getprop("autopilot/route-manager/current-wp") != -1) {
+                    var vsd_nav_info_text = sprintf("No.%02d", getprop("autopilot/route-manager/current-wp"));
+                } else {
+                    var vsd_nav_info_text = "No.00";
+                }
+                
+            } elsif (LADCanvas.vsd_nav_box_mode == 1) {  # Bullseye mode
+                LADCanvas.vsd_stpt_eta.setColor(prst_blue.r, prst_blue.g, prst_blue.b);
+                LADCanvas.vsd_stpt_dist.setColor(prst_blue.r, prst_blue.g, prst_blue.b);
+                LADCanvas.vsd_stpt_bearing.setColor(prst_blue.r, prst_blue.g, prst_blue.b);
+                LADCanvas.vsd_stpt_index.setColor(prst_blue.r, prst_blue.g, prst_blue.b);
+                var vsd_nav_info_text = "BULLS";
+            
+                if (getprop("sim/model/f15/fcs/bullseye-lat") == 0 and getprop("sim/model/f15/fcs/bullseye-lon") == 0 and getprop("sim/model/f15/fcs/bullseye-alt") == 0) {  # Bullseye ain't been defined
+                    var vsd_display_dist_nav = 999.9;
+                    var vsd_nav_bearing = 999;
+                    var vsd_no_eta = 1;
+                } else {
+                    var vsd_no_eta = 0;
+                    var bullseye_coord = geo.Coord.new().set_latlon(getprop("sim/model/f15/fcs/bullseye-lat"),getprop("sim/model/f15/fcs/bullseye-lon"),getprop("sim/model/f15/fcs/bullseye-alt")*FT2M);
+                    var bullseye_bearing = geo.normdeg180(geo.aircraft_position().course_to(bullseye_coord) - getprop("orientation/heading-deg"));  # relative bearing
+                    var bullseye_bearing_nonrel = geo.aircraft_position().course_to(bullseye_coord);
+                    var bullseye_range = geo.aircraft_position().distance_to(bullseye_coord)*M2NM;
+                    if (getprop("velocities/groundspeed-kt") < 150) {  # If we're on ground. 150kts in threshold for take off speed, ish
+                        var bullseye_eta = nil;
+                        var bullseye_eta_secs = nil;
+                        var vsd_no_eta = 1;
+                    } else {
+                        var bullseye_eta = bullseye_range / getprop("velocities/groundspeed-kt");
+                        var bullseye_eta_secs = bullseye_eta * 3600;
+                    }
+                    
+                    var vsd_display_dist_nav = bullseye_range;
+                    var vsd_nav_bearing = bullseye_bearing_nonrel;
+                    var vsd_nav_mins = bullseye_eta;
+                    var vsd_nav_secs = bullseye_eta_secs;
+                    
+                }
+            } elsif (LADCanvas.vsd_nav_box_mode == 3) {  # ILS/NAV1 mode
+                LADCanvas.vsd_stpt_eta.setColor(prst_cyan.r, prst_cyan.g, prst_cyan.b);
+                LADCanvas.vsd_stpt_dist.setColor(prst_cyan.r, prst_cyan.g, prst_cyan.b);
+                LADCanvas.vsd_stpt_bearing.setColor(prst_cyan.r, prst_cyan.g, prst_cyan.b);
+                LADCanvas.vsd_stpt_index.setColor(prst_cyan.r, prst_cyan.g, prst_cyan.b);
+                
+                if (!getprop("instrumentation/nav[0]/in-range")) {  # Frequency ain't valid
+                    var vsd_display_dist_nav = 999.9;
+                    var vsd_nav_bearing = 999;
+                    var vsd_no_eta = 1;
+                    var vsd_nav_info_text = "ILS";
+                } else {
+                    var vsd_display_dist_nav = getprop("instrumentation/nav[0]/nav-distance") * M2NM;  # It's in meters go knows why
+                    var vsd_nav_bearing = getprop("instrumentation/nav[0]/heading-deg");  # Ain't sure but seems to be the right property
+                    var vsd_nav_info_text = getprop("instrumentation/nav[0]/nav-id");  # We display the ILS/NAV station's ID
+                    
+                    var vsd_no_eta = getprop("instrumentation/nav[0]/time-to-intercept-sec") == 9999.9 or getprop("velocities/groundspeed-kt") < 150;  # Don't display that if we're still on the ground (150 kts about take off speed ish)
+                    if (!vsd_no_eta) {
+                        var vsd_nav_mins = sprintf("%.0f", getprop("instrumentation/nav[0]/time-to-intercept-sec") / 60);
+                        var vsd_nav_secs = (getprop("instrumentation/nav[0]/time-to-intercept-sec") / 60 - vsd_nav_mins) * 60;  # remove whole minutes for seconds
+                        if (vsd_nav_secs < 0) {  # tiny fix
+                            var vsd_nav_mins = vsd_nav_mins - 1;
+                            var vsd_nav_secs = 60 + vsd_nav_secs;
+                        }
+                    }
+                }
+            }
+            
+            # Actually display the shit here
+            LADCanvas.vsd_stpt_dist.setText(sprintf("N %4.1f", vsd_display_dist_nav));
+            if (!vsd_no_eta) {
+                LADCanvas.vsd_stpt_eta.setText(sprintf("%02d:%02d", vsd_nav_mins, vsd_nav_secs));
+            } else {
+                LADCanvas.vsd_stpt_eta.setText("XX:XX");
+            }
+            LADCanvas.vsd_stpt_bearing.setText(sprintf("B %03d", vsd_nav_bearing));
+            LADCanvas.vsd_stpt_index.setText(vsd_nav_info_text);
+
             # Update the steerpoint symbols
             var stpt_idx = 0;
             if (getprop("sim/model/instrumentation/vhf/mode") == 0) {  # if we're in normal nav mode (not TACAN or ILS)
-
-                # Update the wp dist/ETA texts
-                if (getprop("autopilot/route-manager/active")) {  # if route-manager's active
-                    LADCanvas.vsd_stpt_eta.setText("XX:XX");
-                    if (getprop("autopilot/route-manager/wp/dist") != nil) {
-                        LADCanvas.vsd_stpt_dist.setText(sprintf("N %4.1f", getprop("autopilot/route-manager/wp/dist")));
-                    } else {
-                        LADCanvas.vsd_stpt_dist.setText("N 9999");
-                    }
-
-                    if (getprop("autopilot/route-manager/wp/eta-seconds") != nil) {
-                        nav_mins = sprintf("%.0f", getprop("autopilot/route-manager/wp/eta-seconds") / 60);
-                        nav_secs = (getprop("autopilot/route-manager/wp/eta-seconds") / 60 - nav_mins) * 60;  # remove whole minutes for seconds
-                        if (nav_secs < 0) {  # tiny fix
-                            nav_mins = nav_mins - 1;
-                            nav_secs = 60 + nav_secs;
-                        }
-                        LADCanvas.vsd_stpt_eta.setText(sprintf("%02d:%02d", nav_mins, nav_secs));
-                    } else {
-                        LADCanvas.vsd_stpt_eta.setText("XX:XX");
-                    }
-
-                    if (getprop("autopilot/route-manager/wp/true-bearing-deg") != nil) {
-                        LADCanvas.vsd_stpt_bearing.setText(sprintf("B %03d", getprop("autopilot/route-manager/wp/true-bearing-deg")));
-                    } else {
-                        LADCanvas.vsd_stpt_bearing.setText("B 999");
-                    }
-                } else {
-                    LADCanvas.vsd_stpt_eta.setText("XX:XX");
-                    LADCanvas.vsd_stpt_dist.setText("N 9999");
-                    LADCanvas.vsd_stpt_bearing.setText("B 999");
-                }
-
-
                 var plan = flightplan();
                 var planSize = plan.getPlanSize();
                 for (stpt_idx = 0; stpt_idx < planSize; stpt_idx+=1) {
@@ -2563,7 +2728,7 @@ update_lad = func() {
                         LADCanvas.hsd_stpt_dist.setText("N 9999");
                     }
 
-                    if (getprop("autopilot/route-manager/wp/eta-seconds") != nil) {
+                    if (getprop("autopilot/route-manager/wp/eta-seconds") != nil and getprop("velocities/groundspeed-kt") > 150) {  # Don't display ETA if we're on the ground (150kts take off speed ish)
                         nav_mins = sprintf("%.0f", getprop("autopilot/route-manager/wp/eta-seconds") / 60);
                         nav_secs = (getprop("autopilot/route-manager/wp/eta-seconds") / 60 - nav_mins) * 60;  # remove whole minutes for seconds
                         if (nav_secs < 0) {  # tiny fix
