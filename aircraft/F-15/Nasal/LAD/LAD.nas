@@ -1247,7 +1247,6 @@ var LAD_Device = {
         }
 
         # Radar symbology
-        # Data cartridge loaded data symbology
         m.HSDScreenRdrCones = m.svg.createGroup();  # used only for HSD radar cones, which need to be all deleted if they're updated
         
         # Following pre-drawn radar cones ain't in no use no more,
@@ -1457,6 +1456,8 @@ var LAD_Device = {
             m.dlnk_texts_hsd[i] = m.dlnk_txt;
         }
 
+        m.HSDScreenTacticalDeployment = m.svg.createGroup();  # used to draw tactical deployment information when deploying ordnance
+
         # Data cartridge loaded data symbology
         m.HSDScreenCircles = m.svg.createGroup();  # used only for HSD circled areas , which need to be all deleted if they're updated
 
@@ -1640,19 +1641,6 @@ var path_text_perpendicular_vector_computing = func(coord_1, coord_2, offset=40)
     return [midpoint[0] + offset * unit_normal[0], midpoint[1] + offset * unit_normal[1], rotation];
 }
 
-# Don't work GODDAMN
-var is_inside_static = func(x, y, center_static, radiuses_static, static_rotation) {
-    var dx = x - center_static[0];
-    var dy = y - center_static[1];
-
-    # Apply rotation (if needed)
-    var x_rot = dx * math.cos(-static_rotation*D2R) - dy * math.sin(-static_rotation*D2R);
-    var y_rot = dx * math.sin(-static_rotation*D2R) + dy * math.cos(-static_rotation*D2R);
-
-    #print((x_rot*x_rot)/(radiuses_static[0]*radiuses_static[0]) + (y_rot*y_rot)/(radiuses_static[1]*radiuses_static[1]));
-    return (x_rot*x_rot)/(radiuses_static[0]*radiuses_static[0]) + (y_rot*y_rot)/(radiuses_static[1]*radiuses_static[1]) <= 1;
-}
-
 var point_in_tri = func(px, py, a, b, c) {
     # This function is used to determine if a point is inside
     # a triangle. This is also used by point_in_quad() to determine 
@@ -1698,30 +1686,33 @@ var point_in_quad = func(point, quad) {
     return (point_in_tri(point[0], point[1], d, c, b) or point_in_tri(point[0], point[1], d, a, b));
 }
 
-# Don't work GODDAMN
-var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_radius, center_x, center_y, center_x_static, center_y_static, ellipse2_horizon_radius, ellipse2_vertic_radius, step=2.5, ellipse_rot=0, static_rotation=0) {
+var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_radius, center_x, center_y, center_x_static, center_y_static, ellipse2_horizon_radius, ellipse2_vertic_radius, step=2.5) {
 
-    intersect_points = [];
-    for (var t = 0; t < 360; t += step) {
-        var rad = t * math.pi / 180;
-        var x = ellipse_horizon_radius * math.cos(rad);
-        var y = ellipse_vertic_radius * math.sin(rad);
+     var intersect_points = [];
 
-        # Rotate by theta
-        theta = ellipse_rot*D2R;  # if it's rotated
-        var xr = x * math.cos(theta) - y * math.sin(theta);
-        var yr = x * math.sin(theta) + y * math.cos(theta);
+    var h1 = center_x;
+    var k1 = center_y;
+    var a1 = ellipse_horizon_radius;
+    var b1 = ellipse_vertic_radius;
 
-        # Translate to ellipse center
-        var px = center_x + xr;
-        var py = center_y + yr;
+    var h2 = center_x_static;
+    var k2 = center_y_static;
+    var a2 = ellipse2_horizon_radius;
+    var b2 = ellipse2_vertic_radius;
 
-        # Check if this point lies within the static ellipse
-        var inside = is_inside_static(px, py, [center_x_static, center_y_static], [ellipse2_horizon_radius, ellipse2_vertic_radius], static_rotation);
+    # Loop around the perimeter of Ellipse A
+    for (var angle = 0; angle < 360; angle += step) {
+        var rad = angle * math.pi / 180;
+        
+        var x = h1 + a1 * math.cos(rad);
+        var y = k1 + b1 * math.sin(rad);
 
-        # If inside, store point for drawing
-        if (inside) {
-            append(intersect_points, [px, py]);
+        # Check if (x, y) lies within Ellipse B
+        var dx = (x - h2) / a2;
+        var dy = (y - k2) / b2;
+
+        if ((dx*dx + dy*dy) <= 1) {
+            append(intersect_points, [x, y]);
         }
     }
     return intersect_points;
@@ -1743,15 +1734,13 @@ update_lad = func() {
             if (VSD_ON) {  # Don't run none of that if there ain't no VSD screen
             
                 # Update the boxes' x position, depending on VSD's slot on the LAD
-                var vsd_nav_box_pos = vsd_nav_box_pos;
-                if (LADCanvas.VSDDisplayTrans != 0) {  # If the display is at slot 0, we don't gotta update the touch zone box's pos
-                    var vsd_nav_box_pos = [];
-                    point_count = 0;  # vector id
-                    foreach(point; vsd_nav_box_pos) {
-                        append(vsd_nav_box_pos, [point[0] + LADCanvas.VSDDisplayTrans, point[1]]);
-                        point_count += 1;
-                    }
+                var vsd_nav_box_pos_new = [];
+                point_count = 0;  # vector id
+                foreach(point; vsd_nav_box_pos) {
+                    append(vsd_nav_box_pos_new, [point[0] + LADCanvas.VSDDisplayTrans, point[1]]);
+                    point_count += 1;
                 }
+                var vsd_nav_box_pos = vsd_nav_box_pos_new;
                 
                 if (point_in_quad(LADCanvas.screen_touch_pos, vsd_nav_box_pos)) {  # We touched that box
                     if (LADCanvas.vsd_nav_box_mode == 3) {  # Wrap up
@@ -1961,6 +1950,7 @@ update_lad = func() {
             LADCanvas.HSDScreenLines.setTranslation(0,0);
             LADCanvas.HSDScreenCircles.setTranslation(0,0);
             LADCanvas.HSDScreenRdrCones.setTranslation(0,0);
+            LADCanvas.HSDScreenTacticalDeployment.setTranslation(0,0);
             LADCanvas.HSDDisplayTrans = 0;
         } elsif (main_screens.center == "HSD") {
             HSD_ON = 1;
@@ -1968,6 +1958,7 @@ update_lad = func() {
             LADCanvas.HSDScreenLines.setTranslation(8192/3,0);
             LADCanvas.HSDScreenCircles.setTranslation(8192/3,0);
             LADCanvas.HSDScreenRdrCones.setTranslation((8192/3),0);
+            LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3),0);
             LADCanvas.HSDDisplayTrans = 8192/3;
         } elsif (main_screens.right == "HSD") {
             HSD_ON = 1;
@@ -1975,6 +1966,7 @@ update_lad = func() {
             LADCanvas.HSDScreenLines.setTranslation((8192/3)*2,0);
             LADCanvas.HSDScreenCircles.setTranslation((8192/3)*2,0);
             LADCanvas.HSDScreenRdrCones.setTranslation((8192/3)*2,0);
+            LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3)*2,0);
             LADCanvas.HSDDisplayTrans = (8192/3)*2;
         } else {
             HSD_ON = 0;
@@ -2224,7 +2216,7 @@ update_lad = func() {
                     var vsd_display_dist_nav = 999.9;
                     var vsd_nav_bearing = 999;
                     var vsd_no_eta = 1;
-                    var vsd_nav_info_text = "ILS";
+                    var vsd_nav_info_text = "NAV1";
                 } else {
                     var vsd_display_dist_nav = getprop("instrumentation/nav[0]/nav-distance") * M2NM;  # It's in meters go knows why
                     var vsd_nav_bearing = getprop("instrumentation/nav[0]/heading-deg");  # Ain't sure but seems to be the right property
@@ -2620,6 +2612,7 @@ update_lad = func() {
             LADCanvas.HSDScreenLines.setVisible(1);
             LADCanvas.HSDScreenCircles.setVisible(1);
             LADCanvas.HSDScreenRdrCones.setVisible(1);
+            LADCanvas.HSDScreenTacticalDeployment.setVisible(1);
 
             # Update measures
             LADCanvas.hsd_nm_to_px_x = (LADCanvas.hsd_great_circle_radius*2*(10/19)) / ((getprop("instrumentation/radar/radar2-range") * 1.25));
@@ -3268,62 +3261,41 @@ update_lad = func() {
                         circle_color = prst_marron;
                     }
 
-                    if (circle_range+circle_radius*1.5 < getprop("instrumentation/radar/radar2-range") * 1.25) {  # If it perfectly fits into the HSD great circle
+                    move_dir = ellipse_clamp(x_move, y_move);  # So the text is always displayed
+                    LADCanvas.HSDScreenLines.createChild("text")
+                        .setFontSize((circle_radius*LADCanvas.hsd_nm_to_px_x)/3, 1.4)
+                        .setText(threat_circle.label)
+                        .setAlignment("center-center")
+                        .setColor(circle_color.r,circle_color.g,circle_color.b)
+                        .setTranslation(1355-move_dir[0], 1150*2+500-move_dir[1])
+                        .set("z-index",0)
+                        .setFont(aircraft.HUDFont)
+                        .setVisible(1)
+                        .update();
 
-                        LADCanvas.HSDScreenCircles.createChild("path")
-                            .moveTo(1355-circle_radius*LADCanvas.hsd_nm_to_px_x,1150*2+500)
-                            .arcSmallCW(circle_radius*LADCanvas.hsd_nm_to_px_x,circle_radius*LADCanvas.hsd_nm_to_px_y, 0, circle_radius*LADCanvas.hsd_nm_to_px_y*2, 0)
-                            .arcSmallCW(circle_radius*LADCanvas.hsd_nm_to_px_x,circle_radius*LADCanvas.hsd_nm_to_px_y, 0, -circle_radius*LADCanvas.hsd_nm_to_px_y*2, 0)
-                            .moveTo(1355-circle_radius*LADCanvas.hsd_nm_to_px_x,1150*2+500+75)
-                            .setCenter(1355-circle_radius*LADCanvas.hsd_nm_to_px_x,1150*2+500)
-                            .set("z-index",0)
-                            .setVisible(1)
-                            .setStrokeLineWidth(10)
-                            .setColor(circle_color.r,circle_color.g,circle_color.b)
-                            .setTranslation(-x_move-circle_radius*LADCanvas.hsd_nm_to_px_x/2,-y_move)
-                            .update();
-                        LADCanvas.HSDScreenLines.createChild("text")
-                            .setFontSize((circle_radius*LADCanvas.hsd_nm_to_px_x)/1.5, 1.4)
-                            .setText(threat_circle.label)
-                            .setAlignment("center-center")
-                            .setColor(circle_color.r,circle_color.g,circle_color.b)
-                            .setTranslation(1355-x_move, 1150*2+500-y_move)
-                            .set("z-index",0)
-                            .setFont(aircraft.HUDFont)
-                            .setVisible(1)
-                            .update();
+                    inside_points = get_points_inside_for_ellipse(circle_radius*LADCanvas.hsd_nm_to_px_x*2, circle_radius*LADCanvas.hsd_nm_to_px_y*2, 1355-x_move, (1150*2+500)-y_move, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=.5);
+
+                    var curve = LADCanvas.HSDScreenCircles.createChild("path")
+                        .set("z-index",0)
+                        .setStrokeLineWidth(10)
+                        .setColor(circle_color.r,circle_color.g,circle_color.b);
+                    if (size(inside_points) > 0) {
+                        var first = inside_points[0];
+                        curve.moveTo(first[0], first[1]);
+
+                        var p = first;
+                        for (var i = 1; i < size(inside_points); i += 1) {
+                            var p2 = inside_points[i];
+                            if (!(math.abs(p2[0] - p[0]) > 25)) {  # Tiny fix, too lazy to explain that
+                                curve.lineTo(p2[0], p2[1]);  # could also use curveTo(), but that'd take more resources, unless step was reduced, but that'd reduce accuracy
+                            }
+                            var p = p2;
+                        }
+                        curve.setVisible(1);
                     } else {
-                        inside_points = get_points_inside_for_ellipse(circle_radius*LADCanvas.hsd_nm_to_px_x, circle_radius*LADCanvas.hsd_nm_to_px_y, 1355-circle_radius*LADCanvas.hsd_nm_to_px_x-x_move-circle_radius*LADCanvas.hsd_nm_to_px_x/2, 1150*2+500-y_move, 1355-LADCanvas.hsd_great_circle_radius, 1150*2+500, LADCanvas.hsd_great_circle_radius*10/19, LADCanvas.hsd_great_circle_radius, step=2.5);
-
-                        #LADCanvas.HSDScreenLines.createChild("text")  # TODO: Find a way to do the same with the ellipse but with the text
-                            #.setFontSize((circle_radius*LADCanvas.hsd_nm_to_px_x)/1.5, 1.4)
-                            #.setText(threat_circle.label)
-                            #.setAlignment("center-center")
-                            #.setColor(circle_color.r,circle_color.g,circle_color.b)
-                            #.setTranslation(1355-x_move/1.5, 1150*2+500-y_move-100)
-                            #.set("z-index",0)
-                            #.setFont(aircraft.HUDFont)
-                            #.setVisible(1)
-                            #.update();
-
-                        #var curve = LADCanvas.HSDScreenCircles.createChild("path")
-                        #        .set("z-index",0)
-                        #        .setStrokeLineWidth(10)
-                        #        .setColor(circle_color.r,circle_color.g,circle_color.b);
-                        #if (size(inside_points) > 0) {
-                        #    var first = inside_points[0];
-                        #    curve.moveTo(first[0], first[1]);
-
-                        #    for (var i = 1; i < size(inside_points); i += 1) {
-                        #        var p = inside_points[i];
-                        #        curve.lineTo(p[0], p[1]);  # could also use curveTo(), but that'd take more resources, unless step was reduced, but that'd reduce accuracy
-                        #    }
-                        #    curve.setVisible(1);
-                        #} else {
-                        #    curve.setVisible(0);
-                        #}
-                        #curve.update();
+                        curve.setVisible(0);
                     }
+                    curve.update();
                 }
             }
 
@@ -3341,12 +3313,109 @@ update_lad = func() {
                 var y_move = (bullseye_range*LADCanvas.hsd_nm_to_px_y)*math.cos(bullseye_bearing*D2R);
                 LADCanvas.hsd_bullseye_aim.setTranslation(-x_move,-y_move);
             }
+            
+            # Draw tactical deployment symbology
+
+            LADCanvas.HSDScreenTacticalDeployment.removeAllChildren();
+            # Depending on the currently armed ordnance, we draw difference paths or circles giving
+            # tactical information about that ordnance's theoretical/planned performance
+
+            var curr_weap = pylons.fcs.getSelectedWeapon();
+            if (getprop("sim/model/f15/controls/armament/master-arm-switch") == 1 and curr_weap != nil) {
+                var curr_weap_type = curr_weap.type;
+                var curr_weap_status = curr_weap.status;
+                # For the AMRAAM:
+                # Draw a path from us to the target, with a range text along it.
+                # Display the Max RNG, Opti RNG and NEZ RNG circles, all centered at the target's pos
+                if (curr_weap_type == "AIM-120D") {
+                    if (curr_weap_status == armament.MISSILE_LOCK) {  # Got a lock
+                        
+                        # First draw the path connecting the target and draw a text showing direct dist
+                        # between the two along that path (same method as HSD steerpoints paths)
+                        var curr_weap_target = curr_weap.Tgt;
+                        tgt_bear = curr_weap_target.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing to the contact
+                        tgt_rng = curr_weap_target.get_range();  # direct distance to target
+
+                        var x_move_aim = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);  # Position of the target on the HSD
+                        var y_move_aim = -(tgt_rng*LADCanvas.hsd_nm_to_px_y)*math.cos(tgt_bear*D2R);
+                        
+                        move_dir = ellipse_clamp(x_move_aim, y_move_aim);
+                        clamped = x_move_aim =! move_dir[0] or y_move_aim != move_dir[1];  # If the target is outside of our reach, and has been clamped
+                        var x_move_aim = move_dir[0];
+                        var y_move_aim = move_dir[1];
+                        
+                        
+                        LADCanvas.HSDScreenTacticalDeployment.createChild("path")  # Connects the aircraft to the target
+                            .moveTo(677*2,2262+500)
+                            .lineTo(677*2+x_move_aim,2262+500+y_move_aim)
+                            .setStrokeLineWidth(5)
+                            .setStrokeDashArray([1,5])
+                            .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+                            .set("z-index",1)
+                            .update();
+
+                        # Computing for the text giving range between the aircraft and the target
+                        text_dir = path_text_perpendicular_vector_computing([677*2, 2262+500], [677*2+x_move_aim, 2262+500+y_move_aim], offset=10);
+                        LADCanvas.HSDScreenTacticalDeployment.createChild("text")
+                            .setFontSize(60, 1.4)
+                            .setText(sprintf("N %02.1f", tgt_rng))
+                            .setAlignment("center-center")
+                            .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+                            .setTranslation(text_dir[0],text_dir[1])
+                            #.setCenter(text_dir[0],text_dir[1])
+                            .setRotation(text_dir[2])
+                            .set("z-index",1)
+                            .setFont(aircraft.HUDFont)
+                            .update();
+                        
+                        # Secondly draw the two DLZ circles, centered at the target.
+                        var DLZ_array = pylons.getDLZ();  # vec 0 max fire range vec 1 optimistic fire range vec 2 NEZ fire range
+                        if (DLZ_array != nil and size(DLZ_array) != 0) {  # This shouldn't happen, but still here as a safety
+                            var circle_1_radius = DLZ_array[0];  # NM
+                            var circle_2_radius = DLZ_array[1];  # NM
+                            var circle_3_radius = DLZ_array[2];  # NM
+                            var circle_radiuses = [circle_1_radius, circle_2_radius, circle_3_radius];
+                            var circle_colors = [prst_blue_dark, prst_cyan_dark, prst_cyan];
+                            
+                            var idx = 0;
+                            foreach(curr_radius; circle_radiuses) {  # Draw all the circles one by one
+                                # Draw the first circle
+                                inside_points = get_points_inside_for_ellipse(curr_radius*LADCanvas.hsd_nm_to_px_x*2, curr_radius*LADCanvas.hsd_nm_to_px_y*2, 1355+x_move_aim, (1150*2+500)+y_move_aim, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=.5);
+
+                                var curve = LADCanvas.HSDScreenTacticalDeployment.createChild("path")
+                                    .set("z-index",0)
+                                    .setStrokeLineWidth(10)
+                                    .setColor(circle_colors[idx].r,circle_colors[idx].g,circle_colors[idx].b);
+                                if (size(inside_points) > 0) {
+                                    var first = inside_points[0];
+                                    curve.moveTo(first[0], first[1]);
+
+                                    var p = first;
+                                    for (var i = 1; i < size(inside_points); i += 1) {
+                                        var p2 = inside_points[i];
+                                        if (!(math.abs(p2[0] - p[0]) > 25)) {  # Tiny fix, too lazy to explain that
+                                            curve.lineTo(p2[0], p2[1]);  # could also use curveTo(), but that'd take more resources, unless step was reduced, but that'd reduce accuracy
+                                        }
+                                        var p = p2;
+                                    }
+                                    curve.setVisible(1);
+                                } else {
+                                    curve.setVisible(0);
+                                }
+                                curve.update();
+                                idx += 1;
+                            }
+                        }
+                    }
+                }
+            }
 
         } else {
             LADCanvas.HSDScreen.setVisible(0);
             LADCanvas.HSDScreenLines.setVisible(0);
             LADCanvas.HSDScreenCircles.setVisible(0);
             LADCanvas.HSDScreenRdrCones.setVisible(0);
+            LADCanvas.HSDScreenTacticalDeployment.setVisible(0);
         }
 
 
