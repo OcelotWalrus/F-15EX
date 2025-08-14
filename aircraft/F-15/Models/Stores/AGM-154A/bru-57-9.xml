@@ -33,11 +33,11 @@
       <object-name>Station9_AGM154_left</object-name>
       <condition><and>
         <equals>
-          <property>payload/armament/station/id-1-type</property>
+          <property>payload/armament/station/id-9-type</property>
           <value>AGM-154A</value>
         </equals>
         <greater-than>
-          <property>payload/armament/station/id-1-count</property>
+          <property>payload/armament/station/id-9-count</property>
           <value>1</value>
         </greater-than></and>
       </condition>
@@ -49,11 +49,11 @@
       <condition>
         <and>
         <equals>
-          <property>payload/armament/station/id-1-type</property>
+          <property>payload/armament/station/id-9-type</property>
           <value>AGM-154A</value>
         </equals>
         <greater-than>
-          <property>payload/armament/station/id-1-count</property>
+          <property>payload/armament/station/id-9-count</property>
           <value>0</value>
         </greater-than>
       </and>

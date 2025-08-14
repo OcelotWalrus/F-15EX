@@ -1227,33 +1227,33 @@ var AIM = {
 		# call this only before release/eject
 		if (me.dlz_enabled != 1) {
 			return nil;
-		} elsif (contact == nil or (me.status != MISSILE_LOCK and !ignoreLock)) {
+		} elsif (me.Tgt == nil or (me.status != MISSILE_LOCK and !ignoreLock)) {
 			return [];
 		}
-		me.dlz_t_alt = contact.get_altitude();
+		me.dlz_t_alt = me.Tgt.get_altitude();
 		me.dlz_o_alt = ourAlt.getValue();
 		me.dlz_t_rs = me.rho_sndspeed(me.dlz_t_alt);
 		me.dlz_t_rho = me.dlz_t_rs[0];
 		me.dlz_t_sound_fps = me.dlz_t_rs[1];
 		me.dlz_tG    = me.maxG(me.dlz_t_rho, me.max_g);
-		#me.dlz_t_mach = contact.get_Speed()*KT2FPS/me.dlz_t_sound_fps;
+		#me.dlz_t_mach = me.Tgt.get_Speed()*KT2FPS/me.dlz_t_sound_fps;
 		#me.dlz_o_mach = getprop("velocities/mach");
-		me.contactCoord = contact.get_Coord();
-		me.vectorToEcho   = me.myMath.eulerToCartesian2(-contact.get_bearing(), me.myMath.getPitch(geo.aircraft_position(), me.contactCoord));
-    	me.vectorEchoNose = me.myMath.eulerToCartesian3X(-contact.get_heading(), contact.get_Pitch(), contact.get_Roll());
+		me.contactCoord = me.Tgt.get_Coord();
+		me.vectorToEcho   = me.myMath.eulerToCartesian2(-me.Tgt.get_bearing(), me.myMath.getPitch(geo.aircraft_position(), me.contactCoord));
+    	me.vectorEchoNose = me.myMath.eulerToCartesian3X(-me.Tgt.get_heading(), me.Tgt.get_Pitch(), me.Tgt.get_Roll());
     	me.angleToRear    = geo.normdeg180(me.myMath.angleBetweenVectors(me.vectorToEcho, me.vectorEchoNose));
     	#me.abso           = math.abs(me.angleToRear)-90;
     	#me.mach_factor    = math.sin(me.abso*D2R);
     	#me.dlz_CS         = me.mach_factor*me.dlz_t_mach+me.dlz_o_mach;#closing speed in mach (old version)
 
     	me.dlz_mid_rs = me.rho_sndspeed((me.dlz_t_alt+me.dlz_o_alt)*0.5);#get average speed of sound between us and target
-		me.dlz_CS = KT2FPS * contact.get_closure_rate() / me.dlz_mid_rs[1];#approx closing speed in mach
+		me.dlz_CS = KT2FPS * me.Tgt.get_closure_rate() / me.dlz_mid_rs[1];#approx closing speed in mach
 
-	    me.min_fire_nm = me.getCurrentMinFireRange(contact);
+	    me.min_fire_nm = me.getCurrentMinFireRange(me.Tgt);
     	me.dlz_opt   = me.clamp(me.max_fire_range_nm *0.3* (me.dlz_o_alt/me.dlz_opt_alt) + me.max_fire_range_nm *0.2* (me.dlz_t_alt/me.dlz_opt_alt) + me.max_fire_range_nm *0.5* (me.dlz_CS/me.dlz_opt_mach),me.min_fire_nm,me.max_fire_range_nm);
     	me.dlz_nez   = me.clamp(me.dlz_opt * (me.dlz_tG/45), me.min_fire_nm, me.dlz_opt);
     	me.printStatsDetails("Dynamic Launch Zone reported (NM): Maximum=%04.1f Optimistic=%04.1f NEZ=%04.1f Minimum=%04.1f",me.max_fire_range_nm,me.dlz_opt,me.dlz_nez,me.min_fire_nm);
-    	return [me.max_fire_range_nm,me.dlz_opt,me.dlz_nez,me.min_fire_nm,geo.aircraft_position().direct_distance_to(me.contactCoord)*M2NM,contact.get_Speed(),me.contactCoord,me.angleToRear];
+    	return [me.max_fire_range_nm,me.dlz_opt,me.dlz_nez,me.min_fire_nm,geo.aircraft_position().direct_distance_to(me.contactCoord)*M2NM,me.Tgt.get_Speed(),me.contactCoord,me.angleToRear];
 	},
 
 	getCurrentMinFireRange: func (target) {

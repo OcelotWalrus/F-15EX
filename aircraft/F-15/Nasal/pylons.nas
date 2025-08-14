@@ -350,7 +350,7 @@ var getDLZ = func {
         var w = fcs.getSelectedWeapon();
         if (w!=nil and w.parents[0] == armament.AIM) {
             var result = w.getDLZ(1);
-            if (result != nil and size(result) == 8 and result[4]<result[0]*1.5 and armament.contact != nil and armament.contact.get_display()) {
+            if (result != nil and size(result) == 8 and result[4]<result[0]*1.5 and armament.contact != nil) {
                 #target is within 150% of max weapon fire range.
         	    return result;
             }

@@ -150,10 +150,12 @@ var typeLookup = { # database of known radar signatures
     "hunter":                   "BOAT",
 };
 
-chaff_lasts = {};  # Vector containing data about each radar contact's unique and their
+var chaff_lasts = {};  # Vector containing data about each radar contact's unique and their
                    # chaff node. This is used to draw the chaffs on the VSD
-chaffs_pos = [];  # Vector containing data about chaffs (their geographic position
+var chaffs_pos = [];  # Vector containing data about chaffs (their geographic position
                   # and the time at which they were released. If they're expired, they're removed)
+
+var GPS_weaps = ["CBU-105", "GBU-31", "GBU-32", "GBU-54", "GBU-39", "AGM-88E", "AGM-154A", "AGM-158A", "AGM-158C"];  # List of weapons that are GPS guided to draw tactical information on the HSD
 
 # Preset Colors
 var prst_black = {"r": 0, "g": 0, "b": 0};
@@ -838,12 +840,12 @@ var LAD_Device = {
         m.chaff_symbols = setsize([], m.chaff_symbols_max);
         for (var i = 0; i < m.chaff_symbols_max; i += 1){
             m.chaff = m.VSDScreen.createChild("path")
-                .moveTo(677*2,2262+500-44*0.5)
-	            .vert(44)
-	            .setStrokeLineWidth(88)
+                .moveTo(677*2,2262+500+50*.5)
+	            .vert(50)
+	            .setStrokeLineWidth(25)
 	            .setStrokeLineCap("butt")
-                .set("z-index",10)
                 .setVisible(0)
+                .set("z-index",10)
                 .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
             m.chaff_symbols[i] = m.chaff;
         }
@@ -1716,6 +1718,16 @@ var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_
         }
     }
     return intersect_points;
+}
+
+var containsVector = func (vec, item) {
+    # Determines whether given item is inside vector
+    foreach(test; vec) {
+        if (test == item) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 update_lad = func() {
@@ -3324,16 +3336,16 @@ update_lad = func() {
             if (getprop("sim/model/f15/controls/armament/master-arm-switch") == 1 and curr_weap != nil) {
                 var curr_weap_type = curr_weap.type;
                 var curr_weap_status = curr_weap.status;
-                # For the AMRAAM:
+                # For the AMRAAM /AND/ GPS-guided A/G munitions:
                 # Draw a path from us to the target, with a range text along it.
                 # Display the Max RNG, Opti RNG and NEZ RNG circles, all centered at the target's pos
-                if (curr_weap_type == "AIM-120D") {
-                    if (curr_weap_status == armament.MISSILE_LOCK) {  # Got a lock
+                if (curr_weap_type == "AIM-120D" or containsVector(GPS_weaps, curr_weap_type)) {
+                    var curr_weap_target = curr_weap.Tgt;
+                    if (curr_weap_target != nil) {  # Got a lock
                         
                         # First draw the path connecting the target and draw a text showing direct dist
                         # between the two along that path (same method as HSD steerpoints paths)
-                        var curr_weap_target = curr_weap.Tgt;
-                        tgt_bear = curr_weap_target.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing to the contact
+                        tgt_bear = curr_weap_target.get_relative_bearing();  # relative bearing to the contact
                         tgt_rng = curr_weap_target.get_range();  # direct distance to target
 
                         var x_move_aim = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);  # Position of the target on the HSD
@@ -3774,7 +3786,11 @@ update_lad = func() {
                     } elsif (loaded_type == "AGM-154A") {
                             LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
                             LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
-                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG154A");
+                            if (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "2 x AGM-154A") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2AG154A");
+                            } elsif (getprop("payload/armament/station/id-"~pylon_idx~"-set") == "1 x AGM-154A") {
+                                LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AG154A");
+                            }
                             if (weapon_selector == 5) {
                                 if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
                                     LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText("RDY");

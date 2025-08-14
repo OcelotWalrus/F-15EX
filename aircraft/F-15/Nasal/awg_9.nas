@@ -2337,6 +2337,11 @@ var ContactTGP = {
 		}
 		return myBearing;
 	},
+	
+	get_closure_rate : func() {
+		return getprop("velocities/airspeed-kt");
+	},
+	
 };
 
 setlistener("instrumentation/iff/interrogate-cmd", func(v) {  # Target interrogation command
