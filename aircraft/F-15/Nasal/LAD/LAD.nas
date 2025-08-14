@@ -873,6 +873,14 @@ var LAD_Device = {
             .setVisible(0)
             .set("z-index",20)
             .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
+        m.vsd_cursor_bearing = m.VSDScreen.createChild("text")  # far down, bottom left
+            .setFontSize(80, 1.4)
+            .setText("239")
+            .setAlignment("center-center")
+            .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+            .setTranslation(677*2+95,2262+500+61)
+            .set("z-index",20)
+            .setFont(aircraft.HUDFont);
 
         # Create the datalink contacts symbols
         m.dlnk_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
@@ -1005,6 +1013,7 @@ var LAD_Device = {
         m.vsd_azimuth_carat.setVisible(1);
         m.vsd_elevation_carat.setVisible(1);
         m.vsd_cursor.setVisible(1);
+        m.vsd_cursor_bearing.setVisible(1);
         m.vsd_rdr_range_txt.setVisible(1);
         m.vsd_rdr_filter_1.setVisible(1);
         m.vsd_rdr_filter_2.setVisible(1);
@@ -2103,9 +2112,15 @@ update_lad = func() {
 
                 var cursor_pos = [677*2+cursor_x_move, 2262+500+cursor_y_move];
                 LADCanvas.vsd_cursor.setTranslation(cursor_x_move, cursor_y_move);
+                LADCanvas.vsd_cursor_bearing.setTranslation(677*2+95+cursor_x_move, 2262+500+61+cursor_y_move);
+                var cursor_bearing = math.fmod(getprop("orientation/heading-deg") + cursor_az_deg, 360);
+                if (cursor_bearing < 0) cursor_bearing += 360;
+                LADCanvas.vsd_cursor_bearing.setText(sprintf("%03d", cursor_bearing));
                 LADCanvas.vsd_cursor.setVisible(1);
+                LADCanvas.vsd_cursor_bearing.setVisible(1);
             } else {
                 LADCanvas.vsd_cursor.setVisible(1);
+                LADCanvas.vsd_cursor_bearing.setVisible(1);
             }
             
             # Update AzFieldOffset depending on the cursor's placement
@@ -2430,6 +2445,7 @@ update_lad = func() {
                         if (found_lock == 1 and lock_assigned == 0) {
                             if (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto) {  # in TWS AUTO, the cursor's automatic
                                 LADCanvas.vsd_cursor.setTranslation(x_move, y_move);
+                                LADCanvas.vsd_cursor_bearing.setTranslation(677*2+95+x_move, 2262+500+61+y_move);
                             }
                             lock_assigned = 1;  # so others don't take the lock symbology from it
                         }
