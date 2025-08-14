@@ -444,8 +444,16 @@
                 <desc>Lean onto the LAD (Large Area Display).</desc>
             </key>
             <key>
-                <name>y/Y</name>
-                <desc>Select next/prev radar target TWS AUTO (by distance).</desc>
+                <name>Keypad arrows</name>
+                <desc>Move the Target Cursor Designator</desc>
+            </key>
+            <key>
+                <name>y</name>
+                <desc>Select radar target for track.</desc>
+            </key>
+            <key>
+                <name>Y</name>
+                <desc>Swipe through the different TWS tracks</desc>
             </key>
             <key>
                 <name>x</name>
@@ -4806,6 +4814,56 @@
                     </binding>
                 </mod-up>
             </key>
+            
+            <key n="356">
+                <name>Keypad Left</name>
+                <desc>TCD Left</desc>
+                <binding>
+                    <command>property-adjust</command>
+                    <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
+                    <step type="double">-1</step>
+                    <min>-60</min>
+                    <max>60</max>
+                    <wrap>false</wrap>
+                </binding>
+            </key>
+            <key n="358">
+                <name>Keypad Right</name>
+                <desc>TCD Right</desc>
+                <binding>
+                    <command>property-adjust</command>
+                    <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
+                    <step type="double">1</step>
+                    <min>-60</min>
+                    <max>60</max>
+                    <wrap>false</wrap>
+                </binding>
+            </key>
+            <key n="357">
+                <name>Keypad Up</name>
+                <desc>TCD Up</desc>
+                <binding>
+                    <command>property-adjust</command>
+                    <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
+                    <step type="double">-1</step>
+                    <min>-60</min>
+                    <max>60</max>
+                    <wrap>false</wrap>
+                </binding>
+            </key>
+            <key n="359">
+                <name>Keypad Down</name>
+                <desc>TCD Up</desc>
+                <binding>
+                    <command>property-adjust</command>
+                    <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
+                    <step type="double">1</step>
+                    <min>-60</min>
+                    <max>60</max>
+                    <wrap>false</wrap>
+                </binding>
+            </key>
+            
             <key n="73">
                 <name>I</name>
                 <desc>Toggle flare burst release</desc>

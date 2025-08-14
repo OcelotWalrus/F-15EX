@@ -42,13 +42,10 @@
 # - Display the steering dot, ASE circle.
 # - Display the DLZ and the Missile Time Of Launch
 # - Use different symbols for SAMs, AAAs and ships contacts
-# - Have some text in the upper part, separated by rulers telling distance, bearing and ETA from bullseye (not sure if there's enough room left)
 # - For steerpoints that are clamped, use a different symbol to acknowledge that
 # - For datalink contacts that are clamped, use a different symbol to acknowledge that
-# - Use better symbology for datalink contacts so they're more visible
 # //HSD Display// :
 # - Display our datalink-compatible ordnance live with their target connected with a dashed line
-# - Display threat circles so that they can display on a certain part (if visually there's parts outside and some ain't) Note: (maybe use something like the sit-mask.png)
 # - Show true headings around the great circle and make them move to be at the correct position
 # - Use different symbols for SAM and AAA contacts
 # - Display contacts heading by rotating 'em. FUCK I SPENT 1 DAY TRYNA FIGURE OUT WHY THAT THING IS FUCKED UP AND DONT WORK FOR NO GODDAMN REASON SON OF A
@@ -807,8 +804,8 @@ var LAD_Device = {
             m.stpt_texts[i] = m.stpt_txt;
         }
 
-        # Create the radar target symbols
-        m.tgt_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
+        # Create the radar bleps and TWS trackfile symbols
+        m.tgt_symbols_max = 25; # random number, can always be increased or decreased if we ever need to
         m.tgt_symbols = setsize([], m.tgt_symbols_max);
         for (var i = 0; i < m.tgt_symbols_max; i += 1){
             m.tgt = m.VSDScreen.createChild("path")
@@ -820,6 +817,22 @@ var LAD_Device = {
                 .set("z-index",15)
                 .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
             m.tgt_symbols[i] = m.tgt;
+        }
+        m.tws_symbols = setsize([], m.tgt_symbols_max);
+        for (var i = 0; i < m.tgt_symbols_max; i += 1){
+            m.tws = m.VSDScreen.createChild("path")
+                .moveTo(677*2,2262+500)
+                .arcSmallCW(28,28,0,0,56)
+                .arcSmallCW(28,28,0,0,-56)
+                .moveTo(677*2,2262+500+56)
+                .lineTo(677*2,2262+500+56+40)
+                .moveTo(677*2,2262+500)
+                .setCenter(677*2,2262+500+28)
+                .setStrokeLineWidth(7)
+                .setVisible(0)
+                .set("z-index",15)
+                .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+            m.tws_symbols[i] = m.tws;
         }
         m.tgt_texts = setsize([], m.tgt_symbols_max);
         for (var i = 0; i < m.tgt_symbols_max; i += 1){
@@ -1720,10 +1733,9 @@ var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_
     return intersect_points;
 }
 
-var containsVector = func (vec, item) {
-    # Determines whether given item is inside vector
-    foreach(test; vec) {
-        if (test == item) {
+var containsVector = func (vector, content) {
+    foreach(var vari; vector) {
+        if (vari == content) {
             return 1;
         }
     }
@@ -2025,7 +2037,7 @@ update_lad = func() {
             } elsif (new_y_pos_hori < -1960) {
                 new_y_pos_hori = -1960;
             }
-            LADCanvas.vsd_horizon_line.setTranslation(0.0, -new_y_pos_hori-pitch_offset);
+            LADCanvas.vsd_horizon_line.setTranslation(0.0, new_y_pos_hori-pitch_offset);
             LADCanvas.vsd_horizon_line.setRotation(-getprop("orientation/roll-deg") * DTOR);
 
             # Update the radar bars / mode text
@@ -2067,15 +2079,11 @@ update_lad = func() {
                     # If the elevation boundary is hit upward (and the elevation bars value can still go up), we reset the cursor position and increase the elevation bars value
                     # Same thing for downward
                     if (cursor_y_move > 0 and awg_9.HoFieldBars.getValue() != 2) {  # Is positive, so downward; 2 is min
-                        cursor_x_move = 0;
                         cursor_y_move = 0;
-                        setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
                         setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
                         awg_9.HoFieldBars.setValue(awg_9.HoFieldBars.getValue() - 2);
                     } elsif (cursor_y_move < 0 and awg_9.HoFieldBars.getValue() != 8) {  # Is negative, so upward; 8 is max
-                        cursor_x_move = 0;
                         cursor_y_move = 0;
-                        setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
                         setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
                         awg_9.HoFieldBars.setValue(awg_9.HoFieldBars.getValue() + 2);
                     }
@@ -2084,15 +2092,11 @@ update_lad = func() {
                     # Limits are 10 and 120.
                     if (cursor_x_move > 0 and awg_9.AzField.getValue() < 120) {  # Positive, so right-ward
                         cursor_x_move = 0;
-                        cursor_y_move = 0;
                         setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
-                        setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
                         awg_9.AzField.setValue(awg_9.AzField.getValue() + 10);
                     } elsif (cursor_x_move < 0 and awg_9.AzField.getValue() > 10) {  # Negative, so left-ward
                         cursor_x_move = 0;
-                        cursor_y_move = 0;
                         setprop("sim/model/f15/controls/LAD/cursor-deg-az", 0);
-                        setprop("sim/model/f15/controls/LAD/cursor-deg-el", 0);
                         awg_9.AzField.setValue(awg_9.AzField.getValue() - 10);
                     }
                 }
@@ -2139,8 +2143,19 @@ update_lad = func() {
             max_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up) * .001;  # in thousands of feet
             min_alt = (getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down) * .001;
             
-            y_move_max = awg_9.actual_degrees_coverage_up * 2220 / 30;
-            y_move_min = awg_9.actual_degrees_coverage_down * 2220 / 30;
+            y_move_max = (awg_9.HoFieldOffset.getValue() - awg_9.HoField.getValue()/2) * 2220 / 30;
+            y_move_min = (awg_9.HoFieldOffset.getValue() + awg_9.HoField.getValue()/2) * 2220 / 30;
+            
+            if (y_move_max > 2200 - 75) {
+                y_move_max = 2200-75
+            } elsif (y_move_max < -2200 + 75) {
+                y_move_max = -2200+75
+            }
+            if (y_move_min > 2200 - 75) {
+                y_move_min = 2200-75
+            } elsif (y_move_min < -2200 + 75) {
+                y_move_min = -2200+75
+            }
             
             LADCanvas.vsd_vert_coverage_circle_up.setTranslation(0, y_move_max);
             LADCanvas.vsd_vert_coverage_circle_down.setTranslation(0, y_move_min);
@@ -2356,25 +2371,43 @@ update_lad = func() {
 
                         if (on_link) {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b, contact.get_fading());
+                            LADCanvas.tws_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b, contact.get_fading());
                         } elsif (friendly) {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b, contact.get_fading());
+                            LADCanvas.tws_symbols[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b, contact.get_fading());
                         } elsif (hostile) {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b, contact.get_fading());
+                            LADCanvas.tws_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b, contact.get_fading());
                         } else {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, contact.get_fading());
+                            LADCanvas.tws_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b, contact.get_fading());
                         }
 
-                        LADCanvas.tgt_symbols[target_idx].setVisible(1);
-                        LADCanvas.tgt_texts[target_idx].setVisible(1);
+                        # We don't actually need the RWS check because in RWS TWS_tracks gets cleaned, but it makes things more optimized
+                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or !awg_9.containsV(awg_9.TWS_tracks, contact)) {  # Not tracked by TWS
+                            LADCanvas.tgt_symbols[target_idx].setVisible(1);
+                            LADCanvas.tws_symbols[target_idx].setVisible(0);
+                            LADCanvas.tgt_texts[target_idx].setVisible(0);
+                        } elsif ((awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man) and awg_9.containsV(awg_9.TWS_tracks, contact)) {  # We're in TWS mode and that target is tracked
+                            LADCanvas.tgt_symbols[target_idx].setVisible(0);
+                            LADCanvas.tws_symbols[target_idx].setVisible(1);
+                            LADCanvas.tgt_texts[target_idx].setVisible(1);
+                        }
+                        
+                        if (awg_9.active_u_callsign == contact.get_Callsign()) {  # If this is our active target, we display its text (fix for RWS mode)
+                            LADCanvas.tgt_texts[target_idx].setVisible(1);
+                        }
+                        
                         xc = contact.get_deviation(getprop("orientation/heading-deg")) or 0;
                         yc = -contact.get_total_elevation(getprop("orientation/pitch-deg")) or 0;
 
                         x_move = xc*1354/60;
                         y_move = yc*(1131*2)/60;
+                        roll_rot = (contact.get_Roll() - 180)*D2R;  # -180 because the tail is down by default
 
                         if (x_move > 1300) {  # clamp the translation's values so it don't get outta the screen
                                 x_move = 1300;  # don't know why I did this there ain't no way a radar contact is outta the VSD screen ???!
@@ -2388,7 +2421,12 @@ update_lad = func() {
                         }
 
                         LADCanvas.tgt_symbols[target_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
-                        LADCanvas.tgt_texts[target_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
+                        LADCanvas.tws_symbols[target_idx].setTranslation(x_move, y_move);
+                        LADCanvas.tgt_texts[target_idx].setTranslation(677*2+x_move, 2262+500+145+y_move);
+                        
+                        #LADCanvas.tws_symbols[target_idx].setCenter(677*2+x_move,2262+500+y_move);
+                        LADCanvas.tws_symbols[target_idx].setRotation(roll_rot);
+                        
                         if (found_lock == 1 and lock_assigned == 0) {
                             if (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto) {  # in TWS AUTO, the cursor's automatic
                                 LADCanvas.vsd_cursor.setTranslation(x_move, y_move);
@@ -2491,6 +2529,7 @@ update_lad = func() {
             # Do not display any unused target boxes
             for (var nv = target_idx; nv < LADCanvas.tgt_symbols_max;nv += 1) {
                 LADCanvas.tgt_symbols[nv].setVisible(0);
+                LADCanvas.tws_symbols[nv].setVisible(0);
                 LADCanvas.tgt_texts[nv].setVisible(0);
             }
             
@@ -2505,9 +2544,12 @@ update_lad = func() {
                     wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
                     wpelev = -steerDir[1];  # elevation to the steerpoint (20* means 20* down)
                     hidden_by_terrain = !awg_9.TerrainManager.IsVisible(nil, nil, SelectCoordForce=chaff.gps);
-                    max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;  # Radar altitude coverage
+                    max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;  # Radar altitude coverage at max range!
                     min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down;
-                    inside_elev_field = chaff.gps.alt() < max_alt and chaff.gps.alt() > min_alt;
+                    # Actual altitude coverage at the target's range
+                    max_alt_u_dist = (chaff.gps.direct_distance_to(geo.aircraft_position()) * M2NM) * max_alt / getprop("instrumentation/radar/radar2-range");
+                    min_alt_u_dist = (chaff.gps.direct_distance_to(geo.aircraft_position()) * M2NM) * min_alt / getprop("instrumentation/radar/radar2-range");
+                    inside_elev_field = chaff.gps.alt() < max_alt_u_dist and chaff.gps.alt() > min_alt_u_dist;
                     inside_az_field = (wpbear > -awg_9.az_coverage_left and wpbear < awg_9.az_coverage_right) or (wpbear < -awg_9.az_coverage_left and wpbear > awg_9.az_coverage_right);
                     if (!hidden_by_terrain and inside_elev_field and math.abs(wpbear) < awg_9.az_fld/2) {  # we're making sure that the chaff ain't outta our radar's cone!
                         LADCanvas.chaff_symbols[chaff_idx].setVisible(1);

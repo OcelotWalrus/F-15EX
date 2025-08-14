@@ -760,7 +760,7 @@ update_loop_func = func() {
                     # - is a number
                     # - between -90 and 90
                     
-                    if (!is_numeric(stored_input) or !(stored_input >= 90 and stored_input <= 90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                    if (!is_numeric(stored_input) or !(stored_input <= 90 and stored_input >= -90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
                         displays.bad_data = 1;  # Trigger the "BAD DATA" label display
                     } else {  # It's all good, we can apply the inputted data to the sim property
                         setprop("autopilot/settings/target-fpa-deg", stored_input + 0);
@@ -1045,7 +1045,7 @@ update_loop_func = func() {
                     # - is a number
                     # - between -90 and 90
                     
-                    if (!is_numeric(stored_input) or !(stored_input >= 90 and stored_input <= 90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                    if (!is_numeric(stored_input) or !(stored_input <= 90 and stored_input >= -90)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
                         displays.bad_data = 1;  # Trigger the "BAD DATA" label display
                     } else {  # It's all good, we can apply the inputted data to the sim property
                         setprop("autopilot/settings/target-fpa-deg", stored_input + 0);
@@ -1304,12 +1304,33 @@ update_loop_func = func() {
             }
             
             displays.menu_pres = 0;
-        } elsif (displays.clr_pres == 1) {  # Cancel data inputting
+        } elsif (displays.clr_pres == 1) {  # Clear currently inputted data
             stored_input = "";
-            inputting = 0;
             displays.clr_pres = 0;
         }
         
+        # The following lines prevent a case of scenario:
+        # You press 1, nothing happens, you press data and you start with 1 already entered ...
+        displays.crec_l_pres = 0;
+        displays.a_1_pres = 0;
+        displays.n_2_pres = 0;
+        displays.b_3_pres = 0;
+        displays.crec_r_pres = 0;
+        displays.mrk_pres = 0;
+        displays.w_4_pres = 0;
+        displays.m_5_pres = 0;
+        displays.e_6_pres = 0;
+        displays.ip_pres = 0;
+        displays.decimal_pres = 0;
+        displays.i_7_pres = 0;
+        displays.s_8_pres = 0;
+        displays.c_9_pres = 0;
+        displays.shf_pres = 0;
+        displays.ap_pres = 0;
+        displays.clr_pres = 0;
+        displays.hyphen_0_pres = 0;
+        displays.data_pres = 0;
+        displays.menu_pres = 0;
     }
 }
 

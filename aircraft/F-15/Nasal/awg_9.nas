@@ -26,6 +26,7 @@
  #                                        implementation of more complex elevation scan with bars-like system.
  #                                        implementation of more complex azimuth scan with ability to offset the
  #                                        azimuth scan.
+ #                                        Implementation of a basic TWS tracfiles system.
  #
  #	Date                 : August 7 2025
  #
@@ -82,6 +83,8 @@ var ownship_pos = geo.Coord.new();
 var cockpitNotifier = nil;
 var radar_ranges = [5,10,20,40,50,80,100,140,170,200,250,275];
 
+var TWS_tracks = [];  # Contact classes of the TWS tracked targets
+var TWS_tracks_callsigns = [];
 
 
 var ElapsedSec        = props.globals.getNode("sim/time/elapsed-sec");
@@ -257,7 +260,7 @@ var u_ecm_signal_norm = 0;
 var u_radar_standby   = 0;
 var u_ecm_type_num    = 0;
 var sel_next_target = 0;
-var sel_prev_target = 0;
+var swipe_tws_targets = 0;
 var stby = 0;
 
 var cycle_range    = getprop("instrumentation/radar/cycle-range");# if range should be cycled or only go up/down.
@@ -360,9 +363,25 @@ var rdr_loop = func(notification) {
         setprop("sim/multiplay/generic/string[6]", "");
 	}
 	
-	# In TWS AUTO mode, bars are handled automatically:
+	# In TWS AUTO mode, elevation scan is handled automatically:
 	# If there ain't no current active target, it's the highest bars setting that gets selected and the antenna's offset degs will always try to stay parallel to the horizon line (level)
 	# If we do got a current active target though, it's the bar setting 2 that gets selected (or up to 4/6/8 if there are other available targets that are considered urgent threats by the EPAWSS and that are outside of the 2-bar reach), and the antenna's offset degs will always try to look toward the current active target.
+	
+	if (wcs_current_mode == wcs_mode_tws_auto) {  # We're in TWS AUTO
+	    if (awg_9.active_u == nil) {  # No active radar target --> max bars and keep the antennae on the horizon line
+	        HoFieldBars.setValue(8);
+	        var antennae_offset = getprop("orientation/pitch-deg");
+	        
+	        # 30 up and down is the physical max coverage of the antennae
+	        if (antennae_offset > 30) {
+	            antennae_offset = 30;
+	        } elsif (antennae_offset < -30) {
+	            antennae_offset = -30;
+	        }
+	        
+	        HoFieldOffset.setValue(antennae_offset);
+	    }
+	}
 	
 	# Synchronize the elevation angle coverage properties with the input'd elevation bars
 	# Refer to beginning of the file with the table
@@ -402,6 +421,16 @@ var rdr_loop = func(notification) {
     awg_9.field_offset = HoFieldOffset.getValue() - getprop("orientation/pitch-deg");  # Take in count antenna offset AND pitch offsets
     awg_9.actual_degrees_coverage_up = field_offset - HoField.getValue()/2;
     awg_9.actual_degrees_coverage_down = field_offset + HoField.getValue()/2;
+    if (awg_9.actual_degrees_coverage_up < -30) {  # Max physical values
+        awg_9.actual_degrees_coverage_up = -30;
+    } elsif (awg_9.actual_degrees_coverage_up > 30) {
+        awg_9.actual_degrees_coverage_up = 30;
+    }
+    if (awg_9.actual_degrees_coverage_down < -30) {
+        awg_9.actual_degrees_coverage_down = -30;
+    } elsif (awg_9.actual_degrees_coverage_down > 30) {
+        awg_9.actual_degrees_coverage_down = 30;
+    }
     actual_degrees_coverage_up_rad = awg_9.actual_degrees_coverage_up * D2R;  # Convert to radians
     actual_degrees_coverage_down_rad = awg_9.actual_degrees_coverage_down * D2R;
             
@@ -412,6 +441,29 @@ var rdr_loop = func(notification) {
     
     awg_9.az_coverage_left = awg_9.AzField.getValue() / 2 - awg_9.AzFieldOffset.getValue();
     awg_9.az_coverage_right = awg_9.AzField.getValue() / 2 + awg_9.AzFieldOffset.getValue();
+
+    # Clear the TWS track file if we're ain't in TWS mode
+    if (awg_9.wcs_current_mode != awg_9.wcs_mode_tws_auto and awg_9.wcs_current_mode != awg_9.wcs_mode_tws_man) {
+        awg_9.TWS_tracks = [];
+        awg_9.TWS_tracks_callsigns = [];
+    }
+    
+    # Fix so that if active_u ain't a trackfile if we're in TWS, active_u becomes null
+    if (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man and !containsV(awg_9.TWS_tracks, active_u)) {
+        active_u = nil;
+        active_u_callsign = nil;
+    }
+
+    # If our TWS tracklist is too big (max is 25), we make it smaller, by sorting files by dist
+    var tws_max_dist = nil;
+    if (size(awg_9.TWS_tracks) > 25) {
+        foreach(tws_track_file; awg_9.TWS_tracks) {
+            if (tws_max_dist == nil or tws_max_dist.get_range() < tws_track_file.get_range()) {
+                var tws_max_dist = tws_track_file;
+            }
+        }
+        awg_9.removeFromTWSTrackFiles(tws_max_dist);  # Remove the trackfile that's the farthest away from us
+    }
 
     # Following Datalink code has been made by Jimmy L. Miles
 
@@ -739,9 +791,14 @@ if(awg9_trace)
 #1;MP2 within  azimuth -130.0592982116802 field=-60->60  (s->w quadrant)
 #0;MP1 within  azimuth 164.2283073827575 field=-60->60
             
+            # Max altitude coverage, at max radar range!
             max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;
             min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down;
-            inside_elev_field = u.get_altitude() < max_alt and u.get_altitude() > min_alt;
+            
+            # Actual altitude coverage at the target's range
+            max_alt_u_dist = u.get_range() * max_alt / getprop("instrumentation/radar/radar2-range");
+            min_alt_u_dist = u.get_range() * min_alt / getprop("instrumentation/radar/radar2-range");
+            inside_elev_field = u.get_altitude() < max_alt_u_dist and u.get_altitude() > min_alt_u_dist;
             inside_az_field = (u.deviationA > -awg_9.az_coverage_left and u.deviationA < awg_9.az_coverage_right) or (u.deviationA < -awg_9.az_coverage_left and u.deviationA > awg_9.az_coverage_right);
             if (radar_mode < 2 and inside_az_field and inside_elev_field) {#richard, I had to fix 2 bugs here.
                 u.set_display(u.get_visible() and !RadarStandby.getValue() and u.get_type() != ORDNANCE);
@@ -905,74 +962,36 @@ var containsV = func (vector, content) {
     return 0;
 }
 
+var removeFromTWSTrackFiles = func(tgt_class) {
+    var new_TWS_track = [];
+    var new_TWS_track_callsigns = [];
+    foreach(track_file; awg_9.TWS_tracks) {
+        if (track_file.string != tgt_class.string) {
+            append(new_TWS_track, track_file);
+            append(new_TWS_track_callsigns, track_file.get_Callsign());
+        }
+    }
+    
+    awg_9.TWS_tracks = new_TWS_track;
+    awg_9.TWS_tracks_callsigns = new_TWS_track_callsigns;
+}
+
 var selectCheck = func {
     var tgt_cmd = SelectTargetCommand.getValue();
     SelectTargetCommand.setIntValue(0);
 
     if (tgt_cmd != nil)
     {
-        if (tgt_cmd > 0)
+        if (tgt_cmd > 0) {
             awg_9.sel_next_target=1;
-        else if (tgt_cmd < 0)
-            awg_9.sel_prev_target=1;
+            awg_9.swipe_tws_targets=0;
+        } else if (tgt_cmd < 0) {
+            awg_9.swipe_tws_targets=1;
+            awg_9.sel_next_target=0;
+        }
     }
 
-    if (awg_9.sel_prev_target)
-    {
-        var dist  = 0;
-        if (awg_9.active_u != nil)
-        {
-            dist = awg_9.active_u.get_range();
-        }
-        if (awg9_trace)
-            print("Sel prev target:");
-
-        var sorted_dist = sort (awg_9.tgts_list, func (a,b) {a.get_range()-b.get_range()});#richard is this needed, or is the list guarenteed to be sorted by distance already?
-        var prv=nil;
-        foreach (var u; sorted_dist)
-        {
-            if (awg9_trace)
-                printf("TGT:: %5.2f (%5.2f) : %s ",u.get_range(), dist, u.Callsign.getValue());
-            if(u.Callsign.getValue() == active_u_callsign and prv != nil) {
-                if (awg9_trace){
-                    if (prv != nil)
-                        print("Located prev: ",prv.Callsign.getValue(), prv.get_range());
-                    else
-                        print("first in list");
-                }
-                break;
-            }
-            if(u.get_display() == 0) {
-                continue;
-            }
-                prv = u;
-            }
-        if (prv == nil and 1==0)
-        {
-            var idx = size(sorted_dist)-1;
-            if (idx > 0)
-            {
-                prv = sorted_dist[idx];
-                if (awg9_trace)
-                    print("Using last in list ",idx," = ",prv.Callsign.getValue(), prv.get_range());
-            }
-        }
-
-        if (prv != nil)
-        {
-            active_u = nearest_u = tmp_nearest_u = prv;
-            armament.contact = active_u;
-            if (tmp_nearest_u.Callsign != nil)
-                active_u_callsign = tmp_nearest_u.Callsign.getValue();
-            else
-                active_u_callsign = nil;
-
-            if (awg9_trace)
-                printf("prv: %s %3.1f", prv.Callsign.getValue(), prv.get_range());
-        }
-        awg_9.sel_prev_target =0;
-    }
-    else if (awg_9.sel_next_target and getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == awg_9.wcs_mode_tws_auto)
+    if (swipe_tws_targets and (getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == awg_9.wcs_mode_tws_auto or getprop("sim/model/f15/instrumentation/radar-awg-9/wcs-mode") == awg_9.wcs_mode_tws_man))
     {
         var dist  = 0;
 
@@ -981,14 +1000,14 @@ var selectCheck = func {
             dist = awg_9.active_u.get_range();
         }
         if (awg9_trace)
-            print("Sel next target AUTO: dist=",dist);
+            print("Sel next TWS file AUTO: dist=",dist);
 
-        var sorted_dist = sort (awg_9.tgts_list, func (a,b) {a.get_range()-b.get_range()});
+        var sorted_dist = sort (awg_9.TWS_tracks, func (a,b) {a.get_range()-b.get_range()});
         var nxt=nil;
         foreach (var u; sorted_dist)
             {
             if (awg9_trace)
-                printf("TGT:: %5.2f (%5.2f) : %s ",u.get_range(), dist, u.Callsign.getValue());
+                printf("TWS Track file:: %5.2f (%5.2f) : %s ",u.get_range(), dist, u.Callsign.getValue());
             if(nxt == nil and u.get_display()) {
                 nxt = u;
             }
@@ -1021,14 +1040,14 @@ var selectCheck = func {
                 active_u_callsign = nil;
 
             if (awg9_trace)
-                printf("nxt: %s %3.1f", nxt.Callsign.getValue(), nxt.get_range());
+                printf("Next TWS track file: %s %3.1f", nxt.Callsign.getValue(), nxt.get_range());
         }
         awg_9.sel_next_target =0;
     }
     else if (awg_9.sel_next_target)
     {
     
-        # We're not in no auto mode as in TWS, so to the pilot has to manually put the
+        # We're not in no auto mode as in TWS AUTO, so to the pilot has to manually put the
         # radar's VSD cursor upon a target to select it.
         cursor_az_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-az");  # Cursor's azimuth and elevation
         cursor_el_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-el");
@@ -1062,8 +1081,17 @@ var selectCheck = func {
             active_u = best_dist_deg_contact;
             active_u_callsign = best_dist_deg_contact.get_Callsign();
             
-            if (awg9_trace) {
-                print(sprintf("Selected radar target %s of deg dist %.2f", active_u_callsign, best_dist_deg));
+            if (!containsV(awg_9.TWS_tracks, awg_9.active_u)) {  # If it's new, we add it.
+                append(awg_9.TWS_tracks, active_u);  # Add the selected target to the TWS track file
+                append(awg_9.TWS_tracks_callsigns, active_u_callsign);
+                if (awg9_trace) {
+                    print(sprintf("Selected radar target %s of deg dist %.2f for TWS/RWS track", active_u_callsign, best_dist_deg));
+                }
+            } else {  # If it's already there, we remove it
+                awg_9.removeFromTWSTrackFiles(active_u);  # Remove the selected target from the TWS track file
+                if (awg9_trace) {
+                    print(sprintf("De-selected radar target %s of deg dist %.2f from TWS/RWS track", active_u_callsign, best_dist_deg));
+                }
             }
         } else {
             if (awg9_trace) {
@@ -1080,7 +1108,7 @@ var TerrainManager = {
     # returns true if the node (position) is visible taking into account terrain
     IsVisible: func(node, fn, SelectCoordForce = nil) {
 
-        if (SelectCoordForce == nil) {  # Edited by Jimmy L. Miles. So we can terrain check with an arbitrary coordinate
+        if (SelectCoordForce == nil) {  # Edited by Jimmy L. Miles. So we can terrain check with a generic coordinate
             var SelectCoord = geo.Coord.new();
             var x = nil;
             var y = nil;
@@ -1396,6 +1424,8 @@ wcs_mode_toggle = func() {
 #	if ( pilot_lock and ! we_are_bs ) { return }
 	if ( wcs_current_mode == wcs_mode_pulse_srch ) {
         wcs_current_mode = wcs_mode_tws_man;
+        append(awg_9.TWS_tracks, active_u);  # Transfer RWS target into the TWS trackfiles
+        append(awg_9.TWS_tracks_callsigns, active_u_callsign);
 		AzField.setValue(60);
 		ddd_screen_width = 0.0422;
 	} elsif ( wcs_current_mode == wcs_mode_tws_man ) {
