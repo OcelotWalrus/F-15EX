@@ -108,10 +108,10 @@ var typeLookup = { # database of known radar signatures
     "gci":                      "AEW&C",
     "MiG-29":                   "F",
     "SU-27":                    "F",
-    "ch53e":                    "HELI",#heli
-    "Mil-Mi-8":                 "HELI",#heli
-    "ka50":                     "HELI",#heli
-    "mi24":                     "HELI",#heli
+    "ch53e":                    "HELO",#heli
+    "Mil-Mi-8":                 "HELO",#heli
+    "ka50":                     "HELO",#heli
+    "mi24":                     "HELO",#heli
     "MQ-9":                     "MC",#missile carrier
     "QF-4E":                    "F",
     "B1-B":                     "B",#bomber
@@ -2482,7 +2482,6 @@ update_lad = func() {
                     LADCanvas.vsd_tgt_heading.setVisible(0);
                     LADCanvas.vsd_tgt_aspect.setVisible(0);
                     LADCanvas.vsd_tgt_fps.setVisible(0);
-                    LADCanvas.vsd_tgt_model.setVisible(0);
                 }
 
                 if (awg_9.active_u != nil) { # safety
@@ -2507,11 +2506,7 @@ update_lad = func() {
                     LADCanvas.vsd_tgt_fps.setText(sprintf("FPS %04d", awg_9.active_u.get_Vertical_Speed()));
                     LADCanvas.vsd_tgt_closure_text.setText(sprintf("%d", awg_9.active_u.get_closure_rate()));
 
-
-                    model = "UNKNOWN";
-                    if (awg_9.active_u.ModelType != "")
-                        model = awg_9.active_u.ModelType;
-                    LADCanvas.vsd_tgt_model.setText(model);
+                    LADCanvas.vsd_tgt_model.setText(awg_9.active_u.getNTCR());
 
                     # Scale:
                     # To be at max (moving 4,600px up), target range must be max radar range

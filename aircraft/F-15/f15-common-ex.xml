@@ -1134,6 +1134,8 @@
                         <radio1-3-channel-knob type="float">118</radio1-3-channel-knob>
                         <radio2-4-channel-knob type="float">118</radio2-4-channel-knob>
                         <rwr-mstr-switch type="bool">false</rwr-mstr-switch>
+                        <air-cond-temp-placeholder type="double">0.5</air-cond-temp-placeholder>
+                        <ntcr-master-switch type="bool">false</ntcr-master-switch>
                     </interiors>
 
                     <pilots-displays>

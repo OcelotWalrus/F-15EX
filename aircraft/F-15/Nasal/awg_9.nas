@@ -27,6 +27,7 @@
  #                                        implementation of more complex azimuth scan with ability to offset the
  #                                        azimuth scan.
  #                                        Implementation of a basic TWS tracfiles system.
+ #                                        Implementation of a basic NTCR system, taking into account target aspect and range
  #
  #	Date                 : August 7 2025
  #
@@ -125,6 +126,7 @@ var LaserArm          = props.globals.getNode("controls/armament/laser-arm-dmd",
 #var LimitedSelect     = props.globals.getNode("instrumentation/radar/limited-select",1);
 var myRadarStrength_rcs = getprop("instrumentation/radar/ref-strength");
 var myRadarRange_rcs = getprop("instrumentation/radar/ref-range");
+var NTCROn = props.globals.getNode("sim/model/f15/controls/interiors/ntcr-master-switch",1);
 
 var awg9_trace = 0;
 var wcs_mode_pd_srch = 1;
@@ -367,6 +369,8 @@ var rdr_loop = func(notification) {
 	# If there ain't no current active target, it's the highest bars setting that gets selected and the antenna's offset degs will always try to stay parallel to the horizon line (level)
 	# If we do got a current active target though, it's the bar setting 2 that gets selected (or up to 4/6/8 if there are other available targets that are considered urgent threats by the EPAWSS and that are outside of the 2-bar reach), and the antenna's offset degs will always try to look toward the current active target.
 	
+	# The antennae elevation keeps it across horizon line in RWS too
+	
 	if (wcs_current_mode == wcs_mode_tws_auto) {  # We're in TWS AUTO
 	    if (awg_9.active_u == nil) {  # No active radar target --> max bars and keep the antennae on the horizon line
 	        HoFieldBars.setValue(8);
@@ -381,6 +385,17 @@ var rdr_loop = func(notification) {
 	        
 	        HoFieldOffset.setValue(antennae_offset);
 	    }
+	} elsif (wcs_current_mode == wcs_mode_pulse_srch) {
+	    var antennae_offset = getprop("orientation/pitch-deg");
+	        
+	    # 30 up and down is the physical max coverage of the antennae
+	    if (antennae_offset > 30) {
+	        antennae_offset = 30;
+	    } elsif (antennae_offset < -30) {
+	        antennae_offset = -30;
+	    }
+	        
+	    HoFieldOffset.setValue(antennae_offset);
 	}
 	
 	# Synchronize the elevation angle coverage properties with the input'd elevation bars
@@ -933,7 +948,9 @@ if(awg9_trace)
     }
     if (active_u != nil and active_u.get_display() and getprop("controls/armament/master-arm") and active_u_callsign != nil and active_u_callsign != "") {
         # transmit what we are locked onto
-        setprop("sim/multiplay/generic/string[6]", left(md5(active_u_callsign), 4));
+        if (wcs_current_mode != wcs_mode_pulse_srch or wcs_current_mode != wcs_mode_tws_auto or wcs_current_mode != wcs_mode_tws_man) {  # None of these modes set off spike alarms
+            setprop("sim/multiplay/generic/string[6]", left(md5(active_u_callsign), 4));
+        }
 
         # the below code is needed so missile can lock/not-lock onto active_u depending on class.
         if (active_u.get_type() == armament.AIR and active_u.get_Speed() < 60) {
@@ -1465,6 +1482,7 @@ wcs_mode_update = func() {
 # - isApproaching()  # Utilized by epawss.nas : return how many degrees the target is away if it's approaching, else, return null
 # - getIffResponse()  # Returns a boolean determining whether this target has responded to us through IFF Mode 4/5.
 # - requestIFF()  # Interrogate the target through IFF Mode 4/5 and update its IFF status thus, and also returns is IFF status (as getIffResponse does)
+# - getNTCR()  # Returns the output to display a target's model (computes whether NTCR can determine that or not)
 # ---------------------------------------------------------------------
 var Target = {
 	new : func (c) {
@@ -2064,6 +2082,34 @@ else
 	    iff.last_interogate = systime();  # update some variable in iff.nas. don't seem to be used though
 	    me.iff_response = iff.interrogate(me.propNode);
 	    return me.iff_response;
+	},
+	getNTCR: func() {  # Added by Jimmy L. Miles
+	    var u_model = "";
+	    if (awg_9.NTCROn.getValue() == 0) {  # NTCR switch is OFF
+	        var u_model = "NTCR OFF";
+	    } else {
+	        # First, check if we know this aircraft
+	        if (me.get_model() != nil and displays.typeLookup[me.get_model()] != nil) {  # We're reusing LAD.nas's typeLookup dic
+	            # Determines how easy it is to detect that type of aircraft ('cause o' size)
+	            # Tankers-Cargos-AWACS - strength 4th
+	            # Bombers - strength 3rd
+	            # Fighters - strength 2nd
+	            # Helos/drone - strength 1st
+	            strength = (displays.typeLookup[me.get_model()] == "TNKR" or displays.typeLookup[me.get_model()] == "AEW&C" or displays.typeLookup[me.get_model()] == "C") * .8 + (displays.typeLookup[me.get_model()] == "B") * .7 + (displays.typeLookup[me.get_model()] == "F" or displays.typeLookup[me.get_model()] == "F/B") * .6 + (displays.typeLookup[me.get_model()] == "MC" or displays.typeLookup[me.get_model()] == "HELO") * .45;
+                within_range = me.get_range() > (275 * strength);
+                # Reference: at 75 NM minimum aspect to get NTCR is 55*
+                within_aspect = me.get_aspect() > me.get_range() * 55 / 75;
+                
+                if (within_range and within_aspect) {
+                    var u_model = me.get_model();
+                } else {
+                    var u_model = "NTCR FAIL";
+                }
+	        } else {
+	            var u_model = "NTCR UNK";
+	        }
+	    }
+        return u_model;
 	},
     isVirtual: func {
         # used by missile-code

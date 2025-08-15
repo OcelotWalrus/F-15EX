@@ -5657,6 +5657,33 @@
       </binding>
     </action>
   </animation>
+  <animation>
+    <type>knob</type>
+    <object-name>cabin-temp-knob</object-name>
+    <property>sim/model/f15/controls/interiors/air-cond-temp-placeholder</property>
+    <offset-deg>-135</offset-deg>
+    <factor>260</factor>
+    <center>
+      <x-m>-5.571</x-m>
+      <y-m>.465</y-m>
+      <z-m>.6848</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>-1</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/air-cond-temp-placeholder</property>
+        <factor>.05</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
   <!-- Lighting; this lights all based on the r-console group. Now that we're using ALS implicit lighting for the panels this is lit by the storm glod-->
   <animation>
     <object-name>r-console</object-name>
@@ -5714,6 +5741,7 @@
     <object-name>misc-panel-top</object-name>
     <object-name>fuel-panel-top</object-name>
     <object-name>misc2-panel-top</object-name>
+    <object-name>ntcr-panel</object-name>
   </effect>
   <effect>
     <name>f15panel-ufc</name>
@@ -20922,4 +20950,41 @@
            </binding>
        </action>
    </animation>
+   
+   <animation>
+    <type>knob</type>
+    <object-name>ntcr-master-switch</object-name>
+    <property>sim/model/f15/controls/interiors/ntcr-master-switch</property>
+    <interpolation>
+      <entry>
+        <ind>1</ind>
+        <dep>0</dep>
+      </entry>
+      <entry>
+        <ind>0</ind>
+        <dep>75</dep>
+      </entry>
+    </interpolation>
+    <center>
+      <x-m>-5.491</x-m>
+      <y-m>-.5534</y-m>
+      <z-m>0.6602</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>0</z>
+    </axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/interiors/ntcr-master-switch</property>
+        <factor>1</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+   
 </PropertyList>
