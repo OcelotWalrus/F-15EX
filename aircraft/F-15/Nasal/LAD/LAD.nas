@@ -1084,8 +1084,8 @@ var LAD_Device = {
             .set("z-index",0)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
         m.hsd_circle_1_3 = m.HSDScreen.createChild("path")
-            .moveTo(1355-m.hsd_great_circle_radius*(1/3),1150*2+500)
-            .setCenter(1355,1150*2+500)
+            .moveTo(1355-m.hsd_great_circle_radius*(1/3),1150*2+500+75)
+            .setCenter(1355,1150*2+500+75)
             .arcSmallCW((m.hsd_great_circle_radius*10/19)*(1/3),m.hsd_great_circle_radius*(1/3), 0, (m.hsd_great_circle_radius)*(1/3)*2, 0)
             .arcSmallCW((m.hsd_great_circle_radius*10/19)*(1/3),m.hsd_great_circle_radius*(1/3), 0, -(m.hsd_great_circle_radius*(1/3))*2, 0)
             .moveTo(1355-m.hsd_great_circle_radius,1150*2+500+75)
@@ -1500,7 +1500,7 @@ var LAD_Device = {
 
         #m.hsd_tacan_symbol = m.TACANsvg.getElementById("TACANSymbol");
 
-        m.HSDScreenLines = m.svg.createGroup();  # used only for steerpoint-connecting lines, which need to be all deleted if steerpoints are updated (it also now contains the range texts)
+        m.HSDScreenLines = m.svg.createGroup();  # used only for steerpoint-connecting lines, which need to be all deleted if steerpoints are updated (it also now contains the range texts) Note: also now used to draw the North/south/East/West pins
 
         m.hsd_cross.setVisible(1);
         m.hsd_great_circle.setVisible(1);
@@ -1627,24 +1627,6 @@ var ellipse_clamp = func(x_move, y_move, mode=0) {  # Used to clamp an object if
     return [x_move, y_move];
 }
 
-# Note: doesn't work lol
-var ellipse_position_and_angle = func(degrees, horiz_radius, verti_radius, center_x=0, center_y=0) {  # Used to determine x and y coordinates, as well as rotation angle for an object to stay along the edge of an ellipse, always facing forward
-    var theta = D2R * (90 - degrees);  # Compass-style: 0° = top, CW
-
-    # Position
-    x = center_x + horiz_radius * math.cos(theta);
-    y = center_y + verti_radius * math.sin(theta);
-
-    # Tangent vector
-    dx = horiz_radius * -math.sin(theta);
-    dy = verti_radius * math.cos(theta);
-
-    # Angle to face (in radians)
-    angle_rad = math.atan2(dy, dx);
-
-    return [x, y, angle_rad];
-}
-
 var path_text_perpendicular_vector_computing = func(coord_1, coord_2, offset=40) {  # used to place texts giving range between two steerpoints on their connecting path.
     # Note:
     # - coord_1 is a vector containing the x and y position of the start of the path in that order
@@ -1751,6 +1733,14 @@ var containsVector = func (vector, content) {
         }
     }
     return 0;
+}
+
+var point_on_ellipse_degrees = func(ellipse_ho, ellipse_ve, ellipse_center, input_degree) {
+    point = [0, 0];
+    point[0] = ellipse_center[0] + ellipse_ho * math.cos(input_degree * math.pi / 180);
+    point[1] = ellipse_center[1] + ellipse_ve * math.sin(input_degree * math.pi / 180);
+    
+    return point;
 }
 
 update_lad = func() {
@@ -3172,6 +3162,12 @@ update_lad = func() {
 
                             tgt_bear = contact.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing to the contact
                             tgt_rng = contact.get_range();  # direct distance to target
+                            
+                            # Since this is a RWR, we make values less accurate
+                            # range accuracy: 5NM step
+                            # bearing accuracy: 10 degrees step
+                            tgt_rng = int(math.round(tgt_rng / 5)) * 5;
+                            tgt_bear = int(math.round(tgt_bear / 10)) * 10;
 
                             var x_move = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);
                             var y_move = -(tgt_rng*LADCanvas.hsd_nm_to_px_y)*math.cos(tgt_bear*D2R);
@@ -3246,6 +3242,11 @@ update_lad = func() {
             if (getprop("payload/armament/MAW-active") or getprop("payload/armament/MAW-semiactive")) {  # Note: EWWS must be on
                 maw_bearing = getprop("payload/armament/MAW-bearing");
                 deviation = -geo.normdeg180(maw_bearing - getprop("orientation/heading-deg")) + 90;
+                
+                # Since this is a RWR, we make values less accurate
+                # bearing accuracy: 10 degrees step
+                deviation = int(math.round(deviation / 5)) * 5;
+                
                 x_move = math.cos(deviation * D2R)*(LADCanvas.hsd_great_circle_radius*10/19)*(1/3);
                 y_move = -math.sin(deviation * D2R)*(LADCanvas.hsd_great_circle_radius)*(1/3);
 
@@ -3297,6 +3298,40 @@ update_lad = func() {
             # Update the TACAN's station position
             #LADCanvas.hsd_tacan_symbol.setVisible(1);
             #LADCanvas.hsd_tacan_symbol.setTranslation(1355+85,1150*2+500+7);
+            
+            # Draw the North/East/South/West pins
+            # Update the North/South/East/West pins
+            var heading_pins_rotation = 360 - getprop("orientation/heading-magnetic-deg");
+            
+            var north_pin_pos = [point_on_ellipse_degrees(LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2, LADCanvas.hsd_great_circle_radius * (1/3) * 2, [1355, 1150*2+500+75], heading_pins_rotation), point_on_ellipse_degrees((LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2) + 75, (LADCanvas.hsd_great_circle_radius * 2 * (1/3)) + 75, [1355, 1150*2+500+75], heading_pins_rotation)];
+            var south_pin_pos = [point_on_ellipse_degrees(LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2, LADCanvas.hsd_great_circle_radius * (1/3) * 2, [1355, 1150*2+500+75], heading_pins_rotation-180), point_on_ellipse_degrees((LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2) + 75, (LADCanvas.hsd_great_circle_radius * 2 * (1/3)) + 75, [1355, 1150*2+500+75], heading_pins_rotation-180)];
+            var east_pin_pos = [point_on_ellipse_degrees(LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2, LADCanvas.hsd_great_circle_radius * 2 * (1/3), [1355, 1150*2+500+75], heading_pins_rotation-90), point_on_ellipse_degrees((LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2) + 75, (LADCanvas.hsd_great_circle_radius * 2 * (1/3)) + 75, [1355, 1150*2+500+75], heading_pins_rotation-90)];
+            var west_pin_pos = [point_on_ellipse_degrees(LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2, LADCanvas.hsd_great_circle_radius * 2 * (1/3), [1355, 1150*2+500+75], heading_pins_rotation+90), point_on_ellipse_degrees((LADCanvas.hsd_great_circle_radius * (10/19) * (1/3) * 2) + 75, (LADCanvas.hsd_great_circle_radius * 2 * (1/3)) + 75, [1355, 1150*2+500+75], heading_pins_rotation+90)];
+
+            LADCanvas.hsd_circle_pin_north = LADCanvas.HSDScreenLines.createChild("path")
+                .moveTo(north_pin_pos[0][0], north_pin_pos[0][1])
+                .lineTo(north_pin_pos[1][0], north_pin_pos[1][1])
+                .setStrokeLineWidth(15)
+                .set("z-index",0)
+                .setColor(prst_green.r,prst_green.g,prst_green.b);
+            LADCanvas.hsd_circle_pin_south = LADCanvas.HSDScreenLines.createChild("path")
+                .moveTo(south_pin_pos[0][0], south_pin_pos[0][1])
+                .lineTo(south_pin_pos[1][0], south_pin_pos[1][1])
+                .setStrokeLineWidth(11)
+                .set("z-index",0)
+                .setColor(prst_white.r,prst_white.g,prst_white.b);
+            LADCanvas.hsd_circle_pin_east = LADCanvas.HSDScreenLines.createChild("path")
+                .moveTo(east_pin_pos[0][0], east_pin_pos[0][1])
+                .lineTo(east_pin_pos[1][0], east_pin_pos[1][1])
+                .setStrokeLineWidth(11)
+                .set("z-index",0)
+                .setColor(prst_white.r,prst_white.g,prst_white.b);
+            LADCanvas.hsd_circle_pin_west = LADCanvas.HSDScreenLines.createChild("path")
+                .moveTo(west_pin_pos[0][0], west_pin_pos[0][1])
+                .lineTo(west_pin_pos[1][0], west_pin_pos[1][1])
+                .setStrokeLineWidth(11)
+                .set("z-index",0)
+                .setColor(prst_white.r,prst_white.g,prst_white.b);
 
             # Draw the HSD circled areas
             LADCanvas.HSDScreenCircles.removeAllChildren();

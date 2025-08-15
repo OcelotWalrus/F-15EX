@@ -12,9 +12,10 @@
 # for the LAD.
 # ---------------------------
 # UFC Menus/Submenus :
-#  - Standalone menus:  # these menus are obtained either by triggering a function on the LAD, or the EFHD, or by selecting them using the keypad
-#
-#  - Triggered menus:  # these menus are only obtained by triggered a function on the LAD, or the EFHD
+# // A/P (Autopilot) //
+# This menu can be obtained by selecting it through the main menu, or by entering A/P on the keypad.
+# The press of A/P on the keypad will turn on autopilot, and a second will turn it off.
+# You can see 
 # ---------------------------
 # Some Notes :
 # - Current proportions in the model are 2.849173228" (width) by .455" (height), making it a 6 1/4 ratio (width/height)
