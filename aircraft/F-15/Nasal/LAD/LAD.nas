@@ -3311,25 +3311,25 @@ update_lad = func() {
             LADCanvas.hsd_circle_pin_north = LADCanvas.HSDScreenLines.createChild("path")
                 .moveTo(north_pin_pos[0][0], north_pin_pos[0][1])
                 .lineTo(north_pin_pos[1][0], north_pin_pos[1][1])
-                .setStrokeLineWidth(15)
+                .setStrokeLineWidth(17)
                 .set("z-index",0)
                 .setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.hsd_circle_pin_south = LADCanvas.HSDScreenLines.createChild("path")
                 .moveTo(south_pin_pos[0][0], south_pin_pos[0][1])
                 .lineTo(south_pin_pos[1][0], south_pin_pos[1][1])
-                .setStrokeLineWidth(11)
+                .setStrokeLineWidth(8)
                 .set("z-index",0)
                 .setColor(prst_white.r,prst_white.g,prst_white.b);
             LADCanvas.hsd_circle_pin_east = LADCanvas.HSDScreenLines.createChild("path")
                 .moveTo(east_pin_pos[0][0], east_pin_pos[0][1])
                 .lineTo(east_pin_pos[1][0], east_pin_pos[1][1])
-                .setStrokeLineWidth(11)
+                .setStrokeLineWidth(8)
                 .set("z-index",0)
                 .setColor(prst_white.r,prst_white.g,prst_white.b);
             LADCanvas.hsd_circle_pin_west = LADCanvas.HSDScreenLines.createChild("path")
                 .moveTo(west_pin_pos[0][0], west_pin_pos[0][1])
                 .lineTo(west_pin_pos[1][0], west_pin_pos[1][1])
-                .setStrokeLineWidth(11)
+                .setStrokeLineWidth(8)
                 .set("z-index",0)
                 .setColor(prst_white.r,prst_white.g,prst_white.b);
 
@@ -3482,7 +3482,7 @@ update_lad = func() {
                             var idx = 0;
                             foreach(curr_radius; circle_radiuses) {  # Draw all the circles one by one
                                 # Draw the first circle
-                                inside_points = get_points_inside_for_ellipse(curr_radius*LADCanvas.hsd_nm_to_px_x*2, curr_radius*LADCanvas.hsd_nm_to_px_y*2, 1355+x_move_aim, (1150*2+500)+y_move_aim, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=.5);
+                                inside_points = get_points_inside_for_ellipse(curr_radius*LADCanvas.hsd_nm_to_px_x, curr_radius*LADCanvas.hsd_nm_to_px_y, 1355+x_move_aim, (1150*2+500)+y_move_aim, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=.5);
 
                                 var curve = LADCanvas.HSDScreenTacticalDeployment.createChild("path")
                                     .set("z-index",0)

@@ -263,7 +263,7 @@ var F15HUD = {
 	            .arcSmallCW(8*mr,8*mr, 0, 8*mr*2, 0)
 	            .arcSmallCW(8*mr,8*mr, 0, -8*mr*2, 0)
 	            .setStrokeLineWidth(1)
-	            .setColor(0,1,0).hide();
+	            .setColor(1,0,0).hide();
 
 	        obj.ASEC100 = obj.ASECircle.createChild("path")#irsearch
 	            .moveTo(-100*mr,0)
@@ -1465,17 +1465,18 @@ return obj;
         }
 
 		me.loft_cue = 0;
+		me.showASC = 0;
 		if (currASEC != nil) {
             # disabled for now as it has issues
-            me.cue = nil;
-            call(func {me.cue = me.weapn.getIdealFireSolution();},[], nil, nil, var err = []);
-            if(size(err)) {
-                print(err[0]);
-                print(err[1]);
-            }
+            me.cue = me.weapn.getIdealFireSolution();
+            #call(func {me.cue = me.weapn.getIdealFireSolution();},[], nil, nil, var err = []);
+            #if(size(err)) {
+            #    print(err[0]);
+            #    print(err[1]);
+            #}
             if (me.cue != nil) {
-                me.cueXDeg1 = geo.normdeg180(me.cue[0]-hdp.getproper("heading"));
-                me.cueYDeg1 = me.cue[1]-hdp.getproper("pitch");
+                me.cueXDeg1 = geo.normdeg180(me.cue[0]-getprop("orientation/heading-deg"));
+                me.cueYDeg1 = me.cue[1]-getprop("orientation/pitch-deg");
 
                 #printf("%02d, %02d", me.cueXDeg1, me.cueYDeg1);
 
@@ -1498,13 +1499,15 @@ return obj;
                 #me.ASC2.setTranslation(hudmath.HudMath.getCenterPosFromDegs(me.cueXDeg1, me.cueYDeg1));#currASEC = center of ASEC
 
                 me.loft_cue = me.cue[1];# set loft cue for DLZ
-                showASC = 1;
+                me.showASC = 1;
             } else {
                 #print("me.cue is nil");
             }
         } else {
             #print("currASEC is nil");
         }
+        
+        me.ASC.setVisible(me.showASC);
 
 		if(getprop("sim/model/f15/controls/armament/master-arm-switch") != 0 and pylons.fcs != nil and pylons.fcs.getAmmo() > 0) {
             var aim = pylons.fcs.getSelectedWeapon();
