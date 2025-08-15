@@ -1279,7 +1279,7 @@ return obj;
 		me.distMax = getprop("velocities/groundspeed-kt")*getprop("sim/model/f15/avionics/hud-flir-distance-max");
 		me.cont = getprop("sim/model/f15/avionics/hud-flir-cont");
 		me.brt = getprop("sim/model/f15/avionics/hud-flir-brt");
-		if (me.brt > 0 and getprop("sim/model/f15/payload/selected/lantirn-nav-pod") == 1 and me.color[3] != 0 and getprop("sim/model/f15/avionics/hud-flir-on")) {
+		if (me.brt > 0 and getprop("sim/model/f15/stores/nav-mounted") == 1 and me.color[3] != 0 and getprop("sim/model/f15/avionics/hud-flir-on")) {
 			for(me.x = 0; me.x < flirImageReso; me.x += 1) {
 				me.xDevi = (me.x-me.xBore)*(256/flirImageReso);
 				me.xDevi /= me.texelPerDegreeX;

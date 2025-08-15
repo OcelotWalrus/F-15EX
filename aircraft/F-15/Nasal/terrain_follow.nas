@@ -34,7 +34,7 @@ var v = nil;
 var distance_Target = nil;
 var terrain = geo.Coord.new();
 var My_pos = geo.Coord.new();
-var minim_delay = 11;
+var minim_delay = 4;
 var maximum_delay = 15;
 
 
@@ -43,7 +43,7 @@ setprop ("instrumentation/tfs/delay-sec", 4);
 setprop ("instrumentation/tfs/delay-big-sec", minim_delay);
 
 var tfs_radar = func(){
-    var delay_sec = getprop("instrumentation/tfs/delay-big-sec");
+    var delay_sec = getprop("instrumentation/tfs/delay-sec");
     var myAltitude = tfs_radar_calculation(delay_sec);
     var myAltitudeNow = tfs_radar_calculation(0);
 
@@ -54,7 +54,7 @@ var tfs_radar = func(){
 var long_view_avoiding = func(){
 
     #Minimum delay 8, maximum 15
-    var myAltitude = tfs_radar_calculation(20) * FT2M;
+    var myAltitude = tfs_radar_calculation(maximum_delay) * FT2M;
     var myAircraft = geo.aircraft_position();
 
     var diff_future = myAltitude - myAircraft.alt();

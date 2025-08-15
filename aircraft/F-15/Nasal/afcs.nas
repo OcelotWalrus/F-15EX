@@ -219,17 +219,20 @@ var routeManagerUpdate = func {
 
 # Loop for terrain-avoidance using the Terrain-Following Radar (if mounted)
 # This is very basic I guess, but works
-# This part was made by Jimmy L. Miles
+# This part was made by Jimmy L. Miles  
 var TerFolRadUpdate = func() {
-    var tfr_enabled = (getprop("sim/model/f15/payload/selected/lantirn-nav-pod") and getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/controls/AFCS/att-hold") == 1 and getprop("sim/model/f15/avionics/tf-couple-switch"));
+    var tfr_enabled = (getprop("sim/model/f15/stores/nav-mounted") and getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/avionics/tf-couple-switch"));
     if (tfr_enabled) {
-        setprop("instrumentation/tfs/delay-big-sec", 25);
 
         ter_data = terr_foll.tfs_radar();  # Update both following properties
         target_altitude = (getprop("instrumentation/tfs/ground-altitude-ft") + getprop("sim/model/f15/avionics/tfr-flir-alt"));
         setprop("/autopilot/settings/target-altitude-ft", target_altitude);
-        vs = 3000;
-        needed_vertical_speed = vs + math.min(12500, 4000*getprop("velocities/groundspeed-kt")/400+(4000*getprop("velocities/groundspeed-kt")/400) * (getprop("instrumentation/radar/time-till-crash") < 15));
-        setprop("/autopilot/settings/vertical-speed-fpm", needed_vertical_speed)
+        var needed_vertical_speed = ((((getprop("instrumentation/tfs/ground-altitude-ft") + getprop("sim/model/f15/avionics/tfr-flir-alt")) - getprop("instrumentation/altimeter/indicated-altitude-ft"))) * 60) / getprop("instrumentation/tfs/delay-sec");
+        
+        if (needed_vertical_speed < -2500) {
+            var needed_vertical_speed = -2500;  # Minimum value
+        }
+        
+        setprop("/autopilot/settings/vertical-speed-fpm", needed_vertical_speed);
     }
 };
