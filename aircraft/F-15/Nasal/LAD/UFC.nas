@@ -348,7 +348,7 @@ var remove_chr = func(chr, str) {  # Remove every "x" character from a string in
 update_loop_func = func() {
     
     # We make sure we don't run none of that if the UFC screen's offline
-    if (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 5) {
+    if (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 5 and getprop("sim/model/f15/avionics/bit-done")) {
     
         # Display what we gotta display depending on the current menu
         if (curr_menu == dft_menu) {
@@ -1331,6 +1331,9 @@ update_loop_func = func() {
         displays.hyphen_0_pres = 0;
         displays.data_pres = 0;
         displays.menu_pres = 0;
+    } elsif (!getprop("sim/model/f15/avionics/bit-done")) {
+        bit_text = sprintf("      B.I.T. %03d percent      ", getprop("sim/model/f15/avionics/bit-norm") * 100);
+        UFCCanvas.UFCText.setText(bit_text);
     }
 }
 

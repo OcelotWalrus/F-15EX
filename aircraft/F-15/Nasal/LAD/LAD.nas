@@ -208,6 +208,8 @@ var LAD_Device = {
 
         m.screen_touch_pos = [0, 0];  # Position of the "cursor". Where the pilot touched the screen in X an Y coordinates
 
+        ## Built-in-test layer
+        m.BitScreen = m.svg.createGroup();
 
         ## The upper panel, it's static and displays basic useful information
         ## Are in order from left to right
@@ -349,7 +351,7 @@ var LAD_Device = {
             .setFont(aircraft.HUDFont);
         m.iff_text_center = m.upper_panel.createChild("text")
             .setFontSize(100, 1.4)
-            .setText("M1/2-0000")
+            .setText("M1-00")
             .setAlignment("center-center")
             .setColor(prst_white.r,prst_white.g,prst_white.b)
             .setTranslation(3295,230)
@@ -1756,7 +1758,7 @@ update_lad = func() {
     elapsed = getprop("sim/time/elapsed-sec");
 
     # We make sure we don't run none of that if the LAD screen's offline
-    if (getprop("sim/model/f15/controls/LAD/mode") > 0 and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0) {
+    if (getprop("sim/model/f15/controls/LAD/mode") > 0 and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0 and getprop("sim/model/f15/avionics/bit-done")) {
     
         # Handle screen screen touches
         if (getprop("sim/model/f15/controls/LAD/screen-touch-cmd") == 1) {  # Screen has been touched
@@ -1857,7 +1859,7 @@ update_lad = func() {
         mode5_power = getprop("instrumentation/iff/power_prop");
         iff_response = getprop("instrumentation/iff/response");
 
-        LADCanvas.iff_text_center.setText(sprintf("M1/2-%04d", iff_channel));
+        LADCanvas.iff_text_center.setText("M1-00");
         LADCanvas.iff_text_mode3.setText(sprintf("M3/A-%04d", iff_channel));
         LADCanvas.iff_text_mode5.setText(sprintf("M4/5-%04d", mode5_channel));
 
@@ -3391,7 +3393,7 @@ update_lad = func() {
             # tactical information about that ordnance's theoretical/planned performance
 
             var curr_weap = pylons.fcs.getSelectedWeapon();
-            if (getprop("sim/model/f15/controls/armament/master-arm-switch") == 1 and curr_weap != nil) {
+            if (getprop("sim/model/f15/controls/armament/master-arm-switch") == 1 and curr_weap != nil and getprop("sim/model/f15/controls/armament/weapon-selector") != 0) {
                 var curr_weap_type = curr_weap.type;
                 var curr_weap_status = curr_weap.status;
                 # For the AMRAAM /AND/ GPS-guided A/G munitions:
@@ -4242,6 +4244,34 @@ update_lad = func() {
         } else {
             LADCanvas.PACSScreen.setVisible(0);
         }
+        LADCanvas.BitScreen.setVisible(0);
+    } elsif (!getprop("sim/model/f15/avionics/bit-done")) {
+        LADCanvas.VSDScreen.setVisible(0);
+        LADCanvas.HSDScreen.setVisible(0);
+        LADCanvas.HSDScreenLines.setVisible(0);
+        LADCanvas.HSDScreenCircles.setVisible(0);
+        LADCanvas.HSDScreenRdrCones.setVisible(0);
+        LADCanvas.HSDScreenTacticalDeployment.setVisible(0);
+        LADCanvas.PACSScreen.setVisible(0);
+        LADCanvas.BitScreen.setVisible(1);
+        
+        LADCanvas.BitScreen.removeAllChildren();
+        LADCanvas.BitText = LADCanvas.BitScreen.createChild("text")
+            .setFontSize(600, 1.4)
+            .setText(sprintf("B.I.T. %03d percent", getprop("sim/model/f15/avionics/bit-norm") * 100))
+            .setAlignment("center-center")
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
+            .setTranslation(8192/2,8192/3)
+            .setVisible(1)
+            .setFont(aircraft.HUDFont);
+        LADCanvas.BitPercentBarBelow = LADCanvas.BitScreen.createChild("path")
+            .rect(8192/2-1335,8192/3+750,1335*2,750)
+            .setVisible(1)
+            .setColorFill(prst_white.r,prst_white.g,prst_white.b);
+        LADCanvas.BitPercentBarOver = LADCanvas.BitScreen.createChild("path")
+            .rect(8192/2-1335+30,8192/3+750+30,(1335*2-60)*getprop("sim/model/f15/avionics/bit-norm"),750-60)
+            .setVisible(1)
+            .setColorFill(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b);
     }
 }
 

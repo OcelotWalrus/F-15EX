@@ -779,6 +779,13 @@ var push_threat_circle_data_from_dtc = func (circle_idx, circle_lat, circle_lon,
 var F15MainModule =
 {
     update: func(notification){
+    
+        # Initiate Built-in-distance if it ain't been
+        if (!getprop("sim/model/f15/avionics/bit-done") and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 5) {
+            interpolate("sim/model/f15/avionics/bit-norm", 1, 160); # Take 2'30"
+            settimer(func {setprop("sim/model/f15/avionics/bit-done", 1);}, 160);
+        }
+    
         # total distance flown calculations.
         currentDistance = distanceNode.getValue();
         if ( last_position != nil) {
@@ -795,14 +802,6 @@ var F15MainModule =
             setprop("fdm/jsbsim/systems/electrics/ground-power", 1);
         } else {
             setprop("fdm/jsbsim/systems/electrics/ground-power", 0);
-        }
-
-        # Make sure ripple number is at least 1 and not higher than 4
-        if (getprop("controls/armament/dual") < 1) {
-            setprop("controls/armament/dual", 1);
-        }
-        if (getprop("controls/armament/dual") > 4) {
-            setprop("controls/armament/dual", 4);
         }
 
         # Compute the trust/weight ratio and set it to an avionics property
@@ -927,8 +926,10 @@ var F15MainModule =
             setprop("instrumentation/iff/power", 0);
         }
 
-        if (getprop("sim/model/f15/controls/interiors/iff-master-switch") >= 0) {  # always true
+        if (getprop("sim/model/f15/controls/interiors/iff-master-switch") == 1) {
             setprop("instrumentation/transponder/inputs/knob-mode", 4);  # ON mode
+        } else {
+            setprop("instrumentation/transponder/inputs/knob-mode", 1);  # STBY mode
         }
 
 

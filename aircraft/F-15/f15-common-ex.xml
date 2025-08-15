@@ -981,6 +981,8 @@
                     <gravity-dropping type="bool">false</gravity-dropping>
                 </armament>
                 <avionics>
+                    <bit-done type="bool">false</bit-done>
+                    <bit-norm type="double">0</bit-norm>
                     <altitude-deck-min type="double">0</altitude-deck-min>
                     <altitude-deck-max type="double">0</altitude-deck-max>
                     <altitude-deck-max-enabled type="bool">false</altitude-deck-max-enabled>

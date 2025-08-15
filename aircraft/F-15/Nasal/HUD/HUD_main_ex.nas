@@ -919,7 +919,9 @@ var F15HUD = {
 														"FuelLow",
 														"VelocitiesAirspeedKt",
 														"RadarStandby",
-														"RadarFilterMode"], 0.1, func(val)
+														"RadarFilterMode"
+														"BitDone",
+														"BitNorm"], 0.1, func(val)
 														{
 															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin) and !val.ControlsGearGearDown) {
 																obj.altitudeDeck.show();
@@ -931,7 +933,10 @@ var F15HUD = {
 																obj.altitudeDeck.hide();
 																setprop("sim/model/f15/avionics/altitude-deck-hit", 0);
 															}
-															if (val.TimeTilCrash != nil and val.TimeTilCrash > 0 and val.TimeTilCrash < 8) {
+															if (!val.BitDone) {
+		                                                     	obj.flyup.setText(sprintf("B.I.T. %03d", val.BitNorm * 100));
+		                                                     	obj.flyup.show();
+															} elsif (val.TimeTilCrash != nil and val.TimeTilCrash > 0 and val.TimeTilCrash < 8) {
 		                                                     	obj.flyup.setText("FLYUP");
 		                                                     	obj.flyup.show();
 															} elsif (getprop("sim/time/elapsed-sec") > 2 and val.FuelLow > 0 and getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
@@ -2363,6 +2368,8 @@ input = {
 		FuelPercentage                          : "consumables/fuel/total-fuel-norm",
 		ThrustToWeightRatio                     : "sim/model/f15/avionics/thrust-weight-ratio",
 		AltitudeAGL                             : "position/altitude-agl-ft",
+		BitDone                                 : "sim/model/f15/avionics/bit-done",
+		BitNorm                                 : "sim/model/f15/avionics/bit-norm",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);
