@@ -1136,6 +1136,12 @@
                         <rwr-mstr-switch type="bool">false</rwr-mstr-switch>
                         <air-cond-temp-placeholder type="double">0.5</air-cond-temp-placeholder>
                         <ntcr-master-switch type="bool">false</ntcr-master-switch>
+                        
+                        <knob-sound type="bool">false</knob-sound>
+                        <knob2-sound type="bool">false</knob2-sound>
+                        <click-sound type="bool">false</click-sound>
+                        <click2-sound type="bool">false</click2-sound>
+                        <click3-sound type="bool">false</click3-sound>
                     </interiors>
 
                     <pilots-displays>

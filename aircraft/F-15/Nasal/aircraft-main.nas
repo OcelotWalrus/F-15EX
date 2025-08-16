@@ -451,8 +451,8 @@ var quickstart = func() {
     setprop("controls/lighting/chart-inst", 5);
     setprop("sim/model/f15/avionics/hmd-sym", .8);
     setprop("controls/lighting/warn-caution", .75);
-    setprop("controls/lighting/l-console", .5);
-    setprop("controls/lighting/r-console", .5);
+    setprop("controls/lighting/l-console", 5);
+    setprop("controls/lighting/r-console", 5);
 
 #    setprop("sim/model/f15/controls/windshield-heat",1);
     setprop("sim/model/f15/controls/electrics/emerg-flt-hyd-switch",0);
@@ -492,6 +492,7 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     setprop("sim/model/f15/controls/engs/r-eng-master-guard",0);
     
     setprop("sim/model/f15/ejection-master", 1);
+    setprop("sim/model/f15/controls/interiors/ground-power-switch", 0);
     
     # ECS
     
@@ -522,7 +523,7 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     setprop("sim/model/f15/radar-awg-9/selected-mode-knob", 2);
     setprop("sim/model/f15/avionics/radar-altimeter-switch-pos", 1);
     setprop("sim/model/f15/avionics/tfr-flir-switch-pos", 2);
-    setprop("sim/model/f15/avionics/ins-selected-mode-knob", 2);
+    setprop("sim/model/f15/avionics/ins-selected-mode-knob", 3);
     setprop("sim/model/f15/avionics/jtids-selected-mode-knob", 2);
     setprop("sim/model/f15/avionics/nav-flir-switch-pos", 1);
     setprop("sim/model/f15/avionics/hud-flir-brt", .5);
@@ -608,6 +609,7 @@ var cold_and_dark = func()
     setprop("sim/model/f15/controls/electrics/jfs-starter",0);
     
     setprop("sim/model/f15/ejection-master", 0);
+    setprop("sim/model/f15/controls/interiors/ground-power-switch", 0);
     
     # ECS
     
@@ -835,6 +837,503 @@ setlistener("/controls/flight/elevator-trim", func {
 	if (getprop("/controls/flight/elevator-trim") > 0.51724) {
 		setprop("/controls/flight/elevator-trim", 0.51724);
 	}
+});
+
+## Interior knobs sound listeners
+# UFC
+setlistener("sim/model/f15/controls/interiors/radio1-3-channel-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/radio2-4-channel-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/instrumentation/ils/volume-norm", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("instrumentation/nav[1]/volume", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("instrumentation/comm[0]/volume", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("instrumentation/comm[1]/volume", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/HUD/brightness", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/hmd-sym", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton00", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton01", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton02", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton03", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton04", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton05", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton06", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton07", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton08", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton09", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton010", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton011", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton012", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton013", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton014", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton015", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton016", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton017", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton018", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/UFC/buttons-pressed/UFCButton019", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+
+# LAD
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton00", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton01", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton02", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton03", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton04", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton05", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton06", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton07", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton08", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton09", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton10", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton11", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton12", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton13", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton14", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton15", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton16", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton17", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton18", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton19", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+
+# EPAWSS
+
+setlistener("sim/model/f15/epawss/expendables-guard", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/epawss/expendables-master", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/epawss/ewws-on", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/rwr-mstr-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/epawss/expendables-sel", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+
+# ENGINES PANEL
+setlistener("sim/model/f15/controls/electrics/jfs-starter", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/ground-power-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/electrics/emerg-gen-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/electrics/r-gen-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/electrics/l-gen-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/engines/r-eec-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/engines/l-eec-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/engs/l-eng-master-guard", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/engs/r-eng-master-guard", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+#setlistener("sim/model/f15/controls/interiors/eng-master-pos-r", func (v) {
+#    print("7");
+#    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+#    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+#});
+#setlistener("sim/model/f15/controls/interiors/eng-master-pos-l", func (v) {
+#    print("8");
+#    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+#    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+#});
+
+# OXYGEN
+setlistener("fdm/jsbsim/systems/ecs/liquid-oxygen-activated", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("fdm/jsbsim/systems/ecs/oxy-supply-mode", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+
+# ECS
+setlistener("fdm/jsbsim/systems/ecs/oxygen-qty-test", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("fdm/jsbsim/systems/ecs/anti-fog", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/windshield-heat-switch-pos", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/air-cond-temp-placeholder", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("fdm/jsbsim/systems/ecs/bleed-air-source", func (v) {
+    setprop("sim/model/f15/controls/interiors/click-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click-sound", 0);},.20);
+});
+setlistener("controls/lighting/l-console", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("controls/lighting/ufc-inst", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("controls/lighting/chart-inst", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("controls/lighting/storm-flood", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("controls/lighting/warn-caution", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("controls/lighting/daylight-mode", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/lights/master-test-lights", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+
+# NUC CONSENT
+setlistener("sim/model/f15/controls/interiors/nuclear-consent-pos", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/nuclear-guard-pos", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+
+# FCP
+setlistener("sim/model/f15/avionics/flyup-master-guard", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/flyup-master-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/tf-couple-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/tf-couple-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/AFCS/cas-takeoff-trim", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/fcp-bit-button", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+
+# MISC
+setlistener("sim/multiplay/generic/int[6]", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/engines/r-ramp-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/engines/l-ramp-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("fdm/jsbsim/fcs/roll-ratio-emergency", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+
+# FUEL
+setlistener("sim/model/f15/controls/fuel/refuel-probe-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/fuel/dump-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+
+# NTCR
+setlistener("sim/model/f15/controls/interiors/ntcr-master-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+
+# VOLUMES
+setlistener("sim/model/f15/epawss/caution-volume", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/epawss/alert-volume", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/betty-volume-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/wpn-volume-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+
+setlistener("sim/model/f15/instrumentation/ils/volume-norm", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/tacan-volume-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+
+# IFF
+setlistener("sim/model/f15/controls/interiors/iff-mode4-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/interiors/iff-master-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+
+# EJECTION MASTER
+setlistener("sim/model/f15/ejection-master", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+
+# EXT LIGHTS
+setlistener("sim/multiplay/generic/int[3]", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/multiplay/generic/int[5]", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/controls/lighting/position-switch", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+setlistener("sim/multiplay/generic/int[1]", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
+});
+
+# SENSORS
+setlistener("sim/model/f15/radar-awg-9/selected-mode-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/ins-selected-mode-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/jtids-selected-mode-knob", func (v) {
+    setprop("sim/model/f15/controls/interiors/click-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/sim/model/f15/avionics/hud-flir-cont", func (v) {
+    setprop("sim/model/f15/controls/interiors/click2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click2-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/sim/model/f15/avionics/hud-flir-brt", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/cc-reset-button-pos", func (v) {
+    setprop("sim/model/f15/controls/interiors/click3-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/click3-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/radar-altimeter-switch-pos", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/tfr-flir-switch-pos", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob-sound", 0);},.20);
+});
+setlistener("sim/model/f15/avionics/nav-flir-switch-pos", func (v) {
+    setprop("sim/model/f15/controls/interiors/knob2-sound", 1);
+    settimer(func{setprop("sim/model/f15/controls/interiors/knob2-sound", 0);},.20);
 });
 
 last_position = nil;
