@@ -17838,6 +17838,26 @@
     </condition>
   </animation>
   
+  <!--model>
+     <name>internal-pilot</name>
+     <path>Aircraft/F-15/Models/Cockpit/chair/pilot_internalview.xml</path>
+     <offsets>
+       <x-m>-1.0025</x-m>
+       <y-m>0</y-m>
+       <z-m>.47</z-m>
+     </offsets>
+  </model>
+  <animation>
+    <type>select</type>
+    <object-name>internal-pilot</object-name>
+    <condition>
+      <equals>
+        <property>sim/current-view/name</property>
+        <value>Cockpit View</value>
+      </equals>
+    </condition>
+  </animation-->
+  
   <!-- Data Cartridge Panel -->
   <animation>
     <type>pick</type>

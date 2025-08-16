@@ -446,6 +446,13 @@ var quickstart = func() {
     setprop("sim/model/f15/controls/MPCD/on-off",1);
     setprop("sim/model/f15/controls/MPCD/mode",2);
     setprop("sim/model/f15/lights/radio2-brightness",0.6);
+    setprop("controls/lighting/ufc-inst", .5);
+    setprop("controls/lighting/storm-flood", 5);
+    setprop("controls/lighting/chart-inst", 5);
+    setprop("sim/model/f15/avionics/hmd-sym", .8);
+    setprop("controls/lighting/warn-caution", .75);
+    setprop("controls/lighting/l-console", .5);
+    setprop("controls/lighting/r-console", .5);
 
 #    setprop("sim/model/f15/controls/windshield-heat",1);
     setprop("sim/model/f15/controls/electrics/emerg-flt-hyd-switch",0);
@@ -483,6 +490,62 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     setprop("sim/model/f15/controls/electrics/emerg-gen-switch",1);
     setprop("sim/model/f15/controls/engs/l-eng-master-guard",0);
     setprop("sim/model/f15/controls/engs/r-eng-master-guard",0);
+    
+    setprop("sim/model/f15/ejection-master", 1);
+    
+    # ECS
+    
+    setprop("fdm/jsbsim/systems/ecs/liquid-oxygen-activated", 0);
+    setprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode", 0);
+    setprop("fdm/jsbsim/systems/ecs/anti-fog", 1);
+    setprop("sim/model/f15/controls/windshield-heat-switch-pos", 1);
+    setprop("fdm/jsbsim/systems/ecs/bleed-air-source", 0);
+    setprop("sim/model/f15/controls/interiors/air-cond-temp-placeholder", .5);
+    
+    # FCP
+    setprop("sim/model/f15/avionics/flyup-master-guard", 1);
+    setprop("sim/model/f15/avionics/flyup-master-switch", 1);
+    setprop("sim/model/f15/avionics/tf-couple-switch", 0);
+    
+    # EPAWSS
+    setprop("sim/model/f15/epawss/ewws-on", 1);
+    setprop("sim/model/f15/controls/interiors/rwr-mstr-switch", 1);
+    setprop("sim/model/f15/epawss/expendables-sel", 3);
+    setprop("sim/model/f15/epawss/expendables-guard", 1);
+    setprop("sim/model/f15/epawss/expendables-master", 1);
+    
+    # NUC CONSENT
+    setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 1);
+    setprop("sim/model/f15/controls/interiors/nuclear-guard-pos", 0);
+    
+    # SENSORS
+    setprop("sim/model/f15/radar-awg-9/selected-mode-knob", 2);
+    setprop("sim/model/f15/avionics/radar-altimeter-switch-pos", 1);
+    setprop("sim/model/f15/avionics/tfr-flir-switch-pos", 2);
+    setprop("sim/model/f15/avionics/ins-selected-mode-knob", 2);
+    setprop("sim/model/f15/avionics/jtids-selected-mode-knob", 2);
+    setprop("sim/model/f15/avionics/nav-flir-switch-pos", 1);
+    setprop("sim/model/f15/avionics/hud-flir-brt", .5);
+    setprop("sim/model/f15/avionics/hud-flir-cont", .5);
+    
+    # IFF
+    setprop("sim/model/f15/controls/interiors/iff-master-switch", 1);
+    setprop("sim/model/f15/controls/interiors/iff-mode4-switch", 1);
+    
+    # Volumes
+    setprop("sim/model/f15/epawss/caution-volume", .75);
+    setprop("sim/model/f15/epawss/alert-volume", .85);
+    setprop("sim/model/f15/controls/interiors/betty-volume-knob", .7);
+    setprop("sim/model/f15/controls/interiors/wpn-volume-knob", .65);
+    setprop("sim/model/f15/instrumentation/ils/volume-norm", .75);
+    setprop("sim/model/f15/controls/interiors/tacan-volume-knob", .75);
+    
+    # NTCR
+    setprop("sim/model/f15/controls/interiors/ntcr-master-switch", 1);
+    
+    # Built-in-test
+    setprop("sim/model/f15/avionics/bit-norm", 1);
+    setprop("sim/model/f15/avionics/bit-done", 1);
  }, 0.2);
 }
 
@@ -504,10 +567,10 @@ var cold_and_dark = func()
     setprop("controls/lighting/r-console", 0);
     setprop("controls/lighting/stby-inst", 0);
     setprop("controls/lighting/warn-caution", 0);
-
-    setprop("sim/model/f15/controls/CAS/cas-pitch-enable",0);
-    setprop("sim/model/f15/controls/CAS/cas-roll-enable",0);
-    setprop("sim/model/f15/controls/CAS/cas-yaw-enable",0);
+    setprop("controls/lighting/ufc-inst", 0);
+    setprop("controls/lighting/storm-flood", 0);
+    setprop("controls/lighting/chart-inst", 0);
+    setprop("sim/model/f15/avionics/hmd-sym", 0);
 
     setprop("sim/model/f15/controls/HUD/brightness",0);
     setprop("sim/model/f15/controls/HUD/on-off",0);
@@ -543,9 +606,62 @@ var cold_and_dark = func()
     setprop("sim/model/f15/controls/engs/l-eng-master-guard",1);
     setprop("sim/model/f15/controls/engs/r-eng-master-guard",1);
     setprop("sim/model/f15/controls/electrics/jfs-starter",0);
-
-    setprop("fdm/jsbsim/systems/electrics/ground-power",0);
-
+    
+    setprop("sim/model/f15/ejection-master", 0);
+    
+    # ECS
+    
+    setprop("fdm/jsbsim/systems/ecs/liquid-oxygen-activated", 1);
+    setprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode", 0);
+    setprop("fdm/jsbsim/systems/ecs/anti-fog", 0);
+    setprop("sim/model/f15/controls/windshield-heat-switch-pos", 0);
+    setprop("fdm/jsbsim/systems/ecs/bleed-air-source", 2);
+    setprop("sim/model/f15/controls/interiors/air-cond-temp-placeholder", 0);
+    
+    # FCP
+    setprop("sim/model/f15/avionics/flyup-master-guard", 0);
+    setprop("sim/model/f15/avionics/flyup-master-switch", 0);
+    setprop("sim/model/f15/avionics/tf-couple-switch", 0);
+    
+    # EPAWSS
+    setprop("sim/model/f15/epawss/ewws-on", 0);
+    setprop("sim/model/f15/controls/interiors/rwr-mstr-switch", 0);
+    setprop("sim/model/f15/epawss/expendables-sel", 0);
+    setprop("sim/model/f15/epawss/expendables-guard", 0);
+    setprop("sim/model/f15/epawss/expendables-master", 0);
+    
+    # NUC CONSENT
+    setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 1);
+    setprop("sim/model/f15/controls/interiors/nuclear-guard-pos", 0);
+    
+    # SENSORS
+    setprop("sim/model/f15/radar-awg-9/selected-mode-knob", 0);
+    setprop("sim/model/f15/avionics/radar-altimeter-switch-pos", 0);
+    setprop("sim/model/f15/avionics/tfr-flir-switch-pos", 0);
+    setprop("sim/model/f15/avionics/ins-selected-mode-knob", 0);
+    setprop("sim/model/f15/avionics/jtids-selected-mode-knob", 0);
+    setprop("sim/model/f15/avionics/nav-flir-switch-pos", 0);
+    setprop("sim/model/f15/avionics/hud-flir-brt", 0);
+    setprop("sim/model/f15/avionics/hud-flir-cont", 0);
+    
+    # IFF
+    setprop("sim/model/f15/controls/interiors/iff-master-switch", 0);
+    setprop("sim/model/f15/controls/interiors/iff-mode4-switch", 0);
+    
+    # Volumes
+    setprop("sim/model/f15/epawss/caution-volume", 0);
+    setprop("sim/model/f15/epawss/alert-volume", 0);
+    setprop("sim/model/f15/controls/interiors/betty-volume-knob", 0);
+    setprop("sim/model/f15/controls/interiors/wpn-volume-knob", 0);
+    setprop("sim/model/f15/instrumentation/ils/volume-norm", 0);
+    setprop("sim/model/f15/controls/interiors/tacan-volume-knob", 0);
+    
+    # NTCR
+    setprop("sim/model/f15/controls/interiors/ntcr-master-switch", 0);
+    
+    # Built-in-test
+    setprop("sim/model/f15/avionics/bit-norm", 0);
+    setprop("sim/model/f15/avionics/bit-done", 0);
 }
 
 # Ejection
@@ -781,7 +897,7 @@ var F15MainModule =
     update: func(notification){
     
         # Initiate Built-in-distance if it ain't been
-        if (!getprop("sim/model/f15/avionics/bit-done") and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 5) {
+        if (!getprop("sim/model/f15/avionics/bit-done") and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 5 and getprop("sim/model/f15/avionics/bit-norm") == 0) {
             interpolate("sim/model/f15/avionics/bit-norm", 1, 160); # Take 2'30"
             settimer(func {setprop("sim/model/f15/avionics/bit-done", 1);}, 160);
         }
@@ -845,6 +961,10 @@ var F15MainModule =
         } else {
             setprop("sim/model/f15/controls/interiors/eng-master-pos-l", !(getprop("engines/engine[0]/starter") or getprop("engines/engine[0]/running")));
         }
+        
+        # Sync lighting shit
+        setprop("controls/lighting/ufc-inst-real", getprop("controls/lighting/ufc-inst") * getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 5);
+        setprop("controls/lighting/chart-inst-real", getprop("controls/lighting/chart-inst") * getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 5);
 
         # Force update different displays' daylight mode (day or night)
         if (getprop("controls/lighting/daylight-mode") == 0) {  # day mode (brt)

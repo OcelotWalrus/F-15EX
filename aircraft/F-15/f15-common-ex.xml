@@ -4445,7 +4445,9 @@
             <radio2-brightness type="double">0.6</radio2-brightness>
 
             <ufc-inst type="double">0</ufc-inst>
+            <ufc-inst-real type="double">0</ufc-inst-real>
             <chart-inst type="int">0</chart-inst>
+            <chart-inst-real type="int">0</chart-inst-real>
 
             <daylight-mode type="int">0</daylight-mode>  <!-- 0 day 1 night-->
             <storm-flood type="double">0</storm-flood>  <!-- 0 day 1 night-->
