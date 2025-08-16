@@ -972,6 +972,9 @@ var containsV = func (vector, content) {
         return 0;
     }
     foreach(var vari; vector) {
+        if (typeof(vari) != "hash" or typeof(vector) != "vector") {
+            return 0;  # Fixes bugs
+        }
         if (vari.string == content.string) {
             return 1;
         }
@@ -1057,9 +1060,9 @@ var selectCheck = func {
                 active_u_callsign = nil;
 
             if (awg9_trace)
-                printf("Next TWS track file: %s %3.1f", nxt.Callsign.getValue(), nxt.get_range());
+                printf("Active TWS track file: %s %3.1f", nxt.Callsign.getValue(), nxt.get_range());
         }
-        awg_9.sel_next_target =0;
+        awg_9.swipe_tws_targets =0;
     }
     else if (awg_9.sel_next_target)
     {
@@ -2096,12 +2099,16 @@ else
 	            # Fighters - strength 2nd
 	            # Helos/drone - strength 1st
 	            strength = (displays.typeLookup[me.get_model()] == "TNKR" or displays.typeLookup[me.get_model()] == "AEW&C" or displays.typeLookup[me.get_model()] == "C") * .8 + (displays.typeLookup[me.get_model()] == "B") * .7 + (displays.typeLookup[me.get_model()] == "F" or displays.typeLookup[me.get_model()] == "F/B") * .6 + (displays.typeLookup[me.get_model()] == "MC" or displays.typeLookup[me.get_model()] == "HELO") * .45;
-                within_range = me.get_range() > (275 * strength);
+                within_range = me.get_range() < (275 * strength);
                 # Reference: at 75 NM minimum aspect to get NTCR is 55*
                 within_aspect = me.get_aspect() > me.get_range() * 55 / 75;
                 
                 if (within_range and within_aspect) {
                     var u_model = me.get_model();
+                } elsif (!within_range) {
+                    var u_model = "NTCR RNG";
+                } elsif (!within_aspect) {
+                    var u_model = "NTCR ASP";
                 } else {
                     var u_model = "NTCR FAIL";
                 }

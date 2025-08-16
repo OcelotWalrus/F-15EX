@@ -1260,7 +1260,7 @@ var MAX_PITCH_DOWN_SPEED = 4;
 var MAX_DIVE_ANGLE = 45;
 var MAX_TURN_SPEED = 22.5;#do not mess with this number unless porting the system to another aircraft.
 var MAX_CANNON_RANGE = 1.0;#nm
-var OPFOR_AIRCRAFT_TYPE = "daVinci_SU-34";
+var OPFOR_AIRCRAFT_TYPE = "F-15EX";
 var BLUFOR_AIRCRAFT_TYPE = "F-15EX";
 
 var num_t = "0000";
