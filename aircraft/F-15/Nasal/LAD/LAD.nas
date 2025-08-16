@@ -3150,7 +3150,7 @@ update_lad = func() {
             }
 
             if (found_lock == 1) {
-                LADCanvas.locked_box_hsd.setVisible(1);
+                LADCanvas.locked_box_hsd.setVisible(0);  # Disabled
                 #LADCanvas.vsd_tgt_true_speed.setVisible(1);
                 #LADCanvas.vsd_tgt_bearing.setVisible(1);
                 #LADCanvas.vsd_tgt_heading.setVisible(1);
