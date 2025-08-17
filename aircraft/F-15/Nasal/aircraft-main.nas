@@ -450,7 +450,7 @@ var quickstart = func() {
     setprop("controls/lighting/storm-flood", 5);
     setprop("controls/lighting/chart-inst", 5);
     setprop("sim/model/f15/avionics/hmd-sym", .8);
-    setprop("controls/lighting/warn-caution", .75);
+    setprop("controls/lighting/warn-caution", 10);
     setprop("controls/lighting/l-console", 5);
     setprop("controls/lighting/r-console", 5);
 

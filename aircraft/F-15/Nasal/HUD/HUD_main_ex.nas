@@ -239,6 +239,87 @@ var F15HUD = {
                           .setColor(0,1,0);
             obj.ccipLine = obj.ccipGrp.createChild("group");
 
+            # ILS/GS Landing aid
+            obj.heading_tape_pointer = obj.get_element("path3419");
+            obj.localizer = obj.canvas.createGroup();
+            obj.centerOrigin = hudmath.HudMath.getCenterOrigin();
+            obj.localizer.setTranslation(obj.centerOrigin);
+            obj.ilsGroup  = obj.localizer.createChild("group");
+            obj.gsGroup   = obj.localizer.createChild("group");
+            obj.ils = obj.ilsGroup.createChild("path")
+                    .moveTo(0,-40)
+                    .vert(80)
+                    .moveTo(-4,-40)
+                    .horiz(8)
+                    .moveTo(-4,40)
+                    .horiz(8)
+                    .moveTo(-4,-20)
+                    .horiz(8)
+                    .moveTo(-4,20)
+                    .horiz(8)
+                    .setStrokeLineWidth(.5)
+                    .setColor(0,1,0)
+                    .set("z-index",11000);
+            obj.ilsOff = obj.ilsGroup.createChild("path")
+                    .moveTo(0,-40)
+                    .vert(8)
+                    .moveTo(0,-24)
+                    .vert(8)
+                    .moveTo(0,-8)
+                    .vert(16)
+                    .moveTo(0,16)
+                    .vert(8)
+                    .moveTo(0,32)
+                    .vert(8)
+                    .moveTo(-4,-40)
+                    .horiz(8)
+                    .moveTo(-4,40)
+                    .horiz(8)
+                    .moveTo(-4,-20)
+                    .horiz(8)
+                    .moveTo(-4,20)
+                    .horiz(8)
+                    .setStrokeLineWidth(.5)
+                    .setColor(0,1,0)
+                    .set("z-index",11000);
+            obj.gs = obj.gsGroup.createChild("path")
+                    .moveTo(-40,0)
+                    .horiz(80)
+                    .moveTo(-40,-4)
+                    .vert(8)
+                    .moveTo(40,-4)
+                    .vert(8)
+                    .moveTo(-20,-4)
+                    .vert(8)
+                    .moveTo(20,-4)
+                    .vert(8)
+                    .setStrokeLineWidth(.5)
+                    .setColor(0,1,0)
+                    .set("z-index",11000);
+            obj.gsOff = obj.gsGroup.createChild("path")
+                    .moveTo(-40,0)
+                    .horiz(8)
+                    .moveTo(-24,0)
+                    .horiz(8)
+                    .moveTo(-8,0)
+                    .horiz(16)
+                    .moveTo(16,0)
+                    .horiz(8)
+                    .moveTo(32,0)
+                    .horiz(8)
+
+                    .moveTo(-40,-4)
+                    .vert(8)
+                    .moveTo(40,-4)
+                    .vert(8)
+                    .moveTo(-20,-4)
+                    .vert(8)
+                    .moveTo(20,-4)
+                    .vert(8)
+                    .setStrokeLineWidth(.5)
+                    .setColor(0,1,0)
+                    .set("z-index",11000);
+
 			# FLIR image
 			obj.flirPicHD = obj.svg.createChild("image")
 	                .set("src", "Aircraft/F-15/Nasal/HUD/flir"~flirImageReso~".png")
@@ -582,7 +663,54 @@ var F15HUD = {
                                                             obj.VV_x = (val.OrientationSideSlipDeg or 0)*10; # adjust for view
                                                             obj.VV_y = (val.Alpha or 0)*10; # adjust for view
                                                             obj.VV.setTranslation (obj.VV_x, obj.VV_y);
+                                                            obj.localizer.setTranslation (obj.centerOrigin[0]+obj.VV_x, obj.centerOrigin[1]+obj.VV_y);
                                                         }),
+            props.UpdateManager.FromHashList(["hasGS","GSDeg","GSinRange","ILSDeg", "ILSinRange", "GSdist", "NavigationMode", "ILSCross", "ILSMode"], 0.01,
+             func(val)
+                                      {
+                                        if (val.ILSMode == 1) {  # NAV1 online ILS mode
+                                            #printf("ILSinRange %d GSdist %d", val.ILSinRange, val.GSdist);
+                                            if (val.ILSinRange) {
+                                                #printf("ILS %d", val.ILSDeg);
+                                                #print(4*obj.clamp(val.ILSDeg,-5,5));
+                                                obj.ilsGroup.setTranslation(4*obj.clamp(val.ILSDeg,-5,5),0);
+                                                if (math.abs(val.ILSDeg)>5) {
+                                                    obj.ils.hide();
+                                                    obj.ilsOff.show();
+                                                } else {
+                                                    obj.ils.show();
+                                                    obj.ilsOff.hide();
+                                                }
+
+                                                if (val.hasGS and val.GSinRange) {
+                                                    obj.gsGroup.setTranslation(0,-20*val.GSDeg);
+                                                    #printf("GS %d", val.GSDeg*10);
+                                                    if (math.abs(val.GSDeg)>0.99) {
+                                                        obj.gs.hide();
+                                                        obj.gsOff.show();
+                                                    } else {
+                                                        obj.gs.show();
+                                                        obj.gsOff.hide();
+                                                    }
+                                                    obj.heading_tape_pointer.setTranslation (5.4*obj.clamp(geo.normdeg180(val.ILSCross-getprop("orientation/heading-deg")),-10,10), 0);
+                                                } else {
+                                                    obj.gsGroup.setTranslation(0,0);
+                                                    obj.gs.hide();
+                                                    obj.gsOff.show();
+                                                }
+                                            } else {
+                                                obj.ilsGroup.setTranslation(0,0);
+                                                obj.ils.hide();
+                                                obj.ilsOff.show();
+                                                obj.gsGroup.setTranslation(0,0);
+                                                obj.gs.hide();
+                                                obj.gsOff.show();
+                                            }
+                                            obj.localizer.show();
+                                        } else {
+                                            obj.localizer.hide();
+                                        }
+                                      }),
             props.UpdateManager.FromHashList(["InstrumentedG", "CadcOwsMaximumG", "ThrustToWeightRatio"], 0.05, func(val)
                                                         {
                                                             obj.window8.setText(sprintf("%02d %02d G",
@@ -2373,6 +2501,14 @@ input = {
 		AltitudeAGL                             : "position/altitude-agl-ft",
 		BitDone                                 : "sim/model/f15/avionics/bit-done",
 		BitNorm                                 : "sim/model/f15/avionics/bit-norm",
+		hasGS                                   : "instrumentation/nav[0]/has-gs",
+        GSinRange                               : "instrumentation/nav[0]/gs-in-range",
+        GSDeg                                   : "instrumentation/nav[0]/gs-needle-deflection-norm",
+        ILSDeg                                  : "instrumentation/nav[0]/heading-needle-deflection",
+        ILSinRange                              : "instrumentation/nav[0]/in-range",
+        GSdist                                  : "instrumentation/nav[0]/gs-distance",
+        ILSCross                                : "instrumentation/nav[0]/radials/target-auto-hdg-deg",
+        ILSMode                                 : "sim/model/f15/instrumentation/ils/mode",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

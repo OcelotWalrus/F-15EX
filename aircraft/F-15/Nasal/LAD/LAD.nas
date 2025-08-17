@@ -46,7 +46,6 @@
 # - Use different symbols for SAM and AAA contacts
 # - Display the A/P's heading using a pointer
 # - Display the TACAN station's pos (useful for tanker or carrier ops), with also bearing (with numbers and a pointer), dist and ETA (TACAN marker symbol F-15E DCS Manual)
-# - Display the ILS station's pos (useful for tanker or carrier ops), with also bearing (with numbers and a pointer), dist and ETA
 # - Display the bullseye's relative bearing using a pointer around the HSD great circle
 # - Display target pod's looking position with a unique symbol
 # //PACS Display// :
@@ -54,6 +53,8 @@
 # - Add the Jettison page (waiting for the interiors to finish because there are switches that configure jettison in there.
 # ---------------------------
 # Coordinates of touchable zones: (all measures are in pixels)
+# //Upper Panel Display// :
+# ILS/Nav1 box : UP R: 5275, 15; UP L: 4820, 15; DOWN R: 5275, 465; DOWN L: 4820, 465
 # //VSD Display// :
 # STP/BULLSEYE/TACAN/ILS info box : UP R: 1390, 5030; UP L: 315, 5030; DOWN R: 1390, 5140; DOWN L: 315, 5140.
 # ---------------------------
@@ -62,6 +63,7 @@
 
 ## Constant Variables
 
+var ils_box = [[5275, 15], [4820, 15], [4820, 465], [5275, 465]];
 var vsd_nav_box_pos = [[1390, 5030], [315, 5030], [315, 5140] ,[1390, 5140]];
 
 var typeLookup = { # database of known radar signatures
@@ -1164,6 +1166,29 @@ var LAD_Device = {
             #.setStrokeDashArray([50,35])
             .set("z-index",10)
             .setColor(prst_rose.r,prst_rose.g,prst_rose.b);
+        
+        m.navaid_station_loc = m.HSDScreen.createChild("path")
+            .moveTo(1355-3,1150*2+500+75)
+            .arcSmallCW(3,3, 0, 6, 0)
+            .arcSmallCW(3,3, 0, -6, 0)
+            .moveTo(1355+25,1150*2+500+75-50)
+            .lineTo(1355+50,1150*2+500+75)
+            .lineTo(1355+25,1150*2+500+75+50)
+            .lineTo(1355-25,1150*2+500+75+50)
+            .lineTo(1355-50,1150*2+500+75)
+            .lineTo(1355-25,1150*2+500+75-50)
+            .lineTo(1355+25,1150*2+500+75-50)
+            .set("z-index",1)
+            .setStrokeLineWidth(5)
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
+            
+        m.navaid_station_id = m.HSDScreen.createChild("text")
+            .setFontSize(80, 1.4)
+            .setText("IDIQ")
+            .setAlignment("center-center")
+            .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+            .setTranslation(1355,1150*2+500+75+110)
+            .setFont(aircraft.HUDFont);
 
         # Information texts (ground speed, true speed etc.)
         m.hsd_ground_speed = m.HSDScreen.createChild("text")
@@ -1574,6 +1599,8 @@ var LAD_Device = {
         m.hsd_circle_1_3.setVisible(1);
         m.hsd_line_h.setVisible(1);
         m.hsd_line_p.setVisible(1);
+        m.navaid_station_loc.setVisible(0);
+        m.navaid_station_id.setVisible(0);
         m.hsd_ground_speed.setVisible(1);
         m.hsd_airspeed.setVisible(1);
         m.hsd_heading_true.setVisible(1);
@@ -1760,6 +1787,25 @@ var point_in_quad = func(point, quad) {
     return (point_in_tri(point[0], point[1], d, c, b) or point_in_tri(point[0], point[1], d, a, b));
 }
 
+var point_in_ellipse = func(x, y, cx, cy, a, b) {
+
+    # Check if a point (x, y) is inside, on, or outside an ellipse
+    # centered at (cx, cy) with horizontal radius a and vertical radius b
+
+    var dx = x - cx;
+    var dy = y - cy;
+
+    var val = (dx*dx)/(a*a) + (dy*dy)/(b*b);
+
+    if (val < 1) {
+        return 0;  # inside
+    } elsif (val == 1) {
+        return 1;  # on
+    } else {
+        return 2;  # outside
+    }
+};
+
 var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_radius, center_x, center_y, center_x_static, center_y_static, ellipse2_horizon_radius, ellipse2_vertic_radius, step=2.5) {
 
      var intersect_points = [];
@@ -1809,6 +1855,12 @@ var point_on_ellipse_degrees = func(ellipse_ho, ellipse_ve, ellipse_center, inpu
     return point;
 }
 
+var angle_wrap = func(angle_deg) {
+    var result = math.mod(angle_deg, 360);
+    if (result < 0) result += 360;
+    return result;
+}
+
 update_lad = func() {
 
     elapsed = getprop("sim/time/elapsed-sec");
@@ -1820,6 +1872,11 @@ update_lad = func() {
         if (getprop("sim/model/f15/controls/LAD/screen-touch-cmd") == 1) {  # Screen has been touched
             setprop("sim/model/f15/controls/LAD/screen-touch-cmd", 0);  # Reset touch trigger command property
             LADCanvas.screen_touch_pos = [getprop("sim/model/f15/controls/LAD/screen-touch-x"), getprop("sim/model/f15/controls/LAD/screen-touch-y")];  # Update the "cursor"'s pos
+            
+            # Upper Panel Touch boxes
+            if (point_in_quad(LADCanvas.screen_touch_pos, ils_box)) {  # We touched that box
+                displays.curr_menu = 7;  # Bind the UFC to the NAV1/ILS menu
+            }
             
             # VSD Touch boxes
             if (VSD_ON) {  # Don't run none of that if there ain't no VSD screen
@@ -3590,6 +3647,74 @@ update_lad = func() {
                 LADCanvas.hsd_bullseye_aim.setTranslation(-x_move,-y_move);
             }
             
+            # Place the NAV1/ILS Station's location (if any)
+            if (getprop("instrumentation/nav[0]/in-range") and getprop("sim/model/f15/instrumentation/ils/mode") == 1) {
+                var navaid_bear_rel = geo.normdeg180(getprop("instrumentation/nav[0]/heading-deg") - getprop("orientation/heading-deg"));  # Relative bearing
+                var navaid_range = getprop("instrumentation/nav[0]/nav-distance") * M2NM;  # It's in meters god knows why
+                
+                var navaid_x_move = (navaid_range*LADCanvas.hsd_nm_to_px_x)*math.sin(navaid_bear_rel*D2R);
+                var navaid_y_move = -(navaid_range*LADCanvas.hsd_nm_to_px_y)*math.cos(navaid_bear_rel*D2R);
+
+                # If the ILS is outside of the circle, we don't let it get away of it and we place it at the very edge of the HSD circle
+                # The circle is actually an ellipse, in a way that it appears as a circle on the LAD
+                move_dir = ellipse_clamp(navaid_x_move, navaid_y_move);
+                clamped = navaid_x_move =! move_dir[0] or navaid_y_move != move_dir[1];
+                var navaid_x_move = move_dir[0];
+                var navaid_y_move = move_dir[1];
+                
+                LADCanvas.navaid_station_loc.setTranslation(navaid_x_move, navaid_y_move);
+                LADCanvas.navaid_station_id.setTranslation(1355+navaid_x_move,1150*2+500+75+110+navaid_y_move);
+                LADCanvas.navaid_station_id.setVisible(!clamped);
+                LADCanvas.navaid_station_loc.setVisible(!clamped);
+            
+                # Draw the NAV1/ILS plan
+                var navaid_course_heading = getprop("instrumentation/nav[0]/radials/selected-deg");
+                var navaid_course_vector = [math.sin((navaid_course_heading - getprop("orientation/heading-deg"))*D2R), math.cos((navaid_course_heading - getprop("orientation/heading-deg"))*D2R)];
+                
+                var p = 0;
+                for (var i = 100; i < 2000; i += 10) {
+                    if (point_in_ellipse(1355+ navaid_x_move + i * navaid_course_vector[0], 1150*2+500+75 + navaid_y_move + i * navaid_course_vector[1], 1355, 1150*2+500+75, (LADCanvas.hsd_great_circle_radius * 10 / 19) * 2, LADCanvas.hsd_great_circle_radius * 2) < 1) {
+                        var p = i;
+                        #var dx = navaid_x_move + i * navaid_course_vector[0];
+                        #var dx = navaid_y_move + i * navaid_course_vector[1];
+                    }
+                }
+                
+                var dx = navaid_x_move + p * navaid_course_vector[0];
+                var dy = navaid_y_move + p * navaid_course_vector[1];
+                
+                # we check if we're on the course, so we make the plan dashed or not
+                var navaid_on_course = 0;
+                var navaid_course_diff = angle_wrap(math.abs(getprop("instrumentation/nav[0]/heading-deg") - getprop("instrumentation/nav[0]/radials/selected-deg")));
+                if (navaid_course_diff > 180) {
+                    navaid_course_diff = 360 - navaid_course_diff;
+                }
+                if (math.abs(navaid_course_diff) < 3.5) {  # 3.5 degrees of tolerance
+                    var navaid_on_course = 1;
+                }
+                
+                if (!navaid_on_course) {
+                    LADCanvas.navaid_course_line = LADCanvas.HSDScreenLines.createChild("path")
+                        .moveTo(1355+navaid_x_move, 1150*2+500+75+navaid_y_move)
+                        .lineTo(1355+dx, 1150*2+500+75+dy)
+                        .setStrokeLineWidth(5)
+                        .setStrokeDashArray([1,5])
+                        .setColor(prst_blue.r,prst_blue.g,prst_blue.b)
+                        .set("z-index",1)
+                        .setVisible(1)
+                        .update();
+                } else {
+                    LADCanvas.navaid_course_line = LADCanvas.HSDScreenLines.createChild("path")
+                        .moveTo(1355+navaid_x_move, 1150*2+500+75+navaid_y_move)
+                        .lineTo(1355+dx, 1150*2+500+75+dy)
+                        .setStrokeLineWidth(7)
+                        .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
+                        .set("z-index",1)
+                        .setVisible(1)
+                        .update();
+                }
+            }
+
             # Draw tactical deployment symbology
 
             LADCanvas.HSDScreenTacticalDeployment.removeAllChildren();

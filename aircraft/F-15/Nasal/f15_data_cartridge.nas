@@ -14,7 +14,8 @@
 # are all the different data block types:
 # - `RADIO1,<active_channel_mhz>,<standby_channel_mhz>` example: `RADIO1,114.5,135.55`.  - Active and standby MHz frequencies of Radio 1 (Comm 1)
 # - `RADIO2,<active_channel_mhz>,<standby_channel_mhz>` example: `RADIO2,114.5,135.55`.  - Active and standby MHz frequencies of Radio 2 (Comm 2)
-# - `ILS,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `ILS,114.5,135.55,284`.  - Active and standby MHz frequencies of ILS (Nav 1) and radial settingin degrees
+# - `ILS,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `ILS,114.5,135.55,284`.  - Active and standby MHz frequencies of ILS (Nav 1) and radial setting in degrees
+# - `NAV1Block,<block_id>,<channel_mhz>` example: `NAV1Block,8,109.10`.   - Stored frequency presets for ILS (Nav 1)
 # - `NAV2,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `NAV2,114.5,135.55,284`.  - Active and standby MHz frequencies of Nav 2 radio and radial setting in degrees
 # - `TACAN,<tacan_channel_mhz>` example: `TACAN,123.5`.  - TACAN channel, not in '029Y' format but MHz format
 # - `GPSSpot,<index>,<latitude_decimal_deg>,<longitude_decimal_deg>,<radius_nm>,<label>,<color_code>,<displayed>` example: `GPSSpot,0,37.2,-115.6,25,SAM,red,1`.  - These are for the
@@ -90,6 +91,8 @@ var load_cartridge = func(path) {
                 setprop("instrumentation/nav[0]/frequencies/selected-mhz", num(items[1]));
                 setprop("instrumentation/nav[0]/frequencies/standby-mhz", num(items[2]));
                 setprop("instrumentation/nav[0]/radials/selected-deg", num(items[3]));
+            } elsif (key == "NAV1Block") {
+                setprop("instrumentation/nav[0]/frequencies/data-"~num(items[1])~"-freq", num(items[2]));
             } elsif (key == "NAV2") {
                 setprop("instrumentation/nav[1]/frequencies/selected-mhz", num(items[1]));
                 setprop("instrumentation/nav[1]/frequencies/standby-mhz", num(items[2]));
@@ -157,6 +160,11 @@ var save_cartridge = func(path) {
     ret = ret~sprintf("DECKMin,%d,%d|", getprop("sim/model/f15/avionics/altitude-deck-min"), getprop("sim/model/f15/avionics/altitude-deck-min-enabled"));
     ret = ret~sprintf("DECKMax,%d,%d|", getprop("sim/model/f15/avionics/altitude-deck-max"), getprop("sim/model/f15/avionics/altitude-deck-max-enabled"));
     ret = ret~sprintf("BULLSEYE,%.4f,%.4f,%d|", getprop("sim/model/f15/fcs/bullseye-lat"), getprop("sim/model/f15/fcs/bullseye-lon"), getprop("sim/model/f15/fcs/bullseye-alt"));
+    
+    # Go through each NAV1 frequency preset data blocks
+    for (var idx = 1; idx < 17; idx += 1) {  # We got 16 data blocks, starting from id 1
+        ret = ret~sprintf("NAV1Block,%d,%.2f|", idx, getprop("instrumentation/nav[0]/frequencies/data-"~idx~"-freq"));
+    }
 
     var idx = 0;
     # Go through each DTC GPS Spots and push 'em

@@ -568,8 +568,7 @@
 			<property>velocities/airspeed-kt</property>
 			<factor>0.001</factor>
 		</volume>
-			
-		</flyby>
+	</flyby>
 		
 		 <!-- Sonic Boom -->
   <sonicboom>
@@ -583,8 +582,8 @@
 	     	<value>1.0</value>
 	    </greater-than>
 	    <equals>
-		    <property>/sim/current-view/internal</property>
-		    <value>false</value>
+			<property>sim/current-view/view-number</property>
+			<value>6</value>
 		</equals>
 	</and>
    </condition>

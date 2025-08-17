@@ -1421,6 +1421,9 @@
                     <warnings>
                         <master-caution type="bool">0</master-caution>
                     </warnings>
+                    <ils>
+                        <mode type="int">0</mode>  <!-- 0 offline, 1 online NAV1, 2 online NAV2, 3 STPT/NAV-->
+                    </ils>
                 </instrumentation>
                 <systems>
                     <armament>
@@ -5094,6 +5097,22 @@
             <frequencies>
                 <selected-freq type="double">115.8</selected-freq>
                 <standby-freq type="double">115.8</standby-freq>
+                <data-1-freq type="double">120.55</data-1-freq>
+                <data-2-freq type="double">120.55</data-2-freq>
+                <data-3-freq type="double">120.55</data-3-freq>
+                <data-4-freq type="double">120.55</data-4-freq>
+                <data-5-freq type="double">120.55</data-5-freq>
+                <data-6-freq type="double">120.55</data-6-freq>
+                <data-7-freq type="double">120.55</data-7-freq>
+                <data-8-freq type="double">120.55</data-8-freq>
+                <data-9-freq type="double">120.55</data-9-freq>
+                <data-10-freq type="double">120.55</data-10-freq>
+                <data-11-freq type="double">120.55</data-11-freq>
+                <data-12-freq type="double">120.55</data-12-freq>
+                <data-13-freq type="double">120.55</data-13-freq>
+                <data-14-freq type="double">120.55</data-14-freq>
+                <data-15-freq type="double">120.55</data-15-freq>
+                <data-16-freq type="double">120.55</data-16-freq>
             </frequencies>
         </nav>
         <iff>

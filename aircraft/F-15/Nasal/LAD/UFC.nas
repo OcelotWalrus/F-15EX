@@ -16,6 +16,13 @@
 # This menu can be obtained by selecting it through the main menu, or by entering A/P on the keypad.
 # The press of A/P on the keypad will turn on autopilot, and a second will turn it off.
 # You can see 
+# // ILS/NAV1 //
+# This menu is obtained by touching the LAD inside the Upper Panel's ILS box. It allows to see
+# status info about the NAV1 radio, set the active/standby and preset channels, and push them to
+# active channel, set the radial/CDI course.
+# ---------------------------
+# Future Features:
+# - Allow the selection of NAV1 Glideslope for A/P Pitch mode
 # ---------------------------
 # Some Notes :
 # - Current proportions in the model are 2.849173228" (width) by .455" (height), making it a 6 1/4 ratio (width/height)
@@ -44,6 +51,13 @@ var autopilot_heading_menu = 3;  # Allows to configure autopilot heading control
 var autopilot_altitude_menu = 4;  # Allows to configure autopilot altitude controls
 var autopilot_altitude_menu_sec = 5;
 var autopilot_auto_throttle_menu = 6;
+
+# NAV1/ILS
+var nav1_main_menu = 7;  # Displays different options (INFO, CHANS, RAD, TCN/STPT)
+var nav1_menu_info = 8;  # Displays info about the current ILS/NAV1 status/settings
+var nav_1_chans_menu = 9;  # Allows to set active and standby channels into NAV1 and select through them
+var nav_1_chans_index = 0;  # So we know which frequency data block we're checking out in the NAV1 channels menu
+var nav_1_mode_menu = 10;
 
 # Measures
 var screen_ratio = 6.25;
@@ -1251,6 +1265,339 @@ update_loop_func = func() {
             }
         
             UFCCanvas.UFCText.setText(throttle_text);
+        } elsif (curr_menu == nav1_main_menu) {
+            ils_text = "1.INFO 2.CHANS 3.RADIA 4.MODE";
+            
+            # Handle inputs
+            if (displays.a_1_pres == 1 and !inputting) {
+                curr_menu = nav1_menu_info;
+                displays.a_1_pres = 0;
+            } elsif (displays.n_2_pres == 1 and !inputting) {
+                curr_menu = nav_1_chans_menu;
+                nav_1_chans_index = 0;
+                displays.n_2_pres = 0;
+            } elsif (displays.b_3_pres == 1 and !inputting) {  # Radial input
+                stored_input = "";  # We reset the stored input just in case
+                inputting = 1;
+                displays.b_3_pres = 0;
+            } elsif (displays.w_4_pres == 1 and !inputting) {  # Radial input
+                curr_menu = nav_1_mode_menu;
+                displays.w_4_pres = 0;
+            } elsif (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+                
+                # We check if the stored input is correct
+                # - is a number
+                # - is between 0 and 360
+                    
+                if (!is_numeric(stored_input) or !(stored_input >= 0 and stored_input <= 360)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                    displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                } else {  # It's all good, we can apply the inputted data to the sim property
+                    setprop("instrumentation/nav[0]/radials/selected-deg", stored_input + 0);
+                }
+                
+                stored_input = "";  # We reset the stored input just in case
+                inputting = 0;
+                displays.mrk_pres = 0;
+            }
+            if (size(stored_input) < 3 and inputting) {  # Max amount of data that can be inputted
+                if (displays.a_1_pres == 1) {
+                    stored_input = stored_input~"1";
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    stored_input = stored_input~"2";
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    stored_input = stored_input~"3";
+                    displays.b_3_pres = 0;
+                } elsif (displays.w_4_pres == 1) {
+                    stored_input = stored_input~"4";
+                    displays.w_4_pres = 0;
+                } elsif (displays.m_5_pres == 1) {
+                    stored_input = stored_input~"5";
+                    displays.m_5_pres = 0;
+                } elsif (displays.e_6_pres == 1) {
+                    stored_input = stored_input~"6";
+                    displays.e_6_pres = 0;
+                } elsif (displays.i_7_pres == 1) {
+                    stored_input = stored_input~"7";
+                    displays.i_7_pres = 0;
+                } elsif (displays.s_8_pres == 1) {
+                    stored_input = stored_input~"8";
+                    displays.s_8_pres = 0;
+                } elsif (displays.c_9_pres == 1) {
+                    stored_input = stored_input~"9";
+                    displays.c_9_pres = 0;
+                } elsif (displays.hyphen_0_pres == 1) {
+                    stored_input = stored_input~"0";
+                    displays.hyphen_0_pres = 0;
+                }
+            }
+        
+            UFCCanvas.UFCText.setText(ils_text);
+        } elsif (curr_menu == nav1_menu_info) {
+            final_text = "";
+            if (!getprop("instrumentation/nav[0]/in-range")) {
+                final_text = "OUT RNG";
+            } else {
+                final_text = sprintf("%s %02d", getprop("instrumentation/nav[0]/nav-id"), getprop("instrumentation/nav[0]/nav-distance") * M2NM);
+            }
+            
+            ils_text = sprintf("FREQ %3.2f RADIAL %03d %s", getprop("instrumentation/nav[0]/frequencies/selected-mhz"), getprop("instrumentation/nav[0]/radials/selected-deg"), final_text);
+        
+            UFCCanvas.UFCText.setText(ils_text);
+        } elsif (curr_menu == nav_1_chans_menu) {
+            
+            if (nav_1_chans_index == 0) {  # Active frequency
+                ils_text = sprintf("ACTIVE %3.2f MHz 1.Stby 2.Next", getprop("instrumentation/nav[0]/frequencies/selected-mhz"));
+                if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
+                    active_freq = getprop("instrumentation/nav[0]/frequencies/selected-mhz");
+                    standby_freq = getprop("instrumentation/nav[0]/frequencies/standby-mhz");
+                    setprop("instrumentation/nav[0]/frequencies/selected-mhz", standby_freq);
+                    setprop("instrumentation/nav[0]/frequencies/standby-mhz", active_freq);
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and ! inputting) {  # Go to the next stored frequency
+                    nav_1_chans_index += 1;
+                    displays.n_2_pres = 0;
+                } elsif (displays.data_pres == 1 and !inputting) {  # Frequency input
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+                    
+                    # We check if the stored input is correct
+                    # - is a number
+                        
+                    if (!is_numeric(stored_input)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("instrumentation/nav[0]/frequencies/selected-mhz", stored_input + 0);
+                    }
+                    
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                }
+                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    } elsif (displays.decimal_pres == 1) {
+                        stored_input = stored_input~".";
+                        displays.decimal_pres = 0;
+                    }
+                }
+            } elsif (nav_1_chans_index == 1) {  # Standby frequency
+                ils_text = sprintf("STBY %3.2f MHz 1.Active 2.Next", getprop("instrumentation/nav[0]/frequencies/standby-mhz"));
+                if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
+                    active_freq = getprop("instrumentation/nav[0]/frequencies/selected-mhz");
+                    standby_freq = getprop("instrumentation/nav[0]/frequencies/standby-mhz");
+                    setprop("instrumentation/nav[0]/frequencies/selected-mhz", standby_freq);
+                    setprop("instrumentation/nav[0]/frequencies/standby-mhz", active_freq);
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and ! inputting) {  # Go to the next stored frequency
+                    nav_1_chans_index += 1;
+                    displays.n_2_pres = 0;
+                } elsif (displays.data_pres == 1 and !inputting) {  # Frequency input
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+                    
+                    # We check if the stored input is correct
+                    # - is a number
+                        
+                    if (!is_numeric(stored_input)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("instrumentation/nav[0]/frequencies/standby-mhz", stored_input + 0);
+                    }
+                    
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                }
+                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    } elsif (displays.decimal_pres == 1) {
+                        stored_input = stored_input~".";
+                        displays.decimal_pres = 0;
+                    }
+                }
+            } elsif (nav_1_chans_index > 1) {  # Stored channel data blocks
+                data_idx = nav_1_chans_index - 1;
+                ils_text = sprintf("DATA%02d %3.2f MHz 1.Push 2.Next", data_idx, getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
+                if (displays.a_1_pres == 1 and !inputting) {  # Push data block to active freq
+                    setprop("instrumentation/nav[0]/frequencies/selected-mhz", getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1 and !inputting and data_idx < 16) {  # Go to the next stored frequency
+                    nav_1_chans_index += 1;
+                    displays.n_2_pres = 0;
+                } elsif (displays.data_pres == 1 and !inputting) {  # Frequency input
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 1;
+                    displays.data_pres = 0;
+                } elsif (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+                    
+                    # We check if the stored input is correct
+                    # - is a number
+                        
+                    if (!is_numeric(stored_input)) {  # (stored_input + 0) forces Nasal to treat stored_input as a float and not a string anymore
+                        displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                    } else {  # It's all good, we can apply the inputted data to the sim property
+                        setprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq", stored_input + 0);
+                    }
+
+                    stored_input = "";  # We reset the stored input just in case
+                    inputting = 0;
+                    displays.mrk_pres = 0;
+                }
+                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                    if (displays.a_1_pres == 1) {
+                        stored_input = stored_input~"1";
+                        displays.a_1_pres = 0;
+                    } elsif (displays.n_2_pres == 1) {
+                        stored_input = stored_input~"2";
+                        displays.n_2_pres = 0;
+                    } elsif (displays.b_3_pres == 1) {
+                        stored_input = stored_input~"3";
+                        displays.b_3_pres = 0;
+                    } elsif (displays.w_4_pres == 1) {
+                        stored_input = stored_input~"4";
+                        displays.w_4_pres = 0;
+                    } elsif (displays.m_5_pres == 1) {
+                        stored_input = stored_input~"5";
+                        displays.m_5_pres = 0;
+                    } elsif (displays.e_6_pres == 1) {
+                        stored_input = stored_input~"6";
+                        displays.e_6_pres = 0;
+                    } elsif (displays.i_7_pres == 1) {
+                        stored_input = stored_input~"7";
+                        displays.i_7_pres = 0;
+                    } elsif (displays.s_8_pres == 1) {
+                        stored_input = stored_input~"8";
+                        displays.s_8_pres = 0;
+                    } elsif (displays.c_9_pres == 1) {
+                        stored_input = stored_input~"9";
+                        displays.c_9_pres = 0;
+                    } elsif (displays.hyphen_0_pres == 1) {
+                        stored_input = stored_input~"0";
+                        displays.hyphen_0_pres = 0;
+                    } elsif (displays.decimal_pres == 1) {
+                        stored_input = stored_input~".";
+                        displays.decimal_pres = 0;
+                    }
+                }
+            }
+            
+            UFCCanvas.UFCText.setText(ils_text);
+        } elsif (curr_menu == nav_1_mode_menu) {
+            if (getprop("sim/model/f15/instrumentation/ils/mode") == 0) {
+                ils_text = "ILS:Off. 1.NAV1 2.NAV2 3.STPTS";
+                if (displays.a_1_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 1);
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 2);
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 2);
+                    displays.b_3_pres = 0;
+                }
+            } elsif (getprop("sim/model/f15/instrumentation/ils/mode") == 1) {
+                ils_text = "ILS:NAV1 1.NAV2 2.STPTS 3.Off.";
+                if (displays.a_1_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 2);
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 3);
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 0);
+                    displays.b_3_pres = 0;
+                }
+            } elsif (getprop("sim/model/f15/instrumentation/ils/mode") == 2) {
+                ils_text = "ILS:NAV2 1.STPTS 2.NAV1 3.Off.";
+                if (displays.a_1_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 3);
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 1);
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 0);
+                    displays.b_3_pres = 0;
+                }
+            } elsif (getprop("sim/model/f15/instrumentation/ils/mode") == 3) {
+                ils_text = "ILS:STPTS 1.NAV1 2.NAV2 3.Off.";
+                if (displays.a_1_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 1);
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 2);
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    setprop("sim/model/f15/instrumentation/ils/mode", 0);
+                    displays.b_3_pres = 0;
+                }
+            }
+        
+            UFCCanvas.UFCText.setText(ils_text);
         }
         
         # If there's a bad data warning, we display it no matter what, for 3 whole seconds
@@ -1290,18 +1637,24 @@ update_loop_func = func() {
             hdg.enable();
             alt.enable();
             vel.enable();
-            if (getprop("sim/gui/dialogs/autopilot/heading-active") == 1) {
+            if (getprop("sim/gui/dialogs/autopilot/heading-active") == 1) {  # If this press turned the A/P ON, we go to the A/P menu
                 curr_menu = autopilot_main_menu;
             }
             displays.ap_pres = 0;
         } elsif (displays.menu_pres == 1) {  # Takes us back to the last menu
             stored_input = "";  # Since we force-display, we reset the pilot's input
-            if (curr_menu == autopilot_main_menu) {
+            if (displays.inputting) {
+                displays.inputting = 0;
+            } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu) {
                 curr_menu = dft_menu;
             } elsif (curr_menu == autopilot_info_menu or curr_menu == autopilot_heading_menu or curr_menu == autopilot_altitude_menu or curr_menu == autopilot_auto_throttle_menu) {
                 curr_menu = autopilot_main_menu;
             } elsif (curr_menu == autopilot_altitude_menu_sec) {
                 curr_menu = autopilot_altitude_menu;
+            } elsif (curr_menu == nav1_menu_info or (curr_menu == nav_1_chans_menu and nav_1_chans_index == 0) or curr_menu == nav_1_mode_menu) {
+                curr_menu = nav1_main_menu;
+            } elsif (curr_menu == nav_1_chans_menu and nav_1_chans_index != 0) {
+                nav_1_chans_index = 0;
             }
             
             displays.menu_pres = 0;
@@ -1333,7 +1686,7 @@ update_loop_func = func() {
         displays.data_pres = 0;
         displays.menu_pres = 0;
     } elsif (!getprop("sim/model/f15/avionics/bit-done")) {
-        bit_text = sprintf("      B.I.T. %03d percent      ", getprop("sim/model/f15/avionics/bit-norm") * 100);
+        bit_text = sprintf("     B.I.T. %03.2f percent     ", getprop("sim/model/f15/avionics/bit-norm") * 100);
         UFCCanvas.UFCText.setText(bit_text);
     }
 }
