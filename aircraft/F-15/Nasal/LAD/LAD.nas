@@ -3754,6 +3754,19 @@ update_lad = func() {
                             .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
                             .set("z-index",1)
                             .update();
+                        
+                        LADCanvas.HSDScreenTacticalDeployment.createChild("path")  # Triangle representing the target
+                            .moveTo(677*2+x_move_aim,2262+500+y_move_aim-75)
+                            .lineTo(677*2+x_move_aim+75,2262+500+y_move_aim+75)
+                            .lineTo(677*2+x_move_aim-75,2262+500+y_move_aim+75)
+                            .lineTo(677*2+x_move_aim,2262+500+y_move_aim-75)
+                            .moveTo(677*2+x_move_aim-50,2262+500+y_move_aim-75)
+                            .arcSmallCW(25,25, 0, -25*2, 0)
+                            .arcSmallCW(25,25, 0, 25*2, 0)
+                            .setStrokeLineWidth(8)
+                            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
+                            .set("z-index",1)
+                            .update();
 
                         # Computing for the text giving range between the aircraft and the target
                         text_dir = path_text_perpendicular_vector_computing([677*2, 2262+500], [677*2+x_move_aim, 2262+500+y_move_aim], offset=10);
