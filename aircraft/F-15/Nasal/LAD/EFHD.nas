@@ -168,7 +168,7 @@ var point_in_quad = func(point, quad) {
 update = func() {
     
     # We make sure we don't run none of that if the EFHD screen's offline
-    if (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 0) {
+    if (getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 0) {
         # Update variables
         touch_command = getprop("sim/model/f15/controls/EFHD/screen-touch-cmd");
         

@@ -218,7 +218,7 @@
     </mod-up>
   </button>
   <button n="2">
-    <desc type="string">Target next</desc>
+    <desc type="string">TDC Designate</desc>
     <binding>
       <command type="string">property-adjust</command>
       <property type="string">/controls/armament/target-selected</property>
@@ -226,18 +226,12 @@
     </binding>
   </button>
   <button n="3">
-    <desc type="string">Target next</desc>
-    <repeatable>false</repeatable>
+    <desc type="string">TWS Swipe trackfiles</desc>
     <binding>
-      <command type="string">property-toggle</command>
-      <property type="string">sim/model/f15/controls/CAS/cas-pitch-enable</property>
+      <command type="string">property-adjust</command>
+      <property type="string">/controls/armament/target-selected</property>
+      <step type="string">-1</step>
     </binding>
-    <mod-up>
-        <binding>
-          <command type="string">property-toggle</command>
-          <property type="string">sim/model/f15/controls/CAS/cas-pitch-enable</property>
-        </binding>
-    </mod-up>
   </button>
   <button n="4">
     <desc type="string">Custom</desc>
@@ -287,12 +281,15 @@
     </mod-up>
   </button>
   <button n="7">
-    <desc type="string">Custom</desc>
+    <desc type="string">Radar Elevation Antennae Up</desc>
     <repeatable type="string">false</repeatable>
     <binding>
-      <command type="string">nasal</command>
-      <script type="string">aircraft.chute_release();</script>
-      <module type="string">__js0</module>
+        <command>property-adjust</command>
+        <property>instrumentation/radar/ho-field-offset</property>
+        <step type="int">-1</step>
+        <min>-60</min>
+        <max>60</max>
+        <wrap>false</wrap>
     </binding>
     <mod-up>
       <binding type="string">
@@ -300,13 +297,15 @@
     </mod-up>
   </button>
   <button n="8">
-    <desc type="string">Custom</desc>
+    <desc type="string">Radar Elevation Antennae Down</desc>
     <repeatable type="string">false</repeatable>
     <binding>
-      <command type="string">nasal</command>
-      <script type="string">aircraft.chute();</script>
-      <module type="string">__js0</module>
-      <offset type="double">1</offset>
+        <command>property-adjust</command>
+        <property>instrumentation/radar/ho-field-offset</property>
+        <step type="int">1</step>
+        <min>-60</min>
+        <max>60</max>
+        <wrap>false</wrap>
     </binding>
     <mod-up>
       <binding type="string">
@@ -336,83 +335,55 @@
   </button>
   <button n="10">
     <name type="string">right black cursor (DMS) up</name>
-    <desc type="string">Custom</desc>
+    <desc type="string">TDC Up</desc>
     <repeatable type="string">true</repeatable>
     <binding>
-      <command type="string">nasal</command>
-      <script type="string">
-				if (mod)
-					reset_zoom();
-				else
-					view.decrease(1);
-			</script>
-      <module type="string">__js0</module>
-      <offset type="double">1</offset>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
+        <step type="double">-2</step>
+        <min>-60</min>
+        <max>60</max>
+        <wrap>false</wrap>
     </binding>
-    <mod-up>
-      <binding n="0" type="string">
-      </binding>
-      <binding n="0">
-        <offset type="double">1</offset>
-      </binding>
-    </mod-up>
   </button>
   <button n="11">
     <name type="string">right black cursor (DMS) right</name>
-    <desc type="string">Custom</desc>
-    <binding>
-      <command type="string">nasal</command>
-      <script type="string">view.stepView(1, mod)</script>
-      <module type="string">__js0</module>
-      <offset type="double">1</offset>
-    </binding>
-    <mod-up>
-      <binding n="0" type="string">
-      </binding>
-      <binding n="0">
-        <offset type="double">1</offset>
-      </binding>
-    </mod-up>
-  </button>
-  <button n="12">
-    <name type="string">right black cursor (DMS) down</name>
-    <desc type="string">Custom</desc>
+    <desc type="string">TDC Right</desc>
     <repeatable type="string">true</repeatable>
     <binding>
-      <command type="string">nasal</command>
-      <script type="string">
-				if (mod)
-					reset_zoom();
-				else
-					view.increase(1);
-			</script>
-      <module type="string">__js0</module>
-      <offset type="double">1</offset>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
+        <step type="double">2</step>
+        <min>-60</min>
+        <max>60</max>
+        <wrap>false</wrap>
     </binding>
-    <mod-up>
-      <binding n="0" type="string">
-      </binding>
-      <binding n="0">
-        <offset type="double">1</offset>
-      </binding>
-    </mod-up>
   </button>
   <button n="13">
     <name type="string">right black cursor (DMS) left</name>
-    <desc type="string">Custom</desc>
+    <desc type="string">TDC Left</desc>
+    <repeatable type="string">true</repeatable>
     <binding>
-      <command type="string">nasal</command>
-      <script type="string">view.stepView(-1, mod)</script>
-      <module type="string">__js0</module>
-      <offset type="double">1</offset>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
+        <step type="double">-2</step>
+        <min>-60</min>
+        <max>60</max>
+        <wrap>false</wrap>
     </binding>
-    <mod-up>
-      <binding n="0" type="string">
-      </binding>
-      <binding n="0">
-        <offset type="double">1</offset>
-      </binding>
-    </mod-up>
+  </button>
+  <button n="12">
+    <name type="string">right black cursor (DMS) down</name>
+    <desc type="string">TDC Down</desc>
+    <repeatable type="string">true</repeatable>
+    <binding>
+        <command>property-adjust</command>
+        <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
+        <step type="double">2</step>
+        <min>-60</min>
+        <max>60</max>
+        <wrap>false</wrap>
+    </binding>
   </button>
   <button n="14">
     <name type="string">grey cursor (CMS) up</name>

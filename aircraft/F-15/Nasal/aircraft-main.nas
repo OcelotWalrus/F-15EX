@@ -555,8 +555,8 @@ var cold_and_dark = func()
 	setprop("sim/model/f15/controls/electrics/emerg-gen-switch",9);
 	setprop("sim/model/f15/controls/electrics/r-gen-switch",0);
 
-    setprop("controls/engines/engine[0]/cutoff",1-getprop("controls/engines/engine[0]/cutoff"));
-    setprop("controls/engines/engine[1]/cutoff",1-getprop("controls/engines/engine[1]/cutoff"));
+    setprop("controls/engines/engine[0]/cutoff",1);
+    setprop("controls/engines/engine[1]/cutoff",1);
 
     setprop("controls/lighting/aux-inst", 0);
     setprop("controls/lighting/eng-inst", 0);

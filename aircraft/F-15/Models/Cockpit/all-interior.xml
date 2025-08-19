@@ -19915,7 +19915,7 @@
         <property>instrumentation/comm[0]/volume</property>
         <factor>.025</factor>
         <min>0</min>
-        <max>1</max>
+        <max>4</max>
         <wrap>false</wrap>
       </binding>
     </action>
@@ -19942,7 +19942,7 @@
         <property>sim/model/f15/instrumentation/ils/volume-norm</property>
         <factor>.025</factor>
         <min>0</min>
-        <max>1</max>
+        <max>4</max>
         <wrap>false</wrap>
       </binding>
     </action>
@@ -19969,7 +19969,7 @@
         <property>instrumentation/comm[1]/volume</property>
         <factor>.025</factor>
         <min>0</min>
-        <max>1</max>
+        <max>4</max>
         <wrap>false</wrap>
       </binding>
     </action>
@@ -19996,7 +19996,7 @@
         <property>instrumentation/nav[1]/volume</property>
         <factor>.025</factor>
         <min>0</min>
-        <max>1</max>
+        <max>4</max>
         <wrap>false</wrap>
       </binding>
     </action>

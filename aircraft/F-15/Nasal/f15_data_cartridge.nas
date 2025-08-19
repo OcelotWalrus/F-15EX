@@ -13,9 +13,11 @@
 # then different numbers giving information about that data block, all separated by commas. Here
 # are all the different data block types:
 # - `RADIO1,<active_channel_mhz>,<standby_channel_mhz>` example: `RADIO1,114.5,135.55`.  - Active and standby MHz frequencies of Radio 1 (Comm 1)
+# - `RADIO1Block,<block_id>,<channel_mhz>` example: `RADIO1Block,8,109.10`.   - Stored frequency presets for Radio 1 (Comm 1). There are 20 presets, from 0 to 19
 # - `RADIO2,<active_channel_mhz>,<standby_channel_mhz>` example: `RADIO2,114.5,135.55`.  - Active and standby MHz frequencies of Radio 2 (Comm 2)
+# - `RADIO2Block,<block_id>,<channel_mhz>` example: `RADIO2Block,8,109.10`.   - Stored frequency presets for Radio 2 (Comm 2). There are 20 presets, from 0 to 19
 # - `ILS,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `ILS,114.5,135.55,284`.  - Active and standby MHz frequencies of ILS (Nav 1) and radial setting in degrees
-# - `NAV1Block,<block_id>,<channel_mhz>` example: `NAV1Block,8,109.10`.   - Stored frequency presets for ILS (Nav 1)
+# - `NAV1Block,<block_id>,<channel_mhz>` example: `NAV1Block,8,109.10`.   - Stored frequency presets for ILS (Nav 1). There are 16 presets, from 1 to 16
 # - `NAV2,<active_channel_mhz>,<standby_channel_mhz>,<radial_deg>` example: `NAV2,114.5,135.55,284`.  - Active and standby MHz frequencies of Nav 2 radio and radial setting in degrees
 # - `TACAN,<tacan_channel_mhz>` example: `TACAN,123.5`.  - TACAN channel, not in '029Y' format but MHz format
 # - `GPSSpot,<index>,<latitude_decimal_deg>,<longitude_decimal_deg>,<radius_nm>,<label>,<color_code>,<displayed>` example: `GPSSpot,0,37.2,-115.6,25,SAM,red,1`.  - These are for the
@@ -103,6 +105,10 @@ var load_cartridge = func(path) {
             } elsif (key == "RADIO2") {
                 setprop("instrumentation/comm[1]/frequencies/selected-mhz", num(items[1]));
                 setprop("instrumentation/comm[1]/frequencies/standby-mhz", num(items[2]));
+            } elsif (key == "RADIO1Block") {
+                setprop("sim/model/f15/instrumentation/an-arc-182v/presets/frequency["~num(items[1])~"]", num(items[2]));
+            } elsif (key == "RADIO2Block") {
+                setprop("sim/model/f15/instrumentation/an-arc-159v1/presets/frequency["~num(items[1])~"]", num(items[2]));
             } elsif (key == "BULLSEYE") {
                 setprop("sim/model/f15/fcs/bullseye-lat", num(items[1]));
                 setprop("sim/model/f15/fcs/bullseye-lon", num(items[2]));
@@ -161,9 +167,22 @@ var save_cartridge = func(path) {
     ret = ret~sprintf("DECKMax,%d,%d|", getprop("sim/model/f15/avionics/altitude-deck-max"), getprop("sim/model/f15/avionics/altitude-deck-max-enabled"));
     ret = ret~sprintf("BULLSEYE,%.4f,%.4f,%d|", getprop("sim/model/f15/fcs/bullseye-lat"), getprop("sim/model/f15/fcs/bullseye-lon"), getprop("sim/model/f15/fcs/bullseye-alt"));
     
+    # Go through each Comm 1 frequency preset data blocks
+    for (var idx = 0; idx < 20; idx += 1) {  # We got 20 data blocks, starting from id 0
+        prop_path = "sim/model/f15/instrumentation/an-arc-182v/presets/frequency[" ~ idx ~ "]";
+        ret = ret~sprintf("RADIO1Block,%d,%.2f|", idx, getprop(prop_path));
+    }
+    
+    # Go through each Comm 2 frequency preset data blocks
+    for (var idx = 0; idx < 20; idx += 1) {  # We got 20 data blocks, starting from id 0
+        prop_path = "sim/model/f15/instrumentation/an-arc-159v1/presets/frequency[" ~ idx ~ "]";
+        ret = ret~sprintf("RADIO2Block,%d,%.2f|", idx, getprop(prop_path));
+    }
+    
     # Go through each NAV1 frequency preset data blocks
     for (var idx = 1; idx < 17; idx += 1) {  # We got 16 data blocks, starting from id 1
-        ret = ret~sprintf("NAV1Block,%d,%.2f|", idx, getprop("instrumentation/nav[0]/frequencies/data-"~idx~"-freq"));
+        prop_path = "instrumentation/nav[0]/frequencies/data-" ~ idx ~ "-freq";
+        ret = ret~sprintf("NAV1Block,%d,%.2f|", idx, getprop(prop_path));
     }
 
     var idx = 0;

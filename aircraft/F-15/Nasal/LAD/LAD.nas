@@ -11,6 +11,7 @@
 # - HSD (Horizontal Situation Display)  - covers radar, navigation, datalink, EPAWSS, radio and pretty much everything
 # - PACS (Programmable Armament Control Set)  - allows to see different stats about current pylons and loadout, and setup jettison
 # Upcoming Displays :
+# - A/A RDR (Air-to-Air Radar - Legacy A/A radar display
 # - ADI (Attitude Director Indicator)
 # - JTIDS (Datalink Sharing & Receiving Control Set)  - People on datalink, number of hostiles, friendlies and unknowns, number of locally shared radar and EPAWSS contacts, and a panel to check received GPS-Spots and send GPS-Spots + basic map just giving pos of datalink contacts, with a tactile button allowing to go through contacts like in radar and get info about them
 # - ETSD (EPAWSS Threat Summary Display)  - Number of contacts, number of threats, jamming on/off, datalink sharing on/off, active threat yes/no + type(MLW, MAW, spike) + basic HSD with info toward EPAWSS
@@ -38,22 +39,25 @@
 # ---------------------------
 # Future features (TODO's) :
 # //VSD Display// :
-# - ASE circles.
-# - Display the DLZ and the Missile Time Of Launch
+# - ASE circles and Missile Time Of Launch
+# - Touching on steerpoints once will display their info page on the UFC, a second click within 3 seconds will select it as current steerpoint
 # //HSD Display// :
 # - Display our datalink-compatible ordnance live with their target connected with a dashed line
 # - Show true headings around the great circle and make them move to be at the correct position
-# - Use different symbols for SAM and AAA contacts
 # - Display the A/P's heading using a pointer
 # - Display the TACAN station's pos (useful for tanker or carrier ops), with also bearing (with numbers and a pointer), dist and ETA (TACAN marker symbol F-15E DCS Manual)
-# - Display the bullseye's relative bearing using a pointer around the HSD great circle
 # - Display target pod's looking position with a unique symbol
+# - Add a measurement tool to freely measure from a selected point to another
+# - Display a TSD map behind every symbology
+# - Touching on steerpoints once will display their info page on the UFC, a second click within 3 seconds will select it as current steerpoint
 # //PACS Display// :
 # - Allow weapons to be programmed when you click on 'em.
 # - Add the Jettison page (waiting for the interiors to finish because there are switches that configure jettison in there.
 # ---------------------------
 # Coordinates of touchable zones: (all measures are in pixels)
 # //Upper Panel Display// :
+# Radio 1 (Comm 1) box : UP R: 2250, 10; UP L: 1640, 10; DOWN R: 2250, 420; DOWN L: 1640, 420
+# Radio 2 (Comm 2) box : UP R: 2910, 10; UP L: 2100, 10; DOWN R: 2910, 420; DOWN L: 2100, 420
 # ILS/Nav1 box : UP R: 5275, 15; UP L: 4820, 15; DOWN R: 5275, 465; DOWN L: 4820, 465
 # //VSD Display// :
 # STP/BULLSEYE/TACAN/ILS info box : UP R: 1390, 5030; UP L: 315, 5030; DOWN R: 1390, 5140; DOWN L: 315, 5140.
@@ -63,6 +67,8 @@
 
 ## Constant Variables
 
+var radio1_box = [[2250, 10], [1640, 10], [1640, 420], [2250, 420]];
+var radio2_box = [[2910, 10], [2100, 10], [2100, 420], [2910, 420]];
 var ils_box = [[5275, 15], [4820, 15], [4820, 465], [5275, 465]];
 var vsd_nav_box_pos = [[1390, 5030], [315, 5030], [315, 5140] ,[1390, 5140]];
 
@@ -777,11 +783,11 @@ var LAD_Device = {
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
             m.stpt = m.VSDScreen.createChild("path")
                 .moveTo(677*2,2262+500)
-                .lineTo(677*2-22,2262+500)
-                .lineTo(677*2,2262+500+112)
-                .lineTo(677*2+22,2262+500)
+                .lineTo(677*2-44,2262+500)
+                .lineTo(677*2,2262+500+224)
+                .lineTo(677*2+44,2262+500)
                 .lineTo(677*2,2262+500)
-                .setStrokeLineWidth(6)
+                .setStrokeLineWidth(12)
                 .setVisible(0)
                 .set("z-index",15)
                 .setColor(prst_purple.r,prst_purple.g,prst_purple.b);
@@ -790,11 +796,11 @@ var LAD_Device = {
         m.stpt_texts = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
             m.stpt_txt = m.VSDScreen.createChild("text")  # far down, bottom left
-                .setFontSize(95, 1.4)
+                .setFontSize(100, 1.4)
                 .setText("STPT 1")
                 .setAlignment("center-center")
                 .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
-                .setTranslation(677*2,2262+500+145)
+                .setTranslation(677*2,2262+500+260)
                 .setVisible(0)
                 .set("z-index",15)
                 .setFont(aircraft.HUDFont);
@@ -907,9 +913,14 @@ var LAD_Device = {
         m.dlnk_symbols = setsize([], m.dlnk_symbols_max);
         for (var i = 0; i < m.dlnk_symbols_max; i += 1){
             m.dlnk = m.VSDScreen.createChild("path")
-                .moveTo(677*2-24,2262+500)
-                .arcSmallCW(24,24,0,0,48)
-                .arcSmallCW(24,24,0,0,-48)
+                .moveTo(677*2,2262+500+75)
+                .lineTo(677*2-30,2262+500+75)
+                .lineTo(677*2-30,2262+500+75+60)
+                .lineTo(677*2+30,2262+500+75+60)
+                .lineTo(677*2+30,2262+500+75)
+                .lineTo(677*2,2262+500+75)
+                .lineTo(677*2,2262+500+75-75)
+                .setCenter(677*2,2262+500+75+30)
                 .setStrokeLineWidth(7)
                 .setVisible(0)
                 .set("z-index",15)
@@ -1009,8 +1020,11 @@ var LAD_Device = {
             .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
             .setTranslation(677*4-75-140,1150*4+500+75)
             .setFont(aircraft.HUDFont);
+        
+        m.VSDScreenDLZ = m.svg.createGroup();  # Used to draw the Dynamic Launch Zone symbology
 
         m.VSDScreen.setVisible(1);
+        m.VSDScreenDLZ.setVisible(1);
         m.vsd_box.setVisible(1);
         m.line_0_1.setVisible(1);
         m.line_0_2.setVisible(1);
@@ -1287,13 +1301,13 @@ var LAD_Device = {
         # Create the steerpoints symbols
         m.stpt_symbols_hsd = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
-            m.stpt = m.HSDScreen.createChild("path")
+            m.stpt = m.VSDScreen.createChild("path")
                 .moveTo(677*2,2262+500)
-                .lineTo(677*2-22,2262+500)
-                .lineTo(677*2,2262+500+112)
-                .lineTo(677*2+22,2262+500)
+                .lineTo(677*2-44,2262+500)
+                .lineTo(677*2,2262+500+224)
+                .lineTo(677*2+44,2262+500)
                 .lineTo(677*2,2262+500)
-                .setStrokeLineWidth(6)
+                .setStrokeLineWidth(12)
                 .setVisible(0)
                 .set("z-index",15)
                 .setColor(prst_purple.r,prst_purple.g,prst_purple.b);
@@ -1301,12 +1315,12 @@ var LAD_Device = {
         }
         m.stpt_texts_hsd = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
-            m.stpt_txt = m.HSDScreen.createChild("text")  # far down, bottom left
-                .setFontSize(95, 1.4)
+            m.stpt_txt = m.VSDScreen.createChild("text")  # far down, bottom left
+                .setFontSize(100, 1.4)
                 .setText("STPT 1")
                 .setAlignment("center-center")
                 .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
-                .setTranslation(677*2,2262+500+145)
+                .setTranslation(677*2,2262+500+260)
                 .setVisible(0)
                 .set("z-index",15)
                 .setFont(aircraft.HUDFont);
@@ -1549,10 +1563,15 @@ var LAD_Device = {
         m.dlnk_symbols_max = 21; # random number, can always be increased or decreased if we ever need to
         m.dlnk_symbols_hsd = setsize([], m.dlnk_symbols_max);
         for (var i = 0; i < m.dlnk_symbols_max; i += 1){
-            m.dlnk = m.HSDScreen.createChild("path")
-                .moveTo(677*2-24,2262+500)
-                .arcSmallCW(24,24,0,0,48)
-                .arcSmallCW(24,24,0,0,-48)
+            m.dlnk = m.VSDScreen.createChild("path")
+                .moveTo(677*2,2262+500+75)
+                .lineTo(677*2-30,2262+500+75)
+                .lineTo(677*2-30,2262+500+75+60)
+                .lineTo(677*2+30,2262+500+75+60)
+                .lineTo(677*2+30,2262+500+75)
+                .lineTo(677*2,2262+500+75)
+                .lineTo(677*2,2262+500+75-75)
+                .setCenter(677*2,2262+500+75+30)
                 .setStrokeLineWidth(7)
                 .setVisible(0)
                 .set("z-index",15)
@@ -1806,7 +1825,7 @@ var point_in_ellipse = func(x, y, cx, cy, a, b) {
     }
 };
 
-var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_radius, center_x, center_y, center_x_static, center_y_static, ellipse2_horizon_radius, ellipse2_vertic_radius, step=2.5) {
+var get_points_inside_for_ellipse = func(ellipse_horizon_radius, ellipse_vertic_radius, center_x, center_y, center_x_static, center_y_static, ellipse2_horizon_radius, ellipse2_vertic_radius, step=1) {
 
      var intersect_points = [];
 
@@ -1875,7 +1894,13 @@ update_lad = func() {
             
             # Upper Panel Touch boxes
             if (point_in_quad(LADCanvas.screen_touch_pos, ils_box)) {  # We touched that box
-                displays.curr_menu = 7;  # Bind the UFC to the NAV1/ILS menu
+                displays.curr_menu = displays.nav1_main_menu;  # Bind the UFC to the NAV1/ILS menu
+            } elsif (point_in_quad(LADCanvas.screen_touch_pos, radio1_box)) {  # We touched that box
+                displays.curr_menu = displays.comm_main_menu;  # Bind the UFC to the Comms menu
+                displays.current_comm = 0;  # Comm 1
+            } elsif (point_in_quad(LADCanvas.screen_touch_pos, radio2_box)) {  # We touched that box
+                displays.curr_menu = displays.comm_main_menu;  # Bind the UFC to the Comms menu
+                displays.current_comm = 1;  # Comm 2
             }
             
             # VSD Touch boxes
@@ -2088,14 +2113,17 @@ update_lad = func() {
         if (main_screens.left == "VSD") {
             VSD_ON = 1;
             LADCanvas.VSDScreen.setTranslation(0,0);  # Default position's position for the left main screen
+            LADCanvas.VSDScreenDLZ.setTranslation(0,0);
             LADCanvas.VSDDisplayTrans = 0;
         } elsif (main_screens.center == "VSD") {
             VSD_ON = 1;
             LADCanvas.VSDScreen.setTranslation(8192/3,0);
+            LADCanvas.VSDScreenDLZ.setTranslation(8192/3,0);
             LADCanvas.VSDDisplayTrans = 8192/3;
         } elsif (main_screens.right == "VSD") {
             VSD_ON = 1;
             LADCanvas.VSDScreen.setTranslation((8192/3)*2,0);
+            LADCanvas.VSDScreenDLZ.setTranslation((8192/3)*2,0);
             LADCanvas.VSDDisplayTrans = (8192/3)*2;
         } else {
             VSD_ON = 0;
@@ -2148,6 +2176,7 @@ update_lad = func() {
         ## VSD Updates
         if (VSD_ON) {  # Optimization, we only wanna update the VSD display if it's online
             LADCanvas.VSDScreen.setVisible(1);
+            LADCanvas.VSDScreenDLZ.setVisible(1);
             # Update the texts
             LADCanvas.vsd_rdr_range_txt.setText(sprintf("%03d NM", getprop("instrumentation/radar/radar2-range")));
             if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # if radar's A/A
@@ -2667,8 +2696,8 @@ update_lad = func() {
                     range_y = 4600 * awg_9.active_u.get_range() / getprop("instrumentation/radar/radar2-range");
                     range_y += 75;  # Fix because the shit starts at outside of the grid, but still inside of the VSD outline
 
-                    LADCanvas.vsd_tgt_closure_pin.setTranslation(0.0,-range_y);
-                    LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140,5175-range_y);
+                    LADCanvas.vsd_tgt_closure_pin.setTranslation(-130,-range_y);
+                    LADCanvas.vsd_tgt_closure_text.setTranslation(677*4-75-140-130,5175-range_y);
                     
                     contact_data = datalink.get_data(awg_9.active_u.get_Callsign());
                     display_callsign = contact.getIffResponse() or (contact_data != nil and contact_data.is_known() and (contact_data.on_link() or contact_data.is_friendly()));  # If we received an IFF response from him, we got his callsign. If he's on same datalink or someone on data got an IFF response from him, we got his callsign.
@@ -2758,6 +2787,7 @@ update_lad = func() {
                             contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
                             contact_bearing = geo.aircraft_position().course_to(contact_coord);
                             contact_elevation = vector.Math.getPitch(geo.aircraft_position(), contact_coord);
+                            contact_roll = getprop("/ai/models/multiplayer["~contact_idx~"]/orientation/roll-deg");
                             if (contact_data == nil or !contact_data.is_known()) {
                                 unknown = 1;
                             } else {
@@ -2793,6 +2823,7 @@ update_lad = func() {
 
                             xc = deviation_normdeg(getprop("orientation/heading-deg"), contact_bearing);
                             yc = -deviation_normdeg(getprop("orientation/pitch-deg"), contact_elevation);
+                            roll_rot = (contact_roll);
 
                             x_move = xc*1354/60;
                             y_move = yc*(1131*2)/60;
@@ -2809,6 +2840,7 @@ update_lad = func() {
                             }
 
                             LADCanvas.dlnk_symbols[dlnk_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
+                            LADCanvas.dlnk_symbols[dlnk_idx].setRotation(roll_rot*D2R);
                             LADCanvas.dlnk_texts[dlnk_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
                             LADCanvas.dlnk_texts[dlnk_idx].setText(sprintf("%s %02d", contact, contact_alt));
@@ -2823,8 +2855,76 @@ update_lad = func() {
                 LADCanvas.dlnk_symbols[nv].setVisible(0);
                 LADCanvas.dlnk_texts[nv].setVisible(0);
             }
+            
+            # Draw the Dynamic Launch Zone symbology if valid
+            LADCanvas.VSDScreenDLZ.removeAllChildren();
+            var DLZ_array = pylons.getDLZ();  # vec 0 max fire range vec 1 optimistic fire range vec 2 NEZ fire range
+            if (DLZ_array != nil and size(DLZ_array) != 0) {  # This shouldn't happen, but still here as a safety
+                var operational_range = DLZ_array[0];
+                var optimal_range = DLZ_array[1];
+                var nez_range = DLZ_array[2];
+                var min_range = DLZ_array[3];
+                
+                # 4,600 px (max up) is curr radar range
+                var operational_range_y = operational_range * 4600 / getprop("instrumentation/radar/radar2-range");
+                if (operational_range_y > 4600-130) {
+                    var operational_range_y = 4600-130;
+                }
+
+                var min_range_y = min_range * 4600 / getprop("instrumentation/radar/radar2-range");
+                if (min_range_y > 4600 - 130) {
+                    var min_range_y = 4600 - 130;
+                }
+                
+                var min_nez_range_diff = nez_range - min_range;  # Actual length of the NEZ envelope
+                var min_nez_range_diff_y = min_nez_range_diff * 4600 / getprop("instrumentation/radar/radar2-range");
+                if (min_nez_range_diff_y > 4600 - 130) {
+                    var min_nez_range_diff_y = 4600 - 130;
+                }
+                var min_opt_range_diff = optimal_range - min_range;  # Actual length of the NEZ envelope
+                var min_opt_range_diff_y = min_opt_range_diff * 4600 / getprop("instrumentation/radar/radar2-range");
+                if (min_opt_range_diff_y > 4600 - 130) {
+                    var min_opt_range_diff_y = 4600 - 130;
+                }
+                
+                # First draw the max operational range pin
+                LADCanvas.VSDDLZOper = LADCanvas.VSDScreenDLZ.createChild("path")
+                    .moveTo(677*4-75,1150*4+500-75)
+                    .lineTo(677*4-75,1150*4+500-75+130)
+                    .lineTo(677*4-75-65,1150*4+500-75+65)
+                    .lineTo(677*4-75,1150*4+500-75)
+                    .setTranslation(0,-operational_range_y)
+                    .setStrokeLineWidth(15)
+                    .set("z-index",15)
+                    .setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b)
+                    .update();
+                
+                # Then, draw the Optimal Fire Range line
+                LADCanvas.VSDDLZNEZ = LADCanvas.VSDScreenDLZ.createChild("path")
+                    .moveTo(677*4-75-120,1150*4+500-75)
+                    .lineTo(677*4-75-120,1150*4+500-75-min_opt_range_diff_y)
+                    .lineTo(677*4-75-60,1150*4+500-75-min_opt_range_diff_y)
+                    .setTranslation(0,-min_range_y)
+                    .setStrokeLineWidth(20)
+                    .set("z-index",15)
+                    .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+                    .update();
+                    
+                # Finally, draw the NEZ (No-Escape-Zone) box, and along that the Optimal Fire Range Line
+                LADCanvas.VSDDLZNEZ = LADCanvas.VSDScreenDLZ.createChild("path")
+                    .moveTo(677*4-75,1150*4+500-75)
+                    .lineTo(677*4-75-120,1150*4+500-75)
+                    .lineTo(677*4-75-120,1150*4+500-75-min_nez_range_diff_y)
+                    .lineTo(677*4-75,1150*4+500-75-min_nez_range_diff_y)
+                    .setTranslation(0,-min_range_y)
+                    .setStrokeLineWidth(25)
+                    .set("z-index",15)
+                    .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
+                    .update();
+            }
         } else {
             LADCanvas.VSDScreen.setVisible(0);
+            LADCanvas.VSDScreenDLZ.setVisible(1);
         }
 
 
@@ -3034,14 +3134,14 @@ update_lad = func() {
                                     LADCanvas.HSDScreenLines.createChild("path")
                                         .moveTo(677*2+x_move,2262+500+y_move)
                                         .lineTo(677*2+former_x_move,2262+500+former_y_move)
-                                        .setStrokeLineWidth(8)
+                                        .setStrokeLineWidth(18)
                                         .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
                                         .update();
 
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
-                                        .setFontSize(60, 1.4)
+                                        .setFontSize(150, 1.4)  # size 150 for 50NM range
                                         .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))
                                         .setAlignment("center-center")
                                         .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
@@ -3060,14 +3160,14 @@ update_lad = func() {
                                     LADCanvas.HSDScreenLines.createChild("path")
                                         .moveTo(677*2+x_move,2262+500+y_move)
                                         .lineTo(677*2+former_x_move,2262+500+former_y_move)
-                                        .setStrokeLineWidth(6)
+                                        .setStrokeLineWidth(15)
                                         .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
                                         .update();
 
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
                                     LADCanvas.HSDScreenLines.createChild("text")
-                                        .setFontSize(55, 1.4)
+                                        .setFontSize(95, 1.4)
                                         .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))  # distance from former steerpoint to current steerpoint.
                                         .setAlignment("center-center")
                                         .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
@@ -3344,6 +3444,7 @@ update_lad = func() {
 
                             var x_move = (contact_range*LADCanvas.hsd_nm_to_px_x)*math.sin(contact_bearing_rel*D2R);
                             var y_move = -(contact_range*LADCanvas.hsd_nm_to_px_y)*math.cos(contact_bearing_rel*D2R);
+                            var rotation = geo.normdeg(contact_heading-getprop("orientation/heading-deg"));
 
                             # If the point is outside of the circle, we don't let it get away of it and we place it at the very edge of the HSD circle
                             # The circle is actually an ellipse, in a way that it appears as a circle on the LAD
@@ -3352,6 +3453,7 @@ update_lad = func() {
                             y_move = move_dir[1];
 
                             LADCanvas.dlnk_symbols_hsd[dlnk_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
+                            LADCanvas.dlnk_symbols_hsd[dlnk_idx].setRotation(rotation*D2R);
                             LADCanvas.dlnk_texts_hsd[dlnk_idx].setTranslation(677*2+x_move, 2262+500+145+y_move); # the factors is to let display correspond to 120 degrees wide and height.
                             contact_alt = contact_alt * 0.001;  # So it's in thousands of feet
                             LADCanvas.dlnk_texts_hsd[dlnk_idx].setText(sprintf("%s %02d", contact, contact_alt));
@@ -3606,7 +3708,7 @@ update_lad = func() {
                         .setVisible(1)
                         .update();
 
-                    inside_points = get_points_inside_for_ellipse(circle_radius*LADCanvas.hsd_nm_to_px_x*2, circle_radius*LADCanvas.hsd_nm_to_px_y*2, 1355-x_move, (1150*2+500)-y_move, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=.5);
+                    inside_points = get_points_inside_for_ellipse(circle_radius*LADCanvas.hsd_nm_to_px_x*2, circle_radius*LADCanvas.hsd_nm_to_px_y*2, 1355-x_move, (1150*2+500)-y_move, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=1);
 
                     var curve = LADCanvas.HSDScreenCircles.createChild("path")
                         .set("z-index",0)
@@ -3697,9 +3799,9 @@ update_lad = func() {
                     LADCanvas.navaid_course_line = LADCanvas.HSDScreenLines.createChild("path")
                         .moveTo(1355+navaid_x_move, 1150*2+500+75+navaid_y_move)
                         .lineTo(1355+dx, 1150*2+500+75+dy)
-                        .setStrokeLineWidth(5)
+                        .setStrokeLineWidth(10)
                         .setStrokeDashArray([1,5])
-                        .setColor(prst_blue.r,prst_blue.g,prst_blue.b)
+                        .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
                         .set("z-index",1)
                         .setVisible(1)
                         .update();
@@ -3761,8 +3863,8 @@ update_lad = func() {
                             .lineTo(677*2+x_move_aim-75,2262+500+y_move_aim+75)
                             .lineTo(677*2+x_move_aim,2262+500+y_move_aim-75)
                             .moveTo(677*2+x_move_aim-50,2262+500+y_move_aim-75)
-                            .arcSmallCW(25,25, 0, -25*2, 0)
-                            .arcSmallCW(25,25, 0, 25*2, 0)
+                            #.arcSmallCW(25,25, 0, -25*2, 0)
+                            #.arcSmallCW(25,25, 0, 25*2, 0)
                             .setStrokeLineWidth(8)
                             .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
                             .set("z-index",1)
@@ -3794,7 +3896,7 @@ update_lad = func() {
                             var idx = 0;
                             foreach(curr_radius; circle_radiuses) {  # Draw all the circles one by one
                                 # Draw the first circle
-                                inside_points = get_points_inside_for_ellipse(curr_radius*LADCanvas.hsd_nm_to_px_x, curr_radius*LADCanvas.hsd_nm_to_px_y, 1355+x_move_aim, (1150*2+500)+y_move_aim, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=.5);
+                                inside_points = get_points_inside_for_ellipse(curr_radius*LADCanvas.hsd_nm_to_px_x, curr_radius*LADCanvas.hsd_nm_to_px_y, 1355+x_move_aim, (1150*2+500)+y_move_aim, 1355, 1150*2+500, (LADCanvas.hsd_great_circle_radius*10/19)*2-75, LADCanvas.hsd_great_circle_radius*2-75, step=1);
 
                                 var curve = LADCanvas.HSDScreenTacticalDeployment.createChild("path")
                                     .set("z-index",0)

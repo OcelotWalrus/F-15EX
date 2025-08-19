@@ -385,11 +385,11 @@
             </key>
             <key>
                 <name>J</name>
-                <desc>MPCD Jettison button</desc>
+                <desc>Radar Elevation antennae up (TWS Manual only)</desc>
             </key>
             <key>
                 <name>K</name>
-                <desc>MPCD Jettison mode</desc>
+                <desc>Radar Elevation antennae down (TWS Manual only)</desc>
             </key>
             <key>
                 <name>m</name>
@@ -4778,23 +4778,26 @@
             </key--> <!-- disabled, now it's for the HMD -->
             <key n="74">
                 <name>J</name>
-                <desc>MPCD jettison</desc>
+                <desc>Radar Elevation Antennae Up</desc>
                 <binding>
-                    <command>property-assign</command>
-                    <property>controls/armament/mpcd-jettison-button</property>
-                    <value type="double">1</value>
+                    <command>property-adjust</command>
+                    <property>instrumentation/radar/ho-field-offset</property>
+                    <step type="int">-1</step>
+                    <min>-60</min>
+                    <max>60</max>
+                    <wrap>false</wrap>
                 </binding>
             </key>
             <key n="75">
                 <name>K</name>
-                <desc>MPCD jettison mode</desc>
+                <desc>Radar Elevation Antennae Down</desc>
                 <binding>
                     <command>property-adjust</command>
-                    <property>controls/armament/mpcd-jettison-mode</property>
+                    <property>instrumentation/radar/ho-field-offset</property>
                     <step type="int">1</step>
-                    <min>0</min>
-                    <max>7</max>
-                    <wrap>true</wrap>
+                    <min>-60</min>
+                    <max>60</max>
+                    <wrap>false</wrap>
                 </binding>
             </key>
 
@@ -5215,12 +5218,12 @@
             <file>Aircraft/Generic/DualControl/pilot-dual-control.nas</file>
         </dual_control>
         -->
-        <!--<an_arc_182v>
+        <an_arc_182v>
             <file>Aircraft/F-15/Nasal/an-arc-182v.nas</file>
         </an_arc_182v>
         <an_arc_159v1>
             <file>Aircraft/F-15/Nasal/an-arc-159v1.nas</file>
-        </an_arc_159v1>-->
+        </an_arc_159v1>
         <f15_chronograph>
             <file>Aircraft/F-15/Nasal/chronograph.nas</file>
         </f15_chronograph>

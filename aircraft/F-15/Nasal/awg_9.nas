@@ -1022,9 +1022,9 @@ var selectCheck = func {
         if (awg9_trace)
             print("Sel next TWS file AUTO: dist=",dist);
 
-        var sorted_dist = sort (awg_9.TWS_tracks, func (a,b) {a.get_range()-b.get_range()});
+        #var sorted_dist = sort (awg_9.TWS_tracks, func (a,b) {a.get_range()-b.get_range()});
         var nxt=nil;
-        foreach (var u; sorted_dist)
+        foreach (var u; awg_9.TWS_tracks)
             {
             if (awg9_trace)
                 printf("TWS Track file:: %5.2f (%5.2f) : %s ",u.get_range(), dist, u.Callsign.getValue());
@@ -1047,7 +1047,7 @@ var selectCheck = func {
             }
         if (nxt == nil and 1==0)
         {
-            if(size(sorted_dist)>0)
+            if(size(awg_9.TWS_tracks)>0)
                 nxt = sorted_dist[0];
         }
 
