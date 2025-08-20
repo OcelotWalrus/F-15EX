@@ -286,24 +286,13 @@
     </mod-up>
   </button>
   <button n="15">
-    <name type="string">Engine Fuel Flow Left</name>
+    <name type="string">Engine Starter Left</name>
     <desc type="string">Custom</desc>
     <repeatable type="string">false</repeatable>
     <binding>
       <command type="string">nasal</command>
       <script type="string">
-                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
-                    {
-                    if ( (!getprop("engines/engine[0]/running") or getprop("engines/engine[0]/running")=="false") and  getprop("controls/engines/engine[0]/cutoff"))
-                    {
-                    setprop("controls/engines/engine[0]/starter",1);
-                    settimer(func { setprop("controls/engines/engine[0]/cutoff",0) }, 0.2);
-                    }
-                    else
-                    {
-                    setprop("controls/engines/engine[0]/cutoff",1-getprop("controls/engines/engine[0]/cutoff"));
-                    }
-                    }
+                    setprop("controls/engines/engine[0]/starter", 1);
       </script>
       <module type="string">__js1</module>
     </binding>
@@ -311,42 +300,20 @@
       <binding>
         <command type="string">nasal</command>
         <script type="string">
-                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
-                    {
-                    if ( (!getprop("engines/engine[0]/running") or getprop("engines/engine[0]/running")=="false") and  getprop("controls/engines/engine[0]/cutoff"))
-                    {
-                    setprop("controls/engines/engine[0]/starter",1);
-                    settimer(func { setprop("controls/engines/engine[0]/cutoff",0) }, 0.2);
-                    }
-                    else
-                    {
-                    setprop("controls/engines/engine[0]/cutoff",1-getprop("controls/engines/engine[0]/cutoff"));
-                    }
-                    }
+                   setprop("controls/engines/engine[0]/starter", 0);
         </script>
         <module type="string">__js1</module>
       </binding>
     </mod-up>
   </button>
   <button n="16">
-    <name type="string">Engine Fuel Flow Right</name>
+    <name type="string">Engine Starter Right</name>
     <desc type="string">Custom</desc>
     <repeatable type="string">false</repeatable>
     <binding>
       <command type="string">nasal</command>
       <script type="string">
-                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
-                    {
-                    if ( (!getprop("engines/engine[1]/running") or getprop("engines/engine[1]/running")=="false") and  getprop("controls/engines/engine[1]/cutoff"))
-                    {
-                    setprop("controls/engines/engine[1]/starter",1);
-                    settimer(func { setprop("controls/engines/engine[1]/cutoff",0) }, 0.2);
-                    }
-                    else
-                    {
-                    setprop("controls/engines/engine[1]/cutoff",1-getprop("controls/engines/engine[1]/cutoff"));
-                    }
-                    }
+                    setprop("controls/engines/engine[1]/starter", 1);
       </script>
       <module type="string">__js1</module>
     </binding>
@@ -354,18 +321,7 @@
       <binding>
         <command type="string">nasal</command>
         <script type="string">
-                    if(getprop("sim/model/f15/controls/engs/l-eng-master-guard"))
-                    {
-                    if ( (!getprop("engines/engine[1]/running") or getprop("engines/engine[1]/running")=="false") and  getprop("controls/engines/engine[1]/cutoff"))
-                    {
-                    setprop("controls/engines/engine[1]/starter",1);
-                    settimer(func { setprop("controls/engines/engine[1]/cutoff",0) }, 0.2);
-                    }
-                    else
-                    {
-                    setprop("controls/engines/engine[1]/cutoff",1-getprop("controls/engines/engine[1]/cutoff"));
-                    }
-                    }
+                    setprop("controls/engines/engine[1]starter", 0);
       </script>
         <module type="string">__js1</module>
       </binding>
