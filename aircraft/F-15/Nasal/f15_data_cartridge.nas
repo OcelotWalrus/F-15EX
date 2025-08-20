@@ -25,17 +25,17 @@
 # If no label is intended, set `XXX` as the label. <displayed> should be either 1 or 0, where 1 enables it and 0 disables it. Here are all the available color codes:
 # - red - yellow - blue - rose - purple - orange - green - cyan - marron.
 # - `IFF,<iff_hash>` example: `IFF,2547`  - IFF Mode 4/5 channel, must stay between 1 and 9999.
-# - `DATALINK,<datalink_hash>` example: `DATALINK,2547`  - JTIDS/DATALINK channel, must stay between 1 and 9999.
+# - `DATALINK,<datalink_hash>` example: `DATALINK,2547`  - JTIDS Link 16 channel, must stay between 1 and 9999.
 # - `DECKMin,<altitude>,<enabled>` example: `DECKMin,10000,1`  - Configures the minimum altitude deck. <altitude> is the altitude (in feet) at which if
 # the pilot goes under, a `altitude` warning will set off. <enabled> should be either 1 or 0, where 1 enables it and 0 disables it.
 # - `DECKMax,<altitude>,<enabled>` example: `DeckMax,42000,1`  - Configures the maximum altitude deck. <altitude> is the altitude (in feet) at which if
 # the pilot goes over, a `altitude` warning will set off. <enabled> should be either 1 or 0, where 1 enables it and 0 disables it.
 # - `BINGO,<fuel_lbs>` example: `BINGO,7500`  - Sets the amount of fuel (in lbs) at which the bingo warning sets off.
-# - `SQUAWK,<4-digit-code>` example : `SQUAWK,1200`  - Sets the IFF Mode 1, 2 and 3/A transponder's code
+# - `SQUAWK,<4-digit-code>` example : `SQUAWK,1200`  - Sets the IFF Mode 3/A transponder's code
 # - `STPT,<index>,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-ft>` example: `STPT,0,37.2,-115.6,12000`  - Adds a steerpoint (waypoint on the route-manager).
 # <index> is the index of the Steerpoint, defining its order (if it's 0, it'll be the first one on the route, 4 the fourth one.). If you don't want a specific
 # altitude for the steerpoint, set the <altitude-ft> parameter to -9999.
-# - `BULLSEYE,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-feet>` example: `BULLSEYE,37.2,-115.6,0`  -  Coordinates for the bullseye
+# - `BULLSEYE,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-feet>` example: `BULLSEYE,37.2,-115.6,0`  -  Coordinates for the bullseye. Set all values to 0 for no bullseye designation
 # ---------------------------
 # Notes:
 # - When loading a DTC, if data blocks such as DECKMin are missing, it won't cause a bug, though the minimum altitude
@@ -47,6 +47,11 @@
 # - All parameters inside a data block must be present for the program to function, or else, it won't load.
 # - If a steerpoint is given an index of 0 and the following one, not 1 but 2, it'll still load correctly,
 # the following one being acknowledged as index 1 even if 2 was stated
+# ---------------------------
+# Planned Features:
+# - Allow to set flight callsigns, so they're in a different color and symbology in the LAD, and also set a
+# flight lead callsign, so its bearing, ETA and distance gets displayed along Bullseye ETA etc. Flight
+# callsigns and lead will need to be connected on datalink for that to work
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
