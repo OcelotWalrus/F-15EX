@@ -1076,34 +1076,6 @@
                     </binding>
                 </checkbox>
             </group>
-            <group>
-                <layout>hbox</layout>
-
-                <text>
-                    <label>External Electrical Power Connected</label>
-					<enable>
-						<and>
-							<property>fdm/jsbsim/systems/electrics/ground-power-gpu</property>
-							<property>fdm/jsbsim/gear/unit[0]/WOW</property>
-						</and>
-					</enable>
-                </text>
-
-                <checkbox>
-					<enable>
-						<and>
-							<property>fdm/jsbsim/systems/electrics/ground-power-gpu</property>
-							<property>fdm/jsbsim/gear/unit[0]/WOW</property>
-						</and>
-					</enable>
-                    <property>fdm/jsbsim/systems/electrics/ground-power</property>
-                    <live>true</live>
-                    <binding>
-                        <command>property-toggle</command>
-                        <property>fdm/jsbsim/systems/electrics/ground-power</property>
-                    </binding>
-                </checkbox>
-            </group>
 
             <group>
                 <layout>hbox</layout>
@@ -2043,7 +2015,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-3-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-3-set") != "Empty")) {
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-3-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-3-set") != "CATM-120D AMRAAM Dummy" and getprop("payload/armament/station/id-3-set") != "Empty")) {
 										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2118,7 +2090,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-4-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-4-set") != "Empty")) {
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-4-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-4-set") != "CATM-120D AMRAAM Dummy" and getprop("payload/armament/station/id-4-set") != "Empty")) {
 										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2253,7 +2225,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-6-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-6-set") != "Empty")) {
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-6-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-6-set") != "CATM-120D AMRAAM Dummy" and getprop("payload/armament/station/id-6-set") != "Empty")) {
 										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();
@@ -2328,7 +2300,7 @@
 							<binding>
 								<command>nasal</command>
 								<script>
-								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-7-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-7-set") != "Empty")) {
+								    if (!getprop("sim/multiplay/generic/bool[70]") and (getprop("payload/armament/station/id-7-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-7-set") != "CATM-120D AMRAAM Dummy" and getprop("payload/armament/station/id-7-set") != "Empty")) {
 										setprop("sim/model/f15/warn-loads-text", "!You need conformal fuel tanks to use that weapon on that hardpoint!");
 										var warn_dialog = gui.Dialog.new("dialog[4]","Aircraft/F-15/gui/dialogs/warn-loads.xml");
 										warn_dialog.open();

@@ -1435,16 +1435,16 @@ var F15MainModule =
             setprop("payload/weight[23]/selected", "Empty");
             setprop("payload/weight[24]/selected", "Empty");
             setprop("payload/weight[25]/selected", "Empty");
-            if (getprop("payload/armament/station/id-3-set") != "AIM-120D AMRAAM") {
+            if (getprop("payload/armament/station/id-3-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-3-set") != "CATM-120D AMRAAM Dummy") {
                 setprop("payload/weight[3]/selected", "Empty");
             }
-            if (getprop("payload/armament/station/id-4-set") != "AIM-120D AMRAAM") {
+            if (getprop("payload/armament/station/id-4-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-4-set") != "CATM-120D AMRAAM Dummy") {
                 setprop("payload/weight[4]/selected", "Empty");
             }
-            if (getprop("payload/armament/station/id-6-set") != "AIM-120D AMRAAM") {
+            if (getprop("payload/armament/station/id-6-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-6-set") != "CATM-120D AMRAAM Dummy") {
                 setprop("payload/weight[6]/selected", "Empty");
             }
-            if (getprop("payload/armament/station/id-7-set") != "AIM-120D AMRAAM") {
+            if (getprop("payload/armament/station/id-7-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-7-set") != "CATM-120D AMRAAM Dummy") {
                 setprop("payload/weight[7]/selected", "Empty");
             }
         }
