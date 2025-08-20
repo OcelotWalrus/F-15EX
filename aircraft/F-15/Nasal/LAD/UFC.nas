@@ -12,6 +12,8 @@
 # for the LAD.
 # ---------------------------
 # UFC Menus/Submenus :
+# // Time //
+# Displays local time in format along with zulu time <HH>:<MM>:<SS>UTC<+/-><OFFSET> - <HH>:<MM>:<SS>Z
 # // A/P (Autopilot) //
 # This menu can be obtained by selecting it through the main menu, or by entering A/P on the keypad.
 # The press of A/P on the keypad will turn on autopilot, and a second will turn it off.
@@ -27,6 +29,7 @@
 # ---------------------------
 # Future Features:
 # - Allow the selection of NAV1 Glideslope for A/P Pitch mode
+# - A stopwatch menu
 # ---------------------------
 # Some Notes :
 # - Current proportions in the model are 2.849173228" (width) by .455" (height), making it a 6 1/4 ratio (width/height)
@@ -75,6 +78,9 @@ var nav1_menu_info = 8;  # Displays info about the current ILS/NAV1 status/setti
 var nav_1_chans_menu = 9;  # Allows to set active and standby channels presets into NAV1 and select through them
 var nav_1_chans_index = 0;  # So we know which frequency data block we're checking out in the NAV1 channels menu
 var nav_1_mode_menu = 10;
+
+# Miscellaneous
+var timer_menu = 15;  # Displays current time and zulu (UTC) time
 
 # Measures
 var screen_ratio = 6.25;
@@ -1362,13 +1368,13 @@ update_loop_func = func() {
                 final_text = sprintf("%s %02d", getprop("instrumentation/nav[0]/nav-id"), getprop("instrumentation/nav[0]/nav-distance") * M2NM);
             }
             
-            ils_text = sprintf("FREQ %3.3f RADIAL %03d %s", getprop("instrumentation/nav[0]/frequencies/selected-mhz"), getprop("instrumentation/nav[0]/radials/selected-deg"), final_text);
+            ils_text = sprintf("FREQ %03.3f RADIAL %03d %s", getprop("instrumentation/nav[0]/frequencies/selected-mhz"), getprop("instrumentation/nav[0]/radials/selected-deg"), final_text);
         
             UFCCanvas.UFCText.setText(ils_text);
         } elsif (curr_menu == nav_1_chans_menu) {
             
             if (nav_1_chans_index == 0) {  # Active frequency
-                ils_text = sprintf("ACTIVE %3.3fMHz 1.Stby 2.Next", getprop("instrumentation/nav[0]/frequencies/selected-mhz"));
+                ils_text = sprintf("ACTIVE %03.03fMHz 1.Stby 2.Next", getprop("instrumentation/nav[0]/frequencies/selected-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/nav[0]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/nav[0]/frequencies/standby-mhz");
@@ -1434,7 +1440,7 @@ update_loop_func = func() {
                     }
                 }
             } elsif (nav_1_chans_index == 1) {  # Standby frequency
-                ils_text = sprintf("STBY %3.3fMHz 1.Active 2.Next", getprop("instrumentation/nav[0]/frequencies/standby-mhz"));
+                ils_text = sprintf("STBY %03.03fMHz 1.Active 2.Next", getprop("instrumentation/nav[0]/frequencies/standby-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/nav[0]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/nav[0]/frequencies/standby-mhz");
@@ -1501,7 +1507,7 @@ update_loop_func = func() {
                 }
             } elsif (nav_1_chans_index > 1) {  # Stored channel data blocks
                 data_idx = nav_1_chans_index - 1;
-                ils_text = sprintf("DATA%02d %3.3fMHz 1.Push 2.Next", data_idx, getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
+                ils_text = sprintf("DATA%02d %03.03fMHz 1.Push 2.Next", data_idx, getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Push data block to active freq
                     setprop("instrumentation/nav[0]/frequencies/selected-mhz", getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
                     displays.a_1_pres = 0;
@@ -1660,7 +1666,7 @@ update_loop_func = func() {
             }
             
             if (comm_chans_index == 0) {  # Active frequency
-                comm_text = sprintf("ACTIVE %3.3fMHz 1.Stby 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz"));
+                comm_text = sprintf("ACTIVE %03.03fMHz 1.Stby 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz");
@@ -1726,7 +1732,7 @@ update_loop_func = func() {
                     }
                 }
             } elsif (comm_chans_index == 1) {  # Standby frequency
-                comm_text = sprintf("STBY %3.3fMHz 1.Active 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz"));
+                comm_text = sprintf("STBY %03.03fMHz 1.Active 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz");
@@ -1793,7 +1799,7 @@ update_loop_func = func() {
                 }
             } elsif (comm_chans_index > 1) {  # Stored channel data blocks
                 data_idx = comm_chans_index - 2;
-                comm_text = sprintf("DATA%02d %3.3fMHz 1.Push 2.Next", data_idx, getprop("sim/model/f15/instrumentation/"~curr_radio~"/presets/frequency["~data_idx~"]"));
+                comm_text = sprintf("DATA%02d %03.03fMHz 1.Push 2.Next", data_idx, getprop("sim/model/f15/instrumentation/"~curr_radio~"/presets/frequency["~data_idx~"]"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Push data block to active freq
                     setprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz", getprop("sim/model/f15/instrumentation/"~curr_radio~"/presets/frequency["~data_idx~"]"));
                     displays.a_1_pres = 0;
@@ -1869,6 +1875,22 @@ update_loop_func = func() {
             }
         
             UFCCanvas.UFCText.setText(comm_text);
+        } elsif (curr_menu == timer_menu) {
+            var local_time = getprop("sim/time/local-time-string");
+            if (local_time == nil) {
+                local_time = "99:99:99";
+            }
+            var zulu_time = getprop("sim/time/gmt-string");
+            if (zulu_time == nil) {
+                zulu_time = "99:99:99";
+            }
+            var local_offset = getprop("sim/time/local-offset");
+            if (local_offset == nil) {
+                local_offset = 3600*99;
+            }
+            time_text = sprintf("  %sUTC%02d - %sZ  ", local_time, local_offset/3600, zulu_time);
+            
+            UFCCanvas.UFCText.setText(time_text);
         }
         
         # If there's a bad data warning, we display it no matter what, for 3 whole seconds
@@ -1918,7 +1940,7 @@ update_loop_func = func() {
             sliding_paused = 0;
             if (displays.inputting) {
                 displays.inputting = 0;
-            } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu or curr_menu == comm_main_menu) {
+            } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu or curr_menu == comm_main_menu or curr_menu == timer_menu) {
                 curr_menu = dft_menu;
             } elsif (curr_menu == autopilot_info_menu or curr_menu == autopilot_heading_menu or curr_menu == autopilot_altitude_menu or curr_menu == autopilot_auto_throttle_menu) {
                 curr_menu = autopilot_main_menu;

@@ -56,9 +56,15 @@
 # ---------------------------
 # Coordinates of touchable zones: (all measures are in pixels)
 # //Upper Panel Display// :
-# Radio 1 (Comm 1) box : UP R: 2250, 10; UP L: 1640, 10; DOWN R: 2250, 420; DOWN L: 1640, 420
-# Radio 2 (Comm 2) box : UP R: 2910, 10; UP L: 2100, 10; DOWN R: 2910, 420; DOWN L: 2100, 420
-# ILS/Nav1 box : UP R: 5275, 15; UP L: 4820, 15; DOWN R: 5275, 465; DOWN L: 4820, 465
+# Time Box : UP R: 375, 0; UP L: 0, 0; DOWN R: 375, 475; DOWN L: 0, 475
+# Caution Box : UP R: 1045, 0; UP L: 405, 0; DOWN R: 1045, 475; DOWN L: 405, 475
+# A/P Box : UP R: 1595, 0; UP L: 1085, 0; DOWN R: 1595, 475; DOWN L: 1085, 475
+# Radio 1 (Comm 1) box : UP R: 2250, 0; UP L: 1640, 0; DOWN R: 2250, 475; DOWN L: 1640, 475
+# Radio 2 (Comm 2) box : UP R: 2910, 0; UP L: 2100, 0; DOWN R: 2910, 475; DOWN L: 2100, 475
+# IFF Box : UP R: 2955, 0; UP L: 3600, 0; DOWN R: 2955, 475; DOWN L: 3600, 475
+# JTIDS Box : UP R: 3640, 0; UP L: 4390, 0; DOWN R: 3640, 475; DOWN L: 4390, 475
+# TACAN Box : UP R: 4785, 0; UP L: 4430, 0; DOWN R: 4785, 475; DOWN L: 4430, 475
+# ILS/Nav1 box : UP R: 5275, 0; UP L: 4820, 0; DOWN R: 5275, 475; DOWN L: 4820, 475
 # //VSD Display// :
 # STP/BULLSEYE/TACAN/ILS info box : UP R: 1390, 5030; UP L: 315, 5030; DOWN R: 1390, 5140; DOWN L: 315, 5140.
 # ---------------------------
@@ -67,9 +73,18 @@
 
 ## Constant Variables
 
-var radio1_box = [[2250, 10], [1640, 10], [1640, 420], [2250, 420]];
-var radio2_box = [[2910, 10], [2100, 10], [2100, 420], [2910, 420]];
-var ils_box = [[5275, 15], [4820, 15], [4820, 465], [5275, 465]];
+#Upper box
+var time_box = [[375, 0], [0, 0], [0, 475], [375, 475]];
+var caution_box = [[1045, 0], [405, 0], [405, 475], [1045, 475]];
+var ap_box = [[1595, 0], [1085, 0], [1085, 475], [1595, 475]];
+var radio1_box = [[2250, 0], [1640, 0], [1640, 475], [2250, 475]];
+var radio2_box = [[2910, 0], [2100, 0], [2100, 475], [2910, 475]];
+var iff_box = [[2955, 0], [3600, 0], [3600, 475], [2955, 475]];
+var jtids_box = [[3640, 0], [4390, 0], [4390, 475], [3640, 475]];
+var tacan_box = [[4785, 0], [4430, 0], [4430, 475], [4785, 475]];
+var ils_box = [[5275, 0], [4820, 0], [4820, 475], [5275, 475]];
+
+#VSD
 var vsd_nav_box_pos = [[1390, 5030], [315, 5030], [315, 5140] ,[1390, 5140]];
 
 var typeLookup = { # database of known radar signatures
@@ -1893,14 +1908,34 @@ update_lad = func() {
             LADCanvas.screen_touch_pos = [getprop("sim/model/f15/controls/LAD/screen-touch-x"), getprop("sim/model/f15/controls/LAD/screen-touch-y")];  # Update the "cursor"'s pos
             
             # Upper Panel Touch boxes
-            if (point_in_quad(LADCanvas.screen_touch_pos, ils_box)) {  # We touched that box
+            if (point_in_quad(LADCanvas.screen_touch_pos, ils_box)) {
                 displays.curr_menu = displays.nav1_main_menu;  # Bind the UFC to the NAV1/ILS menu
-            } elsif (point_in_quad(LADCanvas.screen_touch_pos, radio1_box)) {  # We touched that box
+            } elsif (point_in_quad(LADCanvas.screen_touch_pos, radio1_box)) {
                 displays.curr_menu = displays.comm_main_menu;  # Bind the UFC to the Comms menu
                 displays.current_comm = 0;  # Comm 1
-            } elsif (point_in_quad(LADCanvas.screen_touch_pos, radio2_box)) {  # We touched that box
+            } elsif (point_in_quad(LADCanvas.screen_touch_pos, radio2_box)) {
                 displays.curr_menu = displays.comm_main_menu;  # Bind the UFC to the Comms menu
                 displays.current_comm = 1;  # Comm 2
+            } elsif (point_in_quad(LADCanvas.screen_touch_pos, ap_box)) {
+                if (getprop("sim/gui/dialogs/autopilot/heading-active") or getprop("sim/gui/dialogs/autopilot/altitude-active") or getprop("sim/gui/dialogs/autopilot/speed-active")) {
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 0);
+                    setprop("sim/gui/dialogs/autopilot/altitude-active", 0);
+                    setprop("sim/gui/dialogs/autopilot/speed-active", 0);
+                } else {
+                    setprop("sim/gui/dialogs/autopilot/heading-active", 1);
+                    setprop("sim/gui/dialogs/autopilot/altitude-active", 1);
+                    setprop("sim/gui/dialogs/autopilot/speed-active", 0);
+                }
+                displays.hdg.enable();  # We're reusing the UFC's vars
+                displays.alt.enable();
+                displays.vel.enable();
+                if (getprop("sim/gui/dialogs/autopilot/heading-active") == 1) {  # If this press turned the A/P ON, we go to the A/P menu
+                    displays.curr_menu = autopilot_main_menu;  # If we're turning it ON, we bind the UFC menu to the A/P menu
+                }
+            } elsif (point_in_quad(LADCanvas.screen_touch_pos, time_box)) {
+                displays.curr_menu = displays.timer_menu;  # Bind the UFC to the Time menu
+            } elsif (point_in_quad(LADCanvas.screen_touch_pos, caution_box)) {
+                aircraft.master_caution_pressed();
             }
             
             # VSD Touch boxes
@@ -1960,7 +1995,7 @@ update_lad = func() {
 
         # Update the radios' boxes
         comm1_off = getprop("instrumentation/comm[0]/volume") == 0;
-        LADCanvas.radio1_text_down.setText(sprintf("%.02f MHz", getprop("instrumentation/comm[0]/frequencies/selected-mhz")));
+        LADCanvas.radio1_text_down.setText(sprintf("%03.03f MHz", getprop("instrumentation/comm[0]/frequencies/selected-mhz")));
         if (comm1_off) {
             LADCanvas.radio1_text_center.setText("OFF");
             LADCanvas.radio1_text_up.setColor(prst_white.r,prst_white.g,prst_white.b);
@@ -1975,7 +2010,7 @@ update_lad = func() {
             LADCanvas.radio1_box.setColor(prst_green.r,prst_green.g,prst_green.b);
         }
         comm2_off = getprop("instrumentation/comm[1]/volume") == 0;
-        LADCanvas.radio2_text_down.setText(sprintf("%.02f MHz", getprop("instrumentation/comm[1]/frequencies/selected-mhz")));
+        LADCanvas.radio2_text_down.setText(sprintf("%03.03f MHz", getprop("instrumentation/comm[1]/frequencies/selected-mhz")));
         if (comm2_off) {
             LADCanvas.radio2_text_center.setText("OFF");
             LADCanvas.radio2_text_up.setColor(prst_white.r,prst_white.b,prst_white.b);
@@ -2076,7 +2111,7 @@ update_lad = func() {
         # Update the ILS's box
         ils_channel = getprop("instrumentation/nav/frequencies/selected-mhz");
         ils_in_range = getprop("instrumentation/nav/in-range");
-        LADCanvas.ils_text_down.setText(sprintf("%0.2f MHz", ils_channel));
+        LADCanvas.ils_text_down.setText(sprintf("%03.3f MHz", ils_channel));
         if (ils_in_range) {
             LADCanvas.ils_text_up.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.ils_text_down.setColor(prst_green.r,prst_green.g,prst_green.b);
