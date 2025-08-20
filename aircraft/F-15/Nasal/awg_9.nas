@@ -365,6 +365,39 @@ var rdr_loop = func(notification) {
         setprop("sim/multiplay/generic/string[6]", "");
 	}
 	
+	# TWS MAN mode allows to slave the HMD to the radar, allowing the pilot to direct the
+	# azimuth and elevation bars right or left.
+	if (wcs_current_mode == wcs_mode_tws_man and getprop("sim/model/f15/avionics/hmd-slaving")) {
+	    var hmd_h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
+        var hmd_p = getprop("sim/current-view/pitch-offset-deg");
+        
+        # Clamp the values
+        
+        if (hmd_h > 55) {
+            var hmd_h = 55;
+        } elsif (hmd_h < -55) {
+            var hmd_h = -55;
+        }
+        if (hmd_p > 55) {
+            var hmd_p = 55;
+        } elsif (hmd_p < -55) {
+            var hmd_p = -55;
+        }
+        
+        az_deg_offset = hmd_h;
+        max_allowable_az_offset = (120-awg_9.AzField.getValue()) / 2;  # How much the antennae can go left or right
+        if (az_deg_offset > max_allowable_az_offset) {
+            az_deg_offset = max_allowable_az_offset;
+        } elsif (az_deg_offset < -max_allowable_az_offset) {
+            az_deg_offset = -max_allowable_az_offset;
+        }
+        awg_9.AzFieldOffset.setValue(az_deg_offset);
+        
+        setprop("sim/model/f15/controls/LAD/cursor-deg-az", hmd_h);
+        setprop("sim/model/f15/controls/LAD/cursor-deg-el", -hmd_p);
+        awg_9.HoFieldOffset.setValue(-hmd_p);
+	}
+	
 	# In TWS AUTO mode, elevation scan is handled automatically:
 	# If there ain't no current active target, it's the highest bars setting that gets selected and the antenna's offset degs will always try to stay parallel to the horizon line (level)
 	# If we do got a current active target though, it's the bar setting 2 that gets selected (or up to 4/6/8 if there are other available targets that are considered urgent threats by the EPAWSS and that are outside of the 2-bar reach), and the antenna's offset degs will always try to look toward the current active target.

@@ -4596,7 +4596,7 @@
 
             <key n="12">
                 <name>CTRL-l</name>
-                <desc>Toggle HMD Seeker slaving.</desc>
+                <desc>Toggle HMD Seeker and Radar slaving.</desc>
                 <binding>
                     <command>property-toggle</command>
                     <property>sim/model/f15/avionics/hmd-slaving</property>
