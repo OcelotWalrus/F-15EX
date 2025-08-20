@@ -18,7 +18,8 @@
 # // COMMS (Radio 1 & 2)//
 # This menu is obtained by touching the LAD inside either the Radio 1 or Radio 2 boxes. It allows
 # to set active, standby and preset frequencies for the selected radio and see whether a station
-# is connected to us or not with the active frequency.
+# is connected to us or not with the active frequency. It also allows to see the available ATIS
+# speech text if any.
 # // ILS / NAV1-2 //
 # This menu is obtained by touching the LAD inside the Upper Panel's ILS box. It allows to see
 # status info about the NAV1 radio, set the active/standby and preset channels, and push them to
@@ -47,6 +48,11 @@ var bad_data_clear_called = 0;  # Used to determined if we've already started 3-
 var dft_menu = 0;
 var curr_menu = dft_menu;  # Default menu
 
+var sliding_text = 0;  # Whether displayed text should be sliding or not (for ATIS speech) or texts that are too big to be displayed at once
+var last_sliding = 0;
+var amount_slided = 0;
+var sliding_paused = 0;
+
 # Autopilot
 var autopilot_main_menu = 1;  # Displays different options (INFO, HDG MD, PTCH MD, THROT)
 var autopilot_info_menu = 2;  # Displays info about current autopilot nav
@@ -61,6 +67,7 @@ var comm_info_menu = 12;  # Displays info about the current Comm radio status/se
 var comm_chans_menu = 13;  # Allows to set active and standby channels into the selected Comm radio and select through them
 var comm_chans_index = 0;  # So we know which frequency data block we're checking out in the Comm channels menu
 var current_comm = 0;  # 0 comm1, 1 comm2
+var comm_atis_menu = 14;  # Displays current Comm radio's received ATIS speech (if any)
 
 # NAV1/ILS
 var nav1_main_menu = 7;  # Displays different options (INFO, CHANS, RAD, TCN/STPT)
@@ -1309,7 +1316,7 @@ update_loop_func = func() {
                 inputting = 0;
                 displays.mrk_pres = 0;
             }
-            if (size(stored_input) < 3 and inputting) {  # Max amount of data that can be inputted
+            if (size(stored_input) < 5 and inputting) {  # Max amount of data that can be inputted (3 unit, decimal dot and 1 decimal)
                 if (displays.a_1_pres == 1) {
                     stored_input = stored_input~"1";
                     displays.a_1_pres = 0;
@@ -1340,6 +1347,9 @@ update_loop_func = func() {
                 } elsif (displays.hyphen_0_pres == 1) {
                     stored_input = stored_input~"0";
                     displays.hyphen_0_pres = 0;
+                } elsif (displays.decimal_pres == 1) {
+                    stored_input = stored_input~".";
+                    displays.decimal_pres = 0;
                 }
             }
         
@@ -1352,13 +1362,13 @@ update_loop_func = func() {
                 final_text = sprintf("%s %02d", getprop("instrumentation/nav[0]/nav-id"), getprop("instrumentation/nav[0]/nav-distance") * M2NM);
             }
             
-            ils_text = sprintf("FREQ %3.2f RADIAL %03d %s", getprop("instrumentation/nav[0]/frequencies/selected-mhz"), getprop("instrumentation/nav[0]/radials/selected-deg"), final_text);
+            ils_text = sprintf("FREQ %3.3f RADIAL %03d %s", getprop("instrumentation/nav[0]/frequencies/selected-mhz"), getprop("instrumentation/nav[0]/radials/selected-deg"), final_text);
         
             UFCCanvas.UFCText.setText(ils_text);
         } elsif (curr_menu == nav_1_chans_menu) {
             
             if (nav_1_chans_index == 0) {  # Active frequency
-                ils_text = sprintf("ACTIVE %3.2f MHz 1.Stby 2.Next", getprop("instrumentation/nav[0]/frequencies/selected-mhz"));
+                ils_text = sprintf("ACTIVE %3.3fMHz 1.Stby 2.Next", getprop("instrumentation/nav[0]/frequencies/selected-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/nav[0]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/nav[0]/frequencies/standby-mhz");
@@ -1387,7 +1397,7 @@ update_loop_func = func() {
                     inputting = 0;
                     displays.mrk_pres = 0;
                 }
-                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                if (size(stored_input) < 7 and inputting) {  # Max amount of data that can be inputted (3 units 3 decimals and the decimal dot)
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1424,7 +1434,7 @@ update_loop_func = func() {
                     }
                 }
             } elsif (nav_1_chans_index == 1) {  # Standby frequency
-                ils_text = sprintf("STBY %3.2f MHz 1.Active 2.Next", getprop("instrumentation/nav[0]/frequencies/standby-mhz"));
+                ils_text = sprintf("STBY %3.3fMHz 1.Active 2.Next", getprop("instrumentation/nav[0]/frequencies/standby-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/nav[0]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/nav[0]/frequencies/standby-mhz");
@@ -1453,7 +1463,7 @@ update_loop_func = func() {
                     inputting = 0;
                     displays.mrk_pres = 0;
                 }
-                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                if (size(stored_input) < 7 and inputting) {  # Max amount of data that can be inputted (3 units 3 decimals and the decimal dot)
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1491,7 +1501,7 @@ update_loop_func = func() {
                 }
             } elsif (nav_1_chans_index > 1) {  # Stored channel data blocks
                 data_idx = nav_1_chans_index - 1;
-                ils_text = sprintf("DATA%02d %3.2f MHz 1.Push 2.Next", data_idx, getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
+                ils_text = sprintf("DATA%02d %3.3fMHz 1.Push 2.Next", data_idx, getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Push data block to active freq
                     setprop("instrumentation/nav[0]/frequencies/selected-mhz", getprop("instrumentation/nav[0]/frequencies/data-"~data_idx~"-freq"));
                     displays.a_1_pres = 0;
@@ -1517,7 +1527,7 @@ update_loop_func = func() {
                     inputting = 0;
                     displays.mrk_pres = 0;
                 }
-                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                if (size(stored_input) < 7 and inputting) {  # Max amount of data that can be inputted (3 units 3 decimals and the decimal dot)
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1613,7 +1623,7 @@ update_loop_func = func() {
             if (current_comm == 0) {
                 comm_text2 = 2;
             }
-            comm_text = sprintf(" 1.INFO 2.CHANNELS 3.SEL COMM%d", comm_text2);
+            comm_text = sprintf("1.INFO 2.CHANS 3.ATIS 4.SEL R%d", comm_text2);
 
             if (displays.a_1_pres == 1) {  # Handle inputs
                 curr_menu = comm_info_menu;
@@ -1622,19 +1632,22 @@ update_loop_func = func() {
                 curr_menu = comm_chans_menu;
                 displays.n_2_pres = 0;
             } elsif (displays.b_3_pres == 1) {
+                curr_menu = comm_atis_menu;
+                displays.b_3_pres = 0;
+            } elsif (displays.w_4_pres == 1) {
                 if (current_comm == 0) {
                     current_comm = 1;
                 } else {
                     current_comm = 0
                 }
-                displays.b_3_pres = 0;
+                displays.w_4_pres = 0;
             }
 
             UFCCanvas.UFCText.setText(comm_text);
         } elsif (curr_menu == comm_info_menu) {
             final_text = sprintf("%s %02d", getprop("instrumentation/comm["~current_comm~"]/airport-id"), getprop("instrumentation/comm["~current_comm~"]/track-distance-m") * M2NM);
 
-            comm_text = sprintf("FREQ %3.2f Volume %03d %s", getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz"), getprop("instrumentation/comm["~current_comm~"]/volume") * 100, final_text);
+            comm_text = sprintf("FREQ %3.3f Volum %03d %s", getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz"), getprop("instrumentation/comm["~current_comm~"]/volume") * 25, final_text);
 
             UFCCanvas.UFCText.setText(comm_text);
         } elsif (curr_menu == comm_chans_menu) {
@@ -1647,7 +1660,7 @@ update_loop_func = func() {
             }
             
             if (comm_chans_index == 0) {  # Active frequency
-                comm_text = sprintf("ACTIVE %3.2f MHz 1.Stby 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz"));
+                comm_text = sprintf("ACTIVE %3.3fMHz 1.Stby 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz");
@@ -1676,7 +1689,7 @@ update_loop_func = func() {
                     inputting = 0;
                     displays.mrk_pres = 0;
                 }
-                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                if (size(stored_input) < 7 and inputting) {  # Max amount of data that can be inputted (3 units 3 decimals and the decimal dot)
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1713,7 +1726,7 @@ update_loop_func = func() {
                     }
                 }
             } elsif (comm_chans_index == 1) {  # Standby frequency
-                comm_text = sprintf("STBY %3.2f MHz 1.Active 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz"));
+                comm_text = sprintf("STBY %3.3fMHz 1.Active 2.Next", getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Switch between active and standby
                     active_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz");
                     standby_freq = getprop("instrumentation/comm["~current_comm~"]/frequencies/standby-mhz");
@@ -1742,7 +1755,7 @@ update_loop_func = func() {
                     inputting = 0;
                     displays.mrk_pres = 0;
                 }
-                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                if (size(stored_input) < 7 and inputting) {  # Max amount of data that can be inputted (3 units 3 decimals and the decimal dot)
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1780,7 +1793,7 @@ update_loop_func = func() {
                 }
             } elsif (comm_chans_index > 1) {  # Stored channel data blocks
                 data_idx = comm_chans_index - 2;
-                comm_text = sprintf("DATA%02d %3.2f MHz 1.Push 2.Next", data_idx, getprop("sim/model/f15/instrumentation/"~curr_radio~"/presets/frequency["~data_idx~"]"));
+                comm_text = sprintf("DATA%02d %3.3fMHz 1.Push 2.Next", data_idx, getprop("sim/model/f15/instrumentation/"~curr_radio~"/presets/frequency["~data_idx~"]"));
                 if (displays.a_1_pres == 1 and !inputting) {  # Push data block to active freq
                     setprop("instrumentation/comm["~current_comm~"]/frequencies/selected-mhz", getprop("sim/model/f15/instrumentation/"~curr_radio~"/presets/frequency["~data_idx~"]"));
                     displays.a_1_pres = 0;
@@ -1806,7 +1819,7 @@ update_loop_func = func() {
                     inputting = 0;
                     displays.mrk_pres = 0;
                 }
-                if (size(stored_input) < 6 and inputting) {  # Max amount of data that can be inputted (3 units 2 decimals and the decimal dot)
+                if (size(stored_input) < 7 and inputting) {  # Max amount of data that can be inputted (3 units 3 decimals and the decimal dot)
                     if (displays.a_1_pres == 1) {
                         stored_input = stored_input~"1";
                         displays.a_1_pres = 0;
@@ -1844,6 +1857,17 @@ update_loop_func = func() {
                 }
             }
             
+            UFCCanvas.UFCText.setText(comm_text);
+        } elsif (curr_menu == comm_atis_menu) {
+            comm_text = "";
+            if (getprop("instrumentation/comm["~current_comm~"]/atis") == nil or size(getprop("instrumentation/comm["~current_comm~"]/atis")) == 0) {  # No available ATIS speech
+                sliding_text = 0;
+                comm_text = "NO ATIS AVAILABLE";
+            } else {
+                sliding_text = 1;
+                comm_text = getprop("instrumentation/comm["~current_comm~"]/atis");
+            }
+        
             UFCCanvas.UFCText.setText(comm_text);
         }
         
@@ -1890,6 +1914,8 @@ update_loop_func = func() {
             displays.ap_pres = 0;
         } elsif (displays.menu_pres == 1) {  # Takes us back to the last menu
             stored_input = "";  # Since we force-display, we reset the pilot's input
+            sliding_text = 0;
+            sliding_paused = 0;
             if (displays.inputting) {
                 displays.inputting = 0;
             } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu or curr_menu == comm_main_menu) {
@@ -1902,7 +1928,7 @@ update_loop_func = func() {
                 curr_menu = nav1_main_menu;
             } elsif (curr_menu == nav_1_chans_menu and nav_1_chans_index != 0) {
                 nav_1_chans_index = 0;
-            } elsif (curr_menu == comm_info_menu or (curr_menu == comm_chans_menu and comm_chans_index == 0)) {
+            } elsif (curr_menu == comm_info_menu or (curr_menu == comm_chans_menu and comm_chans_index == 0) or curr_menu == comm_atis_menu) {
                 curr_menu = comm_main_menu;
             } elsif (curr_menu == comm_chans_menu and comm_chans_index != 0) {
                 comm_chans_index = 0;
@@ -1912,6 +1938,27 @@ update_loop_func = func() {
         } elsif (displays.clr_pres == 1) {  # Clear currently inputted data
             stored_input = "";
             displays.clr_pres = 0;
+        }
+        
+        # Make text "slide" if it should be
+        if (displays.ip_pres == 1 and sliding_text and !inputting and !bad_data) {  # Pause/Resume sliding text
+            sliding_paused = !sliding_paused;
+            displays.ip_pres = 0;
+        }
+        if (sliding_text and !inputting and !bad_data and !sliding_paused) {
+            text_size = size(UFCCanvas.UFCText.getText()) * 35;  # Each character's about 35 pixels big
+            # We move 256 pixels (half screen) in 2.25 seconds
+            sliding_rate = (getprop("sim/time/elapsed-sec") - last_sliding) * 256 / 2.25;
+            if (amount_slided < text_size/2) {  # We ain't slided the whole thing yet
+                UFCCanvas.UFCText.setTranslation(screen_width/2+text_size/4-(amount_slided+sliding_rate),screen_height/2);
+                amount_slided += sliding_rate;
+            } else {
+                UFCCanvas.UFCText.setTranslation(screen_width/2+text_size/4,screen_height/2);
+                amount_slided = 0;
+            }
+            last_sliding = getprop("sim/time/elapsed-sec");
+        } elsif (!sliding_text) {
+            UFCCanvas.UFCText.setTranslation(screen_width/2,screen_height/2);  # Fixes text position when switching from a menu with sliding and one that don't
         }
         
         # The following lines prevent a case of scenario:
