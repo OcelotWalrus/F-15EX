@@ -1,5 +1,7 @@
 # F-15 Weapons system
 # ---------------------------
+# Modified by Jimmy L. Miles to implement mission sets and programs for A/G operations in the
+# F-15EX.
 # ---------------------------
 # Richard Harrison (rjh@zaretto.com) Feb  2015 - based on F-14B version by Alexis Bory
 # ---------------------------
@@ -84,6 +86,183 @@ var weapons_init = func() {
     arm_selector();
 }
 
+## Initiate A/G PACS
+## Note: There are 8 slots for A/G PACS programs
+
+var pacs = [[], [], [], [], [], [], [], []];
+var i = 0;
+foreach(pacs_program; pacs) {
+    data_block = {program: i, selected_pylons: [], status: 0, release_mode: 0, release_step: 1, fuzing: 0};
+    # program: id of the program, from 1 to 8
+    # selected_pylons: vector containing selected pylons' ids
+    # status: current status of the program. 0 means unpopulated, 1 means populated
+    # release_mode: 0 means direct, 1 means auto (doesn't matter right now, auto would release bombs automatically when DLZ NEZ is reached)
+    # release_step: ripple count (how much we release per ripple button trigger)
+    # fuzing: 0 Nose/tail, 1 nose, 2 tail (doesn't matter right now)
+
+    i += 1;
+}
+var pacs_current_program = 0;  # Program 1
+
+## Initiate A/G Smart Weapons data blocks
+var pylons_a_g = [12,1,3,4,5,6,7,9,15,20,21,22,23,24,25];  # A/G Hardpoints
+var smart_weapons_data_blocks = [];
+for (var i = 0; i < size(pylons_a_g); i += 1) {
+    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}}], initiated: 0};
+    append(smart_weapons_data_blocks, data_block);
+}
+
+var get_data_block_from_pylon_idx = func (pylon_idx) {
+    foreach(curr_block; smart_weapons_data_blocks) {
+        if (curr_block.pylon_idx == pylon_idx) {
+            return curr_block;
+        }
+    }
+    return 0;
+}
+
+## Initiate the A/G Mission Sets and Programs (JADMS and other GPS-guided-like ordnance)
+## This aims to replicate the F-15E Strike Eagles at best
+## Mission Programs are stored in sets, which we got 8 of them. In each set, we got
+## 40 slots for mission programs, and in each of those last, we store these bits of data:
+## - what's the target is (Lat, Lon, El) (of each ordnance, ex. if we got a double-rack GBU-54)
+## - what's its terminal parameters [heading, angle, vertical speed fps) (for now to functional, but the parameters exist and are stored) (of each ordnance, ex. if we got a double-rack GBU-54)
+## Note:
+## - not all pylons must have data in a mission program, you only store data for the chosen ones.
+## - Mission Programs can be loaded and saved through the Data Cartridge system, and they
+## can be edited in-sim in the mission preplanning dialog, or in the PACS/Mission Program Editor
+## screen on the LAD.
+## - Mission Sets and Mission Programs are selected in numerical order: Mission 0 gets selected first and Mission 15
+## gets selected last. The next Mission Program is selected once all ordnance from the former Mission
+## Program has been released. If the theoretical next Mission Program is un-populated, it won't be
+## selected.
+## - Ordnances of different type cannot be mixed in the same Mission Program (You can't have a Mission
+## Program with 2 GBU-31s and 4 GBU-39s, you must have a Mission Program with 2 GBU-31s and a second
+## Mission Program with the 4 GBU-39s).
+var mission_sets_max = 4;
+var mission_programs_max = 40;
+var mission_sets = [[], [], [], []];
+for (var i = 0; i < mission_sets_max; i += 1) {
+    for (var y = 0; y < mission_programs_max; y += 1) {
+        var mission_program = {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}};
+        append(mission_sets[i], mission_program);
+    }
+}
+
+var get_status_for_pylon = func(pylon_idx) {
+    is_valid_pylon = 0;
+    foreach(curr_pylon; pylons_a_g) {
+        if (curr_pylon == pylon_idx) {
+            is_valid_pylon = 1;
+        }
+    }
+    
+    if (is_valid_pylon) {
+        initiated = get_data_block_from_pylon_idx(pylon_idx).initiated;
+        no_data = get_data_block_from_pylon_idx(pylon_idx).data[0].gps == nil;
+        
+        return [initiated, no_data];
+    }
+    return 0;
+}
+
+var determine_set_text = func(set_text) {
+    # AGM-65B
+    if (set_text == "2 x AGM-65B") {
+        return "2AG65B";
+    } elsif (set_text == "3 x AGM-65B") {
+        return "3AG65B";
+    } elsif (set_text == "1 x AGM-65B") {
+        return "AG65B";
+    # AGM-65D
+    } elsif (set_text == "2 x AGM-65D") {
+        return "2AG65D";
+    } elsif (set_text == "3 x AGM-65D") {
+        return "3AG65D";
+    } elsif (set_text == "1 x AGM-65D") {
+        return "AG65D";
+    # AGM-84D
+    } elsif (set_text == "1 x AGM-84D") {
+        return "AG84D";
+    # AGM-84E
+    } elsif (set_text == "1 x AGM-84E") {
+        return "AG84E";
+    # AGM-88E
+    } elsif (set_text == "1 x AGM-88E") {
+        return "AG88E";
+    # AGM-119A
+    } elsif (set_text == "1 x AGM-119A") {
+        return "AG119A";
+    # AGM-154A
+    } elsif (set_text == "1 x AGM-154A") {
+        return "AG154A";
+    } elsif (set_text == "2 x AGM-154A") {
+        return "2AG154A";
+    # AGM-158A
+    } elsif (set_text == "1 x AGM-158A") {
+        return "AG158A";
+    # AGM-158C
+    } elsif (set_text == "1 x AGM-158C") {
+        return "AG158C";
+    # CBU-87
+    } elsif (set_text == "1 x CBU-87") {
+        return "CBU87";
+    } elsif (set_text == "3 x CBU-87") {
+        return "3CBU87";
+    # CBU-105
+    } elsif (set_text == "1 x CBU-105") {
+        return "CBU105";
+    } elsif (set_text == "2 x CBU-105") {
+        return "2CBU105";
+    # GBU-12
+    } elsif (set_text == "1 x GBU-12") {
+        return "GBU12";
+    } elsif (set_text == "3 x GBU-12") {
+        return "3GBU12";
+    # GBU-31
+    } elsif (set_text == "1 x GBU-31") {
+        return "GBU31";
+    # GBU-32
+    } elsif (set_text == "1 x GBU-32") {
+        return "GBU32";
+    } elsif (set_text == "2 x GBU-32") {
+        return "2GBU32";
+    # GBU-59
+    } elsif (set_text == "1 x GBU-39") {
+        return "GBU39";
+    } elsif (set_text == "4 x GBU-39") {
+        return "4GBU39";
+    # GBU-54
+    } elsif (set_text == "1 x GBU-54") {
+        return "GBU54";
+    } elsif (set_text == "2 x GBU-54") {
+        return "2GBU12";
+    # LAU-68C Hydra Rocket Launcher
+    } elsif (set_text == "3 x M151") {
+        return "3M151";
+    } elsif (set_text == "1 x M151") {
+        return "M151";
+    # MK-82
+    } elsif (set_text == "3 x MK-82") {
+        return "3MK82";
+    } elsif (set_text == "1 x MK-82") {
+        return "MK82";
+    # MK-82AIR
+    } elsif (set_text == "3 x MK-82AIR") {
+        return "3MKAIR";
+    } elsif (set_text == "1 x MK-82AIR") {
+        return "MKAIR";
+    # MK-83
+    } elsif (set_text == "3 x MK-83") {
+        return "3MK83";
+    } elsif (set_text == "1 x MK-83") {
+        return "MK83";
+    # MK-84
+    } elsif (set_text == "1 x MK-84") {
+        return "MK83";
+    }
+    return 0;
+}
 
 ## All the following lines are taken from the A-10 model and adapted by Jimmy L. Miles
 ## These methods are used for compatible AGM missiles: AGM-65B, AGM-65D, AGM-84D, AGM-88E and AGM-119A (not AGM-154A and AGM-158s since GPS guided)
@@ -313,10 +492,10 @@ var updateGPSTarget = func {
 
 gpsFeeder = maketimer(.1,updateGPSTarget);
 
-setlistener(WeaponSelector, gpsUpdate, nil, 0);
-setlistener("controls/armament/selected-armament-offset", gpsUpdate, nil, 0);
-setlistener("controls/armament/trigger", gpsUpdate, nil, 0);
-setlistener("controls/armament/selected-armament-offset", gpsUpdate, nil, 0);
+#setlistener(WeaponSelector, gpsUpdate, nil, 0);
+#setlistener("controls/armament/selected-armament-offset", gpsUpdate, nil, 0);
+#setlistener("controls/armament/trigger", gpsUpdate, nil, 0);
+#setlistener("controls/armament/selected-armament-offset", gpsUpdate, nil, 0);
 # -- end of GPS guided weapons code
 
 # Main loop
@@ -362,6 +541,11 @@ var armament_update = func {
     } else {
         SWCoolOn.setBoolValue(0);
         SWCoolOff.setBoolValue(0);
+    }
+    
+    # Actually turn the cooling on or off
+    if (pylons.fcs.getSelectedWeapon() != nil and (pylons.fcs.getSelectedWeapon() == "AIM-9X" or pylons.fcs.getSelectedWeapon() == "CATM-9X")) {
+        pylons.fcs.getSelectedWeapon().setCooling(SWCoolOn.getValue());
     }
 
     SwCount.setValue(aim9_count);

@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.1767767"
-     inkscape:cx="1255.8216"
-     inkscape:cy="4901.6641"
+     inkscape:zoom="0.062500002"
+     inkscape:cx="1056"
+     inkscape:cy="10584"
      inkscape:window-width="2560"
      inkscape:window-height="1379"
      inkscape:window-x="0"
@@ -162,6 +162,18 @@
        inkscape:label="left_wing" />
     <path
        inkscape:connector-curvature="0"
+       id="left_wing_smrt_wpns"
+       d="m 378.33182,1922.836 -140.78542,-1.8252 -76.03917,32.8519 -63.993416,-301.1435 280.818006,-744.6458 1.50579,3.6503 h -1.50579"
+       style="display:inline;fill:none;stroke:#00ffea;stroke-width:3.28214px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:label="left_wing_smrt_wpns" />
+    <path
+       inkscape:connector-curvature="0"
+       id="right_wing_smrt_wpns"
+       d="m 843.75147,1919.8938 125.16636,-1.8621 67.60327,33.5159 56.8938,-307.2294 -249.66343,-759.69459 -1.33874,3.72408 h 1.33874"
+       style="display:inline;fill:none;stroke:#00ffea;stroke-width:3.12584px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:label="right_wing_smrt_wpns" />
+    <path
+       inkscape:connector-curvature="0"
        id="right_wing"
        d="m 746.82715,1927.4433 151.68864,-2.7243 81.92817,49.037 68.94954,-449.5055 -302.56635,-1111.50408 -1.62237,5.4485 h 1.62237"
        style="display:inline;fill:none;stroke:#00ffea;stroke-width:4.16232;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
@@ -173,7 +185,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan12">CHF 220</tspan></text>
+         id="tspan1">CHF 220</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,-608.37738,96.995148)"
@@ -181,7 +193,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan13">L 17650 lbs</tspan></text>
+         id="tspan2">L 17650 lbs</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,-609.97249,176.89392)"
@@ -189,7 +201,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan16">C OUT</tspan></text>
+         id="tspan3">C OUT</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,-608.96263,255.92628)"
@@ -197,7 +209,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan17">R 17650 lbs</tspan></text>
+         id="tspan4">R 17650 lbs</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(-8.3707213e-4,0.61770656,-0.38494248,-0.00188043,588.54029,779.01155)"
@@ -206,7 +218,7 @@
        inkscape:label="left_cft_title"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan18">L CFTs</tspan></text>
+         id="tspan5">L CFTs</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.00312366,-0.61768013,0.38492601,0.00701711,625.04395,3501.0829)"
@@ -215,7 +227,7 @@
        inkscape:label="right_cft_title"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan19">R CFTs</tspan></text>
+         id="tspan6">R CFTs</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.37313553,0,0,0.90696367,-704.84569,-30.401564)"
@@ -223,7 +235,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-6);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan20">FUEL</tspan></text>
+         id="tspan7">FUEL</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.37313553,0,0,0.90696367,-708.76151,399.86657)"
@@ -231,7 +243,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-6-7);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan21">NAV</tspan></text>
+         id="tspan8">NAV</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.37313553,0,0,0.90696367,-709.47402,490.42494)"
@@ -239,7 +251,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-6-7-2);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan22">TPOD</tspan></text>
+         id="tspan9">TPOD</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.37313553,0,0,0.90696367,-711.22826,575.25149)"
@@ -247,7 +259,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-6-7-2-7);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan23">IRPOD</tspan></text>
+         id="tspan10">IRPOD</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.37313553,0,0,0.90696367,-712.52706,658.79841)"
@@ -255,7 +267,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-6-7-2-7-7);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan30">ECMPOD</tspan></text>
+         id="tspan11">ECMPOD</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,290.10598,98.116849)"
@@ -263,7 +275,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan31">FLA 220</tspan></text>
+         id="tspan12">FLA 220</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,203.06904,170.77359)"
@@ -271,7 +283,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan32">ROUNDS 925</tspan></text>
+         id="tspan13">ROUNDS 925</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,295.69956,243.78796)"
@@ -279,7 +291,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan35">SRM 10</tspan></text>
+         id="tspan16">SRM 10</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,291.69686,315.62343)"
@@ -287,7 +299,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan36">AAM 20</tspan></text>
+         id="tspan17">AAM 20</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.32534435,0,0,0.73086583,269.37872,392.1441)"
@@ -295,7 +307,7 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan37">GRND 20</tspan></text>
+         id="tspan18">GRND 20</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.56389194,0,0,0.91920262,-1134.2461,918.84681)"
@@ -304,7 +316,7 @@
        inkscape:label="view_mode_text"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan38">A/A</tspan></text>
+         id="tspan19">A/A</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.45710868,0,0,1.079247,-443.02535,-119.78529)"
@@ -313,7 +325,7 @@
        inkscape:label="arm_time_counter"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan39">ARM 03:21</tspan></text>
+         id="tspan20">ARM 03:21</tspan></text>
     <text
        inkscape:label="BOX_UP_TEXT_S4"
        id="BOX_UP_TEXT_S4"
@@ -1307,6 +1319,6 @@
        style="font-size:106.667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-8-0-5-9);display:inline;fill:#eeeef0;stroke:none;stroke-width:6.4252;stroke-miterlimit:4.1"><tspan
          x="2052.6348"
          y="207.27436"
-         id="tspan40">COOL</tspan></text>
+         id="tspan21">COOL</tspan></text>
   </g>
 </svg>
