@@ -1381,7 +1381,7 @@ var push_threat_circle_data_from_dialog = func () {  # used to push data from th
     setprop("sim/model/f15/preplanning-status", sprintf("Updated DTC GPS-Spot %02d", circle_idx));
 }
 
-var push_threat_circle_data_from_dtc = func (circle_idx, circle_lat, circle_lon, circle_radius, circle_label, circle_color, circle_on) {  # used to push data from the mission planning dialog to the actual threat circles
+var push_threat_circle_data_from_dtc = func (circle_idx, circle_lat, circle_lon, circle_radius, circle_label, circle_color, circle_on) {
     threat_circles[circle_idx].lat = circle_lat;
     threat_circles[circle_idx].lon = circle_lon;
     threat_circles[circle_idx].radius = circle_radius;

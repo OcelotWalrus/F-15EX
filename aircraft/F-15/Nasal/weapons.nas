@@ -144,9 +144,30 @@ var mission_programs_max = 40;
 var mission_sets = [[], [], [], []];
 for (var i = 0; i < mission_sets_max; i += 1) {
     for (var y = 0; y < mission_programs_max; y += 1) {
-        var mission_program = {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}};
+        var mission_program = {gps: geo.Coord.new().set_latlon(0, 0, 0), terminal: {heading: 0, angle: 0, vel: 0}, initialized: 0};
         append(mission_sets[i], mission_program);
     }
+}
+
+var push_mission_program_from_dialog = func () {  # used to push data from the mission planning dialog to the actual mission programs
+    mission_set_id = getprop("controls/mission-planning/selected-mission-set");
+    mission_program_id = getprop("controls/mission-planning/selected-mission-program");
+    mission_gps = geo.Coord.new().set_latlon(getprop("controls/mission-planning/selected-mission-program-lat"), getprop("controls/mission-planning/selected-mission-program-lon"), getprop("controls/mission-planning/selected-mission-program-alt"));
+    mission_terminal = {heading: getprop("controls/mission-planning/selected-mission-program-term-heading"), angle: getprop("controls/mission-planning/selected-mission-program-term-angle"), vel: getprop("controls/mission-planning/selected-mission-program-term-vel")};
+    mission_initialized = getprop("controls/mission-planning/selected-mission-program-initialized");
+    
+    aircraft.mission_sets[mission_set_id][mission_program_id] = {gps: mission_gps, terminal: mission_terminal, initialized: mission_initialized};
+
+    setprop("sim/model/f15/preplanning-status", sprintf("Updated DTC Mission %d/%02d", mission_set_id, mission_program_id));
+}
+
+var push_mission_program_from_dtc = func (mission_set_id, mission_program_id, mission_lat, mission_lon, mission_alt, mission_terminal_head, mission_terminal_angle, mission_terminal_vel, mission_initialized) {
+    mission_gps = geo.Coord.new().set_latlon(mission_lat, mission_lon, mission_alt);
+    mission_terminal = {heading: mission_terminal_head, angle: mission_terminal_angle, vel: mission_terminal_vel};
+    
+    aircraft.mission_sets[mission_set_id][mission_program_id] = {gps: mission_gps, terminal: mission_terminal, initialized: mission_initialized};
+    
+    setprop("sim/model/f15/preplanning-status", sprintf("Updated DTC Mission %d/%02d", mission_set_id, mission_program_id));
 }
 
 var get_status_for_pylon = func(pylon_idx) {

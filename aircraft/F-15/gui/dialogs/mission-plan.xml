@@ -5,7 +5,7 @@
   	<layout>vbox</layout>
   	<draggable>true</draggable>
     <resizable>false</resizable>
-    <width>1350</width>
+    <width>2048</width>
     <!--<height>250</height>-->
 
     <nasal>
@@ -525,6 +525,191 @@
 				<command>nasal</command>
 				<script><![CDATA[
 					aircraft.push_threat_circle_data_from_dialog();
+				]]></script>
+			</binding>
+		</button>
+	</group>
+
+	<empty><stretch>1</stretch></empty>
+	<hrule/>
+	
+	<text><halign>center</halign><label>DTC Mission Programs (Pre-planned targets)</label></text>
+	<empty><stretch>1</stretch></empty>
+
+	<group>
+		<layout>hbox</layout>
+
+        <combo>
+              <name>mission-set-combo</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+		  	  <label>Set</label>
+              <live>true</live>
+              <property>/controls/mission-planning/selected-mission-set</property>
+              <value>0</value>
+              <value>1</value>
+              <value>2</value>
+              <value>3</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>mission-set-combo</object-name>
+              </binding>
+              <binding>
+                <command>nasal</command>
+                <script>
+                    # Update GPS Spot
+                    setprop("controls/mission-planning/selected-mission-program-lat", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lat());
+                    setprop("controls/mission-planning/selected-mission-program-lon", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lon());
+                    setprop("controls/mission-planning/selected-mission-program-alt", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.alt());
+                    
+                    # Update Terminal Parameters
+                    setprop("controls/mission-planning/selected-mission-program-term-heading", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.heading);
+                    setprop("controls/mission-planning/selected-mission-program-term-angle", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.angle);
+                    setprop("controls/mission-planning/selected-mission-program-term-vel", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.vel);
+                    
+                    setprop("controls/mission-planning/selected-mission-program-initialized", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].initialized);
+                </script>
+              </binding>
+        </combo>
+        <combo>
+              <name>mission-program-combo</name>
+              <pref-width>55</pref-width>
+              <pref-height>25</pref-height>
+		  	  <label>Set</label>
+              <live>true</live>
+              <property>/controls/mission-planning/selected-mission-program</property>
+              <value>0</value>
+              <value>1</value>
+              <value>2</value>
+              <value>3</value>
+              <value>4</value>
+              <value>5</value>
+              <value>6</value>
+              <value>7</value>
+              <value>8</value>
+              <value>9</value>
+              <value>10</value>
+              <value>11</value>
+              <value>12</value>
+              <value>13</value>
+              <value>14</value>
+              <value>15</value>
+              <value>16</value>
+              <value>17</value>
+              <value>18</value>
+              <value>19</value>
+              <value>20</value>
+              <value>21</value>
+              <value>22</value>
+              <value>23</value>
+              <value>24</value>
+              <value>25</value>
+              <value>26</value>
+              <value>27</value>
+              <value>28</value>
+              <value>29</value>
+              <value>30</value>
+              <value>31</value>
+              <value>32</value>
+              <value>33</value>
+              <value>34</value>
+              <value>35</value>
+              <value>36</value>
+              <value>37</value>
+              <value>38</value>
+              <value>39</value>
+              <binding>
+                <command>dialog-apply</command>
+                <object-name>mission-program-combo</object-name>
+              </binding>
+              <binding>
+                <command>nasal</command>
+                <script>
+                    # Update GPS Spot
+                    setprop("controls/mission-planning/selected-mission-program-lat", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lat());
+                    setprop("controls/mission-planning/selected-mission-program-lon", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lon());
+                    setprop("controls/mission-planning/selected-mission-program-alt", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.alt());
+                    
+                    # Update Terminal Parameters
+                    setprop("controls/mission-planning/selected-mission-program-term-heading", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.heading);
+                    setprop("controls/mission-planning/selected-mission-program-term-angle", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.angle);
+                    setprop("controls/mission-planning/selected-mission-program-term-vel", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.vel);
+                    
+                    setprop("controls/mission-planning/selected-mission-program-initialized", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].initialized);
+                </script>
+              </binding>
+        </combo>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Lat (deg)</label>
+             <property>controls/mission-planning/selected-mission-program-lat</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Lon (deg)</label>
+            <property>controls/mission-planning/selected-mission-program-lon</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Terminal Heading (True)</label>
+            <property>controls/mission-planning/selected-mission-program-term-heading</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Terminal Angle (deg)</label>
+            <property>controls/mission-planning/selected-mission-program-term-angle</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Terminal Velocity (FPS)</label>
+            <property>controls/mission-planning/selected-mission-program-term-vel</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<checkbox>
+			<label>Initialized (Enabled)</label>
+			<halign>right</halign>
+			<live>true</live>
+			<property>controls/mission-planning/selected-mission-program-initialized</property>
+			<binding>
+				<command>dialog-apply</command>
+			</binding>
+		</checkbox>
+		<button>
+			<legend>Apply</legend>
+			<halign>center</halign>
+			<binding>
+				<command>nasal</command>
+				<script><![CDATA[
+					aircraft.push_mission_program_from_dialog();
 				]]></script>
 			</binding>
 		</button>

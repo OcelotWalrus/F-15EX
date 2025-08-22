@@ -4416,6 +4416,16 @@
             <selected-threat-circle-enabled type="bool">false</selected-threat-circle-enabled>
             <selected-threat-circle-color type="string">red</selected-threat-circle-color>
             <selected-threat-circle-label type="string"></selected-threat-circle-label>
+            
+            <selected-mission-set type="int">0</selected-mission-set>
+            <selected-mission-program type="int">0</selected-mission-program>
+            <selected-mission-program-lat type="double">0</selected-mission-program-lat>
+            <selected-mission-program-lon type="double">0</selected-mission-program-lon>
+            <selected-mission-program-alt type="double">0</selected-mission-program-alt>
+            <selected-mission-program-term-heading type="double">0</selected-mission-program-term-heading>
+            <selected-mission-program-term-angle type="double">0</selected-mission-program-term-angle>
+            <selected-mission-program-term-vel type="double">0</selected-mission-program-term-vel>
+            <selected-mission-program-initialized type="double">0</selected-mission-program-initialized>
         </mission-planning>
         <seat>
             <pilot-helmet-volume-attenuation type="int">0</pilot-helmet-volume-attenuation>

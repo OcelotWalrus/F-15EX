@@ -36,6 +36,7 @@
 # <index> is the index of the Steerpoint, defining its order (if it's 0, it'll be the first one on the route, 4 the fourth one.). If you don't want a specific
 # altitude for the steerpoint, set the <altitude-ft> parameter to -9999.
 # - `BULLSEYE,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-feet>` example: `BULLSEYE,37.2,-115.6,0`  -  Coordinates for the bullseye. Set all values to 0 for no bullseye designation
+# - `MISSION,<mission_set_id>,<mission_program_id>,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-feet>,<terminal_heading_true_deg>,<terminal_angle_deg>,<terminal_velocity_fps>,<initialized/enabled>` example: `MISSION,1,21,37.2894,76.5432,3443,230,75,800,1` - Sets up a Mission Program. Mission Programs are stored into Mission Sets. You have 4 slot from 0 to 3 for Mission Sets, and 40 slots from 0 to 39 for Mission Programs. Terminal parameters are available but not functional yet. Initialized is a boolean, determining whether that program is enabled or not.
 # ---------------------------
 # Notes:
 # - When loading a DTC, if data blocks such as DECKMin are missing, it won't cause a bug, though the minimum altitude
@@ -143,6 +144,17 @@ var load_cartridge = func(path) {
                     var leg = plan.getWP(plan.getPlanSize()-1);
                     leg.setAltitude(spot_alt, "at");
                 }
+            } elsif (key == "MISSION") {
+                mission_set_id = num(items[1]);
+                mission_program_id = num(items[2]);
+                mission_lat = num(items[3]);
+                mission_lon = num(items[4]);
+                mission_alt = num(items[5]);
+                mission_terminal_head = num(items[6]);
+                mission_terminal_angle = num(items[7]);
+                mission_terminal_vel = num(items[8]);
+                mission_initialized = num(items[9]);
+                aircraft.push_mission_program_from_dtc (mission_set_id, mission_program_id, mission_lat, mission_lon, mission_alt, mission_terminal_head, mission_terminal_angle, mission_terminal_vel, mission_initialized);
             }
         }
         if (planned != nil) {
@@ -205,6 +217,21 @@ var save_cartridge = func(path) {
         spot_enabled = gps_spot.enabled;
         ret = ret~sprintf("GPSSpot,%d,%.5f,%.5f,%.2f,%s,%s,%d|", spot_index, spot_lat, spot_lon, spot_radius, spot_label, spot_color, spot_enabled);
         idx += 1;
+    }
+    
+    # Go through each DTC Mission Sets/Programs an push 'em
+    for (var i = 0; i < aircraft.mission_sets_max; i += 1) {
+        for (var y = 0; y < aircraft.mission_programs_max; y += 1) {
+            curr_mission = aircraft.mission_sets[i][y];
+            mission_lat = curr_mission.gps.lat();
+            mission_lon = curr_mission.gps.lon();
+            mission_alt = curr_mission.gps.alt();
+            mission_terminal_head = curr_mission.terminal.heading;
+            mission_terminal_angle = curr_mission.terminal.angle;
+            mission_terminal_vel = curr_mission.terminal.vel;
+            mission_initialized = curr_mission.initialized;
+            ret = ret~sprintf("MISSION,%d,%02d,%.5f,%.5f,%.2f,%03d,%03d,%04d,%d|", i, y, mission_lat, mission_lon, mission_alt, mission_terminal_head, mission_terminal_angle, mission_terminal_vel, mission_initialized);
+        }
     }
 
     plan = flightplan();
