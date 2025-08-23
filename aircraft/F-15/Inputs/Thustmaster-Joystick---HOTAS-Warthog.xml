@@ -282,7 +282,7 @@
   </button>
   <button n="7">
     <desc type="string">Radar Elevation Antennae Up</desc>
-    <repeatable type="string">false</repeatable>
+    <repeatable type="bool">true</repeatable>
     <binding>
         <command>property-adjust</command>
         <property>instrumentation/radar/ho-field-offset</property>
@@ -298,7 +298,7 @@
   </button>
   <button n="8">
     <desc type="string">Radar Elevation Antennae Down</desc>
-    <repeatable type="string">false</repeatable>
+    <repeatable type="bool">true</repeatable>
     <binding>
         <command>property-adjust</command>
         <property>instrumentation/radar/ho-field-offset</property>
@@ -456,5 +456,12 @@
         <offset type="double">1</offset>
       </binding>
     </mod-up>
+  </button>
+  <button n="18">
+    <desc type="string">Radar Mode Switch</desc>
+    <binding>
+        <command>nasal</command>
+        <script>awg_9.wcs_mode_toggle()</script>
+    </binding>
   </button>
 </PropertyList>

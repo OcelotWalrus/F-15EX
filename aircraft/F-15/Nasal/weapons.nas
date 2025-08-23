@@ -90,7 +90,7 @@ var weapons_init = func() {
 ## Note: There are 8 slots for A/G PACS programs
 
 var pacs = [[], [], [], [], [], [], [], []];
-var i = 0;
+var i = 1;
 foreach(pacs_program; pacs) {
     data_block = {program: i, selected_pylons: [], status: 0, release_mode: 0, release_step: 1, fuzing: 0};
     # program: id of the program, from 1 to 8
@@ -108,7 +108,7 @@ var pacs_current_program = 0;  # Program 1
 var pylons_a_g = [12,1,3,4,5,6,7,9,15,20,21,22,23,24,25];  # A/G Hardpoints
 var smart_weapons_data_blocks = [];
 for (var i = 0; i < size(pylons_a_g); i += 1) {
-    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}}], initiated: 0};
+    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}}], initiated: 0, push_source: nil};
     append(smart_weapons_data_blocks, data_block);
 }
 
@@ -121,24 +121,8 @@ var get_data_block_from_pylon_idx = func (pylon_idx) {
     return 0;
 }
 
-## Initiate the A/G Mission Sets and Programs (JADMS and other GPS-guided-like ordnance)
-## This aims to replicate the F-15E Strike Eagles at best
-## Mission Programs are stored in sets, which we got 8 of them. In each set, we got
-## 40 slots for mission programs, and in each of those last, we store these bits of data:
-## - what's the target is (Lat, Lon, El) (of each ordnance, ex. if we got a double-rack GBU-54)
-## - what's its terminal parameters [heading, angle, vertical speed fps) (for now to functional, but the parameters exist and are stored) (of each ordnance, ex. if we got a double-rack GBU-54)
-## Note:
-## - not all pylons must have data in a mission program, you only store data for the chosen ones.
-## - Mission Programs can be loaded and saved through the Data Cartridge system, and they
-## can be edited in-sim in the mission preplanning dialog, or in the PACS/Mission Program Editor
-## screen on the LAD.
-## - Mission Sets and Mission Programs are selected in numerical order: Mission 0 gets selected first and Mission 15
-## gets selected last. The next Mission Program is selected once all ordnance from the former Mission
-## Program has been released. If the theoretical next Mission Program is un-populated, it won't be
-## selected.
-## - Ordnances of different type cannot be mixed in the same Mission Program (You can't have a Mission
-## Program with 2 GBU-31s and 4 GBU-39s, you must have a Mission Program with 2 GBU-31s and a second
-## Mission Program with the 4 GBU-39s).
+## Initiate the A/G Mission Sets and Programs
+# Note: there are 4 slots for sets, and inside each of 'em, 40 slots for programs
 var mission_sets_max = 4;
 var mission_programs_max = 40;
 var mission_sets = [[], [], [], []];
@@ -146,6 +130,15 @@ for (var i = 0; i < mission_sets_max; i += 1) {
     for (var y = 0; y < mission_programs_max; y += 1) {
         var mission_program = {gps: geo.Coord.new().set_latlon(0, 0, 0), terminal: {heading: 0, angle: 0, vel: 0}, initialized: 0};
         append(mission_sets[i], mission_program);
+    }
+}
+
+var push_mission_program_to_station = func(mission_set, mission_program, station, ordnance) {  # Used to push a Mission to a station's ordnance in the Smart Weapons Page using CC populate mode
+    data_block = mission_sets[mission_set][mission_program];
+    for (var i = 0; i < size(pylons_a_g); i += 1) {
+        if (smart_weapons_data_blocks[i].pylon_idx == station) {
+            smart_weapons_data_blocks[i].data[ordnance] = data_block;
+        }
     }
 }
 
@@ -565,7 +558,7 @@ var armament_update = func {
     }
     
     # Actually turn the cooling on or off
-    if (pylons.fcs.getSelectedWeapon() != nil and (pylons.fcs.getSelectedWeapon() == "AIM-9X" or pylons.fcs.getSelectedWeapon() == "CATM-9X")) {
+    if (pylons.fcs.getSelectedWeapon() != nil and (pylons.fcs.getSelectedWeapon().type == "AIM-9X" or pylons.fcs.getSelectedWeapon().type == "CATM-9X")) {
         pylons.fcs.getSelectedWeapon().setCooling(SWCoolOn.getValue());
     }
 
@@ -890,6 +883,13 @@ var master_arm_cycle = func()
 	if (master_arm_switch == 0)
     {
 		ArmSwitch.setValue(1);
+		
+		# All smart weapons are automatically initialized
+		for (var i = 0; i < size(smart_weapons_data_blocks); i += 1) {
+            if (contains(displays.SmartWeaps, getprop("payload/armament/station/id-"~smart_weapons_data_blocks[i].pylon_idx~"-type"))) {  # We're reusing the LAD's SmartWeaps variable here
+		        smart_weapons_data_blocks[i].initiated = 1;
+		    }
+        }
 	}
     else
     {

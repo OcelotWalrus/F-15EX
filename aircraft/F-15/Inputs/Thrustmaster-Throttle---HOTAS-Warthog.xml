@@ -408,15 +408,13 @@
     <desc type="string">Master Arm Switch</desc>
     <repeatable type="double">0</repeatable>
     <binding>
-      <command type="string">property-assign</command>
-      <property type="string">/sim/model/f15/controls/armament/master-arm-switch</property>
-      <value type="string">1</value>
+      <command type="string">nasal</command>
+      <script type="string">aircraft.master_arm_cycle();</script>
     </binding>
     <mod-up>
       <binding>
-        <command type="string">property-assign</command>
-        <property type="string">/sim/model/f15/controls/armament/master-arm-switch</property>
-        <value type="string">0</value>
+        <command type="string">nasal</command>
+        <script type="string">aircraft.master_arm_cycle();</script>
       </binding>
     </mod-up>
   </button>

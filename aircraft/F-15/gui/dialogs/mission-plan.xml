@@ -5,7 +5,7 @@
   	<layout>vbox</layout>
   	<draggable>true</draggable>
     <resizable>false</resizable>
-    <width>2048</width>
+    <width>3048</width>
     <!--<height>250</height>-->
 
     <nasal>
@@ -655,6 +655,17 @@
 		  	<height>25</height>
 		  	<label>Lon (deg)</label>
             <property>controls/mission-planning/selected-mission-program-lon</property>
+		  	<live>true</live>
+		  	<halign>left</halign>
+	        <binding>
+	            <command>dialog-apply</command>
+	      	</binding>
+		</input>
+		<input>
+		  	<width>150</width>
+		  	<height>25</height>
+		  	<label>Altitude (ft)</label>
+            <property>controls/mission-planning/selected-mission-program-alt</property>
 		  	<live>true</live>
 		  	<halign>left</halign>
 	        <binding>
