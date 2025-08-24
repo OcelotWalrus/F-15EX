@@ -575,7 +575,7 @@
               <name>mission-program-combo</name>
               <pref-width>55</pref-width>
               <pref-height>25</pref-height>
-		  	  <label>Set</label>
+		  	  <label>Mission</label>
               <live>true</live>
               <property>/controls/mission-planning/selected-mission-program</property>
               <value>0</value>

@@ -108,7 +108,7 @@ var pacs_current_program = 0;  # Program 1
 var pylons_a_g = [12,1,3,4,5,6,7,9,15,20,21,22,23,24,25];  # A/G Hardpoints
 var smart_weapons_data_blocks = [];
 for (var i = 0; i < size(pylons_a_g); i += 1) {
-    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}}], initiated: 0, push_source: nil};
+    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, push_source: nil}], initiated: 0};
     append(smart_weapons_data_blocks, data_block);
 }
 
@@ -119,6 +119,14 @@ var get_data_block_from_pylon_idx = func (pylon_idx) {
         }
     }
     return 0;
+}
+
+var untarget_data_block = func(station, ordnance) {
+    for (var i = 0; i < size(pylons_a_g); i += 1) {
+        if (smart_weapons_data_blocks[i].pylon_idx == station) {
+            smart_weapons_data_blocks[i].data[ordnance] = {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, push_source: nil};
+        }
+    }
 }
 
 ## Initiate the A/G Mission Sets and Programs
@@ -138,6 +146,7 @@ var push_mission_program_to_station = func(mission_set, mission_program, station
     for (var i = 0; i < size(pylons_a_g); i += 1) {
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].data[ordnance] = data_block;
+            smart_weapons_data_blocks[i].data[ordnance].push_source = "CC MEM";
         }
     }
 }
