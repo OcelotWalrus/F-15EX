@@ -692,11 +692,12 @@ var F15HUD = {
                                                         obj.gs.show();
                                                         obj.gsOff.hide();
                                                     }
-                                                    obj.heading_tape_pointer.setTranslation (5.4*obj.clamp(geo.normdeg180(val.ILSCross-getprop("orientation/heading-deg")),-10,10), 0);
+                                                    obj.heading_tape_pointer.setTranslation(5.4*obj.clamp(geo.normdeg180(val.ILSCross-getprop("orientation/heading-deg")),-10,10), 0);
                                                 } else {
                                                     obj.gsGroup.setTranslation(0,0);
                                                     obj.gs.hide();
                                                     obj.gsOff.show();
+                                                    obj.heading_tape_pointer.setTranslation(0, 0);
                                                 }
                                             } else {
                                                 obj.ilsGroup.setTranslation(0,0);
@@ -705,10 +706,12 @@ var F15HUD = {
                                                 obj.gsGroup.setTranslation(0,0);
                                                 obj.gs.hide();
                                                 obj.gsOff.show();
+                                                obj.heading_tape_pointer.setTranslation(0, 0);
                                             }
                                             obj.localizer.show();
                                         } else {
                                             obj.localizer.hide();
+                                            obj.heading_tape_pointer.setTranslation(0, 0);
                                         }
                                       }),
             props.UpdateManager.FromHashList(["InstrumentedG", "CadcOwsMaximumG", "ThrustToWeightRatio"], 0.05, func(val)
