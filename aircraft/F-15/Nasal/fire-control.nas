@@ -746,7 +746,8 @@ var FireControl = {
 			    	# CCRP: weapon locked and ready
 			        me.distCCRP = getprop("sim/model/f15/armament/distCCRP");
 			        me.distCCRPLast = me.distCCRP;
-			        if (me.distCCRP == -1 or me.distCCRPLast == -1 or me.distCCRP >= 500 or me.distCCRP < me.distCCRPLast) {
+			        me.CRRPauto = aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 1;
+			        if ((me.distCCRP == -1 or me.distCCRPLast == -1 or me.distCCRP >= 500 or me.distCCRP < me.distCCRPLast) and me.CRRPauto) {
 			            printDebug("CCRP: Trigger was pressed, waiting for launch parameters as not fully ready yet");
                         if (me["distCCRPListen"] == nil) me.distCCRPListen = setlistener("sim/model/f15/armament/distCCRP", func (distCCRP) {
 

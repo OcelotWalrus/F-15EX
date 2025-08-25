@@ -89,20 +89,228 @@ var weapons_init = func() {
 ## Initiate A/G PACS
 ## Note: There are 8 slots for A/G PACS programs
 
-var pacs = [[], [], [], [], [], [], [], []];
-var i = 1;
-foreach(pacs_program; pacs) {
-    data_block = {program: i, selected_pylons: [], status: 0, release_mode: 0, release_step: 1, fuzing: 0};
-    # program: id of the program, from 1 to 8
-    # selected_pylons: vector containing selected pylons' ids
-    # status: current status of the program. 0 means unpopulated, 1 means populated
-    # release_mode: 0 means direct, 1 means auto (doesn't matter right now, auto would release bombs automatically when DLZ NEZ is reached)
-    # release_step: ripple count (how much we release per ripple button trigger)
-    # fuzing: 0 Nose/tail, 1 nose, 2 tail (doesn't matter right now)
-
-    i += 1;
+var pacs = [];
+var pacs_program_slots = 8;  # 8 A/G PACS programs available
+for (var i = 0; i < pacs_program_slots; i += 1) {
+    data_block = {program: i+1, selected_pylons: {pylon_12: nil, pylon_1: nil, pylon_3: nil, pylon_4: nil, pylon_5: nil, pylon_6: nil, pylon_7: nil, pylon_9: nil, pylon_15: nil, pylon_20: nil, pylon_21: nil, pylon_22: nil, pylon_23: nil, pylon_24: nil, pylon_25: nil}, delivery_mode: 0, release_sequence: 1, ripple_dist: 150, fuzing: 0, cluster_spin: 0, cluster_time: 0, cluster_height: 0, ordnance_type: nil, tarm: nil};
+    # NOTE: A single program can't mix up different ordnance types: if you got 2 AGM-84Es and 4 GBU-31s loaded, you'll need at least 1 program for the AGM-84Es and one for the GBU-31s
+    # program: id of the program, from 1 to 32
+    # selected_pylons: dict containing every A/G pylon. If nil, it's not selected, to select it, it's set to a vector containing sub ordnances idx ex. pylon_1: [0,1,2,3] for select a 4xGBU-39 rack on pylon 1.
+    # delivery_mode: 0 means direct, 1 means auto (doesn't matter right now, auto would release bombs automatically when DLZ NEZ is reached), 3 means CCIP (pipper)
+    # release_sequence:
+    #  0: 1/STA - one ordnance per selected station will be dropped simultaneously with each
+    #              press of the pickle button. So if two stations are programmed, one bomb will fall
+    #              from each of them etc.
+    #  1: Step - one ordnance will be dropped with each press of the pickle button, alternating
+    #            between the stations to maintain best possible balance
+    #  0: Ripple Single - will drop one ordnance at a time, alternating between stations, automatically every
+    #             ripple_dist feet traveled by the F-15, until no programmed ordnance is left,
+    #             as soon as a single press of the pickle button is done.
+    #  0: Ripple Multiple - will drop one ordnance by selected station simultaneously, automatically every
+    #             ripple_dist feet traveled by the F-15, until no programmed ordnance is left,
+    #             as soon as a single press of the pickle button is done.
+    # ripple_dist: how much feet in space we wait for a new ripple iteration (if release sequence is either ripple single or ripple multiple)
+    # fuzing:
+    #  0: Nose - Inhibits deployment of ballots/fins for MK82AIRs and MK82SEs  (both nose and center fuzing units energized)
+    #  1: Tail - Allows deployment of ballots/fins for MK82AIRs and MK82SEs  (only tail fuzing units energized)
+    #  2: Nose/Tail - Allows deployment of ballots/fins for MK82AIRs and MK82SEs  (nose, center and tail fuzing units energized)
+    #  3: Time - (Cluster Bomb Units only) sets the time bomb drop in seconds after which the
+    #             bomblets will be released. Uses cluster_time and cluster_spin.
+    #  4: Time - (Cluster Bomb Units only) determines the altitude (in feet MSL) at which the
+    #            bomblets will be released. Similarly to spin, the higher the altitude, the larger the
+    #            bomblet coverage, but smaller the density. Uses cluster_height and cluster_spin.
+    # cluster_spin: (Cluster Bomb Units only) chooses the speed (in RPM) with which the canister will rotate while
+    #               releasing the bomblets. The higher the speed, the larger area will be covered, but at
+    #               the expense of density. There are 6 different spin options
+    #               Is available and selectable but doesn't function because cluster munitions aren't properly implemented.
+    # 0 - 0 RPM
+    # 1 - 500 RPM
+    # 2 - 1,000 RPM
+    # 3 - 1,500 RPM
+    # 4 - 2,000 RPM
+    # 5 - 2,500 RPM
+    # cluster_time: (Cluster Bomb Units only) Is available and selectable but doesn't function because cluster munitions aren't properly implemented.
+    # 0 - "N":   .95s
+    # 1 - "O":  1.28s
+    # 2 - "P":  1.60s
+    # 3 - "R":  1.92s
+    # 4 - "S":  2.23s
+    # 5 - "T":  2.25s
+    # 6 - "U":  2.87s
+    # 7 - "V":  3.19s
+    # 8 - "X":  3.51s
+    # 9 - "Y":  3.83s
+    # 10 - "Z": 4.15s
+    # cluster_height: (Cluster Bomb Units only) Is available and selectable but doesn't function because cluster munitions aren't properly implemented.
+    # 0 - "A":    300ft
+    # 1 - "B":    500ft
+    # 2 - "C":    700ft
+    # 3 - "D":    900ft
+    # 4 - "E":  1,200ft
+    # 5 - "F":  1,500ft
+    # 6 - "G":  1,800ft
+    # 7 - "H":  2,200ft
+    # 8 - "J":  2,600ft
+    # 9 - "L":  3,000ft
+    # tarm: Time to Arm - How much time in seconds the ordances of the program will arm after drop
+    
+    append(pacs, data_block);
 }
 var pacs_current_program = 0;  # Program 1
+
+var pylon_in_program = func(pylon_idx) {  # Check if the input'd pylon is in the current PACS program
+
+    if (pylon_idx == 12) {
+        return pacs[pacs_current_program].selected_pylons.pylon_12 != nil;
+    } elsif (pylon_idx == 1) {
+        return pacs[pacs_current_program].selected_pylons.pylon_1 != nil;
+    } elsif (pylon_idx == 3) {
+        return pacs[pacs_current_program].selected_pylons.pylon_3 != nil;
+    } elsif (pylon_idx == 4) {
+        return pacs[pacs_current_program].selected_pylons.pylon_4 != nil;
+    } elsif (pylon_idx == 5) {
+        return pacs[pacs_current_program].selected_pylons.pylon_5 != nil;
+    } elsif (pylon_idx == 6) {
+        return pacs[pacs_current_program].selected_pylons.pylon_6 != nil;
+    } elsif (pylon_idx == 7) {
+        return pacs[pacs_current_program].selected_pylons.pylon_7 != nil;
+    } elsif (pylon_idx == 9) {
+        return pacs[pacs_current_program].selected_pylons.pylon_9 != nil;
+    } elsif (pylon_idx == 15) {
+        return pacs[pacs_current_program].selected_pylons.pylon_15 != nil;
+    } elsif (pylon_idx == 20) {
+        return pacs[pacs_current_program].selected_pylons.pylon_20 != nil;
+    } elsif (pylon_idx == 21) {
+        return pacs[pacs_current_program].selected_pylons.pylon_21 != nil;
+    } elsif (pylon_idx == 22) {
+        return pacs[pacs_current_program].selected_pylons.pylon_22 != nil;
+    } elsif (pylon_idx == 23) {
+        return pacs[pacs_current_program].selected_pylons.pylon_23 != nil;
+    } elsif (pylon_idx == 24) {
+        return pacs[pacs_current_program].selected_pylons.pylon_24 != nil;
+    } elsif (pylon_idx == 25) {
+        return pacs[pacs_current_program].selected_pylons.pylon_25 != nil;
+    }
+    return 0;
+}
+
+var select_pylon_in_program = func(pylon_idx) {
+    if (contains(displays.PACSWeaps, getprop("payload/armament/station/id-"~pylon_idx~"-set"))) {  # we're reusing LAD.nas's PACSWeaps variable (list of A/G PACS compatible ordnance)
+        return 0;
+    }
+
+    if (pacs[pacs_current_program].ordnance_type == nil or pacs[pacs_current_program].tarm == nil) {  # First time a station gets selected, we set the ordnance type for the program
+        pacs[pacs_current_program].ordnance_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+        type_lc = string.lc(getprop("payload/armament/station/id-"~pylon_idx~"-type"));
+        pacs[pacs_current_program].tarm = getprop("payload/armament/" ~ type_lc ~ "/arming-time-sec");
+    }
+
+    if (pacs[pacs_current_program].ordnance_type == getprop("payload/armament/station/id-"~pylon_idx~"-type")) {  # Ordnance type matches
+        if (pylon_idx == 12) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_12 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_12 = [0];
+            }
+        } elsif (pylon_idx == 1) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_1 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_1 = [0];
+            }
+        } elsif (pylon_idx == 3) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_3 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_3 = [0];
+            }
+        } elsif (pylon_idx == 4) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_4 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_4 = [0];
+            }
+        } elsif (pylon_idx == 5) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_5 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_5 = [0];
+            }
+        } elsif (pylon_idx == 6) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_6 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_6 = [0];
+            }
+        } elsif (pylon_idx == 7) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_7 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_7 = [0];
+            }
+        } elsif (pylon_idx == 9) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_9 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_9 = [0];
+            }
+        } elsif (pylon_idx == 15) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_15 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_15 = [0];
+            }
+        } elsif (pylon_idx == 20) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_20 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_20 = [0];
+            }
+        } elsif (pylon_idx == 21) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_21 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_21 = [0];
+            }
+        } elsif (pylon_idx == 22) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_22 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_22 = [0];
+            }
+        } elsif (pylon_idx == 23) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_23 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_23 = [0];
+            }
+        } elsif (pylon_idx == 24) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_24 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_24 = [0];
+            }
+        } elsif (pylon_idx == 25) {
+            if (pacs[pacs_current_program].selected_pylons.pylon_25 == nil) {
+                pacs[pacs_current_program].selected_pylons.pylon_25 = [0];
+            }
+        }
+    }
+    return 0;
+}
+
+var deselect_pylon_in_program = func(pylon_idx) {
+
+    if (((pacs[pacs_current_program].selected_pylons.pylon_12 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_1 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_3 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_4 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_5 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_6 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_7 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_9 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_15 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_20 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_21 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_22 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_23 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_24 == nil) + (pacs[pacs_current_program].selected_pylons.pylon_25 == nil)) == 14) {  # If we're deselecting the final station
+        pacs[pacs_current_program].ordnance_type = nil;
+        pacs[pacs_current_program].tarm = nil;
+    }
+
+    if (pylon_idx == 12) {
+        pacs[pacs_current_program].selected_pylons.pylon_12 = nil;
+    } elsif (pylon_idx == 1) {
+        pacs[pacs_current_program].selected_pylons.pylon_1 = nil;
+    } elsif (pylon_idx == 3) {
+        pacs[pacs_current_program].selected_pylons.pylon_3 = nil;
+    } elsif (pylon_idx == 4) {
+        pacs[pacs_current_program].selected_pylons.pylon_4 = nil;
+    } elsif (pylon_idx == 5) {
+        pacs[pacs_current_program].selected_pylons.pylon_5 = nil;
+    } elsif (pylon_idx == 6) {
+        pacs[pacs_current_program].selected_pylons.pylon_6 = nil;
+    } elsif (pylon_idx == 7) {
+        pacs[pacs_current_program].selected_pylons.pylon_7 = nil;
+    } elsif (pylon_idx == 9) {
+        pacs[pacs_current_program].selected_pylons.pylon_9 = nil;
+    } elsif (pylon_idx == 15) {
+        pacs[pacs_current_program].selected_pylons.pylon_15 = nil;
+    } elsif (pylon_idx == 20) {
+        pacs[pacs_current_program].selected_pylons.pylon_20 = nil;
+    } elsif (pylon_idx == 21) {
+        pacs[pacs_current_program].selected_pylons.pylon_21 = nil;
+    } elsif (pylon_idx == 22) {
+        pacs[pacs_current_program].selected_pylons.pylon_22 = nil;
+    } elsif (pylon_idx == 23) {
+        pacs[pacs_current_program].selected_pylons.pylon_23 = nil;
+    } elsif (pylon_idx == 24) {
+        pacs[pacs_current_program].selected_pylons.pylon_24 = nil;
+    } elsif (pylon_idx == 25) {
+        pacs[pacs_current_program].selected_pylons.pylon_25 = nil;
+    }
+    return 0;
+}
 
 ## Initiate A/G Smart Weapons data blocks
 var pylons_a_g = [12,1,3,4,5,6,7,9,15,20,21,22,23,24,25];  # A/G Hardpoints

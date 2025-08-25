@@ -40,6 +40,7 @@
 # Future features (TODO's) :
 # //General// :
 # - Calculate touch boxes shift only when main screens are changed for optimization
+# - Before running the long touch checks in every main screen, instead of only cheking if the screen's on, also check if the touch pos is at least inside that screen
 # //VSD Display// :
 # - ASE circles and Missile Time Of Launch
 # - Touching on steerpoints once will display their info page on the UFC, a second click within 3 seconds will select it as current steerpoint
@@ -91,6 +92,7 @@
 # Station 23 : UP R: 1775, 3000; UP L: 1605, 3000; DOWN R: 1775, 3315; DOWN L: 1605, 3315
 # Station 24 : UP R: 2035, 3000; UP L: 1865, 3000; DOWN R: 2035, 3315; DOWN L: 1865, 3315
 # Station 25 : UP R: 2290, 3000; UP L: 2125, 3000; DOWN R: 2290, 3315; DOWN L: 2125, 3315
+# /Smart Weapons Page Boxes/:
 # Next Ordnance Box: UP R: 740, 3420; UP L: 585, 3420; DOWN R: 740, 3520; DOWN L: 585, 3520
 # Next Mission Set Box: UP R: 290, 3410; UP L: 135, 3410; DOWN R: 290, 3510; DOWN L: 135, 3510
 # Next Mission Program Box: UP R: 500, 3410; UP L: 340, 3410; DOWN R: 500, 3510; DOWN L: 340, 3510
@@ -152,6 +154,8 @@ var populate_mode_box = [[995, 4840], [840, 4840], [840, 5040], [995, 5040]];
 var un_target_box = [[1430, 4840], [1275, 4840], [1275, 5040], [1430, 5040]];
 var loft_box = [[1875, 4840], [1685, 4840], [1685, 5040], [1875, 5040]];
 var armt_box = [[2365, 4815], [2150, 4815], [2150, 5040], [2365, 5040]];
+var next_program_box = [[830, 3425], [270, 3425], [270, 3505], [830, 3505]];
+var tarm_box = [[1010, 3760], [950, 3760], [950, 3835], [1010, 3835]];
 
 var typeLookup = { # database of known radar signatures
     # Aicraft
@@ -235,7 +239,8 @@ var chaff_lasts = {};  # Vector containing data about each radar contact's uniqu
 var chaffs_pos = [];  # Vector containing data about chaffs (their geographic position
                   # and the time at which they were released. If they're expired, they're removed)
 
-var SmartWeaps = ["CBU-105", "GBU-31", "GBU-32", "GBU-54", "GBU-39", "AGM-84D", "AGM-84E", "AGM-88E", "AGM-154A", "AGM-158A", "AGM-158C"];  # List of smart weapons
+var SmartWeaps = ["CBU-105", "GBU-31", "GBU-32", "GBU-54", "GBU-39", "AGM-84D", "AGM-84E", "AGM-88E", "AGM-154A", "AGM-158A", "AGM-158C"];  # List of smart weapons  (all GPS/INS-guided)
+var PACSWeaps = ["MK-82", "MK-82AIR", "MK-83", "MK-84", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-32", "GBU-54", "GBU-39", "AGM-65B", "AGM-65D", "AGM-84D", "AGM-84E", "AGM-88E", "AGM-119A", "AGM-154A", "AGM-158A", "AGM-158C", "M151", "LAU-68C"];  # List of A/G PACS weapons
 
 # Preset Colors
 var prst_black = {"r": 0, "g": 0, "b": 0};
@@ -1789,6 +1794,7 @@ var LAD_Device = {
         m.SmartWeaponsCurrSubOrdnanceMax = 1;  # Number of ordnances in the current Smart Weapons selected station. Automatically gets computed in the Smart Weapons Page PACS loop
         m.SmartWeaponsPopulateMode = 0;  # How we populate the current Smart Weapon. 0: WPN mode; 1: CC mode; 2: TOO mode;
         m.SmartWeaponsPopulating = 0;  # If data's being written at the moment
+        m.SmartWeaponsUntargeting = 0;  # If data's being deleted
         
         m.SmartWeaponsCurrSet = 0;  # DTC Mission Set for CC populate mode
         m.SmartWeaponsCurrMission = 0;  # DTC Mission Program for CC populate mode
@@ -2017,8 +2023,67 @@ var LAD_Device = {
             .setVisible(1)
             .set("z-index",1)
             .setStrokeLineWidth(10);
+        m.pacs_smrt_wpns_un_tgt_box = m.PACSScreenSmartWeapons.createChild("path")
+            .moveTo(1355,2300*2+500-70-120+1000-225-150)
+            .lineTo(1355+150,2300*2+500-70-120+1000-225-150)
+            .lineTo(1355+150,2300*2+500-70-120+1000-225+150)
+            .lineTo(1355-150,2300*2+500-70-120+1000-225+150)
+            .lineTo(1355-150,2300*2+500-70-120+1000-225-150)
+            .lineTo(1355,2300*2+500-70-120+1000-225-150)
+            .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+            .setVisible(1)
+            .set("z-index",1)
+            .setStrokeLineWidth(10);
+            
+        
+        # Screen used by A/G PACS page
+        m.PACSScreenAGPacs = m.svg.createGroup();
+        m.pacs_smrt_wpns_seperator_2 = m.PACSScreenAGPacs.createChild("path")
+            .moveTo(325,4150)
+            .lineTo(1355*2-325,4150)
+            .set("z-index",0)
+            .setVisible(1)
+            .setStrokeLineWidth(11)
+            .setColor(prst_white.r,prst_white.g,prst_white.b);
+        m.pacs_high_p = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(125, 1.4)
+            .setText("HIGH 510P")
+            .setAlignment("center-center")
+            .setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b)
+            .setTranslation(1355,4210)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_curr_program = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(125, 1.4)
+            .setText("PROG 1")
+            .setAlignment("center-center")
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
+            .setTranslation(325+125,4210)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_info_line_one = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(110, 1.4)
+            .setText("          LOFT 0°")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(325+125+115-50,4440)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_info_line_two = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(110, 1.4)
+            .setText("          TARM 2.0SEC")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(325+125+115-50,4545)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
 
         m.PACSScreenSmartWeapons.setVisible(0);
+        m.PACSScreenAGPacs.setVisible(0);
         m.pacs_mode_text.setVisible(1);
         m.pacs_arming_time.setVisible(0);
         m.pacs_chaff.setVisible(1);
@@ -2703,15 +2768,28 @@ update_lad = func() {
                 }
                 var armt_box = armt_box_new;
                 
+                var next_program_box_new = [];
+                point_count = 0;  # vector id
+                foreach(point; next_program_box) {
+                    append(next_program_box_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var next_program_box = next_program_box_new;
+                
+                var tarm_box_new = [];
+                point_count = 0;  # vector id
+                foreach(point; tarm_box) {
+                    append(tarm_box_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var tarm_box = tarm_box_new;
+                
                 if (point_in_quad(LADCanvas.screen_touch_pos, page_indicator_box)) {
                     if (LADCanvas.PACSmode == 4) {  # Wrap up
                         LADCanvas.PACSmode = 0;
                     } else {
                         LADCanvas.PACSmode += 1;
                     }
-                } elsif (LADCanvas.PACSmode == 2 and point_in_quad(LADCanvas.screen_touch_pos, station_12_box)) {  # We touched that box, and we're on the Smart Weapons PACS page
-                    LADCanvas.SmartWeaponsCurrPylon = 12;
-                    LADCanvas.SmartWeaponsCurrSubOrdnance = 0;  # Reset to 0 cause we're changing stations
                 } elsif (LADCanvas.PACSmode == 2 and point_in_quad(LADCanvas.screen_touch_pos, station_12_box)) {  # We touched that box, and we're on the Smart Weapons PACS page
                     LADCanvas.SmartWeaponsCurrPylon = 12;
                     LADCanvas.SmartWeaponsCurrSubOrdnance = 0;  # Reset to 0 cause we're changing stations
@@ -2788,6 +2866,114 @@ update_lad = func() {
                 } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 1 and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {
                     LADCanvas.SmartWeaponsPopulating = 1;
                     settimer(func {aircraft.push_mission_program_to_station(displays.LADCanvas.SmartWeaponsCurrSet, displays.LADCanvas.SmartWeaponsCurrMission, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 3);
+                } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 0 and point_in_quad(LADCanvas.screen_touch_pos, un_target_box)) {
+                    LADCanvas.SmartWeaponsUntargeting = 1;
+                    settimer(func{ aircraft.untarget_data_block(displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance); displays.LADCanvas.SmartWeaponsUntargeting = 0;} , 3);
+                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 0 or LADCanvas.SmartWeaponsPopulateMode == 2) and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {
+                    LADCanvas.PACSmode = 3;
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_12_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(12)) {
+                        aircraft.deselect_pylon_in_program(12);
+                    } else {
+                        aircraft.select_pylon_in_program(12);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_1_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(1)) {
+                        aircraft.deselect_pylon_in_program(1);
+                    } else {
+                        aircraft.select_pylon_in_program(1);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_3_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(3)) {
+                        aircraft.deselect_pylon_in_program(3);
+                    } else {
+                        aircraft.select_pylon_in_program(3);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_4_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(4)) {
+                        aircraft.deselect_pylon_in_program(4);
+                    } else {
+                        aircraft.select_pylon_in_program(4);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_5_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(5)) {
+                        aircraft.deselect_pylon_in_program(5);
+                    } else {
+                        aircraft.select_pylon_in_program(5);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_6_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(6)) {
+                        aircraft.deselect_pylon_in_program(6);
+                    } else {
+                        aircraft.select_pylon_in_program(6);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_7_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(7)) {
+                        aircraft.deselect_pylon_in_program(7);
+                    } else {
+                        aircraft.select_pylon_in_program(7);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_9_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(9)) {
+                        aircraft.deselect_pylon_in_program(9);
+                    } else {
+                        aircraft.select_pylon_in_program(9);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_15_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(15)) {
+                        aircraft.deselect_pylon_in_program(15);
+                    } else {
+                        aircraft.select_pylon_in_program(15);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_20_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(20)) {
+                        aircraft.deselect_pylon_in_program(20);
+                    } else {
+                        aircraft.select_pylon_in_program(20);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_21_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(21)) {
+                        aircraft.deselect_pylon_in_program(21);
+                    } else {
+                        aircraft.select_pylon_in_program(21);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_22_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(22)) {
+                        aircraft.deselect_pylon_in_program(22);
+                    } else {
+                        aircraft.select_pylon_in_program(22);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_23_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(23)) {
+                        aircraft.deselect_pylon_in_program(23);
+                    } else {
+                        aircraft.select_pylon_in_program(23);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_24_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(24)) {
+                        aircraft.deselect_pylon_in_program(24);
+                    } else {
+                        aircraft.select_pylon_in_program(24);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, station_25_box)) {  # We touched that box, and we're on the A/G PACS page
+                    if (aircraft.pylon_in_program(25)) {
+                        aircraft.deselect_pylon_in_program(25);
+                    } else {
+                        aircraft.select_pylon_in_program(25);
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, next_program_box)) {
+                    if (aircraft.pacs_current_program == (aircraft.pacs_program_slots-1)) {  # Wrap up
+                        aircraft.pacs_current_program = 0;
+                    } else {
+                        aircraft.pacs_current_program += 1;
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and aircraft.pacs[aircraft.pacs_current_program].tarm != nil and point_in_quad(LADCanvas.screen_touch_pos, tarm_box)) {
+                    # Arming time goes on a .25 sec step from .25 to 25.
+                    if (aircraft.pacs[aircraft.pacs_current_program].tarm == 25) {  # Wrap up
+                        aircraft.pacs[aircraft.pacs_current_program].tarm = .25;
+                    } else {
+                        aircraft.pacs[aircraft.pacs_current_program].tarm += .25;
+                    }
                 }
             }
         }
@@ -3030,16 +3216,19 @@ update_lad = func() {
             PACS_ON = 1;
             LADCanvas.PACSScreen.setTranslation(0,LADCanvas.PACSDisplayTransUp+620);  # Default position's position for the left main screen
             LADCanvas.PACSScreenSmartWeapons.setTranslation(0,LADCanvas.PACSDisplayTransUp+620);  # Default position's position for the left main screen
+            LADCanvas.PACSScreenAGPacs.setTranslation(0,LADCanvas.PACSDisplayTransUp+620);  # Default position's position for the left main screen
             LADCanvas.PACSDisplayTrans = 0;
         } elsif (main_screens.center == "PACS") {
             PACS_ON = 1;
             LADCanvas.PACSScreen.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
             LADCanvas.PACSScreenSmartWeapons.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
+            LADCanvas.PACSScreenAGPacs.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
             LADCanvas.PACSDisplayTrans = 8192/3;
         } elsif (main_screens.right == "PACS") {
             PACS_ON = 1;
             LADCanvas.PACSScreen.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
             LADCanvas.PACSScreenSmartWeapons.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
+            LADCanvas.PACSScreenAGPacs.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
             LADCanvas.PACSDisplayTrans = (8192/3)*2;
         } else {
             PACS_ON = 0;
@@ -4856,9 +5045,9 @@ update_lad = func() {
             LADCanvas.pacs_chaff.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[13]/count")));
             LADCanvas.pacs_flare.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[5]/count")));
             LADCanvas.pacs_rounds.setText(sprintf("ROUNDS %03d", getprop("sim/model/f15/systems/gun/rounds")));
-            LADCanvas.pacs_chaff.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_flare.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_rounds.setVisible(LADCanvas.PACSmode != 2);
+            LADCanvas.pacs_chaff.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_flare.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_rounds.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
 
             tank_center_text = "OUT";
             tank_right_text = "OUT";
@@ -4881,43 +5070,43 @@ update_lad = func() {
             LADCanvas.pacs_fuel_amount_left.setText(sprintf("L %s", tank_left_text));
             LADCanvas.pacs_fuel_amount_center.setText(sprintf("C %s", tank_center_text));
             LADCanvas.pacs_fuel_amount_right.setText(sprintf("R %s", tank_right_text));
-            LADCanvas.pacs_fuel_amount_left.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_fuel_amount_center.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_fuel_amount_right.setVisible(LADCanvas.PACSmode != 2);
+            LADCanvas.pacs_fuel_amount_left.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_fuel_amount_center.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_fuel_amount_right.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
 
-            LADCanvas.navpod_mounted_text.setVisible(getprop("/sim/model/f15/stores/nav-mounted") and LADCanvas.PACSmode != 2);
-            LADCanvas.tpod_mounted_text.setVisible(getprop("sim/model/f15/stores/tgp-mounted") and LADCanvas.PACSmode != 2);
-            LADCanvas.irst_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/irst-mounted") and LADCanvas.PACSmode != 2);
-            LADCanvas.ecm_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/ecm-mounted") and LADCanvas.PACSmode != 2);
+            LADCanvas.navpod_mounted_text.setVisible(getprop("/sim/model/f15/stores/nav-mounted") and LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.tpod_mounted_text.setVisible(getprop("sim/model/f15/stores/tgp-mounted") and LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.irst_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/irst-mounted") and LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.ecm_pod_mounted_text.setVisible(getprop("sim/model/f15/stores/ecm-mounted") and LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
             
-            LADCanvas.pacs_arm_1.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_arm_2.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_arm_3.setVisible(LADCanvas.PACSmode != 2);
+            LADCanvas.pacs_arm_1.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_arm_2.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_arm_3.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
             
-            LADCanvas.pacs_wing_left.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_wing_right.setVisible(LADCanvas.PACSmode != 2);
-            LADCanvas.pacs_wing_left_alt.setVisible(LADCanvas.PACSmode == 2);
-            LADCanvas.pacs_wing_right_alt.setVisible(LADCanvas.PACSmode == 2);
+            LADCanvas.pacs_wing_left.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_wing_right.setVisible(LADCanvas.PACSmode != 2 and LADCanvas.PACSmode != 3);
+            LADCanvas.pacs_wing_left_alt.setVisible(LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3);
+            LADCanvas.pacs_wing_right_alt.setVisible(LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3);
             
             # SMRT WPNS page needs room so it translates the screen up
-            LADCanvas.PACSDisplayTransUp = (LADCanvas.PACSmode == 2) * -1355;
+            LADCanvas.PACSDisplayTransUp = (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * -1355;
             
             # These need to move down to correct visuals
-            LADCanvas.pacs_station_boxes_up_text[3].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
-            LADCanvas.pacs_station_boxes_down_text[3].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
-            LADCanvas.pacs_station_boxes_down[3].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
-            LADCanvas.pacs_station_boxes_up[3].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
-            LADCanvas.pacs_station_boxes_up_text[7].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
-            LADCanvas.pacs_station_boxes_down_text[7].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
-            LADCanvas.pacs_station_boxes_down[7].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
-            LADCanvas.pacs_station_boxes_up[7].setTranslation(0, (LADCanvas.PACSmode == 2) * 420);
+            LADCanvas.pacs_station_boxes_up_text[3].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
+            LADCanvas.pacs_station_boxes_down_text[3].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
+            LADCanvas.pacs_station_boxes_down[3].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
+            LADCanvas.pacs_station_boxes_up[3].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
+            LADCanvas.pacs_station_boxes_up_text[7].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
+            LADCanvas.pacs_station_boxes_down_text[7].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
+            LADCanvas.pacs_station_boxes_down[7].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
+            LADCanvas.pacs_station_boxes_up[7].setTranslation(0, (LADCanvas.PACSmode == 2 or LADCanvas.PACSmode == 3) * 420);
             
             LADCanvas.PACSScreenSmartWeapons.setVisible(LADCanvas.PACSmode == 2);
+            LADCanvas.PACSScreenAGPacs.setVisible(LADCanvas.PACSmode == 3);
 
             # A/A mode updates
 
             if (LADCanvas.PACSmode == 0) {  # A/A overview mode updates
-                LADCanvas.pacs_smrt_wpns_seperator.setVisible(0);
                 LADCanvas.pacs_arm_1.setText(sprintf("SRM %02d", getprop("sim/model/f15/systems/armament/aim9/count")));
                 LADCanvas.pacs_arm_2.setText(sprintf("AAM %02d", getprop("sim/model/f15/systems/armament/aim120/count")));
                 LADCanvas.pacs_arm_3.setText(sprintf("GRND %02d", getprop("sim/model/f15/systems/armament/agm/count")));
@@ -5036,8 +5225,6 @@ update_lad = func() {
                     }
                 }
             } elsif (LADCanvas.PACSmode == 1) {  # A/G overview mode updates
-                LADCanvas.pacs_smrt_wpns_seperator.setVisible(0);
-
                 LADCanvas.aim9_cool_box.setVisible(0);
                 LADCanvas.aim9_cool_text.setVisible(0);
                 LADCanvas.pacs_arm_1.setText(sprintf("SRM %02d", getprop("sim/model/f15/systems/armament/aim9/count")));
@@ -5216,6 +5403,8 @@ update_lad = func() {
                             LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(1);
                             LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(1);
                             LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(1);
+                            LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(0);
+                            LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
                             
                             # We determine whether the currently selected ordnance of the current station got the vector it needs
                             # If not, we create it
@@ -5292,6 +5481,7 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(1);
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
+                            LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
                         if (curr_mission_block.initialized) {
                             var mission_coords = curr_mission_block.gps;
                             var mission_mgrs_coords = decimal_lat_lon_to_mgrs(mission_coords.lat(), mission_coords.lon());
@@ -5325,6 +5515,8 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
                     }
                 } else {
                     LADCanvas.pacs_smrt_wpns_station.setText("STA: NIL");
@@ -5338,6 +5530,8 @@ update_lad = func() {
                     LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
                     LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                     LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                    LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(0);
+                    LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
                 }
                 
                 # Update the down buttons
@@ -5377,10 +5571,72 @@ update_lad = func() {
                 }
                 LADCanvas.pacs_smrt_wpns_loft.setText(loft_txt);
                 
+            } elsif (LADCanvas.PACSmode == 3) {  # "ARMT"/A/G PACS
+                var master_arm = getprop("sim/model/f15/controls/armament/master-arm-switch");
+                var current_pacs_program_data = aircraft.pacs[aircraft.pacs_current_program];
+                
+                LADCanvas.pacs_smrt_wpns_seperator_2.setVisible(1);
+                LADCanvas.pacs_high_p.setVisible(1);
+                LADCanvas.pacs_curr_program.setVisible(1);
+                LADCanvas.pacs_curr_program.setText(sprintf("PROG %02d", aircraft.pacs_current_program+1));
+                
+                LADCanvas.pacs_info_line_one.setVisible(1);
+                LADCanvas.pacs_info_line_two.setVisible(1);
+                var tarm_text = "          TARM XX.XSEC";
+                if (current_pacs_program_data.tarm != nil) {
+                    var tarm_text = sprintf("          TARM %02.1fSEC", current_pacs_program_data.tarm);
+                }
+                LADCanvas.pacs_info_line_two.setText(tarm_text);
+                
+                LADCanvas.aim9_cool_box.setVisible(0);
+                LADCanvas.aim9_cool_text.setVisible(0);
+                LADCanvas.pacs_arming_time.setVisible(0);
+                
+                
+                # Draw each station
+                foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
+                    loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+                    loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
+                    pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
+                    set_text = aircraft.determine_set_text(loaded_set);
+                    status_text = "";
+                    status_text_norm = aircraft.get_status_for_pylon(pylon_idx);
+                    if (status_text_norm == 0) {
+                        status_text = "FAIL";
+                    } elsif (typeof(status_text_norm) == "vector" and status_text_norm[0] == 0) {  # not initiated
+                        status_text = "STRT";
+                    } elsif (typeof(status_text_norm) == "vector" and status_text_norm[0] == 1 and status_text_norm[1] == 1) {  # initiated but no data
+                        status_text = "INIT";
+                    } elsif (typeof(status_text_norm) == "vector" and status_text_norm[0] == 1 and status_text_norm[1] == 0 and !pylon_ready) {  # initiated and data but not active
+                        status_text = "STBY";
+                    } elsif (typeof(status_text_norm) == "vector" and status_text_norm[0] == 1 and status_text_norm[1] == 0 and pylon_ready) {  # initiated and data and active
+                        status_text = "RDY";
+                    }
+                    
+                    if (set_text != 0 and containsVector(PACSWeaps, getprop("payload/armament/station/id-"~pylon_idx~"-type"))) {  # is a valid A/G ordnance - we also verify if it's a smart weapon
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText(set_text);
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setText(status_text);
+                        if (aircraft.pylon_in_program(pylon_idx)) {
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(1);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(1);
+                        } else {
+                            LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                            LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                        }
+                    } else {
+                        LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
+                        LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
+                    }
+                }
             }
         } else {
             LADCanvas.PACSScreen.setVisible(0);
             LADCanvas.PACSScreenSmartWeapons.setVisible(0);
+            LADCanvas.PACSScreenAGPacs.setVisible(0);
         }
         LADCanvas.BitScreen.setVisible(0);
     } elsif (!getprop("sim/model/f15/avionics/bit-done")) {
