@@ -317,9 +317,7 @@
     <binding>
       <command type="string">nasal</command>
       <script type="string">
-        if (getprop("sim/model/f15/controls/armament/weapon-selector") == 5) {
-            pylons.fcs.toggleDropMode();
-        } elsif (getprop("sim/model/f15/controls/armament/weapon-selector") == 0) {
+        if (getprop("sim/model/f15/controls/armament/weapon-selector") == 0) {
             guns_mode = getprop("sim/model/f15/armament/gun-sight");
             if (guns_mode == 0) {
                 setprop("sim/model/f15/armament/gun-sight", 1);
