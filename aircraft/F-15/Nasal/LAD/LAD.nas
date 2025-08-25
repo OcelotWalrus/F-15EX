@@ -3166,17 +3166,19 @@ update_lad = func() {
                 LADCanvas.vsd_cursor_bearing.setVisible(1);
             }
             
-            # Update AzFieldOffset depending on the cursor's placement
+            # Update AzFieldOffset depending on the cursor's placement (only if we're not HMD-slaving the radar)
             
-            # Clamp the value
-            az_deg_offset = getprop("sim/model/f15/controls/LAD/cursor-deg-az");
-            max_allowable_az_offset = (120-awg_9.AzField.getValue()) / 2;  # How much the antennae can go left or right
-            if (az_deg_offset > max_allowable_az_offset) {
-                az_deg_offset = max_allowable_az_offset;
-            } elsif (az_deg_offset < -max_allowable_az_offset) {
-                az_deg_offset = -max_allowable_az_offset;
+            if (!getprop("sim/model/f15/avionics/hmd-slaving")) {
+                # Clamp the value
+                az_deg_offset = getprop("sim/model/f15/controls/LAD/cursor-deg-az");
+                max_allowable_az_offset = (120-awg_9.AzField.getValue()) / 2;  # How much the antennae can go left or right
+                if (az_deg_offset > max_allowable_az_offset) {
+                    az_deg_offset = max_allowable_az_offset;
+                } elsif (az_deg_offset < -max_allowable_az_offset) {
+                    az_deg_offset = -max_allowable_az_offset;
+                }
+                awg_9.AzFieldOffset.setValue(az_deg_offset);
             }
-            awg_9.AzFieldOffset.setValue(az_deg_offset);
             
 
             # Update some texts giving info about ourselves

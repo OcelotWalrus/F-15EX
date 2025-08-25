@@ -371,17 +371,17 @@ var rdr_loop = func(notification) {
 	    var hmd_h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
         var hmd_p = getprop("sim/current-view/pitch-offset-deg");
         
-        # Clamp the values
+        # Clamp the values to physical limits
         
-        if (hmd_h > 55) {
-            var hmd_h = 55;
-        } elsif (hmd_h < -55) {
-            var hmd_h = -55;
+        if (hmd_h > 60) {
+            var hmd_h = 60;
+        } elsif (hmd_h < -60) {
+            var hmd_h = -60;
         }
-        if (hmd_p > 55) {
-            var hmd_p = 55;
-        } elsif (hmd_p < -55) {
-            var hmd_p = -55;
+        if (hmd_p > 60) {
+            var hmd_p = 60;
+        } elsif (hmd_p < -60) {
+            var hmd_p = -60;
         }
         
         az_deg_offset = hmd_h;
@@ -392,9 +392,6 @@ var rdr_loop = func(notification) {
             az_deg_offset = -max_allowable_az_offset;
         }
         awg_9.AzFieldOffset.setValue(az_deg_offset);
-        
-        setprop("sim/model/f15/controls/LAD/cursor-deg-az", hmd_h);
-        setprop("sim/model/f15/controls/LAD/cursor-deg-el", -hmd_p);
         awg_9.HoFieldOffset.setValue(-hmd_p);
 	}
 	
