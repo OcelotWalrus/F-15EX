@@ -56,6 +56,10 @@
 # - Add the Jettison page (waiting for the interiors to finish because there are switches that configure jettison in there).
 # ---------------------------
 # Coordinates of touchable zones: (all measures are in pixels)
+# //Screen Selector Display// :
+# Left: UP R: 1795, 2370; UP L: 920, 2370; DOWN R: 1795, 3285; DOWN L: 920, 3285
+# Center: UP R: 4530, 2370; UP L: 3655, 2370; DOWN R: 4530, 3285; DOWN L: 3655, 3285
+# Right: UP R: 7255, 2370; UP L: 6395, 2370; DOWN R: 7255, 3285; DOWN L: 6395, 3285
 # //Upper Panel Display// :
 # Time Box : UP R: 375, 0; UP L: 0, 0; DOWN R: 375, 475; DOWN L: 0, 475
 # Caution Box : UP R: 1045, 0; UP L: 405, 0; DOWN R: 1045, 475; DOWN L: 405, 475
@@ -71,7 +75,7 @@
 # //PACS Display// :
 # /Main Page/:
 # Page Indicator (with no shift, shift is taken in account in the active code) : UP R: 730, 2490; UP L: 30, 2490; DOWN R: 730, 1610; DOWN L: 30, 1610
-# /Smart Weapons Page Station Boxes/:
+# /A.G PACS and Smart Weapons Page Boxes/:
 # Station 12 : UP R: 800, 2275; UP L: 590, 2275; DOWN R: 800, 2600; DOWN L: 590, 2600
 # Station 1 : UP R: 1170, 1480; UP L: 905, 1480; DOWN R: 1170, 1890; DOWN L: 905, 1890
 # Station 3 : UP R: 1315, 605; UP L: 1105, 605; DOWN R: 1315, 905; DOWN L: 1105, 905
@@ -95,11 +99,19 @@
 # Un-target Box: UP R: 1430, 4840; UP L: 1275, 4840; DOWN R: 1430, 5040; DOWN L: 1275, 5040
 # Loft Box: UP R: 1875, 4840; UP L: 1685, 4840; DOWN R: 1875, 5040; DOWN L: 1685, 5040
 # Armt Box: UP R: 2365, 4815; UP L: 2150, 4815; DOWN R: 2365, 5040; DOWN L: 2150, 5040
+# /A.G PACS Page Boxes/
+# Next Program Box: UP R: 830, 3425; UP L: 270, 3425; DOWN R: 830, 3505; DOWN L: 270, 3505
+# TARM Box: UP R: 1010, 3760; UP L: 950, 3760; DOWN R: 1010, 3835; DOWN L: 950, 3835
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
 
 ## Constant Variables
+
+#Screen Selector
+var left_sel_box = [[1795, 2370], [920, 2370], [920, 3285], [1795, 3285]];
+var center_sel_box = [[4530, 2370], [3655, 2370], [3655, 3285], [4530, 3285]];
+var right_sel_box = [[7255, 2370], [6395, 2370], [6395, 3285], [7255, 3285]];
 
 #Upper box
 var time_box = [[375, 0], [0, 0], [0, 475], [375, 475]];
@@ -275,12 +287,70 @@ var LAD_Device = {
         m.svg = canvas.new(LAD_Device.canvas_settings);
         m.svg.addPlacement(placement);
 
-        m.svg.setColorBackground(prst_black.r,prst_black.g,prst_black.b, 1);  # dark-dark gray
+        m.svg.setColorBackground(0,1/255,12/255, 205/255);  # dark-dark gray
 
         m.screen_touch_pos = [0, 0];  # Position of the "cursor". Where the pilot touched the screen in X an Y coordinates
 
         ## Built-in-test layer
         m.BitScreen = m.svg.createGroup();
+        
+        # Main Screens Selection layer
+        m.ScreensSel = m.svg.createGroup();
+        m.ScreenSelecting = 1;  # Whether pilot is selected LAD screens. Bool per default for startup
+        m.LeftSelText = m.ScreensSel.createChild("text")
+            .setFontSize(600, 1.4)
+            .setText("VSD")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(677*2,2262+500+75)
+            .setVisible(1)
+            .setFont(aircraft.HUDFont);
+        m.LeftSelBox = m.ScreensSel.createChild("path")
+            .moveTo(677*2,2262+500+75-475)
+            .lineTo(677*2+475,2262+500+75-475)
+            .lineTo(677*2+475,2262+500+75+475)
+            .lineTo(677*2-475,2262+500+75+475)
+            .lineTo(677*2-475,2262+500+75-475)
+            .lineTo(677*2,2262+500+75-475)
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setStrokeLineWidth(25)
+            .setVisible(1);
+        m.CenterSelText = m.ScreensSel.createChild("text")
+            .setFontSize(600, 1.4)
+            .setText("PACS")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(677*2+(8192/3),2262+500+75)
+            .setVisible(1)
+            .setFont(aircraft.HUDFont);
+        m.CenterSelBox = m.ScreensSel.createChild("path")
+            .moveTo(677*2+(8192/3),2262+500+75-475)
+            .lineTo(677*2+(8192/3)+475,2262+500+75-475)
+            .lineTo(677*2+(8192/3)+475,2262+500+75+475)
+            .lineTo(677*2+(8192/3)-475,2262+500+75+475)
+            .lineTo(677*2+(8192/3)-475,2262+500+75-475)
+            .lineTo(677*2+(8192/3),2262+500+75-475)
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setStrokeLineWidth(25)
+            .setVisible(1);
+        m.RightSelText = m.ScreensSel.createChild("text")
+            .setFontSize(600, 1.4)
+            .setText("HSD")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(677*2+((8192/3)*2),2262+500+75)
+            .setVisible(1)
+            .setFont(aircraft.HUDFont);
+        m.RightSelBox = m.ScreensSel.createChild("path")
+            .moveTo(677*2+((8192/3)*2),2262+500+75-475)
+            .lineTo(677*2+((8192/3)*2)+475,2262+500+75-475)
+            .lineTo(677*2+((8192/3)*2)+475,2262+500+75+475)
+            .lineTo(677*2+((8192/3)*2)-475,2262+500+75+475)
+            .lineTo(677*2+((8192/3)*2)-475,2262+500+75-475)
+            .lineTo(677*2+((8192/3)*2),2262+500+75-475)
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setStrokeLineWidth(25)
+            .setVisible(1);
 
         ## The upper panel, it's static and displays basic useful information
         ## Are in order from left to right
@@ -1975,6 +2045,9 @@ var LAD_Device = {
         m.HSDDisplayTrans = 0;
         m.PACSDisplayTrans = 0;
         m.PACSDisplayTransUp = 0;
+        
+        # Buttons status
+        m.LADButton00Pressed = 0;
 
         return m;
     },
@@ -2300,6 +2373,86 @@ update_lad = func() {
         if (getprop("sim/model/f15/controls/LAD/screen-touch-cmd") == 1) {  # Screen has been touched
             setprop("sim/model/f15/controls/LAD/screen-touch-cmd", 0);  # Reset touch trigger command property
             LADCanvas.screen_touch_pos = [getprop("sim/model/f15/controls/LAD/screen-touch-x"), getprop("sim/model/f15/controls/LAD/screen-touch-y")];  # Update the "cursor"'s pos
+            
+            # Screen Selector Touch boxes
+            if (LADCanvas.ScreenSelecting) {
+                if (point_in_quad(LADCanvas.screen_touch_pos, left_sel_box)) {
+                    if (main_screens.left == "VSD") {
+                        main_screens.left = "HSD";
+                        if (main_screens.center == "HSD") {
+                            main_screens.center = "VSD";
+                        } elsif (main_screens.right == "HSD") {
+                            main_screens.right = "VSD";
+                        }
+                    } elsif (main_screens.left == "HSD") {
+                        main_screens.left = "PACS";
+                        if (main_screens.center == "PACS") {
+                            main_screens.center = "HSD";
+                        } elsif (main_screens.right == "PACS") {
+                            main_screens.right = "HSD";
+                        }
+                    } elsif (main_screens.left == "PACS") {
+                        main_screens.left = "NIL";
+                    } elsif (main_screens.left == "NIL") {
+                        main_screens.left = "VSD";
+                        if (main_screens.center == "VSD") {
+                            main_screens.center = "NIL";
+                        } elsif (main_screens.right == "VSD") {
+                            main_screens.right = "NIL";
+                        }
+                    }
+                } elsif (point_in_quad(LADCanvas.screen_touch_pos, center_sel_box)) {
+                    if (main_screens.center == "VSD") {
+                        main_screens.center = "HSD";
+                        if (main_screens.left == "HSD") {
+                            main_screens.left = "VSD";
+                        } elsif (main_screens.right == "HSD") {
+                            main_screens.right = "VSD";
+                        }
+                    } elsif (main_screens.center == "HSD") {
+                        main_screens.center = "PACS";
+                        if (main_screens.left == "PACS") {
+                            main_screens.left = "HSD";
+                        } elsif (main_screens.right == "PACS") {
+                            main_screens.right = "HSD";
+                        }
+                    } elsif (main_screens.center == "PACS") {
+                        main_screens.center = "NIL";
+                    } elsif (main_screens.center == "NIL") {
+                        main_screens.center = "VSD";
+                        if (main_screens.left == "VSD") {
+                            main_screens.left = "NIL";
+                        } elsif (main_screens.right == "VSD") {
+                            main_screens.right = "NIL";
+                        }
+                    }
+                } elsif (point_in_quad(LADCanvas.screen_touch_pos, right_sel_box)) {
+                    if (main_screens.right == "VSD") {
+                        main_screens.right = "HSD";
+                        if (main_screens.center == "HSD") {
+                            main_screens.center = "VSD";
+                        } elsif (main_screens.left == "HSD") {
+                            main_screens.left = "VSD";
+                        }
+                    } elsif (main_screens.right == "HSD") {
+                        main_screens.right = "PACS";
+                        if (main_screens.center == "PACS") {
+                            main_screens.center = "HSD";
+                        } elsif (main_screens.left == "PACS") {
+                            main_screens.left = "HSD";
+                        }
+                    } elsif (main_screens.right == "PACS") {
+                        main_screens.right = "NIL";
+                    } elsif (main_screens.right == "NIL") {
+                        main_screens.right = "VSD";
+                        if (main_screens.center == "VSD") {
+                            main_screens.center = "NIL";
+                        } elsif (main_screens.left == "VSD") {
+                            main_screens.left = "NIL";
+                        }
+                    }
+                }
+            }
             
             # Upper Panel Touch boxes
             if (point_in_quad(LADCanvas.screen_touch_pos, ils_box)) {
@@ -2890,6 +3043,24 @@ update_lad = func() {
             LADCanvas.PACSDisplayTrans = (8192/3)*2;
         } else {
             PACS_ON = 0;
+        }
+        
+        ## Screen Selecting Display
+        
+        if (LADCanvas.LADButton00Pressed) {  # Up left LAD Button
+            LADCanvas.ScreenSelecting = !LADCanvas.ScreenSelecting;  # Toggle
+            LADCanvas.LADButton00Pressed = 0;
+        }
+        
+        LADCanvas.ScreensSel.setVisible(LADCanvas.ScreenSelecting);
+        if (LADCanvas.ScreenSelecting) {  # Don't display no screens if we're screen-selecting
+            VSD_ON = 0;
+            HSD_ON = 0;
+            PACS_ON = 0;
+            
+            LADCanvas.LeftSelText.setText(main_screens.left);
+            LADCanvas.CenterSelText.setText(main_screens.center);
+            LADCanvas.RightSelText.setText(main_screens.right);
         }
 
         ## VSD Updates
@@ -5219,6 +5390,7 @@ update_lad = func() {
         LADCanvas.HSDScreenTacticalDeployment.setVisible(0);
         LADCanvas.PACSScreen.setVisible(0);
         LADCanvas.BitScreen.setVisible(1);
+        LADCanvas.ScreensSel.setVisible(0);
         
         LADCanvas.BitScreen.removeAllChildren();
         LADCanvas.BitText = LADCanvas.BitScreen.createChild("text")
@@ -5239,6 +5411,13 @@ update_lad = func() {
             .setColorFill(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b);
     }
 }
+
+# Button Listeners
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton00", func (v) {
+    if (getprop("sim/model/f15/controls/LAD/buttons-pressed/LADButton00") == 1) {
+        displays.LADCanvas.LADButton00Pressed = 1;
+    }
+});
 
 LADCanvas = LAD_Device.new({"node": "LADImage"});
 update_loop_lad = maketimer(.15, update_lad);
