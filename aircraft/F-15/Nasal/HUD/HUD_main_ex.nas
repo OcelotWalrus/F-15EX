@@ -100,11 +100,11 @@ var F15HUD = {
                     "view": [256,296],
                     "mipmapping": 0,
                     });
-        obj.view = [0, 1.4000051983, -5];
+        obj.view = [0, 1.42195, -5.28];
         obj.canvas.addPlacement({"node": "HUDImage1"});
         obj.canvas.addPlacement({"node": "HUDImage2"});
         obj.canvas.setColorBackground(0.36, 1, 0.3, 0.00);
-        obj.FocusAtInfinity = 0;
+        obj.FocusAtInfinity = 1;
 # Create a group for the parsed elements
         obj.svg = obj.canvas.createGroup();
 
@@ -776,43 +776,42 @@ var F15HUD = {
 				"OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg", "NavigationMode", "TacanStationInRange", "TacanXShift", "TacanYShift"
 			], nil, func(val)
                                                         {
-														# Taken from the F-16's model and adapted by Jimmy L. Miles
-														# get all the active steerpoints
-														if (val.NavigationMode == 0) {  # if we're in normal nav mode
-															me.plan = flightplan();
-											                me.planSize = me.plan.getPlanSize();
-															for (me.j = 0; me.j < me.planSize;me.j+=1) {
-																me.wp = me.plan.getWP(me.j);
-																me.wpC = geo.Coord.new();
-																me.wpC.set_latlon(me.wp.lat,me.wp.lon);
-															}
-														}
 														# the Y position is still not accurate due to HUD being at an angle, but will have to do.
-													    if (steerpoints.getCurrentNumber() != 0 and getprop("autopilot/route-manager/active") and val.NavigationMode != 1) {  # and !hdp.getproper("dgft")
-															 obj.steerDir = steerpoints.getCurrentDirectionForHUD();
-															 obj.wpbear = obj.steerDir[0];
-															 if (obj.wpbear != nil) {
-																 obj.wpbear = geo.normdeg180(obj.wpbear-val.OrientationHeadingDeg);
-																 obj.tadpoleX = hudmath.HudMath.getCenterPosFromDegs(obj.wpbear,0)[0];
+													    if (flightplan().current > -1 and getprop("autopilot/route-manager/active") and val.NavigationMode != 1) {  # and !hdp.getproper("dgft")
+													         obj.plan = flightplan();
+													         obj.wp = obj.plan.getWP(steerpoints.getCurrentNumber()-1);
+													         if (obj.wp != nil) {
+                                                                obj.wpC = geo.Coord.new();
+                                                                if (obj.wp.alt_cstr != nil) {  # steerpoints don't necessarily got an altitude
+                                                                    obj.wpC.set_latlon(obj.wp.lat,obj.wp.lon,obj.wp.alt_cstr);
+                                                                } else {
+                                                                    obj.wpC.set_latlon(obj.wp.lat,obj.wp.lon,0);
+                                                                }
+															     obj.steerDir = [geo.aircraft_position().course_to(obj.wpC), vector.Math.getPitch(geo.aircraft_position(), obj.wpC)];
+															     obj.wpbear = geo.normdeg180(obj.steerDir[0] - val.OrientationHeadingDeg);
+															     if (obj.wpbear != nil) {
+																     obj.wpbear = geo.normdeg180(obj.wpbear-val.OrientationHeadingDeg);
+																     obj.tadpoleX = hudmath.HudMath.getCenterPosFromDegs(obj.wpbear,0)[0];
 
-																 if (obj.tadpoleX > sx * 0.20) {
-																	 obj.tadpoleX = sx * 0.20;
-																 } elsif (obj.tadpoleX < -sx * 0.20) {
-																	 obj.tadpoleX = -sx * 0.20;
-																 }
-																 obj.greatCircleSteeringCue.setTranslation(obj.tadpoleX, obj.VV_y);
-																 obj.greatCircleSteeringCue.setRotation(obj.wpbear*D2R);
-																 obj.greatCircleSteeringCue.show();
-																 if (obj.steerDir[1] != nil) {
-																	obj.steerCart = vector.Math.eulerToCartesian2(-obj.steerDir[0], obj.steerDir[1]);
-																	obj.steerLocal = vector.Math.yawPitchRollVector(val.OrientationHeadingDeg, -val.OrientationPitchDeg, -val.OrientationRollDeg, obj.steerCart);
-																	obj.steerLocalEuler = vector.Math.cartesianToEuler(obj.steerLocal);
-																	obj.steerHUD = hudmath.HudMath.getCenterPosFromDegs(obj.steerLocalEuler[0]==nil?0:geo.normdeg180(obj.steerLocalEuler[0]),obj.steerLocalEuler[1]);
-																	obj.steerPT.setTranslation(obj.steerHUD);
-																	obj.steerPT.show();
-																 } else {
-																	obj.steerPT.hide();
-																 }
+																     if (obj.tadpoleX > sx * 0.20) {
+																	     obj.tadpoleX = sx * 0.20;
+																     } elsif (obj.tadpoleX < -sx * 0.20) {
+																	     obj.tadpoleX = -sx * 0.20;
+																     }
+																     obj.greatCircleSteeringCue.setTranslation(obj.tadpoleX, obj.VV_y);
+																     obj.greatCircleSteeringCue.setRotation(obj.wpbear*D2R);
+																     obj.greatCircleSteeringCue.show();
+																     if (obj.wpC.alt() != 0) {
+																	    obj.steerCart = vector.Math.eulerToCartesian2(-obj.steerDir[0], obj.steerDir[1]);
+																	    obj.steerLocal = vector.Math.yawPitchRollVector(val.OrientationHeadingDeg, -val.OrientationPitchDeg, -val.OrientationRollDeg, obj.steerCart);
+																	    obj.steerLocalEuler = vector.Math.cartesianToEuler(obj.steerLocal);
+																	    obj.steerHUD = hudmath.HudMath.getCenterPosFromDegs(obj.steerLocalEuler[0]==nil?0:geo.normdeg180(obj.steerLocalEuler[0]),obj.steerLocalEuler[1]);
+																	    obj.steerPT.setTranslation(obj.steerHUD);
+																	    obj.steerPT.show();
+																     } else {
+																	    obj.steerPT.hide();
+																     }
+																}
 															 } else {
 																 obj.greatCircleSteeringCue.hide();
 																 obj.steerPT.hide();

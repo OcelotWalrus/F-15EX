@@ -707,19 +707,29 @@ var F15_HMD = {
 
                                       },
             func(val) {
-                                                 if (steerpoints.getCurrentNumber() != 0) {  # should have !hdp.getproper("dgft") TODO
-                                                    obj.stptPos = hudmath.HudMath.getDevFromCoord(steerpoints.getCurrentCoordForHUD(), val.HmdH, val.HmdP, {"OrientationRollDeg": val.OrientationRollDeg, "OrientationPitchDeg": val.OrientationPitchDeg, "OrientationHeadingDeg": val.OrientationHeadingDeg,}, geo.viewer_position());
-                                                    obj.stptPos[0] = geo.normdeg180(obj.stptPos[0]);
-                                                    obj.stptPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
-                                                    obj.stptPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                                                 if (flightplan().current > -1 and getprop("autopilot/route-manager/active")) {  # should have !hdp.getproper("dgft") TODO
+                                                    obj.plan = flightplan();
+                                                    obj.wp = obj.plan.getWP(steerpoints.getCurrentNumber()-1);
+                                                    if (obj.wp != nil) {
+                                                        obj.wpC = geo.Coord.new();
+                                                        if (obj.wp.alt_cstr != nil) {  # steerpoints don't necessarily got an altitude
+                                                            obj.wpC.set_latlon(obj.wp.lat,obj.wp.lon,obj.wp.alt_cstr);
+                                                        } else {
+                                                            obj.wpC.set_latlon(obj.wp.lat,obj.wp.lon,0);
+                                                        }
+                                                        obj.stptPos = hudmath.HudMath.getDevFromCoord(obj.wpC, val.HmdH, val.HmdP, {"OrientationRollDeg": val.OrientationRollDeg, "OrientationPitchDeg": val.OrientationPitchDeg, "OrientationHeadingDeg": val.OrientationHeadingDeg,}, geo.viewer_position());
+                                                        obj.stptPos[0] = geo.normdeg180(obj.stptPos[0]);
+                                                        obj.stptPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                                                        obj.stptPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
 
-                                                    obj.clamped = math.sqrt(obj.stptPos[0]*obj.stptPos[0]+obj.stptPos[1]*obj.stptPos[1]) > 500;
+                                                        obj.clamped = math.sqrt(obj.stptPos[0]*obj.stptPos[0]+obj.stptPos[1]*obj.stptPos[1]) > 500;
 
-                                                    if (!obj.clamped) {
-                                                        obj.steerPT.setTranslation(obj.stptPos);
-                                                        obj.steerPT.show();
-                                                    } else {
-                                                        obj.steerPT.hide();
+                                                        if (!obj.clamped) {
+                                                            obj.steerPT.setTranslation(obj.stptPos);
+                                                            obj.steerPT.show();
+                                                        } else {
+                                                            obj.steerPT.hide();
+                                                        }
                                                     }
                                                  } else {
                                                      obj.steerPT.hide();

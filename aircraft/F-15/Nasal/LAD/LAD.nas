@@ -3822,12 +3822,7 @@ update_lad = func() {
                     wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
                     wpelev = -steerDir[1];  # elevation to the steerpoint (20* means 20* down)
                     hidden_by_terrain = !awg_9.TerrainManager.IsVisible(nil, nil, SelectCoordForce=chaff.gps);
-                    max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;  # Radar altitude coverage at max range!
-                    min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down;
-                    # Actual altitude coverage at the target's range
-                    max_alt_u_dist = (chaff.gps.direct_distance_to(geo.aircraft_position()) * M2NM) * max_alt / getprop("instrumentation/radar/radar2-range");
-                    min_alt_u_dist = (chaff.gps.direct_distance_to(geo.aircraft_position()) * M2NM) * min_alt / getprop("instrumentation/radar/radar2-range");
-                    inside_elev_field = chaff.gps.alt() < max_alt_u_dist and chaff.gps.alt() > min_alt_u_dist;
+                    inside_elev_field = steerDir[1] <= -awg_9.actual_degrees_coverage_up and steerDir[1] >= -awg_9.actual_degrees_coverage_down;
                     inside_az_field = (wpbear > -awg_9.az_coverage_left and wpbear < awg_9.az_coverage_right) or (wpbear < -awg_9.az_coverage_left and wpbear > awg_9.az_coverage_right);
                     if (!hidden_by_terrain and inside_elev_field and inside_az_field) {  # we're making sure that the chaff ain't outta our radar's cone!
                         LADCanvas.chaff_symbols[chaff_idx].setVisible(1);
@@ -4440,12 +4435,7 @@ update_lad = func() {
                     wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
                     wprng = -steerDir[1];  # elevation to the steerpoint (20* means 20* down)
                     hidden_by_terrain = !awg_9.TerrainManager.IsVisible(nil, nil, SelectCoordForce=chaff.gps);
-                    max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;  # Radar altitude coverage at max range!
-                    min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down;
-                    # Actual altitude coverage at the target's range
-                    max_alt_u_dist = (chaff.gps.direct_distance_to(geo.aircraft_position()) * M2NM) * max_alt / getprop("instrumentation/radar/radar2-range");
-                    min_alt_u_dist = (chaff.gps.direct_distance_to(geo.aircraft_position()) * M2NM) * min_alt / getprop("instrumentation/radar/radar2-range");
-                    inside_elev_field = chaff.gps.alt() < max_alt_u_dist and chaff.gps.alt() > min_alt_u_dist;
+                    inside_elev_field = steerDir[1] <= -awg_9.actual_degrees_coverage_up and steerDir[1] >= -awg_9.actual_degrees_coverage_down;
                     inside_az_field = (wpbear > -awg_9.az_coverage_left and wpbear < awg_9.az_coverage_right) or (wpbear < -awg_9.az_coverage_left and wpbear > awg_9.az_coverage_right);
                     if (!hidden_by_terrain and inside_elev_field and inside_az_field) {  # we're making sure that the chaff ain't outta our radar's cone!
                         LADCanvas.chaff_symbols_hsd[chaff_idx].setVisible(1);
