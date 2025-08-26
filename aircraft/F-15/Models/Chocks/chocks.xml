@@ -113,12 +113,26 @@
    <property>gear/gear[1]/wow</property>
    <property>gear/gear[2]/wow</property>
    <less-than>
-    <property>velocities/groundspeed-kt</property>
-    <value>0.25</value>
+     <property>velocities/groundspeed-kt</property>
+     <value>0.25</value>
    </less-than>
    <not><property>fdm/jsbsim/gear/unit/damaged</property></not>
    <not><property>fdm/jsbsim/gear/unit[1]/damaged</property></not>
    <not><property>fdm/jsbsim/gear/unit[2]/damaged</property></not>
+   <and>
+     <not>
+       <greater-than>
+         <property>engines/engine[0]/n2</property>
+         <value>25</value>
+       </greater-than>
+     </not>
+     <not>
+       <greater-than>
+         <property>engines/engine[1]/n2</property>
+         <value>25</value>
+       </greater-than>
+     </not>
+   </and>
  </condition>
 </animation>
 
