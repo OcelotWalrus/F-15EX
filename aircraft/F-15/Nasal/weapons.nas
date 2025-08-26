@@ -95,18 +95,19 @@ for (var i = 0; i < pacs_program_slots; i += 1) {
     data_block = {program: i+1, selected_pylons: {pylon_12: nil, pylon_1: nil, pylon_3: nil, pylon_4: nil, pylon_5: nil, pylon_6: nil, pylon_7: nil, pylon_9: nil, pylon_15: nil, pylon_20: nil, pylon_21: nil, pylon_22: nil, pylon_23: nil, pylon_24: nil, pylon_25: nil}, delivery_mode: 0, release_sequence: 1, ripple_dist: 150, fuzing: 0, cluster_spin: 0, cluster_time: 0, cluster_height: 0, ordnance_type: nil, tarm: nil};
     # NOTE: A single program can't mix up different ordnance types: if you got 2 AGM-84Es and 4 GBU-31s loaded, you'll need at least 1 program for the AGM-84Es and one for the GBU-31s
     # program: id of the program, from 1 to 32
-    # selected_pylons: dict containing every A/G pylon. If nil, it's not selected, to select it, it's set to a vector containing sub ordnances idx ex. pylon_1: [0,1,2,3] for select a 4xGBU-39 rack on pylon 1.
-    # delivery_mode: 0 means direct, 1 means auto (doesn't matter right now, auto would release bombs automatically when DLZ NEZ is reached), 3 means CCIP (pipper)
+    # selected_pylons: dict containing every A/G pylon. If nil, it's not selected, to select it, it's set to a vector containing sub ordnances idx ex. pylon_1: [0,1,2,3] to select a 4xGBU-39 rack on pylon 1.
+    #                  (actually you can't select specific ordnances on a pylon, it's the whole station
+    # delivery_mode: 0 means direct, 1 means auto (doesn't matter right now, auto would release bombs automatically when DLZ NEZ is reached), 2 means CCIP (pipper)
     # release_sequence:
     #  0: 1/STA - one ordnance per selected station will be dropped simultaneously with each
     #              press of the pickle button. So if two stations are programmed, one bomb will fall
     #              from each of them etc.
     #  1: Step - one ordnance will be dropped with each press of the pickle button, alternating
     #            between the stations to maintain best possible balance
-    #  0: Ripple Single - will drop one ordnance at a time, alternating between stations, automatically every
+    #  2: Ripple Single - will drop one ordnance at a time, alternating between stations, automatically every
     #             ripple_dist feet traveled by the F-15, until no programmed ordnance is left,
     #             as soon as a single press of the pickle button is done.
-    #  0: Ripple Multiple - will drop one ordnance by selected station simultaneously, automatically every
+    #  3: Ripple Multiple - will drop one ordnance by selected station simultaneously, automatically every
     #             ripple_dist feet traveled by the F-15, until no programmed ordnance is left,
     #             as soon as a single press of the pickle button is done.
     # ripple_dist: how much feet in space we wait for a new ripple iteration (if release sequence is either ripple single or ripple multiple)
@@ -116,7 +117,7 @@ for (var i = 0; i < pacs_program_slots; i += 1) {
     #  2: Nose/Tail - Allows deployment of ballots/fins for MK82AIRs and MK82SEs  (nose, center and tail fuzing units energized)
     #  3: Time - (Cluster Bomb Units only) sets the time bomb drop in seconds after which the
     #             bomblets will be released. Uses cluster_time and cluster_spin.
-    #  4: Time - (Cluster Bomb Units only) determines the altitude (in feet MSL) at which the
+    #  4: Height - (Cluster Bomb Units only) determines the altitude (in feet MSL) at which the
     #            bomblets will be released. Similarly to spin, the higher the altitude, the larger the
     #            bomblet coverage, but smaller the density. Uses cluster_height and cluster_spin.
     # cluster_spin: (Cluster Bomb Units only) chooses the speed (in RPM) with which the canister will rotate while
@@ -152,7 +153,7 @@ for (var i = 0; i < pacs_program_slots; i += 1) {
     # 7 - "H":  2,200ft
     # 8 - "J":  2,600ft
     # 9 - "L":  3,000ft
-    # tarm: Time to Arm - How much time in seconds the ordances of the program will arm after drop
+    # tarm: Time to Arm - How much time in seconds the ordnances of the program will arm after drop
     
     append(pacs, data_block);
 }
@@ -362,7 +363,7 @@ var push_mission_program_to_station = func(mission_set, mission_program, station
 var push_mission_program_from_dialog = func () {  # used to push data from the mission planning dialog to the actual mission programs
     mission_set_id = getprop("controls/mission-planning/selected-mission-set");
     mission_program_id = getprop("controls/mission-planning/selected-mission-program");
-    mission_gps = geo.Coord.new().set_latlon(getprop("controls/mission-planning/selected-mission-program-lat"), getprop("controls/mission-planning/selected-mission-program-lon"), getprop("controls/mission-planning/selected-mission-program-alt"));
+    mission_gps = geo.Coord.new().set_latlon(getprop("controls/mission-planning/selected-mission-program-lat"), getprop("controls/mission-planning/selected-mission-program-lon"), getprop("controls/mission-planning/selected-mission-program-alt")*FT2M);
     mission_terminal = {heading: getprop("controls/mission-planning/selected-mission-program-term-heading"), angle: getprop("controls/mission-planning/selected-mission-program-term-angle"), vel: getprop("controls/mission-planning/selected-mission-program-term-vel")};
     mission_initialized = getprop("controls/mission-planning/selected-mission-program-initialized");
     
@@ -372,7 +373,7 @@ var push_mission_program_from_dialog = func () {  # used to push data from the m
 }
 
 var push_mission_program_from_dtc = func (mission_set_id, mission_program_id, mission_lat, mission_lon, mission_alt, mission_terminal_head, mission_terminal_angle, mission_terminal_vel, mission_initialized) {
-    mission_gps = geo.Coord.new().set_latlon(mission_lat, mission_lon, mission_alt);
+    mission_gps = geo.Coord.new().set_latlon(mission_lat, mission_lon, mission_alt*FT2M);
     mission_terminal = {heading: mission_terminal_head, angle: mission_terminal_angle, vel: mission_terminal_vel};
     
     aircraft.mission_sets[mission_set_id][mission_program_id] = {gps: mission_gps, terminal: mission_terminal, initialized: mission_initialized};
@@ -749,6 +750,15 @@ var armament_update = func {
         #populate the payload dialog:
         setprop("sim/model/f15/systems/external-loads/station["~p.guiID~"]/type", getprop("payload/weight["~p.guiID~"]/selected"));
     }
+    
+    # Updates drop mode depending on the current PACS Program delivery mode
+    if (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 2) {  # CCIP mode
+        pylons.fcs.setDropMode(1);
+    } else {  # Either direct or auto, both CCRP
+        pylons.fcs.setDropMode(0);
+    }
+    # Also update ripple dist (no matter the current mode)
+    pylons.fcs.setRippleDist(aircraft.pacs[aircraft.pacs_current_program].ripple_dist);
 
     # Update selected weapon on the HUD
     if (WeaponSelector.getValue() == 0) {
@@ -1023,32 +1033,117 @@ var arm_selector = func() {
             setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } elsif ( stick_s == 5 ) {
-        var ground_wps = ["CBU-87", "CBU-105", "MK-82AIR", "MK-82", "MK-83", "MK-84", "GBU-10", "GBU-12", "GBU-31", "GBU-32", "GBU-39", "GBU-54", "AGM-88E", "AGM-65B", "AGM-65D", "AGM-119A", "AGM-84D", "AGM-158C", "AGM-84E", "AGM-158A", "AGM-154A"];
-        var count = 20 - selector_offset;  # length of the list (id 1 is 0 here)
-        if (count < 0) {
-            var selector_offset = 0;
-            setprop("controls/armament/selected-armament-offset", 0);
-        }
-        var p = pylons.fcs.selectWeapon("");
-        while (p == nil and count >= 0) {
-            cur_wpn = ground_wps[count];
-            var p = pylons.fcs.selectWeapon(cur_wpn);
-            setprop("sim/model/f15/systems/armament/selected-arm", cur_wpn);
-            count = count -1;
-        }
-        if (p == nil) {
-            setprop("sim/model/f15/systems/armament/selected-arm", "");
+        if (aircraft.pacs[aircraft.pacs_current_program].ordnance_type != nil) {  # At least one station is selected on the current PACS Program
+        
+            # We determine which stations are chosen in the PACS
+            var curr_pacs_stations = [];
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_12 != nil) {
+                append(curr_pacs_stations, 12);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_1 != nil) {
+                append(curr_pacs_stations, 1);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_3 != nil) {
+                append(curr_pacs_stations, 3);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_4 != nil) {
+                append(curr_pacs_stations, 4);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_5 != nil) {
+                append(curr_pacs_stations, 5);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_6 != nil) {
+                append(curr_pacs_stations, 6);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_7 != nil) {
+                append(curr_pacs_stations, 7);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_9 != nil) {
+                append(curr_pacs_stations, 9);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_15 != nil) {
+                append(curr_pacs_stations, 15);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_20 != nil) {
+                append(curr_pacs_stations, 20);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_21 != nil) {
+                append(curr_pacs_stations, 21);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_22 != nil) {
+                append(curr_pacs_stations, 22);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_23 != nil) {
+                append(curr_pacs_stations, 23);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_24 != nil) {
+                append(curr_pacs_stations, 24);
+            }
+            if (aircraft.pacs[aircraft.pacs_current_program].selected_pylons.pylon_25 != nil) {
+                append(curr_pacs_stations, 25);
+            }
+            
+            var i = 0;
+            var current_station_vec_idx = nil;
+            var current_station_rel_idx = nil;
+            foreach(curr_station; pylons.pylons) {
+                if (contains(curr_pacs_stations, curr_station.id) and current_station_vec_idx == nil) {
+                    var current_station_vec_idx = i;
+                    var current_station_rel_idx = curr_station.id;
+                }
+                var i += 1;
+            }
+            if (current_station_vec_idx != nil) {
+                pylons.fcs.selectPylon(current_station_vec_idx);
+                setprop("sim/model/f15/systems/armament/selected-arm", aircraft.pacs[aircraft.pacs_current_program].ordnance_type);
+                # Apply Smart Weapon's data if valid
+                if (get_status_for_pylon(current_station_rel_idx)[0] == 1 and get_status_for_pylon(current_station_rel_idx)[1] == 0 and pylons.fcs.selected != nil) {  # Smart Weapon initiated and populated
+                    var current_station_ordnance_idx = pylons.fcs.selected[1];
+                    if (current_station_ordnance_idx < size(get_data_block_from_pylon_idx(current_station_rel_idx).data)) {  # Make sure the data for the sub-ordnance is initialized
+                        var current_station_gps_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].gps;
+                    } else {
+                        var current_station_gps_data = nil;
+                    }
+                    if (current_station_gps_data != nil) {
+				        if (current_station_gps_data.lat() < 90 and current_station_gps_data.lat() > -90 and current_station_gps_data.lon() < 180 and current_station_gps_data.lon() > -180 and pylons.fcs != nil) {
+					        var wp = pylons.fcs.getSelectedWeapon();
+					        if (wp != nil and wp.parents[0] == armament.AIM and wp.target_pnt == 1 and (wp.guidance=="gps" or wp.guidance=="gps-altitude")) {
+						        var spot = awg_9.ContactTGP.new("Station" ~ current_station_rel_idx ~ "." ~ current_station_ordnance_idx ~ "-TGT",current_station_gps_data,0);
+						        armament.contactPoint = spot;
+						        tgp.gps = 1;
+						        if (getprop("sim/model/f15/stores/tgp-mounted") and 0) {
+							        tgp.flir_updater.click_coord_cam = armament.contactPoint.get_Coord();
+							        callsign = armament.contactPoint.getUnique();
+			                        setprop("/sim/model/f15/flir/target/auto-track", 1);
+			                        flir_updater.offsetP = 0;
+			                        flir_updater.offsetH = 0;
+							        setprop("sim/model/f15/avionics/tgp-lock", 1);
+						        }
+						        wp.setContacts([spot]);
+					        }
+				        }
+                    }
+                }
+            } else {
+                pylons.fcs.selectNothing();
+                setprop("sim/model/f15/systems/armament/selected-arm", "");
+            }
+            
+            setprop("sim/model/f15/systems/armament/selected-arm", aircraft.pacs[aircraft.pacs_current_program].ordnance_type);
         } else {
-            #print(pylons.fcs.selectWeapon(cur_wpn).type);
+            pylons.fcs.selectNothing();
+            setprop("sim/model/f15/systems/armament/selected-arm", "");
         }
     } else {
         pylons.fcs.selectNothing();
+        setprop("sim/model/f15/systems/armament/selected-arm", "");
     }
     setCockpitLights();
     if (get_sel_missile_count() == 0) {
         setprop("sim/model/f15/systems/armament/selected-arm", "");
     }
 }
+setlistener(ArmSwitch, arm_selector, nil, 0);
 setlistener(WeaponSelector, arm_selector, nil, 0);
 setlistener("controls/armament/trigger", arm_selector, nil, 0);
 setlistener("controls/armament/selected-armament-offset", arm_selector, nil, 0);

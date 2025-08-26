@@ -746,8 +746,8 @@ var FireControl = {
 			    	# CCRP: weapon locked and ready
 			        me.distCCRP = getprop("sim/model/f15/armament/distCCRP");
 			        me.distCCRPLast = me.distCCRP;
-			        me.CRRPauto = aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 1;
-			        if ((me.distCCRP == -1 or me.distCCRPLast == -1 or me.distCCRP >= 500 or me.distCCRP < me.distCCRPLast) and me.CRRPauto) {
+			        me.CCRPauto = aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 1;
+			        if ((me.distCCRP == -1 or me.distCCRPLast == -1 or me.distCCRP >= 500 or me.distCCRP < me.distCCRPLast) and me.CCRPauto) {
 			            printDebug("CCRP: Trigger was pressed, waiting for launch parameters as not fully ready yet");
                         if (me["distCCRPListen"] == nil) me.distCCRPListen = setlistener("sim/model/f15/armament/distCCRP", func (distCCRP) {
 
@@ -1250,7 +1250,7 @@ var printfDebug = func {if (debug == 1) call(printf,arg);};
 
 # This is non-generic methods, please edit it to fit your radar setup:
 # List of weapons that can be CCIP/CCRP dropped:
-var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-32", "GBU-54", "GBU-39", "AGM-154A", "AGM-88E", "AGM-158A", "AGM-158C"];
+var CCIP_CCRP = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-32", "GBU-54", "GBU-39", "AGM-154A", "AGM-84E", "AGM-158A", "AGM-158C"];
 # List of weapons that can be ripple/dual dropped:
 var dualWeapons = ["MK-84", "GBU-10", "MK-82AIR", "MK-82", "MK-83", "CBU-87", "CBU-105", "GBU-12", "GBU-31", "GBU-32", "GBU-54", "GBU-39", "AGM-154A", "AGM-88E", "AGM-158A", "AGM-158C"];
 var defaultCannon = "20mm Cannon";

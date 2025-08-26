@@ -241,7 +241,7 @@ if (getprop("sim/model/f15/variant") == "EX") {
 	pyloncft6 = stations.Pylon.new("CFT6 Station",      25, [5.1044, 2.0865, -0.56368],   pyloncftset,  25, props.globals.getNode("fdm/jsbsim/inertia/pointmass-weight-lbs[30]",1),props.globals.getNode("fdm/jsbsim/inertia/pointmass-dragarea-sqft[30]",1),func{return getprop("payload/armament/fire-control/serviceable") and getprop("fdm/jsbsim/systems/electrics/dc-main-bus")>20;},func{return 1;});
 }
 
-pylon2a.forceRail = 1;# set the missiles mounted on these pylon always on a rail.
+pylon2a.forceRail = 1;  # set the missiles mounted on these pylon always on a rail.
 pylon2c.forceRail = 1;
 pylon8a.forceRail = 1;
 pylon8c.forceRail = 1;

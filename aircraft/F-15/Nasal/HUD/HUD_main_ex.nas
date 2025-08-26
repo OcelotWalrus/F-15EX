@@ -888,26 +888,7 @@ var F15HUD = {
 																		obj.window17.setText("CCRP XX:XX");
 																	}
 																	obj.window17.setVisible(1);
-																} elsif (weap.type == "AGM-65B" or weap.type == "AGM-65D" or weap.type == "AGM-84D" or weap.type == "AGM-84E" or weap.type == "AGM-119A" or weap.type == "AGM-154A" or weap.type == "AGM-158A" or weap.type == "GBU-31" or weap.type == "GBU-32" or weap.type == "CBU-105" or weap.type == "GBU-54" or weap.type == "GBU-39") {  # For AGMs, we display the time till weapon's ready (TODO: display time till no power left when power system is implemented)
-																	if (!(weap.ready_time == 0)) { # Only if the weapon has a ready timer
-																		curr_time = getprop("sim/time/elapsed-sec");
-																		standby_time = weap.ready_standby_time;  # time at which the weapon started readyin process
-																		if (curr_time > (standby_time + weap.ready_time)) {  # weapon's ready
-																			obj.window17.setText("RDY");
-																		} else {
-																			timer = math.round((standby_time + weap.ready_time) - curr_time);
-																			timer_sec = timer;
-																			timer_min = math.floor(timer / 60);
-																			if (timer_min > 0) {
-																				timer_sec = timer_sec - timer_min * 60;
-																			}
-																			obj.window17.setText(sprintf("STBY %02d:%02d", timer_min, timer_sec));
-																		}
-																	} else {
-																		obj.window17.setText("RDY");
-																	}
-																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "AIM-120D" or weap.type == "CATM-120D" or weap.type == "AIM-9X" or weap.type == "CATM-9X" or weap.type == "AGM-88E" or weap.type == "AGM-158C") and getprop("instrumentation/datalink/power")) {  # needs datalink to be ON to work
+																} elsif ((weap.type == "AIM-120D" or weap.type == "CATM-120D" or weap.type == "AIM-9X" or weap.type == "CATM-9X" or weap.type == "AGM-88E" or weap.type == "AGM-84E" or weap.type == "AGM-158C") and getprop("instrumentation/datalink/power")) {  # needs datalink to be ON to work
 																	if (weap.type == "AIM-9X" or weap.type == "CATM-9X") {
 																		mean_speed = mean_9_x_speed;
 																	} elsif (weap.type == "AIM-120D" or weap.type == "CATM-120D") {
@@ -1159,6 +1140,7 @@ var F15HUD = {
                                                                 obj.window2.setVisible(1);
 																eegsShow = 0;
 																obj.window18.setVisible(0);
+																obj.window17.setVisible(0);
 
                                                                 if (w_s == 0) {
 																	eegsShow = 1;
@@ -1213,9 +1195,9 @@ var F15HUD = {
                                                                     	obj.window2.setText(sprintf("%2d GND", val.ArmamentAgmCount));
 																	}
 																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "AGM-65B" and pylons.fcs.getSelectedWeapon().type != "AGM-65D" and pylons.fcs.getSelectedWeapon().type != "AGM-84D" and pylons.fcs.getSelectedWeapon().type != "AGM-84E" and pylons.fcs.getSelectedWeapon().type != "AGM-119A" and pylons.fcs.getSelectedWeapon().type != "AGM-88E") {
-																		obj.window18.setVisible(1);
+																		obj.window18.setVisible(0);
 																		obj.window18.setText(sprintf("RIPL %2d", val.ArmamentRippleCount));
-																	} elsif (pylons.fcs.getSelectedWeapon() != nil) {  # For the AGMs, instead of ripple count, we display the status of the seeker
+																	} elsif (pylons.fcs.getSelectedWeapon() != nil and (pylons.fcs.getSelectedWeapon().type == "AGM-65B" or pylons.fcs.getSelectedWeapon().type == "AGM-65D" or pylons.fcs.getSelectedWeapon().type == "AIM-9X" or pylons.fcs.getSelectedWeapon().type == "CATM-9X" or pylons.fcs.getSelectedWeapon().type == "AGM-88E")) {  # For the AGMs, instead of ripple count, we display the status of the seeker
 																		obj.window18.setVisible(1);
 																		if (pylons.fcs.getSelectedWeapon() != nil) {
 																			caged = pylons.fcs.getSelectedWeapon().isCaged();  # AGM-65B caging is all automatic and hard-coded in the weapons.nas
@@ -1263,6 +1245,69 @@ var F15HUD = {
 																		var rel_aspect = sprintf("%2d%s", aspect, aspect > 0 ? "R" : "L");
 																	}
                                                                     obj.window6.setText(rel_aspect);  # SRM UNCAGE / TARGET ASPECT
+                                                                } elsif (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and aircraft.pacs[aircraft.pacs_current_program].delivery_mode != 2) {  # For Smart Weapons
+                                                                    if (pylons.fcs.getSelectedWeapon().Tgt != nil) {  # Valid target
+                                                                        obj.window3.setText("TGT");
+                                                                        obj.window4.setText(sprintf("G %03.1f", pylons.fcs.getSelectedWeapon().Tgt.get_range()));
+                                                                        
+                                                                        # Time to optimal/auto release
+                                                                        if (obj.timeToRelease != nil and obj.CCRP_active != nil) {
+                                                                            obj.timeToReleaseH = int(obj.timeToRelease/3600);
+																	        obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseH*3600;
+																	        obj.timeToReleaseM = int(obj.timeToRelease/60);
+																	        obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseM*60;
+																	        if (obj.timeToReleaseH < 1) {
+																		        obj.window5.setText(sprintf("%02d:%02d TREL",obj.timeToReleaseM,obj.timeToRelease));
+																	        } else {
+																		        obj.window5.setText("XX:XX TREL");
+																	        }
+																	    } else {
+																	        obj.window5.setText("XX:XX TREL");
+																	    }
+
+                                                                        var ordnance_type = "";
+                                                                        if (pylons.fcs.getSelectedWeapon().type == "AGM-84E") {
+                                                                            var ordnance_type = "SLAM";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158A") {
+                                                                            var ordnance_type = "JASSM";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-154A") {
+                                                                            var ordnance_type = "JSOW";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158C") {
+                                                                            var ordnance_type = "LRSAM";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-31" or pylons.fcs.getSelectedWeapon().type == "GBU-32" or pylons.fcs.getSelectedWeapon().type == "GBU-54") {
+                                                                            var ordnance_type = "JDAM";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-39") {
+                                                                            var ordnance_type = "SDB";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "CBU-105") {
+                                                                            var ordnance_type = "SFW";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "CBU-87") {
+                                                                            var ordnance_type = "CEM";
+                                                                        }
+                                                                        
+                                                                        var delivery_mode = "DIR";
+                                                                        if (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 1) {
+                                                                            var delivery_mode = "AUTO";
+                                                                        } elsif (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 2) {
+                                                                            var delivery_mode = "CCIP";
+                                                                        }
+
+                                                                        obj.window6.setText(sprintf("%s %s", ordnance_type ,delivery_mode));
+                                                                        
+                                                                        # Whether we're in range or not
+                                                                        var in_range_text = "IN RANGE";
+                                                                        var type_lc = string.lc(pylons.fcs.getSelectedWeapon().type);
+                                                                        var curr_smart_weapon_max_range = getprop("payload/armament/" ~ type_lc ~ "/max-fire-range-nm");
+                                                                        if (pylons.fcs.getSelectedWeapon().Tgt.get_range() > curr_smart_weapon_max_range) {
+                                                                            var in_range_text = " OUT RNG";
+                                                                        }
+                                                                        obj.window18.setVisible(1);
+                                                                        obj.window18.setText(in_range_text);
+                                                                    } else {
+                                                                        obj.window3.setText("");
+                                                                        obj.window4.setText("");
+                                                                        obj.window5.setText("");
+                                                                        obj.window6.setText("");
+                                                                    }
                                                                 } else {
                                                                     # this else added by Leto
                                                                     obj.window3.setText("");

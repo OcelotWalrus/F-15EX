@@ -103,7 +103,15 @@
 # Armt Box: UP R: 2365, 4815; UP L: 2150, 4815; DOWN R: 2365, 5040; DOWN L: 2150, 5040
 # /A.G PACS Page Boxes/
 # Next Program Box: UP R: 830, 3425; UP L: 270, 3425; DOWN R: 830, 3505; DOWN L: 270, 3505
-# TARM Box: UP R: 1010, 3760; UP L: 950, 3760; DOWN R: 1010, 3835; DOWN L: 950, 3835
+# TARM Box: UP R: 1010, 3760; UP L: 490, 3760; DOWN R: 1010, 3835; DOWN L: 490, 3835
+# Delivery Mode Box: UP R: 1080, 4500; UP L: 740, 4500; DOWN R: 1080, 4600; DOWN L: 740, 4600
+# Release Sequence Box: UP R: 1520, 4500; UP L: 1185, 4500; DOWN R: 1520, 4600; DOWN L: 1185, 4600
+# Fuzing Box: UP R: 1950, 4500; UP L: 1615, 4500; DOWN R: 1950, 4600; DOWN L: 1615, 4600
+# Config Select Box 1: UP R: 605, 4900; UP L: 300, 4900; DOWN R: 605, 4985; DOWN L: 300, 4985
+# Config Select Box 2: UP R: 1065, 4900; UP L: 755, 4900; DOWN R: 1065, 4985; DOWN L: 755, 4985
+# Config Select Box 3: UP R: 1510, 4900; UP L: 1200, 4900; DOWN R: 1510, 4985; DOWN L: 1200, 4985
+# Config Select Box 4: UP R: 1935, 4900; UP L: 1625, 4900; DOWN R: 1935, 4985; DOWN L: 1625, 4985
+# Config Select Box 5: UP R: 2415, 4900; UP L: 2105, 4900; DOWN R: 2415, 4985; DOWN L: 2105, 4985
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
@@ -155,7 +163,16 @@ var un_target_box = [[1430, 4840], [1275, 4840], [1275, 5040], [1430, 5040]];
 var loft_box = [[1875, 4840], [1685, 4840], [1685, 5040], [1875, 5040]];
 var armt_box = [[2365, 4815], [2150, 4815], [2150, 5040], [2365, 5040]];
 var next_program_box = [[830, 3425], [270, 3425], [270, 3505], [830, 3505]];
-var tarm_box = [[1010, 3760], [950, 3760], [950, 3835], [1010, 3835]];
+var tarm_box = [[1010, 3760], [490, 3760], [490, 3835], [1010, 3835]];
+
+var delivery_mode_box = [[1080, 4500], [740, 4500], [740, 4600], [1080, 4600]];
+var release_sequence_box = [[1520, 4500], [1185, 4500], [1185, 4600], [1520, 4600]];
+var fuzing_box = [[1950, 4500], [1615, 4500], [1615, 4600], [1950, 4600]];
+var config_select_box_1 = [[605, 4900], [300, 4900], [300, 4985], [605, 4985]];
+var config_select_box_2 = [[1065, 4900], [755, 4900], [755, 4985], [1065, 4985]];
+var config_select_box_3 = [[1510, 4900], [1200, 4900], [1200, 4985], [1510, 4985]];
+var config_select_box_4 = [[1935, 4900], [1625, 4900], [1625, 4985], [1935, 4985]];
+var config_select_box_5 = [[2415, 4900], [2105, 4900], [2105, 4985], [2415, 4985]];
 
 var typeLookup = { # database of known radar signatures
     # Aicraft
@@ -266,9 +283,9 @@ var prst_red_dark = {"r": .3764, "g": .0076, "b": .0076};  # 2.5 times darker th
 
 # Settings
 var main_screens = {
-    "left": "VSD",
-    "center": "PACS",
-    "right": "HSD",
+    "left": "NIL",
+    "center": "NIL",
+    "right": "NIL",
 };
 var VSD_ON = 0;
 var PACS_ON = 0;
@@ -1445,7 +1462,7 @@ var LAD_Device = {
         # Create the steerpoints symbols
         m.stpt_symbols_hsd = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
-            m.stpt = m.VSDScreen.createChild("path")
+            m.stpt = m.HSDScreen.createChild("path")
                 .moveTo(677*2,2262+500)
                 .lineTo(677*2-44,2262+500)
                 .lineTo(677*2,2262+500+224)
@@ -1798,6 +1815,8 @@ var LAD_Device = {
         
         m.SmartWeaponsCurrSet = 0;  # DTC Mission Set for CC populate mode
         m.SmartWeaponsCurrMission = 0;  # DTC Mission Program for CC populate mode
+        
+        m.PACSProgEditing = 0;  # 0 not editing current PACS program; 1 editing current PACS program delivery_mode; 2 editing current PACS program release_sequence; 3 editing current PACS program fuzing
 
         # Parse the PACS.svg file
         m.PACSScreen = m.svg.createGroup();
@@ -2078,6 +2097,108 @@ var LAD_Device = {
             .setAlignment("center-center")
             .setColor(prst_green.r,prst_green.g,prst_green.b)
             .setTranslation(325+125+115-50,4545)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_info_line_three = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(110, 1.4)
+            .setText("          RP DIST 0000FT")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(325+125+115-50,5060)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        
+        m.pacs_options_label_main = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(145, 1.4)
+            .setText("OPTIONS")
+            .setAlignment("center-center")
+            .setColor(prst_rose.r,prst_rose.g,prst_rose.b)
+            .setTranslation(1355,2300*2+500-70-120+1000-225-225)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+            
+        m.pacs_options_label_1 = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(125, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(325+125,2300*2+500-70-120+1000-225)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_options_label_2 = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(125, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(677+235,2300*2+500-70-120+1000-225)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_options_label_3 = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(125, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(1355,2300*2+500-70-120+1000-225)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_options_label_4 = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(125, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(1355+425,2300*2+500-70-120+1000-225)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_options_label_5 = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(125, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(1355*2-325-125,2300*2+500-70-120+1000-225)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        
+        m.pacs_options_label_2_up = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(135, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(677+235,2300*2+500-70-120+1000-225-400)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_options_label_3_up = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(135, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(1355,2300*2+500-70-120+1000-225-400)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_options_label_4_up = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(135, 1.4)
+            .setText("XXXXXX")
+            .setAlignment("center-center")
+            .setColor(prst_green.r,prst_green.g,prst_green.b)
+            .setTranslation(1355+425,2300*2+500-70-120+1000-225-400)
+            .setVisible(1)
+            .set("z-index",1)
+            .setFont(aircraft.HUDFont);
+        m.pacs_prog_status = m.PACSScreenAGPacs.createChild("text")
+            .setFontSize(145, 1.4)
+            .setText("INIT")
+            .setAlignment("center-center")
+            .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
+            .setTranslation(1355+425+320,2300*2+500-70-120+1000-225-400)
             .setVisible(1)
             .set("z-index",1)
             .setFont(aircraft.HUDFont);
@@ -2572,7 +2693,7 @@ update_lad = func() {
             }
             
             # PACS Touch boxes
-            if (HSD_ON) {  # Don't run none of that if there ain't no VSD screen
+            if (PACS_ON) {  # Don't run none of that if there ain't no VSD screen
             
                 # Update the boxes' x position, depending on PACS's slot on the LAD
                 
@@ -2783,6 +2904,70 @@ update_lad = func() {
                     point_count += 1;
                 }
                 var tarm_box = tarm_box_new;
+
+                var delivery_mode_box_new = [];
+                point_count = 0;  # vector id
+                foreach(point; delivery_mode_box) {
+                    append(delivery_mode_box_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var delivery_mode_box = delivery_mode_box_new;
+                
+                var release_sequence_box_new = [];
+                point_count = 0;  # vector id
+                foreach(point; release_sequence_box) {
+                    append(release_sequence_box_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var release_sequence_box = release_sequence_box_new;
+                
+                var fuzing_box_new = [];
+                point_count = 0;  # vector id
+                foreach(point; fuzing_box) {
+                    append(fuzing_box_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var fuzing_box = fuzing_box_new;
+                
+                var config_select_box_1_new = [];
+                point_count = 0;  # vector id
+                foreach(point; config_select_box_1) {
+                    append(config_select_box_1_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var config_select_box_1 = config_select_box_1_new;
+                
+                var config_select_box_2_new = [];
+                point_count = 0;  # vector id
+                foreach(point; config_select_box_2) {
+                    append(config_select_box_2_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var config_select_box_2 = config_select_box_2_new;
+                
+                var config_select_box_3_new = [];
+                point_count = 0;  # vector id
+                foreach(point; config_select_box_3) {
+                    append(config_select_box_3_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var config_select_box_3 = config_select_box_3_new;
+                
+                var config_select_box_4_new = [];
+                point_count = 0;  # vector id
+                foreach(point; config_select_box_4) {
+                    append(config_select_box_4_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var config_select_box_4 = config_select_box_4_new;
+                
+                var config_select_box_5_new = [];
+                point_count = 0;  # vector id
+                foreach(point; config_select_box_5) {
+                    append(config_select_box_5_new, [point[0] + LADCanvas.PACSDisplayTrans, point[1]]);
+                    point_count += 1;
+                }
+                var config_select_box_5 = config_select_box_5_new;
                 
                 if (point_in_quad(LADCanvas.screen_touch_pos, page_indicator_box)) {
                     if (LADCanvas.PACSmode == 4) {  # Wrap up
@@ -2969,11 +3154,53 @@ update_lad = func() {
                     }
                 } elsif (LADCanvas.PACSmode == 3 and aircraft.pacs[aircraft.pacs_current_program].tarm != nil and point_in_quad(LADCanvas.screen_touch_pos, tarm_box)) {
                     # Arming time goes on a .25 sec step from .25 to 25.
-                    if (aircraft.pacs[aircraft.pacs_current_program].tarm == 25) {  # Wrap up
+                    if (aircraft.pacs[aircraft.pacs_current_program].tarm >= 25) {  # Wrap up
                         aircraft.pacs[aircraft.pacs_current_program].tarm = .25;
                     } else {
                         aircraft.pacs[aircraft.pacs_current_program].tarm += .25;
                     }
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, delivery_mode_box)) {
+                    LADCanvas.PACSProgEditing = 1;
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, release_sequence_box)) {
+                    LADCanvas.PACSProgEditing = 2;
+                } elsif (LADCanvas.PACSmode == 3 and point_in_quad(LADCanvas.screen_touch_pos, fuzing_box)) {
+                    LADCanvas.PACSProgEditing = 3;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 1 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_2)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].delivery_mode = 0;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 1 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_3)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].delivery_mode = 1;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 1 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_4)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].delivery_mode = 2;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 2 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_1)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].release_sequence = 0;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 2 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_2)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].release_sequence = 1;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 2 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_3)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].release_sequence = 2;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 2 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_4)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].release_sequence = 3;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 2 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_5)) {
+                    if (aircraft.pacs[aircraft.pacs_current_program].ripple_dist > 1500) {  # Wrap up
+                        aircraft.pacs[aircraft.pacs_current_program].ripple_dist = 50;
+                    } else {
+                        aircraft.pacs[aircraft.pacs_current_program].ripple_dist += 50;
+                    }
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 3 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_2)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].fuzing = 0;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 3 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_3)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].fuzing = 1;
+                } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 3 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_4)) {
+                    LADCanvas.PACSProgEditing = 0;
+                    aircraft.pacs[aircraft.pacs_current_program].fuzing = 2;
                 }
             }
         }
@@ -5270,7 +5497,7 @@ update_lad = func() {
                         status_text = "INIT";
                     } elsif (typeof(status_text_norm) == "vector" and status_text_norm[0] == 1 and status_text_norm[1] == 0 and !pylon_ready) {  # initiated and data but not active
                         status_text = "STBY";
-                    } elsif (typeof(status_text_norm) == "vector" and status_text_norm[0] == 1 and status_text_norm[1] == 0 and !pylon_ready) {  # initiated and data and active
+                    } elsif (typeof(status_text_norm) == "vector" and status_text_norm[0] == 1 and status_text_norm[1] == 0 and pylon_ready) {  # initiated and data and active
                         status_text = "RDY";
                     }
                     
@@ -5425,7 +5652,7 @@ update_lad = func() {
                                 LADCanvas.pacs_smrt_wpns_tgt_line_one.setText(sprintf("TGT   %s", mgrs_coords));
                                 LADCanvas.pacs_smrt_wpns_tgt_line_two.setText(sprintf("      %s", ddm_coords[0]));
                                 LADCanvas.pacs_smrt_wpns_tgt_line_three.setText(sprintf("      %s", ddm_coords[1]));
-                                LADCanvas.pacs_smrt_wpns_tgt_line_four.setText(sprintf("      ELEV %04d FT M84", curr_smart_weapon_block.data[LADCanvas.SmartWeaponsCurrSubOrdnance].gps.alt()));
+                                LADCanvas.pacs_smrt_wpns_tgt_line_four.setText(sprintf("      ELEV %04d FT M84", curr_smart_weapon_block.data[LADCanvas.SmartWeaponsCurrSubOrdnance].gps.alt()*M2FT));
                                 LADCanvas.pacs_smrt_wpns_tgt_line_five.setText("           0000 FT HAE");  # Raw GPS altitude, don't matter, will always be 0
                             }
                             if (term_hdg_nil) {
@@ -5458,6 +5685,7 @@ update_lad = func() {
                             LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
                             LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                             LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                            LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
                         }
                     } elsif (LADCanvas.SmartWeaponsPopulateMode == 1) {  # CC mode (Data Cartridge)
                         var curr_mission_block = aircraft.mission_sets[LADCanvas.SmartWeaponsCurrSet][LADCanvas.SmartWeaponsCurrMission];
@@ -5480,7 +5708,7 @@ update_lad = func() {
                             LADCanvas.pacs_smrt_wpns_tgt_line_one.setText(sprintf("TGT   %s", mission_mgrs_coords));
                             LADCanvas.pacs_smrt_wpns_tgt_line_two.setText(sprintf("      %s", mission_ddm_coords[0]));
                             LADCanvas.pacs_smrt_wpns_tgt_line_three.setText(sprintf("      %s", mission_ddm_coords[1]));
-                            LADCanvas.pacs_smrt_wpns_tgt_line_four.setText(sprintf("      ELEV %04d FT M84", mission_coords.alt()));
+                            LADCanvas.pacs_smrt_wpns_tgt_line_four.setText(sprintf("      ELEV %04d FT M84", mission_coords.alt()*M2FT));
                             LADCanvas.pacs_smrt_wpns_tgt_line_five.setText("           0000 FT HAE");  # Raw GPS altitude, don't matter, will always be 0
                             LADCanvas.pacs_smrt_wpns_tgt_line_six.setText(sprintf("TERM  HDG %03d  T", curr_mission_block.terminal.heading));
                             LADCanvas.pacs_smrt_wpns_tgt_line_seven.setText(sprintf("      ANG %02d   °", curr_mission_block.terminal.angle));
@@ -5572,15 +5800,67 @@ update_lad = func() {
                 
                 LADCanvas.pacs_info_line_one.setVisible(1);
                 LADCanvas.pacs_info_line_two.setVisible(1);
-                var tarm_text = "          TARM XX.XSEC";
+                var tarm_text = "          TARM XX.XXSEC";
                 if (current_pacs_program_data.tarm != nil) {
-                    var tarm_text = sprintf("          TARM %02.1fSEC", current_pacs_program_data.tarm);
+                    var tarm_text = sprintf("          TARM %02.2fSEC", current_pacs_program_data.tarm);
                 }
                 LADCanvas.pacs_info_line_two.setText(tarm_text);
+                
+                LADCanvas.pacs_info_line_three.setVisible(current_pacs_program_data.release_sequence >= 2);  # Ripple release sequences
+                LADCanvas.pacs_info_line_three.setText(sprintf("          RP DIST %04dFT", current_pacs_program_data.ripple_dist));  # Ripple release sequences
                 
                 LADCanvas.aim9_cool_box.setVisible(0);
                 LADCanvas.aim9_cool_text.setVisible(0);
                 LADCanvas.pacs_arming_time.setVisible(0);
+                
+                # Configuration labels
+                
+                LADCanvas.pacs_options_label_2_up.setVisible(1);
+                LADCanvas.pacs_options_label_3_up.setVisible(1);
+                LADCanvas.pacs_options_label_4_up.setVisible(1);
+                
+                var delivery_mode = "DIRECT";
+                if (current_pacs_program_data.delivery_mode == 1) {
+                    var delivery_mode = "AUTO";
+                } elsif (current_pacs_program_data.delivery_mode == 2) {
+                    var delivery_mode = "CCIP";
+                }
+                
+                var release_sequence = "1/STA";
+                if (current_pacs_program_data.release_sequence == 1) {
+                    var release_sequence = "STEP";
+                } elsif (current_pacs_program_data.release_sequence == 2) {
+                    var release_sequence = "RP SGL";
+                } elsif (current_pacs_program_data.release_sequence == 3) {
+                    var release_sequence = "RP MLT";
+                }
+                
+                var fuzing = "NOSE";
+                if (current_pacs_program_data.fuzing == 1) {
+                    var fuzing = "TAIL";
+                } elsif (current_pacs_program_data.fuzing == 2) {
+                    var fuzing = "N/T";
+                }
+                
+                LADCanvas.pacs_options_label_2_up.setText(delivery_mode);
+                LADCanvas.pacs_options_label_3_up.setText(release_sequence);
+                LADCanvas.pacs_options_label_4_up.setText(fuzing);
+                
+                # Display the program status
+                
+                var status_text = "";
+                var status_color = [0, 0, 0];
+                var no_load = current_pacs_program_data.ordnance_type == nil;
+                if (no_load) {  # No stations selected
+                    var status_text = "INIT";
+                    var status_color = [prst_yellow.r, prst_yellow.g, prst_yellow.b];
+                } else {
+                    var status_text = "RDY";
+                    var status_color = [prst_cyan.r, prst_cyan.g, prst_cyan.b];
+                }
+                
+                LADCanvas.pacs_prog_status.setText(status_text);
+                LADCanvas.pacs_prog_status.setColor(status_color);
                 
                 
                 # Draw each station
@@ -5621,6 +5901,45 @@ update_lad = func() {
                         LADCanvas.pacs_station_boxes_down[pylon_idx].setVisible(0);
                         LADCanvas.pacs_station_boxes_up[pylon_idx].setVisible(0);
                     }
+                }
+                
+                # If we're editing properties, we display all the available options
+                if (LADCanvas.PACSProgEditing > 0) {
+                    LADCanvas.pacs_options_label_1.setVisible(1);
+                    LADCanvas.pacs_options_label_2.setVisible(1);
+                    LADCanvas.pacs_options_label_3.setVisible(1);
+                    LADCanvas.pacs_options_label_4.setVisible(1);
+                    LADCanvas.pacs_options_label_5.setVisible(1);
+                    
+                    if (LADCanvas.PACSProgEditing == 1) {  # We're editing `delivery_mode`
+                        LADCanvas.pacs_options_label_1.setText("");
+                        LADCanvas.pacs_options_label_2.setText("DIRECT");
+                        LADCanvas.pacs_options_label_3.setText("AUTO");
+                        LADCanvas.pacs_options_label_4.setText("CCIP/MAN");
+                        LADCanvas.pacs_options_label_5.setText("");
+                    } elsif (LADCanvas.PACSProgEditing == 2) {  # We're editing `release_sequence`
+                        LADCanvas.pacs_options_label_1.setText("1/STA");
+                        LADCanvas.pacs_options_label_2.setText("STEP");
+                        LADCanvas.pacs_options_label_3.setText("RP SGL");
+                        LADCanvas.pacs_options_label_4.setText("RP MLT");
+                        var ripple_text = "";
+                        if (current_pacs_program_data.release_sequence >= 2) {  # In a ripple mode, display ripple dist increment
+                            var ripple_text = "RP DST";
+                        }
+                        LADCanvas.pacs_options_label_5.setText(ripple_text);
+                    } elsif (LADCanvas.PACSProgEditing == 3) {  # We're editing `fuzing`
+                        LADCanvas.pacs_options_label_1.setText("");
+                        LADCanvas.pacs_options_label_2.setText("NOSE");
+                        LADCanvas.pacs_options_label_3.setText("TAIL");
+                        LADCanvas.pacs_options_label_4.setText("N/T");
+                        LADCanvas.pacs_options_label_5.setText("");
+                    }
+                } else {
+                    LADCanvas.pacs_options_label_1.setVisible(0);
+                    LADCanvas.pacs_options_label_2.setVisible(0);
+                    LADCanvas.pacs_options_label_3.setVisible(0);
+                    LADCanvas.pacs_options_label_4.setVisible(0);
+                    LADCanvas.pacs_options_label_5.setVisible(0);
                 }
             }
         } else {

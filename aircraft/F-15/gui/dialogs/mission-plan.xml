@@ -560,7 +560,7 @@
                     # Update GPS Spot
                     setprop("controls/mission-planning/selected-mission-program-lat", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lat());
                     setprop("controls/mission-planning/selected-mission-program-lon", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lon());
-                    setprop("controls/mission-planning/selected-mission-program-alt", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.alt());
+                    setprop("controls/mission-planning/selected-mission-program-alt", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.alt()*M2FT);
                     
                     # Update Terminal Parameters
                     setprop("controls/mission-planning/selected-mission-program-term-heading", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.heading);
@@ -628,7 +628,7 @@
                     # Update GPS Spot
                     setprop("controls/mission-planning/selected-mission-program-lat", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lat());
                     setprop("controls/mission-planning/selected-mission-program-lon", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.lon());
-                    setprop("controls/mission-planning/selected-mission-program-alt", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.alt());
+                    setprop("controls/mission-planning/selected-mission-program-alt", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].gps.alt()*M2FT);
                     
                     # Update Terminal Parameters
                     setprop("controls/mission-planning/selected-mission-program-term-heading", aircraft.mission_sets[getprop("controls/mission-planning/selected-mission-set")][getprop("controls/mission-planning/selected-mission-program")].terminal.heading);
