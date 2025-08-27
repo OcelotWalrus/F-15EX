@@ -5486,6 +5486,7 @@ update_lad = func() {
 
                 foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
                     loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+                    loaded_count = getprop("payload/armament/station/id-"~pylon_idx~"-count");
                     loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
                     pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
                     set_text = aircraft.determine_set_text(loaded_set);
@@ -5503,7 +5504,7 @@ update_lad = func() {
                         status_text = "RDY";
                     }
                     
-                    if (set_text != 0) {  # is a valid A/G ordnance
+                    if (set_text != 0 and loaded_count > 0) {  # is a valid A/G ordnance and there's ordnance (and not just an empty rack)
                         LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText(set_text);
@@ -5533,6 +5534,7 @@ update_lad = func() {
                 # Draw each station
                 foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
                     loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+                    loaded_count = getprop("payload/armament/station/id-"~pylon_idx~"-count");
                     loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
                     pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
                     set_text = aircraft.determine_set_text(loaded_set);
@@ -5550,7 +5552,7 @@ update_lad = func() {
                         status_text = "RDY";
                     }
                     
-                    if (set_text != 0 and containsVector(SmartWeaps, getprop("payload/armament/station/id-"~pylon_idx~"-type"))) {  # is a valid A/G ordnance - we also verify if it's a smart weapon
+                    if (set_text != 0 and containsVector(SmartWeaps, getprop("payload/armament/station/id-"~pylon_idx~"-type")) and loaded_count > 0) {  # is a valid A/G ordnance - we also verify if it's a smart weapon and the rack ain't empty
                         LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText(set_text);
@@ -5868,6 +5870,7 @@ update_lad = func() {
                 # Draw each station
                 foreach(pylon_idx; LADCanvas.pacs_stations_idx) {
                     loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+                    loaded_count = getprop("payload/armament/station/id-"~pylon_idx~"-count");
                     loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
                     pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
                     set_text = aircraft.determine_set_text(loaded_set);
@@ -5885,7 +5888,7 @@ update_lad = func() {
                         status_text = "RDY";
                     }
                     
-                    if (set_text != 0 and containsVector(PACSWeaps, getprop("payload/armament/station/id-"~pylon_idx~"-type"))) {  # is a valid A/G ordnance - we also verify if it's a smart weapon
+                    if (set_text != 0 and containsVector(PACSWeaps, getprop("payload/armament/station/id-"~pylon_idx~"-type")) and loaded_count > 0) {  # is a valid A/G ordnance - we also verify if it's a smart weapon and it ain't an empty rack
                         LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText(set_text);
