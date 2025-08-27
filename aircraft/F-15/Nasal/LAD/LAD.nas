@@ -4458,17 +4458,19 @@ update_lad = func() {
 
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
-                                    LADCanvas.HSDScreenLines.createChild("text")
-                                        .setFontSize(150, 1.4)  # size 150 for 50NM range
-                                        .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))
-                                        .setAlignment("center-center")
-                                        .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
-                                        .setTranslation(text_dir[0],text_dir[1])
-                                        #.setCenter(text_dir[0],text_dir[1])
-                                        .setRotation(text_dir[2])
-                                        .set("z-index",0)
-                                        .setFont(aircraft.HUDFont)
-                                        .update();
+                                    if (text_dir != nil and text_dir[0] != nil and text_dir[1] != nil) {  # Safety, not sure why but sometimes that fails
+                                        LADCanvas.HSDScreenLines.createChild("text")
+                                            .setFontSize(150, 1.4)  # size 150 for 50NM range
+                                            .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))
+                                            .setAlignment("center-center")
+                                            .setColor(prst_rose_dark.r,prst_rose_dark.g,prst_rose_dark.b)
+                                            .setTranslation(text_dir[0],text_dir[1])
+                                            #.setCenter(text_dir[0],text_dir[1])
+                                            .setRotation(text_dir[2])
+                                            .set("z-index",0)
+                                            .setFont(aircraft.HUDFont)
+                                            .update();
+                                    }
                                 }
                             } else {
                                 LADCanvas.stpt_symbols_hsd[stpt_idx].setStrokeLineWidth(4);
