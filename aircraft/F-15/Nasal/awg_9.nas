@@ -840,7 +840,7 @@ if(awg9_trace)
             max_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") + awg_9.coverage_up;
             min_alt = getprop("instrumentation/altimeter/indicated-altitude-ft") - awg_9.coverage_down;
             
-            inside_elev_field = u.get_total_elevation() <= -awg_9.actual_degrees_coverage_up and u.get_total_elevation() >= -awg_9.actual_degrees_coverage_down;
+            inside_elev_field = u.get_total_elevation(OurPitch.getValue()) <= -awg_9.actual_degrees_coverage_up and u.get_total_elevation(OurPitch.getValue()) >= -awg_9.actual_degrees_coverage_down;
             inside_az_field = (u.deviationA > -awg_9.az_coverage_left and u.deviationA < awg_9.az_coverage_right) or (u.deviationA < -awg_9.az_coverage_left and u.deviationA > awg_9.az_coverage_right);
             if (radar_mode < 2 and inside_az_field and inside_elev_field) {
                 u.set_display(u.get_visible() and !RadarStandby.getValue() and u.get_type() != ORDNANCE);

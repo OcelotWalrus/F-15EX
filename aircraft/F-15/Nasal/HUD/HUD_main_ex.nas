@@ -791,7 +791,7 @@ var F15HUD = {
                                                                     obj.wpC.set_latlon(obj.wp.lat,obj.wp.lon,0);
                                                                 }
 															     obj.steerDir = [geo.aircraft_position().course_to(obj.wpC), vector.Math.getPitch(geo.aircraft_position(), obj.wpC)];
-															     obj.wpbear = geo.normdeg180(obj.steerDir[0] - val.OrientationHeadingDeg);
+															     obj.wpbear = obj.steerDir[0];
 															     if (obj.wpbear != nil) {
 																     obj.wpbear = geo.normdeg180(obj.wpbear-val.OrientationHeadingDeg);
 																     obj.tadpoleX = hudmath.HudMath.getCenterPosFromDegs(obj.wpbear,0)[0];

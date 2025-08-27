@@ -1476,7 +1476,7 @@ var LAD_Device = {
         }
         m.stpt_texts_hsd = setsize([], m.stpt_symbols_max);
         for (var i = 0; i < m.stpt_symbols_max; i += 1){
-            m.stpt_txt = m.VSDScreen.createChild("text")  # far down, bottom left
+            m.stpt_txt = m.HSDScreen.createChild("text")  # far down, bottom left
                 .setFontSize(100, 1.4)
                 .setText("STPT 1")
                 .setAlignment("center-center")
@@ -4469,17 +4469,19 @@ update_lad = func() {
 
                                     # Computing for the text giving range between those two steerpoints
                                     text_dir = path_text_perpendicular_vector_computing([677*2+x_move, 2262+500+y_move], [677*2+former_x_move, 2262+500+former_y_move], offset=30);
-                                    LADCanvas.HSDScreenLines.createChild("text")
-                                        .setFontSize(95, 1.4)
-                                        .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))  # distance from former steerpoint to current steerpoint.
-                                        .setAlignment("center-center")
-                                        .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
-                                        .setTranslation(text_dir[0],text_dir[1])
-                                        #.setCenter(text_dir[0],text_dir[1])
-                                        .setRotation(text_dir[2])
-                                        .set("z-index",0)
-                                        .setFont(aircraft.HUDFont)
-                                        .update();
+                                    if (text_dir != nil and text_dir[0] != nil and text_dir[1] != nil) {  # Safety, not sure why but sometimes that fails
+                                        LADCanvas.HSDScreenLines.createChild("text")
+                                            .setFontSize(95, 1.4)
+                                            .setText(sprintf("N %02.1f", former_wpC.distance_to(wpC)*M2NM))  # distance from former steerpoint to current steerpoint.
+                                            .setAlignment("center-center")
+                                            .setColor(prst_purple_dark.r,prst_purple_dark.g,prst_purple_dark.b)
+                                            .setTranslation(text_dir[0],text_dir[1])
+                                            #.setCenter(text_dir[0],text_dir[1])
+                                            .setRotation(text_dir[2])
+                                            .set("z-index",0)
+                                            .setFont(aircraft.HUDFont)
+                                            .update();
+                                    }
                                 }
                             }
                         }
