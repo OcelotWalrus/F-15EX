@@ -1212,6 +1212,9 @@ var ccrp_loop = func () {
         return;
     }
     ccrpTrgt = armament.contactPoint;
+    if (ccrpTrgt == nil) {  # Tiny fix o' mine
+        ccrpTrgt = selW.Tgt;
+    }
     var prio = awg_9.getPriorityTarget();
     if (ccrpTrgt == nil and prio != nil
     		and (prio.get_type() == armament.SURFACE or prio.get_type() == armament.MARINE)) {
