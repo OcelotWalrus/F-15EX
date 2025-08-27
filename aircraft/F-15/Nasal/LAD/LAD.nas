@@ -40,7 +40,7 @@
 # Future features (TODO's) :
 # //General// :
 # - Calculate touch boxes shift only when main screens are changed for optimization
-# - Before running the long touch checks in every main screen, instead of only cheking if the screen's on, also check if the touch pos is at least inside that screen
+# - Before running the long touch checks in every main screen, instead of only checking if the screen's on, also check if the touch pos is at least inside that screen
 # //VSD Display// :
 # - ASE circles and Missile Time Of Launch
 # - Touching on steerpoints once will display their info page on the UFC, a second click within 3 seconds will select it as current steerpoint
@@ -3797,15 +3797,23 @@ update_lad = func() {
                             x_move = wpbear * 1354 / 60;
                             y_move = wpelev * (1131 * 2) / 60;
 
-                            if (x_move > 1300) {  # clamp the translation's values so it don't get outta the screen
+                            if (x_move > 1300) {  # If it's outta the screen, we don't display it
                                 x_move = 1300;
+                                LADCanvas.stpt_symbols[stpt_idx].setVisible(0);
+                                LADCanvas.stpt_texts[stpt_idx].setVisible(0);
                             } elsif (x_move < -1300) {
                                 x_move = -1300;
+                                LADCanvas.stpt_symbols[stpt_idx].setVisible(0);
+                                LADCanvas.stpt_texts[stpt_idx].setVisible(0);
                             }
                             if (y_move > 1072) {
-                                y_move = 1072
+                                y_move = 1072;
+                                LADCanvas.stpt_symbols[stpt_idx].setVisible(0);
+                                LADCanvas.stpt_texts[stpt_idx].setVisible(0);
                             } elsif (y_move < -1072) {
-                                y_move = -1072
+                                y_move = -1072;
+                                LADCanvas.stpt_symbols[stpt_idx].setVisible(0);
+                                LADCanvas.stpt_texts[stpt_idx].setVisible(0);f
                             }
 
                             LADCanvas.stpt_symbols[stpt_idx].setTranslation(x_move, y_move);
@@ -3839,7 +3847,6 @@ update_lad = func() {
             var found_lock = 0;
             var lock_assigned = 0;
             foreach (contact ; awg_9.tgts_list) {
-            
                 if (contact.get_display() == 1) {
                     if (awg_9.active_u == contact) { # If it's the active radar lock we got
                         found_lock = 1;
@@ -4131,15 +4138,23 @@ update_lad = func() {
                             x_move = xc*1354/60;
                             y_move = yc*(1131*2)/60;
 
-                            if (x_move > 1300) {  # clamp the translation's values so it don't get outta the screen
-                                    x_move = 1300;
+                            if (x_move > 1300) {  # if it's outta the screen, we don't display it
+                                x_move = 1300;
+                                LADCanvas.dlnk_symbols[dlnk_idx].setVisible(0);
+                                LADCanvas.dlnk_texts[dlnk_idx].setVisible(0);
                             } elsif (x_move < -1300) {
                                 x_move = -1300;
+                                LADCanvas.dlnk_symbols[dlnk_idx].setVisible(0);
+                                LADCanvas.dlnk_texts[dlnk_idx].setVisible(0);
                             }
                             if (y_move > 1072) {
-                                y_move = 1072
+                                y_move = 1072;
+                                LADCanvas.dlnk_symbols[dlnk_idx].setVisible(0);
+                                LADCanvas.dlnk_texts[dlnk_idx].setVisible(0);
                             } elsif (y_move < -1072) {
-                                y_move = -1072
+                                y_move = -1072;
+                                LADCanvas.dlnk_symbols[dlnk_idx].setVisible(0);
+                                LADCanvas.dlnk_texts[dlnk_idx].setVisible(0);
                             }
 
                             LADCanvas.dlnk_symbols[dlnk_idx].setTranslation(x_move, y_move); # the factors is to let display correspond to 120 degrees wide and height.
@@ -4749,6 +4764,10 @@ update_lad = func() {
                             # If the point is outside of the circle, we don't let it get away of it and we place it at the very edge of the HSD circle
                             # The circle is actually an ellipse, in a way that it appears as a circle on the LAD
                             move_dir = ellipse_clamp(x_move, y_move);
+                            if (move_dir[0] != x_move or move_dir[1] != y_move) {  # Outta the screen, don't display it
+                                LADCanvas.dlnk_symbols_hsd[dlnk_idx].setVisible(0);
+                                LADCanvas.dlnk_texts_hsd[dlnk_idx].setVisible(0);
+                            }
                             x_move = move_dir[0];
                             y_move = move_dir[1];
 
@@ -4772,7 +4791,7 @@ update_lad = func() {
             # Process the EPAWSS contacts
             var epawss_idx = 0;
             foreach (contact ; epawss.contacts_list) {
-                if (contact.get_visible() and contact.get_range() < getprop("instrumentation/radar/radar2-range") * 1.25) {  # If it's all good
+                if (contact.get_EPAWSS_visible() and contact.get_range() < getprop("instrumentation/radar/radar2-range") * 1.25) {  # If it's all good
                     already_on_rdr = 0;  # if its' on our radar, we don't display it.
                     foreach(rdrcontact ; valid_radar_targets) {
                         if (rdrcontact == contact.get_Callsign()) {

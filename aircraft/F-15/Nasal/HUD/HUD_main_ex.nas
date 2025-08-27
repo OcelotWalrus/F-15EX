@@ -608,7 +608,7 @@ var F15HUD = {
                                       {
                                           obj.ias_range.setTranslation(0, val * ias_range_factor);
                                       }),
-            props.UpdateManager.FromHashValue("ControlsHudSymRej", 0.1, func(val)
+            props.UpdateManager.FromHashValue("ControlsHudSymRej", 0.01, func(val)
                                              {
                                                  obj.symbol_reject = val;
                                              }),
@@ -1292,6 +1292,7 @@ var F15HUD = {
                                                                         }
 
                                                                         obj.window6.setText(sprintf("%s %s", ordnance_type ,delivery_mode));
+                                                                        obj.window6.setVisible(1);
                                                                         
                                                                         # Whether we're in range or not
                                                                         var in_range_text = "IN RANGE";

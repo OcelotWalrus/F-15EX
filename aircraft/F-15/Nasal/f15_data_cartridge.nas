@@ -53,6 +53,7 @@
 # - Allow to set flight callsigns, so they're in a different color and symbology in the LAD, and also set a
 # flight lead callsign, so its bearing, ETA and distance gets displayed along Bullseye ETA etc. Flight
 # callsigns and lead will need to be connected on datalink for that to work
+# - Allow to save A/G PACS Programs
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------

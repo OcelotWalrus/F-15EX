@@ -509,6 +509,13 @@ var rdr_loop = func(notification) {
         }
         awg_9.removeFromTWSTrackFiles(tws_max_dist);  # Remove the trackfile that's the farthest away from us
     }
+    
+    # We make sure that no trackfile is null in our TWS tracklist
+    foreach(var y; awg_9.TWS_tracks) {
+        if (y == nil) {
+            awg_9.removeFromTWSTrackFiles(y);
+        }
+    }
 
     # Following Datalink code has been made by Jimmy L. Miles
 
@@ -1013,7 +1020,7 @@ var removeFromTWSTrackFiles = func(tgt_class) {
     var new_TWS_track = [];
     var new_TWS_track_callsigns = [];
     foreach(track_file; awg_9.TWS_tracks) {
-        if (track_file.string != tgt_class.string) {
+        if (track_file != nil and tgt_class != nil and track_file.string != tgt_class.string) {
             append(new_TWS_track, track_file);
             append(new_TWS_track_callsigns, track_file.get_Callsign());
         }
@@ -1049,9 +1056,9 @@ var selectCheck = func {
         if (awg9_trace)
             print("Sel next TWS file AUTO: dist=",dist);
 
-        #var sorted_dist = sort (awg_9.TWS_tracks, func (a,b) {a.get_range()-b.get_range()});
+        var sorted_dist = sort (awg_9.TWS_tracks, func (a,b) {a.get_range()-b.get_range()});
         var nxt=nil;
-        foreach (var u; awg_9.TWS_tracks)
+        foreach (var u; sorted_dist)
             {
             if (awg9_trace)
                 printf("TWS Track file:: %5.2f (%5.2f) : %s ",u.get_range(), dist, u.Callsign.getValue());
@@ -1108,8 +1115,8 @@ var selectCheck = func {
             xc = u.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing of the target
             yc = -u.get_total_elevation(getprop("orientation/pitch-deg")) or 0;  # relative elevation of the target
             
-            # If the cursor is at least 2 degrees away in both azimuth and elevation
-            close_enough = math.abs(cursor_az_deg - xc) < 2 and math.abs(cursor_el_deg - yc) < 2;
+            # If the cursor is at least 3 degrees away in both azimuth and elevation
+            close_enough = math.abs(cursor_az_deg - xc) < 3 and math.abs(cursor_el_deg - yc) < 3;
             if (close_enough) {
                 append(dist_dic, {unique: u, dist_deg: math.abs(cursor_az_deg - xc) + math.abs(cursor_el_deg - yc)});
             }
@@ -1128,7 +1135,7 @@ var selectCheck = func {
             active_u = best_dist_deg_contact;
             active_u_callsign = best_dist_deg_contact.get_Callsign();
             
-            if (!containsV(awg_9.TWS_tracks, awg_9.active_u)) {  # If it's new, we add it.
+            if (!containsV(awg_9.TWS_tracks, awg_9.active_u) and awg_9.active_u != nil) {  # If it's new, we add it.
                 append(awg_9.TWS_tracks, active_u);  # Add the selected target to the TWS track file
                 append(awg_9.TWS_tracks_callsigns, active_u_callsign);
                 if (awg9_trace) {

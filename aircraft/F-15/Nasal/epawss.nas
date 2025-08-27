@@ -195,14 +195,14 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
             u.set_behind_terrain(0);
             if (!u.get_EPAWSS_visible()) {
                 #print("out of EPAWSS detection");
-                u.set_visible(0);
+                #u.set_visible(0);
             } else if (awg_9.TerrainManager.IsVisible(u.propNode, nil) == 0) {
                 #print("behind terrain");
                 u.set_behind_terrain(1);
                 u.set_visible(0);
             } else {
                 #print("visible");
-                u.set_visible(1);
+                #u.set_visible(1);
             }
             scan_update_visibility = 0;
         }
