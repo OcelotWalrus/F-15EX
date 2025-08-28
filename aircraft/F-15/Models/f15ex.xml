@@ -2016,19 +2016,34 @@
         <object-name>aircraft-ladder</object-name>
         <condition>
             <and>
-                <property>sim/walker/outside</property>
-                <!--<equals>
-                    <property>sim/walker/outfit</property>
-                    <value>1</value>
-                </equals>-->
                 <greater-than>
                     <property>canopy/position-norm</property>
                     <value>0.5</value>
                 </greater-than>
-                <greater-than>
-                    <property>gear/gear[1]/wow</property>
-                    <value>0</value>
-                </greater-than>
+                <property>gear/gear[0]/wow</property>
+               <property>gear/gear[1]/wow</property>
+               <property>gear/gear[2]/wow</property>
+               <less-than>
+                 <property>velocities/groundspeed-kt</property>
+                 <value>0.25</value>
+               </less-than>
+               <not><property>fdm/jsbsim/gear/unit/damaged</property></not>
+               <not><property>fdm/jsbsim/gear/unit[1]/damaged</property></not>
+               <not><property>fdm/jsbsim/gear/unit[2]/damaged</property></not>
+               <and>
+                 <not>
+                   <greater-than>
+                     <property>engines/engine[0]/n2</property>
+                     <value>25</value>
+                   </greater-than>
+                 </not>
+                 <not>
+                   <greater-than>
+                     <property>engines/engine[1]/n2</property>
+                     <value>25</value>
+                   </greater-than>
+                 </not>
+              </and>
             </and>
         </condition>
     </animation>
@@ -5949,10 +5964,7 @@
         <nopreview />
         <object-name>lau68-r</object-name>
         <condition>
-            <greater-than>
-                <value>0</value>
-                <value>0</value>
-            </greater-than>
+            <property>sim/multiplay/generic/bool[333]</property>
         </condition>
     </animation>
 
@@ -6422,7 +6434,7 @@
         <name>2x-aim-120d-lx</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/duorack-12.xml</path>
         <offsets>
-             <x-m>3.00</x-m>
+             <x-m>2.62</x-m>
              <y-m>-4.03</y-m>
              <z-m>0.15</z-m>
         </offsets>
@@ -6680,7 +6692,7 @@
         <name>2x-catm-120d-lx</name>
         <path>Aircraft/F-15/Models/Stores/AIM-120D/duorack-dummy.xml</path>
         <offsets>
-             <x-m>3.00</x-m>
+             <x-m>2.62</x-m>
              <y-m>-4.03</y-m>
              <z-m>0.15</z-m>
         </offsets>
@@ -7049,7 +7061,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>-0.085</z-m>
+            <z-m>-0.205</z-m>
         </offsets>
     </model>
     <model>
@@ -7058,7 +7070,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>-0.085</z-m>
+            <z-m>-0.205</z-m>
         </offsets>
     </model>
     <model>
@@ -7088,7 +7100,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.05</z-m>
+            <z-m>-0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -7106,7 +7118,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.05</z-m>
+            <z-m>-0.05</z-m>
         </offsets>
     </model>
 
@@ -7550,7 +7562,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -7559,7 +7571,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -7578,7 +7590,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.10</z-m>
         </offsets>
     </model>
     <model>
@@ -7587,7 +7599,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.10</z-m>
         </offsets>
     </model>
     <model>
@@ -8016,7 +8028,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.125</z-m>
         </offsets>
     </model>
     <model>
@@ -8025,7 +8037,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.125</z-m>
         </offsets>
     </model>
 
@@ -8035,7 +8047,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.185</z-m>
+            <z-m>0.085</z-m>
         </offsets>
     </model>
     <model>
@@ -8044,7 +8056,9 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.185</z-m>
+            <z-m>0.085</z-m>
+        </offsets>
+    </model>
     <model>
         <name>gbu-39-c</name>
         <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-5.xml</path>
@@ -8061,7 +8075,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.09</z-m>
         </offsets>
     </model>
     <model>
@@ -8070,7 +8084,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.09</z-m>
         </offsets>
     </model>
 
@@ -8080,7 +8094,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.07</z-m>
         </offsets>
     </model>
     <model>
@@ -8098,7 +8112,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.07</z-m>
         </offsets>
     </model>
     <model>
@@ -8190,7 +8204,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.08</z-m>
         </offsets>
     </model>
     <model>
@@ -8199,7 +8213,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.08</z-m>
         </offsets>
     </model>
     <model>
@@ -8355,7 +8369,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.038</z-m>
         </offsets>
     </model>
     <model>
@@ -8364,7 +8378,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.23</z-m>
+            <z-m>0.038</z-m>
         </offsets>
     </model>
 
@@ -8374,7 +8388,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.025</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -8383,7 +8397,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.025</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -8393,7 +8407,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.025</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -8402,7 +8416,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.025</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -8413,7 +8427,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0</z-m>
+            <z-m>-0.15</z-m>
         </offsets>
     </model>
     <model>
@@ -8422,7 +8436,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0</z-m>
+            <z-m>-0.15</z-m>
         </offsets>
     </model>
     <model>
@@ -8441,7 +8455,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0</z-m>
+            <z-m>-0.15</z-m>
         </offsets>
     </model>
     <model>
@@ -8450,7 +8464,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0</z-m>
+            <z-m>-0.15</z-m>
         </offsets>
     </model>
     <model>
@@ -8469,7 +8483,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>-0.125</z-m>
+            <z-m>-0.225</z-m>
         </offsets>
     </model>
     <model>
@@ -8478,7 +8492,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>-0.125</z-m>
+            <z-m>-0.225</z-m>
         </offsets>
     </model>
     <model>
@@ -8497,7 +8511,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>-0.0725</z-m>
+            <z-m>-0.2025</z-m>
         </offsets>
     </model>
     <model>
@@ -8506,7 +8520,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>-0.0725</z-m>
+            <z-m>-0.2025</z-m>
         </offsets>
     </model>
     <model>
@@ -8525,7 +8539,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>-0.0725</z-m>
+            <z-m>-0.2025</z-m>
         </offsets>
     </model>
     <model>
@@ -8534,7 +8548,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>-0.0725</z-m>
+            <z-m>-0.2025</z-m>
         </offsets>
     </model>
     <model>
@@ -8553,7 +8567,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>-0.1</z-m>
+            <z-m>-0.22</z-m>
         </offsets>
     </model>
     <model>
@@ -8562,7 +8576,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>-0.1</z-m>
+            <z-m>-0.22</z-m>
         </offsets>
     </model>
     <model>
@@ -8821,7 +8835,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.125</z-m>
         </offsets>
     </model>
     <model>
@@ -8830,7 +8844,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.15</z-m>
+            <z-m>-0.125</z-m>
         </offsets>
     </model>
     <model>
@@ -8987,7 +9001,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>-4.025</y-m>
-             <z-m>0.1</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -8996,7 +9010,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>3.975</y-m>
-             <z-m>0.1</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -9006,7 +9020,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>-4.025</y-m>
-             <z-m>0.05</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -9015,7 +9029,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>3.975</y-m>
-             <z-m>0.05</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -9025,7 +9039,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>-4.025</y-m>
-             <z-m>0.1</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -9034,7 +9048,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>3.975</y-m>
-             <z-m>0.1</z-m>
+            <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -9044,7 +9058,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>-4.025</y-m>
-             <z-m>0.1</z-m>
+             <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -9053,7 +9067,7 @@
         <offsets>
              <x-m>2.8</x-m>
              <y-m>3.975</y-m>
-             <z-m>0.1</z-m>
+             <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -9063,7 +9077,7 @@
         <offsets>
              <x-m>3.00</x-m>
              <y-m>-4.03</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9072,7 +9086,7 @@
         <offsets>
              <x-m>2.62</x-m>
              <y-m>3.97</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9081,7 +9095,7 @@
         <offsets>
              <x-m>2</x-m>
              <y-m>-2.78</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9090,7 +9104,7 @@
         <offsets>
              <x-m>2</x-m>
              <y-m>2.78</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9099,7 +9113,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.15</z-m>
+             <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -9108,7 +9122,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.15</z-m>
+             <z-m>-0.1</z-m>
         </offsets>
     </model>
 
@@ -9118,7 +9132,7 @@
         <offsets>
              <x-m>3.00</x-m>
              <y-m>-4.03</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9127,7 +9141,7 @@
         <offsets>
              <x-m>2.62</x-m>
              <y-m>3.97</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9136,7 +9150,7 @@
         <offsets>
              <x-m>2</x-m>
              <y-m>-2.78</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9145,7 +9159,7 @@
         <offsets>
              <x-m>2</x-m>
              <y-m>2.78</y-m>
-             <z-m>0.15</z-m>
+             <z-m>0.05</z-m>
         </offsets>
     </model>
     <model>
@@ -9154,7 +9168,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>-2.78</y-m>
-            <z-m>0.15</z-m>
+             <z-m>-0.1</z-m>
         </offsets>
     </model>
     <model>
@@ -9163,7 +9177,7 @@
         <offsets>
             <x-m>2</x-m>
             <y-m>2.78</y-m>
-            <z-m>0.15</z-m>
+             <z-m>-0.1</z-m>
         </offsets>
     </model>
     

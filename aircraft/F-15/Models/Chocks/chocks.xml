@@ -108,7 +108,6 @@
  <object-name>chocks3</object-name>
  <object-name>extinguisher</object-name>
  <condition>
-   <property>controls/gear/brake-parking</property>
    <property>gear/gear[0]/wow</property>
    <property>gear/gear[1]/wow</property>
    <property>gear/gear[2]/wow</property>

@@ -451,6 +451,8 @@ var determine_set_text = func(set_text) {
         return "GBU12";
     } elsif (set_text == "3 x GBU-12") {
         return "3GBU12";
+    } elsif (set_text == "2 x GBU-12") {
+        return "2GBU12";
     # GBU-31
     } elsif (set_text == "1 x GBU-31") {
         return "GBU31";

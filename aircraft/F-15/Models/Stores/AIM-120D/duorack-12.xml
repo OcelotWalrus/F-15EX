@@ -28,11 +28,11 @@
         <object-name>AIM-120-12-0</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-1-type</property>
+                <property>payload/armament/station/id-12-type</property>
                 <value>AIM-120D</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-1-count</property>
+                <property>payload/armament/station/id-12-count</property>
                 <value>0</value>
             </greater-than>
         </condition>
@@ -42,11 +42,11 @@
         <object-name>AIM-120-12-1</object-name>
         <condition>
             <equals>
-                <property>payload/armament/station/id-1-type</property>
+                <property>payload/armament/station/id-12-type</property>
                 <value>AIM-120D</value>
             </equals>
             <greater-than>
-                <property>payload/armament/station/id-1-count</property>
+                <property>payload/armament/station/id-12-count</property>
                 <value>1</value>
             </greater-than>
         </condition>
