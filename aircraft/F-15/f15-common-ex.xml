@@ -2161,10 +2161,10 @@
             <internal archive="y">true</internal>
             <config>
                 <x-offset-m archive="y">0.0</x-offset-m>
-                <y-offset-m archive="y">1.42195</y-offset-m>
-                <z-offset-m archive="y">-5.28</z-offset-m>
-                <pitch-offset-deg>-7.249</pitch-offset-deg>
-                <default-field-of-view-deg>100</default-field-of-view-deg>
+                <y-offset-m archive="y">1.50195</y-offset-m>
+                <z-offset-m archive="y">-5.07</z-offset-m>
+                <pitch-offset-deg>-3.25</pitch-offset-deg>
+                <default-field-of-view-deg>95</default-field-of-view-deg>
                 <limits>
                     <enabled type="bool">true</enabled>
                     <left>

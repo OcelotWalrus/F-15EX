@@ -3813,7 +3813,7 @@ update_lad = func() {
                             } elsif (y_move < -1072) {
                                 y_move = -1072;
                                 LADCanvas.stpt_symbols[stpt_idx].setVisible(0);
-                                LADCanvas.stpt_texts[stpt_idx].setVisible(0);f
+                                LADCanvas.stpt_texts[stpt_idx].setVisible(0);
                             }
 
                             LADCanvas.stpt_symbols[stpt_idx].setTranslation(x_move, y_move);

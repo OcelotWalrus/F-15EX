@@ -100,7 +100,7 @@ var F15HUD = {
                     "view": [256,296],
                     "mipmapping": 0,
                     });
-        obj.view = [0, 1.42195, -5.28];
+        obj.view = [0, 1.50195, -5.07];
         obj.canvas.addPlacement({"node": "HUDImage1"});
         obj.canvas.addPlacement({"node": "HUDImage2"});
         obj.canvas.setColorBackground(0.36, 1, 0.3, 0.00);
@@ -215,7 +215,7 @@ var F15HUD = {
                            .setColor(0,1,0)
                            .setStrokeLineWidth(obj.dlzLW);
 
-            hudmath.HudMath.init([-5.63907,-0.08217,1.41853], [-5.7967,0.10206,1.2481], [256,296], [0.124048, 0.586015], [0.879649,0.045312], 0);
+            hudmath.HudMath.init([-5.648,-0.07769,1.595], [-5.761,0.1002,1.348], [256,296], [0.124048, 0.586015], [0.879649,0.045312], 1);
             obj.ccipGrp = obj.canvas.createGroup();
             obj.centerOrigin = hudmath.HudMath.getCenterOrigin();
             obj.ccipGrp.setTranslation(obj.centerOrigin);
