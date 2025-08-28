@@ -4792,8 +4792,8 @@ update_lad = func() {
 
             # Process the EPAWSS contacts
             var epawss_idx = 0;
-            foreach (contact ; epawss.contacts_list) {
-                if (contact.get_EPAWSS_visible() and contact.get_range() < getprop("instrumentation/radar/radar2-range") * 1.25) {  # If it's all good
+            foreach (contact ; awg_9.tgts_list) {
+                if (!contact.get_behind_terrain() and contact.get_EPAWSS_visible()) {  # If it's all good
                     already_on_rdr = 0;  # if its' on our radar, we don't display it.
                     foreach(rdrcontact ; valid_radar_targets) {
                         if (rdrcontact == contact.get_Callsign()) {
@@ -4825,6 +4825,11 @@ update_lad = func() {
 
                             var x_move = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);
                             var y_move = -(tgt_rng*LADCanvas.hsd_nm_to_px_y)*math.cos(tgt_bear*D2R);
+                            
+                            move_dir = ellipse_clamp(x_move, y_move);
+                            clamped = x_move =! move_dir[0] or y_move != move_dir[1];;
+                            x_move = move_dir[0];
+                            y_move = move_dir[1];
 
                             LADCanvas.epawss_texts_hsd[epawss_idx].setTranslation(677*2+x_move, 2262+500+y_move);
 

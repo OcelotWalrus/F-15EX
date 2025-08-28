@@ -28,9 +28,7 @@
 #  and also: if it's a tanker, it's not considered a threat at all
 # ---------------------------
 # Future features (TODO's) :
-# - For the AI light and its sound, move it from the awg_9.nas to the epawss.nas file, and check if it's a friendly or not
-# - Add the EPAWSS to the systems, so it can be damaged by missiles and etc.
-# - Make the EPAWSS panel on the right panel of the interiors.
+# - Add the EPAWSS/RWR to the systems, so it can be damaged by missiles and etc.
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
@@ -112,7 +110,8 @@ setlistener("sim/model/f15/epawss/epawss-on", func(v){
 
 var update_epawss_contacts = func() {  # computes the list of contacts of the EPAWSS
 
-    if (scan_update_tgt_list and EpawssOn.getValue())  # we only update if a listener has been set off and the Epawss is online
+    # Disabled and deprecated
+    if (scan_update_tgt_list and EpawssOn.getValue() and 1 == 0)  # we only update if a listener has been set off and the Epawss is online
     {
 		scan_update_tgt_list = 0;
 
@@ -174,53 +173,15 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
         append(former_contacts_list_callsigns, contact);
     }
     contacts_list_callsigns = [];
-    for (var scan_tgt_idx = 0;scan_tgt_idx < size(contacts_list); scan_tgt_idx += 1) {
+    # Go through each target, and determine whether they're visible or not to the RWR
+    # If they are, add 'em to the EPAWSS contacts list
+    for (var scan_tgt_idx = 0;scan_tgt_idx < size(awg_9.tgts_list); scan_tgt_idx += 1) {
 
-        u = contacts_list[scan_tgt_idx];
+        u = awg_9.tgts_list[scan_tgt_idx];
 
-        var u_rng = u.get_range();
-
-
-
-        if (scan_update_visibility) {
-            scan_update_visibility = 0;
-        } else if (ElapsedSec.getValue() > scan_next_tgt_check) {
-            scan_next_tgt_check = ElapsedSec.getValue()  + ScanVisibilityCheckInterval.getValue();
-            scan_update_visibility = 1;
-        }
-
-        if (scan_update_visibility) {
-            # check for visible by EPAWSS taking into account if the contact is
-            # emitting, radiating at our coords, or directly spiking us.
-            u.set_behind_terrain(0);
-            if (!u.get_EPAWSS_visible()) {
-                #print("out of EPAWSS detection");
-                #u.set_visible(0);
-            } else if (awg_9.TerrainManager.IsVisible(u.propNode, nil) == 0) {
-                #print("behind terrain");
-                u.set_behind_terrain(1);
-                u.set_visible(0);
-            } else {
-                #print("visible");
-                #u.set_visible(1);
-            }
-            scan_update_visibility = 0;
-        }
-
-        var radar_mode = getprop("instrumentation/radar/radar-mode");
-        if (radar_mode == nil) {
-            radar_mode = 0;
-        } if (radar_mode >= 3) {
-            radar_active = 0;
-        }
-
-        if (u.get_visible()) {
+        if (!u.get_behind_terrain() and u.get_EPAWSS_visible()) {
             append(contacts_list_callsigns, u.get_Callsign());
         }
-
-        # Test if target has a radar. Compute if we are illuminated. This propery used by ECM
-        # over MP, should be standardized, like "ai/models/multiplayer[0]/radar/radar-standby".
-        awg_9.compute_rwr(radar_mode, u, u_rng);
     }
 
     # We go through each current contacts list, and if there's one or multiple that ain't in the former contacts list, we play the new contact sound
@@ -257,8 +218,8 @@ var get_radar_type = func(contact) {  # returns either 0 (airborne radar), 1 (gr
 
 var determine_primary_threat = func() {  # returns the primary threat's internal unique ID and how many points its got in a vector. Returns null if there ain't none
     points_list = [];
-    foreach(u; contacts_list) {
-        if (u.get_visible()) {  # If it's an actually valid EPAWSS contact
+    foreach(u; awg_9.tgts_list) {
+        if (!u.get_behind_terrain() and u.get_EPAWSS_visible()) {  # If it's an actually valid EPAWSS contact
             points = 0;
 
             is_a_missile_approaching = u.getUnique() != nil and u.get_Callsign() != nil and damage.approached[u.get_Callsign()~u.getUnique()] != nil;
@@ -318,7 +279,7 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
     }
 
     primary_threat_callsign = max_points;  # in format `u.get_Callsign()~u.getUnique()`
-    return [max_points, max_points_num];
+    return [primary_threat_callsign, max_points_num];
 }
 
 var is_missile_launcher = func(contact) {  # simple function to determine if given contact is a missile launcher
@@ -333,8 +294,8 @@ var is_missile_launcher = func(contact) {  # simple function to determine if giv
 }
 
 # Loops
-update_list_epawss = maketimer(.5, update_epawss_contacts);
-update_primary_threat = maketimer(.5, determine_primary_threat);
+update_list_epawss = maketimer(.75, update_epawss_contacts);  # No need to run that super often
+update_primary_threat = maketimer(.75, determine_primary_threat);  # No need to run that super often
 
 update_list_epawss.start();
 update_primary_threat.start();
