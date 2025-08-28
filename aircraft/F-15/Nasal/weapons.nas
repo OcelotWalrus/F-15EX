@@ -752,13 +752,11 @@ var armament_update = func {
     }
     
     # Updates drop mode depending on the current PACS Program delivery mode
-    if (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 2) {  # CCIP mode
+    if (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 2) {  # CCIP mode for dumb bombs
         pylons.fcs.setDropMode(1);
     } else {  # Either direct or auto, both CCRP
         pylons.fcs.setDropMode(0);
     }
-    # Also update ripple dist (no matter the current mode)
-    pylons.fcs.setRippleDist(aircraft.pacs[aircraft.pacs_current_program].ripple_dist);
 
     # Update selected weapon on the HUD
     if (WeaponSelector.getValue() == 0) {
@@ -1094,7 +1092,30 @@ var arm_selector = func() {
                 var i += 1;
             }
             if (current_station_vec_idx != nil) {
-                pylons.fcs.selectPylon(current_station_vec_idx);
+                # release_sequence:
+                #  0: 1/STA - one ordnance per selected station will be dropped simultaneously with each
+                #              press of the pickle button. So if two stations are programmed, one bomb will fall
+                #              from each of them etc.
+                #  1: Step - one ordnance will be dropped with each press of the pickle button, alternating
+                #            between the stations to maintain best possible balance
+                #  2: Ripple Single - will drop one ordnance at a time, alternating between stations, automatically every
+                #             ripple_dist feet traveled by the F-15, until no programmed ordnance is left,
+                #             as soon as a single press of the pickle button is done.
+                #  3: Ripple Multiple - will drop one ordnance by selected station simultaneously, automatically every
+                #             ripple_dist feet traveled by the F-15, until no programmed ordnance is left,
+                #             as soon as a single press of the pickle button is done.
+                # ripple_dist: how much feet in space we wait for a new ripple iteration (if release sequence is either ripple single or ripple multiple)
+                if (pacs[pacs_current_program].release_sequence == 1) {  # STEP mode (one ordnance for one station per pickle trigger)
+                    pylons.fcs.selectPylon(current_station_vec_idx);  # Select first available pylon
+                    pylons.fcs.setRippleMode(1);  # No ripple, default
+                    pylons.fcs.setRippleDist(150*FT2M);  # Default value, not used cause ripple is set to 1 above
+                } elsif (pacs[pacs_current_program].release_sequence == 2) {  # RPL SGL (one ordnance every ripple_dist ft till none left)
+                    #pylons.fcs.selectDualWeapons(pacs[pacs_current_program].ordnance_type, pylons.fcs.getAmmoOfType(pacs[pacs_current_program].ordnance_type));  # Select as much as ordnance of that type we got
+                    # Problem is that it won't check if any of the selected pylons are in the program
+                    pylons.fcs.selectPylon(current_station_vec_idx);  # Select first available pylon
+                    pylons.fcs.setRippleMode(pylons.fcs.getAmmoOfType(pacs[pacs_current_program].ordnance_type));  # We tell the fire control how much of the current ordnance we got, so it knows how many it needs to release (all of 'em)
+                    pylons.fcs.setRippleDist(aircraft.pacs[aircraft.pacs_current_program].ripple_dist*FT2M);  # PACS Program's ripple dist parameter
+                }
                 setprop("sim/model/f15/systems/armament/selected-arm", aircraft.pacs[aircraft.pacs_current_program].ordnance_type);
                 # Apply Smart Weapon's data if valid
                 if (get_status_for_pylon(current_station_rel_idx)[0] == 1 and get_status_for_pylon(current_station_rel_idx)[1] == 0 and pylons.fcs.selected != nil) {  # Smart Weapon initiated and populated
@@ -1120,6 +1141,7 @@ var arm_selector = func() {
 							        setprop("sim/model/f15/avionics/tgp-lock", 1);
 						        }
 						        wp.setContacts([spot]);
+						        wp.arming_time = pacs[pacs_current_program].tarm;
 					        }
 				        }
                     }

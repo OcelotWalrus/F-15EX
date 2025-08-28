@@ -1044,7 +1044,7 @@ var AIM = {
         me.ccrp_heading = geo.normdeg(math.atan2(me.ccrp_speed_east_fps,me.ccrp_speed_north_fps)*R2D);
         me.ccrpPos.apply_course_distance(me.ccrp_heading, me.ccrp_dist);
 
-        #printf("Will fall %0.1f NM ahead of aircraft.", me.dist*M2NM);
+        #printf("Will fall %0.1f NM ahead of aircraft.", me.ccrp_dist*M2NM);
         me.ccrp_elev = me.ccrp_alti-me.ccrp_agl;#faster
         me.ccrpPos.set_alt(me.ccrp_elev);
 

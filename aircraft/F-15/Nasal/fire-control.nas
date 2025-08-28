@@ -849,8 +849,18 @@ var FireControl = {
 	rippleTest: func {
 		# test for distance if we should fire ripple bombs. And do so if distance is great enough.
 		me.rippleCount += 1;
+		print(geo.aircraft_position().distance_to(me.rippleCoord) / (me.rippleDist*(me.rippleThis-1)));
 		if (geo.aircraft_position().distance_to(me.rippleCoord) > me.rippleDist*(me.rippleThis-1)) {
 			me.aim = me.getSelectedWeapon();
+			print("FUCK");
+			print(me.aim != nil);
+			print(me.aim.parents[0] == armament.AIM);
+			print(me.aim.status == armament.MISSILE_LOCK);
+			if (me.aim.Tgt != nil) {
+			    print("HOWDY");
+			    print(me.aim.Tgt.get_Coord().lat());
+			    print(me.aim.Tgt.get_Coord().lon());
+			}
 			if (me.aim != nil and me.aim.parents[0] == armament.AIM and (me.aim.status == armament.MISSILE_LOCK or me.aim.guidance=="unguided")) {
 				me.fireAIM(me.selected[0],me.selected[1],me.guidanceEnabled);
 				if (me.selectedAdd != nil) {
@@ -869,13 +879,13 @@ var FireControl = {
 				}
 			}
 		}
-		if (me.rippleCount > 30) {
-			# after 7.5 seconds if its not finished rippling, cancel it. Might happen if the aircraft is still.
-			me.isRippling = 0;
-			setprop("sim/model/f15/gravity-dropping", 0);
-			screen.log.write("Cancelled ripple", 0.5, 0.5, 1);
-			return;
-		}
+		#if (me.rippleCount > 30) {
+		#	# after 7.5 seconds if its not finished rippling, cancel it. Might happen if the aircraft is still.
+		#	me.isRippling = 0;
+		#	setprop("sim/model/f15/gravity-dropping", 0);
+		#	screen.log.write("Cancelled ripple", 0.5, 0.5, 1);
+		#	return;
+		#}
 		settimer(func me.rippleTest(), 0.25);
 	},
 
