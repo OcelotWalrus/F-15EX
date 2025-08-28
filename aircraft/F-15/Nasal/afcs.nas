@@ -221,7 +221,7 @@ var routeManagerUpdate = func {
 # This is very basic I guess, but works
 # This part was made by Jimmy L. Miles  
 var TerFolRadUpdate = func() {
-    var tfr_enabled = (getprop("sim/model/f15/stores/nav-mounted") and getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/avionics/tf-couple-switch"));
+    var tfr_enabled = (getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/avionics/tf-couple-switch"));  # Used to have getprop("sim/model/f15/stores/nav-mounted") but modern F-15s don't need the nav pod no more
     if (tfr_enabled) {
 
         ter_data = terr_foll.tfs_radar();  # Update both following properties
