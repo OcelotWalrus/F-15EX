@@ -139,7 +139,7 @@ var load_cartridge = func(path) {
                 spot_alt = num(items[4]);
                 if (planned == nil) planned = createFlightplan();
                 var plan = planned;
-                var wp = createWP(spot_lat, spot_lon, sprintf("STPT-%02d",spot_index+1));
+                var wp = createWP(spot_lat, spot_lon, sprintf("STPT-%02d",spot_index));
                 plan.insertWP(wp, spot_index);
                 if (spot_alt != -9999) {  # code for "no-altitude"
                     var leg = plan.getWP(plan.getPlanSize()-1);
