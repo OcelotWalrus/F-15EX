@@ -485,6 +485,23 @@ var F15_HMD = {
             append(obj.mark_symbols, obj.tgt);
             append(obj.total, obj.tgt);
         }
+        obj.GPSSpotSquare = obj.centerOrigin.createChild("path")
+                .moveTo(-boxRadius*.5, boxRadius*.25)
+                .lineTo(-boxRadius*.5, boxRadius*.5)
+                .lineTo(-boxRadius*.25, boxRadius*.5)
+                .moveTo(boxRadius*.25, boxRadius*.5)
+                .lineTo(boxRadius*.5, boxRadius*.5)
+                .lineTo(boxRadius*.5, boxRadius*.25)
+                .moveTo(boxRadius*.5, -boxRadius*.25)
+                .lineTo(boxRadius*.5, -boxRadius*.5)
+                .lineTo(boxRadius*.25, -boxRadius*.5)
+                .moveTo(-boxRadius*.25, -boxRadius*.5)
+                .lineTo(-boxRadius*.5, -boxRadius*.5)
+                .lineTo(-boxRadius*.5, -boxRadius*.25)
+                .setStrokeLineWidth(stroke1)
+                .setColor(0,1,0)
+                .hide();
+        append(obj.total, obj.GPSSpotSquare);
         obj.steerPT = obj.centerOrigin.createChild("path")
                 .moveTo(-boxRadius*0.3, 0)
                 .lineTo(0, boxRadiusHalf*0.85)
@@ -707,6 +724,23 @@ var F15_HMD = {
 
                                       },
             func(val) {
+                                                 
+                                                # Update the GPS Spot
+                                                # We got an active ordnance that's a Smart Weapon, and it's got a target
+                                                if (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and pylons.fcs.getSelectedWeapon().Tgt != nil) {
+                                                    obj.gpsPos = hudmath.HudMath.getDevFromCoord(pylons.fcs.getSelectedWeapon().Tgt.get_Coord(), val.HmdH, val.HmdP, {"OrientationRollDeg": val.OrientationRollDeg, "OrientationPitchDeg": val.OrientationPitchDeg, "OrientationHeadingDeg": val.OrientationHeadingDeg,}, geo.viewer_position());
+													obj.gpsPos[0] = geo.normdeg180(obj.gpsPos[0]);
+                                                    obj.gpsPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                                                    obj.gpsPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+
+                                                    obj.clamped = math.sqrt(obj.stptPos[0]*obj.stptPos[0]+obj.stptPos[1]*obj.stptPos[1]) > 500;
+                                                    
+													obj.GPSSpotSquare.setTranslation(obj.gpsPos);
+													obj.GPSSpotSquare.show();
+                                                } else {
+                                                    obj.GPSSpotSquare.hide();
+                                                }
+                                                 
                                                  if (flightplan().current > -1 and getprop("autopilot/route-manager/active")) {  # should have !hdp.getproper("dgft") TODO
                                                     obj.plan = flightplan();
                                                     obj.wp = obj.plan.getWP(steerpoints.getCurrentNumber()-1);
@@ -724,12 +758,15 @@ var F15_HMD = {
 
                                                         obj.clamped = math.sqrt(obj.stptPos[0]*obj.stptPos[0]+obj.stptPos[1]*obj.stptPos[1]) > 500;
 
-                                                        if (!obj.clamped) {
-                                                            obj.steerPT.setTranslation(obj.stptPos);
-                                                            obj.steerPT.show();
-                                                        } else {
-                                                            obj.steerPT.hide();
-                                                        }
+                                                        obj.steerPT.setTranslation(obj.stptPos);
+                                                        obj.steerPT.show();
+                                                        # Always display the steerpoint
+                                                        #if (!obj.clamped) {
+                                                        #    obj.steerPT.setTranslation(obj.stptPos);
+                                                        #    obj.steerPT.show();
+                                                        #} else {
+                                                        #    obj.steerPT.hide();
+                                                        #}
                                                     }
                                                  } else {
                                                      obj.steerPT.hide();

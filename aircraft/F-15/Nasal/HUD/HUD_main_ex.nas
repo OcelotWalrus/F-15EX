@@ -239,6 +239,27 @@ var F15HUD = {
                           .setColor(0,1,0);
             obj.ccipLine = obj.ccipGrp.createChild("group");
 
+            # GPS-ordnance target designator
+            obj.GPSSpot = obj.canvas.createGroup();
+            obj.centerOrigin = hudmath.HudMath.getCenterOrigin();
+            obj.GPSSpot.setTranslation(obj.centerOrigin);
+            obj.GPSSpotSquare = obj.GPSSpot.createChild("path")
+                    .moveTo(-3.75, 1.875)
+                    .lineTo(-3.75, 3.75)
+                    .lineTo(-1.875, 3.75)
+                    .moveTo(1.875, 3.75)
+                    .lineTo(3.75, 3.75)
+                    .lineTo(3.75, 1.875)
+                    .moveTo(3.75, -1.875)
+                    .lineTo(3.75, -3.75)
+                    .lineTo(1.875, -3.75)
+                    .moveTo(-1.875, -3.75)
+                    .lineTo(-3.75, -3.75)
+                    .lineTo(-3.75, -1.875)
+                    .setStrokeLineWidth(.5)
+                    .setColor(0,1,0)
+                    .set("z-index",11000);
+
             # ILS/GS Landing aid
             obj.heading_tape_pointer = obj.get_element("path3419");
             obj.localizer = obj.canvas.createGroup();
@@ -591,6 +612,7 @@ var F15HUD = {
                                               or val.ControlsHudBrightness <= 0) {
                                               obj.svg.setVisible(0);
 											  obj.stby.setVisible(0);
+											  obj.color = [0.3,1,0.3,0];
                                           } else {
                                               obj.svg.setVisible(1);
 											  obj.color = [0.3,1,0.3,1];
@@ -779,6 +801,27 @@ var F15HUD = {
 				"OrientationHeadingDeg", "OrientationPitchDeg", "OrientationRollDeg", "NavigationMode", "TacanStationInRange", "TacanXShift", "TacanYShift"
 			], nil, func(val)
                                                         {
+                                                        
+                                                        # Update the GPS Spot
+                                                        # We got an active ordnance that's a Smart Weapon, and it's got a target
+                                                        if (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and pylons.fcs.getSelectedWeapon().Tgt != nil) {
+                                                            obj.steerDir = [geo.aircraft_position().course_to(pylons.fcs.getSelectedWeapon().Tgt.get_Coord()), vector.Math.getPitch(geo.aircraft_position(), pylons.fcs.getSelectedWeapon().Tgt.get_Coord())];
+														    obj.wpbear = obj.steerDir[0];  # Absolute Bearing
+														    if (obj.wpbear != nil) {
+															    obj.wpbear = geo.normdeg180(obj.wpbear-val.OrientationHeadingDeg);  # Relative bearing
+																obj.steerCart = vector.Math.eulerToCartesian2(-obj.steerDir[0], obj.steerDir[1]);
+																obj.steerLocal = vector.Math.yawPitchRollVector(val.OrientationHeadingDeg, -val.OrientationPitchDeg, -val.OrientationRollDeg, obj.steerCart);
+																obj.steerLocalEuler = vector.Math.cartesianToEuler(obj.steerLocal);
+																obj.steerHUD = hudmath.HudMath.getCenterPosFromDegs(obj.steerLocalEuler[0]==nil?0:geo.normdeg180(obj.steerLocalEuler[0]),obj.steerLocalEuler[1]);
+																obj.GPSSpotSquare.setTranslation(obj.steerHUD);
+																obj.GPSSpotSquare.show();
+														    } else {
+                                                                obj.GPSSpotSquare.hide();
+														    }
+                                                        } else {
+                                                            obj.GPSSpotSquare.hide();
+                                                        }
+                                                        
 														# the Y position is still not accurate due to HUD being at an angle, but will have to do.
 													    if (flightplan().current > -1 and getprop("autopilot/route-manager/active") and val.NavigationMode != 1) {  # and !hdp.getproper("dgft")
 													         obj.plan = flightplan();
