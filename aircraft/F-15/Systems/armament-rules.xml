@@ -3887,4 +3887,15 @@
     </input>
     <output>sim/model/f15/payload/selected/lau128-l-down</output>
   </logic>
+  <logic>
+    <input>
+      <and>
+        <equals>
+          <property>payload/armament/station/id-5-set</property>
+          <value>4 x GBU-39</value>
+        </equals>
+      </and>
+    </input>
+    <output>sim/model/f15/payload/selected/gbu-39-c</output>
+  </logic>
 </PropertyList>

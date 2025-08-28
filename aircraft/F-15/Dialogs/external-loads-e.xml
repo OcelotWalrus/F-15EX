@@ -2138,6 +2138,7 @@
 							<value>3 x CBU-87</value>
 							<value>1 x GBU-31</value>
 							<value>1 x GBU-32</value>
+							<value>4 x GBU-39</value>
 							<value>1 x AGM-84D</value>
 							<value>1 x AGM-84E</value>
 							<value>1 x AGM-154A</value>
@@ -2152,6 +2153,8 @@
 								<script>
 									if (getprop("payload/armament/station/id-5-type") == "MK-83" or getprop("payload/armament/station/id-5-type") == "CBU-87") {
 										setprop("payload/armament/station/id-5-count", 3);
+									} elsif (getprop("payload/armament/station/id-5-type") == "GBU-39") {
+										setprop("payload/armament/station/id-5-count", 4);
 									} else {
 										setprop("payload/armament/station/id-5-count", 1);
 									}

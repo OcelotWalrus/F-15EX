@@ -5615,6 +5615,14 @@
             <property>sim/multiplay/generic/bool[313]</property>
         </condition>
     </animation>
+    <animation>
+        <type>select</type>
+        <nopreview />
+        <object-name>gbu-39-c</object-name>
+        <condition>
+            <property>sim/multiplay/generic/bool[347]</property>
+        </condition>
+    </animation>
 
     <animation>
         <type>select</type>
@@ -8037,6 +8045,13 @@
             <x-m>2</x-m>
             <y-m>2.78</y-m>
             <z-m>0.185</z-m>
+    <model>
+        <name>gbu-39-c</name>
+        <path>Aircraft/F-15/Models/Stores/GBU-39/bru-61-5.xml</path>
+        <offsets>
+            <x-m>1.2</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.82</z-m>
         </offsets>
     </model>
 
