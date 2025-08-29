@@ -215,7 +215,7 @@ var F15HUD = {
                            .setColor(0,1,0)
                            .setStrokeLineWidth(obj.dlzLW);
 
-            hudmath.HudMath.init([-5.648,-0.07769,1.595], [-5.761,0.1002,1.348], [256,296], [0.124048, 0.586015], [0.879649,0.045312], 1);
+            hudmath.HudMath.init([-5.648,-0.07769,1.525], [-5.761,0.1002,1.278], [256,296], [0.124048, 0.586015], [0.879649,0.045312], 1);
             obj.ccipGrp = obj.canvas.createGroup();
             obj.centerOrigin = hudmath.HudMath.getCenterOrigin();
             obj.ccipGrp.setTranslation(obj.centerOrigin);
@@ -687,10 +687,31 @@ var F15HUD = {
                                                             obj.VV.setTranslation (obj.VV_x, obj.VV_y);
                                                             obj.localizer.setTranslation (obj.centerOrigin[0]+obj.VV_x, obj.centerOrigin[1]+obj.VV_y);
                                                         }),
-            props.UpdateManager.FromHashList(["hasGS","GSDeg","GSinRange","ILSDeg", "ILSinRange", "GSdist", "NavigationMode", "ILSCross", "ILSMode"], 0.01,
+            props.UpdateManager.FromHashList(["hasGS","GSDeg","GSinRange","ILSDeg", "ILSinRange", "GSdist", "NavigationMode", "ILSCross", "ILSMode", "ILSTTI"], 0.01,
              func(val)
                                       {
                                         if (val.ILSMode == 1) {  # NAV1 online ILS mode
+                                            
+                                            obj.rng = val.GSdist * M2NM;
+                                            obj.eta_s = math.abs(val.ILSTTI);
+                                            if (obj.rng != nil) {
+                                                obj.HudNavRangeDisplay = sprintf("N %4.1f", obj.rng);
+                                            } else {
+                                                obj.HudNavRangeDisplay = "N XXX";
+                                            }
+
+                                            if (obj.eta_s != nil) {
+												nav_mins = sprintf("%.0f", obj.eta_s / 60);
+												nav_secs = (obj.eta_s / 60 - nav_mins) * 60;  # remove whole minutes for seconds
+												if (nav_secs < 0) {  # tiny fix
+													nav_mins = nav_mins - 1;
+													nav_secs = 60 + nav_secs;
+												}
+	                                            obj.HudNavRangeETA = sprintf("%02d:%02d", nav_mins, nav_secs);
+                                            } else {
+                                                obj.HudNavRangeETA = "XX MIN";
+											}
+                                            
                                             #printf("ILSinRange %d GSdist %d", val.ILSinRange, val.GSdist);
                                             if (val.ILSinRange) {
                                                 #printf("ILS %d", val.ILSDeg);
@@ -1020,7 +1041,7 @@ var F15HUD = {
 																	obj.HudNavRangeDisplay = "N XX";
 																	obj.HudNavRangeETA = "XX";
 																}
-															} elsif (val.AutopilotRouteManagerActive) {
+															} elsif (val.AutopilotRouteManagerActive and (!val.ILSinRange or !(val.ILSMode > 0))) {
                                                                 obj.rng = val.AutopilotRouteManagerWpDist;
                                                                 obj.eta_s = val.AutopilotRouteManagerWpEtaSeconds;
                                                                 if (obj.rng != nil) {
@@ -1040,7 +1061,7 @@ var F15HUD = {
                                                                 } else {
                                                                 	obj.HudNavRangeETA = "XX MIN";
 																}
-                                                            } else {
+                                                            } elsif (!val.ILSinRange or !(val.ILSMode > 0)) {
                                                                 obj.HudNavRangeDisplay = "";
                                                                 obj.HudNavRangeETA = "";
                                                             }
@@ -1151,7 +1172,10 @@ var F15HUD = {
 														"OrientationHeadingDeg",
 														"ArmamentRippleCount",
 														"TacanChannel",
-														"GunsMode"], nil, func(val)
+														"GunsMode",
+														"ILSinRange",
+														"ILSMode",
+														"GSDeg"], nil, func(val)
                                                         {
                                                             if (val.ControlsArmamentMasterArmSwitch) {
                                                                 obj.window11.setVisible(1);
@@ -1392,7 +1416,18 @@ var F15HUD = {
                                                                 obj.window16.setVisible(0);
 																obj.window17.setVisible(0);
 																obj.window18.setVisible(0);
-                                                                if (val.HudNavRangeDisplay != "" and val.NavigationMode == 0) {  # NavigationMode: 0 = waypoint, 1= TACAN, 2=ILS Nav (not implemented), 3=ILS TACAN (not implemented)
+																obj.window6.setVisible(0); # SRM UNCAGE / TARGET ASPECT
+                                                                if (val.HudNavRangeDisplay != "" and val.ILSinRange and val.ILSMode > 0) {
+                                                                	obj.window3.setText("ILSN");
+                                                                	if (val.GSDeg > -.4) {
+                                                                	    obj.window6.setText("GSDN");
+                                                                	} elsif (val.GSDeg < .4) {
+                                                                	    obj.window6.setText("GSUP");
+                                                                	} else {
+                                                                	    obj.window6.setText("");
+                                                                	}
+																    obj.window6.setVisible(1);
+                                                                } elsif (val.HudNavRangeDisplay != "" and val.NavigationMode == 0) {
                                                                 	obj.window3.setText("NAV");
 																} elsif (val.HudNavRangeDisplay != "" and val.NavigationMode == 1) {
                                                                 	obj.window3.setText(sprintf("TACAN %s", val.TacanChannel));
@@ -1401,7 +1436,7 @@ var F15HUD = {
 																}
 	                                                            obj.window4.setText(val.HudNavRangeDisplay);
 	                                                            obj.window5.setText(val.HudNavRangeETA);
-	                                                            obj.window6.setVisible(0); # SRM UNCAGE / TARGET ASPECT
+	                                                            
                                                             }
                                                         }
                                                     ),
@@ -2623,6 +2658,7 @@ input = {
         GSdist                                  : "instrumentation/nav[0]/gs-distance",
         ILSCross                                : "instrumentation/nav[0]/radials/target-auto-hdg-deg",
         ILSMode                                 : "sim/model/f15/instrumentation/ils/mode",
+        ILSTTI                                  : "instrumentation/nav[0]/time-to-intercept-sec",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

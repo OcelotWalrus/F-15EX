@@ -3753,8 +3753,8 @@ update_lad = func() {
                     
                     var vsd_no_eta = getprop("instrumentation/nav[0]/time-to-intercept-sec") == 9999.9 or getprop("velocities/groundspeed-kt") < 150;  # Don't display that if we're still on the ground (150 kts about take off speed ish)
                     if (!vsd_no_eta) {
-                        var vsd_nav_mins = sprintf("%.0f", getprop("instrumentation/nav[0]/time-to-intercept-sec") / 60);
-                        var vsd_nav_secs = (getprop("instrumentation/nav[0]/time-to-intercept-sec") / 60 - vsd_nav_mins) * 60;  # remove whole minutes for seconds
+                        var vsd_nav_mins = sprintf("%.0f", math.abs(getprop("instrumentation/nav[0]/time-to-intercept-sec")) / 60);
+                        var vsd_nav_secs = (math.abs(getprop("instrumentation/nav[0]/time-to-intercept-sec")) / 60 - vsd_nav_mins) * 60;  # remove whole minutes for seconds
                         if (vsd_nav_secs < 0) {  # tiny fix
                             var vsd_nav_mins = vsd_nav_mins - 1;
                             var vsd_nav_secs = 60 + vsd_nav_secs;
