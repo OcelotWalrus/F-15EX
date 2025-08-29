@@ -19,7 +19,7 @@ var uv_x2 = 0;
 var uv_used = uv_x2-uv_x1;
 var ht_debug = 0;
 
-var flirImageReso = 16;
+var flirImageReso = 32;
 
 var sx = 276*uv_used;
 var sy = -106*3;
@@ -345,7 +345,7 @@ var F15HUD = {
 			obj.flirPicHD = obj.svg.createChild("image")
 	                .set("src", "Aircraft/F-15/Nasal/HUD/flir"~flirImageReso~".png")
 	                .setScale(256/flirImageReso,256/flirImageReso)#340,260
-	                .set("z-index",10001);
+	                .set("z-index",-1);
 	        obj.scanY = 0;
 	        obj.scans = flirImageReso/(getprop("sim/model/f15/avionics/hud-flir-optimum")?4:2);
 
