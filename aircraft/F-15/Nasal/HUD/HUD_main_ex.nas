@@ -914,24 +914,7 @@ var F15HUD = {
 															var mean_speed = 1; # placeholder
 															weap = pylons.fcs.getSelectedWeapon(); # get selected weapon data
 															if (weap != nil and weap.parents[0] == armament.AIM) {
-																if (weap.type != "AIM-9X" and weap.type != "CATM-9X" and weap.type != "AIM-120D" and weap.type != "CATM-120D" and weap.type != "AGM-65B" and weap.type != "AGM-65D" and weap.type != "AGM-84D" and weap.type != "AGM-84E" and weap.type != "AGM-88E" and weap.type != "AGM-119A" and weap.type != "AGM-154A" and weap.type != "AGM-158A" and weap.type != "AGM-158C" and getprop("sim/model/f15/armament/ccip-off") == 0 and pylons.fcs.getDropMode() == 1) {
-																	# Time to hit ground already computed, just gotta display it there
-																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
-																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
-																	obj.window17.setText(sprintf("CCIP %02d:%02d", fall_time_mins, fall_time_secs));
-																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "GBU-12" or weap.type == "GBU-31" or weap.type == "GBU-32" or weap.type == "GBU-39" or weap.type == "GBU-54" or weap.type == "MK-84" or weap.type == "MK-83" or weap.type == "MK-82" or weap.type == "MK-82AIR" or weap.type == "CBU-87" or weap.type == "CBU-105") and pylons.fcs.getDropMode() == 0 and obj.timeToRelease != nil and obj.CCRP_active != nil and obj.CCRP_active > 0) {
-																	obj.timeToReleaseH = int(obj.timeToRelease/3600);
-																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseH*3600;
-																	obj.timeToReleaseM = int(obj.timeToRelease/60);
-																	obj.timeToRelease = obj.timeToRelease-obj.timeToReleaseM*60;
-																	if (obj.timeToReleaseH < 1) {
-																		obj.window17.setText(sprintf("CCRP %02d:%02d",obj.timeToReleaseM,obj.timeToRelease));
-																	} else {
-																		obj.window17.setText("CCRP XX:XX");
-																	}
-																	obj.window17.setVisible(1);
-																} elsif ((weap.type == "AIM-120D" or weap.type == "CATM-120D" or weap.type == "AIM-9X" or weap.type == "CATM-9X" or weap.type == "AGM-88E" or weap.type == "AGM-84E" or weap.type == "AGM-158C") and getprop("instrumentation/datalink/power")) {  # needs datalink to be ON to work
+																if ((weap.type == "AIM-120D" or weap.type == "CATM-120D" or weap.type == "AIM-9X" or weap.type == "CATM-9X" or weap.type == "AGM-88E" or weap.type == "AGM-84E" or weap.type == "AGM-158C") and getprop("instrumentation/datalink/power")) {  # needs datalink to be ON to work
 																	if (weap.type == "AIM-9X" or weap.type == "CATM-9X") {
 																		mean_speed = mean_9_x_speed;
 																	} elsif (weap.type == "AIM-120D" or weap.type == "CATM-120D") {
@@ -1330,7 +1313,7 @@ var F15HUD = {
                                                                         var delivery_mode = "DIR";
                                                                         if (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 1) {
                                                                             var delivery_mode = "AUTO";
-                                                                        } elsif (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 2) {
+                                                                        } elsif (aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 2) {  # Should never be here anyway
                                                                             var delivery_mode = "CCIP";
                                                                         }
 
@@ -1352,6 +1335,46 @@ var F15HUD = {
                                                                         obj.window5.setText("");
                                                                         obj.window6.setText("");
                                                                     }
+                                                                } elsif (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and aircraft.pacs[aircraft.pacs_current_program].delivery_mode == 2) {  # CCIP ON
+                                                                
+                                                                    obj.window3.setText("NO TGT");
+                                                                    obj.window4.setText("");
+                                                                
+                                                                    # Time to hit ground already computed, just gotta display it there
+																	fall_time_mins = getprop("sim/model/f15/armament/fall-time-mins");
+																	fall_time_secs = getprop("sim/model/f15/armament/fall-time-secs");
+																	obj.window5.setText(sprintf("TTI %02d:%02d", fall_time_mins, fall_time_secs));
+																	
+																	var ordnance_type = "";
+                                                                    if (pylons.fcs.getSelectedWeapon().type == "AGM-84E") {
+                                                                        var ordnance_type = "SLAM";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158A") {
+                                                                        var ordnance_type = "JASSM";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-154A") {
+                                                                        var ordnance_type = "JSOW";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158C") {
+                                                                        var ordnance_type = "LRSAM";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-31" or pylons.fcs.getSelectedWeapon().type == "GBU-32" or pylons.fcs.getSelectedWeapon().type == "GBU-54") {
+                                                                        var ordnance_type = "JDAM";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-39") {
+                                                                        var ordnance_type = "SDB";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "CBU-105") {
+                                                                        var ordnance_type = "SFW";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "CBU-87") {
+                                                                        var ordnance_type = "CEM";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "MK-82") {
+                                                                        var ordnance_type = "MK82";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "MK-82AIR") {
+                                                                        var ordnance_type = "MKAIR";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "MK-83") {
+                                                                        var ordnance_type = "MK83";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "MK-84") {
+                                                                        var ordnance_type = "MK84";
+                                                                    }
+
+                                                                    obj.window6.setText(sprintf("%s CCIP", ordnance_type));
+                                                                    obj.window6.setVisible(1);
+																	
                                                                 } else {
                                                                     # this else added by Leto
                                                                     obj.window3.setText("");

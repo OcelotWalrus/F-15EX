@@ -453,7 +453,7 @@ var theShakeEffect = func() {
     var y = getprop("sim/view["~raw~"]/config/y-offset-m") or 0;
     var z = getprop("sim/view["~raw~"]/config/z-offset-m") or 0;
 
-	if (shakeEffectProp.getBoolValue() and (((G > getprop("fdm/jsbsim/systems/cadc/ows-maximum-g") or alpha > 15) and rSpeed > 30) or (mach > .99 and mach < 1.1) or (wow and rSpeed > 100) or gun)) {
+	if (shakeEffectProp.getBoolValue() and (((G > getprop("fdm/jsbsim/systems/cadc/ows-maximum-g") or alpha > 15) and rSpeed > 30) or (mach > .99 and mach < 1.1) or (wow and rSpeed > 100) or gun) and raw == 0) {
 		shakeProp.setValue(math.sin(48 * myTime) / 333.333);
 		interpolate("sim/current-view/x-offset-m", x + .5 * shakeProp.getValue() * 2.5, .25);
 		interpolate("sim/current-view/y-offset-m", y + -0.5 * shakeProp.getValue() * 2.5, .25);
