@@ -4493,6 +4493,10 @@
             <nws-maneuvering type="bool">false</nws-maneuvering>
             <brakes-blownout type="double">0</brakes-blownout>
         </gear>
+        <cabin>
+            <shake-effect type="bool">true</shake-effect>
+            <shaking type="double">0</shaking>
+        </cabin>
     </controls>
 
     <engines>

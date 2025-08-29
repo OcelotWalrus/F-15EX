@@ -423,6 +423,50 @@ var LADView = func () {  # lean into the LAD
     }
 }
 
+# 5H1N0B1's NOTE : Shake Effect : Taken to the 707 :
+#######################################################################################
+#   Lake of Constance Hangar :: M.Kraus
+#   Boeing 707 for Flightgear February 2014
+#   This file is licenced under the terms of the GNU General Public Licence V2 or later
+#######################################################################################
+
+############################ roll out and shake effect ##################################
+var shakeEffectProp = props.globals.initNode("controls/cabin/shake-effect", 0, "BOOL");
+var shakeProp       = props.globals.initNode("controls/cabin/shaking", 0, "DOUBLE");
+
+var theShakeEffect = func() {
+	#ge_a_r = getprop("sim/multiplay/generic/float[1]") or 0;
+	var rSpeed  = getprop("/velocities/airspeed-kt") or 0;
+	var G       = getprop("/accelerations/pilot-g");
+	var alpha   = getprop("/orientation/alpha-deg");
+	var mach    = getprop("velocities/mach");
+	var wow     = getprop("/gear/gear[0]/wow") or getprop("/gear/gear[1]/wow") or getprop("/gear/gear[2]/wow");  # Any of the gears on the ground
+	var gun     = getprop("controls/armament/trigger");  # Should only be when the gun's firing or something's triggered really
+	var myTime  = getprop("/sim/time/elapsed-sec");
+
+	#sf = ((rSpeed / 500000 + G / 25000 + alpha / 20000 ) / 3) ;
+	# I want to find a way to improve vibration amplitude with sf, but to tired actually to make it.
+	
+	
+	var raw = getprop("sim/current-view/view-number-raw");
+    var x = getprop("sim/view["~raw~"]/config/x-offset-m") or 0;
+    var y = getprop("sim/view["~raw~"]/config/y-offset-m") or 0;
+    var z = getprop("sim/view["~raw~"]/config/z-offset-m") or 0;
+
+	if (shakeEffectProp.getBoolValue() and (((G > getprop("fdm/jsbsim/systems/cadc/ows-maximum-g") or alpha > 15) and rSpeed > 30) or (mach > .99 and mach < 1.1) or (wow and rSpeed > 100) or gun)) {
+		shakeProp.setValue(math.sin(48 * myTime) / 333.333);
+		interpolate("sim/current-view/x-offset-m", x + .5 * shakeProp.getValue() * 2.5, .25);
+		interpolate("sim/current-view/y-offset-m", y + -0.5 * shakeProp.getValue() * 2.5, .25);
+		interpolate("sim/current-view/z-offset-m", z + .8 * shakeProp.getValue() * 2.5, .25);
+	}
+	else {
+		shakeProp.setValue(0);
+		interpolate("sim/current-view/x-offset-m", x, .5);
+		interpolate("sim/current-view/y-offset-m", y, .5);
+		interpolate("sim/current-view/z-offset-m", z, .5);
+	}
+}
+
 var quickstart = func() {
 #    setprop("controls/electric/engine[0]/generator",1);
 #    setprop("controls/electric/engine[1]/generator",1);
@@ -1400,6 +1444,9 @@ var F15MainModule =
             interpolate("sim/model/f15/avionics/bit-norm", 1, 160); # Take 2'30"
             settimer(func {setprop("sim/model/f15/avionics/bit-done", 1);}, 160);
         }
+        
+        # Shaking Effect
+        aircraft.theShakeEffect();
     
         # total distance flown calculations.
         currentDistance = distanceNode.getValue();
