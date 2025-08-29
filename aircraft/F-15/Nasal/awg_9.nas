@@ -693,9 +693,7 @@ var az_scan = func(notification) {
                         # notice the default class is set to AIR
                     }
 
-                    if ((getprop("instrumentation/radar/radar-filter-mode") == 0 and u.get_type() == AIR) or (getprop("instrumentation/radar/radar-filter-mode") == 1 and u.get_type() == SURFACE) or (getprop("instrumentation/radar/radar-filter-mode") == 2 and u.get_type() == MARINE)) {
-                        append(tgts_list, u);  # Check if the target is filtered or not by the RADAR MODE (0: AIR, 1: SURFACE, 2: SEA)
-                    }
+                    append(tgts_list, u);
                 }
             }
             scan_tgt_idx = 0;
@@ -1864,7 +1862,7 @@ else
 		me.Behind_terrain.setBoolValue(n);
 	},
 	get_EPAWSS_visible : func() {
-	    return me.get_range() <= 120 and (me.get_RWR_visible() or me.isRadiating(geo.aircraft_position()) or me.isSpikingMe());
+	    return epawss.EpawssOn.getValue() and me.get_range() <= epawss.epawss_range and (me.get_RWR_visible() or me.isRadiating(geo.aircraft_position()) or me.isSpikingMe());
 	},
 	get_RWR_visible : func() {
 		return me.RWRVisible.getValue();

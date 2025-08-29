@@ -2774,7 +2774,7 @@
             <rwr_audio_extended type="bool">true</rwr_audio_extended>
             <tacview_supported type="bool">true</tacview_supported>
             <m28_auto type="bool">false</m28_auto>
-            <mlw_max type="double">120</mlw_max>
+            <mlw_max type="double">120</mlw_max>  <!-- must be the same value as epawss.epawss_range -->
             <auto_flare_caller type="bool">false</auto_flare_caller>
         </d-config>
         <armament>

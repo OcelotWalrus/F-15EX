@@ -1,6 +1,6 @@
 # F-15EX EPAWSS (Eagle Passive Active Warning Survivability System)
 # ---------------------------
-# The EPAWSS is the Eagle II's RWR that detects airborne, ground or ship-based
+# The EPAWSS is the Eagle II's RWR and other Electronic Warfare systems suite that detects airborne, ground or ship-based
 # radars, identifies them as threats or not, filter threats to give the pilot which threat
 # is the primary at the situation, detects missile launches and airborne missile activities.
 # ---------------------------
@@ -13,7 +13,7 @@
 # - For optimization concerns, we run the targets' update loop every .5 secondes, but it's actually
 # ran only if a model was added or removed in the sim.
 # - Aspects of the code such as the contacts list update is parts of the awg_9.nas's own update function.
-# - The awg_9.nas's Target class is reused by the EPAWSS.
+# - The awg_9.nas's Target class is reused by the EPAWSS and tgts_list.
 # - How the EPAWSS sorts threats is in the following way: different conditions add up points. The contact with the most points is defined as primary threat.
 #  supreme level - an approaching missile - + 9999 (overrides anything else. if they're multiple, we take the one with the biggest closure rate / dist ratio)
 #  1st level - a target that we've detected launching a missile less than 5 mins ago - +100
@@ -26,9 +26,10 @@
 #  and also: -1/2 points per 1 NM of distance between the aircraft and the EPAWSS contact.
 #  and also: +10 points per 25 kts of closure rate. (ratio so it's actually 2.5 points per 1 kt of closure rate, can remove points if closure rate is negative)
 #  and also: if it's a tanker, it's not considered a threat at all
+# - The primary threat gets determined in the epawss.nas update_primary_threat loop, of which the determined primary threat's identifier (format `<callsign><unique>`) gets saved into the `epawss.primary_threat_callsign` variable
 # ---------------------------
 # Future features (TODO's) :
-# - Add the EPAWSS/RWR to the systems, so it can be damaged by missiles and etc.
+# - Add the EPAWSS/RWR to the aircraft damage systems, so it can be damaged by missiles and etc, and get to malfunction.
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
@@ -205,7 +206,7 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
     }
 }
 
-var get_radar_type = func(contact) {  # returns either 0 (airborne radar), 1 (ground radar) or 2 (sea radar).
+var get_radar_type = func(contact) {  # returns either 0 (airborne radar or unkown), 1 (ground radar) or 2 (sea radar).
     raw_type = contact.get_type();
     if (raw_type == MARINE) {
         return 2;
