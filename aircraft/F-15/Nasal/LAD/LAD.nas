@@ -3518,6 +3518,8 @@ update_lad = func() {
                 radar_mode_str = "TWSA";
             } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man) {
                 radar_mode_str = "TWSM";
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_acm) {
+                radar_mode_str = "ACM";
             }
             LADCanvas.vsd_radar_mode_text.setText(sprintf("%d %s", awg_9.HoFieldBars.getValue(), radar_mode_str));
 
@@ -3529,7 +3531,7 @@ update_lad = func() {
             LADCanvas.vsd_azimuth_limit_circle_left.setTranslation(x_move_left, 0);
 
             # Update the cursor's placement, given input degrees
-            if (awg_9.wcs_current_mode != awg_9.wcs_mode_tws_auto) {  # The cursor moves on its own in TWS AUTO and cannot be controlled
+            if (awg_9.wcs_current_mode != awg_9.wcs_mode_tws_auto and awg_9.wcs_current_mode != awg_9.wcs_mode_acm) {  # The cursor moves on its own in TWS AUTO and cannot be controlled, and it ain't displayed in ACM mode
                 var cursor_az_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-az");
                 var cursor_el_deg = getprop("sim/model/f15/controls/LAD/cursor-deg-el");
                 var cursor_x_move = cursor_az_deg * 1354 / 60;
@@ -3577,14 +3579,17 @@ update_lad = func() {
                 LADCanvas.vsd_cursor_bearing.setText(sprintf("%03d", cursor_bearing));
                 LADCanvas.vsd_cursor.setVisible(1);
                 LADCanvas.vsd_cursor_bearing.setVisible(1);
-            } else {
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto) {  # We still display the cursor in TWS AUTO, we just can't control it
                 LADCanvas.vsd_cursor.setVisible(1);
                 LADCanvas.vsd_cursor_bearing.setVisible(1);
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_acm) {  # Ain't no cursor in ACM, target gets picked up automatically
+                LADCanvas.vsd_cursor.setVisible(0);
+                LADCanvas.vsd_cursor_bearing.setVisible(0);
             }
             
-            # Update AzFieldOffset depending on the cursor's placement (only if we're not HMD-slaving the radar)
+            # Update AzFieldOffset depending on the cursor's placement (only if we're not HMD-slaving the radar and we're not in an automatic radar mode (TWS AUTO or ACM))
             
-            if (!getprop("sim/model/f15/avionics/hmd-slaving")) {
+            if (!getprop("sim/model/f15/avionics/hmd-slaving") and awg_9.wcs_current_mode != awg_9.wcs_mode_tws_auto and awg_9.wcs_current_mode != awg_9.wcs_mode_acm) {
                 # Clamp the value
                 az_deg_offset = getprop("sim/model/f15/controls/LAD/cursor-deg-az");
                 max_allowable_az_offset = (120-awg_9.AzField.getValue()) / 2;  # How much the antennae can go left or right
@@ -3889,7 +3894,7 @@ update_lad = func() {
                         }
 
                         # We don't actually need the RWS check because in RWS TWS_tracks gets cleaned, but it makes things more optimized
-                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or !awg_9.containsV(awg_9.TWS_tracks, contact)) {  # Not tracked by TWS
+                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or (awg_9.wcs_current_mode == awg_9.wcs_mode_acm and contact != awg_9.active_u) or !awg_9.containsV(awg_9.TWS_tracks, contact)) {  # Not tracked by TWS
                             LADCanvas.tgt_symbols[target_idx].setVisible(1);
                             LADCanvas.tws_symbols[target_idx].setVisible(0);
                             LADCanvas.tgt_texts[target_idx].setVisible(0);
@@ -3934,7 +3939,7 @@ update_lad = func() {
 
                         LADCanvas.tws_symbols[target_idx].setRotation(roll_rot*D2R);
                         
-                        if (awg_9.active_u != nil and contact.getUnique() == awg_9.active_u.getUnique() and (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man)) {
+                        if (awg_9.active_u != nil and contact.getUnique() == awg_9.active_u.getUnique() and (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man or awg_9.wcs_current_mode == awg_9.wcs_mode_acm)) {
                             LADCanvas.tws_symbol_current.setVisible(1);
                             LADCanvas.tws_symbols[target_idx].setVisible(0);
                             
@@ -4284,6 +4289,8 @@ update_lad = func() {
                 LADCanvas.hsd_radar_mode.setText("     RWS");
             } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man) {  # If we're in TWS MAN mode
                 LADCanvas.hsd_radar_mode.setText(" TWS MAN");
+            } elsif (awg_9.wcs_current_mode == awg_9.wcs_mode_acm) {  # If we're in TWS MAN mode
+                LADCanvas.hsd_radar_mode.setText("     ACM");
             }
 
 
@@ -4566,7 +4573,7 @@ update_lad = func() {
                             LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
                         }
                         
-                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or !awg_9.containsV(awg_9.TWS_tracks, contact)) {  # Not tracked by TWS
+                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or awg_9.wcs_current_mode == awg_9.wcs_mode_acm or !awg_9.containsV(awg_9.TWS_tracks, contact)) {  # Not tracked by TWS
                             LADCanvas.tgt_symbols_hsd[target_idx].setVisible(1);
                             LADCanvas.tws_symbols_hsd[target_idx].setVisible(0);
                             LADCanvas.tgt_texts_hsd[target_idx].setVisible(0);
@@ -4591,7 +4598,7 @@ update_lad = func() {
                         
                         LADCanvas.tws_symbols_hsd[target_idx].setRotation(rotation*D2R);
                         
-                        if (awg_9.active_u != nil and contact.getUnique() == awg_9.active_u.getUnique() and (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man)) {
+                        if (awg_9.active_u != nil and contact.getUnique() == awg_9.active_u.getUnique() and (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man or awg_9.wcs_current_mode == awg_9.wcs_mode_acm)) {
                             LADCanvas.tws_symbol_current_hsd.setVisible(1);
                             LADCanvas.tws_symbols_hsd[target_idx].setVisible(0);
                             

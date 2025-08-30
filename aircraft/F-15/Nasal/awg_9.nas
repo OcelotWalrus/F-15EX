@@ -22,12 +22,13 @@
  #                       : Nikolai V. Chr
  #                       : Justin Nicholson
  #                       : Jimmy L. Miles (F-15EX retake), implementation of further 
- #                                        modes (RWS, TWS MAN and TWS AUTO) across the different F-15EX's systems,
+ #                                        modes (RWS, TWS MAN, TWS AUTO and ACM) across the different F-15EX's systems,
  #                                        implementation of more complex elevation scan with bars-like system.
  #                                        implementation of more complex azimuth scan with ability to offset the
  #                                        azimuth scan.
  #                                        Implementation of a basic TWS tracfiles system.
  #                                        Implementation of a basic NTCR system, taking into account target aspect and range
+ #                                        Implementation of a basic Auto Acquisition Mode radar mode for visual range combat
  #
  #	Date                 : August 7 2025
  #
@@ -87,6 +88,9 @@ var radar_ranges = [5,10,20,40,50,80,100,140,170,200,250,275];
 var TWS_tracks = [];  # Contact classes of the TWS tracked targets
 var TWS_tracks_callsigns = [];
 
+var last_acm_increament = getprop("sim/time/elapsed-sec");  # Use for timing in automatic scans in both ACM and TWS Auto
+var upwards = 1;
+var rightward = 1;
 
 var ElapsedSec        = props.globals.getNode("sim/time/elapsed-sec");
 var SwpFac            = props.globals.getNode("sim/model/"~this_model~"/instrumentation/awg-9/sweep-factor", 1);
@@ -131,11 +135,12 @@ var NTCROn = props.globals.getNode("sim/model/f15/controls/interiors/ntcr-master
 var awg9_trace = 0;
 var wcs_mode_pd_srch = 1;
 var wcs_mode_pd_stt = 2;
-var wcs_mode_pulse_srch = 3;  # This is actually RWR
+var wcs_mode_pulse_srch = 3;  # This is actually RWS
 var wcs_mode_pulse_stt = 4;
 var wcs_mode_rws = 5;  # Not actual RWS
 var wcs_mode_tws_auto = 6;
 var wcs_mode_tws_man = 7;
+var wcs_mode_acm = 8;
 var wcs_current_mode = wcs_mode_pulse_srch;
 
 var coverage_up = 0;  # Max altitude coverage
@@ -365,9 +370,9 @@ var rdr_loop = func(notification) {
         setprop("sim/multiplay/generic/string[6]", "");
 	}
 	
-	# TWS MAN mode allows to slave the HMD to the radar, allowing the pilot to direct the
+	# TWS MAN and ACM mode allows to slave the HMD to the radar, allowing the pilot to direct the
 	# azimuth and elevation bars right or left.
-	if (wcs_current_mode == wcs_mode_tws_man and getprop("sim/model/f15/avionics/hmd-slaving")) {
+	if ((wcs_current_mode == wcs_mode_tws_man or wcs_current_mode == wcs_mode_acm) and getprop("sim/model/f15/avionics/hmd-slaving")) {
 	    var hmd_h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
         var hmd_p = getprop("sim/current-view/pitch-offset-deg");
         
@@ -395,10 +400,62 @@ var rdr_loop = func(notification) {
         awg_9.HoFieldOffset.setValue(-hmd_p);
 	}
 	
+	# In ACM mode, if we're not HMCS-slaving, the elevation scan is handled automatically to scan up and down by 22 degrees by increments of 5 degrees every .5 secs
+	# That's only if we don't got an active radar target. If we do, the elevation is set to be centered at the active target's vertical deviation from us. Same for azimuth.
+	# Our bars is also always set to 4.
+	if (wcs_current_mode == wcs_mode_acm and !getprop("sim/model/f15/avionics/hmd-slaving") and (active_u == nil or !active_u.get_display())) {  # No valid target, ACM mode and no HMCS slaving
+	    HoFieldBars.setValue(4);
+	    AzField.setValue(80);
+	    if (ElapsedSec.getValue() > last_acm_increament + .5) {  # Change happens every .5 secs
+	        # Elevation Handling
+	        if (awg_9.upwards) {  # Upward scan
+	            if (HoFieldOffset.getValue() < -22) {  # We've reached the max up limit
+	                awg_9.upwards = 0;
+	            } else {
+	                HoFieldOffset.setValue(HoFieldOffset.getValue()-5);  # We add 5 degrees up
+	                last_acm_increament = ElapsedSec.getValue();
+	            }
+	        } elsif (!awg_9.upwards) {  # Upward scan
+	            if (HoFieldOffset.getValue() > 22) {  # We've reached the max down limit
+	                awg_9.upwards = 1;
+	            } else {
+	                HoFieldOffset.setValue(HoFieldOffset.getValue()+5);  # We add 5 degrees down
+	                last_acm_increament = ElapsedSec.getValue();
+	            }
+	        }
+
+	        # Azimuth handling
+	        max_allowable_az_offset = (120-awg_9.AzField.getValue()) / 2;  # How much the antennae can go left or right
+	        if (awg_9.rightward) {
+	            interpolate(AzFieldOffset, max_allowable_az_offset, .35);
+	            awg_9.rightward = 0;
+	        } elsif (!awg_9.rightward) {
+	            interpolate(AzFieldOffset, -max_allowable_az_offset, .35);
+	            awg_9.rightward = 1;
+	        }
+	    }
+	} elsif (wcs_current_mode == wcs_mode_acm and !getprop("sim/model/f15/avionics/hmd-slaving") and active_u != nil and active_u.get_display()) {  # Same as above but we do got an active target.
+	    HoFieldBars.setValue(4);
+	    HoFieldOffset.setValue(-active_u.get_total_elevation(OurPitch.getValue()));
+	    AzField.setValue(40);
+	    AzFieldOffset.setValue(active_u.get_deviation(OurHdg.getValue()));
+	}
+	
+	# ACM Mode is an Auto-Acquisition mode, meaning that the active radar target gets picked up automatically
+	if (wcs_current_mode == wcs_mode_acm) {
+	    var sorted_dist = sort (awg_9.tgts_list, func (a,b) {a.get_range()-b.get_range()});
+	    foreach(curr_tgt; sorted_dist) {
+	        if (curr_tgt.get_display() and active_u == nil) {  # Pick up the closest target
+	            active_u = curr_tgt;
+	            active_u_callsign = curr_tgt.get_Callsign();
+	        }
+	    }
+	}
+	
 	# In TWS AUTO mode, elevation scan is handled automatically:
 	# If there ain't no current active target, it's the highest bars setting that gets selected and the antenna's offset degs will always try to stay parallel to the horizon line (level)
 	# If we do got a current active target though, it's the bar setting 2 that gets selected (or up to 4/6/8 if there are other available targets that are considered urgent threats by the EPAWSS and that are outside of the 2-bar reach), and the antenna's offset degs will always try to look toward the current active target.
-	
+
 	# The antennae elevation keeps it across horizon line in RWS too
 	
 	if (wcs_current_mode == wcs_mode_tws_auto) {  # We're in TWS AUTO
@@ -430,30 +487,30 @@ var rdr_loop = func(notification) {
 	
 	# Synchronize the elevation angle coverage properties with the input'd elevation bars
 	# Refer to beginning of the file with the table
-	# 2 bars - RWS: 6* - TWS: 4*
-    # 4 bars - RWS: 13* - TWS: 7*
-    # 6 bars - RWS: 20* - TWS: 10*
-    # 8 bars - RWS: 26* - TWS: 15*
+	# 2 bars - RWS/ACM: 6* - TWS: 4*
+    # 4 bars - RWS/ACM: 13* - TWS: 7*
+    # 6 bars - RWS/ACM: 20* - TWS: 10*
+    # 8 bars - RWS/ACM: 26* - TWS: 15*
 	if (HoFieldBars.getValue() == 2) {
-	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch or wcs_current_mode == wcs_mode_acm) {
 	        HoField.setValue(6);
 	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
 	        HoField.setValue(4);
 	    }
 	} elsif (HoFieldBars.getValue() == 4) {
-	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch or wcs_current_mode == wcs_mode_acm) {
 	        HoField.setValue(13);
 	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
 	        HoField.setValue(7);
 	    }
 	} elsif (HoFieldBars.getValue() == 6) {
-	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch or wcs_current_mode == wcs_mode_acm) {
 	        HoField.setValue(20);
 	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
 	        HoField.setValue(10);
 	    }
 	} elsif (HoFieldBars.getValue() == 8) {
-	    if (wcs_current_mode == wcs_mode_pulse_srch) {
+	    if (wcs_current_mode == wcs_mode_pulse_srch or wcs_current_mode == wcs_mode_acm) {
 	        HoField.setValue(26);
 	    } elsif (wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man) {
 	        HoField.setValue(15);
@@ -463,7 +520,7 @@ var rdr_loop = func(notification) {
 	# Compute radar elevation altitude coverage
     # Note: positive degrees mean downward
     range_ft = getprop("instrumentation/radar/radar2-range") * 6076.12;  # 6076.12 is NM2FT coefficient
-    awg_9.field_offset = HoFieldOffset.getValue() - getprop("orientation/pitch-deg");  # Take in count antenna offset AND pitch offsets
+    awg_9.field_offset = HoFieldOffset.getValue();
     awg_9.actual_degrees_coverage_up = field_offset - HoField.getValue()/2;
     awg_9.actual_degrees_coverage_down = field_offset + HoField.getValue()/2;
     if (awg_9.actual_degrees_coverage_up < -30) {  # Max physical values
@@ -1229,7 +1286,7 @@ var hud_nearest_tgt = func() {
 		var u_elev_rad = (90 - active_u.get_total_elevation(our_pitch)) * D2R;
 if(awg9_trace >= 1)
 print("active_u ",wcs_mode, active_u.get_range()," Display", active_u.get_display(), "dev ",active_u.get_deviation(our_true_heading)," ",l_az_fld," ",r_az_fld);
-		if ((wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man)
+		if ((wcs_current_mode == wcs_mode_tws_auto or wcs_current_mode == wcs_mode_tws_man or wcs_current_mode == wcs_mode_acm)
 			and active_u.get_display()
 			and active_u.deviationA > l_az_fld
 			and active_u.deviationA < r_az_fld) {
@@ -1485,6 +1542,10 @@ wcs_mode_toggle = func() {
 		AzField.setValue(60);
 		ddd_screen_width = 0.0422;
 	} elsif ( wcs_current_mode == wcs_mode_tws_auto ) {
+        wcs_current_mode = wcs_mode_acm;
+		AzField.setValue(80);
+		ddd_screen_width = 0.0844;
+	} elsif ( wcs_current_mode == wcs_mode_acm ) {
         wcs_current_mode = wcs_mode_pulse_srch;
 		AzField.setValue(120);
 		ddd_screen_width = 0.0844;
@@ -1505,6 +1566,10 @@ wcs_mode_update = func() {
 		wcs_current_mode = wcs_mode_pulse_srch;
 		AzField.setValue(120);
 		ddd_screen_width = 0.0844;
+	} elsif ( WcsMode.getValue() ==  wcs_mode_acm) {
+		wcs_current_mode = wcs_mode_pulse_srch;
+		AzField.setValue(80);
+		ddd_screen_width = 0.0844;
 	}
     setprop("sim/model/"~this_model~"/instrumentation/radar-awg-9/wcs-mode", wcs_current_mode);
 }
@@ -1517,7 +1582,7 @@ wcs_mode_update = func() {
 # - isApproaching()  # Utilized by epawss.nas : return how many degrees the target is away if it's approaching, else, return null
 # - getIffResponse()  # Returns a boolean determining whether this target has responded to us through IFF Mode 4/5.
 # - requestIFF()  # Interrogate the target through IFF Mode 4/5 and update its IFF status thus, and also returns is IFF status (as getIffResponse does)
-# - getNTCR()  # Returns the output to display a target's model (computes whether NTCR can determine that or not)
+# - getNTCR()  # Returns the output to display a target's model (Simulate whether NTCR can determine that or not)
 # ---------------------------------------------------------------------
 var Target = {
 	new : func (c) {
