@@ -3152,7 +3152,7 @@ update_lad = func() {
                     } else {
                         aircraft.pacs_current_program += 1;
                     }
-                } elsif (LADCanvas.PACSmode == 3 and aircraft.pacs[aircraft.pacs_current_program].tarm != nil and point_in_quad(LADCanvas.screen_touch_pos, tarm_box)) {
+                } elsif (LADCanvas.PACSmode == 3 and aircraft.pacs[aircraft.pacs_current_program].tarm != nil and containsVector(SmartWeaps, aircraft.pacs[aircraft.pacs_current_program].ordnance_type) and point_in_quad(LADCanvas.screen_touch_pos, tarm_box)) {  # Only smart weapons can have their Arming Time changed
                     # Arming time goes on a .25 sec step from .25 to 25.
                     if (aircraft.pacs[aircraft.pacs_current_program].tarm >= 25) {  # Wrap up
                         aircraft.pacs[aircraft.pacs_current_program].tarm = .25;
