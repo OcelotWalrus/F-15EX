@@ -436,9 +436,16 @@ var rdr_loop = func(notification) {
 	    }
 	} elsif (wcs_current_mode == wcs_mode_acm and !getprop("sim/model/f15/avionics/hmd-slaving") and active_u != nil and active_u.get_display()) {  # Same as above but we do got an active target.
 	    HoFieldBars.setValue(4);
-	    HoFieldOffset.setValue(-active_u.get_total_elevation(OurPitch.getValue()));
+	    target_elev = -active_u.get_total_elevation(OurPitch.getValue());
+	    if (target_elev <= 60 and target_elev >= -60) {
+	        HoFieldOffset.setValue(target_elev);
+	    }
 	    AzField.setValue(40);
-	    AzFieldOffset.setValue(active_u.get_deviation(OurHdg.getValue()));
+	    target_az = active_u.get_deviation(OurHdg.getValue());
+	    max_allowable_az_offset = (120-awg_9.AzField.getValue()) / 2;  # How much the antennae can go left or right
+        if (target_az <= max_allowable_az_offset and target_az >= -max_allowable_az_offset) {
+	        AzFieldOffset.setValue(target_az);
+	    }
 	}
 	
 	# ACM Mode is an Auto-Acquisition mode, meaning that the active radar target gets picked up automatically
