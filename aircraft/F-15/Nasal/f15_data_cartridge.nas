@@ -42,17 +42,17 @@
 # - When loading a DTC, if data blocks such as DECKMin are missing, it won't cause a bug, though the minimum altitude
 # deck won't be applied. That means that if you're writing the data cartridge by hand, even if some data blocks do not
 # matter to you, set them at a 'standby' value so that you make sure they're disabled. You don't have to worry about
-# that when saving it through the Eagle II pre-planning in-game GUI dialog.
+# that when saving it through the Eagle II pre-planning in-game GUI dialog, because it saves everything into the file.
 # - When loading data cartridges, if unique data blocks - such as DATALINK - are set multiple times, it's the
-# latest iteration that will actually matter.
+# latest iteration that will actually matter (the one that's the furthest away in the file in terms of characters).
 # - All parameters inside a data block must be present for the program to function, or else, it won't load.
-# - If a steerpoint is given an index of 0 and the following one, not 1 but 2, it'll still load correctly,
-# the following one being acknowledged as index 1 even if 2 was stated
 # ---------------------------
 # Planned Features:
 # - Allow to set flight callsigns, so they're in a different color and symbology in the LAD, and also set a
 # flight lead callsign, so its bearing, ETA and distance gets displayed along Bullseye ETA etc. Flight
-# callsigns and lead will need to be connected on datalink for that to work
+# callsigns and lead will need to be connected on datalink for that to work. Flight callsigns will also
+# be tracked during your flight if they're on datalink, allowing to checkout their status in flight, or on ground
+# after the mission, seeing their fuel status, weapons status etc. at different recorded times.
 # - Allow to save A/G PACS Programs
 # ---------------------------
 # Author: Jimmy L. Miles

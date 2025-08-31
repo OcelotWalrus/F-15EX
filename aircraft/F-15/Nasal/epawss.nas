@@ -5,6 +5,9 @@
 # is the primary at the situation, detects missile launches and airborne missile activities.
 # ---------------------------
 # Available Functions :
+# - Detect when a new threat got picked up
+# - Share RWR contacts on Datalink
+# - Determine most threatening RWR contacts
 # ---------------------------
 # Stats:
 # - The EPAWSS' range is said to be 222 km, which is 120 NM. That includes detection of radars and missile launches.

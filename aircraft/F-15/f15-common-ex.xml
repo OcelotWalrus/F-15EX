@@ -2770,7 +2770,7 @@
             <hitable_by_air_munitions type="bool">true</hitable_by_air_munitions>
             <hitable_by_cannon type="bool">true</hitable_by_cannon>
             <is_fleet type="bool">false</is_fleet>
-            <rwr_to_screen type="bool">true</rwr_to_screen>
+            <rwr_to_screen type="bool">false</rwr_to_screen>
             <rwr_audio_extended type="bool">true</rwr_audio_extended>
             <tacview_supported type="bool">true</tacview_supported>
             <m28_auto type="bool">false</m28_auto>
@@ -2880,7 +2880,7 @@
                 <min-speed-for-guiding-mach type="double">0.4</min-speed-for-guiding-mach><!-- just a guess -->
                 <self-destruct-time-sec type="double">60</self-destruct-time-sec>         <!-- same as aim-9m -->
                 <seeker-angular-speed-dps type="double">60</seeker-angular-speed-dps>
-                <rosette-radius-deg type="double">0</rosette-radius-deg>
+                <rosette-radius-deg type="double">5</rosette-radius-deg>
                 <sw-expanded-acquisition-mode type="bool">true</sw-expanded-acquisition-mode>
                 <nutate-double-d-instead-of-circle type="bool">false</nutate-double-d-instead-of-circle>
                 <seeker-filter type="double">1.10</seeker-filter>
@@ -2898,7 +2898,7 @@
                 <DLZ-optimal-alt-feet type="double">25000</DLZ-optimal-alt-feet>
                 <DLZ-optimal-closing-mach type="double">2.0</DLZ-optimal-closing-mach> <!-- TODO: Check this -->
                 <seeker-beam-width-deg type="double">3.5</seeker-beam-width-deg><!-- source: CNATRA P-825 --> <!-- TODO: Check this -->
-                <reaquire type="bool">false</reaquire>
+                <reaquire type="bool">true</reaquire>
                 <lock-on-after-launch type="bool">true</lock-on-after-launch> <!-- TODO: Do we want loal? -->
                 <auto-switch-target-allowed type="bool">false</auto-switch-target-allowed>
                 <prowl-flight type="string">gyro-pitch</prowl-flight>
@@ -2942,7 +2942,7 @@
                 <min-speed-for-guiding-mach type="double">0.4</min-speed-for-guiding-mach><!-- just a guess -->
                 <self-destruct-time-sec type="double">60</self-destruct-time-sec>         <!-- same as aim-9m -->
                 <seeker-angular-speed-dps type="double">60</seeker-angular-speed-dps>
-                <rosette-radius-deg type="double">0</rosette-radius-deg>
+                <rosette-radius-deg type="double">5</rosette-radius-deg>
                 <sw-expanded-acquisition-mode type="bool">true</sw-expanded-acquisition-mode>
                 <nutate-double-d-instead-of-circle type="bool">false</nutate-double-d-instead-of-circle>
                 <seeker-filter type="double">1.10</seeker-filter>
