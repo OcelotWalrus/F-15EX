@@ -1439,6 +1439,46 @@
             </volume>
             <max-dist>5</max-dist>
         </ows-overload>
+        
+        <friendly-fire>
+            <name>friendly-fire</name>
+            <mode>looped</mode>
+            <type>avionics</type>
+            <path>Sounds/betty/warning.wav</path>
+            <condition>
+                <property>sim/model/f15/avionics/friendly-fire-betty</property>
+                <property>sim/current-view/internal</property>
+                <greater-than>
+                    <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+                    <value>0</value>
+                </greater-than>
+            </condition>
+            <volume>
+                <factor>1</factor>
+                <property>sim/model/f15/controls/interiors/betty-volume-knob</property>
+            </volume>
+            <max-dist>5</max-dist>
+        </friendly-fire>
+        
+        <dlnk-data>
+            <name>dlnk-data</name>
+            <mode>once</mode>
+            <type>avionics</type>
+            <path>Sounds/betty/data.wav</path>
+            <condition>
+                <property>instrumentation/datalink/received-data</property>
+                <property>sim/current-view/internal</property>
+                <greater-than>
+                    <property>fdm/jsbsim/systems/electrics/ac-essential-bus1</property>
+                    <value>0</value>
+                </greater-than>
+            </condition>
+            <volume>
+                <factor>1</factor>
+                <property>sim/model/f15/controls/interiors/betty-volume-knob</property>
+            </volume>
+            <max-dist>5</max-dist>
+        </dlnk-data>
 
         <caution-warning>
             <name>caution-warning</name>

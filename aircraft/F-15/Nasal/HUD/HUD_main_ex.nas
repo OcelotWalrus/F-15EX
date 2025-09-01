@@ -133,6 +133,7 @@ var F15HUD = {
         obj.ias_range = obj.get_element("ias_range");
         obj.window9_rect = obj.get_element("window9_rect");
         obj.window1_rect = obj.get_element("window1_rect");
+        obj.nofire_cross = obj.get_element("nofire_cross");
 
         obj.target_locked = obj.get_element("target_locked");
         obj.target_locked.setVisible(0);
@@ -1191,6 +1192,7 @@ var F15HUD = {
 																eegsShow = 0;
 																obj.window18.setVisible(0);
 																obj.window17.setVisible(0);
+																obj.nofire_cross.setVisible(0);
 
                                                                 if (w_s == 0) {
 																	eegsShow = 1;
@@ -1268,7 +1270,7 @@ var F15HUD = {
 																	#}
                                                                 }
                                                                 if (val.RadarActiveTargetAvailable or 0) {
-                                                                    obj.window3.setText(val.RadarActiveTargetCallsign);
+                                                                    obj.window3.setText("");  # Used to display contact's Callsign
                                                                     var model = "XX";
                                                                     if (val.RadarActiveTargetType != "")
                                                                     model = val.RadarActiveTargetType;
@@ -1279,6 +1281,7 @@ var F15HUD = {
                                                                         obj.window4.setText(sprintf("RNG %3.1f", val.RadarActiveTargetRange));
                                                                         obj.window5.setText(sprintf("CLO %-3d", val.RadarActiveTargetClosure));
 																		obj.window6.setVisible(1);
+																		obj.nofire_cross.setVisible(getprop("sim/model/f15/avionics/friendly-fire-betty"));  # We display a Friendly-Fire cross if the target's identified as friendly by either our radar or datalink. Note: the "sim/model/f15/avionics/friendly-fire-betty" prop gets triggered in awg_9.nas itself.
                                                                     } else{
                                                                         obj.window4.setText("");
                                                                         obj.window5.setText("");
@@ -1417,6 +1420,7 @@ var F15HUD = {
 																obj.window17.setVisible(0);
 																obj.window18.setVisible(0);
 																obj.window6.setVisible(0); # SRM UNCAGE / TARGET ASPECT
+																obj.nofire_cross.setVisible(0);
                                                                 if (val.HudNavRangeDisplay != "" and val.ILSinRange and val.ILSMode > 0) {
                                                                 	obj.window3.setText("ILSN");
                                                                 	if (val.GSDeg > -.4) {

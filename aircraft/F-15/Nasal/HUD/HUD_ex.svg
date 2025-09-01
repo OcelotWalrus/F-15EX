@@ -1029,6 +1029,12 @@
            id="tspan8129-2-9-0-0-4-1-9-6-4-1-9-4-3"
            sodipodi:role="line">200</tspan></text>
     </g>
+    <path
+       id="nofire_cross"
+       style="fill:#00ff00;stroke:#00ff00;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="M 64.161589,950.64385 170.86249,823.60158 m -106.931856,0.50414 107.162816,126.53813 -0.69287,-0.50416"
+       inkscape:label="#path3695"
+       inkscape:connector-curvature="0" />
     <g
        id="VelocityVector"
        transform="matrix(0.90051277,0,0,0.90051277,-124.43542,932.89584)"

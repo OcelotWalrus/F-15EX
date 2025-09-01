@@ -459,6 +459,21 @@ var rdr_loop = func(notification) {
 	    }
 	}
 	
+	# Play the Betty Warning sound when active target's is friendly and master arm's on
+	if (active_u != nil and active_u.get_visible() and getprop("sim/model/f15/controls/armament/master-arm-switch")) {
+	    contact_data = datalink.get_data(active_u.get_Callsign());
+	    dlnk_friendly = contact_data != nil and contact_data.is_known() and contact_data.is_friendly();
+	    radar_friendly = active_u.getIffResponse() == 1;
+	    friendly_fire = dlnk_friendly or radar_friendly;
+	    if (friendly_fire) {
+	        setprop("sim/model/f15/avionics/friendly-fire-betty", 1);
+	    } else {
+	        setprop("sim/model/f15/avionics/friendly-fire-betty", 0);
+	    }
+	} else {
+	    setprop("sim/model/f15/avionics/friendly-fire-betty", 0);
+	}
+	
 	# In TWS AUTO mode, elevation scan is handled automatically:
 	# If there ain't no current active target, it's the highest bars setting that gets selected and the antenna's offset degs will always try to stay parallel to the horizon line (level)
 	# If we do got a current active target though, it's the bar setting 2 that gets selected (or up to 4/6/8 if there are other available targets that are considered urgent threats by the EPAWSS and that are outside of the 2-bar reach), and the antenna's offset degs will always try to look toward the current active target.
@@ -623,6 +638,8 @@ var rdr_loop = func(notification) {
                         screen.log.write(out, 1,1,0);
                         print(out_detailed);
                         damageLog.push(out_detailed);
+                        setprop("instrumentation/datalink/received-data", 1);  # Trigger Betty "Data" sound
+                        settimer(func { setprop("instrumentation/datalink/received-data", 0); }, .5);
                     }
                 }
             }

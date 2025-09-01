@@ -1019,6 +1019,7 @@
                     <flyup-master-switch type="bool">false</flyup-master-switch>
                     <flyup-master-guard type="bool">true</flyup-master-guard>
                     <tf-couple-switch type="bool">false</tf-couple-switch>
+                    <friendly-fire-betty type="bool">false</friendly-fire-betty>
                 </avionics>
                 <flir>
                     <input>
@@ -5150,6 +5151,7 @@
             <power_prop type="string" alias="/instrumentation/datalink/power"/>
             <channel_prop type="string" alias="/instrumentation/datalink/channel"/>
             <receive_period type="double">1</receive_period>
+            <received-data type="bool">false</received-data>
             <checked-callsign type="string">Coyote01</checked-callsign>  # All 5 following are used for GUIs to see data that only Nasal could see, Jimmy L. Miles here
             <checked-found type="string">NOT FOUND</checked-found>
             <checked-lat type="float">0</checked-lat>

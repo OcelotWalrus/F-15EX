@@ -3894,7 +3894,7 @@ update_lad = func() {
                         }
 
                         # We don't actually need the RWS check because in RWS TWS_tracks gets cleaned, but it makes things more optimized
-                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or (awg_9.wcs_current_mode == awg_9.wcs_mode_acm and contact != awg_9.active_u) or !awg_9.containsV(awg_9.TWS_tracks, contact)) {  # Not tracked by TWS
+                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or (awg_9.wcs_current_mode == awg_9.wcs_mode_acm and contact.getUnique() != awg_9.active_u.getUnique()) or ((awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode) and !awg_9.containsV(awg_9.TWS_tracks, contact))) {  # Not tracked by TWS
                             LADCanvas.tgt_symbols[target_idx].setVisible(1);
                             LADCanvas.tws_symbols[target_idx].setVisible(0);
                             LADCanvas.tgt_texts[target_idx].setVisible(0);
@@ -3904,7 +3904,7 @@ update_lad = func() {
                             LADCanvas.tgt_texts[target_idx].setVisible(1);
                         }
                         
-                        if (awg_9.active_u_callsign == contact.get_Callsign()) {  # If this is our active target, we display its text (fix for RWS mode)
+                        if (awg_9.active_u.getUnique() == contact.getUnique()) {  # If this is our active target, we display its text (fix for RWS mode)
                             LADCanvas.tgt_texts[target_idx].setVisible(1);
                         }
                         
