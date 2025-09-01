@@ -206,7 +206,7 @@ var routeManagerUpdate = func {
 				turn_dist = 1;
 			}
 			setprop("/autopilot/route-manager/advance", turn_dist);
-			if (getprop("/sim/time/elapsed-sec")-getprop("/autopilot/internal/wp-change-time") > 60) {
+			if (getprop("/sim/time/elapsed-sec")-getprop("/autopilot/internal/wp-change-time") > 60 and time != nil) {
 				setprop("/autopilot/internal/wp-change-check-period", time);
 			}
 
