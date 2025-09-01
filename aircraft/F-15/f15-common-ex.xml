@@ -915,6 +915,7 @@
                     <expendables-master type="bool">false</expendables-master>
                     <expendables-guard type="bool">true</expendables-guard>
                     <expendables-sel type="int">0</expendables-sel> <!-- 0 auto 1 flare 2 chaff 3 auto -->
+                    <aging type="int">15</aging>  <!-- for how much seconds new RWR contacts are considered new -->
                 </epawss>
                 <effects>
                     <rust type="bool">true</rust>

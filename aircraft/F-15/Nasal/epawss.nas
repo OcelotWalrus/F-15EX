@@ -45,6 +45,8 @@ var contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts
 var former_contacts_list_callsigns = [];  # list of callsigns of all EPAWSS contacts of the last scan
 var contacts_list = [];  # list of all EPAWSS contacts, all children of the awg_9.Target class
 var new_threats = [];  # Used when displaying EPAWSS contacts, allowing to highlight new threats from already-detected ones. List of callsigns
+var new_threats_to_be_removed = [];  # Use to know when new threats are supposed to no longer be considered new
+var epawss_aging_time = props.globals.getNode("sim/model/f15/epawss/aging", 1);
 var EpawssOn = props.globals.getNode("sim/model/f15/epawss/epawss-on", 1);  # EPAWSS RWR master switch
 var Mp = props.globals.getNode("ai/models");
 var ElapsedSec = props.globals.getNode("sim/time/elapsed-sec");
@@ -190,21 +192,30 @@ var update_epawss_contacts = func() {  # computes the list of contacts of the EP
 
     # We go through each current contacts list, and if there's one or multiple that ain't in the former contacts list, we play the new contact sound
     # Also share our EPAWSS contacts over datalink
-    foreach(contact; contacts_list_callsigns) {
+    foreach(var contact; contacts_list_callsigns) {
         var found = 0;
         foreach(former_contact; former_contacts_list_callsigns) {
             if (former_contact == contact) {
                 found = 1;
             }
         }
-        if (found == 0) {
-            setprop("sim/model/f15/epawss/new-threat", 1);
+        if (!found) {
+            setprop("sim/model/f15/epawss/new-threat", 1);  # Play the new threat caution EPAWSS sound
             settimer(func {setprop("sim/model/f15/epawss/new-threat", 0); }, .4);
-            append(new_threats, contact);
-            settimer(func {remove(new_threats, contact); }, 45);  # remove it from new threats after 45 seconds (clear the new threat symbol of the LAD's HSD)
+            append(new_threats, contact);  # Add it to the new threat lists, for displaying devices to know
+            append(new_threats_to_be_removed, {callsign: contact, time: (ElapsedSec.getValue() + epawss_aging_time.getValue())});  # Apply EPAWSS contact aging to make it no longer a new threat after a certain time
         }
         if (getprop("instrumentation/datalink/sending") == 0 and getprop("sim/model/f15/avionics/jtids-selected-mode-knob") != 3) {  # safety, so we ain't overwriting smth that's already being sent over datalink - JTIDS knob 3d position is silent/receive-only mode
             datalink.send_data({"contacts":[{"callsign": contact, "iff": 0}]});  # sending unknown data because EPAWSS can't know
+        }
+    }
+    
+    # Go through each "new" RWR threats and see if they're too old to be considered new threats
+    for(var y = 0; y < size(new_threats_to_be_removed); y += 1) {
+        curr = new_threats_to_be_removed[y];
+        if (ElapsedSec.getValue() > curr.time) {  # Too old, remove it
+            remove(new_threats, curr.callsign);
+            remove(new_threats_to_be_removed, curr);
         }
     }
 }
