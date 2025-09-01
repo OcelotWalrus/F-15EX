@@ -2751,6 +2751,7 @@
             <type>avionics</type>
             <path>Aircraft/F-15/Sounds/aim-9-growl.wav</path>
             <condition>
+                <property>sim/model/f15/systems/armament/lock-light</property>
                 <property>sim/current-view/internal</property>
                 <property>payload/armament/aim-9x/sound-on-off</property>
                 <equals>
