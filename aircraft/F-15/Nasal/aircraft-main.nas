@@ -446,8 +446,8 @@ var theShakeEffect = func() {
 
 	#sf = ((rSpeed / 500000 + G / 25000 + alpha / 20000 ) / 3) ;
 	# I want to find a way to improve vibration amplitude with sf, but to tired actually to make it.
-	
-	
+
+
 	var raw = getprop("sim/current-view/view-number-raw");
     var x = getprop("sim/view["~raw~"]/config/x-offset-m") or 0;
     var y = getprop("sim/view["~raw~"]/config/y-offset-m") or 0;
@@ -534,35 +534,35 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     setprop("sim/model/f15/controls/electrics/emerg-gen-switch",1);
     setprop("sim/model/f15/controls/engs/l-eng-master-guard",0);
     setprop("sim/model/f15/controls/engs/r-eng-master-guard",0);
-    
+
     setprop("sim/model/f15/ejection-master", 1);
     setprop("sim/model/f15/controls/interiors/ground-power-switch", 0);
-    
+
     # ECS
-    
+
     setprop("fdm/jsbsim/systems/ecs/liquid-oxygen-activated", 0);
     setprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode", 0);
     setprop("fdm/jsbsim/systems/ecs/anti-fog", 1);
     setprop("sim/model/f15/controls/windshield-heat-switch-pos", 1);
     setprop("fdm/jsbsim/systems/ecs/bleed-air-source", 0);
     setprop("sim/model/f15/controls/interiors/air-cond-temp-placeholder", .5);
-    
+
     # FCP
     setprop("sim/model/f15/avionics/flyup-master-guard", 1);
     setprop("sim/model/f15/avionics/flyup-master-switch", 1);
     setprop("sim/model/f15/avionics/tf-couple-switch", 0);
-    
+
     # EPAWSS
     setprop("sim/model/f15/epawss/ewws-on", 1);
     setprop("sim/model/f15/controls/interiors/rwr-mstr-switch", 1);
     setprop("sim/model/f15/epawss/expendables-sel", 3);
     setprop("sim/model/f15/epawss/expendables-guard", 1);
     setprop("sim/model/f15/epawss/expendables-master", 1);
-    
+
     # NUC CONSENT
     setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 1);
     setprop("sim/model/f15/controls/interiors/nuclear-guard-pos", 0);
-    
+
     # SENSORS
     setprop("sim/model/f15/radar-awg-9/selected-mode-knob", 2);
     setprop("sim/model/f15/avionics/radar-altimeter-switch-pos", 1);
@@ -572,11 +572,11 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     setprop("sim/model/f15/avionics/nav-flir-switch-pos", 1);
     setprop("sim/model/f15/avionics/hud-flir-brt", .5);
     setprop("sim/model/f15/avionics/hud-flir-cont", .5);
-    
+
     # IFF
     setprop("sim/model/f15/controls/interiors/iff-master-switch", 1);
     setprop("sim/model/f15/controls/interiors/iff-mode4-switch", 1);
-    
+
     # Volumes
     setprop("sim/model/f15/epawss/caution-volume", .75);
     setprop("sim/model/f15/epawss/alert-volume", .85);
@@ -584,10 +584,10 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     setprop("sim/model/f15/controls/interiors/wpn-volume-knob", .65);
     setprop("sim/model/f15/instrumentation/ils/volume-norm", .75);
     setprop("sim/model/f15/controls/interiors/tacan-volume-knob", .75);
-    
+
     # NTCR
     setprop("sim/model/f15/controls/interiors/ntcr-master-switch", 1);
-    
+
     # Built-in-test
     setprop("sim/model/f15/avionics/bit-norm", 1);
     setprop("sim/model/f15/avionics/bit-done", 1);
@@ -651,35 +651,35 @@ var cold_and_dark = func()
     setprop("sim/model/f15/controls/engs/l-eng-master-guard",1);
     setprop("sim/model/f15/controls/engs/r-eng-master-guard",1);
     setprop("sim/model/f15/controls/electrics/jfs-starter",0);
-    
+
     setprop("sim/model/f15/ejection-master", 0);
     setprop("sim/model/f15/controls/interiors/ground-power-switch", 0);
-    
+
     # ECS
-    
+
     setprop("fdm/jsbsim/systems/ecs/liquid-oxygen-activated", 1);
     setprop("fdm/jsbsim/systems/ecs/oxygen-supply-mode", 0);
     setprop("fdm/jsbsim/systems/ecs/anti-fog", 0);
     setprop("sim/model/f15/controls/windshield-heat-switch-pos", 0);
     setprop("fdm/jsbsim/systems/ecs/bleed-air-source", 2);
     setprop("sim/model/f15/controls/interiors/air-cond-temp-placeholder", 0);
-    
+
     # FCP
     setprop("sim/model/f15/avionics/flyup-master-guard", 0);
     setprop("sim/model/f15/avionics/flyup-master-switch", 0);
     setprop("sim/model/f15/avionics/tf-couple-switch", 0);
-    
+
     # EPAWSS
     setprop("sim/model/f15/epawss/ewws-on", 0);
     setprop("sim/model/f15/controls/interiors/rwr-mstr-switch", 0);
     setprop("sim/model/f15/epawss/expendables-sel", 0);
     setprop("sim/model/f15/epawss/expendables-guard", 0);
     setprop("sim/model/f15/epawss/expendables-master", 0);
-    
+
     # NUC CONSENT
     setprop("sim/model/f15/controls/interiors/nuclear-consent-pos", 1);
     setprop("sim/model/f15/controls/interiors/nuclear-guard-pos", 0);
-    
+
     # SENSORS
     setprop("sim/model/f15/radar-awg-9/selected-mode-knob", 0);
     setprop("sim/model/f15/avionics/radar-altimeter-switch-pos", 0);
@@ -689,11 +689,11 @@ var cold_and_dark = func()
     setprop("sim/model/f15/avionics/nav-flir-switch-pos", 0);
     setprop("sim/model/f15/avionics/hud-flir-brt", 0);
     setprop("sim/model/f15/avionics/hud-flir-cont", 0);
-    
+
     # IFF
     setprop("sim/model/f15/controls/interiors/iff-master-switch", 0);
     setprop("sim/model/f15/controls/interiors/iff-mode4-switch", 0);
-    
+
     # Volumes
     setprop("sim/model/f15/epawss/caution-volume", 0);
     setprop("sim/model/f15/epawss/alert-volume", 0);
@@ -701,10 +701,10 @@ var cold_and_dark = func()
     setprop("sim/model/f15/controls/interiors/wpn-volume-knob", 0);
     setprop("sim/model/f15/instrumentation/ils/volume-norm", 0);
     setprop("sim/model/f15/controls/interiors/tacan-volume-knob", 0);
-    
+
     # NTCR
     setprop("sim/model/f15/controls/interiors/ntcr-master-switch", 0);
-    
+
     # Built-in-test
     setprop("sim/model/f15/avionics/bit-norm", 0);
     setprop("sim/model/f15/avionics/bit-done", 0);
@@ -881,6 +881,31 @@ setlistener("/controls/flight/elevator-trim", func {
 	if (getprop("/controls/flight/elevator-trim") > 0.51724) {
 		setprop("/controls/flight/elevator-trim", 0.51724);
 	}
+});
+
+setlistener("sim/model/f15/cft", func{
+    if (getprop("sim/model/f15/cft") != 1) {  # We make sure that when removing CFTs, unusable stations are emptied
+        #setprop("payload/weight[18]/selected", "Empty");  # Nav pod, you can now have it even without CFTs
+        setprop("payload/weight[19]/selected", "Empty");
+        setprop("payload/weight[20]/selected", "Empty");
+        setprop("payload/weight[21]/selected", "Empty");
+        setprop("payload/weight[22]/selected", "Empty");
+        setprop("payload/weight[23]/selected", "Empty");
+        setprop("payload/weight[24]/selected", "Empty");
+        setprop("payload/weight[25]/selected", "Empty");
+        if (getprop("payload/armament/station/id-3-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-3-set") != "CATM-120D AMRAAM Dummy") {
+            setprop("payload/weight[3]/selected", "Empty");
+        }
+        if (getprop("payload/armament/station/id-4-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-4-set") != "CATM-120D AMRAAM Dummy") {
+            setprop("payload/weight[4]/selected", "Empty");
+        }
+        if (getprop("payload/armament/station/id-6-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-6-set") != "CATM-120D AMRAAM Dummy") {
+            setprop("payload/weight[6]/selected", "Empty");
+        }
+        if (getprop("payload/armament/station/id-7-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-7-set") != "CATM-120D AMRAAM Dummy") {
+            setprop("payload/weight[7]/selected", "Empty");
+        }
+    }
 });
 
 ## Interior knobs sound listeners
@@ -1438,16 +1463,16 @@ var push_threat_circle_data_from_dtc = func (circle_idx, circle_lat, circle_lon,
 var F15MainModule =
 {
     update: func(notification){
-    
+
         # Initiate Built-in-distance if it ain't been
         if (!getprop("sim/model/f15/avionics/bit-done") and getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") > 5 and getprop("sim/model/f15/avionics/bit-norm") == 0) {
             interpolate("sim/model/f15/avionics/bit-norm", 1, 160); # Take 2'30"
             settimer(func {setprop("sim/model/f15/avionics/bit-done", 1);}, 160);
         }
-        
+
         # Shaking Effect
         aircraft.theShakeEffect();
-    
+
         # total distance flown calculations.
         currentDistance = distanceNode.getValue();
         if ( last_position != nil) {
@@ -1472,30 +1497,6 @@ var F15MainModule =
         thrust_weight_ratio = thrust / gross_weight;
         setprop("sim/model/f15/avionics/thrust-weight-ratio", thrust_weight_ratio);
 
-        # Make sure that if CFTs are not installed, non-CFT-compatible stations are empty
-        if (getprop("fdm/jsbsim/propulsion/cft") != 1 or !getprop("fdm/jsbsim/propulsion/cft")) {
-            #setprop("payload/weight[18]/selected", "Empty");  # Nav pod, you can now have it even without CFTs
-            setprop("payload/weight[19]/selected", "Empty");
-            setprop("payload/weight[20]/selected", "Empty");
-            setprop("payload/weight[21]/selected", "Empty");
-            setprop("payload/weight[22]/selected", "Empty");
-            setprop("payload/weight[23]/selected", "Empty");
-            setprop("payload/weight[24]/selected", "Empty");
-            setprop("payload/weight[25]/selected", "Empty");
-            if (getprop("payload/armament/station/id-3-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-3-set") != "CATM-120D AMRAAM Dummy") {
-                setprop("payload/weight[3]/selected", "Empty");
-            }
-            if (getprop("payload/armament/station/id-4-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-4-set") != "CATM-120D AMRAAM Dummy") {
-                setprop("payload/weight[4]/selected", "Empty");
-            }
-            if (getprop("payload/armament/station/id-6-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-6-set") != "CATM-120D AMRAAM Dummy") {
-                setprop("payload/weight[6]/selected", "Empty");
-            }
-            if (getprop("payload/armament/station/id-7-set") != "AIM-120D AMRAAM" and getprop("payload/armament/station/id-7-set") != "CATM-120D AMRAAM Dummy") {
-                setprop("payload/weight[7]/selected", "Empty");
-            }
-        }
-
         # Compute the engine master switches' position
         if (getprop("sim/model/f15/controls/interiors/eng-master-pos-r-force")) {
             setprop("sim/model/f15/controls/interiors/eng-master-pos-r", 1);
@@ -1507,7 +1508,7 @@ var F15MainModule =
         } else {
             setprop("sim/model/f15/controls/interiors/eng-master-pos-l", !(getprop("engines/engine[0]/starter") or getprop("engines/engine[0]/running")));
         }
-        
+
         # Sync lighting shit
         setprop("controls/lighting/ufc-inst-real", getprop("controls/lighting/ufc-inst") * getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 5);
         setprop("controls/lighting/chart-inst-real", getprop("controls/lighting/chart-inst") * getprop("fdm/jsbsim/systems/electrics/ac-essential-bus1") > 5);

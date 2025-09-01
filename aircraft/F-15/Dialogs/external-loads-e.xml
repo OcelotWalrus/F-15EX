@@ -172,11 +172,11 @@
 						  </not>
 					  </or>
 					</enable>
-                    <property>fdm/jsbsim/propulsion/cft</property>
+                    <property>sim/model/f15/cft</property>
                     <live>true</live>
                     <binding>
                         <command>property-toggle</command>
-                        <property>fdm/jsbsim/propulsion/cft</property>
+                        <property>sim/model/f15/cft</property>
                     </binding>
                 </checkbox>
             </group>
