@@ -11,16 +11,180 @@
 	<animation>
 		<type>select</type>
 		<object-name>GBU-39-base</object-name>
-      	<!--object-name>LJDAM_belly</object-name>
-      	<object-name>LJDAM_tip</object-name>
-      	<object-name>LJDAM_seeker</object-name>
-      	<object-name>LJDAM_wings</object-name>
-      	<object-name>LJDAM_body</object-name>
-      	<object-name>LJDAM_top</object-name-->
+      	<object-name>GBU-39-fin-dn-l</object-name>
+	  	<object-name>GBU-39-fin-dn-r</object-name>
+	  	<object-name>GBU-39-fin-up-l</object-name>
+	  	<object-name>GBU-39-fin-up-r</object-name>
+	  	<object-name>GBU-39-lower-wing-l</object-name>
+	  	<object-name>GBU-39-lower-wing-r</object-name>
+	  	<object-name>GBU-39-upper-wing-l</object-name>
+	  	<object-name>GBU-39-upper-wing-r</object-name>
 		<condition>
 			<property>payload/armament/gbu-39/flags/msl-id-102</property>
 		</condition>
 	</animation>
+	
+  <!-- deploy animation Note: the upper wings don't look quite right when transitioning -->
+	
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-fin-up-r</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>90</factor>
+    <center>
+      <x-m>1.037</x-m>
+      <y-m>.05368</y-m>
+      <z-m>-.07088</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>-1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-fin-up-l</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>90</factor>
+    <center>
+      <x-m>1.038</x-m>
+      <y-m>-.05388</y-m>
+      <z-m>-.07165</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-fin-dn-r</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>-90</factor>
+    <center>
+      <x-m>1.036</x-m>
+      <y-m>.05348</y-m>
+      <z-m>-.1785</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-fin-dn-l</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>-90</factor>
+    <center>
+      <x-m>1.036</x-m>
+      <y-m>-.05372</y-m>
+      <z-m>-.1773</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>1</y>
+      <z>-1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-lower-wing-r</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>55</factor>
+    <center>
+      <x-m>-.354</x-m>
+      <y-m>.07151</y-m>
+      <z-m>-.2523</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>translate</type>
+    <object-name>GBU-39-upper-wing-r</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>.4</factor>
+    <axis>
+      <x>1.2</x>
+      <y>.45</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-upper-wing-r</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>115</factor>
+    <center>
+      <x-m>-.0269</x-m>
+      <y-m>.04926</y-m>
+      <z-m>-.1984</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-lower-wing-l</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>-55</factor>
+    <center>
+      <x-m>-.354</x-m>
+      <y-m>-.07151</y-m>
+      <z-m>-.2523</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>translate</type>
+    <object-name>GBU-39-upper-wing-l</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>.4</factor>
+    <axis>
+      <x>1.2</x>
+      <y>-.45</y>
+      <z>0</z>
+    </axis>
+  </animation>
+  
+  <animation>
+    <type>rotate</type>
+    <object-name>GBU-39-upper-wing-l</object-name>
+    <property>payload/armament/gbu-39/flags/deploy-id-102</property>
+    <factor>-115</factor>
+    <center>
+      <x-m>-.0269</x-m>
+      <y-m>.04926</y-m>
+      <z-m>-.1984</z-m>
+    </center>
+    <axis>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </axis>
+  </animation>
 
 	<particlesystem>
          <name>explosion-inner</name>
@@ -671,12 +835,14 @@
 
 	<animation>
 	  	<object-name>GBU-39-base</object-name>
-      	<!--object-name>LJDAM_belly</object-name>
-      	<object-name>LJDAM_tip</object-name>
-      	<object-name>LJDAM_seeker</object-name>
-      	<object-name>LJDAM_wings</object-name>
-      	<object-name>LJDAM_body</object-name>
-      	<object-name>LJDAM_top</object-name-->
+	  	<object-name>GBU-39-fin-dn-l</object-name>
+	  	<object-name>GBU-39-fin-dn-r</object-name>
+	  	<object-name>GBU-39-fin-up-l</object-name>
+	  	<object-name>GBU-39-fin-up-r</object-name>
+	  	<object-name>GBU-39-lower-wing-l</object-name>
+	  	<object-name>GBU-39-lower-wing-r</object-name>
+	  	<object-name>GBU-39-upper-wing-l</object-name>
+	  	<object-name>GBU-39-upper-wing-r</object-name>
   		<enable-hot type="bool">false</enable-hot>
  	</animation>
 

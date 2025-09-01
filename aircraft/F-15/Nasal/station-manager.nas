@@ -110,12 +110,10 @@ var Station = {
 							}
 							return {};
 						};
-					} if (me.weaponName == "GBU-39") {  # agm-154 and GBU-39 got the same midflight behavior
+					} if (me.weaponName == "GBU-39") {  # AGM-154A and GBU-39 got the same midflight behavior
 						mf = func (struct) {
-							if (struct.dist_m != -1 and struct.dist_m*M2NM < 1.75) {  # When closer than 1.75 nm, start diving onto the target
-								return {"guidanceLaw":"direct","altitude":0,"altitude_at":0,"abort_midflight_function":1};
-							} elsif (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {
-								return {"altitude_at":5000};  # Loft altitude, 5,000ft above target
+							if (struct.dist_m != -1 and struct.dist_m*M2NM < 4) {  # When closer than 1.75 nm, start diving onto the target
+								return {"guidanceLaw":"direct","abort_midflight_function":1};
 							}
 							return {};
 						};
