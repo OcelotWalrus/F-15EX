@@ -372,7 +372,7 @@ var rdr_loop = func(notification) {
 	
 	# TWS MAN and ACM mode allows to slave the HMD to the radar, allowing the pilot to direct the
 	# azimuth and elevation bars right or left.
-	if ((wcs_current_mode == wcs_mode_tws_man or wcs_current_mode == wcs_mode_acm) and getprop("sim/model/f15/avionics/hmd-slaving")) {
+	if ((wcs_current_mode == wcs_mode_tws_man or wcs_current_mode == wcs_mode_acm) and getprop("sim/model/f15/avionics/hmd-slaving") and (active_u == nil or (active_u != nil !active_u.get_display()))) {
 	    var hmd_h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
         var hmd_p = getprop("sim/current-view/pitch-offset-deg");
         
@@ -434,7 +434,7 @@ var rdr_loop = func(notification) {
 	            awg_9.rightward = 1;
 	        }
 	    }
-	} elsif (wcs_current_mode == wcs_mode_acm and !getprop("sim/model/f15/avionics/hmd-slaving") and active_u != nil and active_u.get_display()) {  # Same as above but we do got an active target.
+	} elsif (wcs_current_mode == wcs_mode_acm and active_u != nil and active_u.get_display()) {  # Same as above but we do got an active target.
 	    HoFieldBars.setValue(4);
 	    target_elev = -active_u.get_total_elevation(OurPitch.getValue());
 	    if (target_elev <= 60 and target_elev >= -60) {
