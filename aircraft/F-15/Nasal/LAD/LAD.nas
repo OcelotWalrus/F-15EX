@@ -3409,12 +3409,12 @@ update_lad = func() {
             LADCanvas.law_text_down.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
             LADCanvas.law_box.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
             LADCanvas.law_text_down.setText("OFF");
-        } elsif (getprop("sim/model/f15/avionics/radar-altimeter-online") and getprop("position/altitude-agl-ft") > 1000) {
+        } elsif (getprop("sim/model/f15/avionics/radar-altimeter-online") and (getprop("position/altitude-agl-ft") > 1000 or getprop("controls/gear/gear-down"))) {
             LADCanvas.law_text_up.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.law_text_down.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.law_box.setColor(prst_green.r,prst_green.g,prst_green.b);
             LADCanvas.law_text_down.setText("ON");
-        } elsif (getprop("sim/model/f15/avionics/radar-altimeter-online") and getprop("position/altitude-agl-ft") <= 1000) {
+        } elsif (getprop("sim/model/f15/avionics/radar-altimeter-online") and getprop("position/altitude-agl-ft") <= 1000 and !getprop("controls/gear/gear-down")) {
             LADCanvas.law_text_up.setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
             LADCanvas.law_text_down.setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
             LADCanvas.law_box.setColor(prst_red.r,prst_red.g,prst_red.b);
