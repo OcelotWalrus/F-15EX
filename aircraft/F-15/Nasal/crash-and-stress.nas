@@ -576,7 +576,7 @@ var yaSimProp = {
 var crashCode = nil;
 var crash_start = func {
 	removelistener(lsnr);
-	crashCode = CrashAndStress.new([0,1,2], {"weightLbs":55000, "maxG": 9, "minG": -3.5}, ["controls/flight/aileron", "controls/flight/elevator", "controls/flight/flaps"]);  # 55,000 lbs in Clean with CFTs.
+	crashCode = CrashAndStress.new([0,1,2], {"weightLbs":55000, "maxG": 10, "minG": -4.25}, ["controls/flight/aileron", "controls/flight/elevator", "controls/flight/flaps"]);  # 55,000 lbs in Clean with full fuel and CFTs.
 	crashCode.start();
 }
 
