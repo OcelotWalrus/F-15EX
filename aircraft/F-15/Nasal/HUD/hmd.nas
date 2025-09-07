@@ -535,6 +535,26 @@ var F15_HMD = {
                      .hide();
         append(obj.total, obj.tgpPointF);
         append(obj.total, obj.tgpPointC);
+        obj.dlnk_symbols = [];
+        obj.dlnk_texts = [];
+        for(var k = 0; k<obj.max_symbols;k+=1) {
+            obj.dlnk_tgt = obj.centerOrigin.createChild("path")
+                .moveTo(-100*mr,0)
+                .arcSmallCW(100*mr,100*mr, 0, 100*mr*2, 0)
+                .arcSmallCW(100*mr,100*mr, 0, -100*mr*2, 0)
+                .setStrokeLineWidth(stroke1)
+                .show()
+                .setColor(0,1,0);
+            append(obj.dlnk_symbols, obj.dlnk_tgt);
+            obj.dlnk_txt = obj.centerOrigin.createChild("text")
+                .setText("OPFOR999")
+                .setAlignment("center-center")
+                .setColor(0,1,0,1)
+                .setFont(HUD_FONT)
+                .show()
+                .setFontSize(fontSize/1.25, 1.1);
+            append(obj.dlnk_texts, obj.dlnk_txt);
+        }
         obj.radarLock = obj.centerOrigin.createChild("path")
             .moveTo(-boxRadius*hairFactor,0)
             .horiz(boxRadiusHalf*hairFactor)
@@ -643,12 +663,12 @@ var F15_HMD = {
                                             obj.ASEC120Aspect.setColorFill(obj.color);
                                             obj.ASEC65Aspect.setColorFill(obj.color);
                                           } elsif (val.HmdSym != nil and val.HmdPower != nil) {
-                                            var brt = val.HmdSym * val.HmdPower * (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") >= 75);
+                                            obj.brt = val.HmdSym * val.HmdPower * (getprop("fdm/jsbsim/systems/electrics/ac-left-main-bus") >= 75);
                                             # Ref: 16PR16226 page 60, adjusted up slightly
                                             var night_ratio = 0.6;
                                             obj.daylight_red = math.min(1, obj.extrapolate(val.Red, 0, 0.85, 0, 1));# treat 0.85 as full day light, so it dont have to june and noon at equator to get full brightness
-                                            brt *= (night_ratio + (obj.daylight_red * (1 - night_ratio)));
-                                            obj.color = [0.5,1,0.5,brt];
+                                            obj.brt *= (night_ratio + (obj.daylight_red * (1 - night_ratio)));
+                                            obj.color = [0.5,1,0.5,obj.brt];
                                             foreach(item;obj.total) {
                                               item.setColor(obj.color);
                                             }
@@ -658,13 +678,13 @@ var F15_HMD = {
                                       }),
             func(val) {
                                                  if (val.ControlsGearGearDown) {
-                                                     #obj.boreSymbol.hide();
+                                                     obj.boreSymbol.hide();
                                                  } else {
                                                      #obj.boreSymbol.setTranslation(obj.sx/2,obj.sy-obj.texels_up_into_hud);
                                                      #obj.eegsGroup.setTranslation(obj.sx/2,obj.sy-obj.texels_up_into_hud);
                                                      #printf("bore %d,%d",obj.sx/2,obj.sy-obj.texels_up_into_hud);
-                                                     #obj.locatorAngle.setTranslation(obj.sx/2-10,obj.sy-obj.texels_up_into_hud);
-                                                     #obj.boreSymbol.show();
+                                                     obj.locatorAngle.setTranslation(obj.sx/2-10,obj.sy-obj.texels_up_into_hud);
+                                                     obj.boreSymbol.show();
                                                  }
                                       },
             #props.UpdateManager.FromHashList(["AltitudeAGL","cara","measured_altitude","altSwitch","alow"], 1.0, func(val)
@@ -1233,7 +1253,7 @@ var F15_HMD = {
                         continue;
                     }
                     if (type == "multiplayer" or type == "tanker" or type == "aircraft" or type == "carrier" or type == "ship" or type == "groundvehicle") {
-                        print(c.getNode("callsign").getValue());
+                        #print(c.getNode("callsign").getValue());
                         if (c.getNode("callsign").getValue() == me.callsign) {
                             me.lat = c.getNode("position/latitude-deg").getValue();
                             me.lon = c.getNode("position/longitude-deg").getValue();
@@ -1297,19 +1317,99 @@ var F15_HMD = {
         me.locatorLine.setVisible(me.locatorLineShow);
         me.locatorAngle.setVisible(me.locatorLineShow);
         me.target_locked.setVisible(me.target_lock_show);
+        
+        # Display the datalink connections
+        var dlnk_idx = 0;
+        var datalink_connections = datalink.get_all_callsigns();
+        foreach (contact ; datalink_connections) {
+            if (dlnk_idx < me.max_symbols) {
+                contact_data = datalink.get_data(contact);
+                contact_idx = contact_data.index();
+                if (contact_idx != nil) {  # can make things bug sometimes
+                    contact_lat = getprop("/ai/models/multiplayer["~contact_idx~"]/position/latitude-deg");
+                    contact_lon = getprop("/ai/models/multiplayer["~contact_idx~"]/position/longitude-deg");
+                    contact_alt = getprop("/ai/models/multiplayer["~contact_idx~"]/position/altitude-ft");
+                    contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
+                    if (contact_data == nil or !contact_data.is_known()) {
+                        unknown = 1;
+                    } else {
+                        unknown = 0;
+                    }
 
-        # TODO - IMPLEMENT THAT, DISABLED FOR NOW
-        if (!me.target_lock_show and !hdp.RadarStandby and 1 == 0) { #  radar_system.apg68Radar.currentMode.longName == radar_system.acmBoreMode.longName
-            me.echoPos = hudmath.HudMath.getDevFromHMD(radar_system.apg68Radar.eulerX, radar_system.apg68Radar.eulerY, -hdp.HmdH, hdp.HmdP);
+                    if (unknown == 0) {
+                        friendly = contact_data.is_friendly();
+                        hostile = contact_data.is_hostile();
+                        on_link = contact_data.on_link();
+                    } else {
+                        friendly = 0;
+                        hostile = 0;
+                        on_link = 0;
+                    }
+
+                    if (on_link) {
+                        me.dlnk_symbols[dlnk_idx].setColor(0, 50/255, 1, me.brt);
+                        me.dlnk_texts[dlnk_idx].setColor(0, 50/255, 1, me.brt);
+                    } elsif (friendly) {
+                        me.dlnk_symbols[dlnk_idx].setColor(0, 1, 50/255, me.brt);
+                        me.dlnk_texts[dlnk_idx].setColor(0, 1, 50/255, me.brt);
+                    } elsif (hostile) {
+                        me.dlnk_symbols[dlnk_idx].setColor(1, 50/255, 0, me.brt);
+                        me.dlnk_texts[dlnk_idx].setColor(1, 50/255, 0, me.brt);
+                    } else {
+                        me.dlnk_symbols[dlnk_idx].setColor(1, 1, 50/255, me.brt);
+                        me.dlnk_texts[dlnk_idx].setColor(1, 1, 50/255, me.brt);
+                    }
+                    
+                    me.echoPos = hudmath.HudMath.getDevFromCoord(contact_coord, hdp.HmdH, hdp.HmdP, hdp, geo.viewer_position());
+                    #print(me.echoPos[0],",",me.echoPos[1],"    ", hdp.hmdH, "," ,hdp.hmdP);
+                    me.echoPos[0] = geo.normdeg180(me.echoPos[0]);
+                    #print("    ",me.echoPos[0]);
+                    me.echoPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                    me.echoPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+
+                    #me.clamped = math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]) > 500;
+
+                    #if (me.clamped) {
+                    #    me.clampAmount = 500/math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]);
+                    #    me.echoPos[0] *= me.clampAmount;
+                    #    me.echoPos[1] *= me.clampAmount;
+                    #}
+                    
+                    me.dlnk_symbols[dlnk_idx].setVisible(1);
+                    me.dlnk_texts[dlnk_idx].setVisible(1);
+                    
+                    me.dlnk_texts[dlnk_idx].setText(contact);  # Link 16 Callsign
+                    me.dlnk_symbols[dlnk_idx].setTranslation(me.echoPos);
+                    me.dlnk_texts[dlnk_idx].setTranslation(me.echoPos);
+                    
+                    dlnk_idx += 1;
+                }
+            }
+        }
+        
+        # Do not display any unused target boxes
+        for (var nv = dlnk_idx; nv < me.max_symbols;nv += 1) {
+            me.dlnk_symbols[nv].setVisible(0);
+            me.dlnk_texts[nv].setVisible(0);
+        }
+
+        # We display the radar's bore if we got no radar active target, the radar ain't standby and we're either slaving the radar to the HMD or we're in an Auto Acquisition radar mode
+        if (!me.target_lock_show and !hdp.RadarStandby and (getprop("sim/model/f15/avionics/hmd-slaving") or awg_9.wcs_current_mode == awg_9.wcs_mode_acm)) {
+            me.echoPos = hudmath.HudMath.getDevFromHMD(awg_9.AzFieldOffset.getValue(), -awg_9.HoFieldOffset.getValue(), -hdp.HmdH, hdp.HmdP);
+            me.echoPos[0] = geo.normdeg180(me.echoPos[0]);
             me.echoPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
             me.echoPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;
             me.clamped = math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]) > 500;
-            if (!me.clamped) {
-                me.rdrBore.setTranslation(me.echoPos);
-                me.rdrBore.show();
-            } else {
-                me.rdrBore.hide();
-            }
+            #if (!me.clamped) {
+            #    me.rdrBore.setTranslation(me.echoPos);
+            #    me.rdrBore.show();
+            #} else {
+            #    me.rdrBore.hide();
+            #}
+            
+            # Always display it no matter what
+            me.rdrBore.setTranslation(me.echoPos);
+            me.rdrBore.show();
         } else {
             me.rdrBore.hide();
         }
