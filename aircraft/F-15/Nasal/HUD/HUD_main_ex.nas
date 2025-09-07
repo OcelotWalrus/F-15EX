@@ -544,6 +544,8 @@ var F15HUD = {
 			# Warning texts
 			obj.WarningTexts = obj.canvas.createGroup();
 			obj.WarningTexts.setTranslation(obj.centerOrigin);
+			obj.altitude_threshold_hit = 0;
+			obj.last_law_250 = 0;
 			obj.altitudeDeck = obj.WarningTexts.createChild("text")
 	            .setText("ALTITUDE")
 	            .setTranslation(0,-75)
@@ -622,9 +624,13 @@ var F15HUD = {
 											  obj.GUNSAspect.setColorFill(obj.color);
                                           }
                                       }),
-            props.UpdateManager.FromHashValue("AltimeterIndicatedAltitudeFt", 1, func(val)
+            props.UpdateManager.FromHashList(["AltimeterIndicatedAltitudeFt", "AltitudeAGL"], 1, func(val)
                                              {
-                                                 obj.alt_range.setTranslation(0, val * alt_range_factor);
+                                                if (val.AltitudeAGL > 1000 or !getprop("sim/model/f15/avionics/radar-altimeter-online")) {
+                                                 obj.alt_range.setTranslation(0, val.AltimeterIndicatedAltitudeFt * alt_range_factor);
+                                                } else {  # When below 1,000ft AGL (LAW), AGL becomes principal altimeter
+                                                 obj.alt_range.setTranslation(0, val.AltitudeAGL * alt_range_factor);
+                                                }
                                              }),
 
             props.UpdateManager.FromHashValue("VelocitiesAirspeedKt", 0.1, func(val)
@@ -780,13 +786,17 @@ var F15HUD = {
 															}
 	                                                        obj.window10.setText(sprintf("a  %d", obj.alpha));
                                                         }),
-            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond", "AltitudeAGL"], nil, func(val)
+            props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond", "AltitudeAGL", "AltimeterIndicatedAltitudeFt", "AltitudeAGL"], nil, func(val)
                                                         {
                                                             obj.window9.setText(sprintf("%03d", math.round(val.VelocitiesAirspeedKt)));
                                                             obj.window13.setText(sprintf("G %03d", math.round(val.VelocitiesGroundspeedKt)));
 
                                                             # Separate thousands from the altitude to put em in evidence in the HUD
-                                                            altitude = math.round(val.AltimeterIndicatedAltitudeFt);
+                                                            if (val.AltitudeAGL > 1000 or !getprop("sim/model/f15/avionics/radar-altimeter-online")) {
+                                                                var altitude = math.round(val.AltimeterIndicatedAltitudeFt);
+                                                            } else {  # When AGL is lower than 1,000ft (LAW mode), AGL alt becomes principal alt
+                                                                var altitude = math.round(val.AltitudeAGL);
+                                                            }
                                                             big_altitude = 00;
                                                             if (altitude < 1000) {  # If no thousands, just keep it normal
                                                                 small_altitude = altitude;
@@ -813,7 +823,11 @@ var F15HUD = {
                                                             obj.window14.setVisible(1);
 
 															if (getprop("sim/model/f15/avionics/radar-altimeter-online")) {
-																obj.window19.setText(sprintf("%04d ftAGL", math.round(val.AltitudeAGL)));
+															    if (val.AltitudeAGL > 1000 or !getprop("sim/model/f15/avionics/radar-altimeter-online")) {
+																    obj.window19.setText(sprintf("%04d ftAGL", math.round(val.AltitudeAGL)));
+																} else {  # When lower than 1,000ft AGL (LAW mode), it becomes barometric alt and the main alt becomes AGL
+																    obj.window19.setText(sprintf("%04d ftBAR", math.round(val.AltimeterIndicatedAltitudeFt)));
+																}
 																obj.window19.setVisible(1);
 															} else {
 																obj.window19.setVisible(0);
@@ -1080,7 +1094,8 @@ var F15HUD = {
 														"RadarStandby",
 														"RadarFilterMode"
 														"BitDone",
-														"BitNorm"], 0.1, func(val)
+														"BitNorm",
+														"AltitudeAGL"], 0.1, func(val)
 														{
 															if (val.AltitudeDeckMinEnabled and (val.AltimeterIndicatedAltitudeFt < val.AltitudeDeckMin) and !val.ControlsGearGearDown) {
 																obj.altitudeDeck.show();
@@ -1092,6 +1107,22 @@ var F15HUD = {
 																obj.altitudeDeck.hide();
 																setprop("sim/model/f15/avionics/altitude-deck-hit", 0);
 															}
+															
+															# LAW Warning Receiver
+															if (obj.altitude_threshold_hit and val.AltitudeAGL > 1000 and getprop("sim/model/f15/avionics/radar-altimeter-online")) {  # LAW Was previously hit, but now we're above 1,000ft AGL
+															    obj.altitude_threshold_hit = 0;
+															} elsif (!obj.altitude_threshold_hit and val.AltitudeAGL < 1000 and getprop("sim/model/f15/avionics/radar-altimeter-online")) {  # LAW is hit
+															    obj.altitude_threshold_hit = 1;
+															    setprop("sim/model/f15/avionics/low-altitude-sound", 1);
+															    settimer(func { setprop("sim/model/f15/avionics/low-altitude-sound", 0); }, 1);
+															}
+															
+															if (val.AltitudeAGL < 250 and obj.last_law_250 + 2.5 < getprop("sim/time/elapsed-sec") and getprop("sim/model/f15/avionics/radar-altimeter-online")) {  # If we're 250ft AGL, trigger LAW every 2.5 secs
+															    setprop("sim/model/f15/avionics/low-altitude-sound", 1);
+															    settimer(func { setprop("sim/model/f15/avionics/low-altitude-sound", 0); }, 1);
+															    obj.last_law_250 = getprop("sim/time/elapsed-sec");
+															}
+															
 															if (!val.BitDone) {
 		                                                     	obj.flyup.setText(sprintf("B.I.T. %03d", val.BitNorm * 100));
 		                                                     	obj.flyup.show();
@@ -1128,7 +1159,7 @@ var F15HUD = {
 																}
 																time_till_crash_mil_sec = sprintf("%3d", time_till_crash_mil_sec);
 			                                                    obj.flyupTime.setText(sprintf("%s:%3d", time_till_crash_sec, time_till_crash_mil_sec));
-			                                                    obj.flyupTime.show();
+			                                                    obj.flyupTime.hide();  # We don't show it no more
 																setprop("sim/model/f15/avionics/pullup", 1);
 			                                                } else {
 			                                                    obj.flyupLeft.hide();

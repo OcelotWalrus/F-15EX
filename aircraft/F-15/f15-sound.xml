@@ -2841,7 +2841,7 @@
         </iff>
 
         <altitude>
-            <name>missile5</name>
+            <name>altitude-deck-hit</name>
             <path>Aircraft/F-15/Sounds/betty/altitude.wav</path>
             <mode>looped</mode>
             <type>avionics</type>
@@ -2854,6 +2854,20 @@
                 <property>sim/model/f15/controls/interiors/betty-volume-knob</property>
             </volume>
         </altitude>
+        <low-altitude>
+            <name>low-altitude</name>
+            <path>Aircraft/F-15/Sounds/betty/altitude.wav</path>
+            <mode>once</mode>
+            <type>avionics</type>
+            <condition>
+                <property>sim/model/f15/avionics/low-altitude-sound</property>
+                <property>/sim/current-view/internal</property>
+            </condition>
+            <volume>
+                <factor>1</factor>
+                <property>sim/model/f15/controls/interiors/betty-volume-knob</property>
+            </volume>
+        </low-altitude>
         <pullup>
             <name>pullup</name>
             <path>Aircraft/F-15/Sounds/betty/pullup.wav</path>

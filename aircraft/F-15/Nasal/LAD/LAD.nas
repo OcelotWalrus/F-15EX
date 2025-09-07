@@ -9,7 +9,7 @@
 # Available Displays :
 # - VSD (Vertical Situation Display)  - covers radar, navigation, datalink and pretty much everything
 # - HSD (Horizontal Situation Display)  - covers radar, navigation, datalink, EPAWSS, radio and pretty much everything
-# - PACS (Programmable Armament Control Set)  - merge of the PACS and Smart Weapons MFD pages of the F-15E's
+# - PACS (Programmable Armament Control Set)  - merge of the PACS and Smart Weapons and Jettison MFD pages of the F-15E's
 # Upcoming Displays :
 # - A/A RDR (Air-to-Air Radar - Legacy A/A radar display
 # - ADI (Attitude Director Indicator)
@@ -282,6 +282,8 @@ var prst_red = {"r": .941, "g": .019, "b": .019};
 var prst_red_dark = {"r": .3764, "g": .0076, "b": .0076};  # 2.5 times darker than regular orange (basically brown)
 
 # Settings
+var screen_layout = 0;
+var screen_layout_max = 1;
 var main_screens = {
     "left": "NIL",
     "center": "NIL",
@@ -620,6 +622,30 @@ var LAD_Device = {
             .setTranslation(4820,20)
             .setStrokeLineWidth(20)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
+        
+        # LAW box
+        m.law_text_up = m.upper_panel.createChild("text")
+            .setFontSize(145, 1.4)
+            .setText("LAW")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(5490,160)
+            .setFont(aircraft.HUDFont);
+        m.law_text_down = m.upper_panel.createChild("text")
+            .setFontSize(120, 1.4)
+            .setText("OFF")
+            .setAlignment("center-center")
+            .setColor(prst_white.r,prst_white.g,prst_white.b)
+            .setTranslation(5490,320)
+            .setFont(aircraft.HUDFont);
+        m.law_box = m.upper_panel.createChild("path")
+            .vert(230*2)
+            .horiz(190*2)
+            .vert(-230*2)
+            .horiz(-190*2)
+            .setTranslation(5300,20)
+            .setStrokeLineWidth(20)
+            .setColor(prst_white.r,prst_white.g,prst_white.b);
 
         m.upper_panel.setVisible(1);
         m.caution_text.setVisible(1);
@@ -653,6 +679,9 @@ var LAD_Device = {
         m.ils_text_up.setVisible(1);
         m.ils_text_down.setVisible(1);
         m.ils_box.setVisible(1);
+        m.law_text_up.setVisible(1);
+        m.law_text_down.setVisible(1);
+        m.law_box.setVisible(1);
 
         ## Main screens.
         ## The objects are actually all placed on the left screen,
@@ -674,7 +703,7 @@ var LAD_Device = {
             .horiz(1355*2)
             .vert(-2300*2)
             .horiz(-1355*2)
-            .setTranslation(1355+1355+20,500)
+            .setTranslation(1355+1355+20-565+115,500)
             .setStrokeLineWidth(20)
             .setColor(prst_red.r,prst_red.g,prst_red.b);
         m.main_screen_box_3 = m.upper_panel.createChild("path")
@@ -682,13 +711,17 @@ var LAD_Device = {
             .horiz(1355*2)
             .vert(-2300*2)
             .horiz(-1355*2)
-            .setTranslation(1355+1355+20+1355+1355+20,500)
+            .setTranslation(1355+1355+20+1355+1355+20+120+330,500)
             .setStrokeLineWidth(20)
             .setColor(prst_red.r,prst_red.g,prst_red.b);
 
         m.main_screen_box_1.setVisible(0);
         m.main_screen_box_2.setVisible(0);
         m.main_screen_box_3.setVisible(0);
+        
+        m.main_screen_box_1.setScale(.833,.833);
+        m.main_screen_box_2.setScale(1.333,1.333);
+        m.main_screen_box_3.setScale(.833,.833);
 
         ## VSD Display
         m.VSDScreen = m.svg.createGroup();
@@ -2234,6 +2267,7 @@ var LAD_Device = {
         
         # Buttons status
         m.LADButton00Pressed = 0;
+        m.LADButton01Pressed = 0;
 
         return m;
     },
@@ -3368,6 +3402,24 @@ update_lad = func() {
             LADCanvas.ils_text_down.setColor(prst_white.r,prst_white.g,prst_white.b);
             LADCanvas.ils_box.setColor(prst_white.r,prst_white.g,prst_white.b);
         }
+        
+        # Update the LAW's box
+        if (!getprop("sim/model/f15/avionics/radar-altimeter-online")) {
+            LADCanvas.law_text_up.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+            LADCanvas.law_text_down.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+            LADCanvas.law_box.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+            LADCanvas.law_text_down.setText("OFF");
+        } elsif (getprop("sim/model/f15/avionics/radar-altimeter-online") and getprop("position/altitude-agl-ft") > 1000) {
+            LADCanvas.law_text_up.setColor(prst_green.r,prst_green.g,prst_green.b);
+            LADCanvas.law_text_down.setColor(prst_green.r,prst_green.g,prst_green.b);
+            LADCanvas.law_box.setColor(prst_green.r,prst_green.g,prst_green.b);
+            LADCanvas.law_text_down.setText("ON");
+        } elsif (getprop("sim/model/f15/avionics/radar-altimeter-online") and getprop("position/altitude-agl-ft") <= 1000) {
+            LADCanvas.law_text_up.setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
+            LADCanvas.law_text_down.setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
+            LADCanvas.law_box.setColor(prst_red.r,prst_red.g,prst_red.b);
+            LADCanvas.law_text_down.setText("WARN");
+        }
 
         # Utilities
         var valid_radar_targets = [];  # used to check if we ain't displaying a EPAWSS or Datalink contact, that we already got on radar
@@ -3397,16 +3449,45 @@ update_lad = func() {
             LADCanvas.VSDScreen.setTranslation(0,0);  # Default position's position for the left main screen
             LADCanvas.VSDScreenDLZ.setTranslation(0,0);
             LADCanvas.VSDDisplayTrans = 0;
+            if (screen_layout == 0) {
+                LADCanvas.VSDScreen.setScale(1,1);
+                LADCanvas.VSDScreenDLZ.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                LADCanvas.VSDScreen.setScale(.8333,.8333);
+                LADCanvas.VSDScreenDLZ.setScale(.8333,.8333);
+            }
         } elsif (main_screens.center == "VSD") {
             VSD_ON = 1;
-            LADCanvas.VSDScreen.setTranslation(8192/3,0);
-            LADCanvas.VSDScreenDLZ.setTranslation(8192/3,0);
             LADCanvas.VSDDisplayTrans = 8192/3;
+            if (screen_layout == 0) {
+                LADCanvas.VSDScreen.setTranslation(8192/3,0);
+                LADCanvas.VSDScreenDLZ.setTranslation(8192/3,0);
+
+                LADCanvas.VSDScreen.setScale(1,1);
+                LADCanvas.VSDScreenDLZ.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                LADCanvas.VSDScreen.setTranslation(8192/3+115,0);
+                LADCanvas.VSDScreenDLZ.setTranslation(8192/3+115,0);
+                
+                LADCanvas.VSDScreen.setScale(1.333,1.333);
+                LADCanvas.VSDScreenDLZ.setScale(1.333,1.333);
+            }
         } elsif (main_screens.right == "VSD") {
             VSD_ON = 1;
-            LADCanvas.VSDScreen.setTranslation((8192/3)*2,0);
-            LADCanvas.VSDScreenDLZ.setTranslation((8192/3)*2,0);
             LADCanvas.VSDDisplayTrans = (8192/3)*2;
+            if (screen_layout == 0) {
+                LADCanvas.VSDScreen.setTranslation((8192/3)*2,0);
+                LADCanvas.VSDScreenDLZ.setTranslation((8192/3)*2,0);
+
+                LADCanvas.VSDScreen.setScale(1,1);
+                LADCanvas.VSDScreenDLZ.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                LADCanvas.VSDScreen.setTranslation((8192/3)*2+330,0);
+                LADCanvas.VSDScreenDLZ.setTranslation((8192/3)*2+330,0);
+
+                LADCanvas.VSDScreen.setScale(.8333,.8333);
+                LADCanvas.VSDScreenDLZ.setScale(.8333,.8333);
+            }
         } else {
             VSD_ON = 0;
         }
@@ -3419,22 +3500,76 @@ update_lad = func() {
             LADCanvas.HSDScreenRdrCones.setTranslation(0,0);
             LADCanvas.HSDScreenTacticalDeployment.setTranslation(0,0);
             LADCanvas.HSDDisplayTrans = 0;
+            if (screen_layout == 0) {
+                LADCanvas.HSDScreen.setScale(1,1);
+                LADCanvas.HSDScreenLines.setScale(1,1);
+                LADCanvas.HSDScreenCircles.setScale(1,1);
+                LADCanvas.HSDScreenRdrCones.setScale(1,1);
+                LADCanvas.HSDScreenTacticalDeployment.setScale(1,1);
+            } elsif (screen_layout == 1) {
+
+                LADCanvas.HSDScreen.setScale(.8333,.8333);
+                LADCanvas.HSDScreenLines.setScale(.8333,.8333);
+                LADCanvas.HSDScreenCircles.setScale(.8333,.8333);
+                LADCanvas.HSDScreenRdrCones.setScale(.8333,.8333);
+                LADCanvas.HSDScreenTacticalDeployment.setScale(.8333,.8333);
+            }
         } elsif (main_screens.center == "HSD") {
             HSD_ON = 1;
-            LADCanvas.HSDScreen.setTranslation(8192/3,0);
-            LADCanvas.HSDScreenLines.setTranslation(8192/3,0);
-            LADCanvas.HSDScreenCircles.setTranslation(8192/3,0);
-            LADCanvas.HSDScreenRdrCones.setTranslation((8192/3),0);
-            LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3),0);
             LADCanvas.HSDDisplayTrans = 8192/3;
+            if (screen_layout == 0) {
+                LADCanvas.HSDScreen.setTranslation(8192/3,0);
+                LADCanvas.HSDScreenLines.setTranslation(8192/3,0);
+                LADCanvas.HSDScreenCircles.setTranslation(8192/3,0);
+                LADCanvas.HSDScreenRdrCones.setTranslation((8192/3),0);
+                LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3),0);
+
+                LADCanvas.HSDScreen.setScale(1,1);
+                LADCanvas.HSDScreenLines.setScale(1,1);
+                LADCanvas.HSDScreenCircles.setScale(1,1);
+                LADCanvas.HSDScreenRdrCones.setScale(1,1);
+                LADCanvas.HSDScreenTacticalDeployment.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                LADCanvas.HSDScreen.setTranslation(8192/3+115,0);
+                LADCanvas.HSDScreenLines.setTranslation(8192/3+115,0);
+                LADCanvas.HSDScreenCircles.setTranslation(8192/3+115,0);
+                LADCanvas.HSDScreenRdrCones.setTranslation((8192/3)+115,0);
+                LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3),0);
+
+                LADCanvas.HSDScreen.setScale(1.333,1.333);
+                LADCanvas.HSDScreenLines.setScale(1.333,1.333);
+                LADCanvas.HSDScreenCircles.setScale(1.333,1.333);
+                LADCanvas.HSDScreenRdrCones.setScale(1.333,1.333);
+                LADCanvas.HSDScreenTacticalDeployment.setScale(1.333,1.333);
+            }
         } elsif (main_screens.right == "HSD") {
             HSD_ON = 1;
-            LADCanvas.HSDScreen.setTranslation((8192/3)*2,0);
-            LADCanvas.HSDScreenLines.setTranslation((8192/3)*2,0);
-            LADCanvas.HSDScreenCircles.setTranslation((8192/3)*2,0);
-            LADCanvas.HSDScreenRdrCones.setTranslation((8192/3)*2,0);
-            LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3)*2,0);
             LADCanvas.HSDDisplayTrans = (8192/3)*2;
+            if (screen_layout == 0) {
+                LADCanvas.HSDScreen.setTranslation((8192/3)*2,0);
+                LADCanvas.HSDScreenLines.setTranslation((8192/3)*2,0);
+                LADCanvas.HSDScreenCircles.setTranslation((8192/3)*2,0);
+                LADCanvas.HSDScreenRdrCones.setTranslation((8192/3)*2,0);
+                LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3)*2,0);
+
+                LADCanvas.HSDScreen.setScale(1,1);
+                LADCanvas.HSDScreenLines.setScale(1,1);
+                LADCanvas.HSDScreenCircles.setScale(1,1);
+                LADCanvas.HSDScreenRdrCones.setScale(1,1);
+                LADCanvas.HSDScreenTacticalDeployment.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                LADCanvas.HSDScreen.setTranslation((8192/3)*2+330,0);
+                LADCanvas.HSDScreenLines.setTranslation((8192/3)*2+330,0);
+                LADCanvas.HSDScreenCircles.setTranslation((8192/3)*2+330,0);
+                LADCanvas.HSDScreenRdrCones.setTranslation((8192/3)*2+330,0);
+                LADCanvas.HSDScreenTacticalDeployment.setTranslation((8192/3)*2+330,0);
+            
+                LADCanvas.HSDScreen.setScale(.8333,.8333);
+                LADCanvas.HSDScreenLines.setScale(.8333,.8333);
+                LADCanvas.HSDScreenCircles.setScale(.8333,.8333);
+                LADCanvas.HSDScreenRdrCones.setScale(.8333,.8333);
+                LADCanvas.HSDScreenTacticalDeployment.setScale(.8333,.8333);
+            }
         } else {
             HSD_ON = 0;
         }
@@ -3445,18 +3580,56 @@ update_lad = func() {
             LADCanvas.PACSScreenSmartWeapons.setTranslation(0,LADCanvas.PACSDisplayTransUp+620);  # Default position's position for the left main screen
             LADCanvas.PACSScreenAGPacs.setTranslation(0,LADCanvas.PACSDisplayTransUp+620);  # Default position's position for the left main screen
             LADCanvas.PACSDisplayTrans = 0;
+            if (screen_layout == 0) {
+                LADCanvas.PACSScreen.setScale(1,1);
+                LADCanvas.PACSScreenSmartWeapons.setScale(1,1);
+                LADCanvas.PACSScreenAGPacs.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                
+                LADCanvas.PACSScreen.setScale(.8333,.8333);
+                LADCanvas.PACSScreenSmartWeapons.setScale(.8333,.8333);
+                LADCanvas.PACSScreenAGPacs.setScale(.8333,.8333);
+            }
         } elsif (main_screens.center == "PACS") {
             PACS_ON = 1;
-            LADCanvas.PACSScreen.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
-            LADCanvas.PACSScreenSmartWeapons.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
-            LADCanvas.PACSScreenAGPacs.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
             LADCanvas.PACSDisplayTrans = 8192/3;
+            if (screen_layout == 0) {
+                LADCanvas.PACSScreen.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenSmartWeapons.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenAGPacs.setTranslation(8192/3,LADCanvas.PACSDisplayTransUp+620);
+
+                LADCanvas.PACSScreen.setScale(1,1);
+                LADCanvas.PACSScreenSmartWeapons.setScale(1,1);
+                LADCanvas.PACSScreenAGPacs.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                LADCanvas.PACSScreen.setTranslation(8192/3+115,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenSmartWeapons.setTranslation(8192/3+115,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenAGPacs.setTranslation(8192/3+115,LADCanvas.PACSDisplayTransUp+620);
+
+                LADCanvas.PACSScreen.setScale(1.333,1.333);
+                LADCanvas.PACSScreenSmartWeapons.setScale(1.333,1.333);
+                LADCanvas.PACSScreenAGPacs.setScale(1.333,1.333);
+            }
         } elsif (main_screens.right == "PACS") {
             PACS_ON = 1;
-            LADCanvas.PACSScreen.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
-            LADCanvas.PACSScreenSmartWeapons.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
-            LADCanvas.PACSScreenAGPacs.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
             LADCanvas.PACSDisplayTrans = (8192/3)*2;
+            if (screen_layout == 0) {
+                LADCanvas.PACSScreen.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenSmartWeapons.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenAGPacs.setTranslation((8192/3)*2,LADCanvas.PACSDisplayTransUp+620);
+
+                LADCanvas.PACSScreen.setScale(1,1);
+                LADCanvas.PACSScreenSmartWeapons.setScale(1,1);
+                LADCanvas.PACSScreenAGPacs.setScale(1,1);
+            } elsif (screen_layout == 1) {
+                LADCanvas.PACSScreen.setTranslation((8192/3)*2+330,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenSmartWeapons.setTranslation((8192/3)*2+330,LADCanvas.PACSDisplayTransUp+620);
+                LADCanvas.PACSScreenAGPacs.setTranslation((8192/3)*2+330,LADCanvas.PACSDisplayTransUp+620);
+
+                LADCanvas.PACSScreen.setScale(.8333,.8333);
+                LADCanvas.PACSScreenSmartWeapons.setScale(.8333,.8333);
+                LADCanvas.PACSScreenAGPacs.setScale(.8333,.8333);
+            }
         } else {
             PACS_ON = 0;
         }
@@ -3466,6 +3639,15 @@ update_lad = func() {
         if (LADCanvas.LADButton00Pressed) {  # Up left LAD Button
             LADCanvas.ScreenSelecting = !LADCanvas.ScreenSelecting;  # Toggle
             LADCanvas.LADButton00Pressed = 0;
+        }
+        
+        if (LADCanvas.LADButton01Pressed) {  # Up left LAD Button
+            if (screen_layout >= screen_layout_max) {  # Wrap up
+                screen_layout = 0;
+            } else {
+                screen_layout += 1;
+            }
+            LADCanvas.LADButton01Pressed = 0;
         }
         
         LADCanvas.ScreensSel.setVisible(LADCanvas.ScreenSelecting);
@@ -3894,7 +4076,7 @@ update_lad = func() {
                         }
 
                         # We don't actually need the RWS check because in RWS TWS_tracks gets cleaned, but it makes things more optimized
-                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or (awg_9.wcs_current_mode == awg_9.wcs_mode_acm and contact.getUnique() != awg_9.active_u.getUnique()) or ((awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode) and !awg_9.containsV(awg_9.TWS_tracks, contact))) {  # Not tracked by TWS
+                        if (awg_9.wcs_current_mode == awg_9.wcs_mode_pulse_srch or awg_9.wcs_current_mode == awg_9.wcs_mode_acm or ((awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode) and !awg_9.containsV(awg_9.TWS_tracks, contact))) {  # Not tracked by TWS
                             LADCanvas.tgt_symbols[target_idx].setVisible(1);
                             LADCanvas.tws_symbols[target_idx].setVisible(0);
                             LADCanvas.tgt_texts[target_idx].setVisible(0);
@@ -3904,7 +4086,7 @@ update_lad = func() {
                             LADCanvas.tgt_texts[target_idx].setVisible(1);
                         }
                         
-                        if (awg_9.active_u.getUnique() == contact.getUnique()) {  # If this is our active target, we display its text (fix for RWS mode)
+                        if (awg_9.active_u != nil and awg_9.active_u.getUnique() == contact.getUnique()) {  # If this is our active target, we display its text (fix for RWS mode)
                             LADCanvas.tgt_texts[target_idx].setVisible(1);
                         }
                         
@@ -3942,9 +4124,12 @@ update_lad = func() {
                         if (awg_9.active_u != nil and contact.getUnique() == awg_9.active_u.getUnique() and (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man or awg_9.wcs_current_mode == awg_9.wcs_mode_acm)) {
                             LADCanvas.tws_symbol_current.setVisible(1);
                             LADCanvas.tws_symbols[target_idx].setVisible(0);
+                            LADCanvas.tgt_symbols[target_idx].setVisible(0);
                             
                             LADCanvas.tws_symbol_current.setTranslation(x_move, y_move);
                             LADCanvas.tws_symbol_current.setRotation((roll_rot-180)*D2R);
+                        } else {
+                            LADCanvas.tws_symbol_current.setVisible(0);
                         }
                         
                         if (found_lock == 1 and lock_assigned == 0) {
@@ -4601,9 +4786,12 @@ update_lad = func() {
                         if (awg_9.active_u != nil and contact.getUnique() == awg_9.active_u.getUnique() and (awg_9.wcs_current_mode == awg_9.wcs_mode_tws_auto or awg_9.wcs_current_mode == awg_9.wcs_mode_tws_man or awg_9.wcs_current_mode == awg_9.wcs_mode_acm)) {
                             LADCanvas.tws_symbol_current_hsd.setVisible(1);
                             LADCanvas.tws_symbols_hsd[target_idx].setVisible(0);
+                            LADCanvas.tgt_symbols_hsd[target_idx].setVisible(0);
                             
                             LADCanvas.tws_symbol_current_hsd.setTranslation(x_move, y_move);
                             LADCanvas.tws_symbol_current_hsd.setRotation((rotation-180)*D2R);
+                        } else {
+                            LADCanvas.tws_symbol_current_hsd.setVisible(0);
                         }
     
                         LADCanvas.tgt_symbols_hsd[target_idx].setTranslation(x_move,y_move);
@@ -6021,6 +6209,11 @@ update_lad = func() {
 setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton00", func (v) {
     if (getprop("sim/model/f15/controls/LAD/buttons-pressed/LADButton00") == 1) {
         displays.LADCanvas.LADButton00Pressed = 1;
+    }
+});
+setlistener("sim/model/f15/controls/LAD/buttons-pressed/LADButton01", func (v) {
+    if (getprop("sim/model/f15/controls/LAD/buttons-pressed/LADButton01") == 1) {
+        displays.LADCanvas.LADButton01Pressed = 1;
     }
 });
 
