@@ -750,10 +750,10 @@ var F15_HMD = {
                                                 if (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and pylons.fcs.getSelectedWeapon().Tgt != nil) {
                                                     obj.gpsPos = hudmath.HudMath.getDevFromCoord(pylons.fcs.getSelectedWeapon().Tgt.get_Coord(), val.HmdH, val.HmdP, {"OrientationRollDeg": val.OrientationRollDeg, "OrientationPitchDeg": val.OrientationPitchDeg, "OrientationHeadingDeg": val.OrientationHeadingDeg,}, geo.viewer_position());
 													obj.gpsPos[0] = geo.normdeg180(obj.gpsPos[0]);
-                                                    obj.gpsPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
-                                                    obj.gpsPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                                                    obj.gpsPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.gpsPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                                                    obj.gpsPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.gpsPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
 
-                                                    obj.clamped = math.sqrt(obj.stptPos[0]*obj.stptPos[0]+obj.stptPos[1]*obj.stptPos[1]) > 500;
+                                                    obj.clamped = math.sqrt(obj.gpsPos[0]*obj.gpsPos[0]+obj.gpsPos[1]*obj.gpsPos[1]) > 500;
                                                     
 													obj.GPSSpotSquare.setTranslation(obj.gpsPos);
 													obj.GPSSpotSquare.show();
@@ -771,18 +771,18 @@ var F15_HMD = {
                                                         } else {
                                                             obj.wpC.set_latlon(obj.wp.lat,obj.wp.lon,0);
                                                         }
-                                                        obj.stptPos = hudmath.HudMath.getDevFromCoord(obj.wpC, val.HmdH, val.HmdP, {"OrientationRollDeg": val.OrientationRollDeg, "OrientationPitchDeg": val.OrientationPitchDeg, "OrientationHeadingDeg": val.OrientationHeadingDeg,}, geo.viewer_position());
-                                                        obj.stptPos[0] = geo.normdeg180(obj.stptPos[0]);
-                                                        obj.stptPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
-                                                        obj.stptPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.stptPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                                                        obj.gpsPos = hudmath.HudMath.getDevFromCoord(obj.wpC, val.HmdH, val.HmdP, {"OrientationRollDeg": val.OrientationRollDeg, "OrientationPitchDeg": val.OrientationPitchDeg, "OrientationHeadingDeg": val.OrientationHeadingDeg,}, geo.viewer_position());
+                                                        obj.gpsPos[0] = geo.normdeg180(obj.gpsPos[0]);
+                                                        obj.gpsPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.gpsPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                                                        obj.gpsPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(obj.gpsPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
 
-                                                        obj.clamped = math.sqrt(obj.stptPos[0]*obj.stptPos[0]+obj.stptPos[1]*obj.stptPos[1]) > 500;
+                                                        obj.clamped = math.sqrt(obj.gpsPos[0]*obj.gpsPos[0]+obj.gpsPos[1]*obj.gpsPos[1]) > 500;
 
-                                                        obj.steerPT.setTranslation(obj.stptPos);
+                                                        obj.steerPT.setTranslation(obj.gpsPos);
                                                         obj.steerPT.show();
                                                         # Always display the steerpoint
                                                         #if (!obj.clamped) {
-                                                        #    obj.steerPT.setTranslation(obj.stptPos);
+                                                        #    obj.steerPT.setTranslation(obj.gpsPos);
                                                         #    obj.steerPT.show();
                                                         #} else {
                                                         #    obj.steerPT.hide();
