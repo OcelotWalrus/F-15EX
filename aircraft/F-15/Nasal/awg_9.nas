@@ -2265,7 +2265,7 @@ else
     },
     get_wBody: func {
       var body = nil;
-      if (me.ubody != nil) {
+      if (me.ubody != nil and me.wbody != nil) {
         body = me.wbody.getValue();
       }
       if(body == nil) {
