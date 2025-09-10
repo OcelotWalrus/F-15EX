@@ -449,17 +449,17 @@ var theShakeEffect = func() {
 
 
 	var raw = getprop("sim/current-view/view-number-raw");
+	var internal = getprop("sim/current-view/internal");
     var x = getprop("sim/view["~raw~"]/config/x-offset-m") or 0;
     var y = getprop("sim/view["~raw~"]/config/y-offset-m") or 0;
     var z = getprop("sim/view["~raw~"]/config/z-offset-m") or 0;
 
-	if (shakeEffectProp.getBoolValue() and (((G > getprop("fdm/jsbsim/systems/cadc/ows-maximum-g") or alpha > 15) and rSpeed > 30) or (mach > .99 and mach < 1.1) or (wow and rSpeed > 100) or gun) and raw == 0) {
+	if (shakeEffectProp.getBoolValue() and (((G > getprop("fdm/jsbsim/systems/cadc/ows-maximum-g") or alpha > 15) and rSpeed > 30) or (mach > .99 and mach < 1.1) or (wow and rSpeed > 100) or gun) and internal) {
 		shakeProp.setValue(math.sin(48 * myTime) / 333.333);
 		interpolate("sim/current-view/x-offset-m", x + .5 * shakeProp.getValue() * 2.5, .25);
 		interpolate("sim/current-view/y-offset-m", y + -0.5 * shakeProp.getValue() * 2.5, .25);
 		interpolate("sim/current-view/z-offset-m", z + .8 * shakeProp.getValue() * 2.5, .25);
-	}
-	else {
+	} elsif (internal) {
 		shakeProp.setValue(0);
 		interpolate("sim/current-view/x-offset-m", x, .5);
 		interpolate("sim/current-view/y-offset-m", y, .5);

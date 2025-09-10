@@ -1381,7 +1381,7 @@
                 <layout>hbox</layout>
 
                 <text>
-                    <label>Cockpit View Shaking</label>
+                    <label>Cockpit View Shaking (Experimental)</label>
                 </text>
 
 				<checkbox>
