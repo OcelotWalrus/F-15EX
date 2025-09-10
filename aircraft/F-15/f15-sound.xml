@@ -2849,8 +2849,7 @@
                 <property>sim/model/f15/avionics/altitude-deck-hit</property>
                 <property>/sim/current-view/internal</property>
                 <not>
-                    <property>controls/gear/gear-down
-                    </property>
+                    <property>controls/gear/gear-down</property>
                 </not>
             </condition>
             <volume>
@@ -2867,8 +2866,7 @@
                 <property>sim/model/f15/avionics/low-altitude-sound</property>
                 <property>/sim/current-view/internal</property>
                 <not>
-                    <property>controls/gear/gear-down
-                    </property>
+                    <property>controls/gear/gear-down</property>
                 </not>
             </condition>
             <volume>
