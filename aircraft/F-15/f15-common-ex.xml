@@ -3962,10 +3962,10 @@
                 <lock-on-sun-deg type="double">5</lock-on-sun-deg>
                 <hit-everything-nearby type="bool">true</hit-everything-nearby>
                 <terminal-alt-factor type="double">2</terminal-alt-factor>
-                <terminal-rise-time type="double">23.0</terminal-rise-time>
+                <terminal-rise-time type="double">21.0</terminal-rise-time>
                 <terminal-dive-time type="double">13.0</terminal-dive-time>
                 <seeker-angular-speed-dps type="double">150</seeker-angular-speed-dps>
-                <max-g type="int">15</max-g>
+                <max-g type="int">5</max-g>
                 <stage-1-jet type="bool">true</stage-1-jet>
                 <jet-effectiveness-10000ft type="double">0.825</jet-effectiveness-10000ft>
                 <thrust-lbf-stage-1 type="double">13000</thrust-lbf-stage-1> <!-- 13000 lbf is approx 36000 lb sec impulse -->
@@ -3997,7 +3997,7 @@
                 <telemetry type="bool">true</telemetry>  <!-- E variant: got 2-way datalink -->
                 <DLZ type="bool">true</DLZ>
                 <DLZ-optimal-alt-feet type="double">25000</DLZ-optimal-alt-feet>  <!-- guess -->
-                <DLZ-optimal-closing-mach type="double">.9</DLZ-optimal-closing-mach>  <!-- the SLAM's got a sbsonic cruise speed of .9 Ma -->
+                <DLZ-optimal-closing-mach type="double">.9</DLZ-optimal-closing-mach>  <!-- the SLAM's got a subsonic cruise speed of .9 Ma -->
             </agm-84e>
             <agm-88e>
                 <type-id type="int">2</type-id>
@@ -4024,7 +4024,7 @@
                 <arming-time-sec type="double">4.0</arming-time-sec>
                 <min-speed-for-guiding-mach type="double">0.5</min-speed-for-guiding-mach>
                 <self-destruct-time-sec type="double">1000</self-destruct-time-sec>
-                <loft-altitude type="int">35000</loft-altitude>  <!-- E variant: can perform loft maneuveurs to avoid terrain -->
+                <loft-altitude type="int">35000</loft-altitude>  <!-- E variant: performs loft maneuveur to avoid terrain and increase range on its own-->
                 <min-fire-range-nm type="double">0.25</min-fire-range-nm>
                 <rail type="bool">false</rail>
                 <max-report-distance type="double">65</max-report-distance>

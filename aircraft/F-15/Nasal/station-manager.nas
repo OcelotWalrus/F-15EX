@@ -335,14 +335,14 @@ var Station = {
 						};
 					} elsif (me.weaponName == "AGM-84E") {
    						mf = func (struct) {
-   							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 10 and struct.hasTarget) {
-   								screen.log.write("AGM-84E: Diving", 1,1,0);
-   								return {"class":"GM","target":"closest","guidance":"heat","altitude":0,"guidanceLaw":"PN","abort_midflight_function":1};
-   							}
-							if (!struct.hasTarget and struct.guidance == "gps") {
-								# If it's release in MADDOG mode, turn the heat seeker ON and make it go the the closest target
-								return {"guidance":"heat","guidanceLaw":"PN","altitude":35000,"class":"GM","target":"closest","abort_midflight_function":1};
-							}
+							if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 10 and struct.guidanceLaw == "direct-alt") {
+	   							# start terminal diving when 10 NM from target (without considering altitude distance)
+	   							return {"altitude":0,"guidanceLaw":"direct"};
+	   						}
+	   						if (M2FT*struct.dist_m/struct.speed_fps < 6 and struct.guidance == "gps") {
+	   							# 6s before impact switches to IR
+	   							return {"guidance":"heat","guidanceLaw":"PN","altitude":0,"class":"GM","target":"closest","abort_midflight_function":1};
+	   						}
    							return {};
    						};
 					} elsif (me.weaponName == "AIM-9X" or me.weaponName == "CATM-9X") {
