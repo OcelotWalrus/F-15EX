@@ -4128,8 +4128,6 @@ update_lad = func() {
                             
                             LADCanvas.tws_symbol_current.setTranslation(x_move, y_move);
                             LADCanvas.tws_symbol_current.setRotation((roll_rot-180)*D2R);
-                        } else {
-                            LADCanvas.tws_symbol_current.setVisible(0);
                         }
                         
                         if (found_lock == 1 and lock_assigned == 0) {
@@ -4211,6 +4209,33 @@ update_lad = func() {
                         LADCanvas.vsd_tgt_callsign.setText(awg_9.active_u.get_Callsign());
                     } else {
                         LADCanvas.vsd_tgt_callsign.setVisible(0);
+                    }
+                    
+                    contact_data = datalink.get_data(awg_9.active_u.get_Callsign());
+                    if (contact_data == nil or !contact_data.is_known()) {
+                        unknown = 1;
+                    } else {
+                        unknown = 0;
+                    }
+
+                    if (unknown == 0) {
+                        friendly = contact_data.is_friendly() or contact.getIffResponse();
+                        hostile = contact_data.is_hostile();
+                        on_link = contact_data.on_link();
+                    } else {
+                        friendly = contact.getIffResponse();
+                        hostile = 0;
+                        on_link = 0;
+                    }
+                    
+                    if (on_link) {
+                        LADCanvas.tws_symbol_current.setColor(prst_blue.r,prst_blue.g,prst_blue.b, awg_9.active_u.get_fading());
+                    } elsif (friendly) {
+                        LADCanvas.tws_symbol_current.setColor(prst_green.r,prst_green.g,prst_green.b, awg_9.active_u.get_fading());
+                    } elsif (hostile) {
+                        LADCanvas.tws_symbol_current.setColor(prst_red.r,prst_red.g,prst_red.b, awg_9.active_u.get_fading());
+                    } else {
+                        LADCanvas.tws_symbol_current.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, awg_9.active_u.get_fading());
                     }
                     
                 }

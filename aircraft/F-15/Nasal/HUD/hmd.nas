@@ -1528,12 +1528,12 @@ var F15_HMD = {
             me.dlz.show();
         }
 
-        me.radarLock.setVisible(0 and me.rdL);
+        me.radarLock.setVisible(me.rdL);
         me.irSearch.setVisible(me.irS);
         me.irLock.setVisible(me.irL);
         me.irBore.setVisible(me.irB);
-        me.ASEC120Aspect.setVisible(0 and me.rdT);
-        me.ASEC65Aspect.setVisible(0 and me.irT);
+        me.ASEC120Aspect.setVisible(me.rdT);
+        me.ASEC65Aspect.setVisible(me.irT);
         me.radarLock.update();
         me.irLock.update();
         me.irSearch.update();
