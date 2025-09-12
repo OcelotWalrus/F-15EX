@@ -5710,7 +5710,7 @@ update_lad = func() {
                     loaded_count = getprop("payload/armament/station/id-"~pylon_idx~"-count");
                     loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
                     pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
-                    set_text = aircraft.determine_set_text(loaded_set);
+                    set_text = aircraft.determine_set_text(pylon_idx);
                     status_text = "";
                     status_text_norm = aircraft.get_status_for_pylon(pylon_idx);
                     if (status_text_norm == 0) {
@@ -5758,7 +5758,10 @@ update_lad = func() {
                     loaded_count = getprop("payload/armament/station/id-"~pylon_idx~"-count");
                     loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
                     pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
-                    set_text = aircraft.determine_set_text(loaded_set);
+                    set_text = aircraft.determine_set_text(pylon_idx);
+                    if (!containsVector(SmartWeaps, loaded_type)) {
+                        set_text = 0;
+                    }
                     status_text = "";
                     status_text_norm = aircraft.get_status_for_pylon(pylon_idx);
                     if (status_text_norm == 0) {
@@ -6094,7 +6097,7 @@ update_lad = func() {
                     loaded_count = getprop("payload/armament/station/id-"~pylon_idx~"-count");
                     loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
                     pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
-                    set_text = aircraft.determine_set_text(loaded_set);
+                    set_text = aircraft.determine_set_text(pylon_idx);
                     status_text = "";
                     status_text_norm = aircraft.get_status_for_pylon(pylon_idx);
                     if (status_text_norm == 0) {

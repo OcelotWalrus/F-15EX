@@ -398,103 +398,19 @@ var get_status_for_pylon = func(pylon_idx) {
     return 0;
 }
 
-var determine_set_text = func(set_text) {
-    # AGM-65B
-    if (set_text == "2 x AGM-65B") {
-        return "2AG65B";
-    } elsif (set_text == "3 x AGM-65B") {
-        return "3AG65B";
-    } elsif (set_text == "1 x AGM-65B") {
-        return "AG65B";
-    # AGM-65D
-    } elsif (set_text == "2 x AGM-65D") {
-        return "2AG65D";
-    } elsif (set_text == "3 x AGM-65D") {
-        return "3AG65D";
-    } elsif (set_text == "1 x AGM-65D") {
-        return "AG65D";
-    # AGM-84D
-    } elsif (set_text == "1 x AGM-84D") {
-        return "AG84D";
-    # AGM-84E
-    } elsif (set_text == "1 x AGM-84E") {
-        return "AG84E";
-    # AGM-88E
-    } elsif (set_text == "1 x AGM-88E") {
-        return "AG88E";
-    # AGM-119A
-    } elsif (set_text == "1 x AGM-119A") {
-        return "AG119A";
-    # AGM-154A
-    } elsif (set_text == "1 x AGM-154A") {
-        return "AG154A";
-    } elsif (set_text == "2 x AGM-154A") {
-        return "2AG154A";
-    # AGM-158A
-    } elsif (set_text == "1 x AGM-158A") {
-        return "AG158A";
-    # AGM-158C
-    } elsif (set_text == "1 x AGM-158C") {
-        return "AG158C";
-    # CBU-87
-    } elsif (set_text == "1 x CBU-87") {
-        return "CBU87";
-    } elsif (set_text == "3 x CBU-87") {
-        return "3CBU87";
-    # CBU-105
-    } elsif (set_text == "1 x CBU-105") {
-        return "CBU105";
-    } elsif (set_text == "2 x CBU-105") {
-        return "2CBU105";
-    # GBU-12
-    } elsif (set_text == "1 x GBU-12") {
-        return "GBU12";
-    } elsif (set_text == "3 x GBU-12") {
-        return "3GBU12";
-    } elsif (set_text == "2 x GBU-12") {
-        return "2GBU12";
-    # GBU-31
-    } elsif (set_text == "1 x GBU-31") {
-        return "GBU31";
-    # GBU-32
-    } elsif (set_text == "1 x GBU-32") {
-        return "GBU32";
-    } elsif (set_text == "2 x GBU-32") {
-        return "2GBU32";
-    # GBU-59
-    } elsif (set_text == "1 x GBU-39") {
-        return "GBU39";
-    } elsif (set_text == "4 x GBU-39") {
-        return "4GBU39";
-    # GBU-54
-    } elsif (set_text == "1 x GBU-54") {
-        return "GBU54";
-    } elsif (set_text == "2 x GBU-54") {
-        return "2GBU12";
-    # LAU-68C Hydra Rocket Launcher
-    } elsif (set_text == "3 x M151") {
-        return "3M151";
-    } elsif (set_text == "1 x M151") {
-        return "M151";
-    # MK-82
-    } elsif (set_text == "3 x MK-82") {
-        return "3MK82";
-    } elsif (set_text == "1 x MK-82") {
-        return "MK82";
-    # MK-82AIR
-    } elsif (set_text == "3 x MK-82AIR") {
-        return "3MKAIR";
-    } elsif (set_text == "1 x MK-82AIR") {
-        return "MKAIR";
-    # MK-83
-    } elsif (set_text == "3 x MK-83") {
-        return "3MK83";
-    } elsif (set_text == "1 x MK-83") {
-        return "MK83";
-    # MK-84
-    } elsif (set_text == "1 x MK-84") {
-        return "MK83";
+var determine_set_text = func(pylon_idx) {
+    var loaded_type = getprop("payload/armament/station/id-"~pylon_idx~"-type");
+    var loaded_count = getprop("payload/armament/station/id-"~pylon_idx~"-count");
+    var type_lc = string.lc(loaded_type);
+    
+    if (loaded_count > 0 and loaded_type != "" and type_lc != nil) {
+        short_name = getprop("payload/armament/" ~ type_lc ~ "/short-name");
+        if (loaded_count > 1) {
+            short_name = loaded_count~short_name;
+        }
+        return short_name;
     }
+    
     return 0;
 }
 

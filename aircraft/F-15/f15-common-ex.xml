@@ -3360,7 +3360,7 @@
             </gbu-32>
             <gbu-39>
                 <type-id type="int">16</type-id>  <!-- considered as a FAB-260 cuz the warhead is almost the same weight TODO: add GBU-39 to warheads in damage.nas in OPRF repo -->
-                <short-name type="string">GBU39</short-name>
+                <short-name type="string">GB39</short-name>
                 <long-name type="string">GBU-39/B Small Diameter Bomb I</long-name>
                 <fire-msg type="string">SDB Away</fire-msg><!--Pigs away-->
                 <class type="string">GMP</class>
@@ -3791,7 +3791,7 @@
                 <require-lock-to-fire type="bool">false</require-lock-to-fire>
             </gbu-10>
             <lau-68>
-                <short-name type="string">LAU68</short-name>
+                <short-name type="string">LAU68C</short-name>
                 <long-name type="string">LAU-68C</long-name>
                 <vol-search type="double">0.00</vol-search>
                 <vol-track type="double">1.00</vol-track>
@@ -3947,7 +3947,7 @@
             </agm-84d>
             <agm-84e>
                 <type-id type="int">1</type-id>
-                <short-name type="string">AG84</short-name>
+                <short-name type="string">AG84E</short-name>
                 <long-name type="string">AGM-84E SLAM</long-name>
                 <vol-search type="double">0.075</vol-search>
                 <vol-track type="double">0.25</vol-track>
@@ -4001,7 +4001,7 @@
             </agm-84e>
             <agm-88e>
                 <type-id type="int">2</type-id>
-                <short-name type="string">AG88</short-name>
+                <short-name type="string">AG88E</short-name>
                 <long-name type="string">AGM-88E HARM</long-name>
                 <vol-search type="double">0.00</vol-search>
                 <vol-track type="double">1.00</vol-track>
@@ -4045,7 +4045,7 @@
             </agm-88e>
             <agm-119a>
                 <type-id type="int">4</type-id>
-                <short-name type="string">AG119</short-name>
+                <short-name type="string">AG119A</short-name>
                 <long-name type="string">AGM-119A Penguin MK3</long-name>
                 <vol-search type="double">0.00</vol-search>
                 <vol-track type="double">1.00</vol-track>
@@ -4087,7 +4087,7 @@
             </agm-119a>
             <agm-154a>
                 <type-id type="int">5</type-id>
-                <short-name type="string">AG154</short-name>
+                <short-name type="string">AG154A</short-name>
                 <long-name type="string">AGM-154A-1 JSOW</long-name> <!-- BLU-111 unitary warhead variant (FMS) -->
                 <fire-msg type="string">Greyhound</fire-msg><!--Pigs away-->
                 <class type="string">GMP</class>
@@ -4141,7 +4141,7 @@
             </agm-154a>
             <agm-158a>
                 <type-id type="int">6</type-id>
-                <short-name type="string">AG158</short-name>
+                <short-name type="string">AG158A</short-name>
                 <long-name type="string">AGM-158A JASSM</long-name>
                 <fire-msg type="string">Greyhound</fire-msg>
                 <class type="string">P</class>
