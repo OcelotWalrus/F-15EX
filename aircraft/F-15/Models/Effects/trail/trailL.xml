@@ -60,8 +60,8 @@
 
         <counter>
             <particles-per-sec>
-                <value>55</value>
-                <spread>0</spread>
+                <value>66</value>
+                <spread>2</spread>
             </particles-per-sec>
         </counter>
 
@@ -99,7 +99,7 @@
                     </alpha>
                 </color>
                 <size>
-                    <value>2.45</value>
+                    <value>3.45</value>
                 </size>
             </start>
 
@@ -134,16 +134,16 @@
                     </alpha>
                 </color>
                 <size>
-                    <value>4</value>
+                    <value>5</value>
                 </size>
             </end>
 
             <life-sec>
-                <value>10</value>
+                <value>20</value>
             </life-sec>
 
-            <mass-kg>  0.5 </mass-kg>
-            <radius-m> 0.5 </radius-m>
+            <mass-kg>  0.7 </mass-kg>
+            <radius-m> 0.8 </radius-m>
         </particle>
 
         <program>
