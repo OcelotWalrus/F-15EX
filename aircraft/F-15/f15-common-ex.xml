@@ -4493,7 +4493,7 @@
             <brakes-blownout type="double">0</brakes-blownout>
         </gear>
         <cabin>
-            <shake-effect type="bool">true</shake-effect>
+            <shake-effect type="bool">false</shake-effect>
             <shaking type="double">0</shaking>
         </cabin>
     </controls>

@@ -459,7 +459,7 @@ var theShakeEffect = func() {
 		interpolate("sim/current-view/x-offset-m", x + .5 * shakeProp.getValue() * 2.5, .25);
 		interpolate("sim/current-view/y-offset-m", y + -0.5 * shakeProp.getValue() * 2.5, .25);
 		interpolate("sim/current-view/z-offset-m", z + .8 * shakeProp.getValue() * 2.5, .25);
-	} elsif (internal) {
+	} elsif (shakeEffectProp.getBoolValue() and internal) {
 		shakeProp.setValue(0);
 		interpolate("sim/current-view/x-offset-m", x, .5);
 		interpolate("sim/current-view/y-offset-m", y, .5);
