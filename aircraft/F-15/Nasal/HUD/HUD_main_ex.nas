@@ -363,11 +363,11 @@ var F15HUD = {
 	            .setColor(0,1,0).hide()
 	            .setTranslation(sx*0.5*uv_used,sy*0.25+262*mr*0.5);
 	        obj.ASC = obj.ASECircle.createChild("path")# (Attack Steering Cue (ASC))
-	            .moveTo(-8*mr,0)
-	            .arcSmallCW(8*mr,8*mr, 0, 8*mr*2, 0)
-	            .arcSmallCW(8*mr,8*mr, 0, -8*mr*2, 0)
-	            .setStrokeLineWidth(1)
-	            .setColor(1,0,0).hide();
+	            .moveTo(-2*mr,0)
+	            .arcSmallCW(2*mr,2*mr, 0, 2*mr*2, 0)
+	            .arcSmallCW(2*mr,2*mr, 0, -2*mr*2, 0)
+	            .setStrokeLineWidth(3)
+	            .setColor(0,1,0).hide();
 
 	        obj.ASEC100 = obj.ASECircle.createChild("path")#irsearch
 	            .moveTo(-100*mr,0)
@@ -1839,6 +1839,24 @@ return obj;
             }
         } else {
             #print("currASEC is nil");
+        }
+        
+        # New implementation for ASC by Jimmy L. Miles
+        if (awg_9.active_u != nil and awg_9.active_u.get_display()) {
+            me.intercept = awg_9.active_u.getIntercept();
+            if (me.intercept != nil) {
+                me.showASC = 1;
+                me.intercept_coord = me.intercept[2];
+                me.steerDir = [geo.aircraft_position().course_to(me.intercept_coord), vector.Math.getPitch(geo.aircraft_position(), me.intercept_coord)];
+                me.wpbear = me.steerDir[0];  # Absolute Bearing
+
+                me.steerCart = vector.Math.eulerToCartesian2(-me.steerDir[0], me.steerDir[1]);
+                me.steerLocal = vector.Math.yawPitchRollVector(getprop("orientation/heading-deg"), -getprop("orientation/pitch-deg"), -getprop("orientation/roll-deg"), me.steerCart);
+                me.steerLocalEuler = vector.Math.cartesianToEuler(me.steerLocal);
+                me.steerHUD = hudmath.HudMath.getCenterPosFromDegs(me.steerLocalEuler[0]==nil?0:geo.normdeg180(me.steerLocalEuler[0]),me.steerLocalEuler[1]);
+         
+                me.ASC.setTranslation(me.steerHUD);
+            }
         }
         
         me.ASC.setVisible(me.showASC);

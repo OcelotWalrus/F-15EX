@@ -1137,6 +1137,13 @@ var LAD_Device = {
                 .setFont(aircraft.HUDFont);
             m.dlnk_texts[i] = m.dlnk_txt;
         }
+        
+        m.intercept_cue = m.VSDScreen.createChild("path")
+            .moveTo(677*2-5,2262+500+75)
+	        .arcSmallCW(5,5, 0, 10*2, 0)
+	        .arcSmallCW(5,5, 0, -10*2, 0)
+	        .setStrokeLineWidth(20)
+	        .setColor(prst_rose.r, prst_rose.g, prst_rose.b);
 
         # Texts giving info about the current radar target
         m.vsd_tgt_true_speed = m.VSDScreen.createChild("text")
@@ -1298,6 +1305,7 @@ var LAD_Device = {
         m.vsd_tgt_callsign.setVisible(0);
         m.vsd_gps_spot_square.setVisible(0);
         m.vsd_gps_spot_square_ranging.setVisible(0);
+        m.intercept_cue.setVisible(0);
 
         ## HSD Display
         m.hsd_great_circle_radius = 1150;
@@ -4127,18 +4135,22 @@ update_lad = func() {
 
                         if (on_link) {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b, contact.get_fading());
+                            LADCanvas.tgt_symbols[target_idx].setColorFill(prst_blue.r,prst_blue.g,prst_blue.b, contact.get_fading());
                             LADCanvas.tws_symbols[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b, contact.get_fading());
                         } elsif (friendly) {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b, contact.get_fading());
+                            LADCanvas.tgt_symbols[target_idx].setColorFill(prst_green.r,prst_green.g,prst_green.b, contact.get_fading());
                             LADCanvas.tws_symbols[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b, contact.get_fading());
                         } elsif (hostile) {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b, contact.get_fading());
+                            LADCanvas.tgt_symbols[target_idx].setColorFill(prst_red.r,prst_red.g,prst_red.b, contact.get_fading());
                             LADCanvas.tws_symbols[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b, contact.get_fading());
                         } else {
                             LADCanvas.tgt_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, contact.get_fading());
+                            LADCanvas.tgt_symbols[target_idx].setColorFill(prst_yellow.r,prst_yellow.g,prst_yellow.b, contact.get_fading());
                             LADCanvas.tws_symbols[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, contact.get_fading());
                             LADCanvas.tgt_texts[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b, contact.get_fading());
                         }
@@ -4306,6 +4318,42 @@ update_lad = func() {
                         LADCanvas.tws_symbol_current.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, awg_9.active_u.get_fading());
                     }
                     
+                    intercept = awg_9.active_u.getIntercept();
+                    if (intercept != nil) {
+                        intercept_coord = intercept[2];
+                        steerDir = [geo.aircraft_position().course_to(intercept_coord), vector.Math.getPitch(geo.aircraft_position(), intercept_coord)];
+
+                        wpbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the intercept coord (20 means 20* right)
+                        wpelev = -steerDir[1];  # elevation to the intercept coord (20* means 20* down)
+                        LADCanvas.intercept_cue.setVisible(1);
+                        if (steerDir[1] != nil) {  # that's a safety, why not after all?
+                            x_move = wpbear * 1354 / 60;
+                            y_move = wpelev * (1131 * 2) / 60;
+
+                            clamped = 0;
+                            if (x_move > 1300) {  # If it's outta the screen, we clamp it
+                                x_move = 1300;
+                                clamped = 1;
+                            } elsif (x_move < -1300) {
+                                x_move = -1300;
+                                clamped = 1;
+                            }
+                            if (y_move > 1072) {
+                                y_move = 1072;
+                                clamped = 1;
+                            } elsif (y_move < -1072) {
+                                y_move = -1072;
+                                clamped = 1;
+                            }
+                            
+                            if (clamped) {  # When clamped, make it dark to indicate that
+                                LADCanvas.intercept_cue.setColor(prst_rose_dark.r, prst_rose_dark.g, prst_rose_dark.b);
+                            } else {
+                                LADCanvas.intercept_cue.setColor(prst_rose.r, prst_rose.g, prst_rose.b);
+                            }
+                            LADCanvas.intercept_cue.setTranslation(x_move, y_move);
+                        }
+                    }   
                 }
             } else {
                 LADCanvas.vsd_tgt_true_speed.setVisible(0);
@@ -4319,6 +4367,7 @@ update_lad = func() {
                 LADCanvas.vsd_tgt_closure_pin.setVisible(0);
                 LADCanvas.vsd_tgt_closure_text.setVisible(0);
                 LADCanvas.tws_symbol_current.setVisible(0);
+                LADCanvas.intercept_cue.setVisible(0);
             }
 
             # Do not display any unused target boxes
@@ -4831,21 +4880,25 @@ update_lad = func() {
 
                         if (on_link) {
                             LADCanvas.tgt_symbols_hsd[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
+                            LADCanvas.tgt_symbols_hsd[target_idx].setColorFill(prst_blue.r,prst_blue.g,prst_blue.b);
                             LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
                             LADCanvas.tws_symbols_hsd[target_idx].setColor(prst_blue.r,prst_blue.g,prst_blue.b);
                             LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b);
                         } elsif (friendly) {
                             LADCanvas.tgt_symbols_hsd[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b);
+                            LADCanvas.tgt_symbols_hsd[target_idx].setColorFill(prst_green.r,prst_green.g,prst_green.b);
                             LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b);
                             LADCanvas.tws_symbols_hsd[target_idx].setColor(prst_green.r,prst_green.g,prst_green.b);
                             LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_green_dark.r,prst_green_dark.g,prst_green_dark.b);
                         } elsif (hostile) {
                             LADCanvas.tgt_symbols_hsd[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
+                            LADCanvas.tgt_symbols_hsd[target_idx].setColorFill(prst_red.r,prst_red.g,prst_red.b);
                             LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
                             LADCanvas.tws_symbols_hsd[target_idx].setColor(prst_red.r,prst_red.g,prst_red.b);
                             LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b);
                         } else {
                             LADCanvas.tgt_symbols_hsd[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
+                            LADCanvas.tgt_symbols_hsd[target_idx].setColorFill(prst_yellow.r,prst_yellow.g,prst_yellow.b);
                             LADCanvas.tgt_symbols_hsd_ships[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
                             LADCanvas.tws_symbols_hsd[target_idx].setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b);
                             LADCanvas.tgt_texts_hsd[target_idx].setColor(prst_yellow_dark.r,prst_yellow_dark.g,prst_yellow_dark.b);
@@ -4883,8 +4936,6 @@ update_lad = func() {
                             
                             LADCanvas.tws_symbol_current_hsd.setTranslation(x_move, y_move);
                             LADCanvas.tws_symbol_current_hsd.setRotation((rotation-180)*D2R);
-                        } else {
-                            LADCanvas.tws_symbol_current_hsd.setVisible(0);
                         }
     
                         LADCanvas.tgt_symbols_hsd[target_idx].setTranslation(x_move,y_move);
@@ -4936,6 +4987,33 @@ update_lad = func() {
                         range_y = 4560; # max down px value
                     } elsif (range_y < -4560) {
                         range_y = -4560; # max up px value
+                    }
+                    
+                    contact_data = datalink.get_data(awg_9.active_u.get_Callsign());
+                    if (contact_data == nil or !contact_data.is_known()) {
+                        unknown = 1;
+                    } else {
+                        unknown = 0;
+                    }
+
+                    if (unknown == 0) {
+                        friendly = contact_data.is_friendly() or contact.getIffResponse();
+                        hostile = contact_data.is_hostile();
+                        on_link = contact_data.on_link();
+                    } else {
+                        friendly = contact.getIffResponse();
+                        hostile = 0;
+                        on_link = 0;
+                    }
+                    
+                    if (on_link) {
+                        LADCanvas.tws_symbol_current_hsd.setColor(prst_blue.r,prst_blue.g,prst_blue.b, awg_9.active_u.get_fading());
+                    } elsif (friendly) {
+                        LADCanvas.tws_symbol_current_hsd.setColor(prst_green.r,prst_green.g,prst_green.b, awg_9.active_u.get_fading());
+                    } elsif (hostile) {
+                        LADCanvas.tws_symbol_current_hsd.setColor(prst_red.r,prst_red.g,prst_red.b, awg_9.active_u.get_fading());
+                    } else {
+                        LADCanvas.tws_symbol_current_hsd.setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b, awg_9.active_u.get_fading());
                     }
                 }
             } else {

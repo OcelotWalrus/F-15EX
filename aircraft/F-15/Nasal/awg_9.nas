@@ -1607,6 +1607,7 @@ wcs_mode_update = func() {
 # - getIffResponse()  # Returns a boolean determining whether this target has responded to us through IFF Mode 4/5.
 # - requestIFF()  # Interrogate the target through IFF Mode 4/5 and update its IFF status thus, and also returns is IFF status (as getIffResponse does)
 # - getNTCR()  # Returns the output to display a target's model (Simulate whether NTCR can determine that or not)
+# - getIntercept()  # Returns a vector telling (timeToIntercept, interceptHeading, interceptCoord, interceptDist, interceptRelativeBearing) from the best intercept course to that target
 # ---------------------------------------------------------------------
 var Target = {
 	new : func (c) {
@@ -2238,6 +2239,66 @@ else
 	        }
 	    }
         return u_model;
+	},
+	getIntercept: func() {  # Added by Jimmy L. Miles
+	    # from Leto
+        # needs: bearingToRunner_deg, dist_m, runnerHeading_deg, runnerSpeed_mps, chaserSpeed_mps, chaserCoord
+        #        dist_m > 0 and chaserSpeed > 0
+
+        var bearingToRunner = me.get_bearing();
+        var dist_m = me.get_range()*NM2M;
+        var runnerHeading = me.get_heading();
+        var runnerSpeed = me.get_Speed()*KT2MPS;
+        var chaserSpeed = getprop("velocities/airspeed-kt")*KT2MPS;
+        var chaserCoord = geo.aircraft_position();
+
+        var trigAngle = 90-bearingToRunner;
+        var RunnerPosition = [dist_m*math.cos(trigAngle*D2R), dist_m*math.sin(trigAngle*D2R),0];
+        var ChaserPosition = [0,0,0];
+
+        var VectorFromRunner = vector.Math.minus(ChaserPosition, RunnerPosition);
+        var runner_heading = 90-runnerHeading;
+        var RunnerVelocity = [runnerSpeed*math.cos(runner_heading*D2R), runnerSpeed*math.sin(runner_heading*D2R),0];
+
+        var a = chaserSpeed * chaserSpeed - runnerSpeed * runnerSpeed;
+        var b = 2 * vector.Math.dotProduct(VectorFromRunner, RunnerVelocity);
+        var c = -dist_m * dist_m;
+
+        if (a == 0) a = 1000;# Otherwise same speeds will produce no intercept even though possible.
+        var dd = b*b-4*a*c;
+        if (dd<0) {
+          # intercept not possible
+          return nil;
+        }
+
+        var t1 = (-b+math.sqrt(dd))/(2*a);
+        var t2 = (-b-math.sqrt(dd))/(2*a);
+
+        if (t1 < 0 and t2 < 0) {
+          # intercept not possible
+          return nil;
+        }
+
+        var timeToIntercept = 0;
+        if (t1 > 0 and t2 > 0) {
+              timeToIntercept = math.min(t1, t2);
+        } else {
+              timeToIntercept = math.max(t1, t2);
+        }
+        var InterceptPosition = vector.Math.plus(RunnerPosition, vector.Math.product(timeToIntercept, RunnerVelocity));
+
+        var ChaserVelocity = vector.Math.product(1/timeToIntercept, vector.Math.minus(InterceptPosition, ChaserPosition));
+
+        var interceptAngle = vector.Math.angleBetweenVectors([0,1,0], ChaserVelocity);
+        var interceptHeading = geo.normdeg(ChaserVelocity[0]<0?-interceptAngle:interceptAngle);
+
+        var interceptDist = chaserSpeed*timeToIntercept;
+
+        var interceptCoord = geo.Coord.new(chaserCoord);
+        interceptCoord = interceptCoord.apply_course_distance(interceptHeading, interceptDist);
+        var interceptRelativeBearing = geo.normdeg180(interceptHeading-OurHdg.getValue());
+
+        return [timeToIntercept, interceptHeading, interceptCoord, interceptDist, interceptRelativeBearing];
 	},
     isVirtual: func {
         # used by missile-code
