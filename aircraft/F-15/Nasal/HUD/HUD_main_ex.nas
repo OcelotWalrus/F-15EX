@@ -1226,9 +1226,9 @@ var F15HUD = {
 																obj.nofire_cross.setVisible(0);
 
                                                                 if (w_s == 0) {
-																	eegsShow = 1;
-																	obj.boreSymbol.show();
 																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "LAU-68C") {
+																	    eegsShow = 1;
+																	    obj.boreSymbol.show();
 	                                                                    obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
 																		# Show GUNS mode
 																		if (val.GunsMode == 0) {
@@ -1240,10 +1240,15 @@ var F15HUD = {
 																		} else {
 																			obj.window17.setText("SIGHT");
 																		}
-																	} else {
+																	} elsif (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type == "LAU-68C") {
+																	    eegsShow = 1;
+																	    obj.boreSymbol.show();
 																		obj.window2.setText(sprintf("%3d",pylons.fcs.getAmmo()));
 																		# Show GUNS mode
 																		obj.window17.setText("STRF");
+																	} else {
+																	    obj.window2.setText("");
+																		obj.window17.setText("");
 																	}
 																	obj.window17.setVisible(1);
                                                                 } else if (w_s == 1) {
@@ -1421,13 +1426,13 @@ var F15HUD = {
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "CBU-87") {
                                                                         var ordnance_type = "CEM";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "MK-82") {
-                                                                        var ordnance_type = "MK82";
+                                                                        var ordnance_type = "M82";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "MK-82AIR") {
-                                                                        var ordnance_type = "MKAIR";
+                                                                        var ordnance_type = "M82A";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "MK-83") {
-                                                                        var ordnance_type = "MK83";
+                                                                        var ordnance_type = "M83";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "MK-84") {
-                                                                        var ordnance_type = "MK84";
+                                                                        var ordnance_type = "M84";
                                                                     }
 
                                                                     obj.window6.setText(sprintf("%s CCIP", ordnance_type));

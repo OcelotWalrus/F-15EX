@@ -1237,14 +1237,14 @@ var ccrp_loop = func () {
     if (selW.guidance == "unguided") {
     	# TODO: Scour manual to see if unguided can be dropped with CCRP. Also remove lock requirement if they can.
         var dt = 0.1;
-        var maxFallTime = 20;
+        var maxFallTime = 60;
     } else {
         var agl = (getprop("position/altitude-ft")-ccrpTrgt.get_altitude())*FT2M;
         var dt = agl*0.000025;#4000 ft = ~0.1
         if (dt < 0.1) dt = 0.1;
-        var maxFallTime = 45;
+        var maxFallTime = 120;
     }
-    var distCCRP = selW.getCCRP(maxFallTime,dt);
+    var distCCRP = selW.getCCRP(maxFallTime,dt*.85);
     if (distCCRP == nil) {
         distCCRP = -1;
     }

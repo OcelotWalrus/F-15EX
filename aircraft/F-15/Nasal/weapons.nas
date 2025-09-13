@@ -405,7 +405,7 @@ var determine_set_text = func(pylon_idx) {
     
     if (loaded_count > 0 and loaded_type != "" and type_lc != nil) {
         short_name = getprop("payload/armament/" ~ type_lc ~ "/short-name");
-        if (loaded_count > 1) {
+        if (loaded_count > 1 and short_name != nil and short_name != "") {
             short_name = loaded_count~short_name;
         }
         return short_name;
