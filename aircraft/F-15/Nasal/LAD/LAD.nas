@@ -183,6 +183,9 @@ var typeLookup = { # database of known radar signatures
     "F-16":                     "F/B",#fighter bomber
     "F-15EX":                   "F/B",#fighter bomber
     "F-35":                     "F/B",#fighter bomber
+    "F-35A":                    "F/B",#fighter bomber
+    "F-35B":                    "F/B",#fighter bomber
+    "F-35C":                    "F/B",#fighter bomber
     "YF-16":                    "F",
     "JA37-Viggen":              "F",
     "AJ37-Viggen":              "F/B",
@@ -1006,12 +1009,12 @@ var LAD_Device = {
         m.tgt_symbols = setsize([], m.tgt_symbols_max);
         for (var i = 0; i < m.tgt_symbols_max; i += 1){
             m.tgt = m.VSDScreen.createChild("path")
-	            .rect(677*2-25/2,2262+500+50*.5,25,50)
-	            .setStrokeLineWidth(8)
-	            .moveTo(677*2,2262+500+50*.5)
+                .rect(677*2-25/2,2262+500+50*.5,25,50)
+                .setStrokeLineWidth(8)
+                .moveTo(677*2,2262+500+50*.5)
                 .lineTo(677*2,2262+500+50*.5-35)
                 .setCenter(677*2,2262+500+50*.5+25)
-	            .setStrokeLineCap("butt")
+                .setStrokeLineCap("butt")
                 .setVisible(0)
                 .set("z-index",15)
                 .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
@@ -1074,9 +1077,9 @@ var LAD_Device = {
         for (var i = 0; i < m.chaff_symbols_max; i += 1){
             m.chaff = m.VSDScreen.createChild("path")
                 .moveTo(677*2,2262+500+50*.5)
-	            .vert(50)
-	            .setStrokeLineWidth(25)
-	            .setStrokeLineCap("butt")
+                .vert(50)
+                .setStrokeLineWidth(25)
+                .setStrokeLineCap("butt")
                 .setVisible(0)
                 .set("z-index",10)
                 .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
@@ -1215,6 +1218,32 @@ var LAD_Device = {
             .setTranslation(677*4-75-140,1150*4+500+75)
             .setFont(aircraft.HUDFont);
         
+        m.vsd_gps_spot_square = m.VSDScreen.createChild("path")
+            .moveTo(677*2,2262+500+75)
+            .moveTo(677*2-3.75*15, 2262+500+75+1.875*15)
+            .lineTo(677*2-3.75*15, 2262+500+75+3.75*15)
+            .lineTo(677*2-1.875*15, 2262+500+75+3.75*15)
+            .moveTo(677*2+1.875*15, 2262+500+75+3.75*15)
+            .lineTo(677*2+3.75*15, 2262+500+75+3.75*15)
+            .lineTo(677*2+3.75*15, 2262+500+75+1.875*15)
+            .moveTo(677*2+3.75*15, 2262+500+75-1.875*15)
+            .lineTo(677*2+3.75*15, 2262+500+75-3.75*15)
+            .lineTo(677*2+1.875*15, 2262+500+75-3.75*15)
+            .moveTo(677*2-1.875*15, 2262+500+75-3.75*15)
+            .lineTo(677*2-3.75*15, 2262+500+75-3.75*15)
+            .lineTo(677*2-3.75*15, 2262+500+75-1.875*15)
+            .setStrokeLineWidth(6)
+            .set("z-index",0)
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
+        m.vsd_gps_spot_square_ranging = m.VSDScreen.createChild("text")
+            .setFontSize(80, 1.4)
+            .setText("N999")
+            .setAlignment("center-center")
+            .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+            .setTranslation(677*2,2262+500+75-75)
+            .set("z-index",0)
+            .setFont(aircraft.HUDFont);
+        
         m.VSDScreenDLZ = m.svg.createGroup();  # Used to draw the Dynamic Launch Zone symbology
 
         m.VSDScreen.setVisible(1);
@@ -1267,6 +1296,8 @@ var LAD_Device = {
         m.vsd_tgt_closure_pin.setVisible(0);
         m.vsd_tgt_closure_text.setVisible(0);
         m.vsd_tgt_callsign.setVisible(0);
+        m.vsd_gps_spot_square.setVisible(0);
+        m.vsd_gps_spot_square_ranging.setVisible(0);
 
         ## HSD Display
         m.hsd_great_circle_radius = 1150;
@@ -1646,12 +1677,12 @@ var LAD_Device = {
         m.tgt_symbols_hsd = setsize([], m.tgt_symbols_max);
         for (var i = 0; i < m.tgt_symbols_max; i += 1){
             m.tgt = m.HSDScreen.createChild("path")
-	            .rect(677*2-25/2,2262+500+50*.5,25,50)
-	            .setStrokeLineWidth(8)
-	            .moveTo(677*2,2262+500+50*.5)
+                .rect(677*2-25/2,2262+500+50*.5,25,50)
+                .setStrokeLineWidth(8)
+                .moveTo(677*2,2262+500+50*.5)
                 .lineTo(677*2,2262+500+50*.5-35)
                 .setCenter(677*2,2262+500+50*.5+25)
-	            .setStrokeLineCap("butt")
+                .setStrokeLineCap("butt")
                 .setVisible(0)
                 .set("z-index",15)
                 .setColor(prst_yellow.r,prst_yellow.g,prst_yellow.b)
@@ -1744,9 +1775,9 @@ var LAD_Device = {
         for (var i = 0; i < m.chaff_symbols_max; i += 1){
             m.chaff = m.HSDScreen.createChild("path")
                 .moveTo(677*2,2262+500+50*.5)
-	            .vert(50)
-	            .setStrokeLineWidth(25)
-	            .setStrokeLineCap("butt")
+                .vert(50)
+                .setStrokeLineWidth(25)
+                .setStrokeLineCap("butt")
                 .setVisible(0)
                 .set("z-index",10)
                 .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b);
@@ -3959,6 +3990,43 @@ update_lad = func() {
             }
             LADCanvas.vsd_stpt_bearing.setText(sprintf("B %03d", vsd_nav_bearing));
             LADCanvas.vsd_stpt_index.setText(vsd_nav_info_text);
+            
+            # CCRP Symbology
+            if (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and pylons.fcs.getSelectedWeapon().Tgt != nil) {  # We got a Smart Weapon loaded with a valid target
+                steerDir = [geo.aircraft_position().course_to(pylons.fcs.getSelectedWeapon().Tgt.get_Coord()), vector.Math.getPitch(geo.aircraft_position(), pylons.fcs.getSelectedWeapon().Tgt.get_Coord())];
+                if (steerDir[0] != nil) {
+                    tgtbear = geo.normdeg180(steerDir[0] - getprop("orientation/heading-deg"));  # relative bearing to the steerpoint (20 means 20* right)
+                    tgtelev = -steerDir[1];  # elevation to the target (20* means 20* down)
+                    
+                    x_move = tgtbear * 1354 / 60;
+                    y_move = tgtelev * (1131 * 2) / 60;
+
+                    if (x_move > 1300) {  # Clamp the values so it's always displayed
+                        x_move = 1300;
+                    } elsif (x_move < -1300) {
+                        x_move = -1300;
+                    }
+                    if (y_move > 1072) {
+                        y_move = 1072;
+                    } elsif (y_move < -1072) {
+                        y_move = -1072;
+                    }
+                    
+                    LADCanvas.vsd_gps_spot_square.setTranslation(x_move, y_move);
+                    LADCanvas.vsd_gps_spot_square_ranging.setTranslation(677*2+x_move, 2262+500+75-75+y_move);
+                    
+                    LADCanvas.vsd_gps_spot_square_ranging.setText(sprintf("N%03d", pylons.fcs.getSelectedWeapon().Tgt.get_range()));
+                    
+                    LADCanvas.vsd_gps_spot_square.setVisible(1);
+                    LADCanvas.vsd_gps_spot_square_ranging.setVisible(1);
+                } else {
+                    LADCanvas.vsd_gps_spot_square.setVisible(0);
+                    LADCanvas.vsd_gps_spot_square_ranging.setVisible(0);
+                }
+            } else {
+                LADCanvas.vsd_gps_spot_square.setVisible(0);
+                LADCanvas.vsd_gps_spot_square_ranging.setVisible(0);
+            }
 
             # Update the steerpoint symbols
             var stpt_idx = 0;
@@ -5880,10 +5948,10 @@ update_lad = func() {
                             # If not, we create it
                             missing = size(curr_smart_weapon_block.data) < LADCanvas.SmartWeaponsCurrSubOrdnance + 1;
                             if (missing) {
-		                        for (var i = 0; i < size(aircraft.smart_weapons_data_blocks); i += 1) {
+                                for (var i = 0; i < size(aircraft.smart_weapons_data_blocks); i += 1) {
                                     if (aircraft.smart_weapons_data_blocks[i].pylon_idx == LADCanvas.SmartWeaponsCurrPylon) {
-		                                append(aircraft.smart_weapons_data_blocks[i].data, {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, push_source: nil});
-		                            }
+                                        append(aircraft.smart_weapons_data_blocks[i].data, {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, push_source: nil});
+                                    }
                                 }
                             }
                             var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created

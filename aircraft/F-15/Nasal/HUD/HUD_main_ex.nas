@@ -127,6 +127,7 @@ var F15HUD = {
         obj.ladder.setScale(1,0.558);
 
         obj.VV = obj.get_element("VelocityVector");
+        obj.TfrVV = obj.get_element("tfr_vv");
         obj.heading_tape = obj.get_element("heading-scale");
         obj.roll_pointer = obj.get_element("roll-pointer");
         obj.alt_range = obj.get_element("alt_range");
@@ -685,7 +686,7 @@ var F15HUD = {
                                             obj.ladder.setCenter (110,900+obj.pitch_deg*-(1772/90));
                                         }
                                     }),
-            props.UpdateManager.FromHashList(["Alpha", "OrientationSideSlipDeg"], 0.001, func(val)
+            props.UpdateManager.FromHashList(["Alpha", "OrientationSideSlipDeg", "TFREnabled", "TFSGroundAlt", "TFSFlirAlt", "TFSDelay", "AltimeterIndicatedAltitudeFt", "VelocitiesAirspeedKt"], 0.001, func(val)
                                                         {
                                                             if (val.OrientationSideSlipDeg == nil or val.Alpha == nil)
                                                             return;
@@ -693,6 +694,22 @@ var F15HUD = {
                                                             obj.VV_y = (val.Alpha or 0)*10; # adjust for view
                                                             obj.VV.setTranslation (obj.VV_x, obj.VV_y);
                                                             obj.localizer.setTranslation (obj.centerOrigin[0]+obj.VV_x, obj.centerOrigin[1]+obj.VV_y);
+                                                            
+                                                            if (val.TFREnabled) {
+                                                                var needed_vertical_speed = ((((val.TFSGroundAlt + val.TFSFlirAlt) - val.AltimeterIndicatedAltitudeFt)) * 60) / val.TFSDelay;
+                                                                if (needed_vertical_speed < -2500) {
+                                                                    var needed_vertical_speed = -2500;  # Minimum value
+                                                                }
+                                                                
+                                                                var value = needed_vertical_speed / (val.VelocitiesAirspeedKt * 6076.12 / 60);
+                                                                var value = math.clamp(value, -1, 1);  # Clamp to fix errors
+                                                                
+                                                                alpah_angle_required = math.asin(value) * R2D;  # val.VelocitiesAirspeedKt * 6076.12 / 60 converts kts to fpm
+                                                                obj.TfrVV.setTranslation (obj.VV_x, -alpah_angle_required*10);  # *10 adjusts for view
+                                                                obj.TfrVV.show();
+                                                            } else {
+                                                                obj.TfrVV.hide();
+                                                            }
                                                         }),
             props.UpdateManager.FromHashList(["hasGS","GSDeg","GSinRange","ILSDeg", "ILSinRange", "GSdist", "NavigationMode", "ILSCross", "ILSMode", "ILSTTI"], 0.01,
              func(val)
@@ -2699,6 +2716,10 @@ input = {
         ILSCross                                : "instrumentation/nav[0]/radials/target-auto-hdg-deg",
         ILSMode                                 : "sim/model/f15/instrumentation/ils/mode",
         ILSTTI                                  : "instrumentation/nav[0]/time-to-intercept-sec",
+        TFREnabled                              : "sim/model/f15/avionics/tfr-flir-on",
+        TFSGroundAlt                            : "instrumentation/tfs/ground-altitude-ft",
+        TFSFlirAlt                              : "sim/model/f15/avionics/tfr-flir-alt",
+        TFSDelay                                : "instrumentation/tfs/delay-sec",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

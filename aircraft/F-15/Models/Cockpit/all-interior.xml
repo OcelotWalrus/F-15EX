@@ -1133,9 +1133,9 @@
     <property>controls/armament/emergency-jettison</property>
     <factor>-0.01</factor>
     <center>
-      <x-m>0.0081</x-m>
-      <y-m>-0.0017</y-m>
-      <z-m>-0.0529</z-m>
+      <x-m>-5.687</x-m>
+      <y-m>-.1284</y-m>
+      <z-m>.9408</z-m>
     </center>
     <axis>
       <x>1</x>

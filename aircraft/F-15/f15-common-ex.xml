@@ -3955,7 +3955,7 @@
                 <navigation type="string">direct-alt</navigation>
                 <terrain-follow type="bool">true</terrain-follow>  <!-- standoff missile, using terrain-follow to keep a low profile and escape terrain-->
                 <all-aspect type="bool">true</all-aspect>
-                <max-fire-range-nm type="double">70</max-fire-range-nm>              <!-- E variant: up to 75 nmi because it's got loft altitude -->
+                <max-fire-range-nm type="double">80</max-fire-range-nm>              <!-- E variant: up to 75 nmi because it's got loft altitude -->
                 <FCS-field-deg type="int">80</FCS-field-deg>
                 <seeker-field-deg type="int">80</seeker-field-deg>
                 <no-common-target type="bool">true</no-common-target>

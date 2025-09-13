@@ -2,7 +2,7 @@ AGM-84E SLAM:
   Launch Parameters:
       Alt: 40,000'
       Ma: 1.1
-      Dist: 70 NM (Max Oper)
+      Dist: 80 NM (Max Oper)
       Aircraft Weight: 45,000 lbs (Clean no CFT no Bags, max internal fuel)
       Coords Precision: Lat 3 decimal sec, lon 1 decimal sec, elev no decimal
   Hit Info:

@@ -221,18 +221,20 @@ var routeManagerUpdate = func {
 # This is very basic I guess, but works
 # This part was made by Jimmy L. Miles  
 var TerFolRadUpdate = func() {
-    var tfr_enabled = (getprop("sim/model/f15/avionics/tfr-flir-on") and getprop("sim/model/f15/avionics/tf-couple-switch"));  # Used to have getprop("sim/model/f15/stores/nav-mounted") but modern F-15s don't need the nav pod no more
+    var tfr_enabled = (getprop("sim/model/f15/avionics/tfr-flir-on"));  # Used to have getprop("sim/model/f15/stores/nav-mounted") but modern F-15s don't need the nav pod no more
     if (tfr_enabled) {
 
         ter_data = terr_foll.tfs_radar();  # Update both following properties
         target_altitude = (getprop("instrumentation/tfs/ground-altitude-ft") + getprop("sim/model/f15/avionics/tfr-flir-alt"));
-        setprop("/autopilot/settings/target-altitude-ft", target_altitude);
         var needed_vertical_speed = ((((getprop("instrumentation/tfs/ground-altitude-ft") + getprop("sim/model/f15/avionics/tfr-flir-alt")) - getprop("instrumentation/altimeter/indicated-altitude-ft"))) * 60) / getprop("instrumentation/tfs/delay-sec");
         
         if (needed_vertical_speed < -2500) {
             var needed_vertical_speed = -2500;  # Minimum value
         }
         
-        setprop("/autopilot/settings/vertical-speed-fpm", needed_vertical_speed);
+        if (getprop("sim/model/f15/avionics/tf-couple-switch")) {  # Couple TFR to autopilot-switch
+            setprop("/autopilot/settings/target-altitude-ft", target_altitude);
+            setprop("/autopilot/settings/vertical-speed-fpm", needed_vertical_speed);
+        }
     }
 };

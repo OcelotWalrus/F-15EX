@@ -28,6 +28,10 @@ var rcs_database = {
     "F-15EX":                   25,     #low end of sources
     "f15-bs":                   0.0001,
     "F-16":                     2,
+    "F-35":                     .0015,
+    "F-35A":                    .0015,
+    "F-35B":                    .0015,
+    "F-35C":                    .0015,
     "JA37-Viggen":              3,      
     "AJ37-Viggen":              3,      #gone
     "AJS37-Viggen":             3,      

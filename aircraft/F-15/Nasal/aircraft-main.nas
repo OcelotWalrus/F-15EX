@@ -566,7 +566,7 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     # SENSORS
     setprop("sim/model/f15/radar-awg-9/selected-mode-knob", 2);
     setprop("sim/model/f15/avionics/radar-altimeter-switch-pos", 1);
-    setprop("sim/model/f15/avionics/tfr-flir-switch-pos", 2);
+    setprop("sim/model/f15/avionics/tfr-flir-switch-pos", 1);
     setprop("sim/model/f15/avionics/ins-selected-mode-knob", 3);
     setprop("sim/model/f15/avionics/jtids-selected-mode-knob", 2);
     setprop("sim/model/f15/avionics/nav-flir-switch-pos", 1);
