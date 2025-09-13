@@ -187,21 +187,13 @@
     <binding type="string">
     </binding>
   </axis>
-  <button>
-    <name type="string">Trigger Button/Half Pushed</name>
-    <desc type="string">Custom</desc>
-    <binding n="0" type="string">
+  <button n="0">
+    <desc type="string">Trigger Half Push</desc>
+    <repeatable type="string">false</repeatable>
+    <binding>
+      <command type="string">nasal</command>
+      <script type="string">setprop("sim/model/f15/controls/armament/weapon-selector", 0);</script>
     </binding>
-    <binding n="0">
-      <offset type="double">1</offset>
-    </binding>
-    <mod-up>
-      <binding n="0" type="string">
-      </binding>
-      <binding n="0">
-        <offset type="double">1</offset>
-      </binding>
-    </mod-up>
   </button>
   <button n="1">
     <desc type="string">Pickle</desc>
@@ -221,7 +213,7 @@
     <desc type="string">TDC Designate</desc>
     <binding>
       <command type="string">property-adjust</command>
-      <property type="string">/controls/armament/target-selected</property>
+      <property type="string">sim/model/f15/instrumentation/radar-awg-9/select-target</property>
       <step type="string">1</step>
     </binding>
   </button>
@@ -229,7 +221,7 @@
     <desc type="string">TWS Swipe trackfiles</desc>
     <binding>
       <command type="string">property-adjust</command>
-      <property type="string">/controls/armament/target-selected</property>
+      <property type="string">sim/model/f15/instrumentation/radar-awg-9/select-target</property>
       <step type="string">-1</step>
     </binding>
   </button>
