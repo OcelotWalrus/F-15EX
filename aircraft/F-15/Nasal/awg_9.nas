@@ -1141,7 +1141,7 @@ var selectCheck = func {
             {
             if (awg9_trace)
                 printf("TWS Track file:: %5.2f (%5.2f) : %s ",u.get_range(), dist, u.Callsign.getValue());
-            if(nxt == nil and u.get_display()) {
+            if(nxt == nil and u != nil and u.get_display()) {
                 nxt = u;
             }
                 if(u.Callsign.getValue() == active_u_callsign)
