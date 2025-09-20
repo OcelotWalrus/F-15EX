@@ -5744,9 +5744,9 @@ update_lad = func() {
                         LADCanvas.pacs_station_boxes_up_text[pylon_idx].setVisible(1);
                         LADCanvas.pacs_station_boxes_down_text[pylon_idx].setVisible(1);
                         if (getprop("payload/armament/station/id-"~pylon_idx~"-set") != "2 x AIM-9X Block I Sidewinder") {
-                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("AIM9X");
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("A9X");
                         } else {
-                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2AIM9X");
+                            LADCanvas.pacs_station_boxes_down_text[pylon_idx].setText("2A9X");
                         }
                         if (weapon_selector == 1) {
                             if (pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm) {
@@ -5882,6 +5882,9 @@ update_lad = func() {
                     loaded_set = getprop("payload/armament/station/id-"~pylon_idx~"-set");
                     pylon_ready = pylon_idx+1 == pylons.fcs.getSelectedPylonNumber() and master_arm;
                     set_text = aircraft.determine_set_text(pylon_idx);
+                    if (!containsVector(SmartWeaps, loaded_type)) {
+                        set_text = 0;
+                    }
                     status_text = "";
                     status_text_norm = aircraft.get_status_for_pylon(pylon_idx);
                     if (status_text_norm == 0) {
