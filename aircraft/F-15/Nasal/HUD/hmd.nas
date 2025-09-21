@@ -1137,9 +1137,9 @@ var F15_HMD = {
                             me.clampAmount = 500/math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]);
                             me.echoPos[0] *= me.clampAmount;
                             me.echoPos[1] *= me.clampAmount;
-                            me.tgt.setStrokeDashArray([7,7]);
+                            #me.tgt.setStrokeDashArray([7,7]);
                         } else {
-                            me.tgt.setStrokeDashArray([100]);
+                            #me.tgt.setStrokeDashArray([100]);
                         }
 
                         if (awg_9.getPriorityTarget() != nil and awg_9.getPriorityTarget().get_Callsign() != nil and me.u.get_Callsign() == awg_9.getPriorityTarget().get_Callsign()) {
