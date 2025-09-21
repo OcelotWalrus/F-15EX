@@ -774,7 +774,9 @@ var az_scan = func(notification) {
                         # notice the default class is set to AIR
                     }
 
-                    append(tgts_list, u);
+                    if (u.get_type() != SURFACE) {
+                        append(tgts_list, u);
+                    }
                 }
             }
             scan_tgt_idx = 0;
