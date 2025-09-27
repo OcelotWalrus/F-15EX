@@ -2502,7 +2502,7 @@ var jassm_heavy = func {
     }
 }
 
-var lrsam = func {
+var lrasm = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.empty);
@@ -2561,7 +2561,7 @@ var lrsam = func {
     }
 }
 
-var lrsam_heavy = func {
+var lrasm_heavy = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.aim120dw);

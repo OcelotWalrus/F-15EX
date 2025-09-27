@@ -172,7 +172,7 @@ var Station = {
 								#print("-------------------");
 								#print("DIST");
 								#print(struct.dist_m*M2NM);
-								if (getprop("controls/armament/lrsam-updated") == 0 and 1 == 0) {  # makes so that it only does that 1/2 times DISABLED FOR NOW
+								if (getprop("controls/armament/lrasm-updated") == 0 and 1 == 0) {  # makes so that it only does that 1/2 times DISABLED FOR NOW
 									# First, we check through our own radar targets, but if none are found,
 									# we then search through all datalink contacts
 									foreach (var u; awg_9.tgts_list) {  # Go through each radar targets
@@ -183,7 +183,7 @@ var Station = {
 											#print(gpsCoordsTgt.lon());
 											#print(gpsCoordsTgt.alt());
 											#print("COORDS UPDATE");
-											setprop("controls/armament/lrsam-updated", 1);
+											setprop("controls/armament/lrasm-updated", 1);
 											return {"target": spot};
 										}
 									}
@@ -200,13 +200,13 @@ var Station = {
 												gpsCoordsTgt = geo.Coord.new().set_latlon(lat,lon,alt*FT2M);
 												var spot = awg_9.ContactTGP.new(contact,gpsCoordsTgt,0);
 												#print("COORDS UPDATE");
-												setprop("controls/armament/lrsam-updated", 1);
+												setprop("controls/armament/lrasm-updated", 1);
 												return {"target": spot};
 											}
 										}
 									}
 								} else {
-									setprop("controls/armament/lrsam-updated", 0);
+									setprop("controls/armament/lrasm-updated", 0);
 								}
 
 								# Transmit weapon's data over datalink

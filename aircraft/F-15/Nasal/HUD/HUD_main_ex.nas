@@ -1322,36 +1322,7 @@ var F15HUD = {
 																	#	obj.window18.setVisible(1);
 																	#}
                                                                 }
-                                                                if (val.RadarActiveTargetAvailable or 0) {
-                                                                    obj.window3.setText("");  # Used to display contact's Callsign
-                                                                    var model = "XX";
-                                                                    if (val.RadarActiveTargetType != "")
-                                                                    model = val.RadarActiveTargetType;
-
-                                                                    # these labels aren't correct - but we don't have a full simulation of the targetting and missiles so
-                                                                    # have no real idea on the details of how this works.
-                                                                    if (val.RadarActiveTargetDisplay){
-                                                                        obj.window4.setText(sprintf("RNG %3.1f", val.RadarActiveTargetRange));
-                                                                        obj.window5.setText(sprintf("CLO %-3d", val.RadarActiveTargetClosure));
-																		obj.window6.setVisible(1);
-																		obj.nofire_cross.setVisible(getprop("sim/model/f15/avionics/friendly-fire-betty"));  # We display a Friendly-Fire cross if the target's identified as friendly by either our radar or datalink. Note: the "sim/model/f15/avionics/friendly-fire-betty" prop gets triggered in awg_9.nas itself.
-                                                                    } else{
-                                                                        obj.window4.setText("");
-                                                                        obj.window5.setText("");
-																		obj.window6.setVisible(0);
-                                                                    }
-
-																	# Determine the target's aspect
-																	var aspect = math.round(awg_9.active_u.get_aspect()/10.0);
-																	if (math.abs(aspect) > 17) {
-						                                                var rel_aspect = "H  ";
-						                                            } elsif (math.abs(aspect) < 1) {
-						                                                var rel_aspect = "T  ";
-																	} else {
-																		var rel_aspect = sprintf("%2d%s", aspect, aspect > 0 ? "R" : "L");
-																	}
-                                                                    obj.window6.setText(rel_aspect);  # SRM UNCAGE / TARGET ASPECT
-                                                                } elsif (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and aircraft.pacs[aircraft.pacs_current_program].delivery_mode != 2) {  # For Smart Weapons
+                                                                if (pylons.fcs.getSelectedWeapon() != nil and fc.containsVector(fc.CCIP_CCRP, pylons.fcs.getSelectedWeapon().type) and aircraft.pacs[aircraft.pacs_current_program].delivery_mode != 2) {  # For Smart Weapons
                                                                     if (pylons.fcs.getSelectedWeapon().Tgt != nil) {  # Valid target
                                                                         obj.window3.setText("TGT");
                                                                         obj.window4.setText(sprintf("G %03.1f", pylons.fcs.getSelectedWeapon().Tgt.get_range()));
@@ -1374,12 +1345,14 @@ var F15HUD = {
                                                                         var ordnance_type = "";
                                                                         if (pylons.fcs.getSelectedWeapon().type == "AGM-84E") {
                                                                             var ordnance_type = "SLAM";
+                                                                        } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-84D") {
+                                                                            var ordnance_type = "HARP";
                                                                         } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158A") {
                                                                             var ordnance_type = "JASSM";
                                                                         } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-154A") {
                                                                             var ordnance_type = "JSOW";
                                                                         } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158C") {
-                                                                            var ordnance_type = "LRSAM";
+                                                                            var ordnance_type = "LRASM";
                                                                         } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-31" or pylons.fcs.getSelectedWeapon().type == "GBU-32" or pylons.fcs.getSelectedWeapon().type == "GBU-54") {
                                                                             var ordnance_type = "JDAM";
                                                                         } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-39") {
@@ -1428,12 +1401,14 @@ var F15HUD = {
 																	var ordnance_type = "";
                                                                     if (pylons.fcs.getSelectedWeapon().type == "AGM-84E") {
                                                                         var ordnance_type = "SLAM";
+                                                                    } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-84D") {
+                                                                        var ordnance_type = "HARP";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158A") {
                                                                         var ordnance_type = "JASSM";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-154A") {
                                                                         var ordnance_type = "JSOW";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "AGM-158C") {
-                                                                        var ordnance_type = "LRSAM";
+                                                                        var ordnance_type = "LRASM";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-31" or pylons.fcs.getSelectedWeapon().type == "GBU-32" or pylons.fcs.getSelectedWeapon().type == "GBU-54") {
                                                                         var ordnance_type = "JDAM";
                                                                     } elsif (pylons.fcs.getSelectedWeapon().type == "GBU-39") {
@@ -1455,6 +1430,35 @@ var F15HUD = {
                                                                     obj.window6.setText(sprintf("%s CCIP", ordnance_type));
                                                                     obj.window6.setVisible(1);
 																	
+                                                                } elsif (val.RadarActiveTargetAvailable or 0) {
+                                                                    obj.window3.setText("");  # Used to display contact's Callsign
+                                                                    var model = "XX";
+                                                                    if (val.RadarActiveTargetType != "")
+                                                                    model = val.RadarActiveTargetType;
+
+                                                                    # these labels aren't correct - but we don't have a full simulation of the targetting and missiles so
+                                                                    # have no real idea on the details of how this works.
+                                                                    if (val.RadarActiveTargetDisplay){
+                                                                        obj.window4.setText(sprintf("RNG %3.1f", val.RadarActiveTargetRange));
+                                                                        obj.window5.setText(sprintf("CLO %-3d", val.RadarActiveTargetClosure));
+																		obj.window6.setVisible(1);
+																		obj.nofire_cross.setVisible(getprop("sim/model/f15/avionics/friendly-fire-betty"));  # We display a Friendly-Fire cross if the target's identified as friendly by either our radar or datalink. Note: the "sim/model/f15/avionics/friendly-fire-betty" prop gets triggered in awg_9.nas itself.
+                                                                    } else{
+                                                                        obj.window4.setText("");
+                                                                        obj.window5.setText("");
+																		obj.window6.setVisible(0);
+                                                                    }
+
+																	# Determine the target's aspect
+																	var aspect = math.round(awg_9.active_u.get_aspect()/10.0);
+																	if (math.abs(aspect) > 17) {
+						                                                var rel_aspect = "H  ";
+						                                            } elsif (math.abs(aspect) < 1) {
+						                                                var rel_aspect = "T  ";
+																	} else {
+																		var rel_aspect = sprintf("%2d%s", aspect, aspect > 0 ? "R" : "L");
+																	}
+                                                                    obj.window6.setText(rel_aspect);  # SRM UNCAGE / TARGET ASPECT
                                                                 } else {
                                                                     # this else added by Leto
                                                                     obj.window3.setText("");

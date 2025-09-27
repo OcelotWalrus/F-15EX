@@ -1550,8 +1550,8 @@
 
 					<value>A/G Anti-Ship Penguin (1 Bag)</value>
 					<value>A/G Anti-Ship Harpoon (1 Bag)</value>
-					<value>A/G Anti-Ship LRSAM (1 Bag)</value>
-					<value>A/G Anti-Ship LRSAM Heavy (2 Bags)</value>
+					<value>A/G Anti-Ship LRASM (1 Bag)</value>
+					<value>A/G Anti-Ship LRASM Heavy (2 Bags)</value>
 					<value>A/G Anti-Ship Diverse (2 Bags)</value>
 
 					<value>A/G Stand-Off SLAM (1 Bag)</value>
@@ -2026,7 +2026,7 @@
 										warn_dialog.open();
 										setprop("payload/weight[3]/selected", "Empty");
 									}
-								
+
 									if (getprop("payload/armament/station/id-3-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-3-count", 2);
 									} elsif (getprop("payload/armament/station/id-3-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-3-set") == "3 x MK-82") {
@@ -2101,7 +2101,7 @@
 										warn_dialog.open();
 										setprop("payload/weight[4]/selected", "Empty");
 									}
-								
+
 									if (getprop("payload/armament/station/id-4-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-4-count", 2);
 									} elsif (getprop("payload/armament/station/id-4-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-4-set") == "3 x MK-82") {
@@ -2239,7 +2239,7 @@
 										warn_dialog.open();
 										setprop("payload/weight[6]/selected", "Empty");
 									}
-								
+
 									if (getprop("payload/armament/station/id-6-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-6-count", 2);
 									} elsif (getprop("payload/armament/station/id-6-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-6-set") == "3 x MK-82") {
@@ -2314,7 +2314,7 @@
 										warn_dialog.open();
 										setprop("payload/weight[7]/selected", "Empty");
 									}
-								
+
 									if (getprop("payload/armament/station/id-7-set") == "2 x AIM-120D AMRAAM") {
 										setprop("payload/armament/station/id-7-count", 2);
 									} elsif (getprop("payload/armament/station/id-7-set") == "3 x MK-82 AIR" or getprop("payload/armament/station/id-7-set") == "3 x MK-82") {

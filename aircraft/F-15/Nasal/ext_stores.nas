@@ -298,10 +298,10 @@ var ext_loads_set = func(s) {
             success = pylons.gps_light_cfts();
         } elsif ( s == "A/G Stand-Off JASSM Heavy (2 Bags)" ) {
             success = pylons.jassm_heavy();
-        }  elsif ( s == "A/G Anti-Ship LRSAM (1 Bag)" ) {
-            success = pylons.lrsam();
-        } elsif ( s == "A/G Anti-Ship LRSAM Heavy (2 Bags)" ) {
-            success = pylons.lrsam_heavy();
+        }  elsif ( s == "A/G Anti-Ship LRASM (1 Bag)" ) {
+            success = pylons.lrasm();
+        } elsif ( s == "A/G Anti-Ship LRASM Heavy (2 Bags)" ) {
+            success = pylons.lrasm_heavy();
         } elsif ( s == "A/G GPS JDAM Medium (1 Bag)" ) {
             success = pylons.gps_medium();
         } elsif ( s == "A/G Stand-Off SLAM (1 Bag)" ) {
