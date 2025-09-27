@@ -172,7 +172,7 @@ var Station = {
 								#print("-------------------");
 								#print("DIST");
 								#print(struct.dist_m*M2NM);
-								if (getprop("controls/armament/lrsam-updated") == 0) {  # makes so that it only does that 1/2 times
+								if (getprop("controls/armament/lrsam-updated") == 0 and 1 == 0) {  # makes so that it only does that 1/2 times DISABLED FOR NOW
 									# First, we check through our own radar targets, but if none are found,
 									# we then search through all datalink contacts
 									foreach (var u; awg_9.tgts_list) {  # Go through each radar targets
@@ -240,37 +240,14 @@ var Station = {
 									append(telemetry_weapons, callsign);
 								}
 
-								# Beyond 70nmi, keeps a FL320 altitude, then till 35nmi, FL180 and then lower than 25nmi starts sea-skimming at 85 ft
-								new_altitude = 0;
-	   							if (struct.dist_horz_m*M2NM > 70) {
-	   								# 22,000 ft above sealevel, guess
-	   								new_altitude = 32000;
-	   							} elsif (struct.dist_horz_m*M2NM > 35) {
-	   								# 11,000 ft above sealevel, guess
-	   								new_altitude = 18000;
-	   							} else {
-	   								# 200 ft above sealevel, starts sea-skimming
-	   								new_altitude = 85;
-	   							}
-
-	   							setprop("sim/model/f15/armament/telemetry-data-armaments/"~callsign~"/loft-altitude", new_altitude);
-
-								#print("TGT ALT");
-								#print(new_altitude);
-	   							#if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m > 1.75 and struct.hasTarget) {
-								#	# Not sure bout what that does ...
-	   							#	# Loft altitude to 5000 ft above target
-	   							#	return {"altitude_at": 5000, "altitude": new_altitude};
-	   							#}
 	   							if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 1.75 and struct.guidanceLaw == "direct-alt") {
 	   								# start terminal diving
 	   								return {"altitude":0,"guidanceLaw":"direct"};
 	   							}
-	   							if (M2FT*struct.dist_m/struct.speed_fps < 8 and struct.guidance == "gps") {
+	   							if (M2FT*struct.dist_m/struct.speed_fps < 8) {
 	   								# 8s before impact switch to IR, authentic value (for A version)
 	   								return {"guidance":"heat","guidanceLaw":"PN","altitude":0,"class":"GM","target":"closest","abort_midflight_function":1};
 	   							}
-								return {"altitude": new_altitude};  # makin sure it returns somethin
 	   						}
 	   						return {};
    						};

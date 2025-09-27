@@ -3404,7 +3404,6 @@
                 <terminal-dive-time type="double">13.0</terminal-dive-time>  <!-- same as AGM-154A -->
                 <seeker-angular-speed-dps type="double">0</seeker-angular-speed-dps>
                 <ejector-speed-fps type="double">26</ejector-speed-fps>  <!-- BRU-61 rack ejection speed -->
-                <telemetry type="bool">false</telemetry>
                 <!--ready-time type="double">300</ready-time-->
                 <!--requires-power-on type="bool">true</requires-power-on>
                 <power-on-battery-time type="double">900</power-on-battery-time--><!-- Source: Sammy. inflight time -->
@@ -4201,7 +4200,7 @@
                 <short-name type="string">AG158C</short-name>
                 <long-name type="string">AGM-158C LRASM</long-name>
                 <fire-msg type="string">Rifle LRSAM</fire-msg>
-                <class type="string">P</class>
+                <class type="string">MGP</class>
                 <max-fire-range-nm type="double">299.9</max-fire-range-nm>  <!-- range is estimated to 300 nmi -->
                 <min-fire-range-nm type="double">2.0</min-fire-range-nm>
                 <guidance type="string">gps</guidance> <!-- GPS, but switches to IR 8s fore impact -->
@@ -4249,9 +4248,10 @@
                 <power-on-battery-time type="double">2700</power-on-battery-time-->
                 <ejector-speed-fps type="double">5</ejector-speed-fps>
                 <telemetry type="bool">true</telemetry>
+                <max-pitch-deg>-10</max-pitch-deg>
                 <DLZ type="bool">true</DLZ>
-                <DLZ-optimal-alt-feet type="double">32000</DLZ-optimal-alt-feet>  <!-- guess -->
-                <DLZ-optimal-closing-mach type="double">.9</DLZ-optimal-closing-mach>  <!-- the LRSAM's got a sbsonic cruise speed of .9 Ma -->
+                <DLZ-optimal-alt-feet type="double">30000</DLZ-optimal-alt-feet>  <!-- guess -->
+                <DLZ-optimal-closing-mach type="double">.6</DLZ-optimal-closing-mach>  <!-- the LRSAM's got a sbsonic cruise speed of .9 Ma -->
             </agm-158c>
             <es>                   <!-- Ejection seat ACES II. Source: A-DA-133 628 --> <!-- orginially F-16's -->
                 <type-id type="int">93</type-id>

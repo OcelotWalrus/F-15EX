@@ -317,7 +317,7 @@ var deselect_pylon_in_program = func(pylon_idx) {
 var pylons_a_g = [12,1,3,4,5,6,7,9,15,20,21,22,23,24,25];  # A/G Hardpoints
 var smart_weapons_data_blocks = [];
 for (var i = 0; i < size(pylons_a_g); i += 1) {
-    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, push_source: nil}], initiated: 0};
+    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, type: 0, push_source: nil}], initiated: 0};
     append(smart_weapons_data_blocks, data_block);
 }
 
@@ -333,7 +333,7 @@ var get_data_block_from_pylon_idx = func (pylon_idx) {
 var untarget_data_block = func(station, ordnance) {
     for (var i = 0; i < size(pylons_a_g); i += 1) {
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
-            smart_weapons_data_blocks[i].data[ordnance] = {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, push_source: nil};
+            smart_weapons_data_blocks[i].data[ordnance] = {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, type: 0, push_source: nil};
         }
     }
 }
@@ -352,10 +352,23 @@ for (var i = 0; i < mission_sets_max; i += 1) {
 
 var push_mission_program_to_station = func(mission_set, mission_program, station, ordnance) {  # Used to push a Mission to a station's ordnance in the Smart Weapons Page using CC populate mode
     data_block = mission_sets[mission_set][mission_program];
+    data_block.type = 0;
     for (var i = 0; i < size(pylons_a_g); i += 1) {
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].data[ordnance] = data_block;
             smart_weapons_data_blocks[i].data[ordnance].push_source = "CC MEM";
+        }
+    }
+}
+
+var rdr_tgt_to_station = func(rdr_tgt, station, ordnance, skim_ft=1000) {  # Used to push a radar target to a smart weapon (usually A/S weapons in RDR TGT mode)
+    data_block = {radar_target: rdr_tgt};
+    data_block.type = 1;
+    data_block.skim_ft = skim_ft;
+    for (var i = 0; i < size(pylons_a_g); i += 1) {
+        if (smart_weapons_data_blocks[i].pylon_idx == station) {
+            smart_weapons_data_blocks[i].data[ordnance] = data_block;
+            smart_weapons_data_blocks[i].data[ordnance].push_source = "RDR";
         }
     }
 }
@@ -390,8 +403,12 @@ var get_status_for_pylon = func(pylon_idx) {
     }
     
     if (is_valid_pylon) {
-        initiated = get_data_block_from_pylon_idx(pylon_idx).initiated;
-        no_data = get_data_block_from_pylon_idx(pylon_idx).data[0].gps == nil;
+        var initiated = get_data_block_from_pylon_idx(pylon_idx).initiated;
+        if (get_data_block_from_pylon_idx(pylon_idx).data[0].type == 0) {
+            var no_data = get_data_block_from_pylon_idx(pylon_idx).data[0].gps == nil;
+        } elsif (get_data_block_from_pylon_idx(pylon_idx).data[0].type == 1) {
+            var no_data = get_data_block_from_pylon_idx(pylon_idx).data[0].radar_target == nil;
+        }
         
         return [initiated, no_data];
     }
@@ -1038,11 +1055,22 @@ var arm_selector = func() {
                 # Apply Smart Weapon's data if valid
                 if (get_status_for_pylon(current_station_rel_idx)[0] == 1 and get_status_for_pylon(current_station_rel_idx)[1] == 0 and pylons.fcs.selected != nil) {  # Smart Weapon initiated and populated
                     var current_station_ordnance_idx = pylons.fcs.selected[1];
+                    var current_station_tgt_mode = 0;  # 0 GPS/INS, 1 RDR TGT
+                    
                     if (current_station_ordnance_idx < size(get_data_block_from_pylon_idx(current_station_rel_idx).data)) {  # Make sure the data for the sub-ordnance is initialized
-                        var current_station_gps_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].gps;
+                        var current_station_tgt_mode = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].type;
                     } else {
                         var current_station_gps_data = nil;
                     }
+                    
+                    var current_station_gps_data = nil;
+                    var current_station_rdr_data = nil;
+                    if (current_station_tgt_mode == 0) {
+                        var current_station_gps_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].gps;
+                    } elsif (current_station_tgt_mode == 1) {
+                        var current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
+                    }
+                    
                     if (current_station_gps_data != nil) {
 				        if (current_station_gps_data.lat() < 90 and current_station_gps_data.lat() > -90 and current_station_gps_data.lon() < 180 and current_station_gps_data.lon() > -180 and pylons.fcs != nil) {
 					        var wp = pylons.fcs.getSelectedWeapon();
@@ -1062,6 +1090,18 @@ var arm_selector = func() {
 						        wp.arming_time = pacs[pacs_current_program].tarm;
 					        }
 				        }
+                    } elsif (current_station_rdr_data != nil) {
+                        var wp = pylons.fcs.getSelectedWeapon();
+                        if (wp != nil and wp.parents[0] == armament.AIM) {
+                            print("YO");
+                            wp.guidance = "inertial";
+
+                            wp.setContacts([current_station_rdr_data]);
+                            wp.Tgt = current_station_rdr_data;
+                            
+                            wp.loft_alt = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].skim_ft;
+                            wp.arming_time = pacs[pacs_current_program].tarm;
+                        }
                     }
                 }
             } else {

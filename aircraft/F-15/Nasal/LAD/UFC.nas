@@ -79,6 +79,9 @@ var nav_1_chans_menu = 9;  # Allows to set active and standby channels presets i
 var nav_1_chans_index = 0;  # So we know which frequency data block we're checking out in the NAV1 channels menu
 var nav_1_mode_menu = 10;
 
+# LAD INPUTS
+var skim_ft_menu = 16;  # Menu used by the Harpoon and LRASM to input their skim altitude in MSL ft
+
 # Miscellaneous
 var timer_menu = 15;  # Displays current time and zulu (UTC) time
 
@@ -1891,6 +1894,59 @@ update_loop_func = func() {
             time_text = sprintf("  %sUTC%02d - %sZ  ", local_time, local_offset/3600, zulu_time);
             
             UFCCanvas.UFCText.setText(time_text);
+        } elsif (curr_menu == skim_ft_menu) {
+            if (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+                print("YO");
+                print(stored_input);
+                    
+                # We check if the stored input is correct
+                # - is a number
+                # - is greater than 14 and lower than 5001
+                        
+                if (!is_numeric(stored_input) and stored_input + 0 < 14 and stored_input + 0 > 5001) {  # stored_input + 0 forces Nasal to interpret it as a number
+                    displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                } else {  # It's all good, we can apply the inputted data to the LAD variable
+                    displays.LADCanvas.SmartWeaponsCurrSkimFt = stored_input + 0;
+                }
+
+                stored_input = "";  # We reset the stored input just in case
+                inputting = 0;
+                displays.mrk_pres = 0;
+                curr_menu = dft_menu;
+            }
+            if (size(stored_input) < 4 and inputting) {  # Max amount of data that can be inputted (3 units)
+                if (displays.a_1_pres == 1) {
+                    stored_input = stored_input~"1";
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    stored_input = stored_input~"2";
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    stored_input = stored_input~"3";
+                    displays.b_3_pres = 0;
+                } elsif (displays.w_4_pres == 1) {
+                    stored_input = stored_input~"4";
+                    displays.w_4_pres = 0;
+                } elsif (displays.m_5_pres == 1) {
+                    stored_input = stored_input~"5";
+                    displays.m_5_pres = 0;
+                } elsif (displays.e_6_pres == 1) {
+                    stored_input = stored_input~"6";
+                    displays.e_6_pres = 0;
+                } elsif (displays.i_7_pres == 1) {
+                    stored_input = stored_input~"7";
+                    displays.i_7_pres = 0;
+                } elsif (displays.s_8_pres == 1) {
+                    stored_input = stored_input~"8";
+                    displays.s_8_pres = 0;
+                } elsif (displays.c_9_pres == 1) {
+                    stored_input = stored_input~"9";
+                    displays.c_9_pres = 0;
+                } elsif (displays.hyphen_0_pres == 1) {
+                    stored_input = stored_input~"0";
+                    displays.hyphen_0_pres = 0;
+                }
+            }
         }
         
         # If there's a bad data warning, we display it no matter what, for 3 whole seconds
@@ -1940,7 +1996,7 @@ update_loop_func = func() {
             sliding_paused = 0;
             if (displays.inputting) {
                 displays.inputting = 0;
-            } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu or curr_menu == comm_main_menu or curr_menu == timer_menu) {
+            } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu or curr_menu == comm_main_menu or curr_menu == timer_menu or curr_menu == skim_ft_menu) {
                 curr_menu = dft_menu;
             } elsif (curr_menu == autopilot_info_menu or curr_menu == autopilot_heading_menu or curr_menu == autopilot_altitude_menu or curr_menu == autopilot_auto_throttle_menu) {
                 curr_menu = autopilot_main_menu;
