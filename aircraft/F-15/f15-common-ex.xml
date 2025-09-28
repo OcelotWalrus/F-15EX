@@ -289,7 +289,7 @@
 
     <sim>
         <expected-aircraft-dir-name>F-15</expected-aircraft-dir-name>
-        <minimum-fg-version>2017.3</minimum-fg-version>
+        <minimum-fg-version>2024.1.2</minimum-fg-version>
         <description>F-15EX</description>
         <author>Richard Harrison, Enrique Laso (3d), Nikolai V. Chr., Jimmy L. Miles (EX code and 3d interiors), Robert Andrews (EX interiors modeling)</author>
         <status>production</status>
@@ -4248,7 +4248,6 @@
                 <power-on-battery-time type="double">2700</power-on-battery-time-->
                 <ejector-speed-fps type="double">5</ejector-speed-fps>
                 <telemetry type="bool">true</telemetry>
-                <max-pitch-deg>-10</max-pitch-deg>
                 <DLZ type="bool">true</DLZ>
                 <DLZ-optimal-alt-feet type="double">30000</DLZ-optimal-alt-feet>  <!-- guess -->
                 <DLZ-optimal-closing-mach type="double">.6</DLZ-optimal-closing-mach>  <!-- the LRASM's got a sbsonic cruise speed of .9 Ma -->

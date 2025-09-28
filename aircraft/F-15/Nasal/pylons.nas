@@ -2214,7 +2214,7 @@ var anti_ship_diverse = func {
     if (fcs != nil and (!getprop("payload/armament/msg") or getprop("fdm/jsbsim/gear/unit[0]/WOW"))) {
 
 		pylonex1a.loadSet(pylonSets.empty);
-		pylonex1b.loadSet(pylonSets.singleagm119a);
+		pylonex1b.loadSet(pylonSets.singleagm84d);
 		pylonex1c.loadSet(pylonSets.empty);
 
         pylon2a.loadSet(pylonSets.aim120dw);
@@ -2234,7 +2234,7 @@ var anti_ship_diverse = func {
         pylon8c.loadSet(pylonSets.aim120dw);
 
 		pylonex2a.loadSet(pylonSets.empty);
-		pylonex2b.loadSet(pylonSets.singleagm119a);
+		pylonex2b.loadSet(pylonSets.singleagm84d);
 		pylonex2c.loadSet(pylonSets.empty);
 
 		pylonnav.loadSet(pylonSets.lantirnnav);
@@ -2249,11 +2249,11 @@ var anti_ship_diverse = func {
 
         reloadCannon();
 
-		setprop("payload/weight[12]/selected","1 x AGM-119A");
+		setprop("payload/weight[12]/selected","1 x AGM-84D");
 		setprop("payload/weight[1]/selected","Droptank");
         setprop("payload/weight[5]/selected","1 x AGM-84D");
         setprop("payload/weight[9]/selected","Droptank");
-		setprop("payload/weight[15]/selected","1 x AGM-119A");
+		setprop("payload/weight[15]/selected","1 x AGM-84D");
 
         setprop("consumables/fuel/tank[5]/selected",1);
         setprop("consumables/fuel/tank[6]/selected",1);
@@ -3241,10 +3241,9 @@ var bore_loop = func {
 
         # Slave the seeker to the bore at the HMD, if it's active
         if (aim != nil and (aim.type == "AIM-9X" or aim.type == "CATM-9X" or aim.type == "AGM-65B" or aim.type == "AGM-65D" or aim.type == "AGM-88E" or aim.type == "AGM-119A")) {
-            var hmd_active = getprop("payload/armament/hmd-active");
             var hmd_slaving = getprop("sim/model/f15/avionics/hmd-slaving");
 
-            if (hmd_active and hmd_slaving and aim.status < 1) {
+            if (hmd_slaving and aim.status < 1) {
         		aim.setContacts(awg_9.completeList);
         		var h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
                 var p = getprop("sim/current-view/pitch-offset-deg");
@@ -3265,14 +3264,13 @@ var bore_loop = func {
         }
 
         if (aim != nil and (aim.type == "AIM-9" or aim.type == "AIM-9X" or aim.type == "CATM-9X")) {
-			var hmd_active = getprop("payload/armament/hmd-active");
 
-        	if (standby == 1 and (!hmd_active or !hmd_slaving)) {
+        	if (standby == 1 and !hmd_slaving) {
                 #aim.setBore(1);
                 aim.setContacts(awg_9.completeList);
                 aim.commandDir(0,-3.5);# the real is bored to -6 deg below real bore
                 bore = 1;
-            } elsif (!hmd_active or !hmd_slaving) {
+            } elsif (!hmd_slaving) {
 				# stop tracking target with IR and start try to lock up radar target
                 aim.commandRadar();
                 aim.setContacts([]);

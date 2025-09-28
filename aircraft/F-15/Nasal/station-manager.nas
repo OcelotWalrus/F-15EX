@@ -240,7 +240,7 @@ var Station = {
 									append(telemetry_weapons, callsign);
 								}
 
-	   							if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 1.75 and struct.guidanceLaw == "direct-alt") {
+	   							if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 4 and struct.guidanceLaw == "direct-alt") {
 	   								# start terminal diving
 	   								return {"altitude":0,"guidanceLaw":"direct"};
 	   							}
@@ -305,7 +305,7 @@ var Station = {
 						};
 					} elsif (me.weaponName == "AGM-84" or me.weaponName == "AGM-84D") {  # named 84D in F-15EX
 						mf = func (struct) {
-							if (struct.dist_m != -1 and struct.dist_m*M2NM < 5 and struct.guidance == "inertial") {
+							if (struct.dist_m != -1 and struct.dist_m*M2NM < 7 and struct.guidance == "inertial") {
 								return {"guidance":"radar","abort_midflight_function":1};
 							}
 							return {};
