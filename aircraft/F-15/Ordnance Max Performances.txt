@@ -6,11 +6,11 @@ AGM-84E SLAM:
       Aircraft Weight: 45,000 lbs (Clean no CFT no Bags, max internal fuel)
       Coords Precision: Lat 3 decimal sec, lon 1 decimal sec, elev no decimal
   Hit Info:
-      Hit Precison: lat: .0002 degrees off, lon: .0001 degrees off - Good Hit
+      Hit Precison: lat: .0002 degrees off, lon: .0001 degrees off - Good Hit, target destroyed
       Hit Speed: 1,620 kts True Airspeed
-      Vertical Speed: -578 FPS
+      Vertical Speed: -578 FPS / 342 kts
 
-GBU-39 SDB:
+GBU-39A SDB:
   Launch Parameters:
       Alt: 50,000'
       Ma: 2.5   
@@ -18,6 +18,43 @@ GBU-39 SDB:
       Aircraft Weight: 45,000 lbs (Clean no CFT no Bags, max internal fuel)
       Coords Precision: Lat 3 decimal sec, lon 3 decimal sec, elev no decimal
   Hit Info:
-      Hit Precison: lat: 0 degrees off, lon: 0 degrees off - Good Hit
+      Hit Precison: lat: 0 degrees off, lon: 0 degrees off - Good Hit, target destroyed
       Hit Speed: 531 kts True Airspeed
-      Vertical Speed: -587 FPS
+      Vertical Speed: -587 FPS / 347 kts
+
+AGM-84D Harpoon:
+  Launch Parameters:
+      Alt: 5,000'
+      Ma: .86
+      Dist: 90 NM (3/4 Max Oper)
+      Aircraft Weight: 52,400 lbs (Clean no CFT, 2 Bags, max internal fuel)
+      Skim Altitude: 5,000'
+  Hit Info:
+      Hit Precison: lat: Perfect hit, center-hull, Target sunk
+      Hit Speed: 625 kts True Airspeed
+      Vertical Speed: -1010 FPS / 598 kts
+
+AGM-158C LRASM:
+  Note: This weapons is more limited by the F-15EX's radar rather than the launch parameters.
+  Optimal Launch:
+      Launch Parameters:
+          Alt: 35,000'
+          Ma: .8
+          Dist: 70 NM (7/30 of Max Oper)
+          Aircraft Weight: 45,000 lbs (CFTS, no Bags, max internal fuel)
+          Skim Altitude: 3,500'
+      Hit Info:
+          Hit Precison: Perfect hit, Target sunk, 6.2 yrds off from center
+          Hit Speed: 943 kts True Airspeed
+          Vertical Speed: -231 FPS / 136 kts
+  Restricted Launch:
+      Launch Parameters:
+          Alt: 3,500'
+          Ma: .8
+          Dist: 100 NM (1/3 of Max Oper)
+          Aircraft Weight: 45,000 lbs (CFTS, no Bags, max internal fuel)
+          Skim Altitude: 3,500'
+      Hit Info:
+          Hit Precison: Good hit, Target sunk, 12 yrds off from center
+          Hit Speed: 956 kts True Airspeed
+          Vertical Speed: -233 FPS / 136 kts
