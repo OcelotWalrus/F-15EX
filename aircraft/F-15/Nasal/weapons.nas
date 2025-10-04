@@ -1066,9 +1066,9 @@ var arm_selector = func() {
                     var current_station_gps_data = nil;
                     var current_station_rdr_data = nil;
                     if (current_station_tgt_mode == 0) {
-                        var current_station_gps_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].gps;
+                        current_station_gps_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].gps;
                     } elsif (current_station_tgt_mode == 1) {
-                        var current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
+                        current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
                     }
                     
                     if (current_station_gps_data != nil) {
@@ -1091,9 +1091,9 @@ var arm_selector = func() {
 					        }
 				        }
                     } elsif (current_station_rdr_data != nil) {
+                        var current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
                         var wp = pylons.fcs.getSelectedWeapon();
                         if (wp != nil and wp.parents[0] == armament.AIM) {
-                            print("YO");
                             wp.guidance = "inertial";
 
                             wp.setContacts([current_station_rdr_data]);
