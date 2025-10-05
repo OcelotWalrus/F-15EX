@@ -297,6 +297,72 @@ var determine_primary_threat = func() {  # returns the primary threat's internal
     return [primary_threat_callsign, max_points_num];
 }
 
+var determine_primary_threat_from_list = func(list) {  # returns the given list's primary threat's internal unique ID and how many points its got in a vector. Returns null if there ain't none
+    points_list = [];
+    foreach(u; list) {
+        if (!u.get_behind_terrain() and u.get_EPAWSS_visible()) {  # If it's an actually valid EPAWSS contact
+            points = 0;
+
+            is_a_missile_approaching = u.getUnique() != nil and u.get_Callsign() != nil and damage.approached[u.get_Callsign()~u.getUnique()] != nil;
+            points += (is_a_missile_approaching and u.get_visible() and damage.approached[u.get_Callsign()~u.getUnique()] < 300) * 9999 + (u.get_closure_rate()/u.get_range());  # if it's an approaching missile. We also add a ratio closure rate/dist to determine which approaching missile is more threatening if they're multiple detected
+            if (is_a_missile_approaching) {
+                continue;  # go to the next target, skip all below point computing
+            }
+
+            is_missile_launcher_points = u.getUnique() != nil and u.get_Callsign() != nil and damage.launched[u.get_Callsign()~u.getUnique()] != nil;
+            points += (is_missile_launcher_points and u.get_visible() and damage.launched[u.get_Callsign()~u.getUnique()] < 300) * 100;  # if it's a missile launcher that we've detected (less than 5 mins ago) and it's not hidden by terrain or RCS, we add 100 pts
+
+            points += u.isSpikingMe() * 75;  # 2nd level
+            points += (u.get_Ecm_Signal_Norm() == 1) * 50;  # 3nd level
+            points += (u.get_Ecm_Signal_Norm() == 2) * 25;  # 4th level
+
+            is_a_sam_or_aaa = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "SAM" or displays.typeLookup[u.get_model()] == "AAA");  # we're reusing the LAD.nas's typeLookup variable
+            points += is_a_sam_or_aaa * 10;  # 5th level
+
+            is_approaching = u.isApproaching(geo.aircraft_position());
+            if (is_approaching != nil) {
+                points += 40 - is_approaching;  # 6th level
+            }
+
+            is_an_awacs = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "AEW&C");  # we're reusing the LAD.nas's typeLookup variable
+            points += is_an_awacs * 10;  # 7th level
+            
+            is_a_tanker = (u.get_model() != nil) and (displays.typeLookup[u.get_model()] != nil) and (displays.typeLookup[u.get_model()] == "TNKR");  # we're reusing the LAD.nas's typeLookup variable
+            points -= is_an_awacs * 10000;  # not a threat if it's a tanker!
+
+            points -= u.get_range() * .5;  # distance reduction
+            points += u.get_closure_rate() * 2.5;  # closure rate increment
+
+            data = {};
+            data.unique = u.get_Callsign()~u.getUnique();
+            data.points = points;
+
+            append(points_list, data);
+        }
+    }
+
+    # We go through each in the list, and update the "greatest points" variable if any higher than before
+    max_points_num = 0;
+    max_points = "";
+    callsign = "";
+    first = 1;
+    foreach(u; points_list) {
+        if (first) {
+            max_points_num = u.points;
+            max_points = u.unique;
+        } else {
+            if (u.points > max_points_num) {
+                max_points_num = u.points;
+                max_points = u.unique;
+            }
+        }
+        first = 0;
+    }
+
+    primary_threat_callsign = max_points;  # in format `u.get_Callsign()~u.getUnique()`
+    return [max_points, max_points_num];
+}
+
 var is_missile_launcher = func(contact) {  # simple function to determine if given contact is a missile launcher
     var launchCallsign = getprop("sound/rwr-launch");
     var semiCallsign = getprop("payload/armament/MAW-semiactive-callsign");

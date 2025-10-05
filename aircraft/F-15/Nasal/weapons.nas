@@ -1080,6 +1080,7 @@ var arm_selector = func() {
                     }
                     
                     if (current_station_gps_data != nil) {
+                        current_station_gps_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].gps;
 				        if (current_station_gps_data.lat() < 90 and current_station_gps_data.lat() > -90 and current_station_gps_data.lon() < 180 and current_station_gps_data.lon() > -180 and pylons.fcs != nil) {
 					        var wp = pylons.fcs.getSelectedWeapon();
 					        if (wp != nil and wp.parents[0] == armament.AIM and wp.target_pnt == 1 and (wp.guidance=="gps" or wp.guidance=="gps-altitude")) {
@@ -1100,9 +1101,10 @@ var arm_selector = func() {
 					        }
 				        }
                     } elsif (current_station_rdr_data != nil) {
-                        var current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
+                        current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
                         var wp = pylons.fcs.getSelectedWeapon();
                         if (wp != nil and wp.parents[0] == armament.AIM and (wp.type == "AGM-84D" or wp.type == "AGM-158C")) {
+                            current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
                             wp.guidance = "inertial";
 
                             wp.setContacts([current_station_rdr_data]);
@@ -1112,6 +1114,7 @@ var arm_selector = func() {
                             wp.arming_time = pacs[pacs_current_program].tarm;
                             wp.data = get_data_block_from_pylon_idx(current_station_rel_idx).telemetry;  # Datalink telemetry
                         } elsif (wp != nil and wp.parents[0] == armament.AIM and (wp.type == "AGM-88E")) {
+                            current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
                             wp.guidance = "radiation";
 
                             wp.setContacts([current_station_rdr_data]);

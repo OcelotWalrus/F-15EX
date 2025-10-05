@@ -750,6 +750,75 @@ var SOI_cursor = func(direction) {  # direction 0 = r; 1 = l; 2 = up; 3 = down
     }
 }
 
+var SOI_control_1 = func() {
+    if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+        pylons.fcs.toggleCage();
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+        setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", 1);
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "AARGM") {
+        cursor_az_deg = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-az");  # Cursor's azimuth and elevation
+        cursor_el_deg = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-el");
+                    
+        dist_dic = [];  # A vector that contains `{unique: "<tgt class>", dist_deg: "<accuracy in deci deg>"}`'s. We then go each of 'em an pick the one that's the closest to the cursor. Note that targets that ain't close enough to the cursor (must be close to at least 2 degrees) ain't taken into account
+        foreach(var u; awg_9.tgts_list) {
+            xc = u.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing of the target
+            yc = -u.get_total_elevation(getprop("orientation/pitch-deg")) or 0;  # relative elevation of the target
+                        
+            # If the cursor is at least 3 degrees away in both azimuth and elevation
+            close_enough = math.abs(cursor_az_deg - xc) < 3 and math.abs(cursor_el_deg - yc) < 3;
+            if (close_enough and u.get_EPAWSS_visible()) {  # Don't need to check if it's the AARGM's FOV, cuz the cursor can't move outside of that FOV anyhow
+                append(dist_dic, {unique: u, dist_deg: math.abs(cursor_az_deg - xc) + math.abs(cursor_el_deg - yc)});
+            }
+        }
+                    
+        var best_dist_deg = 5000;  # huge unreal value so it gets updated the first time
+        var best_dist_deg_contact = nil;
+        foreach(curr_data; dist_dic) {
+            if (curr_data.dist_deg < best_dist_deg) {
+                best_dist_deg = curr_data.dist_deg;
+                best_dist_deg_contact = curr_data.unique;
+            }
+        }
+                    
+        if (best_dist_deg_contact != nil) {  # If it's nul, then there ain't no target in the cursor's range
+            displays.LADCanvas.SmartWeaponsPopulating = 1;
+            # Note: the AARGM automatically lofts 10,000 ft above the weapon loaded altitude, always between 10,000 ft and 40,000 ft (max and min loft values)
+            settimer(func {aircraft.rdr_tgt_to_station(best_dist_deg_contact, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 2.25);
+        }
+    }
+}
+
+var SOI_control_2 = func() {
+    if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+        pylons.fcs.setAutocage(!pylons.fcs.isAutocage());
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+        setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", -1);
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "AARGM") {
+        var aargm_tgts = [];
+        foreach(var u; awg_9.tgts_list) {  # We build a valid AARGM tgts list here
+            if (u.get_EPAWSS_visible() and u.get_deviation(getprop("orientation/heading-deg")) < 80 and u.get_deviation(getprop("orientation/heading-deg")) > -80 and u.get_total_elevation(getprop("orientation/pitch-deg")) < 80 and u.get_total_elevation(getprop("orientation/pitch-deg")) > -80) {
+                append(aargm_tgts, u);
+            }
+        }
+        
+        var primary_threat_unique = epawss.determine_primary_threat_from_list(aargm_tgts);
+        var primary_threat_class = nil;
+        if (primary_threat_unique[0] != "") {  # If the AARGM's list is null, it'll return that
+        
+            # Determine that primary threat's awg_9 class
+            foreach(var u; awg_9.tgts_list) {
+                if (u.get_Callsign()~u.getUnique() == primary_threat_unique[0]) {
+                    primary_threat_class = u;
+                }
+            }
+        
+            displays.LADCanvas.SmartWeaponsPopulating = 1;
+            # Note: the AARGM automatically lofts 10,000 ft above the weapon loaded altitude, always between 10,000 ft and 40,000 ft (max and min loft values)
+            settimer(func {aircraft.rdr_tgt_to_station(primary_threat_class, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 2.25);
+        }
+    }
+}
+
 # Ejection
 var eject_f15 = func{
     if (getprop("sim/model/f15/ejected") or !getprop("sim/model/f15/ejection-master")) {

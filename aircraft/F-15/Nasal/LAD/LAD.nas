@@ -5309,9 +5309,9 @@ update_lad = func() {
                             tgt_rng = contact.get_range();  # direct distance to target
                             
                             # Since this is a RWR, we make values less accurate
-                            # range accuracy: 5NM step
+                            # range accuracy: 15NM step
                             # bearing accuracy: 10 degrees step
-                            tgt_rng = int(math.round(tgt_rng / 5)) * 5;
+                            tgt_rng = int(math.round(tgt_rng / 15)) * 15;
                             tgt_bear = int(math.round(tgt_bear / 10)) * 10;
 
                             var x_move = (tgt_rng*LADCanvas.hsd_nm_to_px_x)*math.sin(tgt_bear*D2R);
@@ -5394,7 +5394,7 @@ update_lad = func() {
                 deviation = -geo.normdeg180(maw_bearing - getprop("orientation/heading-deg")) + 90;
                 
                 # Since this is a RWR, we make values less accurate
-                # bearing accuracy: 10 degrees step
+                # bearing accuracy: 5 degrees step
                 deviation = int(math.round(deviation / 5)) * 5;
                 
                 x_move = math.cos(deviation * D2R)*(LADCanvas.hsd_great_circle_radius*10/19)*(1/3);
@@ -6490,6 +6490,14 @@ update_lad = func() {
                             LADCanvas.rad_src_symbols_pacs[tgt_idx].setText(u.get_model());
                         } else {  # Model's unknown to our RWR
                             LADCanvas.rad_src_symbols_pacs[tgt_idx].setText("UNK");
+                        }
+                        
+                        pylon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);
+                        
+                        if (pylon_block.data[LADCanvas.SmartWeaponsCurrSubOrdnance].type == 1 and pylon_block.data[LADCanvas.SmartWeaponsCurrSubOrdnance].radar_target != nil and u.getUnique() == pylon_block.data[LADCanvas.SmartWeaponsCurrSubOrdnance].radar_target.getUnique()) {
+                            LADCanvas.rad_src_symbols_pacs[tgt_idx].setColor(prst_rose.r, prst_rose.g, prst_rose.b);
+                        } else {
+                            LADCanvas.rad_src_symbols_pacs[tgt_idx].setColor(prst_white.r, prst_white.g, prst_white.b);
                         }
                     
                         var tgt_idx += 1;

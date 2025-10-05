@@ -555,6 +555,24 @@ var F15_HMD = {
                 .setFontSize(fontSize/1.25, 1.1);
             append(obj.dlnk_texts, obj.dlnk_txt);
         }
+        obj.maw_diamond = obj.centerOrigin.createChild("path")
+            .moveTo(0,-30*1.25)
+            .lineTo(30*1.25,0)
+            .lineTo(0,30*1.25)
+            .lineTo(-30*1.25,0)
+            .lineTo(0,-30*1.25)
+            .setStrokeLineWidth(stroke1*1.25)
+            .show()
+            .setColor(1,.35,0);
+        obj.maw_text = obj.centerOrigin.createChild("text")
+            .setText("M")
+            .setAlignment("center-center")
+            .setColor(1,0,0,1)
+            .setFont(HUD_FONT)
+            .show()
+            .setFontSize(fontSize*1.25*1.25, 1.1);
+        append(obj.total, obj.maw_diamond);
+        append(obj.total, obj.maw_text);
         obj.radarLock = obj.centerOrigin.createChild("path")
             .moveTo(-boxRadius*hairFactor,0)
             .horiz(boxRadiusHalf*hairFactor)
@@ -984,6 +1002,37 @@ var F15_HMD = {
         me.custom.update();
         me.centerOrigin.update();
         me.svg.update();
+        
+        # MAW (Missile Approach Warning) symbol
+        if (getprop("payload/armament/MAW-active") or getprop("payload/armament/MAW-semiactive")) {  # Note: EWWS must be on
+            maw_bearing = getprop("payload/armament/MAW-bearing");
+            deviation = -geo.normdeg180(maw_bearing - getprop("orientation/heading-deg")) + 180;
+                
+            # Since this is a RWR, we make values less accurate
+            # bearing accuracy: 5 degrees step
+            deviation = int(math.round(deviation / 5)) * 5;
+            
+            print(deviation);
+            
+            me.echoPos = hudmath.HudMath.getDevFromHMD(deviation, 0, -hdp.HmdH, hdp.HmdP);  # Note: Elevation ain't shown because it ain't implemented TODO: implement that
+            me.echoPos[0] = geo.normdeg180(me.echoPos[0]);
+            me.echoPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+            me.echoPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;
+            me.clamped = math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]) > 500;  # It ain't clamped when displayed though
+
+
+            me.maw_diamond.setTranslation(me.echoPos);
+            me.maw_text.setTranslation(me.echoPos);
+            
+            me.maw_diamond.setColor(1,.35,0);
+            me.maw_text.setColor(1,0,0,1);
+            
+            me.maw_diamond.setVisible(1);
+            me.maw_text.setVisible(1);
+        } else {
+            me.maw_diamond.setVisible(0);
+            me.maw_text.setVisible(0);
+        }
 
 
 

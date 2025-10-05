@@ -214,11 +214,7 @@
     <binding>
       <command type="string">nasal</command>
       <script>
-                        if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
-                            pylons.fcs.toggleCage();
-                        } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
-                            setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", 1);
-                        }
+        aircraft.SOI_control_1();
       </script>
     </binding>
   </button>
@@ -227,11 +223,7 @@
     <binding>
       <command type="string">nasal</command>
       <script>
-                        if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
-                            pylons.fcs.setAutocage(!pylons.fcs.isAutocage());
-                        } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
-                            setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", -1);
-                        }
+        aircraft.SOI_control_2();
       </script>
     </binding>
   </button>

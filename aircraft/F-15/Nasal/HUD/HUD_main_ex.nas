@@ -1697,7 +1697,7 @@ return obj;
               var dx = me.view[0] - current_x;
               var dy = me.view[1] - current_y;
 
-              me.svg.setTranslation(me.baseTranslation[0]-dx*1024, me.baseTranslation[1]+dy*1024);
+              #me.svg.setTranslation(me.baseTranslation[0]-dx*1024, me.baseTranslation[1]+dy*1024);
           }
 
         if (awg_9.active_u == nil) {
