@@ -5399,7 +5399,7 @@ var AIM = {
 	is_radiating_me: func (target) {
 		if(target != nil) {
 			me.seeMe = target.isRadiating(me.coord);
-			if (me.seeMe != nil and me.seeMe) {
+			if (me.seeMe != nil and (me.seeMe or target.get_EPAWSS_visible())) {
 				return 1;
 			}
 			return target.isSpikingMe();
@@ -5410,7 +5410,7 @@ var AIM = {
 	is_radiating_aircraft: func (target) {
 		if(target != nil) {
 			me.seeMe = target.isRadiating(geo.aircraft_position());
-			if (me.seeMe != nil and me.seeMe) {
+			if (me.seeMe != nil and (me.seeMe or target.get_EPAWSS_visible())) {
 				return 1;
 			}
 		}

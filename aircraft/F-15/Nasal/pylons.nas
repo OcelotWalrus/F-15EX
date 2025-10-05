@@ -3238,12 +3238,13 @@ var bore_loop = func {
     if (fcs != nil) {
         var standby = getprop("instrumentation/radar/radar-standby");
         var aim = fcs.getSelectedWeapon();
+        var hmd_slaving = getprop("sim/model/f15/avionics/hmd-slaving");
+        var hud_soi = getprop("sim/model/f15/avionics/SOI") == "HUD";
 
         # Slave the seeker to the bore at the HMD, if it's active
-        if (aim != nil and (aim.type == "AIM-9X" or aim.type == "CATM-9X" or aim.type == "AGM-65B" or aim.type == "AGM-65D" or aim.type == "AGM-88E" or aim.type == "AGM-119A")) {
-            var hmd_slaving = getprop("sim/model/f15/avionics/hmd-slaving");
+        if (aim != nil and (aim.type == "AIM-9X" or aim.type == "CATM-9X" or aim.type == "AGM-65B" or aim.type == "AGM-65D" or aim.type == "AGM-119A")) {
 
-            if (hmd_slaving and aim.status < 1) {
+            if (hmd_slaving and aim.status < 1 and !hud_soi) {
         		aim.setContacts(awg_9.completeList);
         		var h = -geo.normdeg180(getprop("sim/current-view/heading-offset-deg"));
                 var p = getprop("sim/current-view/pitch-offset-deg");
@@ -3265,12 +3266,12 @@ var bore_loop = func {
 
         if (aim != nil and (aim.type == "AIM-9" or aim.type == "AIM-9X" or aim.type == "CATM-9X")) {
 
-        	if (standby == 1 and !hmd_slaving) {
+        	if (standby == 1 and !hmd_slaving and !hud_soi) {
                 #aim.setBore(1);
                 aim.setContacts(awg_9.completeList);
                 aim.commandDir(0,-3.5);# the real is bored to -6 deg below real bore
                 bore = 1;
-            } elsif (!hmd_slaving) {
+            } elsif (!hmd_slaving and !hud_soi) {
 				# stop tracking target with IR and start try to lock up radar target
                 aim.commandRadar();
                 aim.setContacts([]);

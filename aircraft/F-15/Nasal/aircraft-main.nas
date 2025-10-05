@@ -710,6 +710,46 @@ var cold_and_dark = func()
     setprop("sim/model/f15/avionics/bit-done", 0);
 }
 
+# SOI
+
+var SOI_cursor = func(direction) {  # direction 0 = r; 1 = l; 2 = up; 3 = down
+    if (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+        var val_string = "sim/model/f15/controls/LAD/cursor-deg-az";
+        if (direction == 2 or direction == 3) {
+            var val_string = "sim/model/f15/controls/LAD/cursor-deg-el";
+        }
+        
+        if (getprop(val_string) < 60 and (direction == 0 or direction == 3)) {
+            setprop(val_string, getprop(val_string) + 1);
+        } elsif (getprop(val_string) > -60 and (direction == 1 or direction == 2)) {
+            setprop(val_string, getprop(val_string) - 1);
+        }
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+        var aim = pylons.fcs.getSelectedWeapon();
+        var hmd_slaving = getprop("sim/model/f15/avionics/hmd-slaving");
+
+        if (aim != nil and (aim.type == "AIM-9X" or aim.type == "CATM-9X" or aim.type == "AGM-65B" or aim.type == "AGM-65D" or aim.type == "AGM-119A") and !hmd_slaving) {
+            aim.setContacts(awg_9.completeList);
+            var h = aim.command_dir_heading - (direction == 1) + (direction == 0);
+            var p = aim.command_dir_pitch - (direction == 3) + (direction == 2);
+            if (math.sqrt(h*h+p*p) < aim.fcs_fov) {
+                aim.commandDir(h,p);
+            }
+        }
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "AARGM") {
+        var val_string = "sim/model/f15/controls/LAD/aargm-cursor-deg-az";
+        if (direction == 2 or direction == 3) {
+            var val_string = "sim/model/f15/controls/LAD/aargm-cursor-deg-el";
+        }
+        
+        if (getprop(val_string) < 30 and (direction == 0 or direction == 3)) {
+            setprop(val_string, getprop(val_string) + 1);
+        } elsif (getprop(val_string) > -30 and (direction == 1 or direction == 2)) {
+            setprop(val_string, getprop(val_string) - 1);
+        }
+    }
+}
+
 # Ejection
 var eject_f15 = func{
     if (getprop("sim/model/f15/ejected") or !getprop("sim/model/f15/ejection-master")) {

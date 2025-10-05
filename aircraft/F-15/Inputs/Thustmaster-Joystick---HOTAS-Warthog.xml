@@ -67,7 +67,7 @@
       <property type="string">/controls/flight/aileron</property>
       <factor type="double">1</factor>
       <offset type="double">0</offset>
-      <power type="double">2.5</power>
+      <power type="double">1</power>
     </binding>
   </axis>
   <axis n="1">
@@ -77,7 +77,7 @@
       <property type="string">/controls/flight/elevator</property>
       <factor type="double">-1</factor>
       <offset type="double">0</offset>
-      <power type="double">2.5</power>
+      <power type="double">1</power>
     </binding>
   </axis>
   <axis n="2">
@@ -210,19 +210,29 @@
     </mod-up>
   </button>
   <button n="2">
-    <desc type="string">TDC Designate</desc>
+    <desc type="string">SOI Control 1</desc>
     <binding>
-      <command type="string">property-adjust</command>
-      <property type="string">sim/model/f15/instrumentation/radar-awg-9/select-target</property>
-      <step type="string">1</step>
+      <command type="string">nasal</command>
+      <script>
+                        if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+                            pylons.fcs.toggleCage();
+                        } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+                            setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", 1);
+                        }
+      </script>
     </binding>
   </button>
   <button n="3">
-    <desc type="string">TWS Swipe trackfiles</desc>
+    <desc type="string">SOI Control 2</desc>
     <binding>
-      <command type="string">property-adjust</command>
-      <property type="string">sim/model/f15/instrumentation/radar-awg-9/select-target</property>
-      <step type="string">-1</step>
+      <command type="string">nasal</command>
+      <script>
+                        if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+                            pylons.fcs.setAutocage(!pylons.fcs.isAutocage());
+                        } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+                            setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", -1);
+                        }
+      </script>
     </binding>
   </button>
   <button n="4">
@@ -325,54 +335,46 @@
   </button>
   <button n="10">
     <name type="string">right black cursor (DMS) up</name>
-    <desc type="string">TDC Up</desc>
+    <desc type="string">SOI Cursor Up</desc>
     <repeatable type="string">true</repeatable>
     <binding>
-        <command>property-adjust</command>
-        <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
-        <step type="double">-2</step>
-        <min>-60</min>
-        <max>60</max>
-        <wrap>false</wrap>
+        <command>nasal</command>
+        <script type="string">
+            aircraft.SOI_cursor(2);
+        </script>
     </binding>
   </button>
   <button n="11">
     <name type="string">right black cursor (DMS) right</name>
-    <desc type="string">TDC Right</desc>
+    <desc type="string">SOI Cursor Right</desc>
     <repeatable type="string">true</repeatable>
     <binding>
-        <command>property-adjust</command>
-        <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
-        <step type="double">2</step>
-        <min>-60</min>
-        <max>60</max>
-        <wrap>false</wrap>
+        <command>nasal</command>
+        <script type="string">
+            aircraft.SOI_cursor(0);
+        </script>
     </binding>
   </button>
   <button n="13">
     <name type="string">right black cursor (DMS) left</name>
-    <desc type="string">TDC Left</desc>
+    <desc type="string">SOI Cursor Left</desc>
     <repeatable type="string">true</repeatable>
     <binding>
-        <command>property-adjust</command>
-        <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
-        <step type="double">-2</step>
-        <min>-60</min>
-        <max>60</max>
-        <wrap>false</wrap>
+        <command>nasal</command>
+        <script type="string">
+            aircraft.SOI_cursor(1);
+        </script>
     </binding>
   </button>
   <button n="12">
     <name type="string">right black cursor (DMS) down</name>
-    <desc type="string">TDC Down</desc>
+    <desc type="string">SOI Cursor Down</desc>
     <repeatable type="string">true</repeatable>
     <binding>
-        <command>property-adjust</command>
-        <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
-        <step type="double">2</step>
-        <min>-60</min>
-        <max>60</max>
-        <wrap>false</wrap>
+        <command>nasal</command>
+        <script type="string">
+            aircraft.SOI_cursor(3);
+        </script>
     </binding>
   </button>
   <button n="14">

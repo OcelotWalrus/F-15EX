@@ -1157,6 +1157,17 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
     <path
+         style="fill:none;stroke:#00ff00;stroke-width:1;stroke-miterlimit:4.1;stroke-dasharray:none;stroke-opacity:1"
+         d="m 181.54768,839.27344 -4.00904,4.89292 4.10374,3.75651 3.50397,-4.45099 z"
+         id="SOI_diamond" />
+      <ellipse
+         style="fill:none;stroke:#00ff00;stroke-width:1;stroke-miterlimit:4.1;stroke-dasharray:none;stroke-opacity:1"
+         id="SOI_circle"
+         cx="181.5213"
+         cy="843.63763"
+         rx="0.46561718"
+         ry="0.51296806" />
+    <path
        id="path4530-6"
        style="color:#000000;fill:none;stroke:#00ff00;stroke-width:0.90051275;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="m 105.79933,889.23691 4.71741,0 3.58523,3.58523 3.71496,-3.86828 3.71496,3.86828 3.58523,-3.58524 4.71741,0"

@@ -261,11 +261,20 @@ var Station = {
 						};
 					} elsif (me.weaponName == "AGM-88E") {  # named 88E in F-15EX  (E variant has more complex midflight mechanics)
 						mf = func (struct) {
-							if (struct.dist_m != -1 and struct.dist_horz_m*M2NM < 10 and struct.hasTarget) {
-								screen.log.write("AGM-88E: Pitbull", 1,1,0);
-								return {"altitude":0,"guidance":"radar","guidanceLaw":"PN","abort_midflight_function":1};
+						
+						    if (!struct.hasTarget) {  # MADDOG mode (launched with no target)
+								return {"guidance":"radar","guidanceLaw":"PN","class": "GM","abort_midflight_function":1};
 							}
-							return {};
+						
+							if (struct.dist_horz_m != nil and M2NM*struct.dist_horz_m < 10 and struct.guidanceLaw == "direct-alt") {
+	   							# start terminal diving when 10 NM from target (without considering altitude distance)
+	   							return {"altitude":0,"guidanceLaw":"direct"};
+	   						}
+	   						if (M2FT*struct.dist_m/struct.speed_fps < 6 and struct.guidance == "gps") {
+	   							# 6s before impact switches to active radar
+	   							return {"guidance":"radar","guidanceLaw":"PN","altitude":0,"class":"GM","target":"closest","abort_midflight_function":1};
+	   						}
+   							return {};
 						};
 					} elsif (me.weaponName == "AIM-54") {
 						mf = func (struct) {

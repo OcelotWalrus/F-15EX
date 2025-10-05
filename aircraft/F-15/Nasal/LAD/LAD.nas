@@ -770,6 +770,15 @@ var LAD_Device = {
             .lineTo(677*3,2300*2+500-75)
             .setStrokeLineWidth(10)
             .setColor(prst_white.r,prst_white.g,prst_white.b);
+        
+        m.vsd_SOI = m.VSDScreen.createChild("path")
+            .moveTo(1355+1355-75-15+30-75,575+75+75)
+            .lineTo(1355+1355-75-15+30-75+35,575+75+75+35)
+            .lineTo(1355+1355-75-15+30-75,575+75+75+35*2)
+            .lineTo(1355+1355-75-15+30-75-35,575+75+75+35)
+            .lineTo(1355+1355-75-15+30-75,575+75+75)
+            .setStrokeLineWidth(13)
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
 
         # VSD Symbologies
         # Standard symbology (speed, alt, horizon etc.)
@@ -1309,6 +1318,7 @@ var LAD_Device = {
         m.vsd_gps_spot_square.setVisible(0);
         m.vsd_gps_spot_square_ranging.setVisible(0);
         m.intercept_cue.setVisible(0);
+        m.vsd_SOI.setVisible(0);
 
         ## HSD Display
         m.hsd_great_circle_radius = 1150;
@@ -2060,6 +2070,17 @@ var LAD_Device = {
             .setVisible(1)
             .set("z-index",1)
             .setFont(aircraft.HUDFont);
+        m.pacs_smrt_wpns_wpn_status_box = m.PACSScreenSmartWeapons.createChild("path")
+            .moveTo(325+125,2300*2+500-70-120+1000-225-130)
+            .lineTo(325+125+130,2300*2+500-70-120+1000-225-130)
+            .lineTo(325+125+130,2300*2+500-70-120+1000-225+130)
+            .lineTo(325+125-130,2300*2+500-70-120+1000-225+130)
+            .lineTo(325+125-130,2300*2+500-70-120+1000-225-130)
+            .lineTo(325+125,2300*2+500-70-120+1000-225-130)
+            .setColor(prst_cyan_dark.r,prst_cyan_dark.g,prst_cyan_dark.b)
+            .setVisible(1)
+            .set("z-index",1)
+            .setStrokeLineWidth(10);
         m.pacs_smrt_wpns_populate_mode = m.PACSScreenSmartWeapons.createChild("text")
             .setFontSize(125, 1.4)
             .setText("WPN\nMEM")
@@ -2130,6 +2151,51 @@ var LAD_Device = {
             .set("z-index",1)
             .setStrokeLineWidth(10);
             
+        m.pacs_smrt_wpns_anti_rad_screen = m.PACSScreenSmartWeapons.createChild("path")
+            .moveTo(325+125,2300*2+500-70-120+1000-225-75-115)
+            .lineTo(325+125+905*2,2300*2+500-70-120+1000-225-75-115)
+            .lineTo(325+125+905*2,2300*2+500-70-120+1000-225-585*2-75-115)
+            .lineTo(325+125,2300*2+500-70-120+1000-225-585*2-75-115)
+            .lineTo(325+125,2300*2+500-70-120+1000-225-75-115)
+            .setColor(prst_red_dark.r,prst_red_dark.g,prst_red_dark.b)
+            .setVisible(1)
+            .set("z-index",1)
+            .setStrokeLineWidth(10);
+        
+        # Create the radar sources symbols
+        m.rad_src_symbols_max = 16; # random number, can always be increased or decreased if we ever need to
+        m.rad_src_symbols_pacs = setsize([], m.rad_src_symbols_max);
+        for (var i = 0; i < m.rad_src_symbols_max; i += 1){
+            m.tgt = m.PACSScreenSmartWeapons.createChild("text")  # far down, bottom left
+                .setFontSize(85, 1.4)
+                .setText("S-300")
+                .setAlignment("center-center")
+                .setColor(prst_white.r,prst_white.g,prst_white.b)
+                .setTranslation(1355,4870)
+                .setVisible(0)
+                .set("z-index",2)
+                .setFont(aircraft.HUDFont);
+            m.rad_src_symbols_pacs[i] = m.tgt;
+        }
+        
+        m.aargm_cursor = m.PACSScreenSmartWeapons.createChild("path")
+            .moveTo(1355-25,4870-25)
+            .lineTo(1355-25,4870+25)
+            .moveTo(1355+25,4870-25)
+            .lineTo(1355+25,4870+25)
+            .setVisible(1)
+            .set("z-index",3)
+            .setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b)
+            .setStrokeLineWidth(15);
+        
+        m.aargm_soi = m.PACSScreenSmartWeapons.createChild("path")
+            .moveTo(325+125+905*2-15+30-75,2300*2+500-70-120+1000-225-585*2-75-115+75)
+            .lineTo(325+125+905*2-15+30-75+35,2300*2+500-70-120+1000-225-585*2-75-115+75+35)
+            .lineTo(325+125+905*2-15+30-75,2300*2+500-70-120+1000-225-585*2-75-115+75+35*2)
+            .lineTo(325+125+905*2-15+30-75-35,2300*2+500-70-120+1000-225-585*2-75-115+75+35)
+            .lineTo(325+125+905*2-15+30-75,2300*2+500-70-120+1000-225-585*2-75-115+75)
+            .setStrokeLineWidth(13)
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b);
         
         # Screen used by A/G PACS page
         m.PACSScreenAGPacs = m.svg.createGroup();
@@ -3055,6 +3121,7 @@ update_lad = func() {
                 var skim_ft_box = skim_ft_box_new;
                 
                 var a_s_wpn = getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-158C" or getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-84D";
+                var anti_rad_wpn = getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-88E";
                 
                 if (point_in_quad(LADCanvas.screen_touch_pos, page_indicator_box)) {
                     if (LADCanvas.PACSmode == 4) {  # Wrap up
@@ -3123,29 +3190,60 @@ update_lad = func() {
                     } else {
                         LADCanvas.SmartWeaponsPopulateMode += 1;
                     }
-                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn) and point_in_quad(LADCanvas.screen_touch_pos, un_target_box)) {
+                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn and !anti_rad_wpn) and point_in_quad(LADCanvas.screen_touch_pos, un_target_box)) {
                     if (LADCanvas.SmartWeaponsCurrSet == 3) {  # Wrap up
                         LADCanvas.SmartWeaponsCurrSet = 0;
                     } else {
                         LADCanvas.SmartWeaponsCurrSet += 1;
                     }
-                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn) and point_in_quad(LADCanvas.screen_touch_pos, loft_box)) {
+                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn and !anti_rad_wpn) and point_in_quad(LADCanvas.screen_touch_pos, loft_box)) {
                     if (LADCanvas.SmartWeaponsCurrMission == 39) {  # Wrap up
                         LADCanvas.SmartWeaponsCurrMission = 0;
                     } else {
                         LADCanvas.SmartWeaponsCurrMission += 1;
                     }
-                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn) and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {
+                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn and !anti_rad_wpn) and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {
                     LADCanvas.SmartWeaponsPopulating = 1;
                     settimer(func {aircraft.push_mission_program_to_station(displays.LADCanvas.SmartWeaponsCurrSet, displays.LADCanvas.SmartWeaponsCurrMission, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 3);
                 } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 0 or a_s_wpn) and point_in_quad(LADCanvas.screen_touch_pos, un_target_box)) {
                     LADCanvas.SmartWeaponsUntargeting = 1;
                     settimer(func{ aircraft.untarget_data_block(displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance); displays.LADCanvas.SmartWeaponsUntargeting = 0;} , 3);
-                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 0 or LADCanvas.SmartWeaponsPopulateMode == 2) and !a_s_wpn and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {
+                } elsif (LADCanvas.PACSmode == 2 and (LADCanvas.SmartWeaponsPopulateMode == 0 or LADCanvas.SmartWeaponsPopulateMode == 2) and !a_s_wpn and !anti_rad_wpn and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {
                     LADCanvas.PACSmode = 3;
                 } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 3 and a_s_wpn and awg_9.active_u != nil and awg_9.active_u.get_display() and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {  # Rdr tgt trsfr
                     LADCanvas.SmartWeaponsPopulating = 1;
                     settimer(func {aircraft.rdr_tgt_to_station(awg_9.active_u, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, displays.LADCanvas.SmartWeaponsCurrSkimFt); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 1.5);
+                } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {  # Rdr src sel
+                
+                    cursor_az_deg = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-az");  # Cursor's azimuth and elevation
+                    cursor_el_deg = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-el");
+                    
+                    dist_dic = [];  # A vector that contains `{unique: "<tgt class>", dist_deg: "<accuracy in deci deg>"}`'s. We then go each of 'em an pick the one that's the closest to the cursor. Note that targets that ain't close enough to the cursor (must be close to at least 2 degrees) ain't taken into account
+                    foreach(var u; awg_9.tgts_list) {
+                        xc = u.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing of the target
+                        yc = -u.get_total_elevation(getprop("orientation/pitch-deg")) or 0;  # relative elevation of the target
+                        
+                        # If the cursor is at least 3 degrees away in both azimuth and elevation
+                        close_enough = math.abs(cursor_az_deg - xc) < 3 and math.abs(cursor_el_deg - yc) < 3;
+                        if (close_enough and u.get_EPAWSS_visible()) {  # Don't need to check if it's the AARGM's FOV, cuz the cursor can't move outside of that FOV anyhow
+                            append(dist_dic, {unique: u, dist_deg: math.abs(cursor_az_deg - xc) + math.abs(cursor_el_deg - yc)});
+                        }
+                    }
+                    
+                    var best_dist_deg = 5000;  # huge unreal value so it gets updated the first time
+                    var best_dist_deg_contact = nil;
+                    foreach(curr_data; dist_dic) {
+                        if (curr_data.dist_deg < best_dist_deg) {
+                            best_dist_deg = curr_data.dist_deg;
+                            best_dist_deg_contact = curr_data.unique;
+                        }
+                    }
+                    
+                    if (best_dist_deg_contact != nil) {  # If it's nul, then there ain't no target in the cursor's range
+                        LADCanvas.SmartWeaponsPopulating = 1;
+                        # Note: the AARGM automatically lofts 10,000 ft above the weapon loaded altitude, always between 10,000 ft and 40,000 ft (max and min loft values)
+                        settimer(func {aircraft.rdr_tgt_to_station(best_dist_deg_contact, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 2.25);
+                    }
                 } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 3 and a_s_wpn and point_in_quad(LADCanvas.screen_touch_pos, skim_ft_box)) {
                     displays.curr_menu = displays.skim_ft_menu;  # Trigger Skimming altitude input on the UFC
                     displays.stored_input = "";  # We reset the stored input just in case
@@ -3295,6 +3393,8 @@ update_lad = func() {
                 } elsif (LADCanvas.PACSmode == 3 and LADCanvas.PACSProgEditing == 3 and point_in_quad(LADCanvas.screen_touch_pos, config_select_box_4)) {
                     LADCanvas.PACSProgEditing = 0;
                     aircraft.pacs[aircraft.pacs_current_program].fuzing = 2;
+                } elsif ((anti_rad_wpn or a_s_wpn) and point_in_quad(LADCanvas.screen_touch_pos, weapon_status_box)) {
+                    aircraft.toggle_telemetry_var_to_station(LADCanvas.SmartWeaponsCurrPylon);
                 }
             }
         }
@@ -3725,6 +3825,10 @@ update_lad = func() {
         if (VSD_ON) {  # Optimization, we only wanna update the VSD display if it's online
             LADCanvas.VSDScreen.setVisible(1);
             LADCanvas.VSDScreenDLZ.setVisible(1);
+            
+            # Display the SOI diamond
+            LADCanvas.vsd_SOI.setVisible(getprop("sim/model/f15/avionics/SOI") == "VSD");
+            
             # Update the texts
             LADCanvas.vsd_rdr_range_txt.setText(sprintf("%03d NM", getprop("instrumentation/radar/radar2-range")));
             if (getprop("instrumentation/radar/radar-filter-mode") == 0) {  # if radar's A/A
@@ -5180,7 +5284,7 @@ update_lad = func() {
             # Process the EPAWSS contacts
             var epawss_idx = 0;
             foreach (contact ; awg_9.tgts_list) {
-                if (!contact.get_behind_terrain() and contact.get_EPAWSS_visible()) {  # If it's all good
+                if (contact.get_EPAWSS_visible()) {  # If it's all good
                     already_on_rdr = 0;  # if its' on our radar, we don't display it.
                     foreach(rdrcontact ; valid_radar_targets) {
                         if (rdrcontact == contact.get_Callsign()) {
@@ -6025,7 +6129,8 @@ update_lad = func() {
                     LADCanvas.pacs_smrt_wpns_status.setColor(curr_selected_station_alignment_status_color);
                     
                     var a_s_wpn = getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-158C" or getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-84D";
-                    if (!a_s_wpn) {
+                    var anti_rad_wpn = getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-88E";
+                    if (!a_s_wpn and !anti_rad_wpn) {
                         if (LADCanvas.SmartWeaponsPopulateMode == 0) {  # Default, WPN mode
                             LADCanvas.pacs_smrt_wpns_station.setText(sprintf("STA: %02d/%d:%d", LADCanvas.SmartWeaponsCurrPylon, LADCanvas.SmartWeaponsCurrSubOrdnance + 1, LADCanvas.SmartWeaponsCurrSubOrdnanceMax));
                         } elsif (LADCanvas.SmartWeaponsPopulateMode == 1) {  # Default, WPN mode
@@ -6033,10 +6138,12 @@ update_lad = func() {
                         }
                     } elsif (a_s_wpn) {
                         LADCanvas.pacs_smrt_wpns_station.setText(sprintf("STA: %02d/%d:%d", LADCanvas.SmartWeaponsCurrPylon, LADCanvas.SmartWeaponsCurrSubOrdnance + 1, LADCanvas.SmartWeaponsCurrSubOrdnanceMax));
+                    } elsif (anti_rad_wpn) {
+                        LADCanvas.pacs_smrt_wpns_station.setText(sprintf("STA: %02d/%d:%d", LADCanvas.SmartWeaponsCurrPylon, LADCanvas.SmartWeaponsCurrSubOrdnance + 1, LADCanvas.SmartWeaponsCurrSubOrdnanceMax));
                     }
 
                     # Update the data block texts
-                    if (LADCanvas.SmartWeaponsPopulateMode == 0 and !a_s_wpn) {  # Default, WPN mode
+                    if (LADCanvas.SmartWeaponsPopulateMode == 0 and !a_s_wpn and !anti_rad_wpn) {  # Default, WPN mode
                         # We draw the data blocks only if it's valid
                         if (typeof(curr_selected_station_alignment_status) == "vector" and curr_selected_station_alignment_status[0] == 1) {  # Initialized and valid target
                             LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(1);
@@ -6049,6 +6156,7 @@ update_lad = func() {
                             LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(1);
                             LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(1);
                             LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(0);
+                            LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(0);
                             LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
                             
                             # We determine whether the currently selected ordnance of the current station got the vector it needs
@@ -6114,8 +6222,9 @@ update_lad = func() {
                             LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                             LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
                             LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
+                            LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(0);
                         }
-                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn) {  # CC mode (Data Cartridge)
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 1 and !a_s_wpn and !anti_rad_wpn) {  # CC mode (Data Cartridge)
                         var curr_mission_block = aircraft.mission_sets[LADCanvas.SmartWeaponsCurrSet][LADCanvas.SmartWeaponsCurrMission];
                         LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(1);
                         LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(1);
@@ -6126,6 +6235,7 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(1);
                         LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(1);
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
                             LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
                         if (curr_mission_block.initialized) {
@@ -6151,7 +6261,9 @@ update_lad = func() {
                             LADCanvas.pacs_smrt_wpns_tgt_line_seven.setText("                ");
                             LADCanvas.pacs_smrt_wpns_tgt_line_eight.setText("                   ");
                         }
-                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 2 and !a_s_wpn) {  # TOO mode (Target Of Opportunity)
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 2 and !a_s_wpn and !anti_rad_wpn) {  # TOO mode (Target Of Opportunity)
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+
                         LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
@@ -6163,7 +6275,10 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
                     } elsif (LADCanvas.SmartWeaponsPopulateMode == 0 and a_s_wpn) {  # A/S WPN B/R mode (Bearing N' Range)
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+                        
                         LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
@@ -6173,9 +6288,13 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible();
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
                         LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
                         LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
                     } elsif (LADCanvas.SmartWeaponsPopulateMode == 1 and a_s_wpn) {  # A/S WPN B-O mode (Bearing Only)
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+                        
                         LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
@@ -6185,9 +6304,12 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
                         LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
                         LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
                     } elsif (LADCanvas.SmartWeaponsPopulateMode == 2 and a_s_wpn) {  # A/S WPN B/W mode (Bearing from Waypoint)
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+                        
                         LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
@@ -6197,6 +6319,7 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
                         LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
                         LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
                     } elsif (LADCanvas.SmartWeaponsPopulateMode == 3 and a_s_wpn) {  # A/S WPN RDR TGT mode (Radar Target)
@@ -6211,6 +6334,7 @@ update_lad = func() {
                         LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(1);
                         LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
                         LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
                         LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
                         LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
                         if (aircraft.get_status_for_pylon(LADCanvas.SmartWeaponsCurrPylon)[0] == 1 and aircraft.get_status_for_pylon(LADCanvas.SmartWeaponsCurrPylon)[1] == 0) {  # Smart Weapon initiated and has data
@@ -6238,7 +6362,67 @@ update_lad = func() {
                             LADCanvas.pacs_smrt_wpns_tgt_line_six.setText("      CLO XXX");
                             LADCanvas.pacs_smrt_wpns_tgt_line_seven.setText("      SKIM XXXX FT");
                         }
-                    } 
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn) {  # ANTI-RAD TOO Mode (Target of Opportunity, missile's passive radar, FOV scheme)
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+                        
+                        LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_four.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_five.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_six.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
+                        LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
+                        LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 1 and anti_rad_wpn) {  # ANTI-RAD SP Mode (Self Protect, automatically targets the highest threat determined by the EPAWSS (360* cuz it's the F-15's RWR))
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+                        
+                        LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_four.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_five.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_six.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
+                        LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
+                        LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 2 and anti_rad_wpn) {  # ANTI-RAD PB Mode (Pre-Briefed, uses GPS/INS to get to the pre-briefed target (With missions sets) and uses its radars in terminal phase for accuracy)
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+                        
+                        LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_four.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_five.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_six.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
+                        LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
+                        LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 3 and anti_rad_wpn) {  # ANTI-RAD ACT Mode (Active, uses the missile's active radar during the whole missile operation)
+                        var curr_smart_weapon_block = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon);  # We re-update the var because the new required one just got created
+                        
+                        LADCanvas.pacs_smrt_wpns_tgt_line_one.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_two.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_three.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_four.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_five.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_six.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_seven.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_eight.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_tgt_line_nine.setVisible(0);
+                        LADCanvas.pacs_smrt_wpns_wpn_status_box.setVisible(curr_smart_weapon_block.telemetry);
+                        LADCanvas.pacs_smrt_wpns_back_to_pac_box.setVisible(LADCanvas.SmartWeaponsPopulating);
+                        LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(LADCanvas.SmartWeaponsUntargeting);
+                    }
                 } else {
                     LADCanvas.pacs_smrt_wpns_station.setText("STA: NIL");
                     LADCanvas.SmartWeaponsCurrSubOrdnanceMax = 0;
@@ -6255,17 +6439,85 @@ update_lad = func() {
                     LADCanvas.pacs_smrt_wpns_un_tgt_box.setVisible(0);
                 }
                 
+                # Reiterations to prevent bugs
+                var a_s_wpn = getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-158C" or getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-84D";
+                var anti_rad_wpn = getprop("payload/armament/station/id-"~LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-88E";
+                
+                # AARGM radar sources screen
+                # Note: the AARGM's FOV is 80*. In that case, with the current shape of the box,
+                # But we only display a 30* FOV so that close radars don't display overlapped
+                # 905 = 30* AZ
+                # 585 = 30* EL
+                LADCanvas.pacs_smrt_wpns_anti_rad_screen.setVisible(LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn);
+                LADCanvas.aargm_soi.setVisible(LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn and getprop("sim/model/f15/avionics/SOI") == "AARGM");
+                LADCanvas.aargm_cursor.setVisible(LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn);
+                
+                var xc = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-az") * 905 / 30;
+                var yc = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-el") * 585 / 30;
+                LADCanvas.aargm_cursor.setTranslation(xc, yc);
+                
+                if (LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn) {
+                    var tgt_idx = 0;
+                    
+                    var aargm_tgts = [];
+                    foreach(var u; awg_9.tgts_list) {  # We build a valid AARGM tgts list here
+                        if (u.get_EPAWSS_visible() and u.get_deviation(getprop("orientation/heading-deg")) < 80 and u.get_deviation(getprop("orientation/heading-deg")) > -80 and u.get_total_elevation(getprop("orientation/pitch-deg")) < 80 and u.get_total_elevation(getprop("orientation/pitch-deg")) > -80) {
+                            append(aargm_tgts, u);
+                        }
+                    }
+                    
+                    foreach(var u; aargm_tgts) {
+                        LADCanvas.rad_src_symbols_pacs[tgt_idx].setVisible(1);
+                        
+                        var xc = u.get_deviation(getprop("orientation/heading-deg")) * 905 / 30;
+                        var yc = -u.get_total_elevation(getprop("orientation/pitch-deg")) * 585 / 30;
+                        
+                        if (xc > 905) {
+                            var xc = 905;
+                        } elsif (xc < -905) {
+                            var xc = -905;
+                        }
+                        
+                        if (yc > 585) {
+                            var yc = 585;
+                        } elsif (yc < -585) {
+                            var yc = -585;
+                        }
+                        
+                        LADCanvas.rad_src_symbols_pacs[tgt_idx].setTranslation(1355 + xc,4870 + yc);
+                        
+                        if (u.get_model() != nil and typeLookup[u.get_model()] != nil) {  # Model's known to our RWR
+                            LADCanvas.rad_src_symbols_pacs[tgt_idx].setText(u.get_model());
+                        } else {  # Model's unknown to our RWR
+                            LADCanvas.rad_src_symbols_pacs[tgt_idx].setText("UNK");
+                        }
+                    
+                        var tgt_idx += 1;
+                    }
+                    
+                    # Do not display any unused target symbols
+                    for (var nv = tgt_idx; nv < LADCanvas.rad_src_symbols_max;nv += 1) {
+                        LADCanvas.rad_src_symbols_pacs[nv].setVisible(0);
+                    }
+                } else {
+                    # Do not display any unused target symbols
+                    for (var nv = 0; nv < LADCanvas.rad_src_symbols_max;nv += 1) {
+                        LADCanvas.rad_src_symbols_pacs[nv].setVisible(0);
+                    }
+                }
+                
                 # Update the down buttons
-                LADCanvas.pacs_smrt_wpns_wpn_status.setVisible(LADCanvas.SmartWeaponsPopulateMode == 0 or a_s_wpn);
-                if (LADCanvas.SmartWeaponsPopulateMode == 0 and !a_s_wpn) {
+                
+                LADCanvas.pacs_smrt_wpns_wpn_status.setVisible(LADCanvas.SmartWeaponsPopulateMode == 0 or a_s_wpn or anti_rad_wpn);
+                if (LADCanvas.SmartWeaponsPopulateMode == 0 and !a_s_wpn and !anti_rad_wpn) {
                     LADCanvas.pacs_smrt_wpns_wpn_status.setText("WPN\nSTATUS");
-                } elsif (a_s_wpn) {
+                } elsif (a_s_wpn or anti_rad_wpn) {
                     LADCanvas.pacs_smrt_wpns_wpn_status.setText("DLNK\nTRSFR");
                 }
                 
 
                 var populate_mode_text = "";
-                if (!a_s_wpn) {
+                if (!a_s_wpn and !anti_rad_wpn) {
                     if (LADCanvas.SmartWeaponsPopulateMode == 0) {
                         var populate_mode_text = "WPN\nMEM";
                     } elsif (LADCanvas.SmartWeaponsPopulateMode == 1) {
@@ -6287,11 +6539,22 @@ update_lad = func() {
                     } elsif (LADCanvas.SmartWeaponsPopulateMode == 5) {
                         var populate_mode_text = "TOO";
                     }
+                } elsif (anti_rad_wpn) {
+                    if (LADCanvas.SmartWeaponsPopulateMode == 0) {
+                        var populate_mode_text = "TOO";
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 1) {
+                        var populate_mode_text = "SLF\nPRCT";
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 2) {
+                        var populate_mode_text = "PRE\nBRF";
+                    } elsif (LADCanvas.SmartWeaponsPopulateMode == 3) {
+                        var populate_mode_text = "ATV\nRDR";
+                    }
                 }
+
                 LADCanvas.pacs_smrt_wpns_populate_mode.setText(populate_mode_text);
                 LADCanvas.pacs_smrt_wpns_populate_mode_box.setVisible(1);
                 
-                if (!a_s_wpn) {
+                if (!a_s_wpn and !anti_rad_wpn) {
                     var last_button_text = "ARMT";
                     if (LADCanvas.SmartWeaponsPopulateMode == 1) {
                         var last_button_text = "MSN\nXFER";
@@ -6316,6 +6579,10 @@ update_lad = func() {
                 } elsif (a_s_wpn) {
                     LADCanvas.pacs_smrt_wpns_back_to_pacs.setText("TGT\nPUSH");
                     LADCanvas.pacs_smrt_wpns_untarget.setText("UN-\nTGT");
+                    LADCanvas.pacs_smrt_wpns_loft.setText("LOFT\n0°");
+                } elsif (anti_rad_wpn and LADCanvas.SmartWeaponsPopulateMode == 0) {
+                    LADCanvas.pacs_smrt_wpns_back_to_pacs.setText("SEL\nSRC");
+                    LADCanvas.pacs_smrt_wpns_untarget.setText("UN-\nSEL");
                     LADCanvas.pacs_smrt_wpns_loft.setText("LOFT\n0°");
                 }
                 

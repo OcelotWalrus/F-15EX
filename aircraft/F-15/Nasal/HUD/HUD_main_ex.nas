@@ -135,6 +135,8 @@ var F15HUD = {
         obj.window9_rect = obj.get_element("window9_rect");
         obj.window1_rect = obj.get_element("window1_rect");
         obj.nofire_cross = obj.get_element("nofire_cross");
+        obj.SOIDiamond = obj.get_element("SOI_diamond");
+        obj.SOICircle = obj.get_element("SOI_circle");
 
         obj.target_locked = obj.get_element("target_locked");
         obj.target_locked.setVisible(0);
@@ -1579,6 +1581,10 @@ return obj;
 
     update : func(notification) {
 
+        # Display the SOI diamond
+        me.SOICircle.setVisible(getprop("sim/model/f15/avionics/SOI") == "HUD");
+        me.SOIDiamond.setVisible(getprop("sim/model/f15/avionics/SOI") == "HUD");
+
 		# Update the bore's cross
 		me.boreSymbol.setTranslation(hudmath.HudMath.getBorePos());
 
@@ -2742,6 +2748,7 @@ input = {
         TFSGroundAlt                            : "instrumentation/tfs/ground-altitude-ft",
         TFSFlirAlt                              : "sim/model/f15/avionics/tfr-flir-alt",
         TFSDelay                                : "instrumentation/tfs/delay-sec",
+        SOI                                     : "sim/model/f15/avionics/SOI",
 };
 
 emexec.ExecModule.register("F15-HUD",input, F15HUD.new("Nasal/HUD/HUD_ex.svg", "HUDImage1"), 2);

@@ -317,7 +317,7 @@ var deselect_pylon_in_program = func(pylon_idx) {
 var pylons_a_g = [12,1,3,4,5,6,7,9,15,20,21,22,23,24,25];  # A/G Hardpoints
 var smart_weapons_data_blocks = [];
 for (var i = 0; i < size(pylons_a_g); i += 1) {
-    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, type: 0, push_source: nil}], initiated: 0};
+    data_block = {pylon_idx: pylons_a_g[i], data: [{gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, type: 0, push_source: nil}], initiated: 0, telemetry: 0};
     append(smart_weapons_data_blocks, data_block);
 }
 
@@ -334,6 +334,26 @@ var untarget_data_block = func(station, ordnance) {
     for (var i = 0; i < size(pylons_a_g); i += 1) {
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].data[ordnance] = {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, type: 0, push_source: nil};
+        }
+    }
+}
+
+var rdr_tgt_to_station = func(rdr_tgt, station, ordnance, skim_ft=1000) {  # Used to push a radar target to a smart weapon (usually A/S weapons in RDR TGT mode)
+    data_block = {radar_target: rdr_tgt};
+    data_block.type = 1;
+    data_block.skim_ft = skim_ft;
+    for (var i = 0; i < size(pylons_a_g); i += 1) {
+        if (smart_weapons_data_blocks[i].pylon_idx == station) {
+            smart_weapons_data_blocks[i].data[ordnance] = data_block;
+            smart_weapons_data_blocks[i].data[ordnance].push_source = "RDR";
+        }
+    }
+}
+
+var toggle_telemetry_var_to_station = func(station) {  # Use for smart weapons to toggle their link 16 or not (only Anti-Ships and SEADs, others are set depending on whether they got it or not)
+    for (var i = 0; i < size(pylons_a_g); i += 1) {
+        if (smart_weapons_data_blocks[i].pylon_idx == station) {
+            smart_weapons_data_blocks[i].telemetry = !smart_weapons_data_blocks[i].telemetry;
         }
     }
 }
@@ -357,18 +377,6 @@ var push_mission_program_to_station = func(mission_set, mission_program, station
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].data[ordnance] = data_block;
             smart_weapons_data_blocks[i].data[ordnance].push_source = "CC MEM";
-        }
-    }
-}
-
-var rdr_tgt_to_station = func(rdr_tgt, station, ordnance, skim_ft=1000) {  # Used to push a radar target to a smart weapon (usually A/S weapons in RDR TGT mode)
-    data_block = {radar_target: rdr_tgt};
-    data_block.type = 1;
-    data_block.skim_ft = skim_ft;
-    for (var i = 0; i < size(pylons_a_g); i += 1) {
-        if (smart_weapons_data_blocks[i].pylon_idx == station) {
-            smart_weapons_data_blocks[i].data[ordnance] = data_block;
-            smart_weapons_data_blocks[i].data[ordnance].push_source = "RDR";
         }
     }
 }
@@ -1088,12 +1096,13 @@ var arm_selector = func() {
 						        }
 						        wp.setContacts([spot]);
 						        wp.arming_time = pacs[pacs_current_program].tarm;
+						        wp.data = get_data_block_from_pylon_idx(current_station_rel_idx).telemetry;  # Datalink telemetry
 					        }
 				        }
                     } elsif (current_station_rdr_data != nil) {
                         var current_station_rdr_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].radar_target;
                         var wp = pylons.fcs.getSelectedWeapon();
-                        if (wp != nil and wp.parents[0] == armament.AIM) {
+                        if (wp != nil and wp.parents[0] == armament.AIM and (wp.type == "AGM-84D" or wp.type == "AGM-158C")) {
                             wp.guidance = "inertial";
 
                             wp.setContacts([current_station_rdr_data]);
@@ -1101,6 +1110,16 @@ var arm_selector = func() {
                             
                             wp.loft_alt = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].skim_ft;
                             wp.arming_time = pacs[pacs_current_program].tarm;
+                            wp.data = get_data_block_from_pylon_idx(current_station_rel_idx).telemetry;  # Datalink telemetry
+                        } elsif (wp != nil and wp.parents[0] == armament.AIM and (wp.type == "AGM-88E")) {
+                            wp.guidance = "radiation";
+
+                            wp.setContacts([current_station_rdr_data]);
+                            wp.Tgt = current_station_rdr_data;
+                            
+                            wp.loft_alt = math.clamp(getprop("instrumentation/altimeter/indicated-altitude-ft") + 10000, 10000, 40000);
+                            wp.arming_time = pacs[pacs_current_program].tarm;
+                            wp.data = get_data_block_from_pylon_idx(current_station_rel_idx).telemetry;  # Datalink telemetry
                         }
                     }
                 }

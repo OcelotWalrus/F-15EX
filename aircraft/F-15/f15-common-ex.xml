@@ -404,14 +404,6 @@
                 <desc>Cycle through Master Arm modes</desc>
             </key>
             <key>
-                <name>C</name>
-                <desc>Toggle AIM-9 cage mode</desc>
-            </key>
-            <key>
-                <name>L</name>
-                <desc>Toggle auto AIM-9 cage mode</desc>
-            </key>
-            <key>
                 <name>Ctrl-l</name>
                 <desc>Toggle HMD Seeker slaving</desc>
             </key>
@@ -422,10 +414,6 @@
             <key>
                 <name>Ctrl-n</name>
                 <desc>Switch through radar modes (RWS, TWS MAN, TWS AUTO)</desc>
-            </key>
-            <key>
-                <name>!</name>
-                <desc>Toggle Radar AIR / SURFACE / SEA Mode</desc>
             </key>
             <key>
                 <name>e</name>
@@ -445,15 +433,19 @@
             </key>
             <key>
                 <name>Keypad arrows</name>
-                <desc>Move the Target Cursor Designator</desc>
+                <desc>Act on SOI cursor</desc>
             </key>
             <key>
-                <name>y</name>
-                <desc>Select radar target for track.</desc>
+                <name>C</name>
+                <desc>SOI Control 1</desc>
             </key>
             <key>
-                <name>Y</name>
-                <desc>Swipe through the different TWS tracks</desc>
+                <name>L</name>
+                <desc>SOI Control 2</desc>
+            </key>
+            <key>
+                <name>!</name>
+                <desc>Switch SOI</desc>
             </key>
             <key>
                 <name>x</name>
@@ -1021,6 +1013,7 @@
                     <flyup-master-guard type="bool">true</flyup-master-guard>
                     <tf-couple-switch type="bool">false</tf-couple-switch>
                     <friendly-fire-betty type="bool">false</friendly-fire-betty>
+                    <SOI type="string">VSD</SOI>
                 </avionics>
                 <flir>
                     <input>
@@ -1188,6 +1181,8 @@
                         <on-off type="bool">0</on-off>
                         <cursor-deg-el type="double">0</cursor-deg-el> <!-- positive means down -->
                         <cursor-deg-az type="double">0</cursor-deg-az> <!-- positive means right -->
+                        <aargm-cursor-deg-el type="double">0</aargm-cursor-deg-el> <!-- positive means down -->
+                        <aargm-cursor-deg-az type="double">0</aargm-cursor-deg-az> <!-- positive means right -->
                         <screen-touch-cmd type="bool">false</screen-touch-cmd>
                         <screen-touch-x type="double">0</screen-touch-x>
                         <screen-touch-y type="double">0</screen-touch-y>
@@ -4001,7 +3996,7 @@
             <agm-88e>
                 <type-id type="int">2</type-id>
                 <short-name type="string">AG88E</short-name>
-                <long-name type="string">AGM-88E HARM</long-name>
+                <long-name type="string">AGM-88E AARGM</long-name>
                 <vol-search type="double">0.00</vol-search>
                 <vol-track type="double">1.00</vol-track>
                 <guidance type="string">radiation</guidance>  <!-- E variant: passive radar, then active radar turns ON when 5 nm from target and starts diving onto it -->
@@ -4564,10 +4559,20 @@
 
             <key n="33">
                 <name>!</name>
-                <desc>Toggle Radar AIR / SURFACE / MARINE Modes</desc>
+                <desc>Switch SOI</desc>
                 <binding>
                     <command>nasal</command>
-                    <script>awg_9.radar_filter_mode_cycle()</script>
+                    <script>
+                    
+                    if (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+                        setprop("sim/model/f15/avionics/SOI", "HUD");
+                    } elsif (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+                        setprop("sim/model/f15/avionics/SOI", "AARGM");
+                    } elsif (getprop("sim/model/f15/avionics/SOI") == "AARGM") {
+                        setprop("sim/model/f15/avionics/SOI", "VSD");
+                    }
+                    
+                    </script>
                 </binding>
             </key>
 
@@ -4639,10 +4644,31 @@
 
             <key n="67">
                 <name>C</name>
-                <desc>Toggle cage</desc>
+                <desc>SOI Control 1</desc>
                 <binding>
                     <command>nasal</command>
-                    <script>pylons.fcs.toggleCage();</script>
+                    <script>
+                        if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+                            pylons.fcs.toggleCage();
+                        } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+                            setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", 1);
+                        }
+                    </script>
+                </binding>
+            </key>
+            
+            <key n="76">
+                <name>L</name>
+                <desc>SOI Control 2</desc>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+                        if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+                            pylons.fcs.setAutocage(!pylons.fcs.isAutocage());
+                        } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+                            setprop("sim/model/f15/instrumentation/radar-awg-9/select-target", -1);
+                        }
+                    </script>
                 </binding>
             </key>
 
@@ -4703,20 +4729,6 @@
             </key>
 
             <!-- map keys for launch-bar -->
-            <key n="76">
-                <name>L</name>
-                <desc>Toggle auto AIM-9 cage mode</desc>
-                <binding>
-                    <command>nasal</command>
-                    <script>
-                        if (pylons.fcs.isAutocage() == 1 or pylons.fcs.isAutocage()) {
-                            pylons.fcs.setAutocage(0);
-                        } else {
-                            pylons.fcs.setAutocage(1);
-                        }
-                    </script>
-                </binding>
-            </key>
             <key n="81">
                 <name>Q</name>
                 <desc>Reset view</desc>
@@ -4848,50 +4860,42 @@
 
             <key n="356">
                 <name>Keypad Left</name>
-                <desc>TCD Left</desc>
+                <desc>SOI Cursor Left</desc>
                 <binding>
-                    <command>property-adjust</command>
-                    <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
-                    <step type="double">-1</step>
-                    <min>-60</min>
-                    <max>60</max>
-                    <wrap>false</wrap>
+                    <command>nasal</command>
+                    <script type="string">
+                        aircraft.SOI_cursor(1);
+                    </script>
                 </binding>
             </key>
             <key n="358">
                 <name>Keypad Right</name>
-                <desc>TCD Right</desc>
+                <desc>SOI Cursor Right</desc>
                 <binding>
-                    <command>property-adjust</command>
-                    <property>sim/model/f15/controls/LAD/cursor-deg-az</property>
-                    <step type="double">1</step>
-                    <min>-60</min>
-                    <max>60</max>
-                    <wrap>false</wrap>
+                    <command>nasal</command>
+                    <script type="string">
+                        aircraft.SOI_cursor(0);
+                    </script>
                 </binding>
             </key>
             <key n="357">
                 <name>Keypad Up</name>
-                <desc>TCD Up</desc>
+                <desc>SOI Cursor Up</desc>
                 <binding>
-                    <command>property-adjust</command>
-                    <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
-                    <step type="double">-1</step>
-                    <min>-60</min>
-                    <max>60</max>
-                    <wrap>false</wrap>
+                    <command>nasal</command>
+                    <script type="string">
+                        aircraft.SOI_cursor(2);
+                    </script>
                 </binding>
             </key>
             <key n="359">
                 <name>Keypad Down</name>
-                <desc>TCD Up</desc>
+                <desc>SOI Cursor Down</desc>
                 <binding>
-                    <command>property-adjust</command>
-                    <property>sim/model/f15/controls/LAD/cursor-deg-el</property>
-                    <step type="double">1</step>
-                    <min>-60</min>
-                    <max>60</max>
-                    <wrap>false</wrap>
+                    <command>nasal</command>
+                    <script type="string">
+                        aircraft.SOI_cursor(3);
+                    </script>
                 </binding>
             </key>
 
@@ -4979,25 +4983,6 @@
                     <script>
                         setprop("controls/armament/selected-armament-offset", getprop("controls/armament/selected-armament-offset")+1);
                     </script>
-                </binding>
-            </key>
-            <key n="121">
-                <name>y</name>
-                <desc>Next target select</desc>
-                <binding>
-                    <command>property-assign</command>
-                    <property>sim/model/f15/instrumentation/radar-awg-9/select-target</property>
-                    <value>1</value>
-                </binding>
-            </key>
-
-            <key n="89">
-                <name>Y</name>
-                <desc>Previous target select</desc>
-                <binding>
-                    <command>property-assign</command>
-                    <property>sim/model/f15/instrumentation/radar-awg-9/select-target</property>
-                    <value>-1</value>
                 </binding>
             </key>
 
