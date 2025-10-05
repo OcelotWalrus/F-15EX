@@ -23,16 +23,40 @@ GBU-39A SDB:
       Vertical Speed: -587 FPS / 347 kts
 
 AGM-84D Harpoon:
-  Launch Parameters:
-      Alt: 5,000'
-      Ma: .86
-      Dist: 90 NM (3/4 Max Oper)
-      Aircraft Weight: 52,400 lbs (Clean no CFT, 2 Bags, max internal fuel)
-      Skim Altitude: 5,000'
-  Hit Info:
-      Hit Precison: lat: Perfect hit, center-hull, Target sunk
-      Hit Speed: 625 kts True Airspeed
-      Vertical Speed: -1010 FPS / 598 kts
+  Low Envelope:
+      Launch Parameters:
+          Alt: 5,000'
+          Ma: .86
+          Dist: 90 NM (3/4 Max Oper)
+          Aircraft Weight: 52,400 lbs (Clean no CFT, 2 Bags, max internal fuel)
+          Skim Altitude: 5,000'
+      Hit Info:
+          Hit Precison: lat: Perfect hit, center-hull, Target sunk
+          Hit Speed: 625 kts True Airspeed
+          Vertical Speed: -1010 FPS / 598 kts
+  Ultra-low Envelope:
+      Launch Parameters:
+          Alt: 800'
+          Ma: .86
+          Dist: 60 NM (3/4 Max Oper)
+          Aircraft Weight: 52,400 lbs (Clean no CFT, 2 Bags, max internal fuel)
+          Skim Altitude: 200'
+      Hit Info:
+          Hit Precison: lat: Perfect hit, center-hull, Target sunk
+          Hit Speed: 625 kts True Airspeed
+          Vertical Speed: -1010 FPS / 598 kts
+
+AGM-158A JASSM:
+  Medium-Restricted Envelope:
+    Launch Parameters:
+          Alt: 18,000'
+          Ma: .867
+          Dist: 80 NM (2/5 of Max Oper)
+          Aircraft Weight: 57,200 lbs (CFTS, no Bags, max internal fuel)
+      Hit Info:
+          Hit Precison: Perfect hit, Target destroyed
+          Hit Speed: -unknown-
+          Vertical Speed: -unknown-
 
 AGM-158C LRASM:
   Note: This weapons is more limited by the F-15EX's radar rather than the launch parameters.
