@@ -546,6 +546,7 @@ var F15_HMD = {
                 .show()
                 .setColor(0,1,0);
             append(obj.dlnk_symbols, obj.dlnk_tgt);
+            append(obj.total, obj.dlnk_tgt);
             obj.dlnk_txt = obj.centerOrigin.createChild("text")
                 .setText("OPFOR999")
                 .setAlignment("center-center")
@@ -554,7 +555,69 @@ var F15_HMD = {
                 .show()
                 .setFontSize(fontSize/1.25, 1.1);
             append(obj.dlnk_texts, obj.dlnk_txt);
+            append(obj.total, obj.dlnk_txt);
         }
+        
+        obj.epawss_texts = [];
+        obj.epawss_hats = [];
+        obj.epawss_mlw = [];
+        obj.epawss_primary_threat = [];
+        obj.epawss_new_threat = [];
+        for(var k = 0; k<obj.max_symbols;k+=1) {
+            obj.tgt = obj.centerOrigin.createChild("text")
+                .setFontSize(fontSize/1.25, 1.1)
+                .setText("F/B")
+                .setAlignment("center-center")
+                .setColor(0,1,0)
+                .setVisible(1)
+                .setFont(HUD_FONT);
+            append(obj.epawss_texts, obj.tgt);
+            append(obj.total, obj.tgt);
+
+            obj.tgt = obj.centerOrigin.createChild("path")
+                .moveTo(-70,0)
+                .arcSmallCW(70,60, 0, 70*2, 0)
+                .setStrokeLineWidth(stroke1)
+                .setVisible(1)
+                .setColor(1,.35,0);
+            append(obj.epawss_new_threat, obj.tgt);
+            append(obj.total, obj.tgt);
+            
+            obj.tgt = obj.centerOrigin.createChild("path")
+                .moveTo(0,-70)
+                .lineTo(70,0)
+                .moveTo(0,-70)
+                .lineTo(-70,0)
+                .setStrokeLineWidth(stroke1/1.25)
+                .setVisible(1)
+                .setColor(0,1,0);
+            append(obj.epawss_hats, obj.tgt);
+            append(obj.total, obj.tgt);
+            
+            obj.tgt = obj.centerOrigin.createChild("path")
+                .moveTo(-70,0)
+                .arcSmallCW(70,60, 0, 70*2, 0)
+                .arcSmallCW(70,60, 0, -70*2, 0)
+                .setStrokeLineWidth(stroke1)
+                .setStrokeDashArray([5,10])
+                .setVisible(1)
+                .setColor(1,.35,0);
+            append(obj.epawss_mlw, obj.tgt);
+            append(obj.total, obj.tgt);
+            
+            obj.tgt = obj.centerOrigin.createChild("path")
+                .moveTo(0,-70)
+                .lineTo(70,0)
+                .lineTo(0,70)
+                .lineTo(-70,0)
+                .lineTo(0,-70)
+                .setStrokeLineWidth(stroke1/1.25)
+                .setVisible(1)
+                .setColor(1,0,0);
+            append(obj.epawss_primary_threat, obj.tgt);
+            append(obj.total, obj.tgt);
+        }
+        
         obj.maw_diamond = obj.centerOrigin.createChild("path")
             .moveTo(0,-30*1.25)
             .lineTo(30*1.25,0)
@@ -1032,6 +1095,91 @@ var F15_HMD = {
         } else {
             me.maw_diamond.setVisible(0);
             me.maw_text.setVisible(0);
+        }
+        
+        # EPAWSS contacts
+        
+        var epawss_idx = 0;
+        foreach (contact ; awg_9.tgts_list) {
+            if (contact.get_EPAWSS_visible() and epawss_idx < me.max_symbols) {
+            
+                tgt_bear = contact.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing to the contact
+                tgt_el = contact.get_total_elevation(getprop("orientation/pitch-deg")) or 0;  # relative elevation to the contact
+                
+                # 5 degrees accuracy for azimuth and and 8 degrees for elevation
+                tgt_bear = int(math.round(tgt_bear / 5)) * 5;
+                tgt_el = int(math.round(tgt_el / 8)) * 8;
+                            
+                me.echoPos = hudmath.HudMath.getDevFromHMD(tgt_bear, tgt_el, -hdp.HmdH, hdp.HmdP);
+                me.echoPos[0] = geo.normdeg180(me.echoPos[0]);
+                me.echoPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+                me.echoPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;
+                me.clamped = math.sqrt(me.echoPos[0]*me.echoPos[0]+me.echoPos[1]*me.echoPos[1]) > 500;  # It ain't clamped when displayed though
+                
+                me.epawss_texts[epawss_idx].setVisible(1);
+                me.epawss_texts[epawss_idx].setTranslation(me.echoPos);
+                
+                # Display contact's indentified type (F, F/B, B, AEW&C, TNKR etc.)
+                if (contact.get_model() != nil and displays.typeLookup[contact.get_model()] != nil) {  # We're reusing LAD.nas's typeLookup var here
+                    contact_type = displays.typeLookup[contact.get_model()];
+                    me.epawss_texts[epawss_idx].setText(contact_type);
+                } elsif (contact.get_type() == awg_9.ORDNANCE) {  # if it's a missile (generally, just ordnance
+                    me.epawss_texts[epawss_idx].setText("M");
+                } else {  # Model's unknown to our radar
+                    me.epawss_texts[epawss_idx].setText("UNK");
+                }
+                
+                # Display the hat if it's an airborne radar
+                if (contact.get_type() == awg_9.AIR) {
+                    me.epawss_hats[epawss_idx].setTranslation(me.echoPos);
+                    me.epawss_hats[epawss_idx].setVisible(1);
+                } else {
+                    me.epawss_hats[epawss_idx].setVisible(0);
+                }
+                
+                # Display the new threat upper circle if it's one
+                found = 0;
+                foreach(new_threat; epawss.new_threats) {
+                    if (contact.get_Callsign() == new_threat) {
+                        found = 1;
+                    }
+                }
+                if (found == 1) {
+                    me.epawss_new_threat[epawss_idx].setVisible(1);
+                    me.epawss_new_threat[epawss_idx].setTranslation(me.echoPos);
+                    me.epawss_new_threat[epawss_idx].setColor(1,.35,0);
+                } else {
+                    me.epawss_new_threat[epawss_idx].setVisible(0);
+                }
+                
+                # Display the primary threat double triangle if that's the one
+                if (contact.get_Callsign()~contact.getUnique() == epawss.primary_threat_callsign) {
+                    me.epawss_primary_threat[epawss_idx].setVisible(1);
+                    me.epawss_primary_threat[epawss_idx].setTranslation(me.echoPos);
+                    me.epawss_primary_threat[epawss_idx].setColor(1,.35,0);
+                } else {
+                    me.epawss_primary_threat[epawss_idx].setVisible(0);
+                }
+
+                # Display the blinking circle if it's a missile launcher, or if it's an approaching missile
+                if ((epawss.is_missile_launcher(contact) or contact.get_type() == awg_9.ORDNANCE) and 5*(getprop("sim/time/elapsed-sec")-int(getprop("sim/time/elapsed-sec")))>2.5) {  # 4Hz blink
+                    me.epawss_mlw[epawss_idx].setVisible(1);
+                    me.epawss_mlw[epawss_idx].setTranslation(me.echoPos);
+                    me.epawss_mlw[epawss_idx].setColor(1,0,0);
+                } else {
+                    me.epawss_mlw[epawss_idx].setVisible(0);
+                }
+                
+                var epawss_idx += 1
+            }
+        }
+        # Do not display any unused EPAWSS symbology
+        for (var nv = epawss_idx; nv < me.max_symbols;nv += 1) {
+            me.epawss_texts[nv].setVisible(0);
+            me.epawss_hats[nv].setVisible(0);
+            me.epawss_mlw[nv].setVisible(0);
+            me.epawss_primary_threat[nv].setVisible(0);
+            me.epawss_new_threat[nv].setVisible(0);
         }
 
 
