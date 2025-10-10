@@ -1106,9 +1106,9 @@ var F15_HMD = {
                 tgt_bear = contact.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing to the contact
                 tgt_el = contact.get_total_elevation(getprop("orientation/pitch-deg")) or 0;  # relative elevation to the contact
                 
-                # 5 degrees accuracy for azimuth and and 8 degrees for elevation
+                # 5 degrees accuracy for azimuth and and 3 degrees for elevation
                 tgt_bear = int(math.round(tgt_bear / 5)) * 5;
-                tgt_el = int(math.round(tgt_el / 8)) * 8;
+                tgt_el = int(math.round(tgt_el / 3)) * 3;
                             
                 me.echoPos = hudmath.HudMath.getDevFromHMD(tgt_bear, tgt_el, -hdp.HmdH, hdp.HmdP);
                 me.echoPos[0] = geo.normdeg180(me.echoPos[0]);

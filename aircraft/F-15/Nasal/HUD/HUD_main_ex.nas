@@ -219,7 +219,7 @@ var F15HUD = {
                            .setColor(0,1,0)
                            .setStrokeLineWidth(obj.dlzLW);
 
-            hudmath.HudMath.init([-5.648,-0.07769,1.525], [-5.761,0.1002,1.278], [256,296], [0.124048, 0.586015], [0.879649,0.045312], 1);
+            hudmath.HudMath.init([-5.648,-0.07769,1.525], [-5.761,0.1002,1.278], [256,296], [0.124048, 0.586015], [0.879649,0.045312], obj.FocusAtInfinity);
             obj.ccipGrp = obj.canvas.createGroup();
             obj.centerOrigin = hudmath.HudMath.getCenterOrigin();
             obj.ccipGrp.setTranslation(obj.centerOrigin);
@@ -1697,7 +1697,18 @@ return obj;
               var dx = me.view[0] - current_x;
               var dy = me.view[1] - current_y;
 
-              #me.svg.setTranslation(me.baseTranslation[0]-dx*1024, me.baseTranslation[1]+dy*1024);
+              me.svg.setTranslation(me.baseTranslation[0]-dx*1024, me.baseTranslation[1]+dy*1024);
+              me.ccipGrp.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.GPSSpot.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.localizer.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.ASECircle.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.SeekerSymbols.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.NavigationSymbols.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.aaTargetDesignationGrp.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.Bore.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.eegsGroup.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.ccrpSymbology.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
+              me.WarningTexts.setTranslation(me.centerOrigin[0]-dx*1024, me.centerOrigin[1]+dy*1024);
           }
 
         if (awg_9.active_u == nil) {

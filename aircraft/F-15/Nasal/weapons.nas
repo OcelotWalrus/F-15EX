@@ -334,6 +334,8 @@ var untarget_data_block = func(station, ordnance) {
     for (var i = 0; i < size(pylons_a_g); i += 1) {
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].data[ordnance] = {gps: nil, terminal: {heading: nil, angle: nil, vel: nil}, type: 0, push_source: nil};
+            setprop("sim/model/f15/avionics/pacs-updated", 1);
+            settimer(func { setprop("sim/model/f15/avionics/pacs-updated", 0); }, .2);
         }
     }
 }
@@ -346,6 +348,8 @@ var rdr_tgt_to_station = func(rdr_tgt, station, ordnance, skim_ft=1000) {  # Use
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].data[ordnance] = data_block;
             smart_weapons_data_blocks[i].data[ordnance].push_source = "RDR";
+            setprop("sim/model/f15/avionics/pacs-updated", 1);
+            settimer(func { setprop("sim/model/f15/avionics/pacs-updated", 0); }, .2);
         }
     }
 }
@@ -354,6 +358,8 @@ var toggle_telemetry_var_to_station = func(station) {  # Use for smart weapons t
     for (var i = 0; i < size(pylons_a_g); i += 1) {
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].telemetry = !smart_weapons_data_blocks[i].telemetry;
+            setprop("sim/model/f15/avionics/pacs-updated", 1);
+            settimer(func { setprop("sim/model/f15/avionics/pacs-updated", 0); }, .2);
         }
     }
 }
@@ -377,6 +383,8 @@ var push_mission_program_to_station = func(mission_set, mission_program, station
         if (smart_weapons_data_blocks[i].pylon_idx == station) {
             smart_weapons_data_blocks[i].data[ordnance] = data_block;
             smart_weapons_data_blocks[i].data[ordnance].push_source = "CC MEM";
+            setprop("sim/model/f15/avionics/pacs-updated", 1);
+            settimer(func { setprop("sim/model/f15/avionics/pacs-updated", 0); }, .2);
         }
     }
 }
@@ -504,10 +512,10 @@ var mavUpdate = func {
 
 };
 
-setlistener(WeaponSelector, mavUpdate, nil, 0);
-setlistener("controls/armament/selected-armament-offset", mavUpdate, nil, 0);
-setlistener("controls/armament/trigger", mavUpdate, nil, 0);
-setlistener("controls/armament/selected-armament-offset", mavUpdate, nil, 0);
+#setlistener(WeaponSelector, mavUpdate, nil, 0);
+#setlistener("controls/armament/selected-armament-offset", mavUpdate, nil, 0);
+#setlistener("controls/armament/trigger", mavUpdate, nil, 0);
+#setlistener("controls/armament/selected-armament-offset", mavUpdate, nil, 0);
 
 #Maverick seeker control
 var rate = .0025;
@@ -677,7 +685,7 @@ gpsFeeder = maketimer(.1,updateGPSTarget);
 var armament_update = func {
     # Trigered each 0.1 sec by instruments.nas main_loop() if Master Arm Engaged.
 
-    lock();
+    #lock();
 
     var stick_s = WeaponSelector.getValue();
 
@@ -1149,6 +1157,7 @@ setlistener(ArmSwitch, arm_selector, nil, 0);
 setlistener(WeaponSelector, arm_selector, nil, 0);
 setlistener("controls/armament/trigger", arm_selector, nil, 0);
 setlistener("controls/armament/selected-armament-offset", arm_selector, nil, 0);
+setlistener("sim/model/f15/avionics/pacs-updated", arm_selector, nil, 0);
 
 # System start and stop.
 # Timers for weapons system status lights.
