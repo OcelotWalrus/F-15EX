@@ -1898,6 +1898,7 @@ var LAD_Device = {
         m.SmartWeaponsPopulating = 0;  # If data's being written at the moment
         m.SmartWeaponsUntargeting = 0;  # If data's being deleted
         m.SmartWeaponsCurrSkimFt = 1000;  # Used by A/SEA weapons (AGM-84D, AGM-158C)
+        m.SmartWeaponsUFCDataGPS = nil;  # Used to push GPS coordinates using the UFC
         
         m.SmartWeaponsCurrSet = 0;  # DTC Mission Set for CC populate mode
         m.SmartWeaponsCurrMission = 0;  # DTC Mission Program for CC populate mode
@@ -2179,14 +2180,14 @@ var LAD_Device = {
         }
         
         m.aargm_cursor = m.PACSScreenSmartWeapons.createChild("path")
-            .moveTo(1355-25,4870-25)
-            .lineTo(1355-25,4870+25)
-            .moveTo(1355+25,4870-25)
-            .lineTo(1355+25,4870+25)
+            .moveTo(1355-50,4870-50)
+            .lineTo(1355-50,4870+50)
+            .moveTo(1355+50,4870-50)
+            .lineTo(1355+50,4870+50)
             .setVisible(1)
             .set("z-index",3)
-            .setColor(prst_blue_dark.r,prst_blue_dark.g,prst_blue_dark.b)
-            .setStrokeLineWidth(15);
+            .setColor(prst_cyan.r,prst_cyan.g,prst_cyan.b)
+            .setStrokeLineWidth(30);
         
         m.aargm_soi = m.PACSScreenSmartWeapons.createChild("path")
             .moveTo(325+125+905*2-15+30-75,2300*2+500-70-120+1000-225-585*2-75-115+75)
@@ -3213,36 +3214,13 @@ update_lad = func() {
                 } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 3 and a_s_wpn and awg_9.active_u != nil and awg_9.active_u.get_display() and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {  # Rdr tgt trsfr
                     LADCanvas.SmartWeaponsPopulating = 1;
                     settimer(func {aircraft.rdr_tgt_to_station(awg_9.active_u, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, displays.LADCanvas.SmartWeaponsCurrSkimFt); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 1.5);
-                } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {  # Rdr src sel
+                } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 0 and anti_rad_wpn and point_in_quad(LADCanvas.screen_touch_pos, armt_box)) {  # Generates a Mission Program if radar source is good
                 
-                    cursor_az_deg = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-az");  # Cursor's azimuth and elevation
-                    cursor_el_deg = getprop("sim/model/f15/controls/LAD/aargm-cursor-deg-el");
-                    
-                    dist_dic = [];  # A vector that contains `{unique: "<tgt class>", dist_deg: "<accuracy in deci deg>"}`'s. We then go each of 'em an pick the one that's the closest to the cursor. Note that targets that ain't close enough to the cursor (must be close to at least 2 degrees) ain't taken into account
-                    foreach(var u; awg_9.tgts_list) {
-                        xc = u.get_deviation(getprop("orientation/heading-deg")) or 0;  # relative bearing of the target
-                        yc = -u.get_total_elevation(getprop("orientation/pitch-deg")) or 0;  # relative elevation of the target
-                        
-                        # If the cursor is at least 3 degrees away in both azimuth and elevation
-                        close_enough = math.abs(cursor_az_deg - xc) < 3 and math.abs(cursor_el_deg - yc) < 3;
-                        if (close_enough and u.get_EPAWSS_visible()) {  # Don't need to check if it's the AARGM's FOV, cuz the cursor can't move outside of that FOV anyhow
-                            append(dist_dic, {unique: u, dist_deg: math.abs(cursor_az_deg - xc) + math.abs(cursor_el_deg - yc)});
-                        }
-                    }
-                    
-                    var best_dist_deg = 5000;  # huge unreal value so it gets updated the first time
-                    var best_dist_deg_contact = nil;
-                    foreach(curr_data; dist_dic) {
-                        if (curr_data.dist_deg < best_dist_deg) {
-                            best_dist_deg = curr_data.dist_deg;
-                            best_dist_deg_contact = curr_data.unique;
-                        }
-                    }
-                    
-                    if (best_dist_deg_contact != nil) {  # If it's nul, then there ain't no target in the cursor's range
+                    var data_target = aircraft.get_data_block_from_pylon_idx(LADCanvas.SmartWeaponsCurrPylon).data[LADCanvas.SmartWeaponsCurrSubOrdnance].radar_target;
+                    if (data_target != nil and math.abs(data_target.get_deviation(getprop("orientation/heading-deg"))) < 60 and math.abs(data_target.get_total_elevation(getprop("orientation/pitch-deg"))) < 60 and data_target.get_EPAWSS_visible()) {  # If that target's valid
                         LADCanvas.SmartWeaponsPopulating = 1;
-                        # Note: the AARGM automatically lofts 10,000 ft above the weapon loaded altitude, always between 10,000 ft and 40,000 ft (max and min loft values)
-                        settimer(func {aircraft.rdr_tgt_to_station(best_dist_deg_contact, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 2.25);
+                        LADCanvas.SmartWeaponsUFCDataGPS = data_target.get_Coord();
+                        settimer(func { displays.push_coordinates_to_cc_mem(displays.LADCanvas.SmartWeaponsUFCDataGPS); displays.LADCanvas.SmartWeaponsPopulating = 0; }, 4.5);
                     }
                 } elsif (LADCanvas.PACSmode == 2 and LADCanvas.SmartWeaponsPopulateMode == 3 and a_s_wpn and point_in_quad(LADCanvas.screen_touch_pos, skim_ft_box)) {
                     displays.curr_menu = displays.skim_ft_menu;  # Trigger Skimming altitude input on the UFC
@@ -6589,7 +6567,7 @@ update_lad = func() {
                     LADCanvas.pacs_smrt_wpns_untarget.setText("UN-\nTGT");
                     LADCanvas.pacs_smrt_wpns_loft.setText("LOFT\n0°");
                 } elsif (anti_rad_wpn and LADCanvas.SmartWeaponsPopulateMode == 0) {
-                    LADCanvas.pacs_smrt_wpns_back_to_pacs.setText("SEL\nSRC");
+                    LADCanvas.pacs_smrt_wpns_back_to_pacs.setText("GEN\nCCM");
                     LADCanvas.pacs_smrt_wpns_untarget.setText("UN-\nSEL");
                     LADCanvas.pacs_smrt_wpns_loft.setText("LOFT\n0°");
                 }

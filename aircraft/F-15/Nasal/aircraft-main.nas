@@ -591,6 +591,9 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     # Built-in-test
     setprop("sim/model/f15/avionics/bit-norm", 1);
     setprop("sim/model/f15/avionics/bit-done", 1);
+    
+    # Flaps up
+    aircraft.raiseFlaps();
  }, 0.2);
 }
 
@@ -708,6 +711,9 @@ var cold_and_dark = func()
     # Built-in-test
     setprop("sim/model/f15/avionics/bit-norm", 0);
     setprop("sim/model/f15/avionics/bit-done", 0);
+    
+    # Flaps down
+    aircraft.lowerFlaps();
 }
 
 # SOI
@@ -781,9 +787,8 @@ var SOI_control_1 = func() {
         }
                     
         if (best_dist_deg_contact != nil) {  # If it's nul, then there ain't no target in the cursor's range
-            displays.LADCanvas.SmartWeaponsPopulating = 1;
             # Note: the AARGM automatically lofts 10,000 ft above the weapon loaded altitude, always between 10,000 ft and 40,000 ft (max and min loft values)
-            settimer(func {aircraft.rdr_tgt_to_station(best_dist_deg_contact, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 2.25);
+            settimer(func {aircraft.rdr_tgt_to_station(best_dist_deg_contact, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000);}, 2.25);
         }
     }
 }
@@ -811,10 +816,15 @@ var SOI_control_2 = func() {
                     primary_threat_class = u;
                 }
             }
+            
+            # We move the LAD's AARGM SOI Cursor upon the highest threat
+            var az_value = primary_threat_class.get_deviation(getprop("orientation/heading-deg"));
+            var el_value = -primary_threat_class.get_total_elevation(getprop("orientation/pitch-deg"));
+            setprop("sim/model/f15/controls/LAD/aargm-cursor-deg-az", math.clamp(az_value, -30, 30));
+            setprop("sim/model/f15/controls/LAD/aargm-cursor-deg-el", math.clamp(el_value, -30, 30));
         
-            displays.LADCanvas.SmartWeaponsPopulating = 1;
             # Note: the AARGM automatically lofts 10,000 ft above the weapon loaded altitude, always between 10,000 ft and 40,000 ft (max and min loft values)
-            settimer(func {aircraft.rdr_tgt_to_station(primary_threat_class, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000); displays.LADCanvas.SmartWeaponsPopulating = 0;}, 2.25);
+            settimer(func {aircraft.rdr_tgt_to_station(primary_threat_class, displays.LADCanvas.SmartWeaponsCurrPylon, displays.LADCanvas.SmartWeaponsCurrSubOrdnance, 10000);}, 2.25);
         }
     }
 }

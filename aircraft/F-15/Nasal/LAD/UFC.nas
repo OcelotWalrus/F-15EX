@@ -84,6 +84,11 @@ var skim_ft_menu = 16;  # Menu used by the Harpoon and LRASM to input their skim
 
 # Miscellaneous
 var timer_menu = 15;  # Displays current time and zulu (UTC) time
+var gps_data_block = nil;  # Variable to store GPS coordinates, to push them into a Mission Program for example
+var gps_data_block_set = 0;  # Selected Mission Set
+var gps_data_block_prog = 0;  # Selected Mission Program
+var gps_push_menu = 17;  # Menu used to select the Mission Set to be pushed
+var gps_push_menu_secondary = 18;  # Menu used to select the Mission Program to be pushed
 
 # Measures
 var screen_ratio = 6.25;
@@ -384,6 +389,13 @@ var remove_chr = func(chr, str) {  # Remove every "x" character from a string in
     }
     return result;
 };
+
+var push_coordinates_to_cc_mem = func(gps_block) {  # Triggers a set of menus to select which Mission Program to push the given coordinates to
+    gps_data_block = gps_block;
+    curr_menu = gps_push_menu;
+    stored_input = "";
+    inputting = 1;
+}
 
 
 update_loop_func = func() {
@@ -1896,12 +1908,10 @@ update_loop_func = func() {
             UFCCanvas.UFCText.setText(time_text);
         } elsif (curr_menu == skim_ft_menu) {
             if (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
-                print("YO");
-                print(stored_input);
                     
                 # We check if the stored input is correct
                 # - is a number
-                # - is greater than 14 and lower than 5001
+                # - is greater than 14 and lower than 5,001  (15ft min 5,000ft max)
                         
                 if (!is_numeric(stored_input) and stored_input + 0 < 14 and stored_input + 0 > 5001) {  # stored_input + 0 forces Nasal to interpret it as a number
                     displays.bad_data = 1;  # Trigger the "BAD DATA" label display
@@ -1915,6 +1925,90 @@ update_loop_func = func() {
                 curr_menu = dft_menu;
             }
             if (size(stored_input) < 4 and inputting) {  # Max amount of data that can be inputted (3 units)
+                if (displays.a_1_pres == 1) {
+                    stored_input = stored_input~"1";
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    stored_input = stored_input~"2";
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    stored_input = stored_input~"3";
+                    displays.b_3_pres = 0;
+                } elsif (displays.w_4_pres == 1) {
+                    stored_input = stored_input~"4";
+                    displays.w_4_pres = 0;
+                } elsif (displays.m_5_pres == 1) {
+                    stored_input = stored_input~"5";
+                    displays.m_5_pres = 0;
+                } elsif (displays.e_6_pres == 1) {
+                    stored_input = stored_input~"6";
+                    displays.e_6_pres = 0;
+                } elsif (displays.i_7_pres == 1) {
+                    stored_input = stored_input~"7";
+                    displays.i_7_pres = 0;
+                } elsif (displays.s_8_pres == 1) {
+                    stored_input = stored_input~"8";
+                    displays.s_8_pres = 0;
+                } elsif (displays.c_9_pres == 1) {
+                    stored_input = stored_input~"9";
+                    displays.c_9_pres = 0;
+                } elsif (displays.hyphen_0_pres == 1) {
+                    stored_input = stored_input~"0";
+                    displays.hyphen_0_pres = 0;
+                }
+            }
+        } elsif (curr_menu == gps_push_menu) {
+            if (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+                    
+                # We check if the stored input is correct
+                # - is a number
+                # - is between 1 and 4 (1 and 4 included)
+                        
+                if (!is_numeric(stored_input) and stored_input + 0 < 1 and stored_input + 0 > 4) {  # stored_input + 0 forces Nasal to interpret it as a number
+                    displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                } else {  # It's all good, we can apply the inputted data to the LAD variable
+                    displays.gps_data_block_set = stored_input + 0;
+                    displays.curr_menu = displays.gps_push_menu_secondary;
+                }
+
+                stored_input = "";  # We reset the stored input just in case
+                displays.mrk_pres = 0;
+            }
+            if (size(stored_input) < 1 and inputting) {  # Max amount of data that can be inputted (1 unit)
+                if (displays.a_1_pres == 1) {
+                    stored_input = stored_input~"1";
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    stored_input = stored_input~"2";
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    stored_input = stored_input~"3";
+                    displays.b_3_pres = 0;
+                } elsif (displays.w_4_pres == 1) {
+                    stored_input = stored_input~"4";
+                    displays.w_4_pres = 0;
+                }
+            }
+        } elsif (curr_menu == gps_push_menu_secondary) {
+            if (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+                    
+                # We check if the stored input is correct
+                # - is a number
+                # - is between 1 and 40 (1 and 40 included)
+                        
+                if (!is_numeric(stored_input) and stored_input + 0 < 1 and stored_input + 0 > 40) {  # stored_input + 0 forces Nasal to interpret it as a number
+                    displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                } else {  # It's all good, we can apply the inputted data to the LAD variable
+                    displays.gps_data_block_prog = stored_input + 0;
+                    aircraft.push_mission_program_from_dtc(displays.gps_data_block_set - 1, displays.gps_data_block_prog - 1, displays.gps_data_block.lat() * .9999994, displays.gps_data_block.lon() * .9999994, displays.gps_data_block.alt()*M2FT * .9999994, 999, 99, 9999, 1);  # We multiply the coordinates by .9999994 to simulate inaccuracy
+                }
+
+                stored_input = "";  # We reset the stored input just in case
+                inputting = 0;
+                displays.mrk_pres = 0;
+                curr_menu = dft_menu;
+            }
+            if (size(stored_input) < 2 and inputting) {  # Max amount of data that can be inputted (2 unit)
                 if (displays.a_1_pres == 1) {
                     stored_input = stored_input~"1";
                     displays.a_1_pres = 0;
