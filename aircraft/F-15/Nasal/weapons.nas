@@ -1092,6 +1092,7 @@ var arm_selector = func() {
 				        if (current_station_gps_data.lat() < 90 and current_station_gps_data.lat() > -90 and current_station_gps_data.lon() < 180 and current_station_gps_data.lon() > -180 and pylons.fcs != nil) {
 					        var wp = pylons.fcs.getSelectedWeapon();
 					        if (wp != nil and wp.parents[0] == armament.AIM and wp.target_pnt == 1 and (wp.guidance=="gps" or wp.guidance=="gps-altitude")) {
+					            current_station_gps_data = get_data_block_from_pylon_idx(current_station_rel_idx).data[current_station_ordnance_idx].gps;
 						        var spot = awg_9.ContactTGP.new("Station" ~ current_station_rel_idx ~ "." ~ current_station_ordnance_idx ~ "-TGT",current_station_gps_data,0);
 						        armament.contactPoint = spot;
 						        tgp.gps = 1;
