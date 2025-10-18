@@ -2208,16 +2208,19 @@
   <effect>
     <name>f15interior</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
+    <inherits-from>Aircraft/F-15/Models/Effects/flir/canvas</inherits-from>
     <object-name>LADImage</object-name>
   </effect>
   <effect>
     <name>f15interior</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
+    <inherits-from>Aircraft/F-15/Models/Effects/flir/canvas</inherits-from>
     <object-name>EFHDImage</object-name>
   </effect>
   <effect>
     <name>f15interior</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15interior</inherits-from>
+    <inherits-from>Aircraft/F-15/Models/Effects/flir/canvas</inherits-from>
     <object-name>UFCImage</object-name>
   </effect>
   <animation>
@@ -5762,6 +5765,7 @@
   <effect>
     <name>f15panel-ufc</name>
     <inherits-from>Aircraft/F-15/Models/Effects/f15panel-ufc</inherits-from>
+    <inherits-from>Aircraft/F-15/Models/Effects/flir/flir-mfd</inherits-from>
     <object-name>UFC</object-name>
     <object-name>UFC-lil-box</object-name>
     <object-name>UFCButton00</object-name>

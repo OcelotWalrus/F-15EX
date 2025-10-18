@@ -599,6 +599,9 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
 
 var cold_and_dark = func()
 {
+    # Flaps down
+    aircraft.lowerFlaps();
+
 	setprop("sim/model/f15/controls/electrics/emerg-gen-switch",9);
 	setprop("sim/model/f15/controls/electrics/r-gen-switch",0);
 
@@ -711,9 +714,6 @@ var cold_and_dark = func()
     # Built-in-test
     setprop("sim/model/f15/avionics/bit-norm", 0);
     setprop("sim/model/f15/avionics/bit-done", 0);
-    
-    # Flaps down
-    aircraft.lowerFlaps();
 }
 
 # SOI

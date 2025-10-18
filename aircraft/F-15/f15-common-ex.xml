@@ -3950,7 +3950,7 @@
                 <navigation type="string">direct-alt</navigation>
                 <terrain-follow type="bool">true</terrain-follow>  <!-- standoff missile, using terrain-follow to keep a low profile and escape terrain-->
                 <all-aspect type="bool">true</all-aspect>
-                <max-fire-range-nm type="double">80</max-fire-range-nm>              <!-- E variant: up to 75 nmi because it's got loft altitude -->
+                <max-fire-range-nm type="double">120</max-fire-range-nm>              <!-- E variant: up to 75 nmi because it's got loft altitude -->
                 <FCS-field-deg type="int">80</FCS-field-deg>
                 <seeker-field-deg type="int">80</seeker-field-deg>
                 <no-common-target type="bool">true</no-common-target>
@@ -4037,6 +4037,7 @@
                 <DLZ type="bool">true</DLZ>
                 <DLZ-optimal-alt-feet type="double">25000</DLZ-optimal-alt-feet>  <!-- guess -->
                 <DLZ-optimal-closing-mach type="double">.9</DLZ-optimal-closing-mach>  <!-- guess -->
+                <no-common-target type="bool">true</no-common-target>
             </agm-88e>
             <agm-119a>
                 <type-id type="int">4</type-id>
@@ -4197,7 +4198,7 @@
                 <long-name type="string">AGM-158C LRASM</long-name>
                 <fire-msg type="string">Rifle LRASM</fire-msg>
                 <class type="string">MGP</class>
-                <max-fire-range-nm type="double">299.9</max-fire-range-nm>  <!-- range is estimated to 300 nmi -->
+                <max-fire-range-nm type="double">599.9</max-fire-range-nm>  <!-- range is estimated to 500 nmi -->
                 <min-fire-range-nm type="double">2.0</min-fire-range-nm>
                 <guidance type="string">gps</guidance> <!-- GPS, but switches to IR 8s fore impact -->
                 <navigation type="string">direct-alt</navigation> <!-- like original AGM-158A, though switches to PN at 8 secs till impact, when IR seeker initiates  -->

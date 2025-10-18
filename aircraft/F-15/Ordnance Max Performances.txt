@@ -19,7 +19,7 @@ GBU-39A SDB:
       Coords Precision: Lat 3 decimal sec, lon 3 decimal sec, elev no decimal
   Hit Info:
       Hit Precison: lat: 0 degrees off, lon: 0 degrees off - Good Hit, target destroyed
-      Hit Speed: 531 kts True Airspeed
+      Hit Sfile:///home/lolo/Pictures/mallow/mallow_1059.jpgpeed: 531 kts True Airspeed
       Vertical Speed: -587 FPS / 347 kts
 
 AGM-84D Harpoon:
