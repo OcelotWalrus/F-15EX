@@ -1777,7 +1777,30 @@ var F15_HMD = {
             }
         }
 
-        if (hdp.AutopilotRouteManagerActive) {
+        if (isLookingAtDatalinkContact() != 0) {
+            var contact = isLookingAtDatalinkContact();
+            var contact_data = datalink.get_data(contact);
+            
+            if (contact_data != nil) {  # Safety
+                var contact_idx = contact_data.index();
+                if (contact_idx != nil) {
+                    var contact_lat = getprop("/ai/models/multiplayer["~contact_idx~"]/position/latitude-deg");
+                    var contact_lon = getprop("/ai/models/multiplayer["~contact_idx~"]/position/longitude-deg");
+                    var contact_alt = getprop("/ai/models/multiplayer["~contact_idx~"]/position/altitude-ft");
+                    var contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
+                    var contact_range = contact_coord.direct_distance_to(geo.aircraft_position()) * M2NM;
+                    
+                    hdp.window5_txt = sprintf("N %4.1f", contact_range);
+                    hdp.window3_txt = sprintf("%05d ft", contact_alt);
+                } else {
+                    hdp.window5_txt = "";
+                    hdp.window3_txt = "";
+                }
+            } else {
+                hdp.window5_txt = "";
+                hdp.window3_txt = "";
+            }
+        } elsif (hdp.AutopilotRouteManagerActive) {
             if (hdp.AutopilotRouteManagerWpDist != nil) {
                 hdp.window5_txt = sprintf(sprintf("N %4.1f", hdp.AutopilotRouteManagerWpDist));
             } else {
@@ -2212,6 +2235,59 @@ var Heading = {
         #me.index.hide();
     },
 };
+
+# Utilities
+
+var deviation_normdeg = func(our_heading, target_bearing) {
+    var dev_norm = target_bearing-our_heading;
+    dev_norm=geo.normdeg180(dev_norm);
+    return dev_norm;
+}
+
+var isLookingAtDatalinkContact = func() {  # Returns whether we're looking at a datalink contact
+
+    # We go through each datalink contact. If we're looking towards one at a 7-degree margin,
+    # it returns 1. If multiple are within that margin, we pick the one with the lowest margin.
+
+    var datalink_connections = datalink.get_all_callsigns();
+    var closest = 99999999999999;  # Placeholder value so we're sure it gets replaced
+    var closest_callsign = "";
+
+    foreach(contact; datalink_connections) {
+        var contact_data = datalink.get_data(contact);
+        var contact_idx = contact_data.index();
+        if (contact_idx != nil) {  # Sometimes it bugs
+            var contact_lat = getprop("/ai/models/multiplayer["~contact_idx~"]/position/latitude-deg");
+            var contact_lon = getprop("/ai/models/multiplayer["~contact_idx~"]/position/longitude-deg");
+            var contact_alt = getprop("/ai/models/multiplayer["~contact_idx~"]/position/altitude-ft");
+            var contact_coord = geo.Coord.new().set_latlon(contact_lat,contact_lon,contact_alt*FT2M);
+
+            var contact_bearing = geo.aircraft_position().course_to(contact_coord);
+            var contact_elevation = vector.Math.getPitch(geo.aircraft_position(), contact_coord);
+            
+            var contact_rel_bear = deviation_normdeg(getprop("orientation/heading-deg") - geo.normdeg180(getprop("sim/current-view/heading-offset-deg")), contact_bearing);
+            var contact_rel_elev = deviation_normdeg(getprop("orientation/pitch-deg") + getprop("sim/current-view/pitch-offset-deg"), contact_elevation);
+            
+            print(contact);
+            print(contact_bearing);
+            print(contact_rel_bear);
+            print(contact_rel_elev);
+            
+            var close_enough = math.abs(contact_rel_bear) < 7 and math.abs(contact_rel_elev) < 7;
+            var closer = closest > math.abs(contact_rel_bear) + math.abs(contact_rel_elev);
+            if (close_enough and closer) {
+                var closest_callsign = contact;
+                var closest = math.abs(contact_rel_bear) + math.abs(contact_rel_elev);
+            }
+        }
+    }
+    
+    if (closest_callsign != "") {
+        return closest_callsign;
+    } else {
+        return 0;
+    }
+}
 
 ### Canvas elements creators
 
