@@ -1168,6 +1168,11 @@
          rx="0.46561718"
          ry="0.51296806" />
     <path
+       d="m 27.760487,888.56515 c -0.767336,0.41022 -1.44714,0.61534 -2.039403,0.61534 -0.846906,0 -1.092705,-0.61755 -0.737403,-1.85263 h -0.09133 c -1.285232,1.23508 -2.478601,1.85263 -3.580119,1.85263 -0.824758,0 -1.351126,-0.27128 -1.579115,-0.81383 -0.227983,-0.54256 -0.127654,-1.31668 0.300985,-2.32241 0.442126,-1.03658 1.124261,-1.86365 2.046415,-2.4812 0.922134,-0.61753 1.850934,-0.9263 2.786402,-0.92631 0.69744,10e-6 1.187574,0.13234 1.470401,0.397 0.282808,0.26466 0.43563,0.70797 0.458473,1.32991 h 0.124544 l 1.269314,-1.61443 h 1.361677 l -0.138039,0.32421 c -0.607506,0.48963 -1.525498,1.3961 -2.753972,2.7194 -0.263626,0.89102 -0.413948,1.5615 -0.450955,2.01142 -0.03703,0.44993 0.116062,0.67488 0.459256,0.67488 0.226937,0 0.538816,-0.10145 0.935639,-0.30436 z m -2.292122,-2.68631 c 0.273989,-0.99248 0.353125,-1.69382 0.237409,-2.10405 -0.115727,-0.41023 -0.447582,-0.61534 -0.995567,-0.61534 -0.58675,0 -1.16311,0.25474 -1.729091,0.76421 -0.565985,0.50948 -1.029563,1.18767 -1.390733,2.03458 -0.69399,1.62767 -0.534506,2.44149 0.478454,2.44149 1.079369,0 2.212547,-0.84028 3.399528,-2.52089 z"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.4771px;line-height:125%;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math Italic';letter-spacing:0px;word-spacing:0px;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.498066"
+       id="path3591"
+       inkscape:connector-curvature="0" />
+    <path
        id="path4530-6"
        style="color:#000000;fill:none;stroke:#00ff00;stroke-width:0.90051275;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="m 105.79933,889.23691 4.71741,0 3.58523,3.58523 3.71496,-3.86828 3.71496,3.86828 3.58523,-3.58524 4.71741,0"
@@ -10311,16 +10316,16 @@
        y="866.85608" />
     <text
        xml:space="preserve"
-       style="font-size:8.15615749px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"
-       x="20.857618"
-       y="887.85608"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Bitstream Vera Sans';-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
+       x="31.274817"
+       y="888.29803"
        id="window10"
-       sodipodi:linespacing="125%"
        inkscape:label="#g-label-1-0"><tspan
          sodipodi:role="line"
-         id="tspan8175-8-9"
-         x="20.857618"
-         y="887.85608">window10</tspan></text>
+         id="tspan2"
+         x="31.274817"
+         y="888.29803"
+         style="font-size:8.15616px;line-height:1.25">window10</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:11.15615749px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Sans"

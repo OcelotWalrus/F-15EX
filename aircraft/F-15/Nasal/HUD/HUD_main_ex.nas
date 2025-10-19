@@ -803,7 +803,7 @@ var F15HUD = {
                                                             } else {
 	                                                            obj.window7.setText(sprintf("%1.3f Ma",obj.mach));
 															}
-	                                                        obj.window10.setText(sprintf("a  %d", obj.alpha));
+	                                                        obj.window10.setText(sprintf("%d", obj.alpha));
                                                         }),
             props.UpdateManager.FromHashList(["VelocitiesAirspeedKt", "VelocitiesGroundspeedKt", "AltimeterIndicatedAltitudeFt", "Alpha", "ControlsGearGearDown", "FeetPerSecond", "AltitudeAGL", "AltimeterIndicatedAltitudeFt", "AltitudeAGL"], nil, func(val)
                                                         {
