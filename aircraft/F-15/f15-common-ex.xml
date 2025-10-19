@@ -2154,14 +2154,21 @@
         </hud>
 -->
 
+        <pilot-pitch type="double">0.0</pilot-pitch>
+        <pilot-roll type="double">0.0</pilot-roll>
+        <pilot-heading type="double">0.0</pilot-heading>
+        <wso-pitch type="double">0.0</wso-pitch>
+        <wso-roll type="double">0.0</wso-roll>
+        <wso-heading type="double">0.0</wso-heading>
+
         <view n="0">
             <name>Cockpit View</name>
             <type>lookfrom</type>
             <internal archive="y">true</internal>
             <config>
-                <x-offset-m archive="y">0.0</x-offset-m>
+                <x-offset-m archive="y">0</x-offset-m>
                 <y-offset-m archive="y">1.50195</y-offset-m>
-                <z-offset-m archive="y">-5.07</z-offset-m>
+                <z-offset-m archive="y">-5.19</z-offset-m>
                 <pitch-offset-deg>-3.25</pitch-offset-deg>
                 <default-field-of-view-deg>95</default-field-of-view-deg>
                 <limits>

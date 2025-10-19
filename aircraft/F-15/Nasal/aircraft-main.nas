@@ -1808,6 +1808,18 @@ var F15MainModule =
             setprop("payload/weight[9]/weight-lb", 271);
         }
 
+        # Save pilot's looking position for the head animation
+        if (getprop("sim/current-view/name") == "Cockpit View") {
+            setprop("sim/pilot-pitch", getprop("sim/current-view/pitch-offset-deg"));
+            setprop("sim/pilot-roll", getprop("sim/current-view/roll-offset-deg"));
+            setprop("sim/pilot-heading", getprop("sim/current-view/heading-offset-deg"));
+        }
+        if (getprop("sim/current-view/name") == "Backseat View") {
+            setprop("sim/wso-pitch", getprop("sim/current-view/pitch-offset-deg"));
+            setprop("sim/wso-roll", getprop("sim/current-view/roll-offset-deg"));
+            setprop("sim/wso-heading", getprop("sim/current-view/heading-offset-deg"));
+        }
+
         # Gear overspeed damage
         if (getprop("controls/gear/gear-down") == 1 and getprop("/velocities/airspeed-kt") > (300 * 1.1) and (getprop("controls/gear/brakes-blownout") == nil or getprop("controls/gear/brakes-blownout") == 0)) { # 10% overspeed safety
             screen.log.write("Wheel brakes are now unusable.");

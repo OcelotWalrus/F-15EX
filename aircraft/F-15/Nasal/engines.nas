@@ -66,13 +66,13 @@ NozzleSpeed = 1.0;
 var current_flame_number = 0;
 
 #
-# Autothrottle 
+# Autothrottle
 var autoThrottle = props.globals.getNode("autopilot/locks/speed", 1);
 
 var toggleAutoThrottle = func {
 	if (autoThrottle.getValue() == "speed-with-throttle-mach")
 		autoThrottle.setValue("");
-	else 
+	else
 	{
 		autoThrottle.setValue("speed-with-throttle-mach");
 		setprop("/autopilot/settings/target-speed-mach", getprop("/instrumentation/airspeed-indicator/indicated-mach"));
@@ -85,7 +85,7 @@ var computeEngines = func {
 # flame animation; this will adjust the texture slightly so that the
 # appears to be a degree of movement within the flame
 
-    current_flame_number = (current_flame_number + 1);        
+    current_flame_number = (current_flame_number + 1);
 
     if (current_flame_number > 3)
         current_flame_number = 0;
@@ -149,7 +149,7 @@ var computeEngines = func {
             setprop("controls/flight/speedbrake", 0);
         }
     }
-    
+
 #
 }
 
@@ -185,7 +185,7 @@ var engineControls = func {
                 if (jfs_start.getValue() == 10)
                 {
                     jfs_start.setValue(11);
-                }  
+                }
             }
         }
     }
@@ -203,8 +203,8 @@ var engineControls = func {
 
     var bleed_air_available = jfs_running or l_running or r_running or getprop("fdm/jsbsim/systems/electrics/ground-air");
 
-    if (engine_crank_switch_pos_prop.getValue() > 0 
-            and l_starter == 0 
+    if (engine_crank_switch_pos_prop.getValue() > 0
+            and l_starter == 0
             and r_starter == 0
             and engine_start_initiated
             and bleed_air_available)
@@ -263,7 +263,7 @@ var jfs_invoke_running_checks = func{
     if (getprop("sim/model/f15/controls/electrics/jfs-starter"))
     {
         if (total_fuel > 2)
-        {   
+        {
 # consume some fuel and then return. 0.2 lbs/sec seems right (it is a guess).
             var fuel_list = props.globals.getNode("consumables/fuel").getChildren();
 
@@ -411,10 +411,10 @@ var engine_crank_switch = func(n) {
 # if both running then just set the switch
     if (l_running and r_running)
     {
-        if(n==0) 
+        if(n==0)
             engine_crank_switch_pos_prop.setIntValue(1);
 
-        if(n==1) 
+        if(n==1)
             engine_crank_switch_pos_prop.setIntValue(2);
 
         shutdownTimer.stop();
@@ -439,10 +439,10 @@ var engine_crank_switch = func(n) {
     {
         if (n == 0) {
             engine_crank_switch_pos_prop.setIntValue(1);
-        } 
+        }
         if (n == 1) {
             engine_crank_switch_pos_prop.setIntValue(2);
-        } 
+        }
         return;
     }
 
@@ -457,7 +457,7 @@ var engine_crank_switch = func(n) {
             setprop("controls/engines/engine[0]/starter",0);
 		}
 	}
-    else 
+    else
     {
 		if (engine_crank_switch_pos == 0) {
 			engine_crank_switch_pos_prop.setIntValue(2);
@@ -468,7 +468,7 @@ var engine_crank_switch = func(n) {
             setprop("controls/engines/engine[1]/starter",0);
 			engine_crank_switch_pos_prop.setIntValue(0);
 		}
-	}	
+	}
 }
 
 #

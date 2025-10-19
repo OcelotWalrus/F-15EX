@@ -1080,76 +1080,24 @@
     </effect>
 
     <model>
-        <path>pilot.xml</path>
         <name>LtCdrTricky</name>
+        <path>pilot.xml</path>
         <offsets>
-            <x-m>0</x-m>
-            <y-m></y-m>
-            <z-m>0</z-m>
+            <x-m>-5</x-m>
+            <y-m>0</y-m>
+            <z-m>1.05</z-m>
         </offsets>
     </model>
     <model>
         <name>Backseater</name>
-        <path>pilot.xml</path>
+        <path>pilot_wso.xml</path>
         <offsets>
-            <x-m>1.4635</x-m>
-            <y-m>-0.0088</y-m>
-            <z-m>0.1375</z-m>
+            <x-m>-3.65</x-m>
+            <y-m>0</y-m>
+            <z-m>1.05</z-m>
         </offsets>
     </model>
-    <animation>
-        <object-name>LtCdrTricky</object-name>
-        <object-name>Backseater</object-name>
-        <type>range</type>
-        <min-m>0.1</min-m>
-        <max-m>9999</max-m>
-    </animation>
-    <animation>
-        <type>select</type>
-        <object-name>LtCdrTricky</object-name>
-        <condition>
-            <not>
-                    <or>
-                        <property>sim/model/f15/ejected</property>
-                        <property>sim/model/hide-pilot</property>
-                        <property>sim/model/hide-pilots-auto</property>
-                        <equals>
-                            <property>sim/current-view/name</property>
-                            <value>Cockpit View</value>
-                        </equals>
-                    </or>
-            </not>
-        </condition>
-    </animation>
-    <animation>
-        <type>select</type>
-        <object-name>Backseater</object-name>
-        <condition>
-            <and>
-                <or>
-                    <equals>
-                        <property>sim/model/f15/variant</property>
-                        <value>D</value>
-                    </equals>
-                    <equals>
-                        <property>sim/model/f15/variant</property>
-                        <value>EX</value>
-                    </equals>
-                </or>
-                <not>
-                    <or>
-                        <property>sim/model/f15/ejected</property>
-                        <property>sim/model/hide-backseater</property>
-                        <property>sim/model/hide-pilots-auto</property>
-                        <equals>
-                            <property>sim/current-view/name</property>
-                            <value>Backseat View</value>
-                        </equals>
-                    </or>
-                </not>
-            </and>
-        </condition>
-    </animation>
+
     <animation>
         <type>select</type>
         <object-name>FanLHighSpeed</object-name>

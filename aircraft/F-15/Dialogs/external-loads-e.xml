@@ -1069,7 +1069,7 @@
             <group>
                 <layout>hbox</layout>
                 <text>
-                    <label>External Air Connected</label>
+                    <label>External Air</label>
 					<enable>
 						<property>fdm/jsbsim/gear/unit[0]/WOW</property>
 					</enable>
