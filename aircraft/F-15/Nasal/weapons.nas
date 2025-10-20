@@ -1200,6 +1200,15 @@ var masw = func(v)
 };
 setlistener("sim/model/f15/controls/armament/master-arm-switch", masw);
 
+var initiate_smart_weapons_ins = func() {
+    # All smart weapons are automatically initialized
+	for (var i = 0; i < size(smart_weapons_data_blocks); i += 1) {
+        if (contains(displays.SmartWeaps, getprop("payload/armament/station/id-"~smart_weapons_data_blocks[i].pylon_idx~"-type"))) {  # We're reusing the LAD's SmartWeaps variable here
+		    smart_weapons_data_blocks[i].initiated = 1;
+		}
+    }
+}
+
 var master_arm_cycle = func()
 {
 	var master_arm_switch = ArmSwitch.getValue();
@@ -1208,12 +1217,7 @@ var master_arm_cycle = func()
     {
 		ArmSwitch.setValue(1);
 		
-		# All smart weapons are automatically initialized
-		for (var i = 0; i < size(smart_weapons_data_blocks); i += 1) {
-            if (contains(displays.SmartWeaps, getprop("payload/armament/station/id-"~smart_weapons_data_blocks[i].pylon_idx~"-type"))) {  # We're reusing the LAD's SmartWeaps variable here
-		        smart_weapons_data_blocks[i].initiated = 1;
-		    }
-        }
+		settimer(aircraft.initiate_smart_weapons_ins, 3*60+30);  # The Smart Weapons' INS alignment takes 3'30"
 	}
     else
     {

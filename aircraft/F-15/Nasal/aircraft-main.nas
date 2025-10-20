@@ -594,6 +594,9 @@ setprop("fdm/jsbsim/propulsion/set-running",0);
     
     # Flaps up
     aircraft.raiseFlaps();
+    
+    # Align the Smart Weapons' INS instantaneously
+    aircraft.initiate_smart_weapons_ins()
  }, 0.2);
 }
 
