@@ -558,6 +558,26 @@ var F15_HMD = {
             append(obj.total, obj.dlnk_txt);
         }
         
+        obj.bullseye = obj.centerOrigin.createChild("path")
+            .moveTo(-100*mr,0)
+            .arcSmallCW(100*mr,100*mr, 0, 100*mr*2, 0)
+            .arcSmallCW(100*mr,100*mr, 0, -100*mr*2, 0)
+            .moveTo(-50*mr,0)
+            .arcSmallCW(50*mr,50*mr, 0, 50*mr*2, 0)
+            .arcSmallCW(50*mr,50*mr, 0, -50*mr*2, 0)
+            .setStrokeLineWidth(stroke1)
+            .show()
+            .setColor(0,1,1);
+        obj.bullseye_ranging_text = obj.centerOrigin.createChild("text")
+            .setText("N 000")
+            .setAlignment("center-center")
+            .setColor(0,1,1)
+            .setFont(HUD_FONT)
+            .show()
+            .setFontSize(fontSize/2, 1.1);
+        append(obj.total, obj.bullseye);
+        append(obj.total, obj.bullseye_ranging_text);
+        
         obj.epawss_texts = [];
         obj.epawss_hats = [];
         obj.epawss_mlw = [];
@@ -1745,6 +1765,25 @@ var F15_HMD = {
 
 
 
+        # Display the BULLSEYE if any
+        me.bullseye.setColor(0,1,1);  # Make sure it's cyan
+        me.bullseye_ranging_text.setColor(0,1,1);  # Make sure it's cyan
+        if (getprop("sim/model/f15/fcs/bullseye-lat") != 0 and getprop("sim/model/f15/fcs/bullseye-lon") != 0 and getprop("sim/model/f15/fcs/bullseye-alt") != 0) {  # BULLSEYE is set
+            bullseye_pos = geo.Coord.new().set_latlon(getprop("sim/model/f15/fcs/bullseye-lat"),getprop("sim/model/f15/fcs/bullseye-lon"),getprop("sim/model/f15/fcs/bullseye-alt")*FT2M);
+            me.echoPos = hudmath.HudMath.getDevFromCoord(bullseye_pos, hdp.HmdH, hdp.HmdP, hdp, geo.viewer_position());
+            me.echoPos[0] = geo.normdeg180(me.echoPos[0]);
+            me.echoPos[0] = (512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[0],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+            me.echoPos[1] = -(512/center_to_edge_distance_m)*(math.tan(math.clamp(me.echoPos[1],-89,89)*D2R))*eye_to_hmcs_distance_m;#0.2m from eye, 0.025 = 512
+            
+            me.bullseye.setTranslation(me.echoPos);
+            me.bullseye_ranging_text.setTranslation(me.echoPos);
+            me.bullseye_ranging_text.setText(sprintf("N %03.01f", geo.aircraft_position().distance_to(bullseye_pos)*M2NM));
+            me.bullseye.show();
+            me.bullseye_ranging_text.show();
+        } else {
+            me.bullseye.hide();
+            me.bullseye_ranging_text.hide();
+        }
 
 
         me.initUpdate = 0;
