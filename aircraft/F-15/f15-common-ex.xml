@@ -2170,18 +2170,18 @@
                 <y-offset-m archive="y">1.50195</y-offset-m>
                 <z-offset-m archive="y">-5.19</z-offset-m>
                 <pitch-offset-deg>-3.25</pitch-offset-deg>
-                <default-field-of-view-deg>95</default-field-of-view-deg>
+                <default-field-of-view-deg>105</default-field-of-view-deg>
                 <limits>
                     <enabled type="bool">true</enabled>
                     <left>
                         <heading-max-deg type="double">180</heading-max-deg>
-                        <x-offset-max-m type="double">0.17</x-offset-max-m>
-                        <x-offset-threshold-deg type="double">120</x-offset-threshold-deg>
+                        <x-offset-max-m type="double">0.2295</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">5</x-offset-threshold-deg>
                     </left>
                     <right>
                         <heading-max-deg type="double">180</heading-max-deg>
-                        <x-offset-max-m type="double">0.17</x-offset-max-m>
-                        <x-offset-threshold-deg type="double">120</x-offset-threshold-deg>
+                        <x-offset-max-m type="double">0.2295</x-offset-max-m>
+                        <x-offset-threshold-deg type="double">5</x-offset-threshold-deg>
                     </right>
                 </limits>
             </config>
