@@ -1234,7 +1234,7 @@ var F15HUD = {
                                                                 obj.window16.setVisible(1);
                                                                 obj.window15.setText(sprintf("CHF %03d",getprop("ai/submodels/submodel[13]/count")));
                                                                 obj.window16.setText(sprintf("FLA %03d",getprop("ai/submodels/submodel[5]/count")));
-																obj.boreSymbol.hide();
+																obj.boreSymbol.show();
                                                                 weapon_type = getprop("sim/model/f15/systems/armament/selected-arm");
                                                                 obj.window11.setText(weapon_type);
                                                                 var w_s = val.ControlsArmamentWeaponSelector;
@@ -1247,7 +1247,6 @@ var F15HUD = {
                                                                 if (w_s == 0) {
 																	if (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type != "LAU-68C") {
 																	    eegsShow = 1;
-																	    obj.boreSymbol.show();
 	                                                                    obj.window2.setText(sprintf("%3d",val.ArmamentRounds));
 																		# Show GUNS mode
 																		if (val.GunsMode == 0) {
@@ -1261,7 +1260,6 @@ var F15HUD = {
 																		}
 																	} elsif (pylons.fcs.getSelectedWeapon() != nil and pylons.fcs.getSelectedWeapon().type == "LAU-68C") {
 																	    eegsShow = 1;
-																	    obj.boreSymbol.show();
 																		obj.window2.setText(sprintf("%3d",pylons.fcs.getAmmo()));
 																		# Show GUNS mode
 																		obj.window17.setText("STRF");
