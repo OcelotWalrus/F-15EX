@@ -16,6 +16,8 @@
 #  Center tank: UP R: 605, 1610; UP L: 335, 1610; DOWN R: 605, 1940; DOWN L: 335, 1940. 
 #  Right tank: UP R: 880, 1790; UP L: 645, 1610; DOWN R: 885, 1940; DOWN L: 645, 1940. 
 #  Left tank: UP R: 300, 1610; UP L: 65, 1800; DOWN R: 300, 1940; DOWN L: 60, 1940. 
+# - Other boxes:
+#  BINGO Fuel: UP R: 660, 1570; UP L: 320, 1570; DOWN R: 660, 1600; DOWN L: 320, 1600. 
 # ---------------------------
 # Planned Features :
 # - Fully developed
@@ -30,6 +32,7 @@ var fuel_display_changed_time = 0;
 var center_tank_quad = [[605, 1610], [335, 1610], [335, 1940], [605, 1940]];
 var right_tank_quad = [[880, 1790], [645, 1610], [645, 1940], [885, 1940]];
 var left_tank_quad = [[300, 1610], [65, 1800], [60, 1940], [300, 1940]];
+var bingo_fuel_quad = [[660, 1570], [320, 1570], [320, 1600], [660, 1600]];
 var cursor_pos = [0, 0];
 var gal_to_pound_ratio = .158730;  # Divide gals of fuel by this and you'll get pounds
 
@@ -246,12 +249,16 @@ update = func() {
         
         if (fuel_display == 0) {  # Total fuel, norm display
             EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("%05d / %05d lbs", current_fuel_lbs, total_fuel_lbs));
+            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setColor(prst_white.r, prst_white.g, prst_white.b);
         } elsif (fuel_display == 1) {  # center tank fuel, screen touched
-            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("%05d / %05d lbs", internal_pounds, internal_total_pounds));
+            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("C %05d / %05d lbs", internal_pounds, internal_total_pounds));
+            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setColor(prst_green.r, prst_green.g, prst_green.b);
         } elsif (fuel_display == 2) {  # right tank fuel, screen touched
-            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("%05d / %05d lbs", right_pounds, right_total_pounds));
+            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("R %05d / %05d lbs", right_pounds, right_total_pounds));
+            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setColor(prst_green.r, prst_green.g, prst_green.b);
         } elsif (fuel_display == 3) {  # left tank fuel, screen touched
-            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("%05d / %05d lbs", left_pounds, left_total_pounds));
+            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setText(sprintf("L %05d / %05d lbs", left_pounds, left_total_pounds));
+            EFHDCanvas.EFHDsvg.getElementById("total_fuel_levels").setColor(prst_green.r, prst_green.g, prst_green.b);
         }
         
         # We make sure no values are null
@@ -318,6 +325,8 @@ update = func() {
             } elsif (point_in_quad(cursor_pos, right_tank_quad)) {
                 fuel_display = 2;
                 fuel_display_changed_time = getprop("sim/time/elapsed-sec");
+            } elsif (point_in_quad(cursor_pos, bingo_fuel_quad)) {
+                displays.curr_menu = displays.bingo_fuel_menu;  # Bind the UFC to the BINGO Fuel menu
             }
         
             touch_command = 0;

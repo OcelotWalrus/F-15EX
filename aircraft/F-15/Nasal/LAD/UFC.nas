@@ -90,6 +90,9 @@ var gps_data_block_prog = 0;  # Selected Mission Program
 var gps_push_menu = 17;  # Menu used to select the Mission Set to be pushed
 var gps_push_menu_secondary = 18;  # Menu used to select the Mission Program to be pushed
 
+var bingo_fuel_menu = 19;  # Menu to view and edit info about BINGO fuel
+var bingo_fuel_eta_menu = 20;  # Menu to view when bingo fuel will be reached at current engine fuel consumption
+
 # Measures
 var screen_ratio = 6.25;
 var screen_width = 512;  # pixels resolution
@@ -1964,7 +1967,7 @@ update_loop_func = func() {
                 # - is a number
                 # - is between 1 and 4 (1 and 4 included)
                         
-                if (!is_numeric(stored_input) and stored_input + 0 < 1 and stored_input + 0 > 4) {  # stored_input + 0 forces Nasal to interpret it as a number
+                if (!is_numeric(stored_input) and (stored_input + 0 < 1 or stored_input + 0 > 4)) {  # stored_input + 0 forces Nasal to interpret it as a number
                     displays.bad_data = 1;  # Trigger the "BAD DATA" label display
                 } else {  # It's all good, we can apply the inputted data to the LAD variable
                     displays.gps_data_block_set = stored_input + 0;
@@ -1990,13 +1993,13 @@ update_loop_func = func() {
                 }
             }
         } elsif (curr_menu == gps_push_menu_secondary) {
-            if (displays.mrk_pres == 1 and inputting) {  # Pilot's confirming data Mach inputting
+            if (displays.mrk_pres == 1 and inputting) {
                     
                 # We check if the stored input is correct
                 # - is a number
                 # - is between 1 and 40 (1 and 40 included)
                         
-                if (!is_numeric(stored_input) and stored_input + 0 < 1 and stored_input + 0 > 40) {  # stored_input + 0 forces Nasal to interpret it as a number
+                if (!is_numeric(stored_input) and (stored_input + 0 < 1 or stored_input + 0 > 40)) {  # stored_input + 0 forces Nasal to interpret it as a number
                     displays.bad_data = 1;  # Trigger the "BAD DATA" label display
                 } else {  # It's all good, we can apply the inputted data to the LAD variable
                     displays.gps_data_block_prog = stored_input + 0;
@@ -2041,6 +2044,97 @@ update_loop_func = func() {
                     displays.hyphen_0_pres = 0;
                 }
             }
+        } elsif (curr_menu == bingo_fuel_menu) {
+            var bingo_text = sprintf("BINGO %05.02f 1.Set Bingo 2.ETA", getprop("sim/model/f15/controls/fuel/bingo"));
+
+            if (displays.a_1_pres == 1 and !inputting) {  # Handle inputs
+                stored_input = "";
+                inputting = 1;
+                displays.a_1_pres = 0;
+            } elsif (displays.n_2_pres == 1 and !inputting) {
+                displays.curr_menu = displays.bingo_fuel_eta_menu;
+                displays.n_2_pres = 0;
+            } elsif (displays.mrk_pres == 1 and inputting) {
+                    
+                # We check if the stored input is correct
+                # - is a number
+                # - is between 500 and 15000 (both excluded)
+                        
+                if (!is_numeric(stored_input) and (stored_input + 0 <= 500 or stored_input + 0 >= 15000)) {  # stored_input + 0 forces Nasal to interpret it as a number
+                    displays.bad_data = 1;  # Trigger the "BAD DATA" label display
+                } else {  # It's all good, we can apply the inputted data to the LAD variable
+                    setprop("sim/model/f15/controls/fuel/bingo", stored_input + 0);
+                }
+
+                stored_input = "";  # We reset the stored input just in case
+                inputting = 0;
+                displays.mrk_pres = 0;
+                curr_menu = bingo_fuel_menu;
+            }
+            if (size(stored_input) < 5 and inputting) {  # Max amount of data that can be inputted (5 unit)
+                if (displays.a_1_pres == 1) {
+                    stored_input = stored_input~"1";
+                    displays.a_1_pres = 0;
+                } elsif (displays.n_2_pres == 1) {
+                    stored_input = stored_input~"2";
+                    displays.n_2_pres = 0;
+                } elsif (displays.b_3_pres == 1) {
+                    stored_input = stored_input~"3";
+                    displays.b_3_pres = 0;
+                } elsif (displays.w_4_pres == 1) {
+                    stored_input = stored_input~"4";
+                    displays.w_4_pres = 0;
+                } elsif (displays.m_5_pres == 1) {
+                    stored_input = stored_input~"5";
+                    displays.m_5_pres = 0;
+                } elsif (displays.e_6_pres == 1) {
+                    stored_input = stored_input~"6";
+                    displays.e_6_pres = 0;
+                } elsif (displays.i_7_pres == 1) {
+                    stored_input = stored_input~"7";
+                    displays.i_7_pres = 0;
+                } elsif (displays.s_8_pres == 1) {
+                    stored_input = stored_input~"8";
+                    displays.s_8_pres = 0;
+                } elsif (displays.c_9_pres == 1) {
+                    stored_input = stored_input~"9";
+                    displays.c_9_pres = 0;
+                } elsif (displays.hyphen_0_pres == 1) {
+                    stored_input = stored_input~"0";
+                    displays.hyphen_0_pres = 0;
+                }
+            }
+
+            UFCCanvas.UFCText.setText(bingo_text);
+        } elsif (curr_menu == bingo_fuel_eta_menu) {
+            # We compute when BINGO fuel will be reached at current fuel consumption
+            var fuel_consumption = getprop("engines/engine[0]/fuel-flow_pph") + getprop("engines/engine[1]/fuel-flow_pph");
+            var bingo_amount = getprop("sim/model/f15/controls/fuel/bingo");
+            var fuel_difference = getprop("sim/model/f15/instrumentation/fuel-gauges/total-display") - bingo_amount;  # How many fuel from our current status and BINGO Fuel
+            
+            var bingo_text = "";
+            if (fuel_difference <= 0) {  # BINGO Fuel has been reached
+                bingo_text = "--- /!\ BINGO REACHED /!\ ---";
+            } else {
+                var eta = fuel_difference / fuel_consumption;
+                var eta_hours = math.floor(eta);
+                var eta_mins = math.floor((eta - eta_hours) * 60);
+                var eta_secs = math.floor((((eta - eta_hours) * 60) - eta_mins) * 60);
+                
+                #if (eta_mins < 0) {  # tiny fix
+                #    var eta_hours = eta_hours - 1;
+                #    var eta_mins = 60 + eta_mins;
+                #}
+                #if (eta_secs < 0) {  # tiny fix
+                #    var eta_mins = eta_mins - 1;
+                #    var eta_secs = 60 + eta_secs;
+                #}
+            
+                bingo_text = sprintf("ETA : %02d:%02d:%02d", eta_hours, eta_mins, eta_secs);
+            }
+            
+        
+            UFCCanvas.UFCText.setText(bingo_text);
         }
         
         # If there's a bad data warning, we display it no matter what, for 3 whole seconds
@@ -2090,7 +2184,7 @@ update_loop_func = func() {
             sliding_paused = 0;
             if (displays.inputting) {
                 displays.inputting = 0;
-            } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu or curr_menu == comm_main_menu or curr_menu == timer_menu or curr_menu == skim_ft_menu) {
+            } elsif (curr_menu == autopilot_main_menu or curr_menu == nav1_main_menu or curr_menu == comm_main_menu or curr_menu == timer_menu or curr_menu == skim_ft_menu or curr_menu == gps_push_menu or curr_menu == gps_push_menu_secondary or curr_menu == bingo_fuel_menu) {
                 curr_menu = dft_menu;
             } elsif (curr_menu == autopilot_info_menu or curr_menu == autopilot_heading_menu or curr_menu == autopilot_altitude_menu or curr_menu == autopilot_auto_throttle_menu) {
                 curr_menu = autopilot_main_menu;
@@ -2104,6 +2198,8 @@ update_loop_func = func() {
                 curr_menu = comm_main_menu;
             } elsif (curr_menu == comm_chans_menu and comm_chans_index != 0) {
                 comm_chans_index = 0;
+            } elsif (curr_menu == bingo_fuel_eta_menu) {
+                curr_menu = bingo_fuel_menu;
             }
             
             displays.menu_pres = 0;
