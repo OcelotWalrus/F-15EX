@@ -125,10 +125,6 @@
       <binding>
         <command type="string">nasal</command>
         <script type="string">
-					if (mod)
-						setprop("/controls/flight/elevator-trim", 0);
-					else
-						controls.elevatorTrim(trimstep);
 				</script>
         <module type="string">__js0</module>
         <offset type="double">1</offset>
@@ -139,10 +135,6 @@
       <binding>
         <command type="string">nasal</command>
         <script type="string">
-					if (mod)
-						setprop("/controls/flight/elevator-trim", 0);
-					else
-						controls.elevatorTrim(-trimstep);
 				</script>
         <module type="string">__js0</module>
         <offset type="double">1</offset>
@@ -165,10 +157,6 @@
       <binding>
         <command type="string">nasal</command>
         <script type="string">
-					if (mod)
-						setprop("/controls/flight/elevator-trim", 0);
-					else
-						controls.elevatorTrim(-trimstep);
 				</script>
       </binding>
     </low>
@@ -177,10 +165,6 @@
       <binding>
         <command type="string">nasal</command>
         <script type="string">
-					if (mod)
-						setprop("/controls/flight/elevator-trim", 0);
-					else
-						controls.elevatorTrim(trimstep);
 				</script>
       </binding>
     </high>

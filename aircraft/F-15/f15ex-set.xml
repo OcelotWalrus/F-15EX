@@ -200,6 +200,11 @@
                 <splash type="bool">true</splash>
                 <path>Previews/EX/036.png</path>
             </preview>
+            <preview>
+                <type>exterior</type>
+                <splash type="bool">true</splash>
+                <path>Previews/EX/037.png</path>
+            </preview>
         </previews>
         <startup>
             <splash-texture>Aircraft/F-15/f15e-splash.jpg</splash-texture>
