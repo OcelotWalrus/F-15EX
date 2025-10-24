@@ -832,6 +832,24 @@ var SOI_control_2 = func() {
     }
 }
 
+var SOI_control_3 = func() {
+    if (getprop("sim/model/f15/avionics/SOI") == "HUD") {
+        #pylons.fcs.setAutocage(!pylons.fcs.isAutocage());
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "VSD") {
+        setprop("instrumentation/iff/interrogate-cmd", 1);
+    } elsif (getprop("sim/model/f15/avionics/SOI") == "AARGM") {
+        var anti_rad_wpn = getprop("payload/armament/station/id-"~displays.LADCanvas.SmartWeaponsCurrPylon~"-type") == "AGM-88E";
+        if (anti_rad_wpn) {
+            var data_target = aircraft.get_data_block_from_pylon_idx(displays.LADCanvas.SmartWeaponsCurrPylon).data[displays.LADCanvas.SmartWeaponsCurrSubOrdnance].radar_target;
+            if (data_target != nil and math.abs(data_target.get_deviation(getprop("orientation/heading-deg"))) < 60 and math.abs(data_target.get_total_elevation(getprop("orientation/pitch-deg"))) < 60 and data_target.get_EPAWSS_visible()) {  # If that target's valid
+                displays.LADCanvas.SmartWeaponsPopulating = 1;
+                displays.LADCanvas.SmartWeaponsUFCDataGPS = data_target.get_Coord();
+                settimer(func { displays.push_coordinates_to_cc_mem(displays.LADCanvas.SmartWeaponsUFCDataGPS); displays.LADCanvas.SmartWeaponsPopulating = 0; }, 4.5);
+            }
+        }
+    }
+}
+
 # Ejection
 var eject_f15 = func{
     if (getprop("sim/model/f15/ejected") or !getprop("sim/model/f15/ejection-master")) {
@@ -1611,6 +1629,12 @@ var F15MainModule =
             setprop("fdm/jsbsim/systems/electrics/ground-power", 1);
         } else {
             setprop("fdm/jsbsim/systems/electrics/ground-power", 0);
+        }
+
+        if (getprop("velocities/groundspeed-kt") < 40) {
+            setprop("fdm/jsbsim/fcs/steer-maneuver", 1);
+        } else {
+            setprop("fdm/jsbsim/fcs/steer-maneuver", 0);
         }
 
         # Compute the trust/weight ratio and set it to an avionics property

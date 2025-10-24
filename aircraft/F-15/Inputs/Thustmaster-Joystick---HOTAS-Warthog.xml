@@ -212,21 +212,13 @@
     </binding>
   </button>
   <button n="4">
-    <desc type="string">Custom</desc>
+    <desc type="string">SOI Control 3</desc>
     <binding>
       <command type="string">nasal</command>
-      <script type="string">
-        setprop("fdm/jsbsim/fcs/steer-maneuver",1);
+      <script>
+        aircraft.SOI_control_3();
       </script>
     </binding>
-    <mod-up>
-      <binding type="string">
-        <command type="string">nasal</command>
-          <script type="string">
-            setprop("fdm/jsbsim/fcs/steer-maneuver",0);
-          </script>
-      </binding>
-    </mod-up>
   </button>
   <button n="5">
     <desc type="string">Trigger</desc>

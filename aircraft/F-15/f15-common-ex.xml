@@ -444,12 +444,12 @@
                 <desc>SOI Control 2</desc>
             </key>
             <key>
-                <name>!</name>
-                <desc>Switch SOI</desc>
+                <name>x</name>
+                <desc>SOI Control 3</desc>
             </key>
             <key>
-                <name>x</name>
-                <desc>Interrogate current radar target through IFF Mode 4/5</desc>
+                <name>!</name>
+                <desc>Switch SOI</desc>
             </key>
             <key>
                 <name>Q</name>
@@ -4954,11 +4954,12 @@
 
             <key n="120">
                 <name>x</name>
-                <desc>IFF Interrogate Mode 4/5 current radar target</desc>
+                <desc>SOI Control 3</desc>
                 <binding>
-                    <command>property-assign</command>
-                    <property>instrumentation/iff/interrogate-cmd</property>
-                    <value>1</value>
+                    <command>nasal</command>
+                    <script>
+                        aircraft.SOI_control_3();
+                    </script>
                 </binding>
             </key>
 
