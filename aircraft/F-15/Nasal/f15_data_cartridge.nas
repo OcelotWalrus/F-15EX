@@ -37,6 +37,7 @@
 # altitude for the steerpoint, set the <altitude-ft> parameter to -9999.
 # - `BULLSEYE,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-feet>` example: `BULLSEYE,37.2,-115.6,0`  -  Coordinates for the bullseye. Set all values to 0 for no bullseye designation
 # - `MISSION,<mission_set_id>,<mission_program_id>,<latitude_decimal_deg>,<longitude_decimal_deg>,<altitude-feet>,<terminal_heading_true_deg>,<terminal_angle_deg>,<terminal_velocity_fps>,<initialized/enabled>` example: `MISSION,1,21,37.2894,76.5432,3443,230,75,800,1` - Sets up a Mission Program. Mission Programs are stored into Mission Sets. You have 4 slot from 0 to 3 for Mission Sets, and 40 slots from 0 to 39 for Mission Programs. Terminal parameters are available but not functional yet. Initialized is a boolean, determining whether that program is enabled or not.
+# - `PACS,<pacs_id>,<pylon_12_selected>,<pylon_1_selected>,<pylon_3_selected>,<pylon_4_selected>,<pylon_5_selected>,<pylon_6_selected>,<pylon_7_selected>,<pylon_9_selected>,<pylon_15_selected>,<pylon_20_selected>,<pylon_21_selected>,<pylon_22_selected>,<pylon_23_selected>,<pylon_24_selected>,<pylon_25_selected>,<delivery_mode>,<release_sequence>,<ripple_dist>,<fuzing>,<cluster_spin>,<cluster_height>,<ordnance_type>,<tarm>` - Lookup line 90 of weapons.nas to understand these parameters
 # ---------------------------
 # Notes:
 # - When loading a DTC, if data blocks such as DECKMin are missing, it won't cause a bug, though the minimum altitude
@@ -53,7 +54,6 @@
 # callsigns and lead will need to be connected on datalink for that to work. Flight callsigns will also
 # be tracked during your flight if they're on datalink, allowing to checkout their status in flight, or on ground
 # after the mission, seeing their fuel status, weapons status etc. at different recorded times.
-# - Allow to save A/G PACS Programs
 # ---------------------------
 # Author: Jimmy L. Miles
 # ---------------------------
@@ -156,7 +156,12 @@ var load_cartridge = func(path) {
                 mission_terminal_vel = num(items[8]);
                 mission_initialized = num(items[9]);
                 aircraft.push_mission_program_from_dtc (mission_set_id, mission_program_id, mission_lat, mission_lon, mission_alt, mission_terminal_head, mission_terminal_angle, mission_terminal_vel, mission_initialized);
-            }
+            } elsif (key == "PACS") {
+                # Go through each PACS Program and push 'em
+                pacs_id = num(items[1]);
+                selected_pylons_data = {pylon_12: num(items[2]), pylon_1: num(items[3]), pylon_3: num(items[4]), pylon_4: num(items[5]), pylon_5: num(items[6]), pylon_6: num(items[7]), pylon_7: num(items[8]), pylon_9: num(items[9]), pylon_15: num(items[10]), pylon_20: num(items[11]), pylon_21: num(items[12]), pylon_22: num(items[13]), pylon_23: num(items[14]), pylon_24: num(items[15]), pylon_25: num(items[15])};
+                aircraft.pacs[pacs_id] = {program: pacs_id+1, selected_pylons: selected_pylons_data, delivery_mode: num(items[16]), release_sequence: num(items[17]), ripple_dist: num(items[18]), fuzing: num(items[19]), cluster_spin: num(items[20]), cluster_time: num(items[21]), cluster_height: num(items[21]), ordnance_type: num(items[23]), tarm: num(items[24])};
+            };
         }
         if (planned != nil) {
             fgcommand("activate-flightplan", props.Node.new({"activate": 0}));
@@ -220,7 +225,7 @@ var save_cartridge = func(path) {
         idx += 1;
     }
     
-    # Go through each DTC Mission Sets/Programs an push 'em
+    # Go through each DTC Mission Sets/Programs and push 'em
     for (var i = 0; i < aircraft.mission_sets_max; i += 1) {
         for (var y = 0; y < aircraft.mission_programs_max; y += 1) {
             curr_mission = aircraft.mission_sets[i][y];
@@ -233,6 +238,13 @@ var save_cartridge = func(path) {
             mission_initialized = curr_mission.initialized;
             ret = ret~sprintf("MISSION,%d,%02d,%.5f,%.5f,%.2f,%03d,%03d,%04d,%d|", i, y, mission_lat, mission_lon, mission_alt, mission_terminal_head, mission_terminal_angle, mission_terminal_vel, mission_initialized);
         }
+    }
+
+    # Go through each PACS Program and push 'em
+    for (var i = 0; i < aircraft.pacs_program_slots; i += 1) {
+        data = aircraft.pacs[i];
+        selected_pylons = data.selected_pylons;
+        ret = ret~sprintf("PACS,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%05d,%d,%05d,%05d,%s,%02.02f|", i, selected_pylons.pylon_12 != nil, selected_pylons.pylon_1 != nil, selected_pylons.pylon_3 != nil, selected_pylons.pylon_4 != nil, selected_pylons.pylon_5 != nil, selected_pylons.pylon_6 != nil, selected_pylons.pylon_7 != nil, selected_pylons.pylon_9 != nil, selected_pylons.pylon_15 != nil, selected_pylons.pylon_20 != nil, selected_pylons.pylon_21 != nil, selected_pylons.pylon_22 != nil, selected_pylons.pylon_23 != nil, selected_pylons.pylon_24 != nil, selected_pylons.pylon_25 != nil, data.delivery_mode, data.release_sequence, data.ripple_dist, data.fuzing, data.cluster_spin, data.cluster_height, data.ordnance_type, data.tarm);
     }
 
     plan = flightplan();

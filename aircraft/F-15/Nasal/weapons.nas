@@ -162,35 +162,35 @@ var pacs_current_program = 0;  # Program 1
 var pylon_in_program = func(pylon_idx) {  # Check if the input'd pylon is in the current PACS program
 
     if (pylon_idx == 12) {
-        return pacs[pacs_current_program].selected_pylons.pylon_12 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_12 != nil and pacs[pacs_current_program].selected_pylons.pylon_12 != 0;
     } elsif (pylon_idx == 1) {
-        return pacs[pacs_current_program].selected_pylons.pylon_1 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_1 != nil and pacs[pacs_current_program].selected_pylons.pylon_1 != 0;
     } elsif (pylon_idx == 3) {
-        return pacs[pacs_current_program].selected_pylons.pylon_3 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_3 != nil and pacs[pacs_current_program].selected_pylons.pylon_3 != 0;
     } elsif (pylon_idx == 4) {
-        return pacs[pacs_current_program].selected_pylons.pylon_4 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_4 != nil and pacs[pacs_current_program].selected_pylons.pylon_4 != 0;
     } elsif (pylon_idx == 5) {
-        return pacs[pacs_current_program].selected_pylons.pylon_5 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_5 != nil and pacs[pacs_current_program].selected_pylons.pylon_5 != 0;
     } elsif (pylon_idx == 6) {
-        return pacs[pacs_current_program].selected_pylons.pylon_6 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_6 != nil and pacs[pacs_current_program].selected_pylons.pylon_6 != 0;
     } elsif (pylon_idx == 7) {
-        return pacs[pacs_current_program].selected_pylons.pylon_7 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_7 != nil and pacs[pacs_current_program].selected_pylons.pylon_7 != 0;
     } elsif (pylon_idx == 9) {
-        return pacs[pacs_current_program].selected_pylons.pylon_9 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_9 != nil and pacs[pacs_current_program].selected_pylons.pylon_9 != 0;
     } elsif (pylon_idx == 15) {
-        return pacs[pacs_current_program].selected_pylons.pylon_15 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_15 != nil and pacs[pacs_current_program].selected_pylons.pylon_15 != 0;
     } elsif (pylon_idx == 20) {
-        return pacs[pacs_current_program].selected_pylons.pylon_20 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_20 != nil and pacs[pacs_current_program].selected_pylons.pylon_20 != 0;
     } elsif (pylon_idx == 21) {
-        return pacs[pacs_current_program].selected_pylons.pylon_21 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_21 != nil and pacs[pacs_current_program].selected_pylons.pylon_21 != 0;
     } elsif (pylon_idx == 22) {
-        return pacs[pacs_current_program].selected_pylons.pylon_22 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_22 != nil and pacs[pacs_current_program].selected_pylons.pylon_22 != 0;
     } elsif (pylon_idx == 23) {
-        return pacs[pacs_current_program].selected_pylons.pylon_23 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_23 != nil and pacs[pacs_current_program].selected_pylons.pylon_23 != 0;
     } elsif (pylon_idx == 24) {
-        return pacs[pacs_current_program].selected_pylons.pylon_24 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_24 != nil and pacs[pacs_current_program].selected_pylons.pylon_24 != 0;
     } elsif (pylon_idx == 25) {
-        return pacs[pacs_current_program].selected_pylons.pylon_25 != nil;
+        return pacs[pacs_current_program].selected_pylons.pylon_25 != nil and pacs[pacs_current_program].selected_pylons.pylon_25 != 0;
     }
     return 0;
 }
